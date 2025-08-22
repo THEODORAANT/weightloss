@@ -1,0 +1,109 @@
+
+
+    .logo {
+        font-size: 32px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    .message-box {
+        border-radius: 10px;
+        max-width: 445px;
+        margin:  auto;
+        text-align: center;
+
+        .icon {
+            font-size: 40px;
+            color: red;
+            margin: 50px 0px 0px 0px;
+        }
+
+        h2 {
+            margin-top: 28px;
+            font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: normal;
+            line-height: 1.5rem;
+            font-feature-settings: "ss02" off, "ss05" off, "ss08" on;
+
+        }
+
+        p {
+            margin-top: 28px;
+            font-size: 17px;
+            letter-spacing: .00625rem;
+            line-height: 1.5rem;
+            margin-bottom: 1.5rem !important;
+            color: #422020;
+            font-weight: 400;
+        }
+
+        button {
+            font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont;
+            background-color: #00ccbd ;
+            color: #000000;
+            border: none;
+            padding: 18px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background .3s ease;
+            width: 441px;
+            font-weight: 400;
+            margin-top: 10px;
+
+            &:hover {
+                background-color: #009999;
+            }
+        }
+
+        .homepage-link {
+            display: block;
+            margin-top: 10px;
+            color: #000000;
+            text-decoration: none;
+            font-weight: 500;
+            transition: text-decoration 0.3s ease;
+            width: 200px;
+            padding: 10px 0px;
+            margin: auto;
+            border-radius: 8px;
+
+            &:hover {
+                color: #000000;
+                background-color: #E5E5E5;
+                transition:  0.5s ease;
+
+
+            }
+        }
+    }
+
+
+
+
+    
+@media screen and (max-width: 767px) {
+
+    .message-box{
+        button {
+            font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont;
+            background-color: #00ccbd;
+            color: #000;
+            border: none;
+            padding: 18px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background .3s ease;
+            max-width: 370px;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+    }
+
+}

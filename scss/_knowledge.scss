@@ -1,0 +1,278 @@
+// knowledge section
+
+.knowledge_div{
+
+    .knowledge_img{
+
+        img{
+            height: 110vh;
+        }
+    }
+
+    .sleep_content{
+
+        margin-top: 25px;
+
+        .excellent_group{
+            ul{
+                list-style-type: none;
+                text-align: left;
+
+                li{
+                    list-style: none;
+                    padding: 0 5px;
+                    display: inline-block;
+
+                    i{
+                        background-color: #00b67a;
+                        color: #fff;
+                        padding: 5px;
+                        margin-right: 5px;
+                        font-size: 10px;
+                    }
+                    .deffer{
+                        background-color: #00b67a;
+                    }
+                    a{
+                        color: black;
+                        text-decoration: none;
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+
+//  The many factors that shape obesity section
+
+.balanced_diet{
+
+    .people_content{
+
+        margin-bottom: 10px;
+    }
+    .inner_content{
+
+        background: #f5f5f5;
+        padding: 10px 5px;
+    }
+}
+
+// Making weight section
+
+.makin_weight{
+
+    background: #ffffff;
+
+    .makin_left{
+
+        float: right;
+    }
+
+    .flaws_left{
+        width: 100%;
+        height: auto;
+
+        img{
+            width: 90%;
+            height: auto;
+            padding-left: 25px;
+            padding-top: 50px;
+        }
+    }
+
+}
+
+// media query
+@media screen and (max-width: 768px) {
+
+    .makin_weight{
+
+        padding-bottom: 25px;
+        .makin_left{
+
+            float: none;
+        }
+        
+    }
+    
+    
+    .makin_weight{
+        
+        .makin_left{
+            
+            img{
+                float: none!important;
+                text-align: center!important;
+                margin-left: 25px!important;
+            }
+        }
+    }
+    
+    .makin_weight{
+
+        padding-bottom: 25px;
+        .flaws_img{
+
+            img{
+                width: 90%!important;
+                float: none!important;
+                margin-left: 25px!important;
+            }
+        }
+        
+    }
+}
+
+
+// Sleep and how it affects obesity section
+
+
+
+// Your weight isn't the only metric that matters
+
+.weightloss_programme{
+
+    .what_link{
+
+        .metric{
+
+            line-height: 60px;
+        }
+    }
+}
+
+.between_link{
+
+    background-color: #fff!important;
+
+}
+
+
+.chroic_start{
+
+    .Chronic_stress{
+
+
+        .btm_space{
+        
+            padding-bottom: 130px!important;
+        }
+    }
+
+}
+
+// Our experts’ guide to success section
+
+.expert_guide{
+
+    padding: 20px 0;
+
+    .people_who_title{
+
+        h1{
+
+            padding-bottom: 10px;
+        }
+    }
+    .guide_success{
+        padding-top: 20px;
+
+        .people_content{
+            border-radius: 10px;
+            width: 95%;
+            height: auto;
+        }
+    }
+}
+
+//Your relationship with food section
+
+.relationship_food{
+
+    background: #fff!important;
+}
+
+
+// Mindful eating section
+
+.mindful_eating{
+
+    .hunger_scale{
+
+        padding-bottom: 110px!important;
+    }
+}
+
+// Understanding nutrition section
+.understanding_nutrition{
+    padding: 50px 0;
+
+    .Understanding_title{
+        
+        h1{
+            padding-bottom: 15px;
+        }
+    }
+}
+
+// media   query
+
+@media screen and (max-width: 768px) {
+    
+    .understanding_nutrition{
+
+        .Understanding_title{
+
+            width: 90%;
+            padding-right: 0!important;
+            padding-left: 25px!important;
+        }
+    }
+
+    .Medicine_magic{
+
+        .medicine_content{
+
+
+            padding-right: 0!important;
+            width: 90%;
+            padding-left: 25px!important;
+        }
+        
+    }
+}
+
+// THE GUT-BRAIN CONNECTION section
+
+.unhealthy_foods{
+
+    background-color: #fff!important;
+    .unhealthy_left{
+        float: left;
+    }
+}
+
+// Every little movement helps section
+
+.mindful_eating{
+
+    .little_movement{
+
+        padding-bottom: 175px!important;
+    }
+}
+
+// 
+.Medicine_magic{
+    width: 100%;
+    padding: 50px 0;
+}
+
+// HEALTH COACHING: PERSONALISED SUPPORT section
+
+.path_for_everyone{
+
+    background: radial-gradient(50% 132.32% at 50% 50%, rgba(0, 204, 189, .2) 0, rgba(0, 204, 189, 0) 100%), #fff;
+}

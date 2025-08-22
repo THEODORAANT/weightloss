@@ -1,0 +1,72 @@
+.nutrition{
+    .research{
+        h1{
+            color: #fff;
+        }
+        .complex{
+            color: #fff !important ;
+            a{
+                text-decoration: underline #fff;
+                color: #00C8B9;
+            }
+            a:hover{
+                text-decoration: underline;
+                color: #00C8B9;
+            }
+        }
+    }
+}
+
+
+// <!--============================================================ The getweightloss  section start ============================================== -->
+
+.research{
+    ul{
+        li{
+            a{
+                text-decoration: underline #000;
+                color: #00C8B9;
+            }
+            a:hover{
+                text-decoration: underline;
+                color: #00C8B9;
+            }
+        }
+    }
+}
+
+
+// <!--============================================================ The getweightloss  section End ============================================== -->
+
+// <!--============================================================ References  section start ============================================== -->
+
+
+.references{
+    .references_content{
+        p{
+            a{
+                text-decoration: none;
+                color:#00C8B9;
+            }
+            a:hover{
+                text-decoration: underline;
+                color:#00C8B9;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1024px) { 
+
+
+    .references_content{
+        padding: 40px 0px 0px 175px;
+    }
+    
+
+}
+
+
+
+
+// <!--============================================================ References  section end ============================================== -->

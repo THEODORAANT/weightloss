@@ -1,0 +1,186 @@
+
+// APRIL CLEAN EATINGCHALLENGE section 
+.knowledge_div{
+
+    .sign_up_box{
+
+        width: 100%;
+        padding: 25px 0;
+
+        input{
+            width: 55%;
+            height: 50px;
+            border-radius: 10px;
+            border: 1px solid #101010;
+        }
+        input::placeholder{
+            padding-left: 10px;
+            color: #b6bcc4;
+            font-weight: 500;
+        }
+
+        span{
+            background: #7ee3dd;
+            padding: 15px 20px;
+            border-radius: 10px;
+            transition: .2s ease;
+            cursor: pointer;
+            margin-left: 5px;
+
+            a{
+                color: #000000;
+                font-weight: bold;
+            }
+
+            i{
+                padding-left: 5px;
+                
+            }
+        }
+        span:hover{
+            background-color: #00a397;
+        }
+    }
+}
+
+// media query
+.knowledge_div{
+
+    .sign_up_box{
+
+        width: 100%;
+
+        span{
+
+            a{
+                font-weight: 400;
+            }
+        }
+    }
+
+    .excellent_group{
+
+        ul{
+            width: 100%;
+
+            li{
+                padding: 10px 0;
+
+                a{
+                    font-size: 14px;
+                    padding: 10px 0;
+
+                    i{
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// What exactly is clean eating? section
+.what_exactly{
+
+    .what_link{
+
+        padding-right: 25px;
+
+        h1{
+            font-size: 24px;
+            font-weight: 700;
+            padding: 10px 0;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+    }
+
+    .what_content{
+
+        width: 100%;
+
+        img{
+
+            width: 80%;
+        }
+    }
+}
+
+// media query
+@media screen and (max-width: 767px) {
+    
+
+    .knowledge_div{
+
+        .sleep_img{
+
+            img{
+
+                height: 60vh!important;
+            }
+        }
+        .sleep_content{
+
+            padding-top: 10px;
+            .big_title{
+                font-size: 36px!important;
+            }
+        }
+    }
+    .what_exactly{
+
+        overflow-x: hidden;
+        .what_link{
+    
+            width: 90%;
+            margin: 0;
+            padding-right: 0;
+    
+            h1{
+                font-size: 20px;
+                font-weight: 700;
+                padding: 10px 0;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+        }
+    
+        .what_content{
+    
+            img{
+    
+                width: 90%;
+                overflow-x: hidden!important;
+            }
+        }
+    }
+    
+
+}
+
+// Your year of transformation: monthly highlights section
+
+.your_year{
+
+    .your_content{
+
+        text-align: left!important;
+
+        img{
+            padding-bottom: 10px;
+            color: #fff;
+        }
+    }
+    .bg_1{
+
+        background: #7f7f7f!important;
+        color: #fff;
+        padding: 15px 10px!important;
+    }
+    .bg_2{
+
+        background: #1a1a1a!important;
+        color: #fff;
+        padding: 15px 5px!important;
+    }
+
+    
+}

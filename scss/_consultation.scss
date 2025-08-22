@@ -1,0 +1,189 @@
+// =====================================================================consultation section start==============================================================================================//
+
+
+
+.consultation{
+    .bar{
+        max-width: 760px;
+        padding: 4px;
+        background-color: #e1f5ed !important;
+        margin: auto;
+        position: relative;
+    }
+        .bar_1::after{
+            content: "";
+            position: absolute;
+            width: 200px;
+            padding: 4px;
+            top: 0px;
+            left: 0px;
+            background-color: #00ccbd ;
+        }
+
+
+        .terms_content{
+            margin: auto;
+            max-width: 760px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            // gap: 230px;
+            .terms{
+                span{
+                    text-decoration: none;
+                    font-size: .75rem !important;
+                    font-weight: 500;
+                    line-height: .75rem;
+                    letter-spacing: .01875rem !important;
+                    font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont !important;
+                    color: #000;
+                }
+            }
+            
+        }
+
+
+
+
+        .consent_title{
+            max-width: 760px;
+            height: auto;
+            margin: auto;
+            text-align: center;
+            padding-top: 43px;
+            h2{
+                font-size: 1.5rem !important;
+                font-weight: 700;
+                line-height: 1.75rem;
+                letter-spacing: normal !important;
+                font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont !important;
+                color: rgba(0, 0, 0, .87);
+            }
+        }
+
+    
+
+
+        .agree_content{
+            max-width: 760px;
+            height: 300px;
+            margin: auto;
+            padding-top: 20px;
+            display: flex ;
+            justify-content: center;
+            .agree_menu{
+                position: relative;
+                li{
+                    font-size: .875rem !important;
+                    font-weight: 500;
+                    line-height: 30px;
+                    letter-spacing: .0125rem !important;
+                    font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont !important;
+                    color: rgba(0, 0, 0, .87);
+                    list-style: none;
+
+                }
+                
+                .menu_list::after{
+                    content: "";
+                    position: absolute;
+                    background-image: url(/asset/download.svg);
+                    background-repeat: no-repeat;
+                    width: 11px;
+                    height: 11px;
+                    top: 12px;
+                    left: 12px;
+                }
+                .menu_lis::after{
+                    content: "";
+                    position: absolute;
+                    background-image: url(/asset/download.svg);
+                    background-repeat: no-repeat;
+                    width: 11px;
+                    height: 11px;
+                    top: 42px;
+                    left: 12px;
+                }
+                .menu_li::after{
+                    content: "";
+                    position: absolute;
+                    background-image: url(/asset/download.svg);
+                    background-repeat: no-repeat;
+                    width: 11px;
+                    height: 11px;
+                    top: 102px;
+                    left: 12px;
+                }
+                .menu_l::after{
+                    content: "";
+                    position: absolute;
+                    background-image: url(/asset/download.svg);
+                    background-repeat: no-repeat;
+                    width: 11px;
+                    height: 11px;
+                    top: 162px;
+                    left: 12px;
+                }
+                .menu_::after{
+                    content: "";
+                    position: absolute;
+                    background-image: url(/asset/download.svg);
+                    background-repeat: no-repeat;
+                    width: 11px;
+                    height: 11px;
+                    top: 222px;
+                    left: 12px;
+                }
+            }
+        }
+
+        .get_started{
+            max-width: 582px;
+            background: #00ccbd !important;
+            margin: auto;
+            border-radius: 5px;
+            margin-top: 110px;
+            transition: 0.3s;
+        }
+        .get_started:hover{
+            cursor: pointer;
+            background-color: #028d83c2 !important ;
+        }
+        .started_button{
+            .get_btn{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 17px;
+                button{
+                    border: none;
+                    color: #000;
+                    font-weight: 500;
+                    letter-spacing: .01875rem;
+                    text-transform: none;
+                    transition-duration: .28s;
+                    max-width: 582px;
+                    transition: 0.5s;
+                    background-color: transparent;
+                    a{
+                        text-decoration: none;
+                        color:#000;
+                    }
+                }
+                
+            }
+        }
+    
+}
+
+
+
+@media screen and (max-width: 700px) {
+    .consultation .get_started {
+        margin-top: 360px !important;
+    }
+
+}
+
+
+// =====================================================================consultation section End==============================================================================================//

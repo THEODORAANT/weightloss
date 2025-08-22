@@ -1,0 +1,177 @@
+
+
+// nutrition section
+
+.stress_weight{
+
+    .sleep_content{
+
+        .icon_style{
+
+            li{
+                display: flex;
+                margin: 0;
+                padding: 0;
+                line-height: 35px;
+            }
+        }
+    }
+}
+
+// A Mediterranean diet section
+
+.accuit{
+
+    .Mediterranean{
+
+        h1{
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .accuit{
+
+        .Mediterranean{
+    
+            margin-left: 25px;
+            h1{
+                text-align: center;
+                font-size: 26px;
+                font-weight: 700;
+            }
+        }
+    }
+
+}
+// The components of a balanced diet section
+.balanced_diet{
+
+    padding-bottom: 25px;
+    background: #f5f5f5!important;
+
+    .balancce_text{
+        color: #a6a6a6;
+    }
+
+    .people_content{
+
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+
+    .balanced_diet{
+
+        .people_content{
+
+            margin-left: 25px!important;
+        }
+    }
+}
+
+// The flaws of calorie counting section
+.flaws_calorie{
+
+    background: #ffffff;
+    padding: 0;
+
+    .flaws_img{
+
+        img {
+            width: 100%;
+            height: auto;
+            padding: 0;
+        }
+    }
+
+    .flaws_content{
+
+        width: 80%;
+        height: auto;
+        padding: 20% 0 15% 25px;
+
+        .flaws_title{
+            font-size: 30px;
+            color: #000000;
+            padding-bottom: 15px;
+        }
+
+        p{
+            color: #2e3339;
+        }
+        b{
+            color: #000000;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .flaws_calorie .flaws_img img {
+        width: 75%;
+        height: 50vh;
+        padding: 0;
+    }
+
+}
+
+// 4 simple tips for a healthy diet section
+
+.simple_tips{
+
+    .people_content{
+
+        width: 95%;
+        height: 300px;
+        max-height: 300px;
+        margin: 10px;
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .simple_tips{
+
+        .people_content{
+    
+            width: 100%;
+            height: 200px;
+            max-height: 300px;
+            margin-left: 25px;
+        }
+    }
+
+}
+
+// How health coaching can improve your diet section 
+.health_coaching{
+
+    .improve_diet{
+
+        width: 100%;
+        padding-left: 0;
+        margin-left: 0;
+        padding-top: 25px;
+        padding-bottom: 25px;
+    }
+}
+
+// reference section
+
+.reference_sec{
+
+    
+    .reference_content{
+
+        p{
+            color: #717171;
+        }
+    }
+}

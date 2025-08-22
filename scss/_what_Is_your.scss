@@ -1,0 +1,208 @@
+body {
+    // height: 100vh;
+}
+
+.what_Is_your {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin: auto;
+    width: 450px;
+    h2 {
+        margin-top: 28px;
+        font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: normal;
+        line-height: 1.5rem;
+        font-feature-settings: "ss02" off, "ss05" off, "ss08" on;
+
+    }
+}
+
+.progress_bar{
+    padding-top: 35px;
+    .nambar{
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        position: relative;
+        span::after{
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 25px;
+            width: 370px;
+            padding: 2px;
+            background-color: #ffffff;
+        }
+    }
+}
+
+.weight-inputs {
+    // display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+}
+input:focus{
+    outline: 2px solid #a79291;
+    transition: 0.3s;
+}
+.st_lbs{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.unit-selector {
+    margin: 10px 0;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    gap: 10px;
+    button {
+        padding: 17px 15px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .back {
+        background: white;
+        border: 1px solid #000000;
+        width: 100px;
+        color: #000;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .back:hover{
+        cursor: pointer;
+        background-color: #EBEBEB;
+        transition: 0.5s;
+    }
+
+    .next {
+        background: #00cfc8;
+        color: #000000;
+        width: 340px;
+        font-weight: 500;
+    }
+}
+
+
+
+
+.unit-selector {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    position: relative;
+    span{
+        position: absolute;
+        z-index: 1;
+        top: -76px;
+        left: 12px;
+        background-color: #f6f6f6;
+        color: #626262;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    label {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+        font-weight: 700;
+    }
+
+    input[type="radio"] {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #888;
+        border-radius: 50%;
+        margin-right: 8px;
+        position: relative;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+
+        &:checked {
+            border-color: #a79291;
+            background-color: white;
+        }
+
+        &:checked::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #a79291;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        &:hover {
+
+            cursor: pointer;
+            
+        }
+    }
+}
+
+
+
+
+
+@media screen and (max-width: 767px) {
+
+    .what_Is_your {
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin: auto;
+        max-width: 389px;
+    }
+
+    .progress_bar .nambar span::after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 25px;
+        max-width: 325px;
+        padding: 2px;
+        background-color: #fff;
+    }
+
+    input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 170px;
+    }
+
+}
+
+

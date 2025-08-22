@@ -1,0 +1,34 @@
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+.custom_btn {
+    padding: 15px 25px;
+    border: 1px solid rgba(0, 0, 0, .16);
+    background: #fff;
+    cursor: pointer;
+    transition: background .3s;
+    width: 180px;
+    border-radius: 8px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.custom_btn:hover {
+        cursor: pointer;
+        background-color: #EBEBEB;
+        transition: 0.5s;
+}
+
+.custom_btn.active {
+    background: black;
+    color: white !important;
+}
+.back-btn {
+    padding: 10px 20px;
+    border: 1px solid black;
+    background: white;
+    cursor: pointer;
+}

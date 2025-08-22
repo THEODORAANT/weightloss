@@ -1,0 +1,116 @@
+
+.are_you{
+    max-width: 450px;
+    height: 700px;
+    margin: auto;
+    .progress_bar{
+        padding-top: 35px;
+        .nambar{
+            text-decoration: none;
+            color: #000;
+            font-weight: 500;
+            position: relative;
+            span::after{
+                content: "";
+                position: absolute;
+                top: 10px;
+                left: 25px;
+                width: 370px;
+                padding: 2px;
+                background-color: #ffffff;
+            }
+        }
+    }
+}
+
+
+
+
+
+.unde{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    input[type="radio"]{
+        display: none;
+    }
+
+    label{
+        position: relative;
+        color: #000000;
+        font-size: 16px;
+        font-weight: 400;
+        border: 1px solid #C5C5C5;
+        border-radius: 10px;
+        padding: 17px 0px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        background-color: #ffffff;
+        margin-bottom: 10px;
+        width: 215px;
+        width: 215px;
+        a{
+            text-decoration: none;
+            color: #000000;
+        }
+    }
+    label:before{
+        content: "";
+        height: 23px;
+        width: 23px;
+        border: 2px solid #5E5E5E;
+        border-radius: 50%;
+        margin-right: 20px;
+        margin-left: 30px;
+    }
+    label:hover{
+        cursor: pointer;
+        background-color: #EBEBEB;
+        transition: 0.5s;
+    }
+    input[ type="radio"] label{
+        background-color: #ffffff;
+        color: #050000;
+        
+    }
+    input[ type="radio"]:checked + label{
+        background-color: #000000;
+        color: #ffffff;
+        
+    }
+    input[type="radio"]:checked + label::before{
+        height: 23px;
+        width: 23px;
+        border: 2px solid #000000;
+        outline: 2px solid #ffffff;
+        background-color: #fff;
+        margin-left: 30px;
+    }
+     
+}
+
+
+
+
+
+@media screen and (max-width: 767px) {
+
+    .unde label {
+        position: relative;
+        color: #000;
+        font-size: 16px;
+        font-weight: 400;
+        border: 1px solid #c5c5c5;
+        border-radius: 10px;
+        padding: 17px 0px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        background-color: #fff;
+        margin-bottom: 10px;
+        width: 180px;
+    }
+
+}
+

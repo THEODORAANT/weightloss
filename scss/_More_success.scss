@@ -1,0 +1,125 @@
+.More_success{
+background-color: #fff;
+padding-top: 30px !important;
+
+    .effective_shortTitle{
+                
+        span{
+        background-color: #F5F5F5;
+        padding: 10px 10px;
+        margin: 20px 0px;
+        font-size: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #000;
+        text-decoration: none;
+        }
+    }
+
+    .effective_longTitle{
+        margin: 30px 0px 0px 0px;
+        h1{
+            font-size: 32px;
+            font-weight: 600;
+        }
+    }
+
+    .success_card{
+        max-width: 100%;
+        height: auto;
+        background-color: #f8ebe7;
+        border-radius: 10px;
+        margin: 10px 10px;
+        .i_feel{
+            padding: 10px 15px;
+        }
+        .card_images{
+            margin: 20px 0px;
+        }
+        .card_content{
+            p{
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 400;
+                font-family: sans-serif;
+
+            }
+        }
+        .card_title{
+            margin: 15px 0px;
+            b{
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'sans-serif';
+            }
+        }
+    }
+
+    .card_mega_img{
+        max-width: 340px;
+        height: 250px;
+        img{
+            width: 100%;
+            height: 250px;
+        }
+    }
+
+
+
+    .excellent_content{
+        display: none;
+
+    }
+    .excellent_title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 13px;
+        margin: 15px;
+        .box{
+            display: flex;
+            gap: 15px;
+        }
+
+        .star{
+            width: 100px;
+            height: auto;
+        }
+        .reviews_img{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+                width: 25px;
+            }
+        }
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-width: 1024px) { 
+
+
+    .More_success{
+        padding: 30px 100px 30px 100px !important;
+    }
+
+    
+
+}

@@ -1,0 +1,311 @@
+// header section
+.my_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #000000;
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 9999999;
+
+
+//     .mobile_menu{
+   
+
+    
+
+
+        #btn,
+        #cancel{
+        font-size: 20px;
+        color: #000000;
+        margin-left: 10px;
+        display: none;
+        cursor: pointer;
+        padding: 15px 20px;
+    }
+
+    #btn:hover, 
+    #cancel:hover{
+        background-color: #288881;
+        cursor: pointer;
+        border-radius: 50%;
+        
+    }
+
+#check{
+    display: none;
+}
+
+
+// }
+    .what_treat{
+        cursor: pointer;
+        font-weight: 700;
+        position: absolute;
+
+        i{
+            color: #fff;
+        }
+    }
+
+    // user icon
+    .user_account{
+        cursor: pointer;
+        padding: 15px 20px;
+        border-radius: 50%;
+        transition: .3s ease;
+    }
+    .user_account:hover{
+        background-color: #288881; 
+        border-radius: 50%;
+    }
+
+   
+}
+
+////////////////=============What we treat main section start==========////////////////
+    .treatments_content{
+
+        z-index: 9999999!important;
+        height: 180vh!important;
+        .treatments_left{
+            border-right: 3px solid #303030;
+            
+            .treatment_title{
+                color: #828282;
+                font-weight: 500;
+                text-transform: uppercase;
+                margin-bottom: 5px;
+            }
+
+            ul{
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+
+                
+                .page_links{
+                    list-style-type: none;
+                    padding: 15px 10px;
+                    margin: 10px 10px 10px 0;
+                    border-radius: 10px;
+                    font-size: 18px;
+
+                    a{
+                        text-decoration: none;
+                        padding: 10px 5px;
+                        color: #fff;
+                        font-weight: 700;
+                        font-size: 16px;
+                    }
+                    
+                }
+                .page_links:hover{
+                    background-color: #288881;
+                    border-radius: 10px;
+                }
+            }
+
+
+            // button active style
+            .active-link {
+                background-color: #288881;
+                color: white;
+            }
+             // button active style
+
+            // Meet getweightloss section style
+
+            .meet_getweightloss{
+
+                margin-left: 0;
+                padding-left: 0;
+
+                .meet_content{
+
+                    ul{
+                        list-style-type: none;
+                        margin: 0;
+                        padding-left: 10px;
+        
+                        li{
+                            display: inline-block;
+                            padding: 0 10px;
+        
+                            a{
+                                color: #ffffff;
+                                text-decoration: none;
+                                font-weight: 500;
+                                line-height: 40px;
+        
+                            }
+                            a:hover{
+                                border-bottom: 1.5px solid #fff;
+                            }
+                        }
+        
+                    }
+    
+                }
+
+                // Social group section
+                .social_icons_section{
+                    padding-left: 15px;
+        
+                    a{
+                        color: #fff;
+                    }
+                    i{
+                        padding: 10px;
+                        font-size: 25px;
+                        transition: .3s ease;
+                        border-radius: 50%;
+                        border: none;
+                        cursor: pointer;
+                        
+                    }
+                    i:hover{
+                        background-color: #288881;
+                        border-radius: 50%;
+        
+                    }
+                }
+            }
+            
+            // Meet getweightloss section style
+        }
+
+        // Multiple Links Style
+        .my_content{
+
+            .multiple_links{
+                padding: 25px 10px 15px 10px!important;
+
+                // h5 or heading link style
+                .heading_link{
+                    background-color: #288881;
+                    padding: 15px 10px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin-top: 5px;
+                    font-size: 18px;
+                    font-weight: 700;
+
+                    a{
+                        font-weight: bold;
+                        color: #000000;
+                        text-decoration: none;
+                        color: #ffffff;
+                    }
+                }
+
+                
+
+                // h6 tag link style
+                .sub_link{
+                    padding: 10px 10px 15px 10px;
+                    cursor: pointer;
+                    margin: 10px ;
+                    border-radius: 10px;
+                    
+                    a{
+                        color: #fff;
+                        border-radius: 10px;
+                        font-size: 18px;
+                        font-weight: 600;
+                        text-decoration: none;
+
+                    }
+
+                }
+
+                .sub_link:hover{
+                    background-color: #288881!important;
+                    border-radius: 10px;
+                }
+               
+                ul{
+                    list-style-type: none;
+
+                    .list_link{
+                        margin: 10px 0;
+                        display: block;
+                        padding: 10px;
+                        cursor: pointer;
+
+                        a{
+                            color: #fff;
+                            font-size: 16px;
+                            font-weight: 600;
+                            text-decoration: none;
+                            cursor: pointer;
+
+                        }
+                    }
+                    .list_link:hover{
+                        background-color: #288881;
+                        border-radius: 10px;
+                    }
+                }
+
+            }
+
+        }
+        
+
+        // Recomended Section Style
+        .recomended_content{
+            border-left: 3px solid #303030;
+
+            .recomended_title{
+                color: #fff!important;
+                margin: 10px 15px;
+                font-size: 24px;
+                padding: 15px 0;
+            }
+
+            .recomended_box{
+                width: 95%;
+                height: auto;
+                margin: 0 auto;
+                background-color: #1a1a1a!important;
+                padding: 15px 10px!important;
+
+                .get_started_btn{
+                    background-color: #7ee3dd;
+                    width: 100%;
+                    height: 50px;
+                    border: none;
+                    border-radius: 10px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: .2s ease-in;
+
+                    a{
+                        color: #0f0f0f;
+                        font-size: 16;
+                        font-weight: 700;
+                        text-decoration: none;
+                    }
+                }
+
+                .get_started_btn:hover{
+                    background-color: #00a397!important;
+                }
+            }
+        }
+        // Recomended Section Style
+
+        /////////////================= Additional sections for other treatments=============/////////////////
+        
+        /////////////================= Additional sections for other treatments=============/////////////////
+
+
+
+    }
+////////////////=============What we treat main section End==========////////////////
+/// 

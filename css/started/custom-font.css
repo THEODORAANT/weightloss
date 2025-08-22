@@ -1,0 +1,81 @@
+@font-face {
+    font-family: 'Gilroy';
+    src: url('./../fonts/Gilroy-ExtraBold.woff') format('woff2'),
+        url('./../fonts/Gilroy-ExtraBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'LDFComicSans';
+    src: url('./../fonts/LDFComicSans.woff2') format('woff2'),
+        url('./../fonts/LDFComicSans.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Marker Felt';
+    src: url('./../fonts/MarkerFelt-Wide.woff2') format('woff2'),
+        url('./../fonts/MarkerFelt-Wide.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gotham Ultra';
+    src: url('./../fonts/Gotham-Ultra.woff2') format('woff2'),
+        url('./../fonts/Gotham-Ultra.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Times New Roman Cyr';
+    src: url('./../fonts/TimesNRCyrMT-Bold.woff2') format('woff2'),
+        url('./../fonts/TimesNRCyrMT-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Impact';
+    src: url('./../fonts/Impact.woff2') format('woff2'),
+        url('./../fonts/Impact.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DIN';
+    src: url('./../fonts/DIN-Bold.woff2') format('woff2'),
+        url('./../fonts/DIN-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'lazer84';
+    src: url('./../fonts/lazer84.woff2') format('woff2'),
+        url('./../fonts/lazer84.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bariol Serif';
+    src: url('./../fonts/BariolSerif-Bold.woff2') format('woff2'),
+        url('./../fonts/BariolSerif-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

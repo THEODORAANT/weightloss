@@ -1,0 +1,192 @@
+.terms_condition {
+  background-color: #f5f5f5;
+}
+.terms_condition .terms_head {
+  padding: 48px 25px;
+}
+.terms_condition .terms_head h2 {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 5px;
+  letter-spacing: 0.6px;
+  line-height: 1;
+  text-transform: uppercase;
+  background-color: #ffffff;
+  display: inline-block;
+}
+
+.main_section .side_menu {
+  padding-top: 20px;
+  text-align: left;
+}
+.main_section .side_menu ul {
+  list-style-type: none;
+}
+.main_section .side_menu ul li {
+  display: block;
+  padding: 10px 0;
+  margin: 10px 0 20px 0;
+}
+.main_section .side_menu ul li a {
+  text-decoration: none;
+  padding: 18px;
+  text-align: center;
+  color: #010101;
+}
+.main_section .side_menu ul li a.active {
+  text-decoration: none;
+  padding: 18px;
+  text-align: center;
+  background-color: #1b3331;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+.main_section .side_menu ul li a:hover {
+  background-color: #e7eaea;
+  border-radius: 10px;
+  color: #010101;
+}
+.main_section .side_menu ul li a:active {
+  text-decoration: none;
+  padding: 18px;
+  text-align: center;
+  background-color: #1b3331;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+.main_section .side_menu ul li a:focus {
+  text-decoration: none;
+  padding: 18px;
+  text-align: center;
+  background-color: #1b3331;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+.main_section .menu_Content {
+  padding-top: 25px;
+}
+
+.links_ever {
+  text-decoration: none;
+  color: #288881;
+}
+
+.links_ever:hover {
+  border-bottom: 1.3px solid #288881;
+  color: #288881;
+  padding: 0;
+}
+
+#terms_condition1 .content_list h1 {
+  font-size: 16px;
+  color: black;
+  font-weight: 900;
+}
+#terms_condition1 ul {
+  list-style: decimal;
+  font-weight: 400;
+}
+#terms_condition1 ul li {
+  padding: 5px 0 5px 10px;
+}
+#terms_condition1 ul li a {
+  text-decoration: none;
+  color: #000;
+}
+#terms_condition1 ul li a:hover {
+  text-decoration: none;
+  border-bottom: 1.3px solid green;
+}
+#terms_condition1 h3 {
+  font-size: 24px;
+  font-weight: 700;
+}
+#terms_condition1 .notice_explain {
+  list-style-type: disc;
+}
+
+.footer_section {
+  background-color: #0f0f0f;
+  padding: 25px 30px 130px 30px;
+}
+.footer_section .main_footer {
+  background-color: #1a1a1a;
+  padding: 30px 40px;
+}
+.footer_section .main_footer .footer_list .footer_title {
+  font-size: 14px;
+  color: #848484;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 400;
+}
+.footer_section .main_footer .footer_list ul {
+  list-style-type: none;
+  text-align: left;
+  padding: 0;
+}
+.footer_section .main_footer .footer_list ul li {
+  display: block;
+  line-height: 35px;
+}
+.footer_section .main_footer .footer_list ul li a {
+  text-decoration: none;
+  color: #f3f3f3;
+  font-size: 16px;
+  font-weight: 400;
+}
+.footer_section .main_footer .footer_list ul li .hiring {
+  background-color: #00ccbd;
+  color: #000000;
+  border-radius: 5px;
+  border: none;
+  font-size: 13px;
+  padding: 5px 10px;
+  margin-left: 5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.footer_section .main_footer .logo_section {
+  margin: 0 auto;
+}
+.footer_section .main_footer .logo_section .getweightloss_logo {
+  width: 100%;
+  padding-top: 25px;
+  padding-bottom: 0;
+}
+.footer_section .main_footer .logo_section .getweightloss_logo img {
+  width: 100%;
+  height: auto;
+}
+.footer_section .main_footer .logo_section .right_side {
+  text-align: right;
+}
+.footer_section .main_footer .logo_section .right_side img {
+  padding: 10px;
+}
+.footer_section .main_footer .logo_section ul {
+  list-style-type: none;
+  text-align: right;
+}
+.footer_section .main_footer .logo_section ul li {
+  display: inline-block;
+  text-align: left;
+  line-height: 30px;
+  padding: 0 10px;
+}
+.footer_section .main_footer .logo_section ul li a {
+  text-decoration: none;
+  color: #ffffff;
+}
+.footer_section .main_footer .copyright {
+  display: block;
+  padding: 10px;
+}
+.footer_section .main_footer .copyright p {
+  color: #8e8e8e;
+  font-size: 15px;
+}

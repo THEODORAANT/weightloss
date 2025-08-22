@@ -1,0 +1,121 @@
+
+////////////////=============footer reviews section start==========////////////////
+.excellent_content{
+    display: none;
+}
+
+.excellent_title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 13px;
+    color: #fff;
+    width: 100%;
+
+    
+
+    .box{
+        display: flex;
+        gap: 15px;
+    }
+
+    .star{
+        width: 100px;
+        height: auto;
+    }
+    .reviews_img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img{
+            width: 25px;
+        }
+    }
+
+    
+}
+
+.footer_section{
+    z-index: 99999;
+}
+
+.footer_reviews{
+
+
+    padding: 20px 0;
+   
+    
+       p {
+           margin-top: 0;
+           margin-bottom: 1rem;
+           text-align: center!important;
+           color: #fff;
+       }
+
+      
+      
+
+  
+}
+
+.hover_item{
+    text-align: center;
+    color: #fff;
+    display: none;
+
+}
+.as_seen{
+    text-align: center;
+    color: #b7b7b7;
+    padding-bottom: 25px;
+
+}
+////////////////=============footer reviews section End==========////////////////
+
+// responsive code
+
+@media screen and (max-width: 768px) {
+
+    .my_header{
+
+       #btn{
+            display: block;
+           }
+
+        .what_treat{
+            display: none;
+        }
+
+
+
+
+
+
+
+        
+        #check:checked ~ label #btn{
+            display: none;
+        }
+        #check:checked ~ label #cancel{
+            display: block;
+        }
+    }
+
+
+    .treatments_left{
+
+        .meet_getweightloss{
+            display: none;
+        }
+
+    }
+
+        
+}
+
+@media screen and (min-width: 769px) {
+    .mobile-menu-icon {
+        display: none;  
+    }
+}

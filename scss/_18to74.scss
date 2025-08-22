@@ -1,0 +1,33 @@
+.are_you{
+    max-width: 450px;
+    height: 700px;
+    margin: auto;
+    .progress_bar{
+        padding-top: 35px;
+        .nambar{
+            text-decoration: none;
+            color: #000;
+            font-weight: 500;
+            position: relative;
+            span::after{
+                content: "";
+                position: absolute;
+                top: 10px;
+                left: 25px;
+                width: 370px;
+                padding: 2px;
+                background-color: #ffffff;
+            }
+            .Percentis::after{
+                content: "";
+                position: absolute;
+                top: 10px;
+                left: 25px;
+                width: 370px;
+                padding: 2px;
+                background-color: #000000;
+            }
+        }
+    }
+
+}

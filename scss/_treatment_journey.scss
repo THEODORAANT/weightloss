@@ -1,0 +1,180 @@
+.title_content{
+    max-width: 730px;
+    height: auto;
+    margin: auto;
+    .treatment_title{
+        padding: 45px 0px 11px 0px;
+        .title_content{
+            
+            h1{
+                color: rgba(0, 0, 0, .87);
+                text-decoration: none;
+                font-size: 1.5rem !important;
+                font-weight: 700;
+                font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont !important;
+                line-height: 1.5;
+                text-align: center;
+            }
+        }
+    }
+
+    .treatment_content{
+        padding-bottom: 10px;
+        .content_text{
+            p{
+                font-size: 1rem !important;
+                font-weight: 400;
+                letter-spacing: .00625rem !important;
+                line-height: 1.5rem;
+                font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont !important;
+                text-align: center;
+                text-decoration: none;
+                color: rgba(0, 0, 0, .87);
+            }
+        }
+    }
+}
+
+.treatment_menu{
+    border-radius: 8px;
+    padding: 12px;
+    border: 2px solid #288881;
+    background-color: #ffffff;
+    max-width: 582px;
+    height: auto;
+    margin: auto;
+    margin-bottom: 18px;
+    .about_content{
+        display: flex;
+        // justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .about_logo{
+        .logo_box{
+            background: linear-gradient(140deg, #f7ede8 20.29%, #e1e8ef 76.97%);
+            min-width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+
+    .about_you{
+        .about_titlr{
+            margin-bottom: 5px;
+            b{
+                font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont;
+                font-size: 1rem !important;
+                font-weight: 700;
+                letter-spacing: normal;
+                line-height: 1.5rem;
+                color: rgba(0, 0, 0, .87);
+                text-decoration: none;
+            }
+        }
+
+        .about_text{
+            span{
+                font-size: 14px !important;
+                font-weight: 500;
+                line-height: 1.25rem;
+                letter-spacing: .0125rem !important;
+                font-family: "Neutrif Studio", "Helvetica Neue", "Segoe UI", roboto, ubuntu, "Lucida Grande", -apple-system, system-ui, cantarell, "Noto Sans", sans-serif, blinkmacsystemfont !important;
+                color: rgba(0, 0, 0, .87);
+            }
+        }
+
+    }
+
+}
+
+.treatment_journey{
+    .get_started{
+        max-width: 582px;
+        background: #00ccbd !important;
+        margin: auto;
+        border-radius: 5px;
+        margin-top: 46px;
+        transition: 0.3s;
+    }
+    .get_started:hover{
+        cursor: pointer;
+        background-color: #028d83c2 !important ;
+    }
+    .started_button{
+        .get_btn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 17px;
+            button{
+                border: none;
+                color: #000;
+                font-weight: 500;
+                letter-spacing: .01875rem;
+                text-transform: none;
+                transition-duration: .28s;
+                max-width: 582px;
+                transition: 0.5s;
+                background-color: transparent;
+                a{
+                    text-decoration: none;
+                    color:#000;
+                }
+            }
+            
+        }
+    }
+
+    .excellent_content{
+        margin-top: 25px;
+        margin-bottom: 50px;
+        .excellent_title{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 13px;
+            .box{
+                display: flex;
+                gap: 15px;
+            }
+
+            .star{
+                width: 100px;
+                height: auto;
+            }
+            .reviews_img{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img{
+                    width: 25px;
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 767px) {
+
+    .treatment_journey .excellent_content .excellent_title {
+        display: block;
+        
+    }
+    .treatment_journey .excellent_content .excellent_title .box {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+    .consultation .get_started {
+        margin-top: 360px;
+    }
+
+}
