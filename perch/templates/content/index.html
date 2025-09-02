@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="Health Self Tests, Easy, from Home" />
+
+		<title>NLCLINIC</title>
+
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com" />
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Catamaran&family=Inter:opsz,wght@14..32,100..900&family=Plus+Jakarta+Sans:wght@200..800&family=Poppins:wght@500&family=Urbanist:wght@100..900&display=swap"
+			rel="stylesheet" />
+
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous" />
+		<link
+			rel="stylesheet"
+			href="css/style.min.css" />
+		<link
+			rel="stylesheet"
+			href="css/pages/home.min.css" />
+
+		<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+			crossorigin="anonymous"></script>
+		<script
+			src="js/index.min.js"
+			defer></script>
+		<script
+			src="js/swipers.min.js"
+			defer></script>
+	</head>
+
+	<body class="page d-flex flex-column">
+		<div id="topBarContent"></div>
+
+		<template id="desktop-template">
+			<div class="topBar urbanist-regular">
+				<div class="container d-flex">
+					<div
+						class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+						<img
+							width="24"
+							height="24"
+							src="./img/icons/star.svg"
+							alt="Outline star" />
+
+						<span class="">No prescription required</span>
+					</div>
+
+					<div
+						class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+						<img
+							width="24"
+							height="24"
+							src="./img/icons/star.svg"
+							alt="Outline star" />
+
+						<span class="">Free shipping worldwide</span>
+					</div>
+
+					<div
+						class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+						<img
+							width="24"
+							height="24"
+							src="./img/icons/star.svg"
+							alt="Outline star" />
+
+						<span class="">100% online order & results</span>
+					</div>
+
+					<div
+						class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+						<img
+							width="24"
+							height="24"
+							src="./img/icons/star.svg"
+							alt="Outline star" />
+
+						<span class="">Trusted by over 500K people</span>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="tablet-template">
+			<div
+				id="topBarCarouselMd"
+				class="topBar topBar_carousel carousel slide"
+				data-bs-ride="carousel">
+				<div class="carousel-inner">
+					<div
+						class="carousel-item active"
+						data-bs-interval="4000">
+						<div class="d-flex">
+							<div
+								class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+								<img
+									width="24"
+									height="24"
+									src="./img/icons/star.svg"
+									alt="Outline star" />
+
+								<span class="">No prescription required</span>
+							</div>
+
+							<div
+								class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+								<img
+									width="24"
+									height="24"
+									src="./img/icons/star.svg"
+									alt="Outline star" />
+
+								<span class="">Free shipping worldwide</span>
+							</div>
+						</div>
+					</div>
+					<div
+						class="carousel-item"
+						data-bs-interval="4000">
+						<div class="d-flex">
+							<div
+								class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+								<img
+									width="24"
+									height="24"
+									src="./img/icons/star.svg"
+									alt="Outline star" />
+
+								<span class="">100% online order & results</span>
+							</div>
+
+							<div
+								class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+								<img
+									width="24"
+									height="24"
+									src="./img/icons/star.svg"
+									alt="Outline star" />
+
+								<span class="">Trusted by over 500K people</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="mobile-template">
+			<div
+				id="topBarCarousel"
+				class="topBar topBar_sm carousel slide"
+				data-bs-ride="carousel">
+				<div class="carousel-inner">
+					<div
+						class="carousel-item active"
+						data-bs-interval="4000">
+						<div
+							class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+							<img
+								width="24"
+								height="24"
+								src="./img/icons/star.svg"
+								alt="Outline star" />
+
+							<span class="">No prescription required</span>
+						</div>
+					</div>
+					<div
+						class="carousel-item"
+						data-bs-interval="4000">
+						<div
+							class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+							<img
+								width="24"
+								height="24"
+								src="./img/icons/star.svg"
+								alt="Outline star" />
+
+							<span class="">Free shipping worldwide</span>
+						</div>
+					</div>
+					<div
+						class="carousel-item"
+						data-bs-interval="4000">
+						<div
+							class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+							<img
+								width="24"
+								height="24"
+								src="./img/icons/star.svg"
+								alt="Outline star" />
+
+							<span class="">100% online order & results</span>
+						</div>
+					</div>
+					<div
+						class="carousel-item"
+						data-bs-interval="4000">
+						<div
+							class="topBar__item col w-100 d-inline-flex justify-content-center align-items-center">
+							<img
+								width="24"
+								height="24"
+								src="./img/icons/star.svg"
+								alt="Outline star" />
+
+							<span class="">Trusted by over 500K people</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+		<header class="header">
+			<div class="container">
+				<div
+					class="header__top d-flex flex-wrap justify-content-between align-items-center">
+					<div class="header__logo">
+						<a
+							class="d-inline-block"
+							href="/">
+							<img
+								width="232"
+								height="65"
+								src="./img/icons/logo.svg"
+								alt="NLCLINIC logo" />
+						</a>
+					</div>
+
+					<div class="header__actions d-flex justify-content-between">
+						<div
+							class="header__search headerSearch urbanist-regular flex-grow-1">
+							<i class="headerSearch__icon d-block ratio-1x1"></i>
+							<input
+								type="text"
+								class="headerSearch__input rounded-pill flex-grow-1"
+								placeholder="Search for a test" />
+						</div>
+
+						<div class="header__links d-flex align-items-center">
+							<a
+								aria-label="Go to profile"
+								href="#"
+								class="header__link ratio-1x1"
+								><svg
+									width="25"
+									height="25"
+									viewBox="0 0 25 25"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M20.7246 21.5C20.7246 18.7386 17.1429 16.5 12.7246 16.5C8.30633 16.5 4.72461 18.7386 4.72461 21.5M12.7246 13.5C9.96319 13.5 7.72461 11.2614 7.72461 8.5C7.72461 5.73858 9.96319 3.5 12.7246 3.5C15.486 3.5 17.7246 5.73858 17.7246 8.5C17.7246 11.2614 15.486 13.5 12.7246 13.5Z"
+										stroke="#030F2D"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round" /></svg></a
+							><a
+								aria-label="Go to busket"
+								href="#"
+								class="header__link ratio-1x1"
+								><svg
+									width="25"
+									height="25"
+									viewBox="0 0 25 25"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M17.7246 17.5C16.62 17.5 15.7246 18.3954 15.7246 19.5C15.7246 20.6046 16.62 21.5 17.7246 21.5C18.8292 21.5 19.7246 20.6046 19.7246 19.5C19.7246 18.3954 18.8292 17.5 17.7246 17.5ZM17.7246 17.5H10.0186C9.55749 17.5 9.32654 17.5 9.13672 17.418C8.96927 17.3456 8.82399 17.2291 8.71815 17.0805C8.59951 16.914 8.5518 16.6913 8.45735 16.2505L5.99609 4.76465C5.89945 4.31363 5.85048 4.08838 5.73047 3.91992C5.62462 3.77135 5.47938 3.65441 5.31193 3.58205C5.12206 3.5 4.8924 3.5 4.43114 3.5H3.72461M6.72461 6.5H19.5978C20.3196 6.5 20.6801 6.5 20.9224 6.65036C21.1346 6.78206 21.2899 6.98862 21.3577 7.229C21.435 7.50343 21.3356 7.84996 21.1356 8.54346L19.751 13.3435C19.6314 13.7581 19.5715 13.965 19.4502 14.1189C19.3431 14.2547 19.2018 14.361 19.0417 14.4263C18.8607 14.5 18.6457 14.5 18.2167 14.5H8.45508M8.72461 21.5C7.62004 21.5 6.72461 20.6046 6.72461 19.5C6.72461 18.3954 7.62004 17.5 8.72461 17.5C9.82918 17.5 10.7246 18.3954 10.7246 19.5C10.7246 20.6046 9.82918 21.5 8.72461 21.5Z"
+										stroke="#030F2D"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round" /></svg></a
+							><a
+								aria-label="Go to favorites"
+								href="#"
+								class="header__link ratio-1x1"
+								><svg
+									width="25"
+									height="25"
+									viewBox="0 0 25 25"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M12.7246 8.19431C10.7246 3.49988 3.72461 3.99988 3.72461 9.99991C3.72461 15.9999 12.7246 21.0001 12.7246 21.0001C12.7246 21.0001 21.7246 15.9999 21.7246 9.99991C21.7246 3.99988 14.7246 3.49988 12.7246 8.19431Z"
+										stroke="#030F2D"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round" /></svg
+							></a>
+						</div>
+					</div>
+				</div>
+
+				<div class="header__nav">
+					<button
+						id="headerNavToggler"
+						class="header__toggler d-md-none">
+						<span class="d-block"></span>
+						<span class="d-block"></span>
+						<span class="d-block"></span>
+					</button>
+					<nav class="tabs">
+						<ul
+							class="m-md-0 px-3 px-md-0 d-flex flex-wrap justify-content-md-between align-items-start align-items-md-center">
+							<li>
+								<a
+									class="tabs__link tabs__link_active urbanist-regular"
+									href="#">
+									All Tests
+								</a>
+							</li>
+							<li>
+								<a
+									class="tabs__link urbanist-regular"
+									href="#">
+									Male Tests
+								</a>
+							</li>
+							<li>
+								<a
+									class="tabs__link urbanist-regular"
+									href="#">
+									Female Tests
+								</a>
+							</li>
+							<li>
+								<a
+									class="tabs__link urbanist-regular"
+									href="#">
+									Sports Performance
+								</a>
+							</li>
+							<li>
+								<a
+									class="tabs__link urbanist-regular"
+									href="#">
+									Wellness
+								</a>
+							</li>
+							<li>
+								<a
+									class="tabs__link urbanist-regular"
+									href="#">
+									Conditions
+								</a>
+							</li>
+							<li>
+								<a
+									class="tabs__link urbanist-regular"
+									href="#">
+									About
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+
+		<main class="page__content page__gap home container">
+			<div
+				class="mb-5 d-flex flex-column flex-lg-row gap-4 justify-content-between align-items-center align-items-lg-end">
+				<h1 class="home__title m-0 inter-regular lh-1">
+					Health <span>Self&nbsp;Tests</span>,<br />
+					Easy, from Home
+				</h1>
+
+				<a
+					href="/category.html"
+					class="home__button button button_fill inter-medium text-center">
+					Find your test
+				</a>
+			</div>
+
+			<div class="page__gap hero">
+				<div
+					id="heroSwiper"
+					class="swiper">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<div class="heroCard">
+								<a
+									class="heroCard__link d-block"
+									href="/">
+									<picture>
+										<source
+											srcset="./img/mockup-purple.webp"
+											type="image/webp" />
+										<img
+											width="600"
+											height="400"
+											src="./img/mockup-purple.jpg"
+											alt="Product" />
+									</picture>
+								</a>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="heroCard">
+								<a
+									class="heroCard__link d-block"
+									href="/">
+									<picture>
+										<source
+											srcset="./img/mockup-blue.webp"
+											type="image/webp" />
+										<img
+											width="600"
+											height="400"
+											src="./img/mockup-blue.jpg"
+											alt="Product" />
+									</picture>
+								</a>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="heroCard">
+								<a
+									class="heroCard__link d-block"
+									href="/">
+									<picture>
+										<source
+											srcset="./img/mockup-green.webp"
+											type="image/webp" />
+										<img
+											width="600"
+											height="400"
+											src="./img/mockup-green.jpg"
+											alt="Product" />
+									</picture>
+								</a>
+							</div>
+						</div>
+
+						<div class="swiper-slide">
+							<div class="heroCard">
+								<a
+									class="heroCard__link d-block"
+									href="/">
+									<picture>
+										<source
+											srcset="./img/mockup-purple.webp"
+											type="image/webp" />
+										<img
+											width="600"
+											height="400"
+											src="./img/mockup-purple.jpg"
+											alt="Product" />
+									</picture>
+								</a>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="heroCard">
+								<a
+									class="heroCard__link d-block"
+									href="/">
+									<picture>
+										<source
+											srcset="./img/mockup-blue.webp"
+											type="image/webp" />
+										<img
+											width="600"
+											height="400"
+											src="./img/mockup-blue.jpg"
+											alt="Product" />
+									</picture>
+								</a>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="heroCard">
+								<a
+									class="heroCard__link d-block"
+									href="/">
+									<picture>
+										<source
+											srcset="./img/mockup-green.webp"
+											type="image/webp" />
+										<img
+											width="600"
+											height="400"
+											src="./img/mockup-green.jpg"
+											alt="Product" />
+									</picture>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<section class="aboutSection page__gap">
+				<div class="aboutSection__image aboutSection__image_first">
+					<picture>
+						<source
+							srcset="./img/about-family-1.webp"
+							type="image/webp" />
+						<img
+							class="d-block"
+							width="600"
+							height="673"
+							src="./img/about-family-1.jpg"
+							alt="Family" />
+					</picture>
+				</div>
+				<div class="d-flex flex-column align-items-start">
+					<span class="urbanist-medium lh-sm mb-1 d-block">About Us</span>
+					<h2
+						class="aboutSection__title page__title urbanist-medium lh-1 mb-4 pb-4">
+						Effortless Health Tracking, Anytime
+					</h2>
+					<p class="urbanist-regular">
+						With our easy-to-use, at-home testing kits, you can monitor your
+						health in the comfort of your own space. Get fast, reliable results
+						with doctor-reviewed insights, all from the convenience of your
+						home. Take the first step towards better health, effortlessly.
+					</p>
+					<a
+						href="#"
+						class="aboutSection__button d-inline-block button button_fill urbanist-medium text-center"
+						>Learn more</a
+					>
+				</div>
+				<div class="aboutSection__image aboutSection__image_second">
+					<picture>
+						<source
+							srcset="./img/about-family-2.webp"
+							type="image/webp" />
+						<img
+							class="d-block"
+							width="600"
+							height="385"
+							src="./img/about-family-2.jpg"
+							alt="Family" />
+					</picture>
+				</div>
+			</section>
+
+			<div class="howItWorks page__gap">
+				<div class="howItWorks__head d-flex flex-wrap gap-4 align-items-center">
+					<h2 class="howItWorks__title page__title urbanist-medium lh-sm">
+						How it works
+					</h2>
+					<button
+						aria-label="play"
+						class="howItWorks__button d-flex justify-content-center align-items-center rounded-circle"></button>
+				</div>
+
+				<div class="howItWorks__slider">
+					<div
+						id="howItWorksSwiper"
+						class="swiper">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<div class="howWorkCard d-flex">
+									<span
+										class="howWorkCard__num d-flex justify-content-center align-items-center urbanist-extraBold lh-1 text-center">
+										1
+									</span>
+
+									<span
+										class="howWorkCard__name d-inline-block urbanist-medium lh-1"
+										>Find your test</span
+									>
+								</div>
+							</div>
+
+							<div class="swiper-slide">
+								<div class="howWorkCard d-flex">
+									<span
+										class="howWorkCard__num d-flex justify-content-center align-items-center urbanist-extraBold lh-1 text-center">
+										2
+									</span>
+
+									<span
+										class="howWorkCard__name d-inline-block urbanist-medium lh-1"
+										>Purchase online</span
+									>
+								</div>
+							</div>
+
+							<div class="swiper-slide">
+								<div class="howWorkCard d-flex">
+									<span
+										class="howWorkCard__num d-flex justify-content-center align-items-center urbanist-extraBold lh-1 text-center">
+										3
+									</span>
+
+									<span
+										class="howWorkCard__name d-inline-block urbanist-medium lh-1"
+										>Receive test kit</span
+									>
+								</div>
+							</div>
+
+							<div class="swiper-slide">
+								<div class="howWorkCard d-flex">
+									<span
+										class="howWorkCard__num d-flex justify-content-center align-items-center urbanist-extraBold lh-1 text-center">
+										4
+									</span>
+
+									<span
+										class="howWorkCard__name d-inline-block urbanist-medium lh-1"
+										>Make test at home</span
+									>
+								</div>
+							</div>
+
+							<div class="swiper-slide">
+								<div class="howWorkCard d-flex">
+									<span
+										class="howWorkCard__num d-flex justify-content-center align-items-center urbanist-extraBold lh-1 text-center">
+										5
+									</span>
+
+									<span
+										class="howWorkCard__name d-inline-block urbanist-medium lh-1"
+										>Send test back to us</span
+									>
+								</div>
+							</div>
+
+							<div class="swiper-slide">
+								<div class="howWorkCard d-flex">
+									<span
+										class="howWorkCard__num d-flex justify-content-center align-items-center urbanist-extraBold lh-1 text-center">
+										6
+									</span>
+
+									<span
+										class="howWorkCard__name d-inline-block urbanist-medium lh-1"
+										>Get results online</span
+									>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<section class="popularTests page__gap">
+				<div
+					class="popularTests__head d-flex gap-4 flex-wrap flex-row justify-content-between align-items-center">
+					<h2 class="urbanist-medium lh-1">Popular Tests</h2>
+					<a
+						class="popularTests__link urbanist-medium button button_fill d-inline-block text-center"
+						href="/category.html"
+						>View all tests</a
+					>
+				</div>
+
+				<div class="popularTests__slider">
+					<div
+						id="popularTestsSwiper"
+						class="swiper">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<div class="popularTestCard">
+									<picture>
+										<source
+											srcset="./img/home-cards/card-1.webp"
+											type="image/webp" />
+										<img
+											class="popularTestCard__image"
+											width="355"
+											height="510"
+											src="./img/home-cards/card-1.jpg"
+											alt="Cover" />
+									</picture>
+
+									<div
+										class="popularTestCard__body d-flex flex-column justify-content-end">
+										<span
+											class="popularTestCard__category popularTestCard__category_pink urbanist-regular d-flex align-items-center gap-1"
+											><svg
+												width="17"
+												height="17"
+												viewBox="0 0 17 17"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M14.2469 6.98308C15.6416 7.38345 16.4476 8.84097 16.0472 10.2357L16.0001 10.4005C15.5998 11.7953 14.1422 12.6012 12.7475 12.2009L12.4885 12.1276C11.0937 11.7272 9.63621 12.5332 9.23585 13.9279L9.16258 14.187C8.76222 15.5817 7.30469 16.3877 5.90997 15.9873L5.74511 15.9402C4.35039 15.5398 3.54444 14.0823 3.9448 12.6876L4.01807 12.4285C4.41843 11.0338 3.61247 9.57628 2.21775 9.17591L2.05289 9.12881C0.65817 8.72845 -0.147784 7.27093 0.252577 5.8762L0.299677 5.71135C0.700038 4.31663 2.15757 3.51067 3.55229 3.91103L3.71714 3.95813C5.11186 4.35849 6.56939 3.55254 6.96975 2.15781L7.01685 1.99296C7.41721 0.598236 8.87474 -0.207721 10.2695 0.192641L10.4343 0.239742C11.829 0.640103 12.635 2.09763 12.2346 3.49235L12.1875 3.65721C11.7872 5.05193 12.5931 6.50945 13.9879 6.90982L14.2469 6.98308Z"
+													fill="#DA7EF1" />
+											</svg>
+											Woman</span
+										>
+										<h3 class="popularTestCard__title urbanist-medium">
+											Advanced Female Fertility Blood Test
+										</h3>
+
+										<div
+											class="popularTestCard__actions d-flex flex-column flex-sm-row align-items-sm-center">
+											<a
+												href="/product.html"
+												class="popularTestCard__link button button_fill poppins-medium text-center"
+												>Order</a
+											>
+											<a
+												href="/product.html"
+												class="popularTestCard__link popularTestCard__link_outline button poppins-medium text-center"
+												>Learn more</a
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="popularTestCard">
+									<picture>
+										<source
+											srcset="./img/home-cards/card-2.webp"
+											type="image/webp" />
+										<img
+											class="popularTestCard__image"
+											width="355"
+											height="510"
+											src="./img/home-cards/card-2.jpg"
+											alt="Cover" />
+									</picture>
+
+									<div
+										class="popularTestCard__body d-flex flex-column justify-content-end">
+										<span
+											class="popularTestCard__category popularTestCard__category_blue urbanist-regular d-flex align-items-center gap-1"
+											><svg
+												width="17"
+												height="17"
+												viewBox="0 0 17 17"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M14.2469 6.98308C15.6416 7.38345 16.4476 8.84097 16.0472 10.2357L16.0001 10.4005C15.5998 11.7953 14.1422 12.6012 12.7475 12.2009L12.4885 12.1276C11.0937 11.7272 9.63621 12.5332 9.23585 13.9279L9.16258 14.187C8.76222 15.5817 7.30469 16.3877 5.90997 15.9873L5.74511 15.9402C4.35039 15.5398 3.54444 14.0823 3.9448 12.6876L4.01807 12.4285C4.41843 11.0338 3.61247 9.57628 2.21775 9.17591L2.05289 9.12881C0.65817 8.72845 -0.147784 7.27093 0.252577 5.8762L0.299677 5.71135C0.700038 4.31663 2.15757 3.51067 3.55229 3.91103L3.71714 3.95813C5.11186 4.35849 6.56939 3.55254 6.96975 2.15781L7.01685 1.99296C7.41721 0.598236 8.87474 -0.207721 10.2695 0.192641L10.4343 0.239742C11.829 0.640103 12.635 2.09763 12.2346 3.49235L12.1875 3.65721C11.7872 5.05193 12.5931 6.50945 13.9879 6.90982L14.2469 6.98308Z"
+													fill="#DA7EF1" />
+											</svg>
+											Man</span
+										>
+										<h3 class="popularTestCard__title urbanist-medium">
+											Testosterone Blood Test
+										</h3>
+
+										<div
+											class="popularTestCard__actions d-flex flex-column flex-sm-row align-items-sm-center">
+											<a
+												href="/product.html"
+												class="popularTestCard__link button button_fill poppins-medium text-center"
+												>Order</a
+											>
+											<a
+												href="/product.html"
+												class="popularTestCard__link popularTestCard__link_outline button poppins-medium text-center"
+												>Learn more</a
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="popularTestCard">
+									<picture>
+										<source
+											srcset="./img/home-cards/card-3.webp"
+											type="image/webp" />
+										<img
+											class="popularTestCard__image"
+											width="355"
+											height="510"
+											src="./img/home-cards/card-3.jpg"
+											alt="Cover" />
+									</picture>
+
+									<div
+										class="popularTestCard__body d-flex flex-column justify-content-end">
+										<span
+											class="popularTestCard__category popularTestCard__category_yellow urbanist-regular d-flex align-items-center gap-1"
+											><svg
+												width="17"
+												height="17"
+												viewBox="0 0 17 17"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M14.2469 6.98308C15.6416 7.38345 16.4476 8.84097 16.0472 10.2357L16.0001 10.4005C15.5998 11.7953 14.1422 12.6012 12.7475 12.2009L12.4885 12.1276C11.0937 11.7272 9.63621 12.5332 9.23585 13.9279L9.16258 14.187C8.76222 15.5817 7.30469 16.3877 5.90997 15.9873L5.74511 15.9402C4.35039 15.5398 3.54444 14.0823 3.9448 12.6876L4.01807 12.4285C4.41843 11.0338 3.61247 9.57628 2.21775 9.17591L2.05289 9.12881C0.65817 8.72845 -0.147784 7.27093 0.252577 5.8762L0.299677 5.71135C0.700038 4.31663 2.15757 3.51067 3.55229 3.91103L3.71714 3.95813C5.11186 4.35849 6.56939 3.55254 6.96975 2.15781L7.01685 1.99296C7.41721 0.598236 8.87474 -0.207721 10.2695 0.192641L10.4343 0.239742C11.829 0.640103 12.635 2.09763 12.2346 3.49235L12.1875 3.65721C11.7872 5.05193 12.5931 6.50945 13.9879 6.90982L14.2469 6.98308Z"
+													fill="#DA7EF1" />
+											</svg>
+											General</span
+										>
+										<h3 class="popularTestCard__title urbanist-medium">
+											Thyroid Function Blood Test
+										</h3>
+
+										<div
+											class="popularTestCard__actions d-flex flex-column flex-sm-row align-items-sm-center">
+											<a
+												href="/product.html"
+												class="popularTestCard__link button button_fill poppins-medium text-center"
+												>Order</a
+											>
+											<a
+												href="/product.html"
+												class="popularTestCard__link popularTestCard__link_outline button poppins-medium text-center"
+												>Learn more</a
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="popularTestCard">
+									<picture>
+										<source
+											srcset="./img/home-cards/card-4.webp"
+											type="image/webp" />
+										<img
+											class="popularTestCard__image"
+											width="355"
+											height="510"
+											src="./img/home-cards/card-4.jpg"
+											alt="Cover" />
+									</picture>
+
+									<div
+										class="popularTestCard__body d-flex flex-column justify-content-end">
+										<span
+											class="popularTestCard__category popularTestCard__category_green urbanist-regular d-flex align-items-center gap-1"
+											><svg
+												width="17"
+												height="17"
+												viewBox="0 0 17 17"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M14.2469 6.98308C15.6416 7.38345 16.4476 8.84097 16.0472 10.2357L16.0001 10.4005C15.5998 11.7953 14.1422 12.6012 12.7475 12.2009L12.4885 12.1276C11.0937 11.7272 9.63621 12.5332 9.23585 13.9279L9.16258 14.187C8.76222 15.5817 7.30469 16.3877 5.90997 15.9873L5.74511 15.9402C4.35039 15.5398 3.54444 14.0823 3.9448 12.6876L4.01807 12.4285C4.41843 11.0338 3.61247 9.57628 2.21775 9.17591L2.05289 9.12881C0.65817 8.72845 -0.147784 7.27093 0.252577 5.8762L0.299677 5.71135C0.700038 4.31663 2.15757 3.51067 3.55229 3.91103L3.71714 3.95813C5.11186 4.35849 6.56939 3.55254 6.96975 2.15781L7.01685 1.99296C7.41721 0.598236 8.87474 -0.207721 10.2695 0.192641L10.4343 0.239742C11.829 0.640103 12.635 2.09763 12.2346 3.49235L12.1875 3.65721C11.7872 5.05193 12.5931 6.50945 13.9879 6.90982L14.2469 6.98308Z"
+													fill="#DA7EF1" />
+											</svg>
+											Wellness</span
+										>
+										<h3 class="popularTestCard__title urbanist-medium">
+											Advanced Heart Disease Risk Blood Test
+										</h3>
+
+										<div
+											class="popularTestCard__actions d-flex flex-column flex-sm-row align-items-sm-center">
+											<a
+												href="/product.html"
+												class="popularTestCard__link button button_fill poppins-medium text-center"
+												>Order</a
+											>
+											<a
+												href="/product.html"
+												class="popularTestCard__link popularTestCard__link_outline button poppins-medium text-center"
+												>Learn more</a
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="popularTestCard">
+									<picture>
+										<source
+											srcset="./img/home-cards/card-5.webp"
+											type="image/webp" />
+										<img
+											class="popularTestCard__image"
+											width="355"
+											height="510"
+											src="./img/home-cards/card-5.jpg"
+											alt="Cover" />
+									</picture>
+
+									<div
+										class="popularTestCard__body d-flex flex-column justify-content-end">
+										<span
+											class="popularTestCard__category popularTestCard__category_green urbanist-regular d-flex align-items-center gap-1"
+											><svg
+												width="17"
+												height="17"
+												viewBox="0 0 17 17"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M14.2469 6.98308C15.6416 7.38345 16.4476 8.84097 16.0472 10.2357L16.0001 10.4005C15.5998 11.7953 14.1422 12.6012 12.7475 12.2009L12.4885 12.1276C11.0937 11.7272 9.63621 12.5332 9.23585 13.9279L9.16258 14.187C8.76222 15.5817 7.30469 16.3877 5.90997 15.9873L5.74511 15.9402C4.35039 15.5398 3.54444 14.0823 3.9448 12.6876L4.01807 12.4285C4.41843 11.0338 3.61247 9.57628 2.21775 9.17591L2.05289 9.12881C0.65817 8.72845 -0.147784 7.27093 0.252577 5.8762L0.299677 5.71135C0.700038 4.31663 2.15757 3.51067 3.55229 3.91103L3.71714 3.95813C5.11186 4.35849 6.56939 3.55254 6.96975 2.15781L7.01685 1.99296C7.41721 0.598236 8.87474 -0.207721 10.2695 0.192641L10.4343 0.239742C11.829 0.640103 12.635 2.09763 12.2346 3.49235L12.1875 3.65721C11.7872 5.05193 12.5931 6.50945 13.9879 6.90982L14.2469 6.98308Z"
+													fill="#DA7EF1" />
+											</svg>
+											Wellness</span
+										>
+										<h3 class="popularTestCard__title urbanist-medium">
+											Advanced Heart Disease Risk Blood Test
+										</h3>
+
+										<div
+											class="popularTestCard__actions d-flex flex-column flex-sm-row align-items-sm-center">
+											<a
+												href="/product.html"
+												class="popularTestCard__link button button_fill poppins-medium text-center"
+												>Order</a
+											>
+											<a
+												href="/product.html"
+												class="popularTestCard__link popularTestCard__link_outline button poppins-medium text-center"
+												>Learn more</a
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<div class="home__discover homeDdiscover">
+				<h2 class="homeDdiscover__title page__title urbanist-medium lh-sm">
+					Discover the Better Way to Check Your Health
+				</h2>
+				<p class="homeDdiscover__slogan urbanist-regular">
+					In a world where convenience matters, we provide effortless health
+					testing that fits into your lifestyle.
+				</p>
+
+				<div class="homeDdiscover__grid">
+					<div class="benefitsCard">
+						<a
+							href="/"
+							class="benefitsCard__link d-block">
+							<h3
+								class="benefitsCard__title benefitsCard__title_house urbanist-medium mb-0">
+								Convenience at Home
+							</h3>
+							<span class="benefitsCard__more urbanist-semiBold d-inline-block"
+								>Read More</span
+							>
+						</a>
+					</div>
+
+					<div class="benefitsCard">
+						<a
+							href="/"
+							class="benefitsCard__link d-block">
+							<h3
+								class="benefitsCard__title benefitsCard__title_cloud urbanist-medium mb-0">
+								Fast 100% Online Results
+							</h3>
+							<span class="benefitsCard__more urbanist-semiBold d-inline-block"
+								>Read More</span
+							>
+						</a>
+					</div>
+
+					<div class="benefitsCard">
+						<a
+							href="/"
+							class="benefitsCard__link d-block">
+							<h3
+								class="benefitsCard__title benefitsCard__title_layers urbanist-medium mb-0">
+								Comprehensive Testing
+							</h3>
+							<span class="benefitsCard__more urbanist-semiBold d-inline-block"
+								>Read More</span
+							>
+						</a>
+					</div>
+
+					<div class="benefitsCard">
+						<a
+							href="/"
+							class="benefitsCard__link d-block">
+							<h3
+								class="benefitsCard__title benefitsCard__title_shield urbanist-medium mb-0">
+								Confidential and Secure
+							</h3>
+							<span class="benefitsCard__more urbanist-semiBold d-inline-block"
+								>Read More</span
+							>
+						</a>
+					</div>
+
+					<div class="benefitsCard">
+						<a
+							href="/"
+							class="benefitsCard__link d-block">
+							<h3
+								class="benefitsCard__title benefitsCard__title_heart urbanist-medium mb-0">
+								Affordable Health Monitoring
+							</h3>
+							<span class="benefitsCard__more urbanist-semiBold d-inline-block"
+								>Read More</span
+							>
+						</a>
+					</div>
+
+					<div class="homeDdiscover__link">
+						<a
+							class="urbanist-medium d-flex justify-content-center align-items-center text-center"
+							href="/category.html">
+							More reasons <br />
+							to choose us
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="home__banner page__gap">
+				<div class="homeBanner d-flex flex-column justify-content-end">
+					<img
+						src="./img/banner-home.jpg"
+						class="homeBanner__image"
+						alt="Five people" />
+					<picture>
+						<source
+							srcset="./img/banner-home.webp"
+							type="image/webp" />
+						<img
+							src="./img/banner-home.jpg"
+							class="homeBanner__image"
+							alt="Five people" />
+					</picture>
+					<div class="homeBanner__content">
+						<span class="urbanist-medium lh-sm mb-1"
+							>Your health simplified</span
+						>
+						<h2 class="homeBanner__title urbanist-medium mb-4 lh-1">
+							Get a better you today
+						</h2>
+						<p class="homeBanner__text urbanist-regular">
+							Take control of your health without the hassle of doctor visits.
+							With fast, accurate results and doctor-reviewed insights, you'll
+							have the information you need to make informed decisions about
+							your health—all from the comfort of your home.
+						</p>
+						<a
+							href="/category.html"
+							class="button button_fill d-inline-block text-center card-text poppins-medium lh-base"
+							><small>Get Started</small></a
+						>
+					</div>
+				</div>
+			</div>
+
+			<section class="faq d-flex flex-column">
+				<div class="faq__head mx-lg-auto">
+					<h2
+						class="faq__title page__title urbanist-medium text-center lh-sm mb-lg-3">
+						Frequently asked questions.
+					</h2>
+					<p class="faq__text urbanist-regular mb-0 text-center">
+						Lorem ipsum dolor sit amet consectetur. Orci malesuada mi et mi
+						pellentesque tincidunt at mollis facilisis. Nisl eu blandit nunc
+						parturient adipiscing commodo.
+					</p>
+				</div>
+
+				<div
+					class="faqAccordion d-flex flex-column mx-lg-auto"
+					id="accordionFaq">
+					<div class="faqAccordion__item">
+						<h2 class="faqAccordion__header urbanist-medium mb-0">
+							<button
+								class="accordion-button"
+								type="button"
+								data-bs-toggle="collapse"
+								data-bs-target="#question1"
+								aria-expanded="true"
+								aria-controls="question1">
+								How does the service work?
+							</button>
+						</h2>
+						<div
+							id="question1"
+							class="accordion-collapse collapse show">
+							<div class="faqAccordion__body">
+								<p class="faqAccordion__text urbanist-regular mb-0">
+									Lorem Ipsum is simply dummy text of the printing and
+									typesetting industry. Lorem Ipsum has been the industry's
+									standard dummy text ever since the 1500s, when an unknown
+									printer took
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="faqAccordion__item">
+						<h2 class="faqAccordion__header urbanist-medium mb-0">
+							<button
+								class="accordion-button collapsed"
+								type="button"
+								data-bs-toggle="collapse"
+								data-bs-target="#question2"
+								aria-expanded="false"
+								aria-controls="question2">
+								Can I buy a test for someone else?
+							</button>
+						</h2>
+						<div
+							id="question2"
+							class="accordion-collapse collapse">
+							<div class="faqAccordion__body">
+								<p class="faqAccordion__text urbanist-regular mb-0">
+									Lorem Ipsum is simply dummy text of the printing and
+									typesetting industry. Lorem Ipsum has been the industry's
+									standard dummy text ever since the 1500s, when an unknown
+									printer took
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="faqAccordion__item">
+						<h2 class="faqAccordion__header urbanist-medium mb-0">
+							<button
+								class="accordion-button collapsed"
+								type="button"
+								data-bs-toggle="collapse"
+								data-bs-target="#question3"
+								aria-expanded="false"
+								aria-controls="question3">
+								Why do I need to complete a lifestyle questionnaire?
+							</button>
+						</h2>
+						<div
+							id="question3"
+							class="accordion-collapse collapse">
+							<div class="faqAccordion__body">
+								<p class="faqAccordion__text urbanist-regular mb-0">
+									Lorem Ipsum is simply dummy text of the printing and
+									typesetting industry. Lorem Ipsum has been the industry's
+									standard dummy text ever since the 1500s, when an unknown
+									printer took
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>

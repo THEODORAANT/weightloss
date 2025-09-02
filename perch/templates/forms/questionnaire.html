@@ -1,0 +1,1520 @@
+<perch:form id="questionnaire" method="POST" app="perch_forms" action="/get-started/questionnaire" >
+ <!--  <a href="/get-started/questionnaire?step=startagain" style="text-decoration: none;color: #000;" >Start again </a>-->
+
+    <perch:if id="step" value="howold">
+            <!-- ==========================================================================consultation section start ============================================================================================-->
+
+            <section class="how_old">
+
+
+
+                <div class="contanier">
+
+
+                    <div class="are_you">
+
+                        <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+
+
+
+                        <div class="old_title">
+                            <h2>How old are you?</h2>
+
+                        </div>
+
+
+
+                        <div class="under">
+        <input type="radio" name="age" value="under18"  onclick="submitForm('age')"  id="Under"   <perch:if id="age" value="under18" required> checked="checked" </perch:if> />
+                <label for="Under" id="UnderLabel">Under 18</label>
+
+                <input type="radio" value="18to74"   onclick="submitForm('age')" name="age" id="18to74" <perch:if id="age" value="18to74"> checked="checked" </perch:if>>
+                    <label for="18to74" id="18to74Lab">Older than 18 or Younger than 75 </label>
+
+                    <input type="radio" value="75over"  onclick="submitForm('age')" name="age" id="over"  <perch:if id="age" value="75over"> checked="checked" </perch:if>>
+                        <label for="over" id="18to74Labe">75 or over</label>
+                            <input type="hidden" id="nextstep" name="nextstep" value="">
+
+                        </div>
+
+
+
+
+
+
+
+                        <div class="get_started">
+                            <div class="started_button">
+                                <div class="get_btn">
+                                    <button><a href="/get-started">Back</a></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </section>
+        </perch:if>
+
+        <perch:if id="step" value="under18,75over" match="within">
+
+
+            <section class="under_18">
+                <div class="container">
+                    <main>
+                        <div class="message-box">
+                            <div class="icon">
+                                &#10060;
+                            </div>
+                            <h2>No suitable treatment</h2>
+
+                            <p>Our weight loss plan isn’t suitable for anyone younger than 18 or over 75. If you talk to your GP, they can discuss alternative plans to help you lose weight.</p>
+
+                            <p><strong>Did you make a mistake in your consultation?</strong> Providing false information can lead to serious harm to your health.</p>
+                            <button id="review-btn"><a href="/get-started/questionnaire?step=howold" style="text-decoration: none; color: #000;" >Review your answers</a></button>
+                            <a href='<perch:forms id="previousPage"  />' class="homepage-link">Back to homepage</a>
+                        </div>
+                    </main>
+                </div>
+            </section>
+
+
+        </perch:if>
+
+        <perch:if id="step" value="18to74">
+
+            <section class="how_old">
+                <div class="contanier">
+                    <div class="are_you">
+                        <!--  <div class="progress_bar">
+                       <div class="nambar">
+                           <span>22%</span>
+                       </div>
+
+                   </div>-->
+                        <div class="old_title">
+                            <h2>Which ethnicity are you?</h2><br>
+
+
+                            <h2>Healthy BMI ranges are different according to your ethnic background.</h2><br>
+
+
+                            <h2>Our clinicians will carefully evaluate your BMI and complete medical history to determine the most appropriate treatment. This may include prescribing medications off-label when clinically appropriate.</h2>
+                        </div>
+                        <div class="under">
+                            <input type="radio" name="ethnicity" value="asian"  onclick="submitForm('ethnicity')"  id="asian" required <perch:if id="ethnicity" value="asian"> checked="checked" </perch:if>>
+                            <label for="asian" onclick="submitForm('ethnicity')"  id="asianlabel">Asian or Asian British</label>
+
+
+                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="African" value="African" <perch:if id="ethnicity" value="African"> checked="checked" </perch:if>>
+                            <label for="African" id="Africanlabel">Black (Caribbean, African)</label>
+
+
+                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')"  id="Mixed"  value="Mixed" <perch:if id="ethnicity" value="Mixed"> checked="checked" </perch:if>>
+                            <label for="Mixed" id="Mixedlabel">Mixed ethnicities</label>
+
+                            <input type="radio" name="ethnicity"onclick="submitForm('ethnicity')"  id="Other" value="Other" <perch:if id="ethnicity" value="Other"> checked="checked" </perch:if>>
+                            <label for="Other" id="Otherlabel">Other ethnic group</label>
+
+
+                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="White" value="White" <perch:if id="ethnicity" value="White"> checked="checked" </perch:if>>
+                            <label for="White" id="Whitelabel">White</label>
+
+                            <input type="hidden" id="nextstep" name="nextstep" value="">
+
+                        </div>
+
+                        <div class="get_started">
+                            <div class="started_button">
+                                <div class="get_btn">
+                                    <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+        </perch:if>
+    <perch:if id="step" value="Other,Mixed" match="within">
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                     <div class="nambar">
+                         <span>22%</span>
+                     </div>
+
+                 </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="ethnicity-more">Please tell us which ethnicities.</label>
+                    <textarea id="ethnicity-more"  name="ethnicity-more" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href="/get-started/questionnaire?step=18to74">Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="ethnicity">
+
+                        <button type="submit" onclick="submitForm('ethnicity-more')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="ethnicity,asian,African,White" match="within" >
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>What sex were you assigned at birth?</h2>
+                    </div>
+
+
+                    <div class="under">
+
+                        <input type="radio" name="gender"  value="Male" required  onclick="submitForm('gender')"  id="Male" <perch:if id="gender" value="Male"> checked="checked" </perch:if>>
+                        <label for="Male" id="Malelabel">Male</label>
+
+                        <input type="radio" name="gender"  value="Female"    onclick="submitForm('gender')" id="Female" <perch:if id="gender" value="Female"> checked="checked" </perch:if>>
+                        <label for="Female" id="Femalelabel">Female</label>
+                        <input type="hidden" id="nextstep" name="nextstep" value="">
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </perch:if>
+    <perch:if id="step" value="Female">
+    <section class="how_old">
+        <div class="contanier">
+            <div class="are_you">
+                <!--  <div class="progress_bar">
+                           <div class="nambar">
+                               <span>22%</span>
+                           </div>
+
+                       </div>-->
+                <div class="old_title">
+                    <h2>Are you currently pregnant, trying to get pregnant, or breastfeeding?</h2>
+                </div>
+
+
+                <div class="under">
+
+                    <div class="button-group">
+                        <button id="yesBtn" onclick="setValuesForm('pregnancy','yes')" <perch:if id="pregnancy" value="yes"> class="custom_btn active" </perch:if> class="custom_btn "><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                        <button id="noBtn" onclick="setValuesForm('pregnancy','no')" <perch:if id="pregnancy" value="no"> class="custom_btn active" </perch:if> class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                        <input type="hidden" name="pregnancy" id="pregnancy"  />
+                        <input type="hidden" id="nextstep" name="nextstep" value="">
+                    </div>
+
+                </div>
+                <div class="get_started">
+                    <div class="started_button">
+                        <div class="get_btn">
+                            <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    </perch:if>
+    <perch:if id="step" value="pregnancy">
+
+
+        <section class="under_18">
+            <div class="container">
+                <main>
+                    <div class="message-box">
+                        <div class="icon">
+                            &#10060;
+                        </div>
+                        <h2>No suitable treatment</h2>
+
+                        <p>Our weight loss plan isn’t suitable , they can discuss alternative plans to help you lose weight.</p>
+
+                        <p><strong>Did you make a mistake in your consultation?</strong> Providing false information can lead to serious harm to your health.</p>
+                        <button id="review-btn"><a href="/get-started/questionnaire?step=Female" style="text-decoration: none; color: #000;" >Review your answers</a></button>
+                        <a href='<perch:forms id="previousPage"  />' class="homepage-link">Back to homepage</a>
+                    </div>
+                </main>
+            </div>
+        </section>
+
+
+    </perch:if>
+    <perch:if id="step" match="within" value="Male,weight">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <h2>What is your weight?</h2>
+                    <div class="weight-inputs">
+                        <input type="text" id="weight"  required name="weight" placeholder="Kg">
+                        <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs">
+
+                         <input type="hidden" id="weightunit" value="kg"   name="weightunit" >
+
+                    </div>
+                    <div class="unit-selector unit_selector">
+                        <label><input type="radio" required onchange="radioweight(this.value)" name="weightradio-unit" id="weightradio-kg" value="kg" checked >kg</label>
+                        <label><input type="radio" onchange="radioweight(this.value)" name="weightradio-unit"  id="weightradio-lbs" value="st-lbs"> st/lbs</label>
+                    </div>
+                    <div class="buttons">
+                        <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
+
+                        <input type="hidden" id="nextstep" name="nextstep" value="height">
+
+                        <button onclick="submitForm('weight')"   class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <script>
+
+
+            function radioweight(value) {
+
+                const weight = document.getElementById("weight");
+
+                document.getElementById("weightunit").value = document.querySelector('input[name=weightradio-unit]:checked').value;
+                if (value === "kg") {
+                    weight.placeholder = "Kg";
+                    document.getElementById("weight2").type = "hidden";
+                } else {
+                    document.getElementById("weight2").type = "text";
+                    weight.placeholder = "st";
+
+                }
+                /*  const weightkg = document.getElementById("weight");
+                  const weightlbs = document.getElementById("weight-lbs");
+
+                  if (value === "kg") {
+                      weightlbs.style.display = "none";
+                      weightkg.style.display = "flex";
+                  } else {
+                      weightlbs.style.display = "block";
+                      weightkg.style.display = "none";
+                  }*/
+
+            }
+
+
+        </script>
+    </perch:if>
+    <perch:if id="step" value="height">
+        <section class="how_old">
+        <div class="contanier">
+                <div class="what_Is_your">
+                    <!--  <div class="progress_bar">
+                            <div class="nambar">
+                                <span>22%</span>
+                            </div>
+
+                        </div>-->
+                    <h2>What is your height?</h2>
+                    <div class="weight-inputs">
+                        <input type="text" id="height" name="height" required placeholder="Cm">
+                        <input type="hidden" id="height2" name="height2" required placeholder="7.5"  step="0.1" min="0.5" max="12" required title="Enter your height in total inches">
+
+                        <input type="hidden" id="heightunit" value="cm"   name="heightunit" >
+
+                    </div>
+                    <div class="unit-selector unit_selector">
+                        <span id="spanheight">Cm</span>
+                        <label><input type="radio" required onchange="radioheight(this.value)" name="heightunit-radio"  id="heightunit-radiocm" value="cm" checked >cm</label>
+                        <label><input type="radio" onchange="radioheight(this.value)" name="heightunit-radio" id="heightunit-radio" value="ft-in"> ft/in</label>
+                    </div>
+                    <div class="buttons">
+                        <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
+
+                        <button onclick="submitForm('height')" class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="diabetes">
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <script>
+            function radioheight(value){
+
+                const weight = document.getElementById("height");
+                document.getElementById("heightunit").value=document.querySelector('input[name=heightunit-radio]:checked').value;
+                document.getElementById("spanheight").innerHTML=value;
+                if (value === "cm") {
+                    weight.placeholder = "Cm";
+                    document.getElementById("height2").type="hidden";
+                }else{
+                    document.getElementById("height2").type="number";
+                    weight.placeholder = "Ft";
+
+                }
+
+            }
+        </script>
+    </perch:if>
+
+    <perch:if id="step" value="diabetes">
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Have you been diagnosed with diabetes?</h2><br>
+
+
+                        <h2>Diabetes treatments can impact the way the medication included with our weight loss plan works.
+                        </h2><br>
+
+
+                    </div>
+                    <div class="under">
+                        <input type="radio" name="diabetes" required onclick="submitForm('diabetes')"  <perch:if id="diabetes" value="yes-medication"> checked </perch:if>   value="yes-medication" id="yes-medication" checked="checked">
+                        <label for="yes-medication" id="have">I have diabetes and take medication for it</label>
+
+
+                        <input type="radio" name="diabetes" value="yes-diet" <perch:if id="diabetes" value="yes-diet"> checked </perch:if>   onclick="submitForm('diabetes')" id="yes-diet">
+                        <label for="yes-diet" >I have diabetes and it's diet-controlled</label>
+
+
+                        <input type="radio" name="diabetes" id="nohistory" onclick="submitForm('diabetes')" <perch:if id="diabetes" value="nohistory"> checked </perch:if>   value="nohistory">
+                        <label for="nohistory" id="there">No, but there is history of diabetes in my family</label>
+
+                        <input type="radio" value="pre-diabetes"  <perch:if id="diabetes" value="pre-diabetes"> checked </perch:if>  id="pre-diabetes" onclick="submitForm('diabetes')" name="diabetes" id="Other">
+                        <label for="pre-diabetes" >I have pre-diabetes</label>
+
+
+                        <input type="radio" name="diabetes" id="no"  <perch:if id="diabetes" value="no"> checked </perch:if>   value="no" onclick="submitForm('diabetes')">
+                        <label for="no" >I don't have diabetes</label>
+                        <input type="hidden" id="nextstep" name="nextstep" value="weight2">
+
+
+
+                    </div>
+
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+
+
+    <perch:if id="step" value="weight2">
+        <section class="statements_apply">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="statement_content">
+                            <div class="top_contents">
+                               <!-- <div class="progress_bar">
+                                    <p class="Percent_text">14%</p><span class="bar_line"></span>
+                                </div>-->
+                                <h5>Do any of the following statements apply to you?</h5>
+                                <h5>
+                                    These conditions can lead to serious complications when losing weight or taking weight loss medications.
+                                </h5>
+                            </div>
+                            <!--////////////========chekbox section start=======/////////////-->
+                            <div class="box_group mt-2">
+                                <div class="box_list" id="fullBox">
+                                    <input type="checkbox" name="conditions[]"  <perch:if id="conditions" value="malabsorption"> checked </perch:if>   class="check1" value="malabsorption" onclick="changeColor()">
+                                    <span class="box_text">I have chronic malabsorption syndrome (problems absorbing food)</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox2">
+                                    <input type="checkbox" name="conditions[]" value="cholestasis" <perch:if id="conditions" value="cholestasis"> checked </perch:if>  class="check1" onclick="changeColor2()">
+                                    <span class="box_text">I have cholestasis</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox3">
+                                    <input type="checkbox" name="conditions[]" value="cancer" <perch:if id="conditions" value="cancer"> checked </perch:if>  class="check1" onclick="changeColor3()">
+                                    <span class="box_text">I’m currently being treated for cancer</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox4">
+                                    <input type="checkbox" name="conditions[]" value="retinopathy"  <perch:if id="conditions" value="retinopathy"> checked </perch:if>   class="check1" onclick="changeColor4()">
+                                    <span class="box_text">I have diabetic retinopathy</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox5">
+                                    <input type="checkbox" name="conditions[]" value="heartfailure" <perch:if id="conditions" value="heartfailure"> checked </perch:if>  class="check1" onclick="changeColor5()">
+                                    <span class="box_text">I have severe heart failure</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox6">
+                                    <input type="checkbox" name="conditions[]" value="familythyroid" <perch:if id="conditions" value="familythyroid"> checked </perch:if>  class="check1" onclick="changeColor6()">
+                                    <span class="box_text">I have a family history of thyroid cancer and/or I’ve had thyroid cancer</span>
+                                </div>
+
+
+
+
+                                <div class="box_list mt-2" id="fullBox7">
+                                    <input type="checkbox" name="conditions[]" value="neoplasia" <perch:if id="conditions" value="neoplasia"> checked </perch:if>  class="check1" onclick="changeColor7()">
+                                    <span class="box_text">I have Multiple endocrine neoplasia type 2 (MEN2)</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox8">
+                                    <input type="checkbox" name="conditions[]" value="pancreatitishistory" <perch:if id="conditions" value="pancreatitishistory"> checked </perch:if>  class="check1" onclick="changeColor8()">
+                                    <span class="box_text">I have a history of pancreatitis</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox9">
+                                    <input type="checkbox" name="conditions[]" value="eatingdisorder" <perch:if id="conditions" value="eatingdisorder"> checked </perch:if>  class="check1" onclick="changeColor9()">
+                                    <span class="box_text">I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder</span>
+                                </div>
+
+
+
+
+                                <div class="box_list mt-2" id="fullBox10">
+                                    <input type="checkbox" name="conditions[]" value="thyroidoperation" <perch:if id="conditions" value="thyroidoperation"> checked </perch:if>  class="check1" onclick="changeColor10()">
+                                    <span class="box_text">I have had surgery or an operation to my thyroid</span>
+                                </div>
+
+
+                                <div class="box_list mt-2" id="fullBox11">
+                                    <input type="checkbox"  name="conditions[]" value="bariatricoperation" <perch:if id="conditions" value="bariatricoperation"> checked </perch:if>  class="check1" onclick="changeColor11()">
+                                    <span class="box_text">I have had a bariatric operation such as gastric band or sleeve surgery</span>
+                                </div>
+
+
+
+                                <br>
+
+
+
+                                <div class="box_list mt-2 mb-5" id="fullBox12">
+                                    <input type="checkbox" name="conditions[]" value="none" class="check1" <perch:if id="conditions" value="none"> checked </perch:if>  onclick="changeColor12()">
+                                    <span class="box_text">None of these statements apply to me</span>
+                                </div>
+                            </div>
+                            <!--////////////========chekbox section END=======/////////////-->
+
+                            <!--////////////========Button section Start=======/////////////-->
+                            <div class="bottom_btn mt-5">
+                                <input type="hidden" id="nextstep" name="nextstep" value="conditions">
+
+                                <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                                <button id="nextButton"  onclick="submitForm('conditions')" class="btn_next" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                            </div>
+                            <!--////////////========Button section END=======/////////////-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </perch:if>
+
+    <perch:if id="step" value="bariatricoperation">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                            <div class="nambar">
+                                <span>22%</span>
+                            </div>
+
+                        </div>-->
+                    <div class="old_title">
+                        <h2>Was your bariatric operation in the last 6 months? </h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+
+                            <button id="yesBtn" onclick="setValuesForm('bariatricoperation','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('bariatricoperation','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="bariatricoperation" name="bariatricoperation" value="">
+
+                            <input type="hidden" id="nextstep" name="nextstep" value="">
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="history_pancreatitis">
+        <section class="under_18">
+            <div class="container">
+                <main>
+                    <div class="message-box">
+                        <div class="icon">
+                            &#10060;
+                        </div>
+                        <h2>No suitable treatment</h2>
+
+                        <p>Based on your medical history, your weight loss is best managed by your GP and we can’t recommend our weight loss plan for you.</p>
+
+                        <p><strong>Did you make a mistake in your consultation?</strong> Providing false information can lead to serious harm to your health.</p>
+                        <button id="review-btn"><a href="/get-started/questionnaire?step=howold" style="text-decoration: none; color: #000;" >Review your answers</a></button>
+                        <a href='<perch:forms id="previousPage"  />' class="homepage-link">Back to homepage</a>
+                    </div>
+                </main>
+            </div>
+        </section>
+
+    </perch:if>
+    <perch:if id="step" value="more_pancreatitis">
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                  <!--  <div class="progress_bar">
+                        <div class="nambar">
+                            <span>22%</span>
+                        </div>
+
+                    </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="more_pancreatitis">Please tell us more about your health condition and how you manage it.</label>
+                    <textarea id="more_pancreatitis" required name="more_pancreatitis" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href='<perch:forms id="previousPage"  />'>Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="conditions">
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button type="submit" onclick="submitForm('more_pancreatitis')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="thyroidoperation">
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                     <div class="nambar">
+                         <span>22%</span>
+                     </div>
+
+                 </div>-->
+                </div>
+                <form id="thyroidoperation">
+                    <label for="thyroidoperation">Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring</label>
+                    <textarea id="thyroidoperation" required name="thyroidoperation" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href='<perch:forms id="previousPage"  />'>Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="conditions">
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button type="submit" onclick="submitForm('thyroidoperation')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </perch:if>
+
+    <perch:if id="step" value="more">
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                     <div class="nambar">
+                         <span>22%</span>
+                     </div>
+
+                 </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="more_conditions">Please tell us more about your health condition and how you manage it.</label>
+                    <textarea id="more_conditions" required name="more_conditions" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href='<perch:forms id="previousPage"  />'>Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="medical_conditions">
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button type="submit" onclick="submitForm('more_conditions')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="conditions">
+        <section class="statements_apply">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="statement_content">
+                            <div class="top_contents">
+                               <!-- <div class="progress_bar">
+                                    <p class="Percent_text">20%</p><span class="bar_line"></span>
+                                </div>-->
+                                <h5>Do any of the following statements apply to you?</h5>
+                                <h5>
+                                    These conditions are often weight related and may be improved as a result of losing weight.
+                                </h5>
+                            </div>
+                            <!--////////////========chekbox section start=======/////////////-->
+                            <div class="box_group mt-2">
+                                <div class="box_list" id="fullBox">
+                                    <input type="checkbox" name="conditions2[]" value="mentalhealth" class="check1" onclick="changeColor()">
+                                    <span class="box_text">I have been diagnosed with a mental health condition such as depression or anxiety </span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox2">
+                                    <input type="checkbox" name="conditions2[]" value="anxious" class="check1" onclick="changeColor2()">
+                                    <span class="box_text">My weight makes me anxious in social situations</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox3">
+                                    <input type="checkbox" name="conditions2[]" value="joint" class="check1" onclick="changeColor3()">
+                                    <span class="box_text">I have joint pains and/or aches</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox4">
+                                    <input type="checkbox"  name="conditions2[]" value="osteoarthritis" class="check1" onclick="changeColor4()">
+                                    <span class="box_text">I have osteoarthritis</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox5">
+                                    <input type="checkbox" name="conditions2[]" value="indigestion" class="check1" onclick="changeColor5()">
+                                    <span class="box_text">I have GORD and/or indigestion</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox6">
+                                    <input type="checkbox" name="conditions2[]" value="cardiovascular" class="check1" onclick="changeColor6()">
+                                    <span class="box_text">I have a heart/cardiovascular problem</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox7">
+                                    <input type="checkbox" name="conditions2[]" value="bloodpressure"  class="check1" onclick="changeColor7()">
+                                    <span class="box_text">I’ve been diagnosed with, or have a family history of, high blood pressure</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox8">
+                                    <input type="checkbox" name="conditions2[]" value="cholesterol"  class="check1" onclick="changeColor8()">
+                                    <span class="box_text">I’ve been diagnosed with, or have a family history of, high cholesterol</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox9">
+                                    <input type="checkbox" name="conditions2[]" value="fattyliver" class="check1" onclick="changeColor9()">
+                                    <span class="box_text">I have fatty liver disease</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox10">
+                                    <input type="checkbox" name="conditions2[]" value="apnoea"  class="check1" onclick="changeColor10()">
+                                    <span class="box_text">I have sleep apnoea</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox11">
+                                    <input type="checkbox" name="conditions2[]" value="asthma"  class="check1" onclick="changeColor11()">
+                                    <span class="box_text">I have asthma or COPD</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox12">
+                                    <input type="checkbox" name="conditions2[]" value="erectile" class="check1" onclick="changeColor12()">
+                                    <span class="box_text">I have erectile dysfunction</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox13">
+                                    <input type="checkbox" name="conditions2[]" value="testosterone" class="check1" onclick="changeColor13()">
+                                    <span class="box_text">I have low testosterone</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox14">
+                                    <input type="checkbox" name="conditions2[]" value="menopausal" class="check1" onclick="changeColor14()">
+                                    <span class="box_text">I have menopausal symptoms</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox15">
+                                    <input type="checkbox" name="conditions2[]" value="pcos" class="check1" onclick="changeColor15()">
+                                    <span class="box_text">I have polycystic ovary syndrome (PCOS)</span>
+                                </div>
+                                <hr>
+                                <div class="box_list mt-2" id="fullBox16">
+                                    <input type="checkbox" name="conditions2[]" value="none" class="check1" onclick="changeColor16()">
+                                    <span class="box_text">None of these statements apply to me</span>
+                                </div>
+                            </div>
+                            <!--////////////========chekbox section END=======/////////////-->
+
+                            <!--////////////========Button section Start=======/////////////-->
+                            <div class="bottom_btn mt-5">
+                                <input type="hidden" id="nextstep" name="nextstep" value="medical_conditions">
+
+                                <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                                <button id="nextButton" onclick="submitForm('conditions')" class="btn_next" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                            </div>
+                            <!--////////////========Button section END=======/////////////-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </perch:if>
+    <perch:if id="step" value="medical_conditions">
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Do you have any other medical conditions?</h2>
+                        <br>
+                        <h2>Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you. </h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesForm('medical_conditions','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('medical_conditions','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+
+                            <input type="hidden" id="medical_conditions" name="medical_conditions" value="">
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <input type="hidden" id="nextstep" name="nextstep" value="">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </perch:if>
+    <perch:if id="step" value="medications">
+        <section class="statements_apply">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="statement_content">
+                            <div class="top_contents">
+                               <!-- <div class="progress_bar">
+                                    <p class="Percent_text">26%</p><span class="bar_line"></span>
+                                </div>-->
+                                <h5>
+                                    Have you ever taken any of the following medications to help you lose weight?
+                                </h5>
+                            </div>
+                            <!--////////////========chekbox section start=======/////////////-->
+                            <div class="box_group mt-2">
+                                <div class="box_list" id="fullBox">
+                                    <input type="checkbox" name="medications[]" value="wegovy" class="check1" onclick="changeColor()">
+                                    <span class="box_text">Wegovy</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox2">
+                                    <input type="checkbox" name="medications[]" value="ozempic" class="check1" onclick="changeColor2()">
+                                    <span class="box_text">Ozempic</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox3">
+                                    <input type="checkbox" name="medications[]" value="saxenda" class="check1" onclick="changeColor3()">
+                                    <span class="box_text">Saxenda</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox4">
+                                    <input type="checkbox" name="medications[]" value="rybelsus" class="check1" onclick="changeColor4()">
+                                    <span class="box_text">Rybelsus</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox5">
+                                    <input type="checkbox" name="medications[]" value="mounjaro" class="check1" onclick="changeColor5()">
+                                    <span class="box_text">Mounjaro</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox6">
+                                    <input type="checkbox" name="medications[]" value="alli" class="check1" onclick="changeColor6()">
+                                    <span class="box_text">Alli</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox7">
+                                    <input type="checkbox" name="medications[]" value="mysimba" class="check1" onclick="changeColor7()">
+                                    <span class="box_text">Mysimba</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox8">
+                                    <input type="checkbox" name="medications[]" value="other" class="check1" onclick="changeColor8()">
+                                    <span class="box_text">Other</span>
+                                </div>
+                                <hr>
+                                <div class="box_list mt-2" id="fullBox9">
+                                    <input type="checkbox" name="medications[]" value="none"  class="check1" onclick="changeColor9()">
+                                    <span class="box_text">I have never taken medication to lose weight</span>
+                                </div>
+                            </div>
+                            <!--////////////========chekbox section END=======/////////////-->
+
+                            <!--////////////========Button section Start=======/////////////-->
+                            <div class="bottom_btn mt-5">
+                                <input type="hidden" id="nextstep" name="nextstep" value="medication_allergies">
+
+                                <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                                <button id="nextButton" class="btn_next" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                            </div>
+                            <!--////////////========Button section END=======/////////////-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </perch:if>
+    <perch:if id="step" value="starting_wegovy" >
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <!--  <div class="progress_bar">
+                       <div class="nambar">
+                           <span>22%</span>
+                       </div>
+
+                   </div>-->
+                    <h2>What was your weight in kg/st-lbs before starting <span id="medication">the weight loss medication</span>?</h2>
+                    <div class="weight-inputs">
+                        <input type="text" name="weight-wegovy" id="weight-wegovy" placeholder="Kg">
+                        <input type="hidden" id="weight2-wegovy" required name="weight2-wegovy" placeholder="lbs"/>
+                        <input type="hidden" id="unit-wegovy" value="kg"   name="unit-wegovy" >
+
+                        <div class="st_lbs" id="st-lbs-inputs" style="display: none;">
+                            <input type="text" placeholder="St">
+                            <input type="text" placeholder="Lbs">
+                        </div>
+                    </div>
+                    <div class="unit-selector unit_selector">
+                        <label><input type="radio" required onchange="radioweight(this.value)" name="unit-wegovyradio" required value="kg" checked>kg</label>
+                        <label><input type="radio"  onchange="radioweight(this.value)" name="unit-wegovyradio" value="st-lbs"> st/lbs</label>
+                    </div>
+
+                  <!--  <div class="buttons skip ">
+                        <button class="back skip_button "><a href="/get-started/questionnaire?step=dose_wegovy" style="text-decoration: none;color: #000;" >Skip</a></button>
+                    </div>-->
+
+
+                    <div class="buttons">
+                        <input type="hidden" id="nextstep" name="nextstep" value="dose_wegovy">
+
+                        <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button onclick="submitForm('weight-wegovy')" class="next"><span  style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <script>
+
+            function radioweight(value) {
+
+                const weight = document.getElementById("weight-wegovy");
+                document.getElementById("unit-wegovy").value = document.querySelector('input[name=unit-wegovyradio]:checked').value;
+
+                if (value === "kg") {
+                    weight.placeholder = "Kg";
+                    document.getElementById("weight2-wegovy").type = "hidden";
+                } else {
+                    document.getElementById("weight2-wegovy").type = "text";
+                    weight.placeholder = "st";
+
+                }
+                /*  const weightkg = document.getElementById("weight");
+                  const weightlbs = document.getElementById("weight-lbs");
+
+                  if (value === "kg") {
+                      weightlbs.style.display = "none";
+                      weightkg.style.display = "flex";
+                  } else {
+                      weightlbs.style.display = "block";
+                      weightkg.style.display = "none";
+                  }*/
+
+            }
+
+
+        </script>
+    </perch:if>
+    <perch:if id="step" value="dose_wegovy" >
+        <section class="how_old">
+
+
+
+            <div class="contanier">
+
+
+                <div class="are_you">
+
+                    <!--  <div class="progress_bar">
+                        <div class="nambar">
+                            <span>22%</span>
+                        </div>
+
+                    </div>-->
+
+
+                    <div class="old_title">
+                        <h2>When was your last dose of <span id="medication">the weight loss medication</span>?</h2>
+                    </div>
+
+
+
+                    <div class="under">
+
+
+                        <input type="radio" value="less4" onclick="submitForm('dose-wegovy')" name="dose-wegovy"  required id="Under" checked="checked">
+                        <label for="Under" id="Less">Less than 4 weeks ago</label>
+
+                        <input type="radio" value="4to6"  onclick="submitForm('dose-wegovy')" name="dose-wegovy"  id="4to6">
+                        <label for="4to6" id="ago">4-6 weeks ago</label>
+
+                        <input type="radio" value="over6" onclick="submitForm('dose-wegovy')" name="dose-wegovy"  id="over">
+                        <label for="over" id="More">More than 6 weeks ago</label>
+
+                        <input type="hidden" id="nextstep" name="nextstep" value="recently_wegovy">
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </section>
+    </perch:if>
+    <perch:if id="step" value="recently_wegovy" >
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                     <div class="nambar">
+                         <span>22%</span>
+                     </div>
+
+                 </div>-->
+                    <div class="old_title">
+                        <h2>What dose of <span id="medication">the weight loss medication</span> were you prescribed most recently?</h2><br>
+
+
+                    </div>
+                    <div class="under">
+                        <input type="radio" value="25mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy"  required id="25mg" checked="checked">
+                        <label for="25mg" >0.25mg/2.5mg</label>
+
+
+                        <input type="radio" id="05mg"  value="05mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy" >
+                        <label for="05mg" >0.5mg/5mg</label>
+
+
+                        <input type="radio" id="1mg"  value="1mg"  onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="1mg" >1mg/7.5mg</label>
+
+                        <input type="radio" id="17mg" value="17mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="17mg" >1.7mg/12.5mg</label>
+
+
+                        <input type="radio" value="24mg" id="24mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="24mg" >2.4mg/15mg</label>
+
+                        <input type="radio" value="other" id="other" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="other" >Other</label>
+
+                        <input type="hidden" id="nextstep" name="nextstep" value="continue_with_wegovy">
+
+
+                    </div>
+
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </perch:if>
+    <perch:if id="step" value="continue_with_wegovy">
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>If you want to continue with <span id="medication">the weight loss medication</span>, what dose would you like to continue with? </h2><br>
+
+
+                        <p style="font-weight: 500;" > <strong>A</strong> clinician will review your answers and select your dosage as appropriate. Price varies by dosage. </p>
+
+
+                    </div>
+                    <div class="under">
+                        <input type="radio" id="increase" value="increase" required onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy"  checked="checked">
+                        <label for="increase" >Increase my dose</label>
+
+
+                        <input type="radio" id="keep" value="keep"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy" >
+                        <label for="keep" >Keep my dose </label>
+
+
+                        <input type="radio"  id="decrease"  value="decrease"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy">
+                        <label for="decrease" id="dose">Decrease my dose</label>
+
+                        <input type="radio" id="not-continue"  value="not-continue"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy">
+                        <label for="not-continue" >I don't want to continue with this medication</label>
+                        <input type="hidden" id="nextstep" name="nextstep" value="effects_with_wegovy">
+
+
+
+
+
+
+                    </div>
+
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="effects_with_wegovy">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Have you experienced any side effects with <span id="medication">the weight loss medication</span>? </h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesForm('effects_with_wegovy','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('effects_with_wegovy','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="nextstep" name="nextstep" value="">
+                            <input type="hidden" id="effects_with_wegovy" name="effects_with_wegovy" value="">
+
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="medication_allergies" >
+        <section class="statements_apply">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="statement_content">
+                            <div class="top_contents">
+                              <!--  <div class="progress_bar">
+                                    <p class="Percent_text">95%</p><span class="bar_line"></span>
+                                </div>-->
+                                <h5>
+                                    Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.
+                                </h5>
+
+
+                                <h5>
+                                    It’s really important that we know about any medication you're taking so that we can make sure there are no interactions with your weight loss plan.
+                                </h5>
+                            </div>
+                            <!--////////////========chekbox section start=======/////////////-->
+                            <div class="box_group mt-2">
+                                <div class="box_list" id="fullBox">
+                                    <input type="checkbox" name="medication_allergies[]" value="levothyroxine" class="check1" onclick="changeColor()">
+                                    <span class="box_text">I’m on levothyroxine</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox2">
+                                    <input type="checkbox" name="medication_allergies[]" value="warfarin"  class="check1" onclick="changeColor2()">
+                                    <span class="box_text">I’m on warfarin</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox3">
+                                    <input type="checkbox" name="medication_allergies[]" value="other"   class="check1" onclick="changeColor3()">
+                                    <span class="box_text">Other / I take more than one prescription medication</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox4">
+                                    <input type="checkbox" name="medication_allergies[]"  value="no-medication"   class="check1" onclick="changeColor4()">
+                                    <span class="box_text">I don’t take any medication</span>
+                                </div>
+                                <div class="box_list mt-2" id="fullBox5">
+                                    <input type="checkbox" name="medication_allergies[]"  value="allergies" class="check1" onclick="changeColor5()">
+                                    <span class="box_text">I have allergies</span>
+                                </div>
+
+
+
+
+
+                            </div>
+                            <!--////////////========chekbox section END=======/////////////-->
+
+                            <!--////////////========Button section Start=======/////////////-->
+                            <div class="bottom_btn mt-5">
+                                <input type="hidden" id="nextstep" name="nextstep" value="gp_informed">
+
+
+                                <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                                <button id="nextButton" class="btn_next" onclick="submitForm('medication_allergies')" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                            </div>
+                            <!--////////////========Button section END=======/////////////-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="list_any_medications" >
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                       <div class="nambar">
+                           <span>22%</span>
+                       </div>
+
+                   </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="other_medical_conditions">Please list any other medical conditions you have. <br> <br> Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you.</label>
+                    <textarea id="other_medical_conditions" required name="other_medical_conditions" placeholder="My health conditions are..."></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <input type="hidden" id="nextstep" name="nextstep" value="medications">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href='<perch:forms id="previousPage"  />'>Back</a></button>
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button type="submit" onclick="submitForm('other_medical_conditions')"  class="next" id="" ><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+    </perch:if>
+    <perch:if id="step" value="list_any" >
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                       <div class="nambar">
+                           <span>22%</span>
+                       </div>
+
+                   </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="other_medical_conditions">Please list any other medical conditions you have. <br> <br> Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you.</label>
+                    <textarea id="other_medical_conditions" required name="other_medical_conditions" placeholder="My health conditions are..."></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <input type="hidden" id="nextstep" name="nextstep" value="medications">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href='<perch:forms id="previousPage"  />'>Back</a></button>
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button type="submit" onclick="submitForm('other_medical_conditions')"  class="next" id="" ><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+    </perch:if>
+    <perch:if id="step" value="wegovy_side_effects" >
+
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="wegovy_side_effects">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
+                    <textarea id="wegovy_side_effects" required name="wegovy_side_effects" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href='<perch:forms id="previousPage"  />'>Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="medication_allergies">
+                       <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                        <button type="submit"  onclick="submitForm('wegovy_side_effects')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+
+    </perch:if>
+    <perch:if id="step" value="gp_informed" >
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                       <div class="nambar">
+                           <span>22%</span>
+                       </div>
+
+                   </div>-->
+                    <div class="old_title">
+                        <h2>Would you like your GP to be informed of this consultation?</h2><br>
+
+                        <p style="font-weight: 600;" >To ensure we provide the best and safest service for you, we strongly encourage you to share your GP details so we can inform them about your treatment. If you are aware of your GP practice's email address, please enter them on the next screen.</p>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesForm('gp_informed','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('gp_informed','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="nextstep" name="nextstep" value="">
+                            <input type="hidden" id="gp_informed" name="gp_informed" value="">
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+    </perch:if>
+
+    <perch:if id="step" value="gp_address">
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <!--  <div class="progress_bar">
+                       <div class="nambar">
+                           <span>22%</span>
+                       </div>
+
+                   </div>-->
+                    <h2>Please enter your GP's email address</h2>
+                    <div class="weight-inputs">
+                        <input type="text" id="GP_email_address"  name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" >
+
+                        <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
+
+                    </div>
+
+
+                    <div class="buttons skip ">
+                        <button class="back skip_button "><a href="/get-started/questionnaire?step=access_special_offers" style="text-decoration: none;color: #000;" >Skip</a></button>
+                    </div>
+
+
+                    <div class="buttons">
+                        <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
+
+                        <button onclick="submitForm('GP_email_address')" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </perch:if>
+    <perch:if id="step" value="access_special_offers">
+
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <h2>Get access to special offers</h2>
+                    <p style="font-weight: 600;" >Take the first step towards improving your metabolic health. You'll receive personalised health insights and exclusive monthly offers available only to Get Weight Loss members.</p>
+                    <div class="weight-inputs">
+                        <input type="text" id="email_address" name="email_address" placeholder="Email address (optional)" style="width: 100%;" >
+
+
+
+                    </div>
+
+
+                    <div class="buttons skip ">
+                        <button class="back skip_button "><a href="/get-started/review-questionnaire" style="text-decoration: none;color: #000;" >Skip</a></button>
+                    </div>
+
+
+                    <div class="buttons">
+
+
+                          <input type="hidden" id="nextstep" name="nextstep" value="plans">
+                        <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
+
+                        <button onclick="submitForm('access_special_offers')"  class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </perch:if>
+
+
+
+
+</perch:form>
+<style>
+    .custom_btn.active {
+        background: #00000052;
+        color: #fff !important;
+    }
+
+</style>
