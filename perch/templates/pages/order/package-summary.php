@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="plans mt-4">
 <form method="post">
     <?php perch_shop_package_contents([
-        'template' => 'products/package-summary/summary',
+        'template' => 'products/package-summary/summary.html',
     ]); ?>
 
     <button type="submit" name="action" value="update">Update package</button>
