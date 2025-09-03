@@ -904,6 +904,57 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 		return $r;
 
 	}
+
+
+	public function get_package_items($opts)
+    	{
+    	 $Packages = new PerchShop_Packages($this->api);
+            $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+
+
+            if (!$Package) {
+                return false;
+            }
+
+            $Items    = $Package->get_items();
+            $Products = new PerchShop_Products($this->api);
+            $data     = [];
+                	  $r = false;
+            if (is_array($Items)) {
+                foreach ($Items as $Item) {
+                    $title = '';
+
+                    if ($Item->variantID()) {
+                        $Product = $Products->find($Item->variantID());
+                        if ($Product) {
+                            $title = $Product->title();
+                        }
+                    } elseif ($Item->productID()) {
+                        $Product = $Products->find($Item->productID());
+                        if ($Product) {
+                            $title = $Product->title();
+                        }
+                    }
+
+                    $data[] = [
+                        'id'       => $Item->itemID(),
+                        'title'    => $title,
+                        'quantity' => $Item->qty(),
+                    ];
+                }
+		  $Template = $this->api->get("Template");
+          $Template->set($opts["template"], 'shop');
+print_r( $Template);
+
+        if (PerchUtil::count($data)) {
+                       $r = $Template->render_group($data, true);
+         }
+            }
+
+
+
+		return $r;
+    	}
 	public function get_order_items($opts)
 	{
 		$this->init_cart();
