@@ -1,0 +1,68 @@
+<perch:before>
+
+</perch:before>
+<div class="product d-flex active" data-product="<perch:shop id="slug" type="slug" />">
+
+
+
+<div class="product_text">
+
+    <h3><perch:shop id="title" type="text" /></h3>
+
+    <p class="d-inline-block"><del>		<perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" />
+    </del> </p> <span><strong>		<perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" />
+</strong></span>
+    <p>Select your next dose:<br/>
+
+    </p>
+        <perch:form id="cart<perch:shop id="productID" env-autofill="false" />" action="/order/cart" app="perch_shop">
+
+            <perch:input class="form-control mb-4 dose_dropdown" type="select" id="product<perch:shop id="productID" env-autofill="false" />" name="dose"
+                         options="<perch:shop id="_variant_opts" type="hidden" />" />
+
+            <perch:cartitems>
+                <perch:input id="qty:<perch:cartitem id="identifier" />" value="<perch:cartitem id="quantity" />" type="number" min="0" />
+            </perch:cartitems>
+
+
+        <perch:input class="btn btn-primary next_btn mt-4 mb-3 next-btn" id="submitbtn<perch:shop id="productID" env-autofill="false" />"  type="submit" value="Add to Basket" />
+        </perch:form>
+
+</div>
+</div>
+
+
+<perch:after>
+
+</perch:after>
+<style>
+/* Style for the select element */
+.dose_dropdown {
+width: 100%; /* Ensures it takes up full container width */
+padding: 10px; /* Adds padding inside the select box */
+font-size: 16px; /* Adjusts font size */
+border: 2px solid #ccc; /* Adds a light border */
+border-radius: 5px; /* Rounds the corners */
+background-color: #f8f9fa; /* Light background color */
+transition: all 0.3s ease; /* Smooth transition effect */
+}
+
+/* Hover effect for select element */
+.dose_dropdown:hover {
+border-color: #007bff; /* Changes border color when hovered */
+background-color: #e9ecef; /* Slightly darker background */
+}
+
+/* Style for the options inside the select element */
+.dose_dropdown option {
+font-size: 16px; /* Ensures option text has same font size */
+padding: 10px; /* Adds space inside options */
+background-color: #fff; /* Ensures background color of options is white */
+}
+
+/* Style for when the select dropdown is open */
+.dose_dropdown:focus {
+border-color: #007bff; /* Adds a blue border on focus */
+outline: none; /* Removes the default focus outline */
+}
+</style>

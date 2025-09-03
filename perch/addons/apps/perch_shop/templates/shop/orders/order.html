@@ -1,0 +1,28 @@
+<div class="plan">
+    <div>
+        <h5>Order ID</h5>
+        <p><perch:shop id="orderID" /></p>
+    </div>
+    <div>
+        <h5>Invoice Number</h5>
+        <p><perch:shop id="orderInvoiceNumber" /></p>
+    </div>
+    <div>
+        <h5>Date</h5>
+        <p><perch:shop id="orderCreated" type="date" format="d F Y H:i" /></p>
+    </div>
+
+    <div>
+        <h5>Total </h5>
+        <p><perch:shop id="orderTotal" /> <perch:shop id="orderCurrency" /></p>
+    </div>
+    <div>
+        <h5>Status </h5>
+        <p><perch:shop id="orderStatus" format="UC" /></p>
+    </div>
+    <div>
+        <h5>Shipping </h5>
+        <p><perch:shop id="orderShippingTaxRate"/></p>
+    </div>
+
+</div>

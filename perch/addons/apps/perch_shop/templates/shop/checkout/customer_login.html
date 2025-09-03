@@ -1,0 +1,35 @@
+<perch:member logged-in="true">
+
+	<h3 class="text-center">Hi <perch:member id="first_name" />, you are logged in</h3>
+
+	<perch:else:member />
+	<perch:form id="login" method="post"  app="perch_members" type="user">
+
+		<div class="mb-3">
+
+			<perch:label for="email" class="form-label">Email</perch:label>
+			<perch:input type="email" class="form-control" id="email" placeholder="Email" required="true" />
+			<perch:error for="email" type="required">Please add your email address</perch:error>
+			<perch:error for="email" type="format">Check format of address</perch:error>
+		</div>
+		<div class="mb-3">
+
+			<perch:label for="password" class="form-label">Password</perch:label>
+			<perch:input type="password" class="form-control" id="password" placeholder="Password" required="true">
+				<perch:error for="password" type="required">Please add a password</perch:error>
+		</div>
+		<div class="mb-3 text-center fotgot_btn">
+
+			<perch:error for="all" type="login">
+				<p class="error text-center mt-3">Those details do not match our records.</p>
+			</perch:error>
+
+			<perch:input type="submit" class="btn btn-primary w-100" id="submit" value="Sign in" />
+			<perch:input type="hidden" id="r" />
+			<a href="/client/forgot-password" class="btn btn_forgot w-100 my-3">Forgot Password</a>
+		</div>
+	</perch:form>
+
+
+
+</perch:member>

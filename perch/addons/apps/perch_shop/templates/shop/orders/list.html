@@ -1,0 +1,22 @@
+<perch:before>
+
+
+</perch:before>
+<div class="plan" >
+	<div>
+		<h5><a href="/client/order?id=<perch:shop id="orderID" escape="true" />">
+			<perch:shop id="orderInvoiceNumber" />
+			</a></h5>
+		<p><perch:shop id="orderCreated" type="date" format="d F Y H:i" /></p>
+	</div>
+	<div class="price-section">
+		<span ></span>
+		<span class="price fw-bold"><perch:shop id="orderTotal" /></span>
+	</div>
+	<span class="badge_save"><perch:shop id="orderStatus" format="UC" /></span>
+</div>
+
+
+<perch:after>
+
+</perch:after>

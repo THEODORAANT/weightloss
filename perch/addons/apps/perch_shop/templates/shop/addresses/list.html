@@ -1,0 +1,29 @@
+<perch:before>
+<table class="table table-bordered">
+</perch:before>
+<tr>
+	<th>
+		<div class="mb-3">
+		<perch:shop id="addressFirstName" /> <perch:shop id="addressLastName" />
+		<perch:if exists="addressCompany"><br /><perch:shop id="addressCompany" /></perch:if>
+		</div>
+	</th>
+	<td>
+		<div class="mb-3">
+		<perch:if exists="address_1"><perch:shop id="address_1" /><br /></perch:if>
+		<perch:if exists="address_2"><perch:shop id="address_2" /><br /></perch:if>
+		<perch:if exists="city"><perch:shop id="city" /> <br /></perch:if>
+		<perch:if exists="county"><perch:shop id="county" /> <br /></perch:if>
+		<perch:if exists="postcode"><perch:shop id="postcode" /> <br /></perch:if>
+		<perch:if exists="country_name"><perch:shop id="country_name" /></perch:if>
+		</div>
+	</td>
+	<td>
+		<div style="background-color: #00ccbd;text-transform: uppercase;" class="badge  text-dark loss ">
+		<a style="text-decoration: none;color:black;" href="/client/addresses?addressID=<perch:shop id="addressID" />/">Edit</a>
+		</div>
+	</td>
+</tr>
+<perch:after>
+</table>
+</perch:after>

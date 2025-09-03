@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@getaddress/autocomplete": "^3.0.9"
+  }
+}

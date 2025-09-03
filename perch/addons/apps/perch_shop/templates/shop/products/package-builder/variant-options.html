@@ -1,0 +1,56 @@
+<perch:before>
+</perch:before>
+
+<div class="product d-flex active" data-product="<perch:shop id="slug" type="slug" />">
+<div class="product_text">
+    <h3><perch:shop id="title" type="text" /></h3>
+
+    <p class="d-inline-block">
+        <del><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></del>
+    </p>
+    <span><strong><perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" /></strong></span>
+
+    <p>Select your next dose:</p>
+
+    <!-- IMPORTANT: still posts to /order/package-builder -->
+    <perch:form id="package<perch:shop id="productID" env-autofill="false" />" action="/order/package-builder" app="perch_shop">
+
+        <!-- Carry the draft package + months along on every submit -->
+        <perch:input type="hidden" name="package_id" value="<perch:shop id="package_id" type="hidden" />" />
+        <perch:input type="hidden" name="months"     value="<perch:shop id="months"     type="hidden" />" />
+    <perch:input type="hidden"
+                 name="package_id"
+                 value="<perch:shop id="package_id" />" />
+
+        <!-- Current month index -->
+        <perch:input type="hidden" name="selections[<perch:shop id="month" type="hidden" />][month]"
+                     value="<perch:shop id="month" type="hidden"/>" />
+
+        <!-- Product reference for server -->
+        <perch:input type="hidden" name="selections[<perch:shop id="month" type="hidden" />][product_id]"
+                     value="<perch:shop id="productID" env-autofill="false" />" />
+
+        <!-- Dose select: name it inside selections[...] by month -->
+        <perch:input class="form-control mb-4 dose_dropdown"
+                     type="select"
+                     id="product<perch:shop id="productID" env-autofill="false" />"
+                     name="selections[<perch:shop id="month" type="hidden" />][dose]"
+                     options="<perch:shop id="_variant_opts" type="hidden" />" />
+
+
+        <!-- Quantity (if you need it per month). If you rely on cartitems, keep that; otherwise use this. -->
+        <perch:input type="number"
+                     min="1"
+                     value="1"
+                     name="selections[<perch:shop id="month" type="hidden" />][qty]" />
+
+        <perch:input class="btn btn-primary next_btn mt-4 mb-3 next-btn"
+                     id="submitbtn<perch:shop id="productID" env-autofill="false" />"
+                     type="submit"
+                     value="Add to package" />
+    </perch:form>
+</div>
+</div>
+
+<perch:after>
+</perch:after>

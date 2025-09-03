@@ -1,0 +1,28 @@
+<perch:before>
+
+</perch:before>
+
+<!-- Popular add-ons section End -->
+<div class="main_product">
+	<span class="most-popular">Most popular</span>
+	<img  src="<perch:shop id="image" type="image" label="Main product image" required="true" />" alt="<perch:shop id="title" type="text" label="Title" required="true" />" />
+
+	<div class="details_product">
+		<h3 class="fw-bolder"><perch:shop id="title" type="text" /></h3>
+		<p><perch:shop id="description" type="textarea" label="Description" editor="markitup" order="3" markdown="true" size="s" />
+
+		</p>
+		<span class="price"><perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" />
+</span>
+		<span class="old_price">		<perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" />
+</span>
+		<!--<span class="save-tag">Save 25%</span>-->
+		<button class="add-btn" id="<perch:shop id="productID" type="hidden" env-autofill="false" />" onclick="addToCart(this)">+ Add</button>
+	</div>
+</div>
+
+
+<perch:after>
+
+</perch:after>
+

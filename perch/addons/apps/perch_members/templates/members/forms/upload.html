@@ -1,0 +1,35 @@
+
+<perch:form id="upload" method="post" app="perch_members" enctype="multipart/form-data" class="d-flex flex-column gap-4 mb-5">
+    <div class="plan"  data-save="8">
+        <div>
+            <h5>  <perch:label for="image">ID Document:</perch:label><br></h5>
+            <p>   <perch:input type="hidden" name="documentType" id="documentType" value="id-documents"  />         <perch:input type="file" name="image" id="image" accept="image/*" required /><br><br>
+            </p>
+        </div>
+        <div class="price-section">
+                    <span class="price fw-bold">
+
+                        <div class="preview">
+    <img id="imgPreview" width="320" height="240"  style="display: none;" alt="Image Preview">
+  </div></span>
+                </div>
+    </div>
+    <div class="plan"  data-save="8">
+        <div>
+            <h5>  <perch:label for="video">Video Document:</perch:label><br></h5>
+            <p>               <perch:input type="file" name="video" id="video" accept="video/*" required /><br><br>
+                <br><br>
+            </p>
+        </div>
+       <div class="price-section">
+                    <span class="price fw-bold">
+                        <div class="preview">
+
+    <video width="320" height="240"  id="videoPreview" style="display: none;" controls></video>
+  </div></span>
+                </div>
+    </div>
+
+    <perch:input type="submit" value="Upload" name="upload"   class="btn btn-primary next_btn mt-4 mb-3 next-btn" />
+
+    </perch:form>
