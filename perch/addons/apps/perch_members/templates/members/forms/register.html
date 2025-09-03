@@ -1,0 +1,54 @@
+<div class="scheduleForm__formFields  pt-2">
+<perch:form id="register" method="post" app="perch_members" type="default" class="d-flex flex-column gap-4 mb-5">
+
+	<div
+			class="scheduleForm__field inter-regular d-flex flex-column">
+		<perch:label class="mb-1"  for="first_name">First name</perch:label>
+		<perch:input type="text" id="first_name" required="true" label="First name" />
+		<perch:error for="first_name" type="required">Please add your name</perch:error>
+	</div>
+
+	<div  class="scheduleForm__field inter-regular d-flex flex-column">
+		<perch:label class="mb-1" for="last_name">Last name</perch:label>
+		<perch:input type="text" id="last_name" required="true"antispam="last_name" label="Last name" />
+		<perch:error for="last_name" type="required">Please add your name</perch:error>
+	</div>
+
+	<div  class="scheduleForm__field inter-regular d-flex flex-column">
+		<perch:label 	class="mb-1" for="email">Email</perch:label>
+		<perch:input type="email" id="email" required="true" placeholder="you@company.com" helper="PerchMembers_Members::check_email" />
+		<perch:error for="email" type="required">Please add your email address</perch:error>
+		<perch:error for="email" type="helper">That email address is already in use</perch:error>
+	</div>
+
+	<div  class="scheduleForm__field inter-regular d-flex flex-column">
+		<perch:label class=password for="password">Password</perch:label>
+		<perch:input type="password" id="password" required="true" match-with="password2" />
+		<perch:error for="password" type="required">Please add a password</perch:error>
+		<perch:error for="password" type="match">Passwords do not match</perch:error>
+	</div>
+
+	<div  class="scheduleForm__field inter-regular d-flex flex-column">
+		<perch:label class=password for="password2">Password again</perch:label>
+		<perch:input type="password" id="password2" required="true" />
+		<perch:error for="password2" type="required">Please repeat your password</perch:error>
+	</div>
+
+
+	<div  class="scheduleForm__field inter-regular d-flex flex-column">
+		<perch:input type="submit" value="Register" />
+		<button
+				id="submitForm-Btn"
+				type="submit"
+				form="scheduleForm"
+				class="scheduleForm__button scheduleForm__button_submit inter-medium text-center d-none button_fill">
+			Register
+		</button>
+	</div>
+
+	<perch:success>
+		<p>Thanks!</p>
+	</perch:success>
+
+</perch:form>
+</div>

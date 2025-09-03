@@ -1,0 +1,57 @@
+<perch:form id="profile" method="post" app="perch_members" class="d-flex flex-column gap-4 mb-5">
+	<fieldset>
+	<div class="mb-3">
+		<perch:label class="form-label" for="first_name">First name</perch:label>
+		<perch:input class="form-control required" type="text" id="first_name" required="true" label="First name" />
+		<perch:error  class="error-message text-danger" for="first_name" type="required">Please add a your name</perch:error>
+
+	</div>
+	<div  class="mb-3">
+		<perch:label  class="form-label" for="last_name">Last name</perch:label>
+		<perch:input class="form-control required"  type="text" id="last_name" required="true" label="Last name" />
+		<perch:error for="last_name"  class="error-message text-danger"type="required">Please add a your name</perch:error>
+	</div>
+
+	<div  class="mb-3">
+		<perch:label class="form-label" for="email">Email</perch:label>
+		<perch:input class="form-control required"  style="backround-color:#f5f3f3" type="email" id="email" required="true" readonly placeholder="you@email.com" />
+		<perch:error for="email" class="error-message text-danger" type="required">Please add a your email address</perch:error>
+		<perch:error for="email" class="error-message text-danger" type="format">Please check a your email address</perch:error>
+	</div>
+	</fieldset>
+
+	<div  class="mb-3">
+		<perch:label class="form-label" ><b>Your Affiliate Code :</b></perch:label>
+			<perch:input class="form-control required" readonly  style="backround-color:#f5f3f3" type="text" id="affID" />
+		<perch:if not-exists="affID">
+			<p>	<button type="button"  class="form-control "  onclick="generateAffCode()" />  <i class="fas fa-key mr-2"></i> Generate Code </button>
+			</p>
+		</perch:if>
+
+
+
+	</div>
+	<div class="mb-3">
+		<perch:input type="submit" value="Save" class="btn btn-primary w-100" />
+
+
+		<perch:input type="hidden" id="token" />
+	</div>
+
+	<perch:success>
+		<p>Your details have been updated.</p>
+	</perch:success>
+
+</perch:form>
+
+	<script>
+		function generateAffCode() {
+		const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		let code = 'AFF';
+		for (let i = 0; i < 5; i++) {
+		code += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+		document.getElementById('form1_affID').value =code;
+	}
+</script>
+

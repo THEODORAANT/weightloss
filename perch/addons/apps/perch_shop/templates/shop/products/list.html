@@ -1,0 +1,35 @@
+<perch:before>
+
+</perch:before>
+<div class="product d-flex active" onclick="setActiveProduct(this.dataset.product);"  data-product="<perch:shop id="slug" type="slug" />">
+
+<!--
+<img  src="<perch:shop id="image" type="image" label="Main product image" required="true" />" alt="<perch:shop id="title" type="text" label="Title" required="true" />" />
+   -->
+	<div class="product_text">
+		<!--<h6>Up to 22% weight loss</h6>-->
+		<h3><perch:shop id="title" type="text" /></h3>
+
+		<p class="d-inline-block"><del>		<perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" />
+		</del> </p> <span><strong>		<perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" />
+</strong></span>
+		<p><perch:shop id="description" type="textarea" label="Description" editor="markitup" order="3" markdown="true" size="s" />
+
+			<!--<a class="learn-more" id="<perch:shop id="slug" type="slug" />" href="/medications/<perch:shop id="slug" type="slug" />">Learn more</a>
+     -->
+            <perch:form id="cart" action="/order/addons" app="perch_shop">
+            <perch:input class="form-control mb-4 dose_dropdown" type="select"  name="product"
+            options="<perch:shop id="_variant_opts" type="hidden" />" />
+                <p>1. 2.5 mg/0.25mg must be requested as a starting dose.</p>
+                <p>2. All other dose requests will require proof of previous purchase prior to shipping.</p>
+        <perch:input class="btn btn-primary next_btn mt-4 mb-3 next-btn" id="submitbtn<perch:shop id="productID" env-autofill="false" />"  type="submit" value="Continue with <perch:shop id="title" type="text" />" />
+            </perch:form>
+
+        </div>
+    </div>
+
+
+    <perch:after>
+
+    </perch:after>
+

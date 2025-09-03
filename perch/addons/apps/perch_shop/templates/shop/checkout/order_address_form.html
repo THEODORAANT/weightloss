@@ -1,0 +1,83 @@
+<perch:form id="order_address" method="post" app="perch_shop">
+	<div class="plan">
+		<h4>Shipping Address</h4>
+	</div>
+
+	<perch:addresses>
+
+		<div class="plan"  data-save="8">
+			<div class="address">
+
+						<perch:input type="radio" id="shipping" value="<perch:address id="addressSlug" />" /></p>
+				<p>	<perch:address id="addressFirstName" /> <perch:address id="addressLastName" /></p>
+				<p>		<perch:address id="addressCompany" /></p>
+				<p><perch:address id="address_1" /> <perch:address id="address_2" /></p>
+				<p><perch:address id="city" /> <perch:address id="county" /> <perch:address id="postcode" /></p>
+				<p>	<perch:address id="country_name" /></p>
+
+		</div>
+
+		</div>
+	</perch:addresses>
+
+<br/></br>
+
+	<div class="plan">
+
+		<h4>Billing Address</h4>
+	</div>
+	<perch:addresses>
+		<div class="plan"  data-save="8">
+			<div class="address">
+
+			<perch:input type="radio" id="billing" value="<perch:address id="addressSlug" />" />
+				<p><perch:address id="addressFirstName" /></p>
+				<p><perch:address id="addressLastName" /> <perch:address id="addressCompany" /></p>
+				<p>	<perch:address id="address_1" /></p>
+				<p><perch:address id="address_2" /></p>
+				<p><perch:address id="city" /></p>
+				<p><perch:address id="county" /></p>
+				<p><perch:address id="postcode" /></p>
+				<p><perch:address id="country_name" /></p>
+
+			</div>
+		</div>
+	</perch:addresses>
+
+
+	<div>
+		<perch:input type="submit" id="submit" class="add-btn" value="Continue" />
+		<perch:input type="hidden" id="r" />
+	</div>
+
+</perch:form>
+
+
+
+<style>
+
+	/* Address block */
+	.plan[data-save] {
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		padding: 15px;
+		margin-bottom: 20px;
+		background-color: #fafafa;
+		transition: border-color 0.3s;
+	}
+
+	.plan[data-save]:hover {
+		border-color: #007BFF;
+	}
+
+	/* Address content */
+	.address p {
+		margin: 0;
+		padding: 2px 0;
+	}
+
+	/* Radio input */
+	input[type="radio"] {
+		margin-right: 10px;
+	}
+</style>

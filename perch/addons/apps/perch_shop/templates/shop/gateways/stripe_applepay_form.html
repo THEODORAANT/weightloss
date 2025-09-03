@@ -1,0 +1,38 @@
+<!-- Add the Apple Pay button on your webpage -->
+<button id="apple-pay-button" class="apple-pay-button">Pay with Apple Pay</button>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('<perch:shop id="publishable_key" escape="true" />');
+
+    var elements = stripe.elements();
+    var applePayButton = document.getElementById('apple-pay-button');
+
+    // Handle the button click and request a token
+    applePayButton.addEventListener('click', function () {
+        stripe.paymentRequest({
+            country: '<perch:shop id="country" escape="true" />',
+            currency: '<perch:shop id="currency" escape="true" />',
+            total: {
+                label: 'Total',
+                amount: <perch:shop id="amount" escape="true"/>, // Amount in cents
+            },
+            requestPayerName: true,
+            requestPayerEmail: true
+        }).canMakePayment().then(function (result) {
+            if (result.canMakePayment) {
+                // Apple Pay is available, display the button and start the payment
+                stripe.paymentRequestWithApplePay().then(function(token) {
+                    // Send token to your server
+                    fetch('/process_apple_pay.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({token: token.id})
+                    });
+                });
+            }
+        });
+    });
+</script>

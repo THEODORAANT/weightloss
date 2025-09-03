@@ -1,0 +1,50 @@
+<perch:before>
+	<table>
+
+		<tr style="background-color: #e2e2e2;
+                display: flex ;
+                /* align-items: center; */
+                gap: 60px; ">
+			<th>Schedule</th>
+			<th style="margin-left: 100px;" >Dose</th>
+			<th style="margin-left: 100px;">Pre-discount price</th>
+		</tr>
+
+
+</perch:before>
+
+
+
+
+
+
+
+
+<tr style="background-color: #eeeeee;
+                display: flex ;
+                /* align-items: center; */
+                gap: 50px; ">
+	<td>
+		<a href="/shop/products/<perch:shop id="slug" type="slug" />/">
+		<perch:shop id="productVariantDesc" type="text" />
+
+		</a>
+		<perch:if not-exists="has_variants">
+			<perch:form id="add_to_cart" app="perch_shop" action="/shop/cart">
+				<perch:input id="product" type="hidden" value="<perch:shop id="productID" env-autofill="false" />" />
+				<perch:input type="submit" value="Add to cart" />
+			</perch:form>
+		</perch:if>
+	</td>
+	<td style="margin-left: 70px;"><perch:shop id="productVariantDesc" type="text" /></td>
+	<td style="margin-left: 85px;"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="m" min="0" step="any" />
+	</td>
+</tr>
+
+
+
+
+
+<perch:after>
+	</table>
+</perch:after>

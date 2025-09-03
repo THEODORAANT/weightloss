@@ -1,0 +1,78 @@
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+
+<div id="result"></div>
+    <!-- <button id="klarna-button" class="klarna-button">
+        <img src="/perch/addons/apps/perch_shop/assets/klarnaicon.png" alt="Pay with Klarna" />
+        Pay with Klarna
+    </button>-->
+    <div class="d-flex flex-wrap gap-3">
+
+        <button id="klarna-button"  class="klarna-button btn btn-light border d-flex align-items-center gap-2" style="background-color: #ffb3c7;">
+            <img src="/asset/payment-methods/klarnaicon.png" alt="Klarna Logo" style="height: 24px;" />
+            Pay with Klarna
+        </button>
+    </div>
+
+<style>
+    .klarna-button {
+        background-color: #ffb3c7;
+        border: none;
+       /* padding: 10px 20px;
+        display: flex;*/
+
+
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        align-items: center;
+        justify-content: center;
+        display: block;
+        position: relative;
+        padding: 0 12px;
+        height: 57px;
+        width:252px;
+        line-height: 30px;
+    }
+
+    .klarna-button:hover {
+        background-color: #ff8fb0;
+    }
+
+    .klarna-button img {
+        height: 24px;
+    }
+
+</style>
+<script>
+    const stripe = Stripe('<perch:shop id="publishable_key" escape="true"/>'); // your publishable key
+var responsesecret="<perch:shop id="client_secret_key"  />";
+    document.getElementById("klarna-button").addEventListener("click", async () => {
+        // Fetch client_secret from backend
+      //  const res = await fetch("create-klarna-payment.php");
+        const client_secretkey  =responsesecret;
+        //console.log(client_secretkey);
+
+        const clsecretkey=client_secretkey;
+            //JSON.stringify(client_secretkey);//await client_secretkey.json();
+        console.log(clsecretkey);
+
+        const {error, paymentIntent} = await stripe.confirmKlarnaPayment(clsecretkey, {
+            payment_method: {
+                billing_details: {
+                    email: '<perch:member id="email" escape="true" />', // Required for Klarna
+                },
+            },
+            return_url: window.location.href + '?success=true',
+        });
+
+        if (error) {
+            document.getElementById("result").textContent = '❌ ' + error.message;
+        } else {
+            document.getElementById("result").textContent = '✅ Klarna payment started';
+        }
+    });
+</script>
+
+
