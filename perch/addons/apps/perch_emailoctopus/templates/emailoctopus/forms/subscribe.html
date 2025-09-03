@@ -1,0 +1,26 @@
+
+<perch:form id="subscribe" app="perch_emailoctopus" class="footerSubscribe__form d-flex flex-wrap flex-sm-row" double-optin="true">
+
+	<perch:success>
+		<p>Thank you!</p>
+	</perch:success>
+	<perch:input
+			class="footerSubscribe__input urbanist-regular rounded-pill w-lg-50"
+			id="email" required="true" type="email" mailer="email"
+			pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+			placeholder="Email address" />
+	<!--<button
+			class="button button_fill footerSubscribe__button urbanist-semiBold">
+		Subscribe
+	</button>-->
+
+
+
+		<perch:input type="submit" value="Subscribe" id="Submit" class="button button_fill footerSubscribe__button urbanist-semiBold">
+		<span style="display: none;" ><perch:input type="text" name="honeypot" /></span>
+
+		<perch:input type="hidden" value="1" id="confirm" mailer="confirm_subscribe" />
+		<perch:input type="hidden" id="list" value="your list ID goes here" mailer="list" />
+
+
+</perch:form>
