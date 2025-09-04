@@ -53,10 +53,10 @@ function perch_shop_update_package_status($status)
 
     $API      = new PerchAPI(1.0, 'perch_shop');
     $Packages = new PerchShop_Packages($API);
-    $Package  = $Packages->find((int)$_SESSION['perch_shop_package_id']);
+    $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
 
     if ($Package) {
-        return $Package->update(['status' => $status]);
+        $Package->update(['status' => $status]);
     }
 
     return $Package;

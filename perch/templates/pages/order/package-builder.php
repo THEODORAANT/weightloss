@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($package) {
 
                     $_SESSION['perch_shop_package_id']= $_SESSION['draft_package']['id'];
+                    $_SESSION['package_billing_type'] = $_SESSION['draft_package']['billing'];
                     print_r($_SESSION['draft_package']['selections']);
                     perch_shop_add_package_item($package->id(), $_SESSION['draft_package']['selections']);
                           unset($_SESSION['draft_package']);
