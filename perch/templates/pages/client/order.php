@@ -63,7 +63,15 @@ echo '<div class="plan">
                   }    }  ?>
 
 
-</div></div>
+        </div></div>
+
+        <div class="container all_content mt-4">
+            <h2 class="text-center fw-bolder">Future Payments</h2>
+
+            <div class="plans mt-4">
+                <?php perch_shop_future_packages(); ?>
+            </div>
+        </div>
 
 </section>
 

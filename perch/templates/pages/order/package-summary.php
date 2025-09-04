@@ -1,7 +1,9 @@
 <?php  if (session_status() === PHP_SESSION_NONE) {
               session_start();
-          } //include('../perch/runtime.php');
-print_r($_SESSION);
+          }
+if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
+    $_SESSION['perch_shop_package_id'] = $_GET['package'];
+} //include('../perch/runtime.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantities = perch_post('qty');
     $removals = perch_post('remove');
@@ -21,8 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $package = perch_shop_update_package_status("confirmed");
             if ($package) {
-            echo "checkout";print_r($package);
-              //  $result= perch_shop_add_to_cart($_POST["dose"]);
+                $billing = $_SESSION['package_billing_type'] ?? 'prepaid';
+                $items   = $package->get_items();
+                if (is_array($items)) {
+                    foreach ($items as $Item) {
+                        if ($billing === 'monthly' && (int)$Item->month() > 1) {
+                            continue;
+                        }
+                        $productID = $Item->variantID() ? $Item->variantID() : $Item->productID();
+                        if ($productID) {
+                            perch_shop_add_to_cart($productID, $Item->qty());
+                        }
+                    }
+                }
                 PerchUtil::redirect('checkout.php');
             }
         } catch (Exception $e) {

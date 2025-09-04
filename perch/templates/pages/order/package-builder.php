@@ -40,21 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($package) {
 
                     $_SESSION['perch_shop_package_id']= $_SESSION['draft_package']['id'];
-                    print_r($_SESSION['draft_package']['selections']);
+                    $_SESSION['package_billing_type'] = $_SESSION['draft_package']['billing'];
                     perch_shop_add_package_item($package->id(), $_SESSION['draft_package']['selections']);
                           unset($_SESSION['draft_package']);
                             //$draft = null;
 
                     }
 
-echo "db crsyion";
-
- echo "perch_shop_package_id";
- echo $_SESSION['perch_shop_package_id'];
+// Debug output removed
         // Optional: redirect to a confirmation screen
       header('Location: /order/package-summary'); exit;
     } else {
-    echo "posts";print_r($_POST);
         // Create/attach a draft ID
         $posted_id = isset($_POST['package_id']) ? (string)$_POST['package_id'] : null;
 
@@ -119,8 +115,6 @@ echo "db crsyion";
         --------------------------------------------------------- */
 
         $_SESSION['draft_package'] = $draft;
-        echo "draft_package crsyion";
-        print_r($_SESSION['draft_package']);
     }
 }
 
