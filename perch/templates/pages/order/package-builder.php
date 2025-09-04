@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $_SESSION['perch_shop_package_id']= $_SESSION['draft_package']['id'];
                     $_SESSION['package_billing_type'] = $_SESSION['draft_package']['billing'];
+
                     perch_shop_add_package_item($package->id(), $_SESSION['draft_package']['selections']);
                           unset($_SESSION['draft_package']);
                             //$draft = null;
@@ -204,11 +205,22 @@ if (isset($_GET['months'])) {
                     PerchSystem::set_var('package_id', $packageId);
                     PerchSystem::set_var('months', $months);
     PerchSystem::set_var('billing_type', $billing);
+    if($billing=="monthly"){
+      perch_shop_product('mounjaro-monthly-mounjaro',[
 
-            perch_shop_products([
+                                          'template' => 'products/package-builder/variant-options'
+                                      ]);
+    }else{
+    perch_shop_product('mounjaro-mounjaro-prepaid',[
+
+                                      'template' => 'products/package-builder/variant-options'
+                                  ]);
+    }
+
+         /*   perch_shop_products([
                 'category' => 'products/weight-loss',
                 'template' => 'products/package-builder/variant-options'
-            ]);
+            ]);*/
         } else {
             echo '<p class="muted">perch_shop_products() not available in this environment.</p>';
         }
@@ -217,9 +229,8 @@ if (isset($_GET['months'])) {
       <?php if (!empty($selections[$i])): ?>
         <div class="selections">
           <strong>Saved for month <?= (int)$i ?>:</strong>
-          <div>Dose: <?= h($selections[$i]['dose'] ?? '-') ?></div>
           <div>Qty: <?= h($selections[$i]['qty'] ?? '1') ?></div>
-          <div>Product ID: <?= h($selections[$i]['product_id'] ?? '-') ?></div>
+          <div>Product ID: <?= h($selections[$i]['productID'] ?? '-') ?></div>
         </div>
       <?php endif; ?>
     </div>

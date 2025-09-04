@@ -78,54 +78,12 @@ function perch_shop_package_contents($opts = [], $return = false)
     if (!isset($_SESSION['perch_shop_package_id'])) {
         return false;
     }
+$ShopRuntime = PerchShop_Runtime::fetch();
+			$r = $ShopRuntime->get_package_items($opts);
 
-    $API      = new PerchAPI(1.0, 'perch_shop');
-    $Packages = new PerchShop_Packages($API);
-    $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
-
-
-    if (!$Package) {
-        return false;
-    }
-
-    $Items    = $Package->get_items();
-    $Products = new PerchShop_Products($API);
-    $data     = [];
-
-    if (is_array($Items)) {
-        foreach ($Items as $Item) {
-            $title = '';
-
-            if ($Item->variantID()) {
-                $Product = $Products->find($Item->variantID());
-                if ($Product) {
-                    $title = $Product->title();
-                }
-            } elseif ($Item->productID()) {
-                $Product = $Products->find($Item->productID());
-                if ($Product) {
-                    $title = $Product->title();
-                }
-            }
-
-            $data[] = [
-                'id'       => $Item->id(),
-                'title'    => $title,
-                'quantity' => $Item->qty(),
-            ];
-        }
-    }
-
-    $Template = new PerchTemplate('shop/' . $opts['template']);
-    $r        = $Template->render(['packageitems' => $data]);
-
-    if ($return) {
-        return $r;
-    }
-
-    echo $r;
-    PerchUtil::flush_output();
-    return true;
+if ($return) return $r;
+		echo $r;
+		PerchUtil::flush_output();
 }
 
 function perch_shop_future_packages($opts = [], $return = false)
