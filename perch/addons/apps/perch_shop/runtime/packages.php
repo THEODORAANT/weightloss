@@ -78,46 +78,64 @@ function perch_shop_package_contents($opts = [], $return = false)
     if (!isset($_SESSION['perch_shop_package_id'])) {
         return false;
     }
+$ShopRuntime = PerchShop_Runtime::fetch();
+			$r = $ShopRuntime->get_package_items($opts);
+
+if ($return) return $r;
+		echo $r;
+		PerchUtil::flush_output();
+}
+
+function perch_shop_future_packages($opts = [], $return = false)
+{
+    $opts = PerchUtil::extend([
+        'template'      => 'packages/future.html',
+        'skip-template' => false,
+    ], $opts);
+
+    if ($opts['skip-template']) {
+        $return = true;
+    }
+
+    if (!perch_member_logged_in()) {
+        if ($return) {
+            return $opts['skip-template'] ? [] : '';
+        }
+        echo '';
+        PerchUtil::flush_output();
+        return true;
+    }
+
+    $Runtime    = PerchShop_Runtime::fetch();
+    $customerID = $Runtime->get_customer_id();
 
     $API      = new PerchAPI(1.0, 'perch_shop');
     $Packages = new PerchShop_Packages($API);
-    $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+    $packages = $Packages->get_for_customer($customerID);
 
+    $data  = [];
+    $today = time();
 
-    if (!$Package) {
-        return false;
-    }
+    if (PerchUtil::count($packages)) {
+        foreach ($packages as $Package) {
+            $date   = $Package->packageDate();
+            $status = $Package->packageStatus();
 
-    $Items    = $Package->get_items();
-    $Products = new PerchShop_Products($API);
-    $data     = [];
-
-    if (is_array($Items)) {
-        foreach ($Items as $Item) {
-            $title = '';
-
-            if ($Item->variantID()) {
-                $Product = $Products->find($Item->variantID());
-                if ($Product) {
-                    $title = $Product->title();
-                }
-            } elseif ($Item->productID()) {
-                $Product = $Products->find($Item->productID());
-                if ($Product) {
-                    $title = $Product->title();
+            if ($status === 'pending' && $date) {
+                $ts = strtotime($date);
+                if ($ts >= $today) {
+                    $data[] = [
+                        'uuid'        => $Package->uuid(),
+                        'packageDate' => $date,
+                        'due'         => ($ts <= $today ? 1 : 0),
+                    ];
                 }
             }
-
-            $data[] = [
-                'id'       => $Item->id(),
-                'title'    => $title,
-                'quantity' => $Item->qty(),
-            ];
         }
     }
 
     $Template = new PerchTemplate('shop/' . $opts['template']);
-    $r        = $Template->render(['packageitems' => $data]);
+    $r        = $Template->render(['packages' => $data]);
 
     if ($return) {
         return $r;

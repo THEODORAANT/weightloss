@@ -12,7 +12,7 @@ class PerchShop_Package extends PerchShop_Base
     public function get_items()
     {
         $Items = new PerchShop_PackageItems($this->api);
-        return $Items->get_for_package($this->id());
+        return $Items->get_for_package($this->uuid());
     }
 }
 

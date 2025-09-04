@@ -4,6 +4,7 @@
 if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
     $_SESSION['perch_shop_package_id'] = $_GET['package'];
 } //include('../perch/runtime.php');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantities = perch_post('qty');
     $removals = perch_post('remove');
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="plans mt-4">
 <form method="post">
     <?php perch_shop_package_contents([
-        'template' => 'products/package-summary/summary',
+        'template' => 'products/package-summary/summary.html',
     ]); ?>
 
     <button type="submit" name="action" value="update">Update package</button>
