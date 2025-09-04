@@ -21,6 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     if (perch_post('action') === 'checkout') {
+        $is_reorder = customer_has_paid_order();
+        if ($is_reorder) {
+            if (empty($_SESSION['questionnaire-reorder'])) {
+                PerchUtil::redirect('/order/re-order');
+            }
+        } else {
+            if (empty($_SESSION['questionnaire'])) {
+                PerchUtil::redirect('/getStarted');
+            }
+        }
         try {
             $package = perch_shop_update_package_status("confirmed");
             if ($package) {
