@@ -212,7 +212,7 @@ if (isset($_GET['months'])) {
                     PerchSystem::set_var('months', $months);
     PerchSystem::set_var('billing_type', $billing);
     if($billing=="monthly"){
-      perch_shop_product('mounjaro-mounjaro-monthly',[
+      perch_shop_product('mounjaro-monthly-mounjaro',[
 
                                           'template' => 'products/package-builder/variant-options'
                                       ]);
