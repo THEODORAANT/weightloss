@@ -943,8 +943,8 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
                     ];
                 }
 		  $Template = $this->api->get("Template");
-          $Template->set($opts["template"], 'shop');
-print_r( $Template);
+          $Template->set("shop/".$opts["template"], 'shop');
+
 
         if (PerchUtil::count($data)) {
                        $r = $Template->render_group($data, true);
