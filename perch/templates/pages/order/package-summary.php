@@ -1,6 +1,10 @@
 <?php  if (session_status() === PHP_SESSION_NONE) {
               session_start();
-          } //include('../perch/runtime.php');
+          }
+if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
+    $_SESSION['perch_shop_package_id'] = $_GET['package'];
+} //include('../perch/runtime.php');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantities = perch_post('qty');
     $removals = perch_post('remove');

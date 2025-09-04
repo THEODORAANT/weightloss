@@ -4,8 +4,6 @@ function perch_shop_create_package($data)
 {
     $API      = new PerchAPI(1.0, 'perch_shop');
     $Packages = new PerchShop_Packages($API);
-    echo "new package";
-    print_r($data);
     return $Packages->create($data);
 }
 
@@ -14,7 +12,6 @@ function perch_shop_add_package_item($packageID, $data)
     $API   = new PerchAPI(1.0, 'perch_shop');
     $Items = new PerchShop_PackageItems($API);
 
-    echo "perch_shop_add_package_item";
     $data['packageID'] = $packageID;
 
     return  $Items->create($data);
@@ -87,4 +84,64 @@ $ShopRuntime = PerchShop_Runtime::fetch();
 if ($return) return $r;
 		echo $r;
 		PerchUtil::flush_output();
+}
+
+function perch_shop_future_packages($opts = [], $return = false)
+{
+    $opts = PerchUtil::extend([
+        'template'      => 'packages/future.html',
+        'skip-template' => false,
+    ], $opts);
+
+    if ($opts['skip-template']) {
+        $return = true;
+    }
+
+    if (!perch_member_logged_in()) {
+        if ($return) {
+            return $opts['skip-template'] ? [] : '';
+        }
+        echo '';
+        PerchUtil::flush_output();
+        return true;
+    }
+
+    $Runtime    = PerchShop_Runtime::fetch();
+    $customerID = $Runtime->get_customer_id();
+
+    $API      = new PerchAPI(1.0, 'perch_shop');
+    $Packages = new PerchShop_Packages($API);
+    $packages = $Packages->get_for_customer($customerID);
+
+    $data  = [];
+    $today = time();
+
+    if (PerchUtil::count($packages)) {
+        foreach ($packages as $Package) {
+            $date   = $Package->packageDate();
+            $status = $Package->packageStatus();
+
+            if ($status === 'pending' && $date) {
+                $ts = strtotime($date);
+                if ($ts >= $today) {
+                    $data[] = [
+                        'uuid'        => $Package->uuid(),
+                        'packageDate' => $date,
+                        'due'         => ($ts <= $today ? 1 : 0),
+                    ];
+                }
+            }
+        }
+    }
+
+    $Template = new PerchTemplate('shop/' . $opts['template']);
+    $r        = $Template->render(['packages' => $data]);
+
+    if ($return) {
+        return $r;
+    }
+
+    echo $r;
+    PerchUtil::flush_output();
+    return true;
 }
