@@ -211,11 +211,22 @@ if (isset($_GET['months'])) {
                     PerchSystem::set_var('package_id', $packageId);
                     PerchSystem::set_var('months', $months);
     PerchSystem::set_var('billing_type', $billing);
+    if($billing=="monthly"){
+      perch_shop_product('mounjaro-mounjaro-monthly',[
 
-            perch_shop_products([
+                                          'template' => 'products/package-builder/variant-options'
+                                      ]);
+    }else{
+    perch_shop_product('mounjaro-mounjaro-prepaid',[
+
+                                      'template' => 'products/package-builder/variant-options'
+                                  ]);
+    }
+
+         /*   perch_shop_products([
                 'category' => 'products/weight-loss',
                 'template' => 'products/package-builder/variant-options'
-            ]);
+            ]);*/
         } else {
             echo '<p class="muted">perch_shop_products() not available in this environment.</p>';
         }
@@ -224,9 +235,8 @@ if (isset($_GET['months'])) {
       <?php if (!empty($selections[$i])): ?>
         <div class="selections">
           <strong>Saved for month <?= (int)$i ?>:</strong>
-          <div>Dose: <?= h($selections[$i]['dose'] ?? '-') ?></div>
           <div>Qty: <?= h($selections[$i]['qty'] ?? '1') ?></div>
-          <div>Product ID: <?= h($selections[$i]['product_id'] ?? '-') ?></div>
+          <div>Product ID: <?= h($selections[$i]['productID'] ?? '-') ?></div>
         </div>
       <?php endif; ?>
     </div>
