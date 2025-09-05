@@ -14,6 +14,6 @@
                                                 'perch_shop_orders/customers/delete',
                                                 ],
                                 'label'=>'Customers'],
-                ['page'=>'../../package_report.php', 'label'=>'Package Report'],
+                ['page'=>'../package_report.php', 'label'=>'Package Report'],
         ], $CurrentUser);
 
