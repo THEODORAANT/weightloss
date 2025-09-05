@@ -28,9 +28,13 @@ CREATE TABLE IF NOT EXISTS `__PREFIX__shop_packages` (
   `customerID` int(10) unsigned NOT NULL DEFAULT '0',
   `month` char(7) NOT NULL DEFAULT '',
   `status` char(32) NOT NULL DEFAULT '',
+  `nextBillingDate` date DEFAULT NULL,
   PRIMARY KEY (`packageID`),
   KEY `idx_customer` (`customerID`)
 ) CHARSET=utf8;
+
+ALTER TABLE `__PREFIX__shop_packages`
+  ADD COLUMN IF NOT EXISTS `nextBillingDate` date DEFAULT NULL AFTER `status`;
 
 CREATE TABLE IF NOT EXISTS `__PREFIX__shop_package_items` (
   `itemID` int(10) unsigned NOT NULL AUTO_INCREMENT,

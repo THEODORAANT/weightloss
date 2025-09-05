@@ -5,8 +5,8 @@ class PerchShop_Packages extends PerchShop_Factory
     public $api_method         = 'packages';
     public $api_list_method    = 'packages';
     public $singular_classname = 'PerchShop_Package';
-    public $static_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid'];
-    public $remote_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid'];
+    public $static_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid', 'nextBillingDate'];
+    public $remote_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid', 'nextBillingDate'];
 
     protected $table               = 'shop_packages';
     protected $pk                  = 'packageID';
