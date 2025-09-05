@@ -27,13 +27,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* Finalize / complete package */
     if (isset($_POST['complete_package'])) {
         // TODO: Persist $draft to DB / create order / etc. before clearing
+        if($_SESSION['draft_package']['billing']=="monthly"){
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
+
+           // Add one month; PHP takes care of month-end edge cases
+                $nextBilling =  $date->modify('+1 month');
+                $nextBilling = $nextBilling->format('Y-m-d');
+
+        }else{
+          $nextBilling = null;
+        }
+
+
+
        $new_package=[
                                      'uuid'      => $_SESSION['draft_package']['id'],
                                      'created' => date('Y-m-d H:i:s'),
                                      'months' => $_SESSION['draft_package']['months'],
                                      'status'  => $_SESSION['draft_package']['status'],
-                                       'billing_type' => $_SESSION['draft_package']['billing'],
-
+                                      'billing_type' => $_SESSION['draft_package']['billing'],
+                                        'nextBillingDate'=>$nextBilling
                                      // optionally store user/customer identifier here
                                  ];
        $package = perch_shop_create_package($new_package);

@@ -14,12 +14,26 @@ class PerchShop_Package extends PerchShop_Base
         $Items = new PerchShop_PackageItems($this->api);
         return $Items->get_for_package($this->uuid());
     }
+
+    public function set_orderID($orderID){
+        $this->update([
+                                'orderID' => $orderID,
+                            ]);
+    }
+    function nextMonthlyPayment(\DateTimeInterface $lastPayment): \DateTimeImmutable
+    {
+        // Clone the date to avoid modifying the original instance
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $lastPayment->format('Y-m-d'));
+
+        // Add one month; PHP takes care of month-end edge cases
+        return $date->modify('+1 month');
+    }
       public function update_next_BillingDate(){
-      $lastBilling = new DateTimeImmutable($this->nextBillingDate());
-      $nextBilling = nextMonthlyPayment($lastBilling)->format('Y-m-d');
-       $this->update([
-                        'nextBillingDate' => $nextBilling,
-                    ]);
-                    }
+          $lastBilling = new DateTimeImmutable($this->nextBillingDate());
+          $nextBilling =  $this->nextMonthlyPayment($lastBilling)->format('Y-m-d');
+           $this->update([
+                            'nextBillingDate' => $nextBilling,
+                        ]);
+                        }
 }
 

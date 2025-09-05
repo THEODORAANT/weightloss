@@ -1,4 +1,17 @@
- <?php
+ <?php   if (perch_member_logged_in() && perch_shop_addresses_set() && isset($_SESSION["package_billing_type"])) {
+            $is_reorder = customer_has_paid_order();
+                             if ($is_reorder) {
+                                 if (empty($_SESSION['questionnaire-reorder'])) {
+                                     PerchUtil::redirect('/client/questionnaire-re-order?step=weight');
+                                 }
+                             } else {
+                                 if (empty($_SESSION['questionnaire'])) {
+                                     PerchUtil::redirect('/get-started');
+                                 }
+                             }
+           }
+
+
     // output the top of the page
      perch_layout('product/header', [
           'page_title' => perch_page_title(true),
@@ -11,6 +24,8 @@
         ]);*/
         //echo "session";
       // print_r($_SESSION);
+
+
             if(isset($_POST["dose"])){
                 $_SESSION['questionnaire-reorder']["dose"] = $_POST["dose"];
                $result= perch_shop_add_to_cart($_POST["dose"]);
@@ -18,6 +33,8 @@
                exit;
 
                 }
+
+
             //  echo "perch_member_logged_in".perch_member_logged_in() ;
              //  echo "stripeToken".perch_post('stripeToken');
  if (perch_member_logged_in() && perch_post('stripeToken')) {
@@ -119,6 +136,7 @@
           'return_url' => $return_url,
           'cancel_url' => $cancel_url
         ]);*/
+
          echo '<div class="d-flex flex-wrap gap-3">
                <button id="stripe-button" onclick="window.location.href=\'/order/checkout?payment_method_types=card\';" class="stripe-button-new">
                    Pay with Card

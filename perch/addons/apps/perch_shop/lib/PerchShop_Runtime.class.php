@@ -677,23 +677,19 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 	$Orders = new PerchShop_Orders($this->api);
 
-                        $Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
+			$Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
 
-                        if ($Order) {
-                                // Order created - check if promotion covers full amount
-                                $discount_code = $Order->get_discount_code();
-                                if ($Order->orderTotal() <= 0 && $discount_code) {
-                                        $Order->finalize_as_paid('pending');
-                                        return [
-                                                'order_id' => $Order->id(),
-                                                'status'   => 'pending',
-                                                'message'  => 'Order total covered by promotion. Marked as pending.'
-                                        ];
-                                }
+			if ($Order) {
+				//$this->Order = $Order;
 
-                                // Otherwise return order ID for further payment processing
-                                return  $Order->id() ;
-                        }
+				//PerchShop_Session::set('shop_order_id', $Order->id());
+
+				//$Gateway = PerchShop_Gateways::get($gateway);
+               // $payment_opts["redirect"]=false;
+				//$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
+				//PerchUtil::debug($result);
+				return  $Order->id() ;
+			}
 
 		}else{
 		echo "Customer or Address or Shipping missing";
@@ -729,26 +725,27 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		if ($Customer && $BillingAddress) {
 
-                        $Order  = $Orders->create_from_cart($this->Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress);
+			$Order  = $Orders->create_from_cart($this->Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress);
 
-                        if ($Order) {
-                                $this->Order = $Order;
+			if ($Order) {
+				$this->Order = $Order;
 
-                                PerchShop_Session::set('shop_order_id', $Order->id());
+				PerchShop_Session::set('shop_order_id', $Order->id());
 
-                                // If discount code covers entire order, mark as pending and skip payment
-                                $discount_code = $Order->get_discount_code();
-                                if ($Order->orderTotal() <= 0 && $discount_code) {
-                                        $Order->finalize_as_paid('pending');
-                                        echo 'Your order is pending confirmation.';
-                                        return;
-                                }
+				$Gateway = PerchShop_Gateways::get($gateway);
 
-                                $Gateway = PerchShop_Gateways::get($gateway);
+				$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
+				  if (isset($_SESSION['perch_shop_package_id'])) {
+                                                            $Packages = new PerchShop_Packages($this->api);
+                                                            $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
 
-                                $result = $Order->take_payment($Gateway->payment_method, $payment_opts);
-                                PerchUtil::debug($result);
-                        }
+                                                            if ($Package) {
+                                                             $Package->set_orderID($Order->id());
+                                                                  //  $Package->update(['customerID' => $Customer->id()]);
+                                                            }
+                                                    }
+				PerchUtil::debug($result);
+			}
 
 		}else{
 			PerchUtil::debug('Customer or Address or Shipping missing', 'error');
@@ -917,7 +914,48 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 	}
 
+public function get_package_future_items($opts){
 
+    $customerID = $this->get_customer_id();
+
+ $r = false;
+    $Packages = new PerchShop_Packages($this->api);
+    $packages = $Packages->get_for_customer($customerID);
+echo "packages for".$customerID;print_r( $packages );
+    $data  = [];
+    $today = time();
+
+    if (PerchUtil::count($packages)) {
+        foreach ($packages as $Package) {
+            $date   = $Package->created();
+            $status = $Package->status();
+
+            if ($status === 'pending' && $date) {
+                $ts = strtotime($date);
+                if ($ts >= $today) {
+                    $data[] = [
+                        'uuid'        => $Package->uuid(),
+                        'packageDate' => $date,
+                        'due'         => ($ts <= $today ? 1 : 0),
+                    ];
+                }
+            }
+        }
+    }
+ $Template = $this->api->get("Template");
+          $Template->set("shop/".$opts["template"], 'shop');
+
+
+        if (PerchUtil::count($data)) {
+                       $r = $Template->render_group($data, true);
+         }
+
+
+
+
+		return $r;
+
+}
 	public function get_package_items($opts)
     	{
     	 $Packages = new PerchShop_Packages($this->api);
@@ -951,6 +989,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
                     $data[] = [
                         'id'       => $Item->itemID(),
                         'title'    => $title,
+                          'month'    => $Item->month(),
                         'quantity' => $Item->qty(),
                     ];
                 }
@@ -1015,6 +1054,19 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 		if ($Customer) {
 			$this->Cart->set_customer($Customer->id());	
 			$this->set_location_from_address('default');
+			 if (session_status() === PHP_SESSION_NONE) {
+                                            session_start();
+                                    }
+
+                                    if (isset($_SESSION['perch_shop_package_id'])) {
+                                            $Packages = new PerchShop_Packages($this->api);
+                                            $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+
+                                            if ($Package) {
+                                             $Package->set_customer($Customer->id());
+                                                  //  $Package->update(['customerID' => $Customer->id()]);
+                                            }
+                                    }
 		}
 	}
 
@@ -1081,7 +1133,15 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
                          perch_emailoctopus_subscribe($data);
                           perch_member_add_tag('pending-docs');
                            perch_member_register_referral($Customer->memberID(), $SubmittedForm->data['referrer']);
+  if (isset($_SESSION['perch_shop_package_id'])) {
+                                            $Packages = new PerchShop_Packages($this->api);
+                                            $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
 
+                                            if ($Package) {
+                                             $Package->set_customer($Customer->id());
+                                                  //  $Package->update(['customerID' => $Customer->id()]);
+                                            }
+                                    }
                           //perch_member_add_tag($branch);
 		}
 

@@ -7,7 +7,6 @@ class PerchShop_Packages extends PerchShop_Factory
     public $singular_classname = 'PerchShop_Package';
     public $static_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid', 'nextBillingDate'];
     public $remote_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid', 'nextBillingDate'];
-
     protected $table               = 'shop_packages';
     protected $pk                  = 'packageID';
     protected $default_sort_column = 'packageID';
@@ -25,7 +24,11 @@ class PerchShop_Packages extends PerchShop_Factory
    {
        return $this->get_one_by('uuid', $uuid);
    }
+	public function set_customer($customerID)
+	{
 
+		$this->update(['customerID'=>$customerID]);
+	}
     public function get_for_customer($customerID)
     {
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE customerID=' . $this->db->pdb((int)$customerID);
