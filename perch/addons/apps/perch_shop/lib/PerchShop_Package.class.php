@@ -14,5 +14,12 @@ class PerchShop_Package extends PerchShop_Base
         $Items = new PerchShop_PackageItems($this->api);
         return $Items->get_for_package($this->uuid());
     }
+      public function update_next_BillingDate(){
+      $lastBilling = new DateTimeImmutable($this->nextBillingDate());
+      $nextBilling = nextMonthlyPayment($lastBilling)->format('Y-m-d');
+       $this->update([
+                        'nextBillingDate' => $nextBilling,
+                    ]);
+                    }
 }
 
