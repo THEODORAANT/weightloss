@@ -1,1 +1,40 @@
-test
+# Weightloss Project
+
+This repository contains various PHP scripts for managing packages.
+
+## Payment Scheduler
+
+`next_payment_scheduler.php` provides a helper function to determine the next payment
+for a monthly subscription package. You can run it from the command line:
+
+```
+php next_payment_scheduler.php 2023-01-15
+```
+
+This outputs the date when the next payment is due.
+
+## Payment Notifications
+
+`send_payment_notification.php` scans the `shop_packages` table for
+pending packages with a `nextBillingDate` one week in the future and uses
+Perch's email library to notify the associated customers.
+
+Run the script from the command line:
+
+```
+php send_payment_notification.php
+```
+
+Each matching customer receives an email reminder to complete the payment
+from their portal.
+
+## Advancing Billing Dates
+
+After recording a payment, run `advance_next_billing.php` to move the
+package's `nextBillingDate` forward by one month:
+
+```
+php advance_next_billing.php <packageID>
+```
+
+This keeps the package's billing cycle up to date.
