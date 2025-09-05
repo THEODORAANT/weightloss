@@ -921,17 +921,18 @@ public function get_package_future_items($opts){
  $r = false;
     $Packages = new PerchShop_Packages($this->api);
     $packages = $Packages->get_for_customer($customerID);
-echo "packages for".$customerID;print_r( $packages );
+
     $data  = [];
     $today = time();
 
     if (PerchUtil::count($packages)) {
         foreach ($packages as $Package) {
-            $date   = $Package->created();
+            $date   = $Package->nextBillingDate();
+            echo "date";echo $date;
             $status = $Package->status();
 
-            if ($status === 'pending' && $date) {
                 $ts = strtotime($date);
+                echo "-".$ts;
                 if ($ts >= $today) {
                     $data[] = [
                         'uuid'        => $Package->uuid(),
@@ -939,11 +940,11 @@ echo "packages for".$customerID;print_r( $packages );
                         'due'         => ($ts <= $today ? 1 : 0),
                     ];
                 }
-            }
+
         }
     }
  $Template = $this->api->get("Template");
-          $Template->set("shop/".$opts["template"], 'shop');
+          $Template->set($opts["template"], 'shop');
 
 
         if (PerchUtil::count($data)) {
