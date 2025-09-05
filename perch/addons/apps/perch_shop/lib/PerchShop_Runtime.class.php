@@ -677,19 +677,23 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 	$Orders = new PerchShop_Orders($this->api);
 
-			$Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
+                        $Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
 
-			if ($Order) {
-				//$this->Order = $Order;
+                        if ($Order) {
+                                // Order created - check if promotion covers full amount
+                                $discount_code = $Order->get_discount_code();
+                                if ($Order->orderTotal() <= 0 && $discount_code) {
+                                        $Order->finalize_as_paid('pending');
+                                        return [
+                                                'order_id' => $Order->id(),
+                                                'status'   => 'pending',
+                                                'message'  => 'Order total covered by promotion. Marked as pending.'
+                                        ];
+                                }
 
-				//PerchShop_Session::set('shop_order_id', $Order->id());
-
-				//$Gateway = PerchShop_Gateways::get($gateway);
-               // $payment_opts["redirect"]=false;
-				//$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
-				//PerchUtil::debug($result);
-				return  $Order->id() ;
-			}
+                                // Otherwise return order ID for further payment processing
+                                return  $Order->id() ;
+                        }
 
 		}else{
 		echo "Customer or Address or Shipping missing";
@@ -725,18 +729,26 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		if ($Customer && $BillingAddress) {
 
-			$Order  = $Orders->create_from_cart($this->Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress);
+                        $Order  = $Orders->create_from_cart($this->Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress);
 
-			if ($Order) {
-				$this->Order = $Order;
+                        if ($Order) {
+                                $this->Order = $Order;
 
-				PerchShop_Session::set('shop_order_id', $Order->id());
+                                PerchShop_Session::set('shop_order_id', $Order->id());
 
-				$Gateway = PerchShop_Gateways::get($gateway);
+                                // If discount code covers entire order, mark as pending and skip payment
+                                $discount_code = $Order->get_discount_code();
+                                if ($Order->orderTotal() <= 0 && $discount_code) {
+                                        $Order->finalize_as_paid('pending');
+                                        echo 'Your order is pending confirmation.';
+                                        return;
+                                }
 
-				$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
-				PerchUtil::debug($result);
-			}
+                                $Gateway = PerchShop_Gateways::get($gateway);
+
+                                $result = $Order->take_payment($Gateway->payment_method, $payment_opts);
+                                PerchUtil::debug($result);
+                        }
 
 		}else{
 			PerchUtil::debug('Customer or Address or Shipping missing', 'error');
