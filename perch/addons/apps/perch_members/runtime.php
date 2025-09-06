@@ -573,9 +573,9 @@ $memberid=0;
                 }
                 }
    function perch_member_documents($memberID=false)
-    {
-           $API  = new PerchAPI(1.0, 'perch_members');
-          $Documents = new PerchMembers_Documents($API);
+{
+       $API  = new PerchAPI(1.0, 'perch_members');
+      $Documents = new PerchMembers_Documents($API);
                 if($memberID){
                      $Document  = $Documents->get_for_member($memberID);
                 }else{
@@ -601,9 +601,87 @@ $memberid=0;
 
 
 
+return false;
+}
+
+function perch_member_add_notification($memberID, $title, $message)
+{
+    $API  = new PerchAPI(1.0, 'perch_members');
+    $Notifications = new PerchMembers_Notifications($API);
+
+    if (!$memberID) {
+        $Session = PerchMembers_Session::fetch();
+        if (!$Session->logged_in) return false;
+        $memberID = $Session->get('memberID');
+    }
+
+    $data = [
+        'memberID' => (int)$memberID,
+        'notificationTitle' => $title,
+        'notificationMessage' => $message,
+        'notificationDate' => date('Y-m-d H:i:s'),
+        'notificationRead' => 0
+    ];
+
+    $Notification = $Notifications->create($data);
+    if ($Notification) {
+        return $Notification->to_array();
+    }
+
+    return false;
+}
+
+   function perch_member_notifications($memberID=false)
+    {
+        $API  = new PerchAPI(1.0, 'perch_members');
+        $Notifications = new PerchMembers_Notifications($API);
+        $rows = [];
+        if ($memberID) {
+            $rows = $Notifications->get_for_member($memberID);
+        } else {
+            $Session = PerchMembers_Session::fetch();
+            if ($Session->logged_in) {
+                $rows = $Notifications->get_for_member($Session->get('memberID'));
+            }
+        }
+
+        if (PerchUtil::count($rows)) {
+            $out = array();
+            foreach($rows as $n) {
+                $out[] = array(
+                    'id'=>$n->notificationID(),
+                    'title'=>$n->notificationTitle(),
+                    'message'=>$n->notificationMessage(),
+                    'date'=>$n->notificationDate(),
+                    'read'=>$n->notificationRead()
+                );
+            }
+            return $out;
+        }
+
         return false;
     }
-    function perch_member_form($template="registration.html", $return=false)
+
+    function perch_member_mark_notifications_read($memberID=false)
+    {
+        $API  = new PerchAPI(1.0, 'perch_members');
+        $db   = $API->get('DB');
+
+        if (!$memberID) {
+            $Session = PerchMembers_Session::fetch();
+            if (!$Session->logged_in) return false;
+            $memberID = $Session->get('memberID');
+        }
+
+        $sql = 'UPDATE '.PERCH_DB_PREFIX.'members_notifications
+                SET notificationRead=1
+                WHERE memberID='.$db->pdb((int)$memberID).' AND notificationRead=0';
+
+        $db->execute($sql);
+        return true;
+    }
+
+function perch_member_form($template="registration.html", $return=false)
     {
         $API  = new PerchAPI(1.0, 'perch_members');
         $Template = $API->get('Template');
