@@ -1,6 +1,11 @@
 <?php  if (session_status() === PHP_SESSION_NONE) {
               session_start();
           }
+          $_SESSION['perch_shop_package_monthly_checkout'] = false;
+          if(isset($_GET['package'])){
+            $_SESSION['perch_shop_package_monthly_checkout'] = true;
+          }
+
 if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
     $_SESSION['perch_shop_package_id'] = $_GET['package'];
 } //include('../perch/runtime.php');
@@ -57,12 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="plans mt-4">
 <form method="post">
-    <?php perch_shop_package_contents([
+    <?php
+       PerchSystem::set_var('monthly_checkout',$_SESSION['perch_shop_package_monthly_checkout']);
+     perch_shop_package_contents([
         'template' => 'products/package-summary/summary.html',
-    ]); ?>
+    ]);
+    if (isset( $_SESSION['perch_shop_package_monthly_checkout']) &&  $_SESSION['perch_shop_package_monthly_checkout']){
+    ?>
+     <button type="submit" name="action" value="checkout">Proceed to checkout</button>
+
+ <?}else{?>
 
     <button type="submit" name="action" value="update">Update package</button>
     <button type="submit" name="action" value="checkout">Proceed to checkout</button>
+    <?php  }?>
 </form>
 
         </div>

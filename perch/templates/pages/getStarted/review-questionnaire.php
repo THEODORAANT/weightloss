@@ -129,7 +129,12 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
         </div>
 
         <div class="bottom_btn mt-5">
-            <form action="/order" method="post">
+       <?php  $action="/order";
+        if(isset($_SESSION["package_billing_type"])){
+       $action="/order/cart";
+       }
+?>
+            <form action="<?=$action?>" method="post">
                 <input type="hidden" name="confirm" value="true" />
                 <button id="clientButton" type="submit" class="btn btn-primary next_btn mt-4 mb-3 next-btn">
                     <span>Confirm <i class="fa-solid fa-arrow-right"></i></span>

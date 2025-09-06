@@ -1,8 +1,14 @@
 <? ob_start(); //session_start(); ?>
 
 <?php
+if(isset($_SESSION["package_billing_type"])){
+unset($_SESSION["package_billing_type"]);
 
+}
+if(isset($_SESSION["perch_shop_package_id"])){
+ unset($_SESSION["perch_shop_package_id"]);
 
+                                         }
      perch_layout('product/header', [
           'page_title' => perch_page_title(true),
       ]);
