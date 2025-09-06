@@ -60,11 +60,23 @@
           KEY `idx_tag` (`tag`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
-            CREATE TABLE `__PREFIX__members_notes` (
-              `noteID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-              `note` char(255) NOT NULL DEFAULT '',
-              PRIMARY KEY (`noteID`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+        CREATE TABLE `__PREFIX__members_notes` (
+          `noteID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `note` char(255) NOT NULL DEFAULT '',
+          PRIMARY KEY (`noteID`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+        CREATE TABLE `__PREFIX__members_notifications` (
+          `notificationID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `memberID` int(10) unsigned NOT NULL,
+          `notificationTitle` varchar(255) NOT NULL DEFAULT '',
+          `notificationMessage` text NOT NULL,
+          `notificationDate` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          `notificationRead` tinyint(1) unsigned NOT NULL DEFAULT '0',
+          PRIMARY KEY (`notificationID`),
+          KEY `idx_member` (`memberID`),
+          KEY `idx_read` (`notificationRead`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
     ";
 
