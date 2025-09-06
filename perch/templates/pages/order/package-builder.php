@@ -83,12 +83,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (!isset($draft['months'])) {
             $draft['months'] = 1;
         }
- // Remember billing type
+
+        // Remember billing type
         if (isset($_POST['billing_type'])) {
             $billing = ($_POST['billing_type'] === 'monthly') ? 'monthly' : 'prepaid';
             $draft['billing'] = $billing;
         } elseif (!isset($draft['billing'])) {
             $draft['billing'] = 'prepaid';
+        }
+
+        // Reset a month's selection if requested
+        if (isset($_POST['reset_month'])) {
+            $rm = (int)$_POST['reset_month'];
+            unset($draft['selections'][$rm]);
         }
         /* --------- SELECTION CAPTURE – ADAPT IF NEEDED ---------
            If your Perch item template posts:
@@ -191,7 +198,7 @@ if (isset($_GET['months'])) {
       <?php endforeach; ?>
     </select>
      <label for="billing_type">Billing:</label>
-        <select class="form-control mb-4 dose_dropdown" id="billing_type" name="billing_type">
+        <select class="form-control mb-4 dose_dropdown" id="billing_type" name="billing_type" onchange="this.form.submit()">
           <option value="prepaid" <?= ($billing === 'prepaid' ? 'selected' : '') ?>>Prepaid</option>
           <option value="monthly" <?= ($billing === 'monthly' ? 'selected' : '') ?>>Monthly</option>
         </select>
@@ -207,44 +214,50 @@ if (isset($_GET['months'])) {
   <?php for ($i = 1; $i <= $months; $i++): ?>
     <div class="package-month">
       <h3>Month <?= (int)$i ?></h3>
-      <?php
-        // Allow template to know current month + draft identifiers
 
-        // Render your Perch product block (your template should include
-        // hidden inputs for package_id and months, and name fields like
-        // selections[<month>][...])
-        if (function_exists('perch_shop_products')) {
-                    PerchSystem::set_var('month', $i);
-                    PerchSystem::set_var('package_id', $packageId);
-                    PerchSystem::set_var('months', $months);
-    PerchSystem::set_var('billing_type', $billing);
-    if($billing=="monthly"){
-      perch_shop_product('mounjaro-monthly-mounjaro',[
+      <?php if (empty($selections[$i])): ?>
+        <?php
+            // Allow template to know current month + draft identifiers
 
-                                          'template' => 'products/package-builder/variant-options'
-                                      ]);
-    }else{
-    perch_shop_product('mounjaro-mounjaro-prepaid',[
+            // Render your Perch product block (your template should include
+            // hidden inputs for package_id and months, and name fields like
+            // selections[<month>][...])
+            if (function_exists('perch_shop_products')) {
+                PerchSystem::set_var('month', $i);
+                PerchSystem::set_var('package_id', $packageId);
+                PerchSystem::set_var('months', $months);
+                PerchSystem::set_var('billing_type', $billing);
+                if($billing=="monthly"){
+                    perch_shop_product('mounjaro-monthly-mounjaro',[
+                        'template' => 'products/package-builder/variant-options'
+                    ]);
+                }else{
+                    perch_shop_product('mounjaro-mounjaro-prepaid',[
+                        'template' => 'products/package-builder/variant-options'
+                    ]);
+                }
 
-                                      'template' => 'products/package-builder/variant-options'
-                                  ]);
-    }
-
-         /*   perch_shop_products([
-                'category' => 'products/weight-loss',
-                'template' => 'products/package-builder/variant-options'
-            ]);*/
-        } else {
-            echo '<p class="muted">perch_shop_products() not available in this environment.</p>';
-        }
-      ?>
-
-      <?php if (!empty($selections[$i])): ?>
+                /*   perch_shop_products([
+                        'category' => 'products/weight-loss',
+                        'template' => 'products/package-builder/variant-options'
+                    ]);*/
+            } else {
+                echo '<p class="muted">perch_shop_products() not available in this environment.</p>';
+            }
+        ?>
+      <?php else: ?>
         <div class="selections">
           <strong>Saved for month <?= (int)$i ?>:</strong>
           <div>Qty: <?= h($selections[$i]['qty'] ?? '1') ?></div>
           <div>Product ID: <?= h($selections[$i]['productID'] ?? '-') ?></div>
         </div>
+        <form method="post" style="margin-top:.5rem;">
+            <input type="hidden" name="package_id" value="<?= h($packageId) ?>">
+            <input type="hidden" name="months" value="<?= (int)$months ?>">
+            <input type="hidden" name="billing_type" value="<?= h($billing) ?>">
+            <input type="hidden" name="reset_month" value="<?= (int)$i ?>">
+            <button class="btn" type="submit">Reset</button>
+        </form>
       <?php endif; ?>
     </div>
   <?php endfor; ?>
