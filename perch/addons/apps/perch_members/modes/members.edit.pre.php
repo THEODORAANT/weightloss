@@ -5,6 +5,7 @@
     
     $Tags = new PerchMembers_Tags($API);
     $Notes = new PerchMembers_Notes($API);
+    $Notifications = new PerchMembers_Notifications($API);
     $Documents = new PerchMembers_Documents($API);
     $Questionnaires = new PerchMembers_Questionnaires($API);
 	$Orders   = new PerchShop_Orders($API);
@@ -131,7 +132,7 @@
             }
 
              // new note
-           if (isset($post['new-note']) && $post['new-note']!='') {
+            if (isset($post['new-note']) && $post['new-note']!='') {
                             $noteset = $Notes->parse_string($post['new-note']);
                              $User = $Users->find($CurrentUser->id());
 
@@ -141,7 +142,18 @@
                                     $Note->add_to_member($Member->id(),$User->userUsername());
                                 }
                             }
-             }
+            }
+            // new notification
+            if (isset($post['new-notification-title']) && $post['new-notification-title']!='' && isset($post['new-notification-message']) && $post['new-notification-message']!='') {
+                $data = [
+                    'memberID' => $Member->id(),
+                    'notificationTitle' => $post['new-notification-title'],
+                    'notificationMessage' => $post['new-notification-message'],
+                    'notificationDate' => date('Y-m-d H:i:s'),
+                    'notificationRead' => 0
+                ];
+                $Notifications->create($data);
+            }
             // echo "document";
             // print_r($_FILES);
           if (isset($_FILES['new-document']) && $_FILES['new-document']!='' &&  $_FILES['new-document']['size']!=0) {
@@ -177,13 +189,15 @@
 
     if (is_object($Member)) {
         $tags = $Tags->get_for_member($Member->id());
-          $notes = $Notes->get_for_member($Member->id());
+        $notes = $Notes->get_for_member($Member->id());
+        $notifications = $Notifications->get_for_member($Member->id());
         $documents = $Documents->get_for_member($Member->id());
-          $questionnaire =  $Questionnaires->get_for_member($Member->id());
-  $questionnaire_reorder =  $Questionnaires->get_for_member($Member->id(),"re-order");
+        $questionnaire =  $Questionnaires->get_for_member($Member->id());
+        $questionnaire_reorder =  $Questionnaires->get_for_member($Member->id(),"re-order");
     }else{
         $tags = false;
-         $notes = false;
+        $notes = false;
+        $notifications = false;
         $documents = false;
-        $questionnaire =false;
+        $questionnaire = false;
     }
