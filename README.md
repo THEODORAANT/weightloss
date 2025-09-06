@@ -38,3 +38,7 @@ php advance_next_billing.php <packageID>
 ```
 
 This keeps the package's billing cycle up to date.
+
+## Package Report
+
+In the admin interface, under the Orders section, use the **Package Report** link to view upcoming payments. The report lists each package along with its customer ID, status, and next billing date.
