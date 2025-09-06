@@ -368,6 +368,45 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
               </div>
 
 <?php
+
+          echo $HTML->heading2('Notifications');
+
+          ?>
+
+           <div class="form-inner">
+                  <table class="notes">
+                      <thead>
+                          <tr>
+                              <th>Title</th>
+                              <th>Message</th>
+                              <th>Date</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                  <?php
+                      if (PerchUtil::count($notifications)) {
+                          foreach($notifications as $Notification) {
+                              echo '<tr>';
+                                  echo '<td>'.PerchUtil::html($Notification->notificationTitle()).'</td>';
+                                  echo '<td>'.PerchUtil::html($Notification->notificationMessage()).'</td>';
+                                  echo '<td>'.PerchUtil::html($Notification->notificationDate() ? date('d b Y', strtotime($Notification->notificationDate())) : '-').'</td>';
+                              echo '</tr>';
+                          }
+                      }
+
+                      echo '<tr>';
+                          echo '<td>'.$Form->text('new-notification-title', false).'</td>';
+                          echo '<td>'.$Form->text('new-notification-message', false).'</td>';
+                          echo '<td></td>';
+                      echo '</tr>';
+
+                  ?>
+
+                      </tbody>
+                  </table>
+              </div>
+
+<?php
         }// is object Member
 
         echo $Form->submit_field('btnSubmit', 'Save', $API->app_path());
