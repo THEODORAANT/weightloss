@@ -75,6 +75,14 @@
           border-color: #007bff;
           background-color: #fff;
         }
+        .unread-dot {
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background: #dc3545;
+          border-radius: 50%;
+          margin-left: 4px;
+        }
       </style>
          <?php if (perch_member_logged_in()) { ?>
    <div class="subheader">
@@ -92,6 +100,14 @@
       $reorder_tab="";
        $documents_tab="";
         $affiliate_tab="";
+        $notifications_tab="";
+        $unread_count=0;
+        $member_notifications = perch_member_notifications();
+        if ($member_notifications) {
+            foreach ($member_notifications as $n) {
+                if (!$n['read']) $unread_count++;
+            }
+        }
   if($lastPart=="client"){
   $profile_tab="active";
   }else if( $lastPart=="orders" ){
@@ -103,6 +119,8 @@
            }else if($lastPart=="affiliate-dashboard" ){
 
            $affiliate_tab="active";
+           }else if($lastPart=="notifications" ){
+            $notifications_tab="active";
            }
       ?>
      <div class="tabs">
@@ -110,6 +128,7 @@
                      <a href="/payment/success" class="tab <?php echo $documents_tab; ?>">Documents</a>
 
        <a href="/client/orders" class="tab <?php echo $orders_tab; ?>">Orders</a>
+       <a href="/client/notifications" class="tab <?php echo $notifications_tab; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a>
        <a href="/client/affiliate-dashboard" class="tab <?php echo $affiliate_tab; ?>">Affiliate</a>
        <a href="/order/re-order" class="tab <?php echo $reorder_tab; ?>">Order</a>
        <a href="/client/logout" class="tab ">Logout</a>
