@@ -1,4 +1,5 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 /*
 function generateUUID() {
@@ -141,10 +142,18 @@ function generateUUID() {
     );
 }
 
+$cookieQuestionnaire = isset($_COOKIE['questionnaire'])
+    ? json_decode($_COOKIE['questionnaire'], true)
+    : [];
+if (!isset($_SESSION['questionnaire']) || empty($_SESSION['questionnaire'])) {
+    $_SESSION['questionnaire'] = $cookieQuestionnaire;
+}
+
 $previousPage = $_SERVER['HTTP_REFERER'] ?? 'No referrer';
 $redirect=true;
 if (isset($_GET['step']) && $_GET['step'] === 'startagain') {
     $_SESSION['questionnaire'] = [];
+    setcookie('questionnaire', '', time()-3600, '/');
     header("Location: /get-started/questionnaire?step=howold");
     exit();
 }
@@ -240,6 +249,7 @@ if (isset($_POST['nextstep'])) {
     $redirectUrl = ($nextStep === 'plans')
         ? "/get-started/review-questionnaire"
         : "/get-started/questionnaire?step=$nextStep";
+    setcookie('questionnaire', json_encode($_SESSION['questionnaire']), time()+3600, '/');
        /* if($_SESSION['questionnaire']['reviewed'] === 'InProcess' && $nextStep=="plans" ){
         exit;
         }else{
@@ -253,6 +263,7 @@ if (isset($_POST['nextstep'])) {
             }
 
 }
+setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
 ?>
 
 

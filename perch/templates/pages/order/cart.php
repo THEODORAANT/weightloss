@@ -1,4 +1,12 @@
- <?php   if (perch_member_logged_in() && perch_shop_addresses_set() && isset($_SESSION["package_billing_type"])) {
+ <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
+    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+}
+if (!isset($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
+    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
+}
+if (perch_member_logged_in() && perch_shop_addresses_set() && isset($_SESSION["package_billing_type"])) {
             $is_reorder = customer_has_paid_order();
 
                              if ($is_reorder) {
@@ -12,6 +20,8 @@
                              }
            }
 
+setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
+setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
   print_r($_SESSION);
     // output the top of the page
      perch_layout('product/header', [
@@ -29,6 +39,7 @@
 
             if(isset($_POST["dose"])){
                 $_SESSION['questionnaire-reorder']["dose"] = $_POST["dose"];
+                setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
                $result= perch_shop_add_to_cart($_POST["dose"]);
                echo "<script>window.location.href='/client/questionnaire-re-order?step=weight';</script> ";
                exit;

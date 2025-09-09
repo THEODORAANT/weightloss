@@ -1,6 +1,13 @@
 <?php //include('../../perch/runtime.php');?>
 
 <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
+    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+}
+if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
+    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
+}
 
       // your 'success' and 'failure' URLs
     $success_url= "https://".$_SERVER['HTTP_HOST']."/payment/success";
@@ -13,11 +20,12 @@
        ]);
 
 
-	if ($result) {
-	if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
-	unset($_SESSION['questionnaire-reorder']['nextstep']);
+        if ($result) {
+        if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
+        unset($_SESSION['questionnaire-reorder']['nextstep']);
     perch_member_add_questionnaire($_SESSION['questionnaire-reorder'],'re-order');
     $_SESSION['questionnaire-reorder'] = array();
+    setcookie('questionnaire_reorder', '', time()-3600, '/');
     }
      // perch_shop_shipping_method_form();
             // $stripeform=true;
@@ -80,11 +88,14 @@
              unset($_SESSION['answer_log']);
              }
 
-              $_SESSION['questionnaire'] = array();
+             $_SESSION['questionnaire'] = array();
+            setcookie('questionnaire', '', time()-3600, '/');
             }
 
-		   echo("<script>location.href = '".$success_url."';</script>");
-		}else{
-		   echo("<script>location.href = '".$cancel_url."';</script>");
-		}
+                   echo("<script>location.href = '".$success_url."';</script>");
+                }else{
+                   setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
+                   setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
+                   echo("<script>location.href = '".$cancel_url."';</script>");
+                }
 ?>

@@ -1,17 +1,24 @@
-<? ob_start(); //session_start(); ?>
-
 <?php
-if(isset($_SESSION["package_billing_type"])){
-unset($_SESSION["package_billing_type"]);
+if (session_status() === PHP_SESSION_NONE) session_start();
+ob_start();
 
-}
-if(isset($_SESSION["perch_shop_package_id"])){
- unset($_SESSION["perch_shop_package_id"]);
+// Clear package identifiers stored in the session
+unset(
+    $_SESSION['package_billing_type'],
+    $_SESSION['perch_shop_package_id'],
+    $_SESSION['questionnaire'],
+    $_SESSION['questionnaire-reorder']
+);
 
-                                         }
-     perch_layout('product/header', [
-          'page_title' => perch_page_title(true),
-      ]);
+// Expire related cookies so they do not persist after completion
+setcookie('package_billing_type', '', time()-3600, '/');
+setcookie('perch_shop_package_id', '', time()-3600, '/');
+setcookie('questionnaire', '', time()-3600, '/');
+setcookie('questionnaire_reorder', '', time()-3600, '/');
+
+perch_layout('product/header', [
+    'page_title' => perch_page_title(true),
+]);
 ?>
   <style>
 

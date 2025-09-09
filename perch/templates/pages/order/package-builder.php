@@ -4,7 +4,7 @@
    package-builder.php
    -----------------------------------------------------------
    - Server-side only (no JS)
-   - Persists a draft package across submits via PHP session
+   - Persists a draft package across submits via cookie
    - Works with Perch Shop product templates
    ----------------------------------------------------------- */
 
@@ -16,10 +16,10 @@ function clamp_months($v){ $m = max(1, (int)$v); return min($m, 36); }
 function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
 /* ---------- Load existing draft ---------- */
-$draft = $_SESSION['draft_package'] ?? null;
+$draft = isset($_COOKIE['draft_package']) ? json_decode($_COOKIE['draft_package'], true) : null;
 if(isset($_GET["UNSET"])){
- unset($_SESSION['draft_package']);
-
+ setcookie('draft_package','', time()-3600,'/');
+ $draft = null;
 }
 /* ---------- Handle POST ---------- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* Finalize / complete package */
     if (isset($_POST['complete_package'])) {
         // TODO: Persist $draft to DB / create order / etc. before clearing
-        if($_SESSION['draft_package']['billing']=="monthly"){
+        if($draft['billing']=="monthly"){
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
 
            // Add one month; PHP takes care of month-end edge cases
@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
        $new_package=[
-                                     'uuid'      => $_SESSION['draft_package']['id'],
+                                     'uuid'      => $draft['id'],
                                      'created' => date('Y-m-d H:i:s'),
-                                     'months' => $_SESSION['draft_package']['months'],
-                                     'status'  => $_SESSION['draft_package']['status'],
-                                      'billing_type' => $_SESSION['draft_package']['billing'],
+                                     'months' => $draft['months'],
+                                     'status'  => $draft['status'],
+                                      'billing_type' => $draft['billing'],
                                         'nextBillingDate'=>$nextBilling,
                                         'totalPaidMonths'=>0,
                                         'paymentStatus'=>'pending'
@@ -55,12 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        //print_r($package);
                     if ($package) {
 
-                    $_SESSION['perch_shop_package_id']= $_SESSION['draft_package']['id'];
-                    $_SESSION['package_billing_type'] = $_SESSION['draft_package']['billing'];
+                    $_SESSION['perch_shop_package_id']= $draft['id'];
+                    $_SESSION['package_billing_type'] = $draft['billing'];
+                    setcookie('perch_shop_package_id', $draft['id'], time()+3600, '/');
+                    setcookie('package_billing_type', $draft['billing'], time()+3600, '/');
 
-                    perch_shop_add_package_item($package->id(), $_SESSION['draft_package']['selections']);
-                          unset($_SESSION['draft_package']);
-                            //$draft = null;
+                    perch_shop_add_package_item($package->id(), $draft['selections']);
+                          setcookie('draft_package','', time()-3600,'/');
+                          $draft = null;
 
                     }
 
@@ -140,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         --------------------------------------------------------- */
 
-        $_SESSION['draft_package'] = $draft;
+        setcookie('draft_package', json_encode($draft), time()+3600,'/');
     }
 }
 
@@ -163,7 +165,7 @@ if (isset($_GET['months'])) {
     $months = clamp_months($_GET['months']);
     if (!isset($draft)) $draft = ['id' => $packageId, 'created' => time(), 'status' => 'in_progress'];
     $draft['months'] = $months;
-    $_SESSION['draft_package'] = $draft;
+    setcookie('draft_package', json_encode($draft), time()+3600,'/');
     if (function_exists('PerchSystem::set_var')) {
         PerchSystem::set_var('months', $months);
     }

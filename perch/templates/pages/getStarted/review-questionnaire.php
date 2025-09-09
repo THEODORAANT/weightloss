@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
+    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+}
 $questions = [
     "age" => "How old are you?",
     "ethnicity" => "Which ethnicity are you?",
@@ -73,6 +77,7 @@ function renderMeasurement($value, $unitKey, $secondKey, $questionnaire) {
 }
 
 // Page header
+setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
 perch_layout('product/header', [
     'page_title' => perch_page_title(true),
 ]);
