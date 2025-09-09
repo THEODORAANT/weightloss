@@ -2,12 +2,19 @@
               session_start();
           }
           $_SESSION['perch_shop_package_monthly_checkout'] = false;
+          if (!isset($_SESSION['perch_shop_package_id']) && isset($_COOKIE['perch_shop_package_id'])) {
+            $_SESSION['perch_shop_package_id'] = $_COOKIE['perch_shop_package_id'];
+          }
+          if (!isset($_SESSION['package_billing_type']) && isset($_COOKIE['package_billing_type'])) {
+            $_SESSION['package_billing_type'] = $_COOKIE['package_billing_type'];
+          }
           if(isset($_GET['package'])){
             $_SESSION['perch_shop_package_monthly_checkout'] = true;
           }
 
 if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
     $_SESSION['perch_shop_package_id'] = $_GET['package'];
+    setcookie('perch_shop_package_id', $_GET['package'], time()+3600, '/');
 } //include('../perch/runtime.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

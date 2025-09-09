@@ -1,5 +1,10 @@
- <?php  if (!perch_member_logged_in()) { exit;}
-     //  echo "session";
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!perch_member_logged_in()) { exit;}
+if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
+    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
+}
+    //  echo "session";
       //  print_r($_SESSION);
  function generateUUID() {
      return sprintf(
@@ -43,7 +48,8 @@
                    }
                      logAnswerChange($key, $_SESSION['questionnaire-reorder'][$key],"reorder");
          }
-         //print_r($_SESSION['reorder_answer_log']);
+        setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
+        //print_r($_SESSION['reorder_answer_log']);
 
      if($_POST['nextstep']=="cart"){
 
@@ -107,11 +113,12 @@
                             header("Location: /order/cart"); // Redirect to the selected URL
                                               exit();
                                  }else{
-                                  header("Location: /client/questionnaire-re-order?step=".$_POST['nextstep'] ); // Redirect to the selected URL
+                                header("Location: /client/questionnaire-re-order?step=".$_POST['nextstep'] ); // Redirect to the selected URL
                                     exit();
                                     }
 
     }
+    setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
         perch_layout('getStarted/header', [
             'page_title' => perch_page_title(true),
         ]);
