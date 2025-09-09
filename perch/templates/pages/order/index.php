@@ -1,5 +1,11 @@
-<?php if(isset($_SESSION['questionnaire'])) {$errors =perch_member_validateQuestionnaire($_SESSION['questionnaire']) ;
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
+    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+}
+if(isset($_SESSION['questionnaire'])) {$errors =perch_member_validateQuestionnaire($_SESSION['questionnaire']) ;
  if (!empty($errors)) {header("Location: /get-started/review-questionnaire");    }}else{header("Location: /get-started");}
+setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
 
 
  // output the top of the page
@@ -14,9 +20,10 @@
     <div class="main_product">
         <div id="product-selection">
 <?php
- if(isset($_POST["confirm"]) || $_SESSION['questionnaire']["confirmed"]){
+if(isset($_POST["confirm"]) || $_SESSION['questionnaire']["confirmed"]){
 $_SESSION['questionnaire']["confirmed"] = true;
 $_SESSION['questionnaire']["reviewed"] = "Completed";
+setcookie('questionnaire', json_encode($_SESSION['questionnaire']), time()+3600, '/');
 
     if (empty($errors)) {
 
