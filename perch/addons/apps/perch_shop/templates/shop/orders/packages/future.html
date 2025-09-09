@@ -6,9 +6,11 @@
                 <p><perch:shop id="packageDate" /></p>
             </div>
             <div>
-                <perch:shop id="today" />
-                <perch:if id="packageDate" match="eq" value=" <perch:shop id="today" />">
-                    <a class="button" href="/order/package-summary?package=<perch:shop id='uuid' />">Checkout</a>
+                today  <perch:shop id="today" />
+                <a class="button" href="/order/package-summary?package=<perch:shop id="uuid" />">Checkout</a>
+
+                <perch:if id="packageDate" match="eq" value="<perch:shop id="today" />">
+                    <a class="button" href="/order/package-summary?package=<perch:shop id="uuid" />">Checkout</a>
                 <perch:else />
                     <p>Upcoming</p>
                 </perch:if>

@@ -5,7 +5,7 @@ class PerchShop_PackageItems extends PerchShop_Factory
     public $api_method         = 'packages';
     public $api_list_method    = 'packages';
     public $singular_classname = 'PerchShop_PackageItem';
-    public $static_fields      = ['packageID', 'productID', 'variantID', 'qty'];
+    public $static_fields      = ['packageID', 'productID', 'variantID', 'qty','paymentStatus'];
 
     protected $table               = 'shop_package_items';
     protected $pk                  = 'itemID';
@@ -41,7 +41,7 @@ class PerchShop_PackageItems extends PerchShop_Factory
                      $vals[] =$this->db->pdb($value);
                     }
  		$sql .= 'INSERT INTO ' .  $this->table . '(' . implode(',', $cols) . ') VALUES(' . implode(',', $vals) . ');';
-
+//echo $sql;
                $cols   = [];
                     $vals   = [];
                       $data = [];

@@ -1,8 +1,7 @@
 <?php
-// Output the top of the page
-perch_layout('client/header', [
-    'page_title' => perch_page_title(true),
-]);
+    perch_layout('client/header', [
+        'page_title' => perch_page_title(true),
+    ]);
 
 $notifications = perch_member_notifications();
 if ($notifications) {

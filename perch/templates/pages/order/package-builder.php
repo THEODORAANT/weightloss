@@ -46,10 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                      'months' => $_SESSION['draft_package']['months'],
                                      'status'  => $_SESSION['draft_package']['status'],
                                       'billing_type' => $_SESSION['draft_package']['billing'],
-                                        'nextBillingDate'=>$nextBilling
+                                        'nextBillingDate'=>$nextBilling,
+                                        'totalPaidMonths'=>0,
+                                        'paymentStatus'=>'pending'
                                      // optionally store user/customer identifier here
                                  ];
        $package = perch_shop_create_package($new_package);
+       //print_r($package);
                     if ($package) {
 
                     $_SESSION['perch_shop_package_id']= $_SESSION['draft_package']['id'];
@@ -104,15 +107,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               selections[<month>][product_id]
            …this will capture them into the session.
            ------------------------------------------------------ */
+
         if (isset($_POST['selections']) && is_array($_POST['selections'])) {
             foreach ($_POST['selections'] as $m => $row) {
                 $m = (int)$m;
                 if ($m < 1) continue;
-
+ print_r($row);
                 // Merge/overwrite that month’s selection
                 $draft['selections'][$m] = [
                     'productID'       => isset($row['dose']) ? (string)$row['dose'] : null,
                     'qty'        => isset($row['qty'])  ? max(1, (int)$row['qty']) : 1,
+                     'paymentStatus'=>'pending',
                     'packageID'=>$posted_id
                    // 'product_id' => isset($row['product_id']) ? (string)$row['product_id'] : null,
                 ];
