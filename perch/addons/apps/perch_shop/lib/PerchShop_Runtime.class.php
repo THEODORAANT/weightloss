@@ -735,7 +735,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 				$Gateway = PerchShop_Gateways::get($gateway);
 
 				$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
-				echo "perch_shop_package_id".$_SESSION['perch_shop_package_id'];
+
 				   if (!isset($_SESSION['perch_shop_package_id']) && isset($_COOKIE['perch_shop_package_id'])) {
                               $_SESSION['perch_shop_package_id'] = $_COOKIE['perch_shop_package_id'];
                               }
@@ -749,7 +749,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
                                                                   //  $Package->update(['customerID' => $Customer->id()]);
                                                             }
                                                     }
-                                                    exit;
+
 				PerchUtil::debug($result);
 			}
 
@@ -1148,22 +1148,21 @@ public function get_package_future_items($opts){
                            perch_member_register_referral($Customer->memberID(), $SubmittedForm->data['referrer']);
 
 
-                                            exit;
+
    if (!isset($_SESSION['perch_shop_package_id']) && isset($_COOKIE['perch_shop_package_id'])) {
               $_SESSION['perch_shop_package_id'] = $_COOKIE['perch_shop_package_id'];
               }
-        echo "perch_shop_package_id";      print_r( $_SESSION['perch_shop_package_id']);
+
               if(isset($_SESSION['perch_shop_package_id'])){
 
                                             $Packages = new PerchShop_Packages($this->api);
                                             $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
-print_r(  $Package);
+
                                             if ($Package) {
                                              $Package->set_customer($Customer->id());
                                                   //  $Package->update(['customerID' => $Customer->id()]);
                                             }
-                                            die;
-                                            exit;
+
                                     }
                           //perch_member_add_tag($branch);
 		}

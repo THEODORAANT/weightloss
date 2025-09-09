@@ -24,11 +24,7 @@ class PerchShop_Packages extends PerchShop_Factory
    {
        return $this->get_one_by('uuid', $uuid);
    }
-	public function set_customer($customerID)
-	{
 
-		$this->update(['customerID'=>$customerID]);
-	}
     public function get_for_customer($customerID)
     {
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE customerID=' . $this->db->pdb((int)$customerID);

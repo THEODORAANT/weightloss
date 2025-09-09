@@ -14,11 +14,15 @@ class PerchShop_Package extends PerchShop_Base
         $Items = new PerchShop_PackageItems($this->api);
         return $Items->get_for_package($this->uuid());
     }
+    	public function set_customer($customerID)
+    	{
+
+    		$this->update(['customerID'=>$customerID]);
+    	}
 
     public function set_orderID($orderID){
-        $this->update([
-                                'orderID' => $orderID,
-                            ]);
+
+        $this->update([ 'orderID' => $orderID ]);
     }
     function nextMonthlyPayment(\DateTimeInterface $lastPayment): \DateTimeImmutable
     {
