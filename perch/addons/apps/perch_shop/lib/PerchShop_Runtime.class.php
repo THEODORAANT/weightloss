@@ -735,15 +735,18 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 				$Gateway = PerchShop_Gateways::get($gateway);
 
 				$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
+				echo "perch_shop_package_id".$_SESSION['perch_shop_package_id'];
 				  if (isset($_SESSION['perch_shop_package_id'])) {
                                                             $Packages = new PerchShop_Packages($this->api);
                                                             $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+                                                            echo "package";print_r( $Package);
 
                                                             if ($Package) {
                                                              $Package->set_orderID($Order->id());
                                                                   //  $Package->update(['customerID' => $Customer->id()]);
                                                             }
                                                     }
+                                                    exit;
 				PerchUtil::debug($result);
 			}
 
@@ -923,16 +926,16 @@ public function get_package_future_items($opts){
     $packages = $Packages->get_for_customer($customerID);
 
     $data  = [];
-    $today = time();
-
+    $today =strtotime(date('Y-m-d'));
+// echo "today-".$today;
     if (PerchUtil::count($packages)) {
         foreach ($packages as $Package) {
             $date   = $Package->nextBillingDate();
-            echo "date";echo $date;
+           // echo "date";echo $date;
             $status = $Package->status();
 
                 $ts = strtotime($date);
-                echo "-".$ts;
+
                 if ($ts >= $today) {
                     $data[] = [
                         'uuid'        => $Package->uuid(),

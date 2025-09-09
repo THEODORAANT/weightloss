@@ -1,5 +1,6 @@
  <?php   if (perch_member_logged_in() && perch_shop_addresses_set() && isset($_SESSION["package_billing_type"])) {
             $is_reorder = customer_has_paid_order();
+
                              if ($is_reorder) {
                                  if (empty($_SESSION['questionnaire-reorder'])) {
                                      PerchUtil::redirect('/client/questionnaire-re-order?step=weight');
@@ -11,7 +12,7 @@
                              }
            }
 
-
+  print_r($_SESSION);
     // output the top of the page
      perch_layout('product/header', [
           'page_title' => perch_page_title(true),

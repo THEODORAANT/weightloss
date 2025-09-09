@@ -19,7 +19,7 @@ function perch_shop_add_package_item($packageID, $data)
     $API   = new PerchAPI(1.0, 'perch_shop');
     $Items = new PerchShop_PackageItems($API);
 
-    echo "perch_shop_add_package_item";
+    //echo "perch_shop_add_package_item";
     $data['packageID'] = $packageID;
 
     return  $Items->create($data);
@@ -116,6 +116,7 @@ function perch_shop_future_packages($opts = [], $return = false)
 
   $ShopRuntime = PerchShop_Runtime::fetch();
   			$r = $ShopRuntime->get_package_future_items($opts);
+  			if(!$r) return false;
 
   if ($return) return $r;
   		echo $r;

@@ -366,7 +366,6 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                       </tbody>
                   </table>
               </div>
-
 <?php
 
           echo $HTML->heading2('Notifications');
@@ -389,7 +388,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               echo '<tr>';
                                   echo '<td>'.PerchUtil::html($Notification->notificationTitle()).'</td>';
                                   echo '<td>'.PerchUtil::html($Notification->notificationMessage()).'</td>';
-                                  echo '<td>'.PerchUtil::html($Notification->notificationDate() ? date('d b Y', strtotime($Notification->notificationDate())) : '-').'</td>';
+                                  echo '<td>'.PerchUtil::html($Notification->notificationDate() ? date('d m Y', strtotime($Notification->notificationDate())) : '-').'</td>';
                               echo '</tr>';
                           }
                       }

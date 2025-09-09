@@ -6,7 +6,7 @@ $API = new PerchAPI(1.0, 'perch_shop');
 $DB  = PerchDB::fetch();
 
 $table = PERCH_DB_PREFIX . 'shop_packages';
-$sql   = 'SELECT packageID, customerID, status, nextBillingDate FROM ' . $table . ' ORDER BY nextBillingDate ASC';
+$sql   = 'SELECT packageID, customerID, status, nextBillingDate FROM ' . $table . ' where billing_type="monthly" and nextBillingDate>=NOW()  ORDER BY nextBillingDate ASC';
 
 $packages = $DB->get_rows($sql);
 ?>
