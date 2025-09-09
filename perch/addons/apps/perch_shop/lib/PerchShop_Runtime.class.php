@@ -920,15 +920,15 @@ public function get_package_future_items($opts){
 // echo "today-".$today;
     if (PerchUtil::count($packages)) {
         foreach ($packages as $Package) {
-            $date   = $Package->nextBillingDate();
+            $date   = $Package->billingDate();
            // echo "date";echo $date;
-            $status = $Package->status();
+            $status = $Package->paymentStatus();
 
                 $ts = strtotime($date);
 
                 if ($ts >= $today) {
                     $data[] = [
-                        'uuid'        => $Package->uuid(),
+                        'id'        => $Package->id(),
                         'packageDate' => $date,
                         'due'         => ($ts <= $today ? 1 : 0),
                     ];

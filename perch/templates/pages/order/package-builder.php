@@ -33,9 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            // Add one month; PHP takes care of month-end edge cases
                 $nextBilling =  $date->modify('+1 month');
                 $nextBilling = $nextBilling->format('Y-m-d');
+                $billigdateitem= $nextBilling;
 
         }else{
           $nextBilling = null;
+               $billigdateitem= null;
         }
 
 
@@ -110,17 +112,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            …this will capture them into the session.
            ------------------------------------------------------ */
 
+
         if (isset($_POST['selections']) && is_array($_POST['selections'])) {
             foreach ($_POST['selections'] as $m => $row) {
                 $m = (int)$m;
                 if ($m < 1) continue;
- print_r($row);
+ //print_r($row);
+  $nextBillingitem = null;
+ if($draft['billing']=="monthly"){
+  $billigdateitem = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
+   if ($m> 1){
+     $nextBillingitem =  $billigdateitem->modify('+'.$m.' month');
+                   $nextBillingitem = $nextBillingitem->format('Y-m-d');
+   }else{
+   $nextBillingitem=$billigdateitem->format('Y-m-d');
+   }
+   }
                 // Merge/overwrite that month’s selection
                 $draft['selections'][$m] = [
                     'productID'       => isset($row['dose']) ? (string)$row['dose'] : null,
                     'qty'        => isset($row['qty'])  ? max(1, (int)$row['qty']) : 1,
                      'paymentStatus'=>'pending',
-                    'packageID'=>$posted_id
+                    'packageID'=>$posted_id,
+                    'billingDate'=>$nextBillingitem,
                    // 'product_id' => isset($row['product_id']) ? (string)$row['product_id'] : null,
                 ];
             }

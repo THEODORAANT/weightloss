@@ -8,6 +8,7 @@ class PerchShop_Packages extends PerchShop_Factory
     public $static_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid', 'nextBillingDate','paymentStatus','totalPaidMonths'];
     public $remote_fields      = ['customerID', 'month', 'status', 'packageDate', 'packageStatus', 'uuid', 'nextBillingDate','paymentStatus','totalPaidMonths'];
     protected $table               = 'shop_packages';
+     protected $table_items               = 'shop_package_items';
     protected $pk                  = 'packageID';
     protected $default_sort_column = 'packageID';
 
@@ -27,7 +28,9 @@ class PerchShop_Packages extends PerchShop_Factory
 
     public function get_for_customer($customerID)
     {
-        $sql = 'SELECT * FROM ' . $this->table . ' WHERE customerID=' . $this->db->pdb((int)$customerID);
+        $sql = 'SELECT i.* FROM ' . $this->table . ' as p, ' . $this->table_items . ' as i     WHERE
+         p.paymentStatus="pending" and   p.nextBillingDate=i.billingDate
+        p.customerID=' . $this->db->pdb((int)$customerID);
         return $this->return_instances($this->db->get_rows($sql));
     }
 }
