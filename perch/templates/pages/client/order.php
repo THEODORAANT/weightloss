@@ -72,10 +72,7 @@ echo '<div class="plan">
                 <?php
                   PerchSystem::set_var('today', date('Y-m-d'));
                  $r=perch_shop_future_packages();
-                 if($r==false){
-                   echo '<div class="plan">No Future Payments</div>';
 
-                 }
 
 
                  ?>

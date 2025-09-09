@@ -236,6 +236,20 @@ public function action_payment_callback($Order, $args, $opts)
                 //echo "Payment successful! Order marked as paid.";
               $Order->update(['orderGatewayRef'=>$session['payment_intent']]);
                  $success= $this->handle_successful_payment($Order, $response, $opts);
+                   if (!isset($_SESSION['perch_shop_package_id']) && isset($_COOKIE['perch_shop_package_id'])) {
+                                               $_SESSION['perch_shop_package_id'] = $_COOKIE['perch_shop_package_id'];
+                                               }
+
+                                               if(isset($_SESSION['perch_shop_package_id']) ){
+                                                $Packages = new PerchShop_Packages($this->api);
+                                                                                                           $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+                                                                                                          // echo "package";print_r( $Package);
+
+                                                                                                           if ($Package) {
+                                                                                                            $Package->set_status();
+                                                                                                                 //  $Package->update(['customerID' => $Customer->id()]);
+                                                                                                           }
+                                               }
                            return true;
 
             } else {

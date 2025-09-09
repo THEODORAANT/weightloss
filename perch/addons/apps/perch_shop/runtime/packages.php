@@ -110,13 +110,13 @@ function perch_shop_future_packages($opts = [], $return = false)
         }
         echo '';
         PerchUtil::flush_output();
-        return true;
+        return false;
     }
 
 
   $ShopRuntime = PerchShop_Runtime::fetch();
   			$r = $ShopRuntime->get_package_future_items($opts);
-  			if(!$r) return false;
+  			if(!$r) $r='<div class="plan">No Future Payments</div>';
 
   if ($return) return $r;
   		echo $r;

@@ -147,6 +147,23 @@ public function take_payment($Order, $opts)
         // Optional: save session ID for tracking
         $Order->set_transaction_reference($data['id']);
 
+
+				   if (!isset($_SESSION['perch_shop_package_id']) && isset($_COOKIE['perch_shop_package_id'])) {
+                              $_SESSION['perch_shop_package_id'] = $_COOKIE['perch_shop_package_id'];
+                              }
+
+                              if(isset($_SESSION['perch_shop_package_id']) ){
+                                                            $Packages = new PerchShop_Packages($this->api);
+                                                            $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+
+
+                                                            if ($Package) {
+                                                             $Package->set_orderID($Order->id());
+                                                                  //  $Package->update(['customerID' => $Customer->id()]);
+                                                            }
+
+
+                                                    }
         // Redirect to Stripe Checkout
 
         if(!$opts['redirect']){

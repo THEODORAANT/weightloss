@@ -19,7 +19,11 @@ class PerchShop_PackageItems extends PerchShop_Factory
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE packageID=' . $this->db->pdb($packageID);
         return $this->return_instances($this->db->get_rows($sql));
     }
-
+    public function get_unpaid_for_package($packageID)
+    {
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE paymentStatus="pending" and  packageID=' . $this->db->pdb($packageID);
+        return $this->return_instances($this->db->get_rows($sql));
+    }
      public function create($items)
         {
         $packageID=$items["packageID"];
