@@ -121,8 +121,10 @@ $nextMonth=0;
   $nextBillingitem = null;
  if($draft['billing']=="monthly"){
   $billigdateitem = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
-   if ($m> 1){
-   $nextMonth=$nextMonth+1;
+    $nextMonth=$nextMonth+1;
+    echo "nextMonth".$nextMonth;
+   if ($nextMonth> 1){
+
      $nextBillingitem =  $billigdateitem->modify('+'.$nextMonth.' month');
                    $nextBillingitem = $nextBillingitem->format('Y-m-d');
    }else{

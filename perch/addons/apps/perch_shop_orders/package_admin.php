@@ -18,20 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $DB->execute($sql);
 }
 
-$sql       = 'SELECT packageID, customerID, billing_type, status, paymentStatus, nextBillingDate FROM ' . $table . ' ORDER BY packageID DESC';
+$sql       = 'SELECT packageID,uuid, customerID, billing_type, status, paymentStatus, nextBillingDate FROM ' . $table . ' ORDER BY packageID DESC';
 $packages  = $DB->get_rows($sql);
 
 $sqlPending      = 'SELECT packageID, customerID, billing_type, status, paymentStatus, nextBillingDate FROM ' . $table .
                    ' WHERE paymentStatus=' . $DB->pdb('pending') . ' ORDER BY nextBillingDate ASC';
 $pendingPackages = $DB->get_rows($sqlPending);
 
-$items_sql = 'SELECT i.packageID, i.itemID, i.productID, i.variantID, i.qty, i.paymentStatus, '
-           . 'p.title AS productTitle, v.title AS variantTitle '
+$items_sql = 'SELECT i.packageID, i.itemID, i.productID,  i.qty, i.paymentStatus,p.title AS productTitle,i.billingDate AS billingDate '
            . 'FROM ' . PERCH_DB_PREFIX . 'shop_package_items i '
            . 'LEFT JOIN ' . PERCH_DB_PREFIX . 'shop_products p ON i.productID = p.productID '
-           . 'LEFT JOIN ' . PERCH_DB_PREFIX . 'shop_products v ON i.variantID = v.productID '
            . 'ORDER BY i.packageID';
+           echo $items_sql ;
 $item_rows = $DB->get_rows($items_sql);
+print_r($item_rows );
 $itemsByPackage = [];
 if (PerchUtil::count($item_rows)) {
     foreach ($item_rows as $row) {
@@ -99,7 +99,7 @@ if (PerchUtil::count($item_rows)) {
                 <td><?= htmlspecialchars($pkg['nextBillingDate']) ?></td>
             </tr>
 
-            <?php if (!empty($itemsByPackage[$pkg['packageID']])): ?>
+            <?php if (!empty($itemsByPackage[$pkg['uuid']])): ?>
             <tr>
                 <td colspan="6">
                     <table>
@@ -107,17 +107,17 @@ if (PerchUtil::count($item_rows)) {
                         <tr>
                             <th>Item ID</th>
                             <th>Product</th>
-                            <th>Variant</th>
+                            <th>billingDate</th>
                             <th>Qty</th>
                             <th>Payment Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($itemsByPackage[$pkg['packageID']] as $item): ?>
+                        <?php foreach ($itemsByPackage[$pkg['uuid']] as $item): ?>
                             <tr>
                                 <td><?= (int)$item['itemID'] ?></td>
                                 <td><?= htmlspecialchars($item['productTitle']) ?: (int)$item['productID'] ?></td>
-                                <td><?= $item['variantID'] ? htmlspecialchars($item['variantTitle']) : '' ?></td>
+                                <td><?= $item['billingDate'] ? htmlspecialchars($item['billingDate']) : '' ?></td>
                                 <td><?= (int)$item['qty'] ?></td>
                                 <td><?= htmlspecialchars($item['paymentStatus']) ?></td>
                             </tr>
@@ -158,7 +158,7 @@ if (PerchUtil::count($item_rows)) {
                 <td><?= htmlspecialchars($pkg['paymentStatus']) ?></td>
                 <td><?= htmlspecialchars($pkg['nextBillingDate']) ?></td>
             </tr>
-            <?php if (!empty($itemsByPackage[$pkg['packageID']])): ?>
+            <?php if (!empty($itemsByPackage[$pkg['uuid']])): ?>
             <tr>
                 <td colspan="6">
                     <table>
@@ -166,17 +166,17 @@ if (PerchUtil::count($item_rows)) {
                         <tr>
                             <th>Item ID</th>
                             <th>Product</th>
-                            <th>Variant</th>
+                            <th>billingDate</th>
                             <th>Qty</th>
                             <th>Payment Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($itemsByPackage[$pkg['packageID']] as $item): ?>
+                        <?php foreach ($itemsByPackage[$pkg['uuid']] as $item): ?>
                             <tr>
                                 <td><?= (int)$item['itemID'] ?></td>
                                 <td><?= htmlspecialchars($item['productTitle']) ?: (int)$item['productID'] ?></td>
-                                <td><?= $item['variantID'] ? htmlspecialchars($item['variantTitle']) : '' ?></td>
+                                <td><?= $item['billingDate'] ? htmlspecialchars($item['billingDate']) : '' ?></td>
                                 <td><?= (int)$item['qty'] ?></td>
                                 <td><?= htmlspecialchars($item['paymentStatus']) ?></td>
                             </tr>
