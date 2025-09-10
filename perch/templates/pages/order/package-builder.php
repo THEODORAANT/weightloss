@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            …this will capture them into the session.
            ------------------------------------------------------ */
 
-
+$nextMonth=0;
         if (isset($_POST['selections']) && is_array($_POST['selections'])) {
             foreach ($_POST['selections'] as $m => $row) {
                 $m = (int)$m;
@@ -122,7 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  if($draft['billing']=="monthly"){
   $billigdateitem = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
    if ($m> 1){
-     $nextBillingitem =  $billigdateitem->modify('+'.$m.' month');
+   $nextMonth=$nextMonth+1;
+     $nextBillingitem =  $billigdateitem->modify('+'.$nextMonth.' month');
                    $nextBillingitem = $nextBillingitem->format('Y-m-d');
    }else{
    $nextBillingitem=$billigdateitem->format('Y-m-d');
