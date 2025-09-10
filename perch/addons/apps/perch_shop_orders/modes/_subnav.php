@@ -13,6 +13,7 @@
 						'perch_shop_orders/customers/edit',
 						'perch_shop_orders/customers/delete',
 						], 
-				'label'=>'Customers'],
+                                'label'=>'Customers'],
+ ['page'=>'perch_shop_orders/package_admin', 'label'=>'Package Admin'],
  ['page'=>'perch_shop_orders/package_report', 'label'=>'Package Report'],
-	], $CurrentUser);
+        ], $CurrentUser);

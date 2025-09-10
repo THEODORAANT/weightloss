@@ -45,7 +45,7 @@ In the admin interface, under the Orders section, use the **Package Report** lin
 
 ## Admin Package Module
 
-Use `perch/addons/apps/perch_shop_orders/package_admin.php` to add new packages and review existing ones. The page shows each client's billing type, payment status, next billing date, and highlights pending packages.
+In the admin interface, under the Orders section, use the **Package Admin** link to add new packages and review existing ones. The page shows each client's billing type, payment status, next billing date, and highlights pending packages.
 
 ## Push Notifications Inbox
 
