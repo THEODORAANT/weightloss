@@ -112,32 +112,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            …this will capture them into the session.
            ------------------------------------------------------ */
 
-$nextMonth=0;
         if (isset($_POST['selections']) && is_array($_POST['selections'])) {
+            $baseBillingDate = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
             foreach ($_POST['selections'] as $m => $row) {
                 $m = (int)$m;
                 if ($m < 1) continue;
- //print_r($row);
-  $nextBillingitem = null;
- if($draft['billing']=="monthly"){
-  $billigdateitem = \DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
-    $nextMonth=$nextMonth+1;
-    echo "nextMonth".$nextMonth;
-   if ($nextMonth> 1){
-
-     $nextBillingitem =  $billigdateitem->modify('+'.$nextMonth.' month');
-                   $nextBillingitem = $nextBillingitem->format('Y-m-d');
-   }else{
-   $nextBillingitem=$billigdateitem->format('Y-m-d');
-   }
-   }
+                $nextBillingitem = null;
+                if ($draft['billing'] === 'monthly') {
+                    $nextBillingitem = $baseBillingDate
+                        ->modify('+' . ($m - 1) . ' month')
+                        ->format('Y-m-d');
+                }
                 // Merge/overwrite that month’s selection
                 $draft['selections'][$m] = [
                     'productID'       => isset($row['dose']) ? (string)$row['dose'] : null,
-                    'qty'        => isset($row['qty'])  ? max(1, (int)$row['qty']) : 1,
-                     'paymentStatus'=>'pending',
-                    'packageID'=>$posted_id,
-                    'billingDate'=>$nextBillingitem,
+                    'qty'             => isset($row['qty'])  ? max(1, (int)$row['qty']) : 1,
+                    'paymentStatus'   => 'pending',
+                    'packageID'       => $posted_id,
+                    'billingDate'     => $nextBillingitem,
                    // 'product_id' => isset($row['product_id']) ? (string)$row['product_id'] : null,
                 ];
             }
