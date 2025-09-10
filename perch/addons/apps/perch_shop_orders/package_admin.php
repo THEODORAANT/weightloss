@@ -38,6 +38,7 @@ if (PerchUtil::count($item_rows)) {
         $itemsByPackage[$row['packageID']][] = $row;
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -97,6 +98,7 @@ if (PerchUtil::count($item_rows)) {
                 <td><?= htmlspecialchars($pkg['paymentStatus']) ?></td>
                 <td><?= htmlspecialchars($pkg['nextBillingDate']) ?></td>
             </tr>
+
             <?php if (!empty($itemsByPackage[$pkg['packageID']])): ?>
             <tr>
                 <td colspan="6">
@@ -125,6 +127,7 @@ if (PerchUtil::count($item_rows)) {
                 </td>
             </tr>
             <?php endif; ?>
+
         <?php endforeach; ?>
     <?php else: ?>
         <tr><td colspan="6">No packages found</td></tr>
@@ -183,6 +186,7 @@ if (PerchUtil::count($item_rows)) {
                 </td>
             </tr>
             <?php endif; ?>
+
         <?php endforeach; ?>
     <?php else: ?>
         <tr><td colspan="6">No pending packages</td></tr>
