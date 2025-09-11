@@ -28,9 +28,10 @@ class PerchShop_Packages extends PerchShop_Factory
 
     public function get_for_customer($customerID)
     {
-        $sql = 'SELECT i.* FROM ' . $this->table . ' as p, ' . $this->table_items . ' as i     WHERE
-         p.paymentStatus="pending" and   p.nextBillingDate=i.billingDate
-        p.customerID=' . $this->db->pdb((int)$customerID);
+        $sql = 'SELECT i.*,p.nextBillingDate FROM ' . $this->table . ' as p, '.PERCH_DB_PREFIX.'shop_package_items as i     WHERE
+         p.paymentStatus="pending"
+        and p.customerID=' . $this->db->pdb((int)$customerID);
+
         return $this->return_instances($this->db->get_rows($sql));
     }
 }

@@ -15,6 +15,7 @@ setcookie('package_billing_type', '', time()-3600, '/');
 setcookie('perch_shop_package_id', '', time()-3600, '/');
 setcookie('questionnaire', '', time()-3600, '/');
 setcookie('questionnaire_reorder', '', time()-3600, '/');
+setcookie('draft_package_item', '', time()-3600, '/');
 
      perch_layout('product/header', [
           'page_title' => perch_page_title(true),

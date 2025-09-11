@@ -242,13 +242,17 @@ public function action_payment_callback($Order, $args, $opts)
 
                                                if(isset($_SESSION['perch_shop_package_id']) ){
                                                 $Packages = new PerchShop_Packages($this->api);
-                                                                                                           $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
+                                               $Package  = $Packages->find_by_uuid($_SESSION['perch_shop_package_id']);
                                                                                                           // echo "package";print_r( $Package);
 
-                                                                                                           if ($Package) {
-                                                                                                            $Package->set_status();
+                                                          if ($Package) {             $Package->set_status();
                                                                                                                  //  $Package->update(['customerID' => $Customer->id()]);
                                                                                                            }
+                                               }
+                                               if(isset($_COOKIE['draft_package_item'])){
+                                                  $PackageItems = new PerchShop_PackageItems($this->api);
+$PackageItem  = $PackageItems->find($_COOKIE['draft_package_item']);
+ $PackageItem->set_status_paid($Order->id());
                                                }
                            return true;
 

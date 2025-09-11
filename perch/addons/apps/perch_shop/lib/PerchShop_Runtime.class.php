@@ -912,23 +912,23 @@ public function get_package_future_items($opts){
     $customerID = $this->get_customer_id();
 
  $r = false;
-    $Packages = new PerchShop_Packages($this->api);
-    $packages = $Packages->get_for_customer($customerID);
-
+    $PackageItems = new PerchShop_PackageItems($this->api);
+    $packages = $PackageItems->get_for_customer($customerID);
     $data  = [];
     $today =strtotime(date('Y-m-d'));
 // echo "today-".$today;
     if (PerchUtil::count($packages)) {
         foreach ($packages as $Package) {
             $date   = $Package->billingDate();
-           // echo "date";echo $date;
+
+            //echo $date;
             $status = $Package->paymentStatus();
 
                 $ts = strtotime($date);
 
                 if ($ts >= $today) {
                     $data[] = [
-                        'id'        => $Package->id(),
+                        'id'        => $Package->itemID(),
                         'packageDate' => $date,
                         'due'         => ($ts <= $today ? 1 : 0),
                     ];
@@ -948,7 +948,26 @@ public function get_package_future_items($opts){
 
 
 		return $r;
+		}
+	public function get_package_item($opts)
+    	{	 $r =false;
+    	$PerchShop_PackageItems = new PerchShop_PackageItems($this->api);
+    	 $Item = $PerchShop_PackageItems->find((int)$opts["itemID"]);
 
+                                if ($Item) {
+
+                                  if ($opts['skip-template']) {
+                                       return $Item;
+                                    }else{
+                                  $Template = $this->api->get("Template");
+                                          $Template->set("shop/".$opts["template"], 'shop');
+
+
+                                                       $r = $Template->render($Item, true);
+                                                       }
+
+                                }
+    return $r;
 }
 	public function get_package_items($opts)
     	{

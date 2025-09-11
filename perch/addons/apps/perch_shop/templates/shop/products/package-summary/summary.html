@@ -8,7 +8,7 @@
         <td><div class="Glucomannan_title"> <h5><perch:shop id="title" /></h5></div></td>
         <perch:if id="monthly_checkout" match="eq" value="false">
         <td >
-            <perch:label class="form-label">Quantity</perch:label> <input type="number" name="qty[<perch:shop id='id' />]" value="<perch:shop id='quantity' />" min="0" /></td>
+            <perch:label class="form-label">Quantity</perch:label> <input type="hidden" name="qty[<perch:shop id='id' />]" value="<perch:shop id='quantity' />" min="0" /></td>
         <td><perch:label class="form-label">Remove</perch:label><input type="checkbox" name="remove[<perch:shop id='id' />]" value="1" /></td>
         </perch:if>
    </tr>

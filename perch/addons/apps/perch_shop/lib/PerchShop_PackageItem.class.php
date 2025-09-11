@@ -8,5 +8,10 @@ class PerchShop_PackageItem extends PerchShop_Base
     protected $index_table       = false;
 
     protected $event_prefix = 'shop.packageitem';
+
+     public function set_status_paid($orderID){
+        $this->update(['orderID'=>$orderID,   'paymentStatus' => 'paid'
+                                                         ]);
+     }
 }
 

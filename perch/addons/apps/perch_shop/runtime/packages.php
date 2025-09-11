@@ -77,18 +77,20 @@ function perch_shop_package_contents($opts = [], $return = false)
     if ($opts['skip-template']) {
         $return = true;
     }
-
-    if (session_status() === PHP_SESSION_NONE) {
+ /*   if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
 
-    if (!isset($_SESSION['perch_shop_package_id'])) {
+    if (!isset($_SESSION['perch_shop_package_id']) && !isset($opts["itemID"])) {
         return false;
-    }
+    }*/
 $ShopRuntime = PerchShop_Runtime::fetch();
+  if(isset($opts["itemID"])){
+    $r = $ShopRuntime->get_package_item($opts);
+  }else{
 			$r = $ShopRuntime->get_package_items($opts);
-
+}
 if ($return) return $r;
 		echo $r;
 		PerchUtil::flush_output();
