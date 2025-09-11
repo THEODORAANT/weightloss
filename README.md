@@ -58,5 +58,11 @@ Unread notifications display a red dot indicator and are marked as read when the
 To create a new notification in code, call `perch_member_add_notification($memberID, $title, $message)`.
 Administrators can also add notifications for a member from the member edit screen in the control panel.
 
+## Product API
+
+- `GET /api/products/{id}` returns the specified product with all of its variants.
+- `GET /api/products/{id}/variants` returns only the variants for that product.
+
+`{id}` corresponds to the product slug in Perch Shop.
 
 # perchDocumenttion
