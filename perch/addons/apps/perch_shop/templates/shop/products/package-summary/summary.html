@@ -6,6 +6,15 @@
         <td>Month <perch:shop id="month" />:</td>
 
         <td><div class="Glucomannan_title"> <h5><perch:shop id="title" /></h5></div></td>
+        <td><div class="Glucomannan_title">
+         <perch:shop id="sku" type="text" label="SKU" required="true" order="1" />
+<perch:shop id="title" type="text" label="Title" required="true" order="2" />
+<perch:shop id="slug" type="slug" editable="true" indelible="true" label="Slug" for="title sku" order="10" divider-before="Meta data" />
+
+            <perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="m" min="0" step="any" />
+
+            <perch:shop id="description" type="textarea" label="Description" editor="markitup" order="3" markdown="true" size="s" />
+        </div></td>
         <perch:if id="monthly_checkout" match="eq" value="false">
         <td >
             <perch:label class="form-label">Quantity</perch:label> <input type="hidden" name="qty[<perch:shop id='id' />]" value="<perch:shop id='quantity' />" min="0" /></td>

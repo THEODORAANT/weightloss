@@ -904,7 +904,6 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
         $r = $Template->render($Order);
 
 		return $r;
-
 	}
 
 public function get_package_future_items($opts){
@@ -929,6 +928,8 @@ public function get_package_future_items($opts){
                 if ($ts >= $today) {
                     $data[] = [
                         'id'        => $Package->itemID(),
+                        'price'  => $Package->price(),
+                        'item'  => $Package->productVariantDesc(),
                         'packageDate' => $date,
                         'due'         => ($ts <= $today ? 1 : 0),
                     ];
@@ -952,7 +953,7 @@ public function get_package_future_items($opts){
 	public function get_package_item($opts)
     	{	 $r =false;
     	$PerchShop_PackageItems = new PerchShop_PackageItems($this->api);
-    	 $Item = $PerchShop_PackageItems->find((int)$opts["itemID"]);
+    	 $Item = $PerchShop_PackageItems->getItem((int)$opts["itemID"]);
 
                                 if ($Item) {
 

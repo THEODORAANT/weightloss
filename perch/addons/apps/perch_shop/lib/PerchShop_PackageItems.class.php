@@ -5,7 +5,7 @@ class PerchShop_PackageItems extends PerchShop_Factory
     public $api_method         = 'packages';
     public $api_list_method    = 'packages';
     public $singular_classname = 'PerchShop_PackageItem';
-    public $static_fields      = ['packageID', 'productID', 'variantID', 'qty','paymentStatus'];
+    public $static_fields      = ['packageID', 'productID', 'variantID', 'qty','paymentStatus','orderID'];
 
     protected $table               = 'shop_package_items';
     protected $pk                  = 'itemID';
@@ -19,16 +19,40 @@ class PerchShop_PackageItems extends PerchShop_Factory
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE packageID=' . $this->db->pdb($packageID);
         return $this->return_instances($this->db->get_rows($sql));
     }
+  public function getItem($itemID)
+        {
+          $sql = 'SELECT i.*,p.nextBillingDate,po.* FROM ' . $this->table . ' as i,
+                    '.PERCH_DB_PREFIX.'shop_products po,
+                    '.PERCH_DB_PREFIX.'shop_packages as p     WHERE
+                       i.productID = po.productID   and p.itemID=' . $this->db->pdb((int)$itemID);
+echo $sql;
+print_r($this->db->get_row($sql));
 
+                    return $this->return_instance($this->db->get_row($sql));
+
+        }
         public function get_for_customer($customerID)
         {
-            $sql = 'SELECT i.*,p.nextBillingDate FROM ' . $this->table . ' as i, '.PERCH_DB_PREFIX.'shop_packages as p     WHERE
+            $sql = 'SELECT i.*,p.nextBillingDate,po.* FROM ' . $this->table . ' as i,'.PERCH_DB_PREFIX.'shop_products po,
+            '.PERCH_DB_PREFIX.'shop_packages as p  WHERE
+             i.productID = po.productID and
              i.paymentStatus="pending"
             and p.customerID=' . $this->db->pdb((int)$customerID);
 
 
             return $this->return_instances($this->db->get_rows($sql));
         }
+        	public function get_for_admin($packageID)
+        	{
+        		$sql = 'SELECT i.*, p.*
+        				FROM '.$this->table.' i, '.PERCH_DB_PREFIX.'shop_products p
+        				WHERE
+
+        					 i.productID = p.productID
+        					AND i.packageID='.$this->db->pdb($packageID);
+
+        		return $this->return_instances($this->db->get_rows($sql));
+        	}
     public function get_unpaid_for_package($packageID)
     {
         $sql = 'SELECT * FROM ' . $this->table . ' WHERE paymentStatus="pending" and  packageID=' . $this->db->pdb($packageID);

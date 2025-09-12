@@ -249,10 +249,12 @@ public function action_payment_callback($Order, $args, $opts)
                                                                                                                  //  $Package->update(['customerID' => $Customer->id()]);
                                                                                                            }
                                                }
+
                                                if(isset($_COOKIE['draft_package_item'])){
                                                   $PackageItems = new PerchShop_PackageItems($this->api);
 $PackageItem  = $PackageItems->find($_COOKIE['draft_package_item']);
- $PackageItem->set_status_paid($Order->id());
+ $PackageItem->set_status_paid($Order->orderID());
+
                                                }
                            return true;
 

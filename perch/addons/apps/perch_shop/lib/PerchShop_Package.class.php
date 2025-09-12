@@ -28,7 +28,7 @@ class PerchShop_Package extends PerchShop_Base
 
     	  public function set_status(){
     	          $currentMonths = (int)$this->totalPaidMonths();
-                      echo "currentMonths";
+
                       $paymentStatus= 'pending';
                         $paidmonths=$currentMonths + 1; echo  $paidmonths;
                       if( $paidmonths==$this->months()) $paymentStatus= 'paid';
@@ -38,12 +38,15 @@ class PerchShop_Package extends PerchShop_Base
                                                     ]);
           $sql = 'UPDATE '.PERCH_DB_PREFIX.'shop_package_items SET paymentStatus='. $this->db->pdb('paid') . '
           WHERE month=' . $this->db->pdb($paidmonths).' and  packageID=' . $this->db->pdb($this->uuid());
-          echo $sql;
+
                            $this->db->execute($sql);
     	  }
 
     public function set_orderID($orderID){
+ $sql = 'UPDATE '.PERCH_DB_PREFIX.'shop_package_items SET orderID='. $this->db->pdb($orderID) . '
+          WHERE month="1" and  packageID=' . $this->db->pdb($this->uuid());
 
+                           $this->db->execute($sql);
                            $this->update([ 'orderID' => $orderID
                                           ]);
 

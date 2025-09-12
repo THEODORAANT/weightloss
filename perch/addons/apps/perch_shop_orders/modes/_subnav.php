@@ -14,7 +14,6 @@
 						'perch_shop_orders/customers/delete',
 						], 
 				'label'=>'Customers'],
- ['page'=>'perch_shop_orders/package_report', 'label'=>'Package Future Payments'],
-  ['page'=>'perch_shop_orders/package_admin', 'label'=>'Packages'],
+  ['page'=>'perch_shop_orders/packages', 'label'=>'Packages'],
 
 	], $CurrentUser);
