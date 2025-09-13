@@ -627,9 +627,6 @@ class PerchFactory
                     $sql .= ' LIMIT '.$limit;
                 }
             }
-
-            echo "here";
-echo $sql;
             $rows    = $this->db->get_rows($sql);
 
             if ($Paging->enabled()) {

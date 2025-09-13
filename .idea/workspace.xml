@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/client/order.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/client/order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/list.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/list.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/package-renew.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/package-renew.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/package-summary.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/package-summary.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/core/lib/PerchFactory.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/core/lib/PerchFactory.class.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +89,7 @@
       <workItem from="1757493363406" duration="4542000" />
       <workItem from="1757581268270" duration="3550000" />
       <workItem from="1757668836130" duration="1310000" />
+      <workItem from="1757750374387" duration="3594000" />
     </task>
     <task id="LOCAL-00001" summary="weightloss">
       <option name="closed" value="true" />
@@ -381,7 +379,23 @@
       <option name="project" value="LOCAL" />
       <updated>1757669329719</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1757750668683</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1757750668683</updated>
+    </task>
+    <task id="LOCAL-00038" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1757751237498</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1757751237498</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
