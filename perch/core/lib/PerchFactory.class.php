@@ -628,6 +628,8 @@ class PerchFactory
                 }
             }
 
+            echo "here";
+echo $sql;
             $rows    = $this->db->get_rows($sql);
 
             if ($Paging->enabled()) {
