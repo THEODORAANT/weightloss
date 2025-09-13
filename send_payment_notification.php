@@ -9,7 +9,15 @@ $table  = PERCH_DB_PREFIX . 'shop_packages';
 $tableitems  = PERCH_DB_PREFIX . 'shop_package_items';
 $target = (new DateTimeImmutable('+1 week'))->format('Y-m-d');
 
-$log_file = __DIR__ . '/send_payment_notification.log';
+$log_dir  = __DIR__ . '/logs';
+if (!is_dir($log_dir)) {
+    mkdir($log_dir, 0777, true);
+}
+if (!is_writable($log_dir)) {
+    chmod($log_dir, 0777);
+}
+$log_file = $log_dir . '/send_payment_notification.log';
+
 $sent     = [];
 if (file_exists($log_file)) {
     foreach (file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
