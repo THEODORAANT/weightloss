@@ -209,11 +209,11 @@ $sort_val = null;
             $selectsql = 'SELECT';
         }
 
-        $selectsql .=  '  o.*, c.*, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
-         $fromsql =  '      FROM ' . $this->table .' o, '.PERCH_DB_PREFIX.'shop_customers c ';
+        $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
+         $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
                 $wheresql = ' WHERE o.customerID=c.customerID
-                             	AND o.orderDeleted IS NULL
-                             	AND o.orderStatus IN ("paid")';
+                                AND o.orderDeleted IS NULL
+                                AND o.orderStatus IN ("paid")';
                 	if($details["sendtopharmacy"]!=""){
                 	if($details["sendtopharmacy"]=="yes"){
                 	 // $selectsql .= ' ,p.* ';
@@ -271,11 +271,12 @@ $sql= $selectsql. $fromsql.$wheresql;
             $sql = 'SELECT';
         }
 
-        $sql .= ' o.*, c.*, CONCAT(customerFirstName, " ", customerLastName) AS customerName
-                FROM ' . $this->table .' o, '.PERCH_DB_PREFIX.'shop_customers c
-                WHERE o.customerID=c.customerID
-                	AND o.orderDeleted IS NULL 
-                	AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status).')';
+        $sql .= ' o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName
+                FROM ' . $this->table .' o
+                JOIN '.PERCH_DB_PREFIX.'shop_customers c ON o.customerID=c.customerID
+                LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID
+                WHERE o.orderDeleted IS NULL
+                        AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status).')';
 
 		if ($sort_val) {
             $sql .= ' ORDER BY '.$sort_val.' '.$sort_dir;
