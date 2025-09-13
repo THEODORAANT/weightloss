@@ -54,6 +54,15 @@
             'value'     => 'statusTitle',
             'sort'      => 'orderStatus',
         ]);
+
+    $Listing->add_col([
+            'title'     => 'Package',
+            'value'     => function($Item) {
+                $type = $Item->billing_type();
+                return $type ? ucfirst($type) : '';
+            },
+            'sort'      => 'billing_type',
+        ]);
     
 
     $Listing->add_delete_action([
