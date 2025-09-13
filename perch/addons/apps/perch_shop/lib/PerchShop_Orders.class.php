@@ -271,12 +271,14 @@ $sql= $selectsql. $fromsql.$wheresql;
             $sql = 'SELECT';
         }
 
-        $sql .= ' o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName
+        $sql .= ' o.*, c.*, p.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName
                 FROM ' . $this->table .' o
                 JOIN '.PERCH_DB_PREFIX.'shop_customers c ON o.customerID=c.customerID
-                LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID
+                LEFT JOIN '.PERCH_DB_PREFIX.'shop_package_items pkg ON pkg.orderID=o.orderID
+                LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages p  ON pkg.packageID = p.uuid OR (p.billing_type = "prepaid" AND p.orderID = o.orderID)
                 WHERE o.orderDeleted IS NULL
                         AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status).')';
+
 
 		if ($sort_val) {
             $sql .= ' ORDER BY '.$sort_val.' '.$sort_dir;

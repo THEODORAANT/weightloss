@@ -59,7 +59,7 @@
             'title'     => 'Package',
             'value'     => function($Item) {
                 $type = $Item->billing_type();
-                return $type ? ucfirst($type) : '';
+                return $type ? ucfirst($type) : 'Normal';
             },
             'sort'      => 'billing_type',
         ]);
