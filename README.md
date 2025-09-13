@@ -19,6 +19,9 @@ This outputs the date when the next payment is due.
 pending packages with a `nextBillingDate` one week in the future and uses
 Perch's email library to notify the associated customers.
 
+The script records each notification in `send_payment_notification.log` and
+skips sending duplicates if an entry already exists.
+
 Run the script from the command line:
 
 ```
