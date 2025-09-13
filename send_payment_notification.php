@@ -17,6 +17,7 @@ if (!is_writable($log_dir)) {
     chmod($log_dir, 0777);
 }
 $log_file = $log_dir . '/send_payment_notification.log';
+
 $sent     = [];
 if (file_exists($log_file)) {
     foreach (file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
