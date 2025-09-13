@@ -16,7 +16,7 @@ if (!is_dir($log_dir)) {
 if (!is_writable($log_dir)) {
     chmod($log_dir, 0777);
 }
-$log_file = $log_dir . '/send_payment_notification.log';
+$log_file = $log_dir . '/send_payment_notification'.$target.'.log';
 
 $sent     = [];
 if (file_exists($log_file)) {
