@@ -920,19 +920,23 @@ public function get_package_future_items($opts){
         foreach ($packages as $Package) {
             $date   = $Package->billingDate();
 
-            //echo $date;
+
             $status = $Package->paymentStatus();
+                $fields = PerchUtil::json_safe_decode($Package->productDynamicFields(), true);
+if($date!=null){
+
 
                 $ts = strtotime($date);
 
                 if ($ts >= $today) {
                     $data[] = [
                         'id'        => $Package->itemID(),
-                        'price'  => $Package->price(),
+                        'price'  => $fields["price"],
                         'item'  => $Package->productVariantDesc(),
                         'packageDate' => $date,
                         'due'         => ($ts <= $today ? 1 : 0),
                     ];
+                }
                 }
 
         }
@@ -955,16 +959,27 @@ public function get_package_future_items($opts){
     	$PerchShop_PackageItems = new PerchShop_PackageItems($this->api);
     	 $Item = $PerchShop_PackageItems->getItem((int)$opts["itemID"]);
 
-                                if ($Item) {
+                $fields = PerchUtil::json_safe_decode($Item->productDynamicFields(), true);
+  $data = [
+                        'id'       => $Item->itemID(),
+                        'title'    => $Item->title(),
+                         'productID'    => $Item->productID(),
+                         'sku'    => $Item->sku(),
+                        'price'=>$fields["price"]["_default"],
+                          'month'    => $Item->month(),
+                        'quantity' => $Item->qty(),
+                    ];
+
+                                if ($data) {
 
                                   if ($opts['skip-template']) {
-                                       return $Item;
+                                       return $data;
                                     }else{
                                   $Template = $this->api->get("Template");
                                           $Template->set("shop/".$opts["template"], 'shop');
 
 
-                                                       $r = $Template->render($Item, true);
+                                                       $r = $Template->render($data, true);
                                                        }
 
                                 }
@@ -1006,6 +1021,7 @@ public function get_package_future_items($opts){
                     $data[] = [
                         'id'       => $Item->itemID(),
                         'title'    => $title,
+                        'price'=> $Product->price(),
                           'month'    => $Item->month(),
                         'quantity' => $Item->qty(),
                     ];

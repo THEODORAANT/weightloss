@@ -1,26 +1,27 @@
 <div class="order-summary p-3 border rounded">
-<table class="package-summary">
+
+        <p></p>
+        <div class="order-item d-flex align-items-center">
+            <!--<img src="/asset/weight-loss-support.png" alt="Product Image" class="product-image me-3">-->
+
+            <div class="Glucomannan_title">
+                <h5>Month <perch:shop id="month" /> </h5>
+                <perch:shop id="sku" type="text" label="SKU" required="true" order="1" />
+
+                <p>      <perch:if id="monthly_checkout" match="eq" value="false">
+
+                        <perch:label class="form-label"></perch:label> <input type="hidden" name="qty[<perch:shop id='id' />]" value="<perch:shop id='quantity' />" min="0" />
+                </perch:if>   </p>
+                <!--	<button type="submit" class="remove_cart" name="del:<perch:cartitem id="identifier" />" value="1">
+                    <img src="/asset/delete.png" width="30" height="30">
+
+                    </button>-->
+                <p>         <span>Price</span>
+                <span>  &pound;<perch:shop id="price"  />
+                </span></p>
+            </div>
+
+        </div>
 
 
-    <tr>
-        <td>Month <perch:shop id="month" />:</td>
-
-        <td><div class="Glucomannan_title"> <h5><perch:shop id="title" /></h5></div></td>
-        <td><div class="Glucomannan_title">
-         <perch:shop id="sku" type="text" label="SKU" required="true" order="1" />
-<perch:shop id="title" type="text" label="Title" required="true" order="2" />
-<perch:shop id="slug" type="slug" editable="true" indelible="true" label="Slug" for="title sku" order="10" divider-before="Meta data" />
-
-            <perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="m" min="0" step="any" />
-
-            <perch:shop id="description" type="textarea" label="Description" editor="markitup" order="3" markdown="true" size="s" />
-        </div></td>
-        <perch:if id="monthly_checkout" match="eq" value="false">
-        <td >
-            <perch:label class="form-label">Quantity</perch:label> <input type="hidden" name="qty[<perch:shop id='id' />]" value="<perch:shop id='quantity' />" min="0" /></td>
-        <td><perch:label class="form-label">Remove</perch:label><input type="checkbox" name="remove[<perch:shop id='id' />]" value="1" /></td>
-        </perch:if>
-   </tr>
-</table>
-
-    </div>
+</div>

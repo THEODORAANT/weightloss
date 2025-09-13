@@ -65,19 +65,7 @@ echo '<div class="plan">
 
         </div></div>
 
-        <div class="container all_content mt-4">
-            <h2 class="text-center fw-bolder">Future Payments</h2>
 
-            <div class="plans mt-4">
-                <?php
-                  PerchSystem::set_var('today', date('Y-m-d'));
-                 $r=perch_shop_future_packages();
-
-
-
-                 ?>
-            </div>
-        </div>
 
 </section>
 

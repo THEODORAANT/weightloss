@@ -21,12 +21,12 @@ class PerchShop_PackageItems extends PerchShop_Factory
     }
   public function getItem($itemID)
         {
-          $sql = 'SELECT i.*,p.nextBillingDate,po.* FROM ' . $this->table . ' as i,
-                    '.PERCH_DB_PREFIX.'shop_products po,
+          $sql = 'SELECT i.*,p.nextBillingDate,po.* FROM ' . $this->table . ' as i inner join
+                    '.PERCH_DB_PREFIX.'shop_products po inner join
                     '.PERCH_DB_PREFIX.'shop_packages as p     WHERE
-                       i.productID = po.productID   and p.itemID=' . $this->db->pdb((int)$itemID);
-echo $sql;
-print_r($this->db->get_row($sql));
+                      i.packageID= p.uuid and i.productID = po.productID   and i.itemID=' . $this->db->pdb((int)$itemID);
+
+
 
                     return $this->return_instance($this->db->get_row($sql));
 
