@@ -978,9 +978,13 @@ $out=[];
 }
 if(isset($data["uuid"])){
   $qdata['uuid']=$data["uuid"];
-}elseif(isset($_SESSION['step_data'])){
+
+}else{
+ $qdata['uuid']="unknown";
+}
+/*if(isset($_SESSION['step_data'])){
            $qdata['uuid']=$_SESSION['step_data']['user_id'];
-          }
+          }*/
 
 
 

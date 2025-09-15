@@ -24,6 +24,10 @@
         if (!is_object($Member)) {
             PerchUtil::redirect($API->app_path());
         }
+        $Session = PerchMembers_Session::fetch();
+        if ($Session->logged_in) {
+            $Auth->log_out();
+        }
 
         $Auth->refresh_session_data($Member);
 
@@ -31,6 +35,15 @@
         $log_file = PERCH_PATH.'/addons/apps/perch_members/impersonate.log';
         file_put_contents($log_file, $log_line, FILE_APPEND);
 
-        PerchUtil::redirect('/client');
+         PerchUtil::redirect('/client');
+        // After impersonating, redirect to the package builder
+       // $site = PerchRequest::get('site');
+        if(isset( PerchRequest::get('site'))){
+                PerchUtil::redirect('/order/package-builder');
+
+        }else{
+
+         PerchUtil::redirect('/client');
+        }
     }
 
