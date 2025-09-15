@@ -1,5 +1,7 @@
 <?php
-$log_dir = realpath(__DIR__.'/../../../../logs');
+$log_dir = realpath(__DIR__.'/../../../../../logs/notifications');
+//$log_dir  = __DIR__ . '/logs/notifications';
+//$log_dir  = __DIR__ . '/logs/notifications';
 $logs = [];
 if ($log_dir && is_dir($log_dir)) {
     $files = glob($log_dir . '/send_payment_notification*.log');

@@ -1021,6 +1021,7 @@ if($date!=null){
                     $data[] = [
                         'id'       => $Item->itemID(),
                         'title'    => $title,
+                          'sku'    => $Item->sku(),
                         'price'=> $Product->price(),
                           'month'    => $Item->month(),
                         'quantity' => $Item->qty(),

@@ -18,7 +18,11 @@ if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
 } //include('../perch/runtime.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $quantities = perch_post('qty');
+ if (perch_post('action') === 'update') {
+ perch_shop_package_remove( $_SESSION['perch_shop_package_id']);
+      PerchUtil::redirect('/order/package-builder');
+ }
+   /* $quantities = perch_post('qty');
     $removals = perch_post('remove');
     if (is_array($quantities)) {
         foreach ($quantities as $itemID => $qty) {
@@ -31,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 perch_shop_package_remove_item($itemID);
             }
         }
-    }
+    }*/
     if (perch_post('action') === 'checkout') {
         try {
             $package = perch_shop_update_package_status("confirmed");
@@ -85,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
  <?}else{?>
 
-    <button class="add-btn" type="submit" name="action" value="update">Update package</button>
+    <button class="add-btn" type="submit" name="action" value="update">Reset package</button>
     <button  class="add-btn" type="submit" name="action" value="checkout">Proceed to checkout</button>
     <?php  }?>
 </form>
