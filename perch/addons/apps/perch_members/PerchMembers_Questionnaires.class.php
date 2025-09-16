@@ -736,25 +736,50 @@ function getNextStepforFirstOrder(array $data): string {
   }
 
   function calculateBMIAdvanced($weight, $weightUnit, $height1, $weight2=0, $height2 = 0, $heightUnit = 'cm') {
+      // Normalise numeric values defensively before calculations
+      $weightNumeric  = is_numeric($weight)  ? (float)$weight  : null;
+      $weight2Numeric = is_numeric($weight2) ? (float)$weight2 : null;
+      $height1Numeric = is_numeric($height1) ? (float)$height1 : null;
+      $height2Numeric = is_numeric($height2) ? (float)$height2 : null;
+
       // Convert weight to kilograms if needed
       if ($weightUnit === 'st-lbs') {
-         $totalPounds = ($weight * 14) + $weight2;
+          if ($weightNumeric === null || $weight2Numeric === null) {
+              return "Invalid weight value.";
+          }
+
+          $totalPounds = ($weightNumeric * 14) + $weight2Numeric;
           $weightKg = $totalPounds * 0.453592;
 
       } elseif ($weightUnit === 'kg') {
-          $weightKg = $weight;
+          if ($weightNumeric === null) {
+              return "Invalid weight value.";
+          }
+
+          $weightKg = $weightNumeric;
       } else {
           return "Invalid weight unit. Use 'kg' or 'lbs'.";
       }
 
       // Convert height to meters based on unit
       if ($heightUnit === 'cm') {
-          $heightM = $height1 / 100;
-      } elseif ($heightUnit === 'in') {
-          $heightM = $height1 * 0.0254;
-      } elseif ($heightUnit === 'ft-in') {
+          if ($height1Numeric === null) {
+              return "Invalid height value.";
+          }
 
-          $totalInches = ($height1 * 12) + $height2;
+          $heightM = $height1Numeric / 100;
+      } elseif ($heightUnit === 'in') {
+          if ($height1Numeric === null) {
+              return "Invalid height value.";
+          }
+
+          $heightM = $height1Numeric * 0.0254;
+      } elseif ($heightUnit === 'ft-in') {
+          if ($height1Numeric === null || $height2Numeric === null) {
+              return "Invalid height value.";
+          }
+
+          $totalInches = ($height1Numeric * 12) + $height2Numeric;
           $heightM = $totalInches * 0.0254;
       } else {
           return "Invalid height unit. Use 'cm', 'in', or 'ft_in'.";
