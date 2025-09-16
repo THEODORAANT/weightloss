@@ -4,6 +4,7 @@
         <table class="d">
             <thead>
                 <tr>
+                    <th><?php echo $Lang->get('Item ID'); ?></th>
                     <th><?php echo $Lang->get('Customer ID'); ?></th>
                     <th><?php echo $Lang->get('Billing Date'); ?></th>
                     <th><?php echo $Lang->get('Logged At'); ?></th>
@@ -13,10 +14,11 @@
             <tbody>
             <?php foreach ($entries as $entry): ?>
                 <tr>
-                    <td><?php echo $HTML->encode($entry['customerID']); ?></td>
-                    <td><?php echo $HTML->encode($entry['billingDate']); ?></td>
-                    <td><?php echo $HTML->encode($entry['loggedAt']); ?></td>
-                    <td><?php echo $HTML->encode($entry['status']); ?></td>
+                    <td><?php echo $HTML->encode($entry['itemID'] ?? ''); ?></td>
+                    <td><?php echo $HTML->encode($entry['customerID'] ?? ''); ?></td>
+                    <td><?php echo $HTML->encode($entry['billingDate'] ?? ''); ?></td>
+                    <td><?php echo $HTML->encode($entry['loggedAt'] ?? ''); ?></td>
+                    <td><?php echo $HTML->encode($entry['status'] ?? ''); ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
