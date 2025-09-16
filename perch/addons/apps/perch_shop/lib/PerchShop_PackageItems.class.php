@@ -35,6 +35,7 @@ class PerchShop_PackageItems extends PerchShop_Factory
         {
             $sql = 'SELECT i.*,p.nextBillingDate,po.* FROM ' . $this->table . ' as i,'.PERCH_DB_PREFIX.'shop_products po,
             '.PERCH_DB_PREFIX.'shop_packages as p  WHERE
+            i.packageID=p.uuid and
              i.productID = po.productID and
              i.paymentStatus="pending"
             and p.customerID=' . $this->db->pdb((int)$customerID);

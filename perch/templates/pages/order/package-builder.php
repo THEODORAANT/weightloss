@@ -201,6 +201,8 @@ if (isset($_GET['months'])) {
 <div class="wrap">
 
   <h1>Build your package</h1>
+    <p class="muted">Customer: <strong><?= h(perch_member_get('email')) ?></strong></p>
+
   <p class="muted">Package ID: <strong><?= h($packageId) ?></strong></p>
   <p class="muted">Billing: <strong><?= h($billing) ?></strong></p>
 
