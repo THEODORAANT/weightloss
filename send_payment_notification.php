@@ -9,7 +9,7 @@ $table  = PERCH_DB_PREFIX . 'shop_packages';
 $tableitems  = PERCH_DB_PREFIX . 'shop_package_items';
 $target = (new DateTimeImmutable('+1 week'))->format('Y-m-d');
 
-$log_dir  = __DIR__ . '/logs';
+$log_dir  = __DIR__ . '/logs/notifications';
 if (!is_dir($log_dir)) {
     mkdir($log_dir, 0777, true);
 }
