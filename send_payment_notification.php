@@ -16,42 +16,54 @@ if (!is_dir($log_dir)) {
 if (!is_writable($log_dir)) {
     chmod($log_dir, 0777);
 }
-$log_file = $log_dir . '/send_payment_notification'.$target.'.log';
+$log_file = $log_dir . '/send_payment_notification' . $target . '.log';
 
-$sent     = [];
+$sent = [];
 if (file_exists($log_file)) {
     foreach (file($log_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
         $parts = explode('|', $line);
-        if (count($parts) >= 2) {
-            $sent[$parts[0] . '|' . $parts[1]] = true;
+        if (count($parts) >= 5) {
+            $sent['item:' . $parts[0]] = true;
+        } elseif (count($parts) >= 2) {
+            $sent['legacy:' . $parts[0] . '|' . $parts[1]] = true;
         }
     }
 }
 
-$sql = 'SELECT p.customerID, i.billingDate FROM ' . $tableitems .
+$writeLog = function ($itemID, $customerID, $billingDate, $status) use ($log_file) {
+    $line = $itemID . '|' . $customerID . '|' . $billingDate . '|' . date('c') . '|' . $status . "\n";
+    file_put_contents($log_file, $line, FILE_APPEND | LOCK_EX);
+};
+
+$sql = 'SELECT p.customerID, i.billingDate, i.itemID FROM ' . $tableitems .
        ' as i inner join   ' . $table . ' as p WHERE i.packageID=p.uuid and  p.billing_type="monthly" and i.paymentStatus=' . $DB->pdb('pending') .
        ' AND i.billingDate=' . $DB->pdb($target);
 $packages = $DB->get_rows($sql);
 
 if (PerchUtil::count($packages)) {
     foreach ($packages as $package) {
-        $key = $package['customerID'] . '|' . $package['billingDate'];
-        if (isset($sent[$key])) {
-            file_put_contents(
-                $log_file,
-                $key . '|' . date('c') . "|skipped\n",
-                FILE_APPEND | LOCK_EX
-            );
+        $itemID = isset($package['itemID']) ? (int) $package['itemID'] : 0;
+        $customerID = $package['customerID'] ?? '';
+        $billingDate = $package['billingDate'] ?? '';
+        $itemKey = 'item:' . $itemID;
+        $legacyKey = 'legacy:' . $customerID . '|' . $billingDate;
+
+        if (($itemID && isset($sent[$itemKey])) || isset($sent[$legacyKey])) {
+            $writeLog($itemID, $customerID, $billingDate, 'skipped');
+            $sent[$itemKey] = true;
+            if (isset($sent[$legacyKey])) {
+                unset($sent[$legacyKey]);
+            }
             continue;
         }
 
-        $Customer = $Customers->find((int)$package['customerID']);
+        $Customer = $Customers->find((int) $customerID);
         if (!$Customer) {
             continue;
         }
         $memberID = $Customer->memberID();
         $title    = 'Upcoming Payment Reminder';
-        $message  = 'Your next payment is due on ' . $package['billingDate'] . '. Please complete it from your portal.';
+        $message  = 'Your next payment is due on ' . $billingDate . '. Please complete it from your portal.';
 
         perch_member_add_notification($memberID, $title, $message);
         $Email = new PerchEmail('');
@@ -59,15 +71,11 @@ if (PerchUtil::count($packages)) {
         $Email->senderName('Weightloss');
         $Email->senderEmail('no-reply@example.com');
         $Email->recipientEmail($Customer->customerEmail());
-        $Email->body('Your next payment is due on ' . $package['billingDate'] . '. Please complete it from your portal.');
+        $Email->body('Your next payment is due on ' . $billingDate . '. Please complete it from your portal.');
 
         $Email->send();
-        file_put_contents(
-            $log_file,
-            $key . '|' . date('c') . "|sent\n",
-            FILE_APPEND | LOCK_EX
-        );
-        $sent[$key] = true;
+        $writeLog($itemID, $customerID, $billingDate, 'sent');
+        $sent[$itemKey] = true;
     }
 }
 
