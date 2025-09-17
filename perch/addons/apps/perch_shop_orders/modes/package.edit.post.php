@@ -148,6 +148,8 @@ $output.=  $HTML->heading2('Customer');
 
                 if ((int)$Item->month() === 1) {
                     $billing_value = $Item->billingDate() ? $HTML->encode($Item->billingDate()) : '';
+                     $output.=  $HTML->encode($Item->billingDate());
+                      $billing_value = date($billing_value);
                     $output.=  '<form method="post" action="'.$form_action.'" class="inline-billing-date">';
                     $output.=  '<input type="hidden" name="formaction" value="update_billing_date">';
                     $output.=  '<input type="hidden" name="token" value="'.$csrf_token.'">';
