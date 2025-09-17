@@ -25,6 +25,38 @@
 
                 $Customer    = $Customers->find($Package->customerID());
 
+
+                if (!PerchSession::get('csrf_token')) {
+                    PerchSession::set('csrf_token', md5(uniqid('csrf', true)));
+                }
+
+                $status_choices = ['confirmed', 'completed', 'cancelled'];
+
+                if (PerchUtil::post('formaction') === 'update_status') {
+                    $token          = PerchUtil::post('token');
+                    $session_token  = PerchSession::get('csrf_token');
+
+                    if (!$token || !$session_token || $token !== $session_token) {
+                        $message = $HTML->failure_message($Lang->get('Sorry, that request could not be authorised. Please try again.'));
+                        PerchSession::set('csrf_token', md5(uniqid('csrf', true)));
+                    } else {
+                        PerchSession::set('csrf_token', md5(uniqid('csrf', true)));
+
+                        $status = trim((string)PerchUtil::post('status'));
+
+                        if (in_array($status, $status_choices, true)) {
+                            if ($Package->update(['status' => $status])) {
+                                $message = $HTML->success_message($Lang->get('Package status updated successfully.'));
+                            } else {
+                                $message = $HTML->failure_message($Lang->get('Sorry, that update was not successful.'));
+                            }
+                        } else {
+                            $message = $HTML->failure_message($Lang->get('Please select a valid status.'));
+                        }
+                    }
+                }
+
+
                 if (PerchUtil::post('formaction') === 'update_billing_date') {
                     $token          = PerchUtil::post('token');
                     $session_token  = PerchSession::get('csrf_token');
@@ -46,6 +78,7 @@
 
                                 if ($Item && $Item->packageID() == $Package->uuid()) {
                                     if ((int)$Item->month() === 1) {
+
                                         $update_success = $Item->update(['billingDate' => $billingDate]);
 
                                         if ($update_success) {
@@ -75,6 +108,9 @@
                                         }
 
                                         if ($update_success) {
+
+                                        if ($Item->update(['billingDate' => $billingDate])) {
+
                                             $message = $HTML->success_message($Lang->get('Billing date updated successfully.'));
                                         } else {
                                             $message = $HTML->failure_message($Lang->get('Sorry, that update was not successful.'));

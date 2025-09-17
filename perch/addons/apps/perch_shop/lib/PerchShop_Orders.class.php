@@ -67,7 +67,18 @@ class PerchShop_Orders extends PerchShop_Factory
 
     		return true;
     	}
+ public function send_monthly_notification( $Customer,$message)
+    {
 
+          $Email = $this->api->get('Email');
+               $Email->subject('Upcoming Payment Reminder');
+               $Email->senderName('Weightloss');
+               $Email->senderEmail('no-reply@example.com');
+               $Email->recipientEmail($Customer->customerEmail());
+               $Email->body($message);
+
+               return $Email->send();
+    }
 	public function create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,$api=false)
 	{
 		if($api){

@@ -905,7 +905,11 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		return $r;
 	}
+public function send_monthly_notification( $Customer,$message){
+ $Orders = new PerchShop_Orders($this->api);
 
+return $Orders->send_monthly_notification( $Customer,$message);
+}
 public function get_package_future_items($opts){
 
     $customerID = $this->get_customer_id();
