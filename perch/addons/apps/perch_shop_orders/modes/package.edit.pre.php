@@ -5,40 +5,72 @@
 	$Customers  = new PerchShop_Customers($API);
 
 
-	$Form = $API->get('Form');
+        $Form = $API->get('Form');
 
-	$message = false;
+        $message = false;
 
-	if (PerchUtil::get('id')) {
+        if (PerchUtil::get('id')) {
 
-		if (!$CurrentUser->has_priv('perch_shop.orders.edit')) {
-		    PerchUtil::redirect($API->app_path());
-		}
+                if (!$CurrentUser->has_priv('perch_shop.orders.edit')) {
+                    PerchUtil::redirect($API->app_path());
+                }
 
-		$shop_id = PerchUtil::get('id');
+                $shop_id = PerchUtil::get('id');
 
-		$Package     = $Packages->find($shop_id);
+                $Package     = $Packages->find($shop_id);
+
+                if (!$Package) {
+                    PerchUtil::redirect($API->app_path());
+                }
+
+                $Customer    = $Customers->find($Package->customerID());
+
+                if (PerchUtil::post('formaction') === 'update_billing_date') {
+                    $token          = PerchUtil::post('token');
+                    $session_token  = PerchSession::get('csrf_token');
+
+                    if (!$token || !$session_token || $token !== $session_token) {
+                        $message = $HTML->failure_message($Lang->get('Sorry, that request could not be authorised. Please try again.'));
+                        PerchSession::set('csrf_token', md5(uniqid('csrf', true)));
+                    } else {
+                        PerchSession::set('csrf_token', md5(uniqid('csrf', true)));
+
+                        $itemID      = (int)PerchUtil::post('itemID');
+                        $billingDate = trim((string)PerchUtil::post('billingDate'));
+
+                        if ($itemID > 0 && $billingDate !== '') {
+                            $date = DateTime::createFromFormat('Y-m-d', $billingDate);
+
+                            if ($date && $date->format('Y-m-d') === $billingDate) {
+                                $Item = $PackageItems->find($itemID);
+
+                                if ($Item && $Item->packageID() == $Package->uuid()) {
+                                    if ((int)$Item->month() === 1) {
+                                        if ($Item->update(['billingDate' => $billingDate])) {
+                                            $message = $HTML->success_message($Lang->get('Billing date updated successfully.'));
+                                        } else {
+                                            $message = $HTML->failure_message($Lang->get('Sorry, that update was not successful.'));
+                                        }
+                                    } else {
+                                        $message = $HTML->failure_message($Lang->get('Billing date can only be edited for the first month.'));
+                                    }
+                                } else {
+                                    $message = $HTML->failure_message($Lang->get('Sorry, that package item could not be found.'));
+                                }
+                            } else {
+                                $message = $HTML->failure_message($Lang->get('Please enter a valid billing date (YYYY-MM-DD).'));
+                            }
+                        } else {
+                            $message = $HTML->failure_message($Lang->get('Billing date and item information are required.'));
+                        }
+                    }
+                }
+
+                $items = $PackageItems->get_for_admin($Package->uuid());
 
 
-		$Customer    = $Customers->find($Package->customerID());
-
-		/*if ($Form->submitted()) {
-
-			$data = $Form->receive(['status']);
-
-			if ($Order) {
-				$Order->set_status($data['status']);
-			}
-		}*/
-
-
-		//$details = $Package->to_array();
-
-	    $items = $PackageItems->get_for_admin($Package->uuid());
-	   
-
-	}else{
-	    PerchUtil::redirect($API->app_path());
-	}
+        }else{
+            PerchUtil::redirect($API->app_path());
+        }
 
 
