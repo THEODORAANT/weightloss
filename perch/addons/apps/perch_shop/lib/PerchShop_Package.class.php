@@ -20,6 +20,37 @@ class PerchShop_Package extends PerchShop_Base
             $Items = new PerchShop_PackageItems($this->api);
             return $Items->get_unpaid_for_package($this->uuid());
         }
+
+    public function update($data)
+    {
+        $should_cancel_unpaid = false;
+
+        if (isset($data['status'])) {
+            $incoming_status = strtolower(trim((string)$data['status']));
+
+            if ($incoming_status === 'canceled') {
+                $incoming_status = 'cancelled';
+            }
+
+            if ($incoming_status === 'cancelled') {
+                $data['status'] = 'cancelled';
+                $should_cancel_unpaid = true;
+            }
+        }
+
+        $result = parent::update($data);
+
+        if ($result !== false && $should_cancel_unpaid) {
+            $cascade_result = $this->cancel_unpaid_payment_records();
+
+            if ($cascade_result === false) {
+                $result = false;
+            }
+        }
+
+        return $result;
+    }
+
     	public function set_customer($customerID)
     	{
 
@@ -67,5 +98,37 @@ class PerchShop_Package extends PerchShop_Base
                             'nextBillingDate' => $nextBilling,
                         ]);
                         }
+
+    private function cancel_unpaid_payment_records()
+    {
+        $success = true;
+
+        $current_payment_status = strtolower((string)$this->paymentStatus());
+        if ($current_payment_status !== 'paid' && $current_payment_status !== 'cancelled') {
+            if (!parent::update(['paymentStatus' => 'cancelled'])) {
+                $success = false;
+            }
+        }
+
+        $Items = new PerchShop_PackageItems($this->api);
+        $package_items = $Items->get_for_package($this->uuid());
+
+        if (PerchUtil::count($package_items)) {
+            foreach ($package_items as $PackageItem) {
+                $item_status = strtolower((string)$PackageItem->paymentStatus());
+
+                if ($item_status === 'paid' || $item_status === 'cancelled') {
+                    continue;
+                }
+
+                if (!$PackageItem->update(['paymentStatus' => 'cancelled'])) {
+                    $success = false;
+                }
+            }
+        }
+
+        return $success;
+    }
 }
+
 
