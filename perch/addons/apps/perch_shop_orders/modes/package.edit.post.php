@@ -12,6 +12,16 @@
 
 
 
+    $form_action = $HTML->encode($Form->action());
+    $csrf_token  = $HTML->encode(PerchSession::get('csrf_token'));
+
+    if (!isset($status_choices) || !is_array($status_choices)) {
+        $status_choices = ['confirmed', 'completed', 'cancelled'];
+    }
+
+    $current_status = trim((string)$Package->status());
+
+
 
 $output= $HTML->heading2('Package');
 
@@ -34,6 +44,24 @@ $output= $HTML->heading2('Package');
     $output.=  '<tr>';
         $output.=  '<th>'.$Lang->get('PaymentStatus').'</th>';
         $output.=  '<td>'.$HTML->encode(ucfirst($Package->paymentStatus())).'</td>';
+    $output.=  '</tr>';
+
+    $output.=  '<tr>';
+        $output.=  '<th>'.$Lang->get('Status').'</th>';
+        $output.=  '<td>';
+            $output.=  '<form method="post" action="'.$form_action.'" class="inline-package-status">';
+            $output.=  '<input type="hidden" name="formaction" value="update_status">';
+            $output.=  '<input type="hidden" name="token" value="'.$csrf_token.'">';
+            $output.=  '<select name="status">';
+            foreach ($status_choices as $status_option) {
+                $label = $Lang->get(ucfirst($status_option));
+                $selected = ($status_option === $current_status) ? ' selected="selected"' : '';
+                $output.=  '<option value="'.$HTML->encode($status_option).'"'.$selected.'>'.$HTML->encode($label).'</option>';
+            }
+            $output.=  '</select>';
+            $output.=  '<button type="submit" class="button button-simple button-small">'.$HTML->encode($Lang->get('Save')).'</button>';
+            $output.=  '</form>';
+        $output.=  '</td>';
     $output.=  '</tr>';
 
     $output.=  '<tr>';
@@ -106,9 +134,6 @@ $output.=  $HTML->heading2('Customer');
                 $output.=  '<th>'.$Lang->get('orderID').'</th>';
         $output.=  '</tr>';
         $output.=  '</thead>';
-
-        $form_action = $HTML->encode($Form->action());
-        $csrf_token  = $HTML->encode(PerchSession::get('csrf_token'));
 
         foreach($items as $Item) {
             #PerchUtil::debug($Item);
