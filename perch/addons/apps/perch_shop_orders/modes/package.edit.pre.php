@@ -78,7 +78,6 @@
 
                                 if ($Item && $Item->packageID() == $Package->uuid()) {
                                     if ((int)$Item->month() === 1) {
-
                                         $update_success = $Item->update(['billingDate' => $billingDate]);
 
                                         if ($update_success) {
@@ -108,9 +107,6 @@
                                         }
 
                                         if ($update_success) {
-
-                                        if ($Item->update(['billingDate' => $billingDate])) {
-
                                             $message = $HTML->success_message($Lang->get('Billing date updated successfully.'));
                                         } else {
                                             $message = $HTML->failure_message($Lang->get('Sorry, that update was not successful.'));
