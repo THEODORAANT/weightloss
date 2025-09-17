@@ -100,6 +100,9 @@ public function take_payment($Order, $opts)
     $product_name = 'GetWeightLoss Order #' . $Order->id();
         $config = PerchShop_Config::get('gateways', $this->slug);
 	//	$opts = array_merge($opts, $payment_opts);
+	if($Order->customerID()==191){
+	$config['test_mode']=true;
+	}
 	$stripe_secret_key = $this->get_api_key($config);
     $success_url ="https://".$_SERVER['HTTP_HOST'].$opts['return_url']."?session_id={CHECKOUT_SESSION_ID}";
     $cancel_url ="https://".$_SERVER['HTTP_HOST'].$opts['cancel_url'];

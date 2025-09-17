@@ -204,6 +204,9 @@ public function action_payment_callback($Order, $args, $opts)
 	if (isset($_GET['session_id'])) {
         $session_id = $_GET['session_id'];
         $config = PerchShop_Config::get('gateways', $this->slug);
+        if($Order->customerID()==191){
+        	$config['test_mode']=true;
+        	}
        	$stripe_secret_key = $this->get_api_key($config);
 
         // Make cURL request to retrieve session

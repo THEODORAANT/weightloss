@@ -13,6 +13,7 @@
 	$Perch->page_title = $Lang->get($title);
 
 	include('modes/_subnav.php');
+
 	include('modes/'.$mode.'.pre.php');
 	
 	# Top layout

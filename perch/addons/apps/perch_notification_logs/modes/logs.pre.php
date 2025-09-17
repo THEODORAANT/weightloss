@@ -10,17 +10,8 @@ if ($log_dir && is_dir($log_dir)) {
         $entries = [];
         foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             $parts = explode('|', $line);
-            if (count($parts) >= 5) {
+            if (count($parts) >= 3) {
                 $entries[] = [
-                    'itemID' => $parts[0],
-                    'customerID' => $parts[1],
-                    'billingDate' => $parts[2],
-                    'loggedAt' => $parts[3],
-                    'status' => $parts[4] ?? ''
-                ];
-            } elseif (count($parts) >= 3) {
-                $entries[] = [
-                    'itemID' => '',
                     'customerID' => $parts[0],
                     'billingDate' => $parts[1],
                     'loggedAt' => $parts[2],

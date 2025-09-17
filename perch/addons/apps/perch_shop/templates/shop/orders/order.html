@@ -11,18 +11,20 @@
         <h5>Date</h5>
         <p><perch:shop id="orderCreated" type="date" format="d F Y H:i" /></p>
     </div>
-
-    <div>
-        <h5>Total </h5>
-        <p><perch:shop id="orderTotal" /> <perch:shop id="orderCurrency" /></p>
-    </div>
     <div>
         <h5>Status </h5>
         <p><perch:shop id="orderStatus" format="UC" /></p>
     </div>
     <div>
         <h5>Shipping </h5>
-        <p><perch:shop id="orderShippingTaxRate"/></p>
+        <p><perch:shop id="currencySymbol" /> <perch:shop id="orderShippingTotal" /></p>
     </div>
-
+    <div>
+        <h5>Discount </h5>
+        <p><perch:shop id="currencySymbol" /> <perch:shop id="orderDiscountsTotal" /></p>
+    </div>
+    <div>
+        <h5>Total </h5>
+        <p><perch:shop id="orderTotal" /> <perch:shop id="orderCurrency" /></p>
+    </div>
 </div>

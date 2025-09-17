@@ -3,88 +3,62 @@
 
 	<perch:input type="submit" value="Update" hidden="true" aria-hidden="true" />
 
-		<div class="order-summary p-3 border rounded">
-			<perch:cartitems>
-				<p></p>
+	<div class="order-summary p-3 border rounded">
+		<perch:cartitems>
+			<p></p>
 			<div class="order-item d-flex align-items-center">
 				<!--<img src="/asset/weight-loss-support.png" alt="Product Image" class="product-image me-3">-->
-            <img class="product-image me-3"  src="<perch:cartitem id="image" type="image" label="Main product image" required="true" />" alt="<perch:cartitem id="title" type="text" label="Title" required="true" />" />
+				<img class="product-image me-3"  src="<perch:cartitem id="image" type="image" label="Main product image" required="true" />" alt="<perch:cartitem id="title" type="text" label="Title" required="true" />" />
 
-            <div class="Glucomannan_title">
-                <h5><perch:cartitem id="title" /> weight loss</h5>
+				<div class="Glucomannan_title">
+					<h5><perch:cartitem id="title" /> weight loss</h5>
 
-                <p><perch:cartitem id="variant_desc" />
-					<perch:input id="qty:<perch:cartitem id="identifier" />" value="<perch:cartitem id="quantity" />" type="number" min="0" />
-					<perch:label class="form-label">Quantity</perch:label>
-				</p>
-            <!--	<button type="submit" class="remove_cart" name="del:<perch:cartitem id="identifier" />" value="1">
-                <img src="/asset/delete.png" width="30" height="30">
+					<p><perch:cartitem id="variant_desc" />
+						<perch:input id="qty:<perch:cartitem id="identifier" />" value="<perch:cartitem id="quantity" />" type="number" min="0" />
+						<perch:label class="form-label">Quantity</perch:label>
+					</p>
+					<!--	<button type="submit" class="remove_cart" name="del:<perch:cartitem id="identifier" />" value="1">
+                        <img src="/asset/delete.png" width="30" height="30">
 
-                </button>-->
+                        </button>-->
 				</div>
 
 			</div>	</perch:cartitems>
-			<hr>
-			<div class="sub_total d-flex justify-content-between">
-				<span style="color: #545454; font-weight: 500;">Subtotal</span>
-				<span class="fw-bold"><perch:shop id="total_items_formatted" /></span>
-			</div>
-			<div class="d-flex justify-content-between">
-				<a href="#" style="color: #545454; padding: 10px 0;">Add promo code</a>
-
-				<span style="color: #288881; font-weight: bolder; padding: 10px 0;">	<perch:input type="text" class="discount-input" id="discount_code" /></span>
-
-
-			</div>
-
-			<div class="d-flex justify-content-between">
-				<span style="color: #757575;">Delivery</span>
-
-
-				<span style="color: #288881; font-weight: bolder;"><perch:shop id="shipping_method" /></span>
-				<span style="color: #288881; font-weight: bolder;"><perch:shop id="shipping_with_tax_formatted" /></span>
-			</div>
-			<div class="d-flex justify-content-between">
-
-			<perch:label for="discount">
-						<span style="color: #757575;"><span>Discount </span></span>
-
-				<span style="color: #288881; font-weight: bolder;"><perch:input type="text" class="discount-input" id="discount_code" />
-				</span>	</perch:label>
-			</div>
-			<perch:if id="total_discounts" match="gt" value="0.00">
-				<div class="d-flex justify-content-between">
-
-				<span style="color: #288881; font-weight: bolder;"
-						Discount (
-						<perch:shop id="discount_code" />)
-					</span>
-					<span style="color: #288881; font-weight: bolder;"
-						<perch:shop id="total_discounts_formatted" />
-					</span>
-				</div>
-				<div class="d-flex justify-content-between">
-					<span style="color: #288881; font-weight: bolder;"
-						Total
-					</span>
-					<span style="color: #288881; font-weight: bolder;"
-						<perch:shop id="total_items_discounted_formatted" />
-
-						<!-- <button type="submit" class="remove_cart" name="del:<perch:cartitem id="identifier" />" value="1">
-                <img src="../../../../../../../images/delete-icon.png" width="30" height="30">
-            </button> productCard__button -->
-					</span>
-				</div>
-			</perch:if>
-			<div class="total_cost d-flex justify-content-between fw-bold">
-
-				<span></span>
-			<span style="color: #288881; font-weight: bolder;"><perch:input type="submit" class="add-btn" value="Update" /></span>
-			</div>
-			<hr>
-			<div class="total_cost d-flex justify-content-between fw-bold">
-				<span>Total</span>
-				<span><perch:shop id="total_items_discounted_formatted" /></span>
-			</div>
+		<hr>
+		<div class="sub_total d-flex justify-content-between">
+			<span style="color: #545454; font-weight: 500;">Subtotal</span>
+			<span class="fw-bold"><perch:shop id="total_items_formatted" /></span>
 		</div>
+		<div class="d-flex justify-content-between">
+			<a href="#" style="color: #545454; padding: 10px 0;">Add promo code</a>
+
+			<span style="color: #288881; font-weight: bolder; padding: 10px 0;">	<perch:input type="text" class="discount-input" id="discount_code" /></span>
+
+
+		</div>
+
+		<div class="d-flex justify-content-between">
+			<span style="color: #757575;">Delivery</span>
+
+
+			<span style="color: #288881; font-weight: bolder;"><perch:shop id="shipping_method" /></span>
+			<span style="color: #288881; font-weight: bolder;"><perch:shop id="shipping_with_tax_formatted" /></span>
+		</div>
+
+
+		<div class="total_cost d-flex justify-content-between fw-bold">
+
+			<span></span>
+			<span style="color: #288881; font-weight: bolder;"><perch:input type="submit" class="add-btn" value="Update" /></span>
+		</div>
+		<hr>
+		<div class="total_cost d-flex justify-content-between fw-bold">
+			<span>Total Discounted</span>
+			<span><perch:shop id="total_items_discounted_formatted" /></span>
+		</div>
+		<div class="total_cost d-flex justify-content-between fw-bold">
+			<span>Total </span>
+			<span><perch:shop id="grand_total_formatted" /></span>
+		</div>
+	</div>
 </perch:form>
