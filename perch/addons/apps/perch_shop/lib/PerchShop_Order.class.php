@@ -90,6 +90,9 @@ class PerchShop_Order extends PerchShop_Base
 
 		 if ((float)$this->orderTotal() <= 0) {
                                 $this->finalize_as_paid('pending');
+
+                                       echo "<script>window.location.href = '" . $opts['return_url'] . "?pending=1';</script>";
+
                                 return true;
                         }
                         $Gateway = PerchShop_Gateways::get($this->orderGateway());

@@ -195,31 +195,14 @@ class PerchShop_Orders extends PerchShop_Factory
 
 		return $this->return_instances($rows);
 	}
-public function get_by_properties($details,$Paging=false,$statuses=null){
+public function get_by_properties($details,$Paging=false){
 //echo "get_by_properties";
 //print_r($details);
 $sort_val = null;
         $sort_dir = null;
 
 
-        if ($statuses === null) {
-            $statuses = ['paid'];
-        }
-
-        if (!is_array($statuses)) {
-            $statuses = [$statuses];
-        }
-
-        $statuses = array_filter($statuses, function($status) {
-            return $status !== null && $status !== '';
-        });
-
-        if (!count($statuses)) {
-            $statuses = ['paid'];
-        }
-
-
-                if ($Paging && $Paging->enabled()) {
+		if ($Paging && $Paging->enabled()) {
             $selectsql = $Paging->select_sql();
             list($sort_val, $sort_dir) = $Paging->get_custom_sort_options();
         }else{
@@ -230,7 +213,7 @@ $sort_val = null;
          $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
                 $wheresql = ' WHERE o.customerID=c.customerID
                                 AND o.orderDeleted IS NULL
-                                AND o.orderStatus IN ('.$this->db->implode_for_sql_in($statuses).')';
+                                AND o.orderStatus IN ("paid")';
                 	if($details["sendtopharmacy"]!=""){
                 	if($details["sendtopharmacy"]=="yes"){
                 	 // $selectsql .= ' ,p.* ';
@@ -320,16 +303,21 @@ $sql= $selectsql. $fromsql.$wheresql;
     public function send_monthly_notification( $Customer,$message)
     {
 
+     	$Members = new PerchMembers_Members($this->api);
+               	$Member = $Members->find($Customer->memberID());
+          	$properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+if(isset( $data["FirstName"])){  $data["FirstName"]=$properties["first_name"];}  else{$data["FirstName"]="client";}
+
           $Email = $this->api->get('Email');
                   $Email->set_template('shop/emails/package_reminder.html', 'shop');
-                $Email->set('first_name', $Customer->first_name());
+                $Email->set('first_name', $data["FirstName"]);
                  $Email->set('message',$message);
                $Email->subject('Upcoming Payment Reminder');
               $Email->senderName(PERCH_EMAIL_FROM_NAME);
         	        $Email->senderEmail(PERCH_EMAIL_FROM);
 
                $Email->recipientEmail($Customer->customerEmail());
-               $Email->body($message);
+               //$Email->body($message);
 
                return $Email->send();
     }

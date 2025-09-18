@@ -1,11 +1,7 @@
 <?php 
 
-if (!isset($list_heading)) {
-    $list_heading = $Lang->get('Listing all orders');
-}
-
 echo $HTML->title_panel([
-    'heading' => $list_heading,
+    'heading' => $Lang->get('Listing all orders'),
     'button'  => [
         'text' => $Lang->get('Add order'),
         'link' => $API->app_nav().'/order/edit/',
@@ -18,7 +14,7 @@ echo $HTML->title_panel([
 	/* ----------------------------------------- SMART BAR ----------------------------------------- */
 
     include('_orders_smartbar.php');
-       
+
 	/* ----------------------------------------- /SMART BAR ----------------------------------------- */
  echo $Form->form_start(false, "ordersclass");
         echo $Form->fields_from_template($Template, $details, array(), false);
@@ -39,27 +35,18 @@ echo $HTML->title_panel([
                 return $invoice_number;
             },
             'sort'      => 'orderInvoiceNumber',
-            'edit_link' => 'order',
+            'edit_link' => '/perch/addons/apps/perch_shop_orders/order',
             'priv'      => 'perch_shop.orders.edit',
         ]);
      $Listing->add_col([
                 'title'     => 'Order Product',
-        'value'     => function($Item) use ($OrderItems){
+                'value'     => function($Item) use ($OrderItems){
                   $items = $OrderItems->get_for_admin($Item->id());
-                    if (!is_array($items) || empty($items)) {
+
+                    if (!isset($items[0]) ) {
                         return "";
                     }
-
-                    $first_item = reset($items);
-
-                    if (!is_object($first_item) || !method_exists($first_item, 'sku')) {
-                        return "";
-                    }
-
-                    $product = $first_item->sku();
-                    if ($product == '') {
-                        return "";
-                    }
+                     $product = $items[0]->sku();
                     return $product;
                 },
 
