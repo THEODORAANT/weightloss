@@ -17,19 +17,11 @@ setcookie('questionnaire', '', time()-3600, '/');
 setcookie('questionnaire_reorder', '', time()-3600, '/');
 setcookie('draft_package_item', '', time()-3600, '/');
 
-$order_is_paid = perch_shop_order_successful();
-$order_complete = $order_is_paid;
+$order_complete = perch_shop_order_successful();
 
 if (!$order_complete) {
-    $ShopRuntime = PerchShop_Runtime::fetch();
-    $ActiveOrder = $ShopRuntime->get_active_order();
+    $order_complete = perch_shop_active_order_has_status('pending');
 
-    if ($ActiveOrder) {
-        $order_status = strtolower((string)$ActiveOrder->orderStatus());
-        if ($order_status === 'pending') {
-            $order_complete = true;
-        }
-    }
 }
 
      perch_layout('product/header', [

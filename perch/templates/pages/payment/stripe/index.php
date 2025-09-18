@@ -20,15 +20,9 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
        ]);
 
 
-        $ShopRuntime = PerchShop_Runtime::fetch();
-        $ActiveOrder = $ShopRuntime->get_active_order();
-        $order_status = null;
-        if ($ActiveOrder) {
-            $order_status = strtolower((string)$ActiveOrder->orderStatus());
-        }
+        $order_complete = perch_shop_active_order_has_status(['paid', 'pending']);
+        $redirect_to_success = $order_complete;
 
-        $successful_statuses = ['paid', 'pending'];
-        $redirect_to_success = in_array($order_status, $successful_statuses, true);
 
         if (!$redirect_to_success && $result === true) {
             $redirect_to_success = true;
