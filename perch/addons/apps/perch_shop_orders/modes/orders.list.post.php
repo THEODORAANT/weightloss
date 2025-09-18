@@ -1,7 +1,11 @@
 <?php 
 
+if (!isset($list_heading)) {
+    $list_heading = $Lang->get('Listing all orders');
+}
+
 echo $HTML->title_panel([
-    'heading' => $Lang->get('Listing all orders'),
+    'heading' => $list_heading,
     'button'  => [
         'text' => $Lang->get('Add order'),
         'link' => $API->app_nav().'/order/edit/',

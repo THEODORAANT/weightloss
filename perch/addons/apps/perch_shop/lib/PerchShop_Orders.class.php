@@ -195,14 +195,31 @@ class PerchShop_Orders extends PerchShop_Factory
 
 		return $this->return_instances($rows);
 	}
-public function get_by_properties($details,$Paging=false){
+public function get_by_properties($details,$Paging=false,$statuses=null){
 //echo "get_by_properties";
 //print_r($details);
 $sort_val = null;
         $sort_dir = null;
 
 
-		if ($Paging && $Paging->enabled()) {
+        if ($statuses === null) {
+            $statuses = ['paid'];
+        }
+
+        if (!is_array($statuses)) {
+            $statuses = [$statuses];
+        }
+
+        $statuses = array_filter($statuses, function($status) {
+            return $status !== null && $status !== '';
+        });
+
+        if (!count($statuses)) {
+            $statuses = ['paid'];
+        }
+
+
+                if ($Paging && $Paging->enabled()) {
             $selectsql = $Paging->select_sql();
             list($sort_val, $sort_dir) = $Paging->get_custom_sort_options();
         }else{
@@ -213,7 +230,7 @@ $sort_val = null;
          $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
                 $wheresql = ' WHERE o.customerID=c.customerID
                                 AND o.orderDeleted IS NULL
-                                AND o.orderStatus IN ("paid")';
+                                AND o.orderStatus IN ('.$this->db->implode_for_sql_in($statuses).')';
                 	if($details["sendtopharmacy"]!=""){
                 	if($details["sendtopharmacy"]=="yes"){
                 	 // $selectsql .= ' ,p.* ';
