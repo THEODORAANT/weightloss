@@ -44,9 +44,19 @@ echo $HTML->title_panel([
         ]);
      $Listing->add_col([
                 'title'     => 'Order Product',
-                'value'     => function($Item) use ($OrderItems){
+        'value'     => function($Item) use ($OrderItems){
                   $items = $OrderItems->get_for_admin($Item->id());
-                    $product = $items[0]->sku();
+                    if (!is_array($items) || empty($items)) {
+                        return "";
+                    }
+
+                    $first_item = reset($items);
+
+                    if (!is_object($first_item) || !method_exists($first_item, 'sku')) {
+                        return "";
+                    }
+
+                    $product = $first_item->sku();
                     if ($product == '') {
                         return "";
                     }
