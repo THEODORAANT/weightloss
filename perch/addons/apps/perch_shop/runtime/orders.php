@@ -12,6 +12,39 @@
 		return false;
 	}
 
+	function perch_shop_active_order_status()
+	{
+		$ShopRuntime = PerchShop_Runtime::fetch();
+		$ActiveOrder = $ShopRuntime->get_active_order();
+
+		if ($ActiveOrder) {
+			return strtolower((string)$ActiveOrder->orderStatus());
+		}
+
+		return null;
+	}
+
+	function perch_shop_active_order_has_status($statuses)
+	{
+		$status = perch_shop_active_order_status();
+
+		if ($status === null) {
+			return false;
+		}
+
+		if (!is_array($statuses)) {
+			$statuses = [$statuses];
+		}
+
+		foreach ($statuses as $expected_status) {
+			if ($status === strtolower((string)$expected_status)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	function perch_shop_successful_order_id()
 	{
 		$ShopRuntime = PerchShop_Runtime::fetch();
@@ -23,8 +56,6 @@
 
 		return false;
 	}
-
-
 
 	function perch_shop_orders($opts=array(), $return=false)
 	{

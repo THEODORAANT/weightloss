@@ -20,7 +20,14 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
        ]);
 
 
-        if ($result) {
+        $order_complete = perch_shop_active_order_has_status(['paid', 'pending']);
+        $redirect_to_success = $order_complete;
+
+        if (!$redirect_to_success && $result === true) {
+            $redirect_to_success = true;
+        }
+
+        if ($redirect_to_success) {
         if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
         unset($_SESSION['questionnaire-reorder']['nextstep']);
     perch_member_add_questionnaire($_SESSION['questionnaire-reorder'],'re-order');
