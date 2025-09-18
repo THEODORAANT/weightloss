@@ -5,6 +5,7 @@ $log_dir = realpath(__DIR__.'/../../../../../logs/notifications');
 $logs = [];
 
 $package_page_base = rtrim($API->app_path('perch_shop_orders'), '/') . '/packages/edit/';
+
 $package_items_factory = null;
 $packages_factory = null;
 

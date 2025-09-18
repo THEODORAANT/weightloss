@@ -897,9 +897,10 @@ $Members = new PerchMembers_Members;
         if (!is_array($props)) $props = [];
 
 
-$props["height"]=$data["height"];
-$props["height2"]=$height2;
+        $props["height"]=$data["height"];
+        $props["height2"]=$height2;
  $props["heightunit"]= $data["heightunit"];
+        $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
 $out=[];
  	$out['memberProperties'] = PerchUtil::json_safe_encode($props);
 
