@@ -67,18 +67,7 @@ class PerchShop_Orders extends PerchShop_Factory
 
     		return true;
     	}
- public function send_monthly_notification( $Customer,$message)
-    {
 
-          $Email = $this->api->get('Email');
-               $Email->subject('Upcoming Payment Reminder');
-               $Email->senderName('Weightloss');
-               $Email->senderEmail('no-reply@example.com');
-               $Email->recipientEmail($Customer->customerEmail());
-               $Email->body($message);
-
-               return $Email->send();
-    }
 	public function create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,$api=false)
 	{
 		if($api){
@@ -311,7 +300,22 @@ $sql= $selectsql. $fromsql.$wheresql;
 
         return $this->return_instances($results);
 	}
+    public function send_monthly_notification( $Customer,$message)
+    {
 
+          $Email = $this->api->get('Email');
+                  $Email->set_template('shop/emails/package_reminder.html', 'shop');
+                $Email->set('first_name', $Customer->first_name());
+                 $Email->set('message',$message);
+               $Email->subject('Upcoming Payment Reminder');
+              $Email->senderName(PERCH_EMAIL_FROM_NAME);
+        	        $Email->senderEmail(PERCH_EMAIL_FROM);
+
+               $Email->recipientEmail($Customer->customerEmail());
+               $Email->body($message);
+
+               return $Email->send();
+    }
 	public function get_dashboard_widget()
 	{
 		$Statuses = new PerchShop_OrderStatuses($this->api);

@@ -8,7 +8,7 @@ $Customers = new PerchShop_Customers($API);
 $table  = PERCH_DB_PREFIX . 'shop_packages';
 $tableitems  = PERCH_DB_PREFIX . 'shop_package_items';
 $target = (new DateTimeImmutable('+1 week'))->format('Y-m-d');
-
+echo $target;
 $log_dir  = __DIR__ . '/logs/notifications';
 if (!is_dir($log_dir)) {
     mkdir($log_dir, 0777, true);
@@ -66,22 +66,22 @@ if (PerchUtil::count($packages)) {
         $message  = 'Your next payment is due on ' . $billingDate . '. Please complete it from your portal.';
 
         perch_member_add_notification($memberID, $title, $message);
-          try{
+       try{
 
-       $emailsend=send_monthly_notification( $Customer,$message);
-       echo "email sent";echo $Customer->customerEmail();echo $emailsend;
-            /*       $API  = new PerchAPI(1.0, 'perch_shop');
-                   $Email = $API->get('Email');
-                 $Email->subject('Upcoming Payment Reminder');
-                 $Email->senderName('Weightloss');
-                 $Email->senderEmail('no-reply@example.com');
-                 $Email->recipientEmail($Customer->customerEmail());
-                 $Email->body('Your next payment is due on ' . $package['billingDate'] . '. Please complete it from your portal.');
+ $emailsend=send_monthly_notification( $Customer,$message);
+ echo "email sent";echo $Customer->customerEmail();echo $emailsend;
+      /*       $API  = new PerchAPI(1.0, 'perch_shop');
+             $Email = $API->get('Email');
+           $Email->subject('Upcoming Payment Reminder');
+           $Email->senderName('Weightloss');
+           $Email->senderEmail('no-reply@example.com');
+           $Email->recipientEmail($Customer->customerEmail());
+           $Email->body('Your next payment is due on ' . $package['billingDate'] . '. Please complete it from your portal.');
 
-                 $Email->send();*/
-                 } catch (Exception $exc) {
-                 print_r($exc);
-                 }
+           $Email->send();*/
+           } catch (Exception $exc) {
+           print_r($exc);
+           }
         $writeLog($itemID, $customerID, $billingDate, 'sent');
         $sent[$itemKey] = true;
     }

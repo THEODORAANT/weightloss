@@ -7,6 +7,6 @@
 	}
 
 	 function send_monthly_notification( $Customer,$message){
-    	 	$ShopRuntime = PerchShop_Runtime::fetch();
-         		return $ShopRuntime->send_monthly_notification($Customer, $message);
-    	 }
+	 	$ShopRuntime = PerchShop_Runtime::fetch();
+     		return $ShopRuntime->send_monthly_notification($Customer, $message);
+	 }
