@@ -4,7 +4,8 @@ $log_dir = realpath(__DIR__.'/../../../../../logs/notifications');
 //$log_dir  = __DIR__ . '/logs/notifications';
 $logs = [];
 
-$send_page_base = rtrim($API->app_path('perch_shop_orders'), '/') . '/package_admin/';
+$package_page_base = rtrim($API->app_path('perch_shop_orders'), '/') . '/packages/edit/';
+
 $package_items_factory = null;
 $packages_factory = null;
 
@@ -14,44 +15,41 @@ if (class_exists('PerchShop_PackageItems', true) && class_exists('PerchShop_Pack
     $packages_factory = new PerchShop_Packages($shop_api);
 }
 
-$build_link = function(array $entry) use ($send_page_base, $package_items_factory, $packages_factory) {
-    $query = [];
-
-    if (!empty($entry['itemID'])) {
-        $item_id = (int)$entry['itemID'];
-        if ($item_id > 0) {
-            $query['itemID'] = $item_id;
-
-            if ($package_items_factory && $packages_factory) {
-                $PackageItem = $package_items_factory->find($item_id);
-                if ($PackageItem) {
-                    $package_uuid = $PackageItem->packageID();
-                    if ($package_uuid) {
-                        $query['packageUUID'] = $package_uuid;
-
-                        $Package = $packages_factory->find_by_uuid($package_uuid);
-                        if ($Package) {
-                            $query['packageID'] = $Package->id();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if (!empty($entry['customerID'])) {
-        $query['customerID'] = $entry['customerID'];
-    }
-
-    if (!empty($entry['billingDate'])) {
-        $query['billingDate'] = $entry['billingDate'];
-    }
-
-    if (empty($query)) {
+$build_link = function(array $entry) use ($package_page_base, $package_items_factory, $packages_factory) {
+    if (!$package_items_factory || !$packages_factory) {
         return null;
     }
 
-    return $send_page_base . '?' . http_build_query($query);
+    if (empty($entry['itemID'])) {
+        return null;
+    }
+
+    $item_id = (int)$entry['itemID'];
+    if ($item_id <= 0) {
+        return null;
+    }
+
+    $PackageItem = $package_items_factory->find($item_id);
+    if (!$PackageItem) {
+        return null;
+    }
+
+    $package_uuid = $PackageItem->packageID();
+    if (!$package_uuid) {
+        return null;
+    }
+
+    $Package = $packages_factory->find_by_uuid($package_uuid);
+    if (!$Package) {
+        return null;
+    }
+
+    $package_id = (int)$Package->id();
+    if ($package_id <= 0) {
+        return null;
+    }
+
+    return $package_page_base . '?id=' . $package_id;
 };
 
 if ($log_dir && is_dir($log_dir)) {

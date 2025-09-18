@@ -9,7 +9,8 @@
                     <th><?php echo $Lang->get('Billing Date'); ?></th>
                     <th><?php echo $Lang->get('Logged At'); ?></th>
                     <th><?php echo $Lang->get('Status'); ?></th>
-                    <th><?php echo $Lang->get('Send Notification Page'); ?></th>
+                    <th><?php echo $Lang->get('Package Page'); ?></th>
+
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +54,8 @@
                     </td>
                     <td>
                         <?php if ($link): ?>
-                            <a class="button button-simple" href="<?php echo $HTML->encode($link); ?>"><?php echo $Lang->get('Open'); ?></a>
+                            <a class="button button-simple" href="<?php echo $HTML->encode($link); ?>"><?php echo $Lang->get('Open package'); ?></a>
+
                         <?php else: ?>
                             &ndash;
                         <?php endif; ?>
