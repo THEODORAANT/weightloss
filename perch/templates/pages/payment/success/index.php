@@ -21,6 +21,7 @@ $order_complete = perch_shop_order_successful();
 
 if (!$order_complete) {
     $order_complete = perch_shop_active_order_has_status('pending');
+
 }
 
      perch_layout('product/header', [
