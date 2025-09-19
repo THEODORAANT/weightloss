@@ -8,7 +8,10 @@ include('PerchMembers_QuestionnaireQuestion.class.php');
 
 $Questions = new PerchMembers_QuestionnaireQuestions($API);
 
-if (count($Questions->all())) {
+$existing = $Questions->all();
+
+if (PerchUtil::count($existing)) {
+
     echo "Questionnaire questions already exist.\n";
     return;
 }

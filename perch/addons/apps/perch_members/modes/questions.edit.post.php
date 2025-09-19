@@ -30,7 +30,6 @@
         echo $Form->hint($Lang->get('Use numbers to control the question order shown to clients. Lower numbers display first; leave blank to add to the end.'));
         echo $Form->text_field('sort', 'Display order', isset($details['sort'])?$details['sort']:'');
 
-
         echo $Form->submit_field('btnSubmit', 'Save', $API->app_path().'/questionnaire_questions/');
 
     echo $Form->form_end();
