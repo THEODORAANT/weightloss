@@ -42,6 +42,16 @@
             }
             $data['options'] = json_encode($json);
         }
+
+        if (!isset($data['sort']) || !is_numeric($data['sort'])) {
+            $data['sort'] = $Questions->get_next_sort_for_type($data['questionnaireType']);
+        } else {
+            $data['sort'] = (int)$data['sort'];
+            if ($data['sort'] < 0) {
+                $data['sort'] = $Questions->get_next_sort_for_type($data['questionnaireType']);
+            }
+        }
+
         if ($Question) {
             $Question->update($data);
         } else {
