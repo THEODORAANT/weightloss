@@ -3,6 +3,8 @@
           }
 
 $draft = isset($_COOKIE['draft_package_item']) ? json_decode($_COOKIE['draft_package_item'], true) : null;
+  $_SESSION['package_billing_type'] = "monthly";
+                    setcookie('package_billing_type',  "monthly", time()+3600, '/');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantities = perch_post('qty');
@@ -11,13 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (perch_post('action') === 'checkout') {
         try {
             $Item =perch_shop_package_contents(['itemID' =>$_GET['renew'],'skip-template'=>true], true);
+
             if ($Item) {
-             $productID = $Item->variantID() ? $Item->variantID() : $Item->productID();
+             $productID = $Item["productID"];
                                     if ($productID) {
-                                        perch_shop_add_to_cart($productID, $Item->qty());
+                                        perch_shop_add_to_cart($productID, $Item["quantity"]);
                                     }
 
-        setcookie('draft_package_item', $Item->itemID(), time()+3600,'/');
+        setcookie('draft_package_item', $Item["id"], time()+3600,'/');
 
                 PerchUtil::redirect('/order/cart');
             }
@@ -44,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'template' => 'products/package-summary/summary.html',
     ]);
     ?>
-     <button type="submit" name="action" value="checkout">Proceed to checkout</button>
+     <button  class="add-btn" type="submit" name="action" value="checkout">Proceed to checkout</button>
 
 
 </form>

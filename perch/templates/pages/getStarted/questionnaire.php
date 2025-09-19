@@ -256,14 +256,19 @@ if (isset($_POST['nextstep'])) {
           header("Location: $redirectUrl");
             exit();
         }*/
-                  print_r($_SESSION['questionnaire']);
+                 // print_r($_SESSION['questionnaire']);
         if($redirect){
  header("Location: $redirectUrl");
             exit();
             }
 
 }
+if(isset($_SESSION['step_data']['user_id'])){
+$_SESSION['questionnaire']['uuid']=$_SESSION['step_data']['user_id'];
+
+}
 setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
+
 ?>
 
 

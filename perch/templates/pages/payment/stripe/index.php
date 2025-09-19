@@ -14,13 +14,24 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
    $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
 //$success_url="/payment/success";
 //$cancel_url ="/payment/went/wrong";
-     $result= perch_shop_complete_payment('stripe',[
-         'success_url' => $success_url,
-         'cancel_url'=> $cancel_url
-       ]);
 
 
-        if ($result) {
+
+        $order_complete = perch_shop_active_order_has_status(['paid', 'pending']);
+        $redirect_to_success = $order_complete;
+        if(!isset($_GET["pending"])){
+           $result= perch_shop_complete_payment('stripe',[
+                 'success_url' => $success_url,
+                 'cancel_url'=> $cancel_url
+               ]);
+        }
+
+
+        if (!$redirect_to_success && $result === true) {
+            $redirect_to_success = true;
+        }
+
+        if ($redirect_to_success) {
         if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
         unset($_SESSION['questionnaire-reorder']['nextstep']);
     perch_member_add_questionnaire($_SESSION['questionnaire-reorder'],'re-order');

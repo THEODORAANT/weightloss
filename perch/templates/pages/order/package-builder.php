@@ -201,6 +201,8 @@ if (isset($_GET['months'])) {
 <div class="wrap">
 
   <h1>Build your package</h1>
+    <p class="muted">Customer: <strong><?= h(perch_member_get('email')) ?></strong></p>
+
   <p class="muted">Package ID: <strong><?= h($packageId) ?></strong></p>
   <p class="muted">Billing: <strong><?= h($billing) ?></strong></p>
 
@@ -244,11 +246,11 @@ if (isset($_GET['months'])) {
                 PerchSystem::set_var('months', $months);
                 PerchSystem::set_var('billing_type', $billing);
                 if($billing=="monthly"){
-                    perch_shop_product('mounjaro-monthly-mounjaro',[
+                    perch_shop_product('mounjaro-monthly-mounjaro-monthly',[
                         'template' => 'products/package-builder/variant-options'
                     ]);
                 }else{
-                    perch_shop_product('mounjaro-mounjaro-prepaid',[
+                    perch_shop_product('mounjaro-prepaid-mounjaro-prepaid',[
                         'template' => 'products/package-builder/variant-options'
                     ]);
                 }

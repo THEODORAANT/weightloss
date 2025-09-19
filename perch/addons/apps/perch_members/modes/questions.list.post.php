@@ -26,6 +26,7 @@
         ]);
 
     $Listing->add_col([
+
             'title'     => 'Type',
             'value'     => 'questionnaireType',
             'sort'      => 'questionnaireType',
@@ -73,4 +74,5 @@
         echo $Form->submit_field('btnSaveOrder', 'Save order');
         echo $Form->form_end();
     }
+
 ?>

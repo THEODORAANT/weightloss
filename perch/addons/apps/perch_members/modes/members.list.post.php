@@ -160,7 +160,13 @@
                     'inline' => true,
                     'path'   => 'delete',
                 ]);
-        
+         $Listing->add_misc_action([
+                                        'title' => $Lang->get('Build package'),
+                                        'path'  => function($item) {
+                                            return 'impersonate/?site=package&id=' . $item->id();
+                                        },
+                                        'priv'  => 'perch_members.impersonate',
+                                    ]);
 
              $Listing->add_misc_action([
                                 'title' => $Lang->get('Login as'),

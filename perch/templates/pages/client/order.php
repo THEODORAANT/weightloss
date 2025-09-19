@@ -38,8 +38,15 @@ perch_shop_order_items($order_id);
            $r= perch_shop_track_order($order_id);
 if($r){
 
-
-
+ if(!isset($r["status"])){
+ $r["status"]="-";
+ }
+ if(!isset($r["dispatchDate"])){
+ $r["dispatchDate"]="-";
+ }
+  if(!isset($r["trackingNo"])){
+  $r["trackingNo"]="-";
+  }
 echo '<div class="plan">
              <div>
            <h5>Status </h5>
@@ -65,19 +72,7 @@ echo '<div class="plan">
 
         </div></div>
 
-        <div class="container all_content mt-4">
-            <h2 class="text-center fw-bolder">Future Payments</h2>
 
-            <div class="plans mt-4">
-                <?php
-                  PerchSystem::set_var('today', date('Y-m-d'));
-                 $r=perch_shop_future_packages();
-
-
-
-                 ?>
-            </div>
-        </div>
 
 </section>
 

@@ -19,6 +19,14 @@ This outputs the date when the next payment is due.
 pending packages with a `nextBillingDate` one week in the future and uses
 Perch's email library to notify the associated customers.
 
+The script records each notification in `logs/notifications/send_payment_notificationYYYY-MM-DD.log`.
+Entries are keyed by the package item ID, so the same item isn't notified
+twice. It creates the `logs` directory if needed and ensures it is writable.
+Administrators can
+review these entries from the **Notification Logs** module in the admin area
+(`perch/addons/apps/perch_notification_logs/index.php`).
+
+
 Run the script from the command line:
 
 ```
@@ -58,5 +66,11 @@ Unread notifications display a red dot indicator and are marked as read when the
 To create a new notification in code, call `perch_member_add_notification($memberID, $title, $message)`.
 Administrators can also add notifications for a member from the member edit screen in the control panel.
 
+## Product API
+
+- `GET /api/products/{id}` returns the specified product with all of its variants.
+- `GET /api/products/{id}/variants` returns only the variants for that product.
+
+`{id}` corresponds to the product slug in Perch Shop.
 
 # perchDocumenttion

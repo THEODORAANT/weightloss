@@ -22,7 +22,7 @@ if (perch_member_logged_in() && perch_shop_addresses_set() && isset($_SESSION["p
 
 setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
 setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
-  print_r($_SESSION);
+  //print_r($_SESSION);
     // output the top of the page
      perch_layout('product/header', [
           'page_title' => perch_page_title(true),

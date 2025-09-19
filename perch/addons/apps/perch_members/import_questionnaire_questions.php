@@ -11,6 +11,7 @@ $Questions = new PerchMembers_QuestionnaireQuestions($API);
 $existing = $Questions->all();
 
 if (PerchUtil::count($existing)) {
+
     echo "Questionnaire questions already exist.\n";
     return;
 }
