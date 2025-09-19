@@ -83,7 +83,10 @@
           `questionKey` varchar(64) NOT NULL DEFAULT '',
           `label` varchar(255) NOT NULL,
           `type` char(32) NOT NULL DEFAULT 'text',
+          `fieldName` varchar(64) DEFAULT NULL,
+          `stepSlug` varchar(64) DEFAULT NULL,
           `options` text,
+          `dependencies` text,
           `sort` int(10) unsigned NOT NULL DEFAULT 0,
           PRIMARY KEY (`questionID`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -121,7 +124,10 @@
                     'questionKey'       => $key,
                     'label'             => $q['label'],
                     'type'              => $q['type'],
+                    'fieldName'         => isset($q['name']) ? $q['name'] : $key,
+                    'stepSlug'          => isset($q['step']) ? $q['step'] : $key,
                     'options'           => isset($q['options']) ? PerchUtil::json_safe_encode($q['options']) : null,
+                    'dependencies'      => isset($q['dependencies']) ? PerchUtil::json_safe_encode($q['dependencies']) : null,
                     'sort'              => $sort,
                 ]);
             }
@@ -134,7 +140,10 @@
                     'questionKey'       => $key,
                     'label'             => $q['label'],
                     'type'              => $q['type'],
+                    'fieldName'         => isset($q['name']) ? $q['name'] : $key,
+                    'stepSlug'          => isset($q['step']) ? $q['step'] : $key,
                     'options'           => isset($q['options']) ? PerchUtil::json_safe_encode($q['options']) : null,
+                    'dependencies'      => isset($q['dependencies']) ? PerchUtil::json_safe_encode($q['dependencies']) : null,
                     'sort'              => $sort,
                 ]);
             }

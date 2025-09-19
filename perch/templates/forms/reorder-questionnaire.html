@@ -10,7 +10,7 @@
                       </div>
 
                   </div>-->
-                    <h2>What is your current weight?</h2>
+                    <h2 class="js-question-label-weight">What is your current weight?</h2>
                     <div class="weight-inputs">
                         <input type="text" id="weight"  required name="weight" placeholder="Kg">
                         <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs">
@@ -66,15 +66,15 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Have you experienced any side effects whilst taking the medication? </h2>
+                        <h2 class="js-question-label-side_effects">Have you experienced any side effects whilst taking the medication? </h2>
                     </div>
 
 
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesreorderForm('side_effects','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesreorderForm('side_effects','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesreorderForm('side_effects','yes')"  class="custom_btn"><span data-question-option-key="side_effects" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('side_effects','no')"  class="custom_btn"><span data-question-option-key="side_effects" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="more_side_effects">
                             <input type="hidden" id="side_effects" name="more_side_effects" value="">
 
@@ -107,7 +107,7 @@
                   </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="more_side_effects">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
+                    <label for="more_side_effects" class="js-question-label-more_side_effects">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
                     <textarea id="more_side_effects" required name="more_side_effects" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -136,15 +136,15 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Have you started taking any additional medication? </h2>
+                        <h2 class="js-question-label-additional_medication">Have you started taking any additional medication? </h2>
                     </div>
 
 
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesreorderForm('additional-medication','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesreorderForm('additional-medication','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesreorderForm('additional-medication','yes')"  class="custom_btn"><span data-question-option-key="additional_medication" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('additional-medication','no')"  class="custom_btn"><span data-question-option-key="additional_medication" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="list_additional_medication">
                             <input type="hidden" id="additional-medication" name="additional-medication" value="">
 
@@ -177,7 +177,7 @@
                   </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="list_additional_medication">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
+                    <label for="list_additional_medication" class="js-question-label-list_additional_medication">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
                     <textarea id="list_additional_medication" required name="list_additional_medication" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -206,15 +206,15 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Are you happy with your monthly weight loss?</h2>
+                        <h2 class="js-question-label-rate_current_experience">Are you happy with your monthly weight loss?</h2>
                     </div>
 
 
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesreorderForm('rate_current_experience','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesreorderForm('rate_current_experience','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesreorderForm('rate_current_experience','yes')"  class="custom_btn"><span data-question-option-key="rate_current_experience" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('rate_current_experience','no')"  class="custom_btn"><span data-question-option-key="rate_current_experience" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="contact">
                             <input type="hidden" id="rate_current_experience" name="rate_current_experience" value="">
 
@@ -247,7 +247,7 @@
                   </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="no_happy_reasons">Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.</label>
+                    <label for="no_happy_reasons" class="js-question-label-no_happy_reasons">Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.</label>
                     <textarea id="no_happy_reasons" required name="no_happy_reasons" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -277,15 +277,15 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Would you like to chat with someone?</h2>
+                        <h2 class="js-question-label-chat_with_us">Would you like to chat with someone?</h2>
                     </div>
 
 
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesreorderForm('chat_with_us','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesreorderForm('chat_with_us','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesreorderForm('chat_with_us','yes')"  class="custom_btn"><span data-question-option-key="chat_with_us" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('chat_with_us','no')"  class="custom_btn"><span data-question-option-key="chat_with_us" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="contact">
                             <input type="hidden" id="chat_with_us" name="chat_with_us" value="">
 
@@ -318,7 +318,7 @@
 
                   </div>-->
                 </div>
-                <h2>Please enter your  email address</h2>
+                <h2 class="js-question-label-email_address">Please enter your  email address</h2>
                 <div class="weight-inputs">
                     <input type="text" id="email_address"  name="email_address" placeholder="e-mail address" style="width: 100%;" >
 
@@ -343,4 +343,132 @@
 
     </perch:if>
 
+    <script type="application/json" class="js-questionnaire-structure"><perch:forms id="questionnaire_structure_json" encode="false" /></script>
+    <perch:if exists="questionnaire_dependencies_json">
+        <script type="application/json" class="js-questionnaire-dependencies"><perch:forms id="questionnaire_dependencies_json" encode="false" /></script>
+    </perch:if>
+    <script>
+        (function () {
+            var scripts = document.querySelectorAll('.js-questionnaire-structure');
+            if (!scripts.length) {
+                return;
+            }
+
+            function slugify(value) {
+                return (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+            }
+
+            function parseJSON(el) {
+                try {
+                    return JSON.parse(el.textContent || el.innerText || 'null');
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function cssEscape(val) {
+                return (val || '').toString().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            }
+
+            scripts.forEach(function (script) {
+                var structure = parseJSON(script);
+                if (!structure) {
+                    return;
+                }
+
+                var form = script.closest('form') || document;
+
+                Object.keys(structure).forEach(function (key) {
+                    var question = structure[key];
+                    var questionSlug = slugify(key);
+                    var labelNodes = form.querySelectorAll('.js-question-label-' + questionSlug);
+
+                    labelNodes.forEach(function (node) {
+                        node.textContent = question.label;
+                    });
+
+                    if (!question.options || typeof question.options !== 'object') {
+                        return;
+                    }
+
+                    Object.keys(question.options).forEach(function (optionKey) {
+                        var optionValue = question.options[optionKey];
+                        var optionLabel = optionValue;
+
+                        if (optionValue && typeof optionValue === 'object') {
+                            if (optionValue.label) {
+                                optionLabel = optionValue.label;
+                            } else if (optionValue.title) {
+                                optionLabel = optionValue.title;
+                            } else if (optionValue.value) {
+                                optionLabel = optionValue.value;
+                            }
+                        }
+
+                        var value = optionKey;
+                        var selectorNames = [];
+                        if (question.name) {
+                            selectorNames.push(question.name);
+                            if (question.name.slice(-2) === '[]') {
+                                selectorNames.push(question.name.slice(0, -2) + '[]');
+                            }
+                        }
+
+                        selectorNames.push(key);
+                        if (key.slice(-2) === '[]') {
+                            selectorNames.push(key.slice(0, -2) + '[]');
+                        }
+
+                        var inputs = [];
+                        selectorNames.forEach(function (name) {
+                            var escapedName = cssEscape(name);
+                            var escapedValue = cssEscape(value);
+                            var found = form.querySelectorAll('input[name="' + escapedName + '"][value="' + escapedValue + '"]');
+                            found.forEach(function (input) {
+                                inputs.push(input);
+                            });
+                        });
+
+                        inputs.forEach(function (input) {
+                            var target = null;
+
+                            if (input.id) {
+                                target = form.querySelector('label[for="' + cssEscape(input.id) + '"]');
+                            }
+
+                            if (!target && input.parentElement) {
+                                target = input.parentElement.querySelector('label');
+                            }
+
+                            if (!target && input.parentElement) {
+                                target = input.parentElement.querySelector('.box_text');
+                            }
+
+                            if (!target && input.nextElementSibling && input.nextElementSibling.tagName === 'SPAN') {
+                                target = input.nextElementSibling;
+                            }
+
+                            if (target) {
+                                target.textContent = optionLabel;
+                            }
+                        });
+
+                        var optionSlug = slugify(optionKey);
+                        var buttonTargets = form.querySelectorAll('[data-question-option-key="' + questionSlug + '"][data-question-option-value="' + optionSlug + '"]');
+                        buttonTargets.forEach(function (node) {
+                            node.textContent = optionLabel;
+                        });
+                    });
+                });
+
+                var dependencyScript = form.querySelector('.js-questionnaire-dependencies');
+                if (dependencyScript) {
+                    var dependencies = parseJSON(dependencyScript);
+                    if (dependencies) {
+                        form.dataset.questionnaireDependencies = JSON.stringify(dependencies);
+                    }
+                }
+            });
+        })();
+    </script>
 </perch:form>

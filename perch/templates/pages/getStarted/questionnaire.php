@@ -357,6 +357,16 @@ $back_links['conditions']="/get-started/questionnaire?step=more_pancreatitis";
 
 $back_link = $back_links[$_GET["step"]] ?? '/get-started';
 
+$questionnaire_structure = perch_member_questionnaire_structure('first-order');
+if (is_array($questionnaire_structure) && PerchUtil::count($questionnaire_structure)) {
+    PerchSystem::set_var('questionnaire_structure_json', PerchUtil::json_safe_encode($questionnaire_structure));
+
+    $questionnaire_dependencies = perch_member_questionnaire_dependencies('first-order');
+    if (is_array($questionnaire_dependencies) && PerchUtil::count($questionnaire_dependencies)) {
+        PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($questionnaire_dependencies));
+    }
+}
+
 PerchSystem::set_var('previousPage', $back_link);
 PerchSystem::set_var('answers', $_SESSION['questionnaire']);
  PerchSystem::set_vars($_SESSION['questionnaire']);

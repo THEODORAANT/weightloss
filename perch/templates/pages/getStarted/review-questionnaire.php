@@ -3,65 +3,32 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
-$questions = [
-    "age" => "How old are you?",
-    "ethnicity" => "Which ethnicity are you?",
-    "ethnicity-more" => "Please tell us which ethnicities",
-    "gender" => "What sex were you assigned at birth?",
-    "pregnancy" => "Are you currently pregnant, trying to get pregnant, or breastfeeding?",
-    "weight" => "What is your weight?",
-    "height" => "What is your height?",
-    "diabetes" => "Have you been diagnosed with diabetes?",
-    "conditions" => "Do any of the following statements apply to you?",
-    "bariatricoperation" => "Was your bariatric operation in the last 6 months?",
-    "more_pancreatitis" => "Please tell us more about your mental health condition and how you manage it",
-    "thyroidoperation" => "Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
-    "more_conditions" => "Please tell us more about your mental health condition and how you manage it",
-    "conditions2" => "Do any of the following statements apply to you?",
-    "medical_conditions" => "Do you have any other medical conditions?",
-    "medications" => "Have you ever taken any of the following medications to help you lose weight?",
-    "weight-wegovy" => "What was your weight in kg before starting the weight loss medication?",
-    "dose-wegovy" => "When was your last dose of the weight loss medication?",
-    "recently-dose-wegovy" => "What dose of the weight loss medication were you prescribed most recently?",
-    "continue-dose-wegovy" => "If you want to continue with the weight loss medication, what dose would you like to continue with?",
-    "effects_with_wegovy" => "Have you experienced any side effects with the weight loss medication?",
-    "medication_allergies" => "Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.",
-    "other_medical_conditions" => "Please list any other medical conditions you have.",
-    "wegovy_side_effects" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
-    "gp_informed" => "Would you like your GP to be informed of this consultation?",
-    "email_address" => "Please enter your GP's email address",
-    "Get access to special offers" => "email_address"
-];
 
-$steps = [
-    "age" => "howold",
-    "ethnicity" => "18to74",
-    "ethnicity-more" => "Mixed",
-    "gender" => "ethnicity",
-    "pregnancy" => "Female",
-    "weight" => "weight",
-    "height" => "height",
-    "diabetes" => "diabetes",
-    "conditions" => "weight2",
-    "bariatricoperation" => "bariatricoperation",
-    "more_pancreatitis" => "more_pancreatitis",
-    "thyroidoperation" => "thyroidoperation",
-    "more_conditions" => "more",
-    "conditions2" => "conditions",
-    "medical_conditions" => "medical_conditions",
-    "medications" => "medications",
-    "weight-wegovy" => "starting_wegovy",
-    "dose-wegovy" => "dose_wegovy",
-    "recently-dose-wegovy" => "recently_wegovy",
-    "continue-dose-wegovy" => "continue_with_wegovy",
-    "effects_with_wegovy" => "effects_with_wegovy",
-    "medication_allergies" => "medication_allergies",
-    "other_medical_conditions" => "list_any",
-    "wegovy_side_effects" => "wegovy_side_effects",
-    "gp_informed" => "gp_informed",
-    "email_address" => "gp_address",
-    "Get access to special offers" => "access_special_offers"
-];
+$structure = perch_member_questionnaire_structure('first-order');
+$question_labels = [];
+$question_steps = [];
+$question_definitions = [];
+$alias_map = [];
+
+if (is_array($structure)) {
+    foreach ($structure as $key => $question) {
+        $question_labels[$key] = $question['label'];
+        $question_steps[$key] = $question['step'] ?? $key;
+        $question_definitions[$key] = $question;
+
+        $names = [$key];
+        if (!empty($question['name'])) {
+            $names[] = $question['name'];
+        }
+        if (!empty($question['aliases']) && is_array($question['aliases'])) {
+            $names = array_merge($names, $question['aliases']);
+        }
+
+        foreach ($names as $name) {
+            $alias_map[$name] = $key;
+        }
+    }
+}
 
 // Render a field with optional second value and unit
 function renderMeasurement($value, $unitKey, $secondKey, $questionnaire) {
@@ -99,25 +66,53 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
             }
 
             foreach ($_SESSION['questionnaire'] as $key => $value) {
-                if (array_key_exists($key, $questions)) {
-                    $changelink = "/get-started/questionnaire?step=" . $steps[$key];
+                $canonicalKey = $alias_map[$key] ?? $key;
+                if (!isset($question_labels[$canonicalKey])) {
+                    continue;
+                }
+
+                $definition = $question_definitions[$canonicalKey] ?? [];
+                if (($definition['type'] ?? '') === 'hidden') {
+                    continue;
+                }
+
+                $changelink = "/get-started/questionnaire?step=" . ($question_steps[$canonicalKey] ?? $canonicalKey);
             ?>
             <div class="plan">
                 <div>
-                    <h5><?= htmlspecialchars($questions[$key]) ?></h5>
+                    <h5><?= htmlspecialchars($question_labels[$canonicalKey]) ?></h5>
                     <p>
                         <?php
+                        $displayValue = '';
+                        $options = isset($definition['options']) && is_array($definition['options']) ? $definition['options'] : [];
+
                         if (is_array($value)) {
-                            echo htmlspecialchars(implode(", ", $value));
-                        } elseif ($key === "weight") {
-                            echo renderMeasurement($value, "weightunit", "weight2", $_SESSION['questionnaire']);
-                        } elseif ($key === "weight-wegovy") {
-                            echo renderMeasurement($value, "unit-wegovy", "weight2-wegovy", $_SESSION['questionnaire']);
-                        } elseif ($key === "height") {
-                            echo renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
+                            if ($options) {
+                                $labels = [];
+                                foreach ($value as $item) {
+                                    $labels[] = $options[$item] ?? $item;
+                                }
+                                $displayValue = implode(', ', $labels);
+                            } else {
+                                $displayValue = implode(', ', $value);
+                            }
                         } else {
-                            echo htmlspecialchars($value);
+                            if ($options && isset($options[$value])) {
+                                $displayValue = $options[$value];
+                            } else {
+                                $displayValue = $value;
+                            }
                         }
+
+                        if ($canonicalKey === "weight") {
+                            $displayValue = renderMeasurement($value, "weightunit", "weight2", $_SESSION['questionnaire']);
+                        } elseif ($canonicalKey === "weight-wegovy") {
+                            $displayValue = renderMeasurement($value, "unit-wegovy", "weight2-wegovy", $_SESSION['questionnaire']);
+                        } elseif ($canonicalKey === "height") {
+                            $displayValue = renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
+                        }
+
+                        echo htmlspecialchars($displayValue, ENT_QUOTES, 'UTF-8');
                         ?>
                     </p>
                 </div>
@@ -129,7 +124,6 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
             </div>
             <?php
                 }
-            }
             ?>
         </div>
 
