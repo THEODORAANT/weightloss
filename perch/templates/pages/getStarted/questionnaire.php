@@ -295,7 +295,7 @@ $back_links = [
     'Other' => '/get-started/questionnaire?step=18to74',
     'Mixed' => '/get-started/questionnaire?step=18to74',
     'asian' => '/get-started/questionnaire?step=18to74',
-    'African' => '/get-started/questionnaire?step=18to74',
+    'Black (African/Caribbean)' => '/get-started/questionnaire?step=18to74',
     'White' => '/get-started/questionnaire?step=18to74',
     'ethnicity' => '/get-started/questionnaire?step=18to74',
     'Female' => '/get-started/questionnaire?step=ethnicity',

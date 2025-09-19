@@ -122,7 +122,7 @@ return array (
       'options' => 
       array (
         'asian' => 'Asian or Asian British',
-        'black' => 'Black (Caribbean, African)',
+        'black' => 'Black (African/Caribbean)',
         'mixed' => 'Mixed ethnicities',
         'other' => 'Other ethnic group',
         'white' => 'White',

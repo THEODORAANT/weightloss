@@ -89,7 +89,7 @@ public $doses = [
 
    /* protected $required_answers=[
     "age"=>["18to74"],
-     "ethnicity"=>["asian","African"],
+     "ethnicity"=>["asian","Black (African/Caribbean)"],
 
     ]*/
 
