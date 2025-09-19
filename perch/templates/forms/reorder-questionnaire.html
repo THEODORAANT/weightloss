@@ -642,20 +642,10 @@
                         continue;
                     }
 
-                    var manual = manualQuestionRouting(question, value);
-                    if (manual) {
-                        return manual;
-                    }
-
                     var dependencyNext = dependencyRouting(question, value);
                     if (dependencyNext) {
                         return dependencyNext;
                     }
-                }
-
-                var manualStep = manualStepRouting(step);
-                if (manualStep) {
-                    return manualStep;
                 }
 
                 var index = stepOrder.indexOf(step);
@@ -664,37 +654,6 @@
                 }
 
                 return finalStep;
-            }
-
-            function manualQuestionRouting(question, value) {
-                var name = question.name || question.key;
-                var handlers = {
-                    'age': function (val) {
-                        if (Array.isArray(val)) {
-                            val = val[0];
-                        }
-                        if (val === 'under18') {
-                            return 'under18';
-                        }
-                        if (val === '75over') {
-                            return '75over';
-                        }
-                        if (val === '18to74') {
-                            return '18to74';
-                        }
-                        return null;
-                    }
-                };
-
-                if (handlers[name]) {
-                    return handlers[name](value);
-                }
-
-                return null;
-            }
-
-            function manualStepRouting(step) {
-                return null;
             }
 
             function dependencyRouting(question, value) {
