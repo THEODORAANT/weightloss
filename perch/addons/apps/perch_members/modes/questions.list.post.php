@@ -3,7 +3,7 @@
         'heading' => $Lang->get('Questionnaire questions'),
         'button'  => [
             'text' => $Lang->get('Add question'),
-            'link' => 'questionnaire_questions/edit/',
+            'link' => 'edit',
             'icon' => 'add'
         ]
     ], $CurrentUser);
@@ -15,7 +15,7 @@
             'title'     => 'Question',
             'value'     => 'label',
             'sort'      => 'label',
-            'edit_link' => 'questionnaire_questions/edit',
+            'edit_link' => 'edit',
             'priv'      => 'perch_members.questionnaires.manage',
         ]);
 
@@ -77,7 +77,7 @@
 
             foreach ($question_groups[$type] as $Question) {
                 echo '<tr>';
-                echo '<td class="action">'.$Form->text('order-'.$Question->id(), $Question->sort(), 'input-simple xs', false, 'number', 'min="0" step="1"').'</td>';
+                echo '<td class="action">'.$Form->text('order-'.$Question->id(), $Question->sort(), 'input-simple ', false, 'number', 'min="0" step="1"').'</td>';
                 echo '<td>'.PerchUtil::html($Question->label()).'</td>';
                 echo '<td>'.PerchUtil::html($Question->questionKey()).'</td>';
                 echo '</tr>';
