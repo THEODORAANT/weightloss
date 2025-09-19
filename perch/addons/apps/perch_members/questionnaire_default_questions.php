@@ -128,6 +128,20 @@ return [
                 '75over' => '75 or over',
             ],
             'step' => 'howold',
+            'dependencies' => [
+                [
+                    'values' => ['under18'],
+                    'step'   => 'under18',
+                ],
+                [
+                    'values' => ['75over'],
+                    'step'   => '75over',
+                ],
+                [
+                    'values' => ['18to74'],
+                    'step'   => '18to74',
+                ],
+            ],
         ],
         'ethnicity' => [
             'label' => 'Which ethnicity are you?',

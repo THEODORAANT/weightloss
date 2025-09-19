@@ -109,7 +109,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 $update['stepSlug'] = $definition['step'];
             }
 
-            if ((empty($row['dependencies'])) && isset($definition['dependencies'])) {
+            $dependencies_empty = empty($row['dependencies']);
+            if (!$dependencies_empty) {
+                $decoded_dependencies = PerchUtil::json_safe_decode($row['dependencies'], true);
+                if (is_array($decoded_dependencies) && !PerchUtil::count($decoded_dependencies)) {
+                    $dependencies_empty = true;
+                }
+            }
+
+            if ($dependencies_empty && isset($definition['dependencies'])) {
                 $encoded = PerchUtil::json_safe_encode($definition['dependencies']);
                 if ($encoded !== false) {
                     $update['dependencies'] = $encoded;
