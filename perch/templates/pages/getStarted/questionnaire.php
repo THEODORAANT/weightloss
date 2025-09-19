@@ -365,11 +365,36 @@ if (is_array($questionnaire_structure) && PerchUtil::count($questionnaire_struct
     if (is_array($questionnaire_dependencies) && PerchUtil::count($questionnaire_dependencies)) {
         PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($questionnaire_dependencies));
     }
+
+    $grouped_steps = [];
+    foreach ($questionnaire_structure as $question) {
+        $step = isset($question['step']) && $question['step'] !== '' ? $question['step'] : $question['key'];
+        if (!isset($grouped_steps[$step])) {
+            $grouped_steps[$step] = [];
+        }
+        $grouped_steps[$step][] = $question['key'];
+    }
+
+    if (PerchUtil::count($grouped_steps)) {
+        PerchSystem::set_var('questionnaire_steps_json', PerchUtil::json_safe_encode($grouped_steps));
+        reset($grouped_steps);
+        $first_step = key($grouped_steps);
+        if (!$first_step) {
+            $first_step = 'howold';
+        }
+        $current_step = $_GET['step'] ?? $first_step;
+        PerchSystem::set_var('questionnaire_default_step', $first_step);
+        PerchSystem::set_var('questionnaire_current_step', $current_step);
+    }
 }
 
+$answers = $_SESSION['questionnaire'] ?? [];
 PerchSystem::set_var('previousPage', $back_link);
-PerchSystem::set_var('answers', $_SESSION['questionnaire']);
- PerchSystem::set_vars($_SESSION['questionnaire']);
+PerchSystem::set_var('answers', $answers);
+if (PerchUtil::count($answers)) {
+    PerchSystem::set_var('questionnaire_answers_json', PerchUtil::json_safe_encode($answers));
+}
+ PerchSystem::set_vars($answers);
  perch_form('questionnaire.html');
 ?>
 

@@ -141,7 +141,35 @@ if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
     if (is_array($reorder_dependencies) && PerchUtil::count($reorder_dependencies)) {
         PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($reorder_dependencies));
     }
+
+    $grouped_steps = [];
+    foreach ($reorder_structure as $question) {
+        $step = isset($question['step']) && $question['step'] !== '' ? $question['step'] : $question['key'];
+        if (!isset($grouped_steps[$step])) {
+            $grouped_steps[$step] = [];
+        }
+        $grouped_steps[$step][] = $question['key'];
+    }
+
+    if (PerchUtil::count($grouped_steps)) {
+        PerchSystem::set_var('questionnaire_steps_json', PerchUtil::json_safe_encode($grouped_steps));
+        reset($grouped_steps);
+        $first_step = key($grouped_steps);
+        if (!$first_step) {
+            $first_step = 'weight';
+        }
+        $current_step = $_GET['step'] ?? $first_step;
+        PerchSystem::set_var('questionnaire_default_step', $first_step);
+        PerchSystem::set_var('questionnaire_current_step', $current_step);
+    }
 }
+
+$reorder_answers = $_SESSION['questionnaire-reorder'] ?? [];
+if (PerchUtil::count($reorder_answers)) {
+    PerchSystem::set_var('questionnaire_answers_json', PerchUtil::json_safe_encode($reorder_answers));
+}
+
+PerchSystem::set_var('previousPage', '/client/re-order');
 
  perch_form('reorder-questionnaire.html');
 

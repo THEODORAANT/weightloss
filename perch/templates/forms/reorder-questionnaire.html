@@ -1,4 +1,4 @@
-<perch:form id="questionnaire" method="POST" app="perch_forms" action="/client/questionnaire-re-order" >
+<perch:form id="questionnaire" method="POST" app="perch_forms" action="/client/questionnaire-re-order" data-questionnaire-form data-current-step="<perch:forms id="questionnaire_current_step" encode="attr" />" data-default-step="<perch:forms id="questionnaire_default_step" encode="attr" />" data-final-step="cart">
 
     <perch:if id="step" match="within" value="weight">
         <section class="how_old">
@@ -347,18 +347,28 @@
     <perch:if exists="questionnaire_dependencies_json">
         <script type="application/json" class="js-questionnaire-dependencies"><perch:forms id="questionnaire_dependencies_json" encode="false" /></script>
     </perch:if>
+    <perch:if exists="questionnaire_steps_json">
+        <script type="application/json" class="js-questionnaire-steps"><perch:forms id="questionnaire_steps_json" encode="false" /></script>
+    </perch:if>
+    <perch:if exists="questionnaire_answers_json">
+        <script type="application/json" class="js-questionnaire-answers"><perch:forms id="questionnaire_answers_json" encode="false" /></script>
+    </perch:if>
     <script>
         (function () {
-            var scripts = document.querySelectorAll('.js-questionnaire-structure');
-            if (!scripts.length) {
+            var form = document.querySelector('[data-questionnaire-form]');
+            if (!form) {
                 return;
             }
 
-            function slugify(value) {
-                return (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+            var structureScript = form.querySelector('.js-questionnaire-structure');
+            if (!structureScript) {
+                return;
             }
 
             function parseJSON(el) {
+                if (!el) {
+                    return null;
+                }
                 try {
                     return JSON.parse(el.textContent || el.innerText || 'null');
                 } catch (e) {
@@ -366,24 +376,101 @@
                 }
             }
 
-            function cssEscape(val) {
-                return (val || '').toString().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            function slugify(value) {
+                return (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
             }
 
-            scripts.forEach(function (script) {
-                var structure = parseJSON(script);
-                if (!structure) {
+            function cssEscape(value) {
+                return (value || '').toString().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            }
+
+            var structure = parseJSON(structureScript) || {};
+            var dependencyScript = form.querySelector('.js-questionnaire-dependencies');
+            var dependencies = dependencyScript ? parseJSON(dependencyScript) || {} : {};
+            var stepsScript = form.querySelector('.js-questionnaire-steps');
+            var providedSteps = stepsScript ? parseJSON(stepsScript) || {} : {};
+            var storedAnswersScript = form.querySelector('.js-questionnaire-answers');
+            var storedAnswers = storedAnswersScript ? parseJSON(storedAnswersScript) || {} : {};
+
+            var currentStep = form.getAttribute('data-current-step') || '';
+            var defaultStep = form.getAttribute('data-default-step') || '';
+            var finalStep = form.getAttribute('data-final-step') || 'plans';
+            if (!currentStep) {
+                currentStep = defaultStep;
+            }
+
+            var stepQuestions = buildStepQuestions(structure, providedSteps);
+            var stepOrder = Object.keys(stepQuestions);
+            var answerState = {};
+            if (storedAnswers && typeof storedAnswers === 'object') {
+                for (var storedKey in storedAnswers) {
+                    if (storedAnswers.hasOwnProperty(storedKey)) {
+                        answerState[storedKey] = storedAnswers[storedKey];
+                    }
+                }
+            }
+
+            applyQuestionLabels(form, structure);
+
+            form.addEventListener('change', function (event) {
+                var target = event.target;
+                if (!target || !target.name) {
                     return;
                 }
+                if (target.type === 'radio' || target.type === 'checkbox') {
+                    toggleActiveButtons(target.name, readValueFromInput(target));
+                }
+                updateNextStep();
+            }, true);
 
-                var form = script.closest('form') || document;
+            form.addEventListener('submit', function () {
+                updateNextStep();
+            });
 
+            window.submitForm = function () {
+                updateNextStep();
+                form.submit();
+            };
+
+            window.setValuesForm = function (questionKey, value) {
+                setHiddenValue(questionKey, value);
+                toggleActiveButtons(questionKey, value);
+                updateNextStep();
+                form.submit();
+            };
+
+            window.setValuesreorderForm = function (questionKey, value) {
+                setHiddenValue(questionKey, value);
+                toggleActiveButtons(questionKey, value);
+                updateNextStep();
+                form.submit();
+            };
+
+            updateNextStep();
+
+            function buildStepQuestions(structure, provided) {
+                if (provided && Object.keys(provided).length) {
+                    return provided;
+                }
+
+                var steps = {};
+                Object.keys(structure).forEach(function (key) {
+                    var question = structure[key];
+                    var step = question.step && question.step !== '' ? question.step : key;
+                    if (!steps[step]) {
+                        steps[step] = [];
+                    }
+                    steps[step].push(key);
+                });
+                return steps;
+            }
+
+            function applyQuestionLabels(form, structure) {
                 Object.keys(structure).forEach(function (key) {
                     var question = structure[key];
                     var questionSlug = slugify(key);
                     var labelNodes = form.querySelectorAll('.js-question-label-' + questionSlug);
-
-                    labelNodes.forEach(function (node) {
+                    Array.prototype.forEach.call(labelNodes, function (node) {
                         node.textContent = question.label;
                     });
 
@@ -419,56 +506,258 @@
                             selectorNames.push(key.slice(0, -2) + '[]');
                         }
 
-                        var inputs = [];
                         selectorNames.forEach(function (name) {
                             var escapedName = cssEscape(name);
                             var escapedValue = cssEscape(value);
-                            var found = form.querySelectorAll('input[name="' + escapedName + '"][value="' + escapedValue + '"]');
-                            found.forEach(function (input) {
-                                inputs.push(input);
+                            var inputs = form.querySelectorAll('input[name="' + escapedName + '"][value="' + escapedValue + '"]');
+                            Array.prototype.forEach.call(inputs, function (input) {
+                                var target = null;
+
+                                if (input.id) {
+                                    target = form.querySelector('label[for="' + cssEscape(input.id) + '"]');
+                                }
+
+                                if (!target && input.parentElement) {
+                                    target = input.parentElement.querySelector('label');
+                                }
+
+                                if (!target && input.parentElement) {
+                                    target = input.parentElement.querySelector('.box_text');
+                                }
+
+                                if (!target && input.nextElementSibling && input.nextElementSibling.tagName === 'SPAN') {
+                                    target = input.nextElementSibling;
+                                }
+
+                                if (target) {
+                                    target.textContent = optionLabel;
+                                }
                             });
-                        });
-
-                        inputs.forEach(function (input) {
-                            var target = null;
-
-                            if (input.id) {
-                                target = form.querySelector('label[for="' + cssEscape(input.id) + '"]');
-                            }
-
-                            if (!target && input.parentElement) {
-                                target = input.parentElement.querySelector('label');
-                            }
-
-                            if (!target && input.parentElement) {
-                                target = input.parentElement.querySelector('.box_text');
-                            }
-
-                            if (!target && input.nextElementSibling && input.nextElementSibling.tagName === 'SPAN') {
-                                target = input.nextElementSibling;
-                            }
-
-                            if (target) {
-                                target.textContent = optionLabel;
-                            }
                         });
 
                         var optionSlug = slugify(optionKey);
                         var buttonTargets = form.querySelectorAll('[data-question-option-key="' + questionSlug + '"][data-question-option-value="' + optionSlug + '"]');
-                        buttonTargets.forEach(function (node) {
+                        Array.prototype.forEach.call(buttonTargets, function (node) {
                             node.textContent = optionLabel;
                         });
                     });
                 });
+            }
 
-                var dependencyScript = form.querySelector('.js-questionnaire-dependencies');
-                if (dependencyScript) {
-                    var dependencies = parseJSON(dependencyScript);
-                    if (dependencies) {
-                        form.dataset.questionnaireDependencies = JSON.stringify(dependencies);
+            function updateNextStep() {
+                var fields = form.querySelectorAll('input[name="nextstep"]');
+                if (!fields.length) {
+                    return;
+                }
+                var next = computeNextStep();
+                Array.prototype.forEach.call(fields, function (field) {
+                    field.value = next || '';
+                });
+            }
+
+            function computeNextStep() {
+                var step = currentStep || stepOrder[0] || '';
+                if (!step) {
+                    return '';
+                }
+
+                var questions = stepQuestions[step] || [];
+                for (var i = 0; i < questions.length; i++) {
+                    var key = questions[i];
+                    var question = structure[key];
+                    if (!question) {
+                        continue;
+                    }
+                    var value = readAnswer(question);
+                    if (value === null || typeof value === 'undefined' || (Array.isArray(value) && !value.length)) {
+                        continue;
+                    }
+
+                    var manual = manualQuestionRouting(question, value);
+                    if (manual) {
+                        return manual;
+                    }
+
+                    var dependencyNext = dependencyRouting(question, value);
+                    if (dependencyNext) {
+                        return dependencyNext;
                     }
                 }
-            });
+
+                var manualStep = manualStepRouting(step);
+                if (manualStep) {
+                    return manualStep;
+                }
+
+                var index = stepOrder.indexOf(step);
+                if (index !== -1 && index + 1 < stepOrder.length) {
+                    return stepOrder[index + 1];
+                }
+
+                return finalStep;
+            }
+
+            function manualQuestionRouting(question, value) {
+                var name = question.name || question.key;
+                var handlers = {
+                    'age': function (val) {
+                        if (Array.isArray(val)) {
+                            val = val[0];
+                        }
+                        if (val === 'under18') {
+                            return 'under18';
+                        }
+                        if (val === '75over') {
+                            return '75over';
+                        }
+                        if (val === '18to74') {
+                            return '18to74';
+                        }
+                        return null;
+                    }
+                };
+
+                if (handlers[name]) {
+                    return handlers[name](value);
+                }
+
+                return null;
+            }
+
+            function manualStepRouting(step) {
+                return null;
+            }
+
+            function dependencyRouting(question, value) {
+                var key = question.key || question.name;
+                var questionDependencies = dependencies[key];
+                if (!questionDependencies) {
+                    return null;
+                }
+
+                var values = Array.isArray(value) ? value : [value];
+
+                for (var i = 0; i < questionDependencies.length; i++) {
+                    var dependency = questionDependencies[i];
+                    if (!dependency || !dependency.step) {
+                        continue;
+                    }
+                    var dependencyValues = dependency.values;
+                    if (typeof dependencyValues === 'undefined') {
+                        continue;
+                    }
+                    if (!Array.isArray(dependencyValues)) {
+                        dependencyValues = [dependencyValues];
+                    }
+
+                    for (var j = 0; j < values.length; j++) {
+                        if (dependencyValues.indexOf(values[j]) !== -1) {
+                            return dependency.step;
+                        }
+                    }
+                }
+
+                return null;
+            }
+
+            function readAnswer(question) {
+                var name = question.name || question.key;
+                if (!name) {
+                    return null;
+                }
+
+                var selector = '[name="' + cssEscape(name) + '"]';
+                if (question.type === 'checkbox') {
+                    var values = [];
+                    var nodes = form.querySelectorAll(selector);
+                    Array.prototype.forEach.call(nodes, function (node) {
+                        if (node.checked) {
+                            values.push(node.value);
+                        }
+                    });
+                    answerState[name] = values;
+                    return values;
+                }
+
+                if (question.type === 'radio') {
+                    var checked = form.querySelector(selector + ':checked');
+                    var radioValue = checked ? checked.value : null;
+                    answerState[name] = radioValue;
+                    return radioValue;
+                }
+
+                var input = form.querySelector(selector);
+                var inputValue = input ? input.value : null;
+                answerState[name] = inputValue;
+                return inputValue;
+            }
+
+            function setHiddenValue(questionKey, value) {
+                var field = document.getElementById(questionKey);
+                if (!field) {
+                    field = form.querySelector('[name="' + cssEscape(questionKey) + '"]');
+                }
+                if (!field) {
+                    field = form.querySelector('[name="' + cssEscape(questionKey) + '[]"]');
+                }
+                if (!field) {
+                    return;
+                }
+
+                if (field.type === 'checkbox') {
+                    var values = Array.isArray(value) ? value : [value];
+                    var nodes = form.querySelectorAll('[name="' + cssEscape(field.name) + '"]');
+                    Array.prototype.forEach.call(nodes, function (node) {
+                        node.checked = values.indexOf(node.value) !== -1;
+                    });
+                } else {
+                    field.value = value;
+                }
+
+                answerState[questionKey] = value;
+            }
+
+            function toggleActiveButtons(questionKey, value) {
+                if (!questionKey) {
+                    return;
+                }
+                var slug = slugify(questionKey);
+                var nodes = form.querySelectorAll('[data-question-option-key="' + slug + '"]');
+                if (!nodes.length) {
+                    return;
+                }
+
+                var values = Array.isArray(value) ? value.map(String) : [String(value)];
+                Array.prototype.forEach.call(nodes, function (node) {
+                    var parentButton = node.closest('button');
+                    if (!parentButton) {
+                        return;
+                    }
+                    var optionValue = node.getAttribute('data-question-option-value');
+                    if (optionValue && values.indexOf(optionValue) !== -1) {
+                        parentButton.classList.add('active');
+                    } else {
+                        parentButton.classList.remove('active');
+                    }
+                });
+            }
+
+            function readValueFromInput(input) {
+                if (input.type === 'checkbox') {
+                    var values = [];
+                    var nodes = form.querySelectorAll('[name="' + cssEscape(input.name) + '"]');
+                    Array.prototype.forEach.call(nodes, function (node) {
+                        if (node.checked) {
+                            values.push(node.value);
+                        }
+                    });
+                    return values;
+                }
+                if (input.type === 'radio') {
+                    return input.checked ? input.value : null;
+                }
+                return input.value;
+            }
         })();
     </script>
 </perch:form>
