@@ -1567,7 +1567,7 @@
             }
 
             var stepQuestions = buildStepQuestions(structure, providedSteps);
-            var stepOrder = Object.keys(stepQuestions);
+            var stepOrder = buildStepOrder(stepQuestions, structure);
             var answerState = {};
             if (storedAnswers && typeof storedAnswers === 'object') {
                 for (var storedKey in storedAnswers) {
@@ -1621,15 +1621,84 @@
                 }
 
                 var steps = {};
-                Object.keys(structure).forEach(function (key) {
+                var sortedKeys = sortQuestionKeys(Object.keys(structure || {}), structure);
+                sortedKeys.forEach(function (key) {
                     var question = structure[key];
+                    if (!question) {
+                        return;
+                    }
                     var step = question.step && question.step !== '' ? question.step : key;
                     if (!steps[step]) {
                         steps[step] = [];
                     }
                     steps[step].push(key);
                 });
+
+                Object.keys(steps).forEach(function (step) {
+                    steps[step] = sortQuestionKeys(steps[step], structure);
+                });
+
                 return steps;
+            }
+
+            function buildStepOrder(stepQuestions, structure) {
+                var steps = stepQuestions ? Object.keys(stepQuestions) : [];
+                var maxSort = (typeof Number !== 'undefined' && typeof Number.MAX_SAFE_INTEGER === 'number')
+                    ? Number.MAX_SAFE_INTEGER
+                    : Math.pow(2, 53) - 1;
+
+                function minSortForStep(stepKey) {
+                    var questions = stepQuestions[stepKey] || [];
+                    if (!questions.length) {
+                        return maxSort;
+                    }
+
+                    var min = maxSort;
+                    for (var i = 0; i < questions.length; i++) {
+                        var key = questions[i];
+                        var sortValue = getQuestionSort(structure[key]);
+                        if (sortValue < min) {
+                            min = sortValue;
+                        }
+                    }
+                    return min;
+                }
+
+                return steps.sort(function (a, b) {
+                    var sortA = minSortForStep(a);
+                    var sortB = minSortForStep(b);
+                    if (sortA === sortB) {
+                        return a.localeCompare(b);
+                    }
+                    return sortA - sortB;
+                });
+            }
+
+            function getQuestionSort(question) {
+                var maxSort = (typeof Number !== 'undefined' && typeof Number.MAX_SAFE_INTEGER === 'number')
+                    ? Number.MAX_SAFE_INTEGER
+                    : Math.pow(2, 53) - 1;
+                if (!question || typeof question.sort === 'undefined' || question.sort === null) {
+                    return maxSort;
+                }
+
+                var parsed = parseInt(question.sort, 10);
+                if (isNaN(parsed)) {
+                    return maxSort;
+                }
+                return parsed;
+            }
+
+            function sortQuestionKeys(keys, structure) {
+                var list = Array.isArray(keys) ? keys.slice() : [];
+                return list.sort(function (a, b) {
+                    var sortA = getQuestionSort(structure[a]);
+                    var sortB = getQuestionSort(structure[b]);
+                    if (sortA === sortB) {
+                        return String(a).localeCompare(String(b));
+                    }
+                    return sortA - sortB;
+                });
             }
 
             function applyQuestionLabels(form, structure) {

@@ -151,6 +151,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 'options'      => $opts,
                 'step'         => $step,
                 'dependencies' => $deps,
+                'sort'         => isset($row['sort']) ? (int)$row['sort'] : null,
+                'question_id'  => isset($row['questionID']) ? (int)$row['questionID'] : null,
             ];
 
             $aliases = $this->expand_aliases($row['questionKey'], $row['type']);
@@ -290,19 +292,36 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         if (PerchUtil::count($questions)) {
             foreach ($questions as $key => $question) {
                 $structure[$key] = [
-                    'key'         => $key,
-                    'label'       => $question['label'],
-                    'type'        => $question['type'],
-                    'name'        => $question['name'] ?? $key,
-                    'options'     => isset($question['options']) && is_array($question['options']) ? $question['options'] : [],
-                    'step'        => $question['step'] ?? $key,
-                    'dependencies'=> isset($question['dependencies']) && is_array($question['dependencies']) ? $question['dependencies'] : [],
+                    'key'          => $key,
+                    'label'        => $question['label'],
+                    'type'         => $question['type'],
+                    'name'         => $question['name'] ?? $key,
+                    'options'      => isset($question['options']) && is_array($question['options']) ? $question['options'] : [],
+                    'step'         => $question['step'] ?? $key,
+                    'dependencies' => isset($question['dependencies']) && is_array($question['dependencies']) ? $question['dependencies'] : [],
+                    'sort'         => isset($question['sort']) ? (int)$question['sort'] : null,
+                    'question_id'  => isset($question['question_id']) ? (int)$question['question_id'] : null,
                 ];
 
                 if (!empty($question['aliases'])) {
                     $structure[$key]['aliases'] = $question['aliases'];
                 }
             }
+        }
+
+        if (PerchUtil::count($structure)) {
+            uasort($structure, function ($a, $b) {
+                $sortA = isset($a['sort']) ? (int)$a['sort'] : PHP_INT_MAX;
+                $sortB = isset($b['sort']) ? (int)$b['sort'] : PHP_INT_MAX;
+
+                if ($sortA === $sortB) {
+                    $keyA = isset($a['key']) ? (string)$a['key'] : '';
+                    $keyB = isset($b['key']) ? (string)$b['key'] : '';
+                    return strcmp($keyA, $keyB);
+                }
+
+                return $sortA <=> $sortB;
+            });
         }
 
         return $structure;

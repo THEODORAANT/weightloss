@@ -5,6 +5,20 @@ if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
 }
 
 $structure = perch_member_questionnaire_structure('first-order');
+if (is_array($structure) && PerchUtil::count($structure)) {
+    uasort($structure, function ($a, $b) {
+        $sortA = isset($a['sort']) ? (int)$a['sort'] : PHP_INT_MAX;
+        $sortB = isset($b['sort']) ? (int)$b['sort'] : PHP_INT_MAX;
+
+        if ($sortA === $sortB) {
+            $keyA = isset($a['key']) ? (string)$a['key'] : '';
+            $keyB = isset($b['key']) ? (string)$b['key'] : '';
+            return strcmp($keyA, $keyB);
+        }
+
+        return $sortA <=> $sortB;
+    });
+}
 $question_labels = [];
 $question_steps = [];
 $question_definitions = [];
