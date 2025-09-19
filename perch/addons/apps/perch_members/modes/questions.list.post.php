@@ -26,10 +26,27 @@
         ]);
 
     $Listing->add_col([
-
-            'title'     => 'Type',
+            'title'     => $Lang->get('Questionnaire type'),
             'value'     => 'questionnaireType',
             'sort'      => 'questionnaireType',
+        ]);
+
+    $Listing->add_col([
+            'title'     => $Lang->get('Answer type'),
+            'value'     => 'type',
+            'sort'      => 'type',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Answers'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $summary = $Question->option_summary();
+                if ($summary === '') {
+                    return $HTML->encode($Lang->get('None'));
+                }
+
+                return $HTML->encode($summary);
+            },
         ]);
 
     echo $Listing->render($questions);

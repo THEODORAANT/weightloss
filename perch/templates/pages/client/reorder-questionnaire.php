@@ -133,6 +133,16 @@ if(isset( $_GET["step"])){
 PerchSystem::set_var('step', $_GET["step"]);
 }
 
+$reorder_structure = perch_member_questionnaire_structure('re-order');
+if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
+    PerchSystem::set_var('questionnaire_structure_json', PerchUtil::json_safe_encode($reorder_structure));
+
+    $reorder_dependencies = perch_member_questionnaire_dependencies('re-order');
+    if (is_array($reorder_dependencies) && PerchUtil::count($reorder_dependencies)) {
+        PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($reorder_dependencies));
+    }
+}
+
  perch_form('reorder-questionnaire.html');
 
             ?>

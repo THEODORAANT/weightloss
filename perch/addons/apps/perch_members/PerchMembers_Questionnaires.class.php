@@ -3,112 +3,310 @@
 class PerchMembers_Questionnaires extends PerchAPI_Factory
 {
     protected $table     = 'questionnaire';
-	protected $pk        = 'id';
-	protected $singular_classname = 'PerchMembers_Questionnaire';
-	public $reorder_questions = [];
-	public $steps=[
-    "age"=>"howold",
-    "ethnicity"=>"18to74",
-    "ethnicity-more"=>"Mixed",
-    "gender"=>"ethnicity",
-    "pregnancy"=>"Female",
-    "weight"=>"weight",
-    "height"=>"height",
-    "diabetes"=>"diabetes",
-    "conditions"=>"weight2",
-    "bariatricoperation"=>"bariatricoperation",
-    "more_pancreatitis"=>"more_pancreatitis",
-    "thyroidoperation"=>"thyroidoperation",
-    "more_conditions"=>"more",
-    "conditions2"=>"conditions",
-    "medical_conditions"=>"medical_conditions",
-    "medications"=>"medications",
-    "weight-wegovy"=>"starting_wegovy",
-    "dose-wegovy"=>"dose_wegovy",
-    "recently-dose-wegovy"=>"recently_wegovy",
-    "continue-dose-wegovy"=>"continue_with_wegovy",
-    "effects_with_wegovy"=>"effects_with_wegovy",
-    "medication_allergies"=>"medication_allergies",
-    "other_medical_conditions"=>"list_any",
-    "wegovy_side_effects"=>"wegovy_side_effects",
-    "gp_informed"=>"gp_informed",
-    "GP_email_address"=>"gp_address",
-    "Get access to special offers"=>"access_special_offers"
-    ];
+    protected $pk        = 'id';
+    protected $singular_classname = 'PerchMembers_Questionnaire';
+
+    public $reorder_questions = [];
     public $reorder_questions_answers = [];
-
     public $questions_and_answers = [];
+    public $questions = [];
 
+    protected $question_aliases = [
+        'reorder'      => [],
+        'first-order'  => [],
+    ];
 
-                public $questions = [];
+    protected $default_sort_column = 'created_at';
+    public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
 
     public function __construct($api=false)
     {
         parent::__construct($api);
 
+        $this->ensure_question_schema();
+        $this->backfill_question_metadata();
+
         $Questions = new PerchMembers_QuestionnaireQuestions($api);
 
-        $rows = $Questions->get_for_type('reorder');
-        if ($rows) {
-            foreach($rows as $row) {
-                $opts = $row['options'] ? PerchUtil::json_safe_decode($row['options'], true) : [];
-                $this->reorder_questions[$row['questionKey']] = $row['label'];
-                $this->reorder_questions_answers[$row['questionKey']] = [
-                    'label' => $row['label'],
-                    'type'  => $row['type'],
-                    'name'  => $row['questionKey'],
-                    'options' => $opts
-                ];
-            }
-        }
-
-        $rows = $Questions->get_for_type('first-order');
-        if ($rows) {
-            foreach($rows as $row) {
-                $opts = $row['options'] ? PerchUtil::json_safe_decode($row['options'], true) : [];
-                $this->questions[$row['questionKey']] = $row['label'];
-                $this->questions_and_answers[$row['questionKey']] = [
-                    'label' => $row['label'],
-                    'type'  => $row['type'],
-                    'name'  => $row['questionKey'],
-                    'options' => $opts
-                ];
-            }
-        }
+        $this->load_questions_for_type($Questions, 'reorder');
+        $this->load_questions_for_type($Questions, 'first-order');
     }
 
-public $doses = [
-    '25mg' => '0.25mg/2.5mg',
-    '05mg' => '0.5mg/5mg',
-    '1mg'  => '1mg/7.5mg',
-    '17mg' => '1.7mg/12.5mg',
-    '24mg' => '2.4mg/15mg',
-    'other'=> 'Other'
-];
-
-
-   /* protected $required_answers=[
-    "age"=>["18to74"],
-     "ethnicity"=>["asian","Black (African/Caribbean)"],
-
-    ]*/
-
-	protected $default_sort_column = 'created_at';
-	public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
-	public function get_questions($type='first-order')
+    protected function ensure_question_schema()
     {
-    if($type=="re-order"){
-     return $this->reorder_questions;
+        static $checked = false;
+        if ($checked) {
+            return;
+        }
+
+        $checked = true;
+        $table = PERCH_DB_PREFIX.'members_questionnaire_questions';
+        $columns = $this->db->get_rows('SHOW COLUMNS FROM '.$table);
+        $fields = [];
+        if (is_array($columns)) {
+            foreach ($columns as $col) {
+                if (isset($col['Field'])) {
+                    $fields[] = $col['Field'];
+                }
+            }
+        }
+
+        if (!in_array('fieldName', $fields)) {
+            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN fieldName varchar(64) DEFAULT NULL AFTER `type`');
+        }
+
+        if (!in_array('stepSlug', $fields)) {
+            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN stepSlug varchar(64) DEFAULT NULL AFTER `fieldName`');
+        }
+
+        if (!in_array('dependencies', $fields)) {
+            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN dependencies text AFTER `options`');
+        }
     }
-    return $this->questions;
+
+    protected function backfill_question_metadata()
+    {
+        $table = PERCH_DB_PREFIX.'members_questionnaire_questions';
+        $needs = $this->db->get_value('SELECT COUNT(*) FROM '.$table.' WHERE fieldName IS NULL OR fieldName="" OR stepSlug IS NULL OR stepSlug=""');
+
+        $needsDependencies = $this->db->get_value('SELECT COUNT(*) FROM '.$table.' WHERE dependencies IS NULL OR dependencies=""');
+
+        if ((int)$needs === 0 && (int)$needsDependencies === 0) {
+            return;
+        }
+
+        $seed_file = __DIR__ . '/questionnaire_default_questions.php';
+        if (!file_exists($seed_file)) {
+            return;
+        }
+
+        $definitions = include $seed_file;
+        if (!is_array($definitions)) {
+            return;
+        }
+
+        $rows = $this->db->get_rows('SELECT questionID, questionnaireType, questionKey, fieldName, stepSlug, dependencies FROM '.$table);
+        if (!is_array($rows)) {
+            return;
+        }
+
+        foreach ($rows as $row) {
+            $type = $row['questionnaireType'];
+            $key  = $row['questionKey'];
+
+            if (!isset($definitions[$type]) || !isset($definitions[$type][$key])) {
+                continue;
+            }
+
+            $definition = $definitions[$type][$key];
+            $update = [];
+
+            if ((empty($row['fieldName'])) && isset($definition['name'])) {
+                $update['fieldName'] = $definition['name'];
+            }
+
+            if ((empty($row['stepSlug'])) && isset($definition['step'])) {
+                $update['stepSlug'] = $definition['step'];
+            }
+
+            if ((empty($row['dependencies'])) && isset($definition['dependencies'])) {
+                $encoded = PerchUtil::json_safe_encode($definition['dependencies']);
+                if ($encoded !== false) {
+                    $update['dependencies'] = $encoded;
+                }
+            }
+
+            if (!empty($update)) {
+                $this->db->update($table, $update, 'questionID', $row['questionID']);
+            }
+        }
     }
+
+    protected function load_questions_for_type(PerchMembers_QuestionnaireQuestions $Questions, $type)
+    {
+        $canonical = $this->normalise_type($type);
+        $rows = $Questions->get_for_type($canonical);
+        if (!$rows) {
+            return;
+        }
+
+        foreach ($rows as $row) {
+            $opts = $row['options'] ? PerchUtil::json_safe_decode($row['options'], true) : [];
+            if (!is_array($opts)) {
+                $opts = [];
+            }
+
+            $deps = $row['dependencies'] ? PerchUtil::json_safe_decode($row['dependencies'], true) : [];
+            if (!is_array($deps)) {
+                $deps = [];
+            }
+
+            $field_name = isset($row['fieldName']) && $row['fieldName'] !== '' ? $row['fieldName'] : $row['questionKey'];
+            $step = isset($row['stepSlug']) && $row['stepSlug'] !== '' ? $row['stepSlug'] : $row['questionKey'];
+
+            $question = [
+                'label'        => $row['label'],
+                'type'         => $row['type'],
+                'name'         => $field_name,
+                'options'      => $opts,
+                'step'         => $step,
+                'dependencies' => $deps,
+            ];
+
+            $aliases = $this->expand_aliases($row['questionKey'], $row['type']);
+            if ($field_name && $field_name !== $row['questionKey']) {
+                $aliases = array_merge($aliases, $this->expand_aliases($field_name, $row['type']));
+            }
+
+            $aliases = array_values(array_unique(array_filter($aliases)));
+            $question['aliases'] = array_values(array_diff($aliases, [$row['questionKey']]));
+
+            if ($canonical === 'reorder') {
+                $this->reorder_questions[$row['questionKey']] = $row['label'];
+                $this->reorder_questions_answers[$row['questionKey']] = $question;
+            } else {
+                $this->questions[$row['questionKey']] = $row['label'];
+                $this->questions_and_answers[$row['questionKey']] = $question;
+            }
+
+            foreach ($aliases as $alias) {
+                $this->question_aliases[$canonical][$alias] = $row['questionKey'];
+            }
+        }
+    }
+
+    protected function expand_aliases($value, $type = null)
+    {
+        $aliases = [];
+        $value = trim((string)$value);
+        if ($value === '') {
+            return $aliases;
+        }
+
+        $aliases[] = $value;
+
+        if (substr($value, -2) === '[]') {
+            $aliases[] = substr($value, 0, -2);
+        } elseif ($type === 'checkbox') {
+            $aliases[] = $value.'[]';
+        }
+
+        $extra = [];
+        foreach ($aliases as $alias) {
+            if (strpos($alias, '-') !== false) {
+                $extra[] = str_replace('-', '_', $alias);
+            }
+            if (strpos($alias, '_') !== false) {
+                $extra[] = str_replace('_', '-', $alias);
+            }
+        }
+
+        return array_values(array_unique(array_merge($aliases, $extra)));
+    }
+
+    protected function normalise_type($type)
+    {
+        return ($type === 're-order') ? 'reorder' : $type;
+    }
+
+    protected function resolve_question_key($type, $key)
+    {
+        $type = $this->normalise_type($type);
+        if (isset($this->question_aliases[$type][$key])) {
+            return $this->question_aliases[$type][$key];
+        }
+
+        foreach ($this->expand_aliases($key) as $alias) {
+            if (isset($this->question_aliases[$type][$alias])) {
+                return $this->question_aliases[$type][$alias];
+            }
+        }
+
+        return $key;
+    }
+
+    protected function get_question_definition($type, $key)
+    {
+        $type = $this->normalise_type($type);
+        $questions = $this->get_questions_answers($type);
+        if (!is_array($questions)) {
+            return null;
+        }
+
+        $canonical = $this->resolve_question_key($type, $key);
+        return $questions[$canonical] ?? null;
+    }
+
+    protected function format_answer_value($type, $key, $value)
+    {
+        $definition = $this->get_question_definition($type, $key);
+        if (!$definition) {
+            return is_array($value) ? implode(', ', $value) : $value;
+        }
+
+        $options = isset($definition['options']) && is_array($definition['options']) ? $definition['options'] : [];
+
+        if (!PerchUtil::count($options)) {
+            return is_array($value) ? implode(', ', $value) : $value;
+        }
+
+        if (is_array($value)) {
+            $labels = [];
+            foreach ($value as $item) {
+                $labels[] = isset($options[$item]) ? $options[$item] : $item;
+            }
+            return implode(', ', $labels);
+        }
+
+        return isset($options[$value]) ? $options[$value] : $value;
+    }
+
+    public function get_questions($type='first-order')
+    {
+        $type = $this->normalise_type($type);
+        if ($type === 'reorder') {
+            return $this->reorder_questions;
+        }
+
+        return $this->questions;
+    }
+
     public function get_questions_answers($type='first-order')
-        {
-        if($type=="re-order"){
-         return $this->reorder_questions_answers;
+    {
+        $type = $this->normalise_type($type);
+        if ($type === 'reorder') {
+            return $this->reorder_questions_answers;
         }
+
         return $this->questions_and_answers;
+    }
+
+    public function get_question_structure($type = 'first-order')
+    {
+        $type = $this->normalise_type($type);
+        $questions = $this->get_questions_answers($type);
+        $structure = [];
+
+        if (PerchUtil::count($questions)) {
+            foreach ($questions as $key => $question) {
+                $structure[$key] = [
+                    'key'         => $key,
+                    'label'       => $question['label'],
+                    'type'        => $question['type'],
+                    'name'        => $question['name'] ?? $key,
+                    'options'     => isset($question['options']) && is_array($question['options']) ? $question['options'] : [],
+                    'step'        => $question['step'] ?? $key,
+                    'dependencies'=> isset($question['dependencies']) && is_array($question['dependencies']) ? $question['dependencies'] : [],
+                ];
+
+                if (!empty($question['aliases'])) {
+                    $structure[$key]['aliases'] = $question['aliases'];
+                }
+            }
         }
+
+        return $structure;
+    }
 	public function get_for_member($memberID,$type="first-order")
     {
         $sql = 'SELECT d.*
@@ -603,24 +801,12 @@ $out=[];
       if (array_key_exists($key, $this->questions)) {
 
       $qdata['question_text']=$this->questions[$key];
-       if(is_array($value)){
-                  $qdata['answer_text']=implode(", ", $value);
-
-                }else{
-                   $qdata['answer_text']=$value;
-
-                }
+      $qdata['answer_text']=$this->format_answer_value('first-order', $key, $value);
       }
       }else{
        if (array_key_exists($key, $this->reorder_questions)) {
        $qdata['question_text']=$this->reorder_questions[$key];
-        if(is_array($value)){
-                   $qdata['answer_text']=implode(", ", $value);
-
-                 }else{
-                    $qdata['answer_text']=$value;
-
-                 }
+       $qdata['answer_text']=$this->format_answer_value('reorder', $key, $value);
        }
       }
          if($type=="first-order"){
@@ -628,9 +814,9 @@ $out=[];
 
         $weightunit=explode("-",$weightradiounit);
         if(count($weightunit)>1){
-         $qdata['answer_text'].= " ".$weightunit[0];
+         $qdata['answer_text']=trim(($qdata['answer_text'] ?? '')." ".$weightunit[0]);
           if(isset($data["weight2"]) ){
-                 $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
+                $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
 
             }
             }
@@ -638,23 +824,18 @@ $out=[];
         if($key=="weight-wegovy"){
             $weightwegovyunit=explode("-",$unitwegovyradio);
                 if(count($weightwegovyunit)>1){
-                 $qdata['answer_text'].= " ".$weightwegovyunit[0];
+                 $qdata['answer_text']=trim(($qdata['answer_text'] ?? '')." ".$weightwegovyunit[0]);
                   if(isset($data["weight2-wegovy"]) ){
                          $qdata['answer_text'].= " ".$data["weight2-wegovy"]."  ".$weightwegovyunit[1];
 
                     }
                     }
         }
-           if($key=="weight-wegovy"){
-
-            $qdata['answer_text']=$doses[$value];
-        }
-
          if($key=="height"){
 
              $heightunit=explode("-",$heightunitradio);
               if(count($heightunit)>1){
-                 $qdata['answer_text'].= " ".$heightunit[0];
+                $qdata['answer_text']=trim(($qdata['answer_text'] ?? '')." ".$heightunit[0]);
                    if(isset($data["height2"])){
                                      $qdata['answer_text'].= " ".$data["height2"]."  ".$heightunit[1];
 

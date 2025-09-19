@@ -23,7 +23,7 @@
 
 
                         <div class="old_title">
-                            <h2>How old are you?</h2>
+                            <h2 class="js-question-label-age">How old are you?</h2>
 
                         </div>
 
@@ -102,7 +102,7 @@
 
                    </div>-->
                         <div class="old_title">
-                            <h2>Which ethnicity are you?</h2><br>
+                            <h2 class="js-question-label-ethnicity">Which ethnicity are you?</h2><br>
 
 
                             <h2>Healthy BMI ranges are different according to your ethnic background.</h2><br>
@@ -160,7 +160,7 @@
                  </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="ethnicity-more">Please tell us which ethnicities.</label>
+                    <label for="ethnicity-more" class="js-question-label-ethnicity_more">Please tell us which ethnicities.</label>
                     <textarea id="ethnicity-more"  name="ethnicity-more" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -186,7 +186,7 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>What sex were you assigned at birth?</h2>
+                        <h2 class="js-question-label-gender">What sex were you assigned at birth?</h2>
                     </div>
 
 
@@ -226,15 +226,15 @@
 
                        </div>-->
                 <div class="old_title">
-                    <h2>Are you currently pregnant, trying to get pregnant, or breastfeeding?</h2>
+                    <h2 class="js-question-label-pregnancy">Are you currently pregnant, trying to get pregnant, or breastfeeding?</h2>
                 </div>
 
 
                 <div class="under">
 
                     <div class="button-group">
-                        <button id="yesBtn" onclick="setValuesForm('pregnancy','yes')" <perch:if id="pregnancy" value="yes"> class="custom_btn active" </perch:if> class="custom_btn "><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                        <button id="noBtn" onclick="setValuesForm('pregnancy','no')" <perch:if id="pregnancy" value="no"> class="custom_btn active" </perch:if> class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                        <button id="yesBtn" onclick="setValuesForm('pregnancy','yes')" <perch:if id="pregnancy" value="yes"> class="custom_btn active" </perch:if> class="custom_btn "><span data-question-option-key="pregnancy" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                        <button id="noBtn" onclick="setValuesForm('pregnancy','no')" <perch:if id="pregnancy" value="no"> class="custom_btn active" </perch:if> class="custom_btn"><span data-question-option-key="pregnancy" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                         <input type="hidden" name="pregnancy" id="pregnancy"  />
                         <input type="hidden" id="nextstep" name="nextstep" value="">
                     </div>
@@ -288,7 +288,7 @@
                       </div>
 
                   </div>-->
-                    <h2>What is your weight?</h2>
+                    <h2 class="js-question-label-weight">What is your weight?</h2>
                     <div class="weight-inputs">
                         <input type="text" id="weight"  required name="weight" placeholder="Kg">
                         <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs">
@@ -354,7 +354,7 @@
                             </div>
 
                         </div>-->
-                    <h2>What is your height?</h2>
+                    <h2 class="js-question-label-height">What is your height?</h2>
                     <div class="weight-inputs">
                         <input type="text" id="height" name="height" required placeholder="Cm">
                         <input type="hidden" id="height2" name="height2" required placeholder="7.5"  step="0.1" min="0.5" max="12" required title="Enter your height in total inches">
@@ -409,7 +409,7 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Have you been diagnosed with diabetes?</h2><br>
+                        <h2 class="js-question-label-diabetes">Have you been diagnosed with diabetes?</h2><br>
 
 
                         <h2>Diabetes treatments can impact the way the medication included with our weight loss plan works.
@@ -467,7 +467,7 @@
                                <!-- <div class="progress_bar">
                                     <p class="Percent_text">14%</p><span class="bar_line"></span>
                                 </div>-->
-                                <h5>Do any of the following statements apply to you?</h5>
+                                <h5 class="js-question-label-conditions">Do any of the following statements apply to you?</h5>
                                 <h5>
                                     These conditions can lead to serious complications when losing weight or taking weight loss medications.
                                 </h5>
@@ -573,7 +573,7 @@
 
                         </div>-->
                     <div class="old_title">
-                        <h2>Was your bariatric operation in the last 6 months? </h2>
+                        <h2 class="js-question-label-bariatricoperation">Was your bariatric operation in the last 6 months? </h2>
                     </div>
 
 
@@ -581,8 +581,8 @@
 
                         <div class="button-group">
 
-                            <button id="yesBtn" onclick="setValuesForm('bariatricoperation','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesForm('bariatricoperation','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesForm('bariatricoperation','yes')"  class="custom_btn"><span data-question-option-key="bariatricoperation" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('bariatricoperation','no')" class="custom_btn"><span data-question-option-key="bariatricoperation" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="bariatricoperation" name="bariatricoperation" value="">
 
                             <input type="hidden" id="nextstep" name="nextstep" value="">
@@ -636,7 +636,7 @@
                     </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="more_pancreatitis">Please tell us more about your health condition and how you manage it.</label>
+                    <label for="more_pancreatitis" class="js-question-label-more_pancreatitis">Please tell us more about your health condition and how you manage it.</label>
                     <textarea id="more_pancreatitis" required name="more_pancreatitis" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -664,7 +664,7 @@
                  </div>-->
                 </div>
                 <form id="thyroidoperation">
-                    <label for="thyroidoperation">Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring</label>
+                    <label for="thyroidoperation" class="js-question-label-thyroidoperation">Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring</label>
                     <textarea id="thyroidoperation" required name="thyroidoperation" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -694,7 +694,7 @@
                  </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="more_conditions">Please tell us more about your health condition and how you manage it.</label>
+                    <label for="more_conditions" class="js-question-label-more_conditions">Please tell us more about your health condition and how you manage it.</label>
                     <textarea id="more_conditions" required name="more_conditions" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -720,7 +720,7 @@
                                <!-- <div class="progress_bar">
                                     <p class="Percent_text">20%</p><span class="bar_line"></span>
                                 </div>-->
-                                <h5>Do any of the following statements apply to you?</h5>
+                                <h5 class="js-question-label-conditions2">Do any of the following statements apply to you?</h5>
                                 <h5>
                                     These conditions are often weight related and may be improved as a result of losing weight.
                                 </h5>
@@ -825,7 +825,7 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Do you have any other medical conditions?</h2>
+                        <h2 class="js-question-label-medical_conditions">Do you have any other medical conditions?</h2>
                         <br>
                         <h2>Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you. </h2>
                     </div>
@@ -834,8 +834,8 @@
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesForm('medical_conditions','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesForm('medical_conditions','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesForm('medical_conditions','yes')"  class="custom_btn"><span data-question-option-key="medical_conditions" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('medical_conditions','no')" class="custom_btn"><span data-question-option-key="medical_conditions" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
 
                             <input type="hidden" id="medical_conditions" name="medical_conditions" value="">
 
@@ -868,7 +868,7 @@
                                <!-- <div class="progress_bar">
                                     <p class="Percent_text">26%</p><span class="bar_line"></span>
                                 </div>-->
-                                <h5>
+                                <h5 class="js-question-label-medications">
                                     Have you ever taken any of the following medications to help you lose weight?
                                 </h5>
                             </div>
@@ -943,7 +943,7 @@
                        </div>
 
                    </div>-->
-                    <h2>What was your weight in kg/st-lbs before starting <span id="medication">the weight loss medication</span>?</h2>
+                    <h2 class="js-question-label-weight_wegovy">What was your weight in kg/st-lbs before starting <span id="medication">the weight loss medication</span>?</h2>
                     <div class="weight-inputs">
                         <input type="text" name="weight-wegovy" id="weight-wegovy" placeholder="Kg">
                         <input type="hidden" id="weight2-wegovy" required name="weight2-wegovy" placeholder="lbs"/>
@@ -1027,7 +1027,7 @@
 
 
                     <div class="old_title">
-                        <h2>When was your last dose of <span id="medication">the weight loss medication</span>?</h2>
+                        <h2 class="js-question-label-dose_wegovy">When was your last dose of <span id="medication">the weight loss medication</span>?</h2>
                     </div>
 
 
@@ -1083,7 +1083,7 @@
 
                  </div>-->
                     <div class="old_title">
-                        <h2>What dose of <span id="medication">the weight loss medication</span> were you prescribed most recently?</h2><br>
+                        <h2 class="js-question-label-recently_dose_wegovy">What dose of <span id="medication">the weight loss medication</span> were you prescribed most recently?</h2><br>
 
 
                     </div>
@@ -1141,7 +1141,7 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>If you want to continue with <span id="medication">the weight loss medication</span>, what dose would you like to continue with? </h2><br>
+                        <h2 class="js-question-label-continue_dose_wegovy">If you want to continue with <span id="medication">the weight loss medication</span>, what dose would you like to continue with? </h2><br>
 
 
                         <p style="font-weight: 500;" > <strong>A</strong> clinician will review your answers and select your dosage as appropriate. Price varies by dosage. </p>
@@ -1196,15 +1196,15 @@
 
                   </div>-->
                     <div class="old_title">
-                        <h2>Have you experienced any side effects with <span id="medication">the weight loss medication</span>? </h2>
+                        <h2 class="js-question-label-effects_with_wegovy">Have you experienced any side effects with <span id="medication">the weight loss medication</span>? </h2>
                     </div>
 
 
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesForm('effects_with_wegovy','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesForm('effects_with_wegovy','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesForm('effects_with_wegovy','yes')"  class="custom_btn"><span data-question-option-key="effects_with_wegovy" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('effects_with_wegovy','no')"  class="custom_btn"><span data-question-option-key="effects_with_wegovy" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="">
                             <input type="hidden" id="effects_with_wegovy" name="effects_with_wegovy" value="">
 
@@ -1236,7 +1236,7 @@
                               <!--  <div class="progress_bar">
                                     <p class="Percent_text">95%</p><span class="bar_line"></span>
                                 </div>-->
-                                <h5>
+                                <h5 class="js-question-label-medication_allergies">
                                     Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.
                                 </h5>
 
@@ -1305,7 +1305,7 @@
                    </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="other_medical_conditions">Please list any other medical conditions you have. <br> <br> Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you.</label>
+                    <label for="other_medical_conditions" class="js-question-label-other_medical_conditions">Please list any other medical conditions you have. <br> <br> Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you.</label>
                     <textarea id="other_medical_conditions" required name="other_medical_conditions" placeholder="My health conditions are..."></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -1334,7 +1334,7 @@
                    </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="other_medical_conditions">Please list any other medical conditions you have. <br> <br> Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you.</label>
+                    <label for="other_medical_conditions" class="js-question-label-other_medical_conditions">Please list any other medical conditions you have. <br> <br> Our clinicians need to know your full medical history to make sure our weight loss plan is safe for you.</label>
                     <textarea id="other_medical_conditions" required name="other_medical_conditions" placeholder="My health conditions are..."></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -1364,7 +1364,7 @@
                   </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="wegovy_side_effects">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
+                    <label for="wegovy_side_effects" class="js-question-label-wegovy_side_effects">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
                     <textarea id="wegovy_side_effects" required name="wegovy_side_effects" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -1394,7 +1394,7 @@
 
                    </div>-->
                     <div class="old_title">
-                        <h2>Would you like your GP to be informed of this consultation?</h2><br>
+                        <h2 class="js-question-label-gp_informed">Would you like your GP to be informed of this consultation?</h2><br>
 
                         <p style="font-weight: 600;" >To ensure we provide the best and safest service for you, we strongly encourage you to share your GP details so we can inform them about your treatment. If you are aware of your GP practice's email address, please enter them on the next screen.</p>
                     </div>
@@ -1403,8 +1403,8 @@
                     <div class="unde">
 
                         <div class="button-group">
-                            <button id="yesBtn" onclick="setValuesForm('gp_informed','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
-                            <button id="noBtn" onclick="setValuesForm('gp_informed','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <button id="yesBtn" onclick="setValuesForm('gp_informed','yes')"  class="custom_btn"><span data-question-option-key="gp_informed" data-question-option-value="yes" style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesForm('gp_informed','no')" class="custom_btn"><span data-question-option-key="gp_informed" data-question-option-value="no" style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="">
                             <input type="hidden" id="gp_informed" name="gp_informed" value="">
 
@@ -1438,7 +1438,7 @@
                        </div>
 
                    </div>-->
-                    <h2>Please enter your GP's email address</h2>
+                    <h2 class="js-question-label-gp_email_address">Please enter your GP's email address</h2>
                     <div class="weight-inputs">
                         <input type="text" id="GP_email_address"  name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" >
 
@@ -1476,7 +1476,7 @@
                       </div>
 
                   </div>-->
-                    <h2>Get access to special offers</h2>
+                    <h2 class="js-question-label-access_special_offers">Get access to special offers</h2>
                     <p style="font-weight: 600;" >Take the first step towards improving your metabolic health. You'll receive personalised health insights and exclusive monthly offers available only to Get Weight Loss members.</p>
                     <div class="weight-inputs">
                         <input type="text" id="email_address" name="email_address" placeholder="Email address (optional)" style="width: 100%;" >
@@ -1510,6 +1510,134 @@
 
 
 
+    <script type="application/json" class="js-questionnaire-structure"><perch:forms id="questionnaire_structure_json" encode="false" /></script>
+    <perch:if exists="questionnaire_dependencies_json">
+        <script type="application/json" class="js-questionnaire-dependencies"><perch:forms id="questionnaire_dependencies_json" encode="false" /></script>
+    </perch:if>
+    <script>
+        (function () {
+            var scripts = document.querySelectorAll('.js-questionnaire-structure');
+            if (!scripts.length) {
+                return;
+            }
+
+            function slugify(value) {
+                return (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+            }
+
+            function parseJSON(el) {
+                try {
+                    return JSON.parse(el.textContent || el.innerText || 'null');
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function cssEscape(val) {
+                return (val || '').toString().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            }
+
+            scripts.forEach(function (script) {
+                var structure = parseJSON(script);
+                if (!structure) {
+                    return;
+                }
+
+                var form = script.closest('form') || document;
+
+                Object.keys(structure).forEach(function (key) {
+                    var question = structure[key];
+                    var questionSlug = slugify(key);
+                    var labelNodes = form.querySelectorAll('.js-question-label-' + questionSlug);
+
+                    labelNodes.forEach(function (node) {
+                        node.textContent = question.label;
+                    });
+
+                    if (!question.options || typeof question.options !== 'object') {
+                        return;
+                    }
+
+                    Object.keys(question.options).forEach(function (optionKey) {
+                        var optionValue = question.options[optionKey];
+                        var optionLabel = optionValue;
+
+                        if (optionValue && typeof optionValue === 'object') {
+                            if (optionValue.label) {
+                                optionLabel = optionValue.label;
+                            } else if (optionValue.title) {
+                                optionLabel = optionValue.title;
+                            } else if (optionValue.value) {
+                                optionLabel = optionValue.value;
+                            }
+                        }
+
+                        var value = optionKey;
+                        var selectorNames = [];
+                        if (question.name) {
+                            selectorNames.push(question.name);
+                            if (question.name.slice(-2) === '[]') {
+                                selectorNames.push(question.name.slice(0, -2) + '[]');
+                            }
+                        }
+
+                        selectorNames.push(key);
+                        if (key.slice(-2) === '[]') {
+                            selectorNames.push(key.slice(0, -2) + '[]');
+                        }
+
+                        var inputs = [];
+                        selectorNames.forEach(function (name) {
+                            var escapedName = cssEscape(name);
+                            var escapedValue = cssEscape(value);
+                            var found = form.querySelectorAll('input[name="' + escapedName + '"][value="' + escapedValue + '"]');
+                            found.forEach(function (input) {
+                                inputs.push(input);
+                            });
+                        });
+
+                        inputs.forEach(function (input) {
+                            var target = null;
+
+                            if (input.id) {
+                                target = form.querySelector('label[for="' + cssEscape(input.id) + '"]');
+                            }
+
+                            if (!target && input.parentElement) {
+                                target = input.parentElement.querySelector('label');
+                            }
+
+                            if (!target && input.parentElement) {
+                                target = input.parentElement.querySelector('.box_text');
+                            }
+
+                            if (!target && input.nextElementSibling && input.nextElementSibling.tagName === 'SPAN') {
+                                target = input.nextElementSibling;
+                            }
+
+                            if (target) {
+                                target.textContent = optionLabel;
+                            }
+                        });
+
+                        var optionSlug = slugify(optionKey);
+                        var buttonTargets = form.querySelectorAll('[data-question-option-key="' + questionSlug + '"][data-question-option-value="' + optionSlug + '"]');
+                        buttonTargets.forEach(function (node) {
+                            node.textContent = optionLabel;
+                        });
+                    });
+                });
+
+                var dependencyScript = form.querySelector('.js-questionnaire-dependencies');
+                if (dependencyScript) {
+                    var dependencies = parseJSON(dependencyScript);
+                    if (dependencies) {
+                        form.dataset.questionnaireDependencies = JSON.stringify(dependencies);
+                    }
+                }
+            });
+        })();
+    </script>
 </perch:form>
 <style>
     .custom_btn.active {

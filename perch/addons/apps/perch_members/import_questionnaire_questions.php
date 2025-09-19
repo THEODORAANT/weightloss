@@ -26,7 +26,10 @@ foreach ($data['reorder'] as $key => $q) {
         'questionKey'       => $key,
         'label'             => $q['label'],
         'type'              => $q['type'],
+        'fieldName'         => isset($q['name']) ? $q['name'] : $key,
+        'stepSlug'          => isset($q['step']) ? $q['step'] : $key,
         'options'           => isset($q['options']) ? PerchUtil::json_safe_encode($q['options']) : null,
+        'dependencies'      => isset($q['dependencies']) ? PerchUtil::json_safe_encode($q['dependencies']) : null,
         'sort'              => $sort,
     ]);
 }
@@ -39,7 +42,10 @@ foreach ($data['first-order'] as $key => $q) {
         'questionKey'       => $key,
         'label'             => $q['label'],
         'type'              => $q['type'],
+        'fieldName'         => isset($q['name']) ? $q['name'] : $key,
+        'stepSlug'          => isset($q['step']) ? $q['step'] : $key,
         'options'           => isset($q['options']) ? PerchUtil::json_safe_encode($q['options']) : null,
+        'dependencies'      => isset($q['dependencies']) ? PerchUtil::json_safe_encode($q['dependencies']) : null,
         'sort'              => $sort,
     ]);
 }
