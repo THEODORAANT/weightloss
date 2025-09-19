@@ -365,11 +365,71 @@ if (is_array($questionnaire_structure) && PerchUtil::count($questionnaire_struct
     if (is_array($questionnaire_dependencies) && PerchUtil::count($questionnaire_dependencies)) {
         PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($questionnaire_dependencies));
     }
+
+    $grouped_steps = [];
+    $step_sort_index = [];
+    foreach ($questionnaire_structure as $question) {
+        $step = isset($question['step']) && $question['step'] !== '' ? $question['step'] : $question['key'];
+        $question_sort = isset($question['sort']) ? (int)$question['sort'] : PHP_INT_MAX;
+
+        if (!isset($grouped_steps[$step])) {
+            $grouped_steps[$step] = [];
+            $step_sort_index[$step] = $question_sort;
+        } else {
+            if ($question_sort < $step_sort_index[$step]) {
+                $step_sort_index[$step] = $question_sort;
+            }
+        }
+
+        $grouped_steps[$step][] = $question['key'];
+    }
+
+    foreach ($grouped_steps as $step => &$keys) {
+        usort($keys, function ($a, $b) use ($questionnaire_structure) {
+            $definitionA = $questionnaire_structure[$a] ?? null;
+            $definitionB = $questionnaire_structure[$b] ?? null;
+
+            $sortA = is_array($definitionA) && isset($definitionA['sort']) ? (int)$definitionA['sort'] : PHP_INT_MAX;
+            $sortB = is_array($definitionB) && isset($definitionB['sort']) ? (int)$definitionB['sort'] : PHP_INT_MAX;
+
+            if ($sortA === $sortB) {
+                return strcmp((string)$a, (string)$b);
+            }
+
+            return $sortA <=> $sortB;
+        });
+    }
+    unset($keys);
+
+    if (PerchUtil::count($grouped_steps)) {
+        if (PerchUtil::count($step_sort_index)) {
+            asort($step_sort_index, SORT_NUMERIC);
+            $ordered_steps = [];
+            foreach (array_keys($step_sort_index) as $stepKey) {
+                $ordered_steps[$stepKey] = $grouped_steps[$stepKey];
+            }
+            $grouped_steps = $ordered_steps;
+        }
+
+        PerchSystem::set_var('questionnaire_steps_json', PerchUtil::json_safe_encode($grouped_steps));
+        reset($grouped_steps);
+        $first_step = key($grouped_steps);
+        if (!$first_step) {
+            $first_step = 'howold';
+        }
+        $current_step = $_GET['step'] ?? $first_step;
+        PerchSystem::set_var('questionnaire_default_step', $first_step);
+        PerchSystem::set_var('questionnaire_current_step', $current_step);
+    }
 }
 
+$answers = $_SESSION['questionnaire'] ?? [];
 PerchSystem::set_var('previousPage', $back_link);
-PerchSystem::set_var('answers', $_SESSION['questionnaire']);
- PerchSystem::set_vars($_SESSION['questionnaire']);
+PerchSystem::set_var('answers', $answers);
+if (PerchUtil::count($answers)) {
+    PerchSystem::set_var('questionnaire_answers_json', PerchUtil::json_safe_encode($answers));
+}
+ PerchSystem::set_vars($answers);
  perch_form('questionnaire.html');
 ?>
 
