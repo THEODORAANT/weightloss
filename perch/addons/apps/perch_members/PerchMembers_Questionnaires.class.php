@@ -5,22 +5,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     protected $table     = 'questionnaire';
 	protected $pk        = 'id';
 	protected $singular_classname = 'PerchMembers_Questionnaire';
-	public $reorder_questions=[
-	"weight"=>"What is your weight?",
-	"weight2"=>"inches",
-	"weightunit"=>"weight unit",
-	"bmi"=>"BMI",
-	"side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
-	"more_side_effects"=>"Please tell us as much as you can about your side effects",
-	"additional-medication"=>"Have you started taking any additional medication?",
-	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
-	"rate_current_experience"=>"Are you happy with your monthly weight loss?",
-	"no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
-	"chat_with_us"=>"Would you like to chat with someone?",
-	"email_address"=>"Please enter your  email address",
-	 "multiple_answers"=>"Have client alter answers?",
-	 "documents"=>"Member Documents",
-	];
+	public $reorder_questions = [];
 	public $steps=[
     "age"=>"howold",
     "ethnicity"=>"18to74",
@@ -50,371 +35,48 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "GP_email_address"=>"gp_address",
     "Get access to special offers"=>"access_special_offers"
     ];
-    public $reorder_questions_answers = [
-        "weight" => [
-            "label" => "What is your current weight?",
-            "type" => "text",
-            "name" => "weight"
-        ],
-        "weight2" => [
-            "label" => "Weight (lbs hidden input)",
-            "type" => "hidden",
-            "name" => "weight2"
-        ],
-        "weightunit" => [
-            "label" => "Weight Unit (kg or st/lbs)",
-            "type" => "radio",
-            "name" => "weightradio-unit",
-            "options" => [
-                "kg" => "kg",
-                "st-lbs" => "st/lbs"
-            ]
-        ],
-        "side_effects" => [
-            "label" => "Have you experienced any side effects whilst taking the medication?",
-            "type" => "button",
-            "name" => "more_side_effects",
-            "options" => [
-                "yes" => "Yes",
-                "no" => "No"
-            ]
-        ],
-        "more_side_effects" => [
-            "label" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.",
-            "type" => "textarea",
-            "name" => "more_side_effects"
-        ],
-        "additional_medication" => [
-            "label" => "Have you started taking any additional medication?",
-            "type" => "button",
-            "name" => "additional-medication",
-            "options" => [
-                "yes" => "Yes",
-                "no" => "No"
-            ]
-        ],
-        "list_additional_medication" => [
-            "label" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.",
-            "type" => "textarea",
-            "name" => "list_additional_medication"
-        ],
-        "rate_current_experience" => [
-            "label" => "Are you happy with your monthly weight loss?",
-            "type" => "button",
-            "name" => "rate_current_experience",
-            "options" => [
-                "yes" => "Yes",
-                "no" => "No"
-            ]
-        ],
-        "no_happy_reasons" => [
-            "label" => "Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
-            "type" => "textarea",
-            "name" => "no_happy_reasons"
-        ],
-        "chat_with_us" => [
-            "label" => "Would you like to chat with someone?",
-            "type" => "button",
-            "name" => "chat_with_us",
-            "options" => [
-                "yes" => "Yes",
-                "no" => "No"
-            ]
-        ],
-        "email_address" => [
-            "label" => "Please enter your  email address",
-            "type" => "text",
-            "name" => "email_address"
-        ]
-    ];
+    public $reorder_questions_answers = [];
 
-    public $questions_and_answers  = [
-                                       "consultation" => [
-                                           "label" => "agree-consultation",
-                                           "type" => "text",
-                                           "name" => "consultation"
-                                       ],
-                                       "age" => [
-                                           "label" => "How old are you?",
-                                           "type" => "radio",
-                                           "name" => "age",
-                                           "options" => [
-                                               "under18" => "Under 18",
-                                               "18to74" => "18 to 74",
-                                               "75over" => "75 or over"
-                                           ]
-                                       ],
-                                       "ethnicity" => [
-                                           "label" => "Which ethnicity are you?",
-                                           "type" => "radio",
-                                           "name" => "ethnicity",
-                                           "options" => [
-                                               "asian" => "Asian or Asian British",
-                                               "black" => "Black (Caribbean, African)",
-                                               "mixed" => "Mixed ethnicities",
-                                               "other" => "Other ethnic group",
-                                               "white" => "White"
-                                           ]
-                                       ],
-                                       "ethnicity-more" => [
-                                           "label" => "Please tell us which ethnicities",
-                                           "type" => "text",
-                                           "name" => "ethnicity-more"
-                                       ],
-                                       "gender" => [
-                                           "label" => "What sex were you assigned at birth?",
-                                           "type" => "radio",
-                                           "name" => "gender",
-                                           "options" => [
-                                               "male" => "Male",
-                                               "female" => "Female"
-                                           ]
-                                       ],
-                                       "pregnancy" => [
-                                           "label" => "Are you currently pregnant, trying to get pregnant, or breastfeeding?",
-                                           "type" => "radio",
-                                           "name" => "pregnancy",
-                                           "options" => [
-                                               "yes" => "Yes",
-                                               "no" => "No"
-                                           ]
-                                       ],
-                                       "weight" => [
-                                           "label" => "What is your weight?",
-                                           "type" => "text",
-                                           "name" => "weight"
-                                       ],
-                                       "weightunit" => [
-                                           "label" => "weight unit",
-                                           "type" => "radio",
-                                           "name" => "weightradio-unit",
-                                           "options" => [
-                                               "kg" => "kg",
-                                               "st" => "st/lbs"
-                                           ]
-                                       ],
-                                       "height" => [
-                                           "label" => "What is your height?",
-                                           "type" => "text",
-                                           "name" => "height"
-                                       ],
-                                       "heightunit" => [
-                                           "label" => "height unit",
-                                           "type" => "radio",
-                                           "name" => "heightunit-radio",
-                                           "options" => [
-                                               "cm" => "cm",
-                                               "ft-in" => "ft/in"
-                                           ]
-                                       ],
-                                       "diabetes" => [
-                                           "label" => "Have you been diagnosed with diabetes?",
-                                           "type" => "radio",
-                                           "name" => "diabetes",
-                                           "options" => [
-                                               "medicated" => "I have diabetes and take medication for it",
-                                               "diet" => "I have diabetes and it's diet-controlled",
-                                               "family-history" => "No, but there is history of diabetes in my family",
-                                               "pre-diabetes" => "I have pre-diabetes",
-                                               "none" => "I don't have diabetes"
-                                           ]
-                                       ],
-                                       "conditions" => [
-                                           "label" => "Do any of the following statements apply to you?",
-                                           "type" => "checkbox",
-                                           "name" => "conditions[]",
-                                           "options" => [
-                                               "malabsorption" => "I have chronic malabsorption syndrome (problems absorbing food)",
-                                               "cholestasis" => "I have cholestasis",
-                                               "cancer" => "I’m currently being treated for cancer",
-                                               "retinopathy" => "I have diabetic retinopathy",
-                                               "heart-failure" => "I have severe heart failure",
-                                               "thyroid-cancer" => "I have a family history of thyroid cancer and/or I’ve had thyroid cancer",
-                                               "men2" => "I have Multiple endocrine neoplasia type 2 (MEN2)",
-                                               "pancreatitis" => "I have a history of pancreatitis",
-                                               "eating-disorder" => "I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder",
-                                               "thyroid-op" => "I have had surgery or an operation to my thyroid",
-                                               "bariatric-op" => "I have had a bariatric operation such as gastric band or sleeve surgery",
-                                               "none" => "None of these statements apply to me"
-                                           ]
-                                       ],
-                                       "bariatricoperation" => [
-                                           "label" => "Was your bariatric operation in the last 6 months?",
-                                           "type" => "radio",
-                                           "name" => "bariatricoperation",
-                                           "options" => [
-                                               "yes" => "Yes",
-                                               "no" => "No"
-                                           ]
-                                       ],
-                                       "more_pancreatitis" => [
-                                           "label" => "Please tell us more about your health condition and how you manage it.",
-                                           "type" => "text",
-                                           "name" => "more_pancreatitis"
-                                       ],
-                                       "thyroidoperation" => [
-                                           "label" => "Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
-                                           "type" => "text",
-                                           "name" => "thyroidoperation"
-                                       ],
-                                       "conditions2" => [
-                                           "label" => "Do any of the following statements apply to you?",
-                                           "type" => "checkbox",
-                                           "name" => "conditions2[]",
-                                           "options" => [
-                                               "mentalhealth" => "I have been diagnosed with a mental health condition such as depression or anxiety",
-                                               "social-anxiety" => "My weight makes me anxious in social situations",
-                                               "joint-pain" => "I have joint pains and/or aches",
-                                               "osteoarthritis" => "I have osteoarthritis",
-                                               "gord" => "I have GORD and/or indigestion",
-                                               "cardio" => "I have a heart/cardiovascular problem",
-                                               "bp" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
-                                               "cholesterol" => "I’ve been diagnosed with, or have a family history of, high cholesterol",
-                                               "fatty-liver" => "I have fatty liver disease",
-                                               "apnoea" => "I have sleep apnoea",
-                                               "asthma" => "I have asthma or COPD",
-                                               "ed" => "I have erectile dysfunction",
-                                               "low-t" => "I have low testosterone",
-                                               "menopause" => "I have menopausal symptoms",
-                                               "pcos" => "I have polycystic ovary syndrome (PCOS)",
-                                               "none" => "None of these statements apply to me"
-                                           ]
-                                       ],
-                                       "medical_conditions" => [
-                                           "label" => "Do you have any other medical conditions?",
-                                           "type" => "radio",
-                                           "name" => "medical_conditions",
-                                           "options" => [
-                                               "yes" => "Yes",
-                                               "no" => "No"
-                                           ]
-                                       ],
-                                       "medications" => [
-                                           "label" => "Have you ever taken any of the following medications to help you lose weight?",
-                                           "type" => "checkbox",
-                                           "name" => "medications[]",
-                                           "options" => [
-                                               "wegovy" => "Wegovy",
-                                               "ozempic" => "Ozempic",
-                                               "saxenda" => "Saxenda",
-                                               "rybelsus" => "Rybelsus",
-                                               "mounjaro" => "Mounjaro",
-                                               "alli" => "Alli",
-                                               "mysimba" => "Mysimba",
-                                               "other" => "Other",
-                                               "never" => "I have never taken medication to lose weight"
-                                           ]
-                                       ],
-                                       "weight-wegovy" => [
-                                           "label" => "What was your weight in kg before starting the weight loss medication?",
-                                           "type" => "text",
-                                           "name" => "weight-wegovy"
-                                       ],
-                                       "dose-wegovy" => [
-                                           "label" => "When was your last dose of the weight loss medication?",
-                                           "type" => "radio",
-                                           "name" => "dose-wegovy",
-                                           "options" => [
-                                               "lt4" => "Less than 4 weeks ago",
-                                               "4-6" => "4–6 weeks ago",
-                                               "gt6" => "More than 6 weeks ago"
-                                           ]
-                                       ],
-                                       "recently-dose-wegovy" => [
-                                           "label" => "What dose of the weight loss medication were you prescribed most recently?",
-                                           "type" => "radio",
-                                           "name" => "recently-dose-wegovy",
-                                           "options" => [
-                                               "0.25" => "0.25mg/2.5mg",
-                                               "0.5" => "0.5mg/5mg",
-                                               "1.0" => "1mg/7.5mg",
-                                               "1.7" => "1.7mg/12.5mg",
-                                               "2.4" => "2.4mg/15mg",
-                                               "other" => "Other"
-                                           ]
-                                       ],
-                                       "continue-dose-wegovy" => [
-                                           "label" => "What dose would you like to continue with?",
-                                           "type" => "radio",
-                                           "name" => "continue-dose-wegovy",
-                                           "options" => [
-                                               "increase" => "Increase my dose",
-                                               "keep" => "Keep my dose",
-                                               "decrease" => "Decrease my dose",
-                                               "stop" => "I don't want to continue with this medication"
-                                           ]
-                                       ],
-                                       "effects_with_wegovy" => [
-                                           "label" => "Have you experienced any side effects with the weight loss medication?",
-                                           "type" => "radio",
-                                           "name" => "effects_with_wegovy",
-                                           "options" => [
-                                               "yes" => "Yes",
-                                               "no" => "No"
-                                           ]
-                                       ],
-                                       "wegovy_side_effects" => [
-                                           "label" => "Please tell us as much as you can about your side effects",
-                                           "type" => "text",
-                                           "name" => "wegovy_side_effects"
-                                       ],
-                                       "medication_allergies" => [
-                                           "label" => "Do you currently take any other medication or have any allergies?",
-                                           "type" => "checkbox",
-                                           "name" => "medication_allergies[]",
-                                           "options" => [
-                                               "levothyroxine" => "I’m on levothyroxine",
-                                               "warfarin" => "I’m on warfarin",
-                                               "multiple" => "Other / I take more than one prescription medication",
-                                               "none" => "I don’t take any medication",
-                                               "allergy" => "I have allergies"
-                                           ]
-                                       ],
-                                       "email_address" => [
-                                           "label" => "Please enter your GP's email address",
-                                           "type" => "text",
-                                           "name" => "email_address"
-                                       ]
-                                   ];
+    public $questions_and_answers = [];
 
 
-		public $questions=[
-	"consultation"=>"agree-consultation",
-    "age"=>"How old are you?",
-    "ethnicity"=>"Which ethnicity are you?",
-    "ethnicity-more"=>"Please tell us which ethnicities",
-    "gender"=>"What sex were you assigned at birth?",
-    "pregnancy"=>"Are you currently pregnant, trying to get pregnant, or breastfeeding?",
-    "weight"=>"What is your weight?",
-      //"weight2"=>"",
-    "weightunit"=>"weight unit",
-    "height"=>"What is your height?",
-    // "height2"=>"",
-    "heightunit"=>"height unit",
-    "diabetes"=>"Have you been diagnosed with diabetes?",
-    "conditions"=>"Do any of the following statements apply to you?",
-    "bariatricoperation"=>"Was your bariatric operation in the last 6 months? ",
-    "more_pancreatitis"=>"Please tell us more about your mental health condition and how you manage it",
-    "thyroidoperation"=>"Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
-    "more_conditions"=>"Please tell us more about your mental health condition and how you manage it",
-    "conditions2"=>"Do any of the following statements apply to you?",
-    "medical_conditions"=>"Do you have any other medical conditions?",
-    "medications"=>"Have you ever taken any of the following medications to help you lose weight?",
-    "weight-wegovy"=>"What was your weight in kg before starting the weight loss medication?",
-    "dose-wegovy"=>"When was your last dose of the weight loss medication?",
-    "recently-dose-wegovy"=>"What dose of the weight loss medication were you prescribed most recently?",
-    "continue-dose-wegovy"=>"If you want to continue with the weight loss medication, what dose would you like to continue with?",
-    "effects_with_wegovy"=>"Have you experienced any side effects with the weight loss medication?",
-    "medication_allergies"=>"Do you currently take any other medication or have any allergies?",
-    "other_medical_conditions"=>"Please list any other medical conditions you have. ",
-    "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
-    "gp_informed"=>"Would you like your GP to be informed of this consultation?",
-    "email_address"=>"Please enter your GP's email address",
-    "Get access to special offers"=>"email_address",
-    "multiple_answers"=>"Have client alter answers?",
-    "documents"=>"Member Documents",
-    "bmi"=>"BMI",
-    ];
+                public $questions = [];
+
+    public function __construct($api=false)
+    {
+        parent::__construct($api);
+
+        $Questions = new PerchMembers_QuestionnaireQuestions($api);
+
+        $rows = $Questions->get_for_type('reorder');
+        if ($rows) {
+            foreach($rows as $row) {
+                $opts = $row['options'] ? PerchUtil::json_safe_decode($row['options'], true) : [];
+                $this->reorder_questions[$row['questionKey']] = $row['label'];
+                $this->reorder_questions_answers[$row['questionKey']] = [
+                    'label' => $row['label'],
+                    'type'  => $row['type'],
+                    'name'  => $row['questionKey'],
+                    'options' => $opts
+                ];
+            }
+        }
+
+        $rows = $Questions->get_for_type('first-order');
+        if ($rows) {
+            foreach($rows as $row) {
+                $opts = $row['options'] ? PerchUtil::json_safe_decode($row['options'], true) : [];
+                $this->questions[$row['questionKey']] = $row['label'];
+                $this->questions_and_answers[$row['questionKey']] = [
+                    'label' => $row['label'],
+                    'type'  => $row['type'],
+                    'name'  => $row['questionKey'],
+                    'options' => $opts
+                ];
+            }
+        }
+    }
+
 public $doses = [
     '25mg' => '0.25mg/2.5mg',
     '05mg' => '0.5mg/5mg',
