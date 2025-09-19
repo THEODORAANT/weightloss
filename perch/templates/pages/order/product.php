@@ -33,7 +33,7 @@
             <a class="Mounjaro_button" href="../addons.html"><h2>Continue with <span id="product-name">Mounjaro</span> <i class="fa-solid fa-arrow-right"></i> </h2></a>
             <h2>What to expect with <span id="product-name">Mounjaro</span></h2>
             <button id="browse-plans">Browse all plans</button>
-             <?php echo "variants";
+             <?php
              perch_shop_product('mounjaro-mounjaro',[
                                                        'template' => 'products/product_view.html',
 

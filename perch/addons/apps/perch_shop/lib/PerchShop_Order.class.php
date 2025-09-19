@@ -87,10 +87,16 @@ class PerchShop_Order extends PerchShop_Base
 	public function take_payment($method='purchase', $opts=array())
 	{
 	//print_r($this->orderGateway());
-		$Gateway = PerchShop_Gateways::get($this->orderGateway());
-		$result  = $Gateway->take_payment($this, $opts);
 
-		return false;
+		 if ((float)$this->orderTotal() <= 0) {
+                                $this->finalize_as_paid('pending');
+
+                                       echo "<script>window.location.href = '" . $opts['return_url'] . "?pending=1';</script>";
+
+                                return true;
+                        }
+                        $Gateway = PerchShop_Gateways::get($this->orderGateway());
+                        return $Gateway->take_payment($this, $opts);
 	}
 
 	public function complete_payment($args, $gateway_opts=array())

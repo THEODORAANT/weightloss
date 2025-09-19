@@ -45,7 +45,24 @@ function perch_shop_package_remove_item($itemID)
     }
     return false;
 }
+function perch_shop_package_remove($packageID)
+{
+    $API   = new PerchAPI(1.0, 'perch_shop');
+      $Packages = new PerchShop_Packages($API);
+      $Package  = $Packages->find_by_uuid($packageID);
 
+    $Items = new PerchShop_PackageItems($API);
+    $Itemasll  = $Items->get_for_package($packageID);
+    					foreach($Itemasll as $Item){
+
+
+    if ($Item) {
+        return $Item->delete();
+    }
+    }
+     $Package->delete();
+    return false;
+}
 function perch_shop_update_package_status($status)
 {
     if (session_status() === PHP_SESSION_NONE) {

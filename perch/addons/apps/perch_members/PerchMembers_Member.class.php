@@ -246,8 +246,8 @@ public function sendtoadmin_docs_email($memberID,$adminemail)
              	$properties = PerchUtil::json_safe_decode($this->memberProperties(), true);
 
          $data["FirstName"]=$properties["first_name"];
-        perch_emailoctopus_update_contact($data);
-      /*  $Email = $API->get('Email');
+      //  perch_emailoctopus_update_contact($data);
+        $Email = $API->get('Email');
         $Email->set_template('members/emails/reset_password.html');
         $Email->set_bulk($this->to_array());
         $Email->set('password', $clear_pwd);
@@ -255,7 +255,7 @@ public function sendtoadmin_docs_email($memberID,$adminemail)
         $Email->senderName(PERCH_EMAIL_FROM_NAME);
         $Email->senderEmail(PERCH_EMAIL_FROM);
         $Email->recipientEmail($this->memberEmail());
-        $Email->send();*/
+        $Email->send();
     }
 
     protected function _generate_password($length=8)

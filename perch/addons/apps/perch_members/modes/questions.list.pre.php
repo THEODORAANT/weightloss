@@ -46,4 +46,6 @@
             $question_groups[$type][] = $Question;
         }
     }
+
+    $questions = $Questions->all();
 ?>

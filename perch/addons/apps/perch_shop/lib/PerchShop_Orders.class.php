@@ -209,11 +209,11 @@ $sort_val = null;
             $selectsql = 'SELECT';
         }
 
-        $selectsql .=  '  o.*, c.*, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
-         $fromsql =  '      FROM ' . $this->table .' o, '.PERCH_DB_PREFIX.'shop_customers c ';
+        $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
+         $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
                 $wheresql = ' WHERE o.customerID=c.customerID
-                             	AND o.orderDeleted IS NULL
-                             	AND o.orderStatus IN ("paid")';
+                                AND o.orderDeleted IS NULL
+                                AND o.orderStatus IN ("paid")';
                 	if($details["sendtopharmacy"]!=""){
                 	if($details["sendtopharmacy"]=="yes"){
                 	 // $selectsql .= ' ,p.* ';
@@ -271,11 +271,14 @@ $sql= $selectsql. $fromsql.$wheresql;
             $sql = 'SELECT';
         }
 
-        $sql .= ' o.*, c.*, CONCAT(customerFirstName, " ", customerLastName) AS customerName
-                FROM ' . $this->table .' o, '.PERCH_DB_PREFIX.'shop_customers c
-                WHERE o.customerID=c.customerID
-                	AND o.orderDeleted IS NULL 
-                	AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status).')';
+        $sql .= ' o.*, c.*, p.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName
+                FROM ' . $this->table .' o
+                JOIN '.PERCH_DB_PREFIX.'shop_customers c ON o.customerID=c.customerID
+                LEFT JOIN '.PERCH_DB_PREFIX.'shop_package_items pkg ON pkg.orderID=o.orderID
+                LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages p  ON pkg.packageID = p.uuid OR (p.billing_type = "prepaid" AND p.orderID = o.orderID)
+                WHERE o.orderDeleted IS NULL
+                        AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status).')';
+
 
 		if ($sort_val) {
             $sql .= ' ORDER BY '.$sort_val.' '.$sort_dir;
@@ -297,7 +300,27 @@ $sql= $selectsql. $fromsql.$wheresql;
 
         return $this->return_instances($results);
 	}
+    public function send_monthly_notification( $Customer,$message)
+    {
 
+     	$Members = new PerchMembers_Members($this->api);
+               	$Member = $Members->find($Customer->memberID());
+          	$properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+if(isset( $data["FirstName"])){  $data["FirstName"]=$properties["first_name"];}  else{$data["FirstName"]="client";}
+
+          $Email = $this->api->get('Email');
+                  $Email->set_template('shop/emails/package_reminder.html', 'shop');
+                $Email->set('first_name', $data["FirstName"]);
+                 $Email->set('message',$message);
+               $Email->subject('Upcoming Payment Reminder');
+              $Email->senderName(PERCH_EMAIL_FROM_NAME);
+        	        $Email->senderEmail(PERCH_EMAIL_FROM);
+
+               $Email->recipientEmail($Customer->customerEmail());
+               //$Email->body($message);
+
+               return $Email->send();
+    }
 	public function get_dashboard_widget()
 	{
 		$Statuses = new PerchShop_OrderStatuses($this->api);

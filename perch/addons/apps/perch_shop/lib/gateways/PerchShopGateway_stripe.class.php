@@ -52,28 +52,34 @@ class PerchShopGateway_stripe extends PerchShopGateway_default
 		return false;
 	}
 
-	public function get_exchange_rate($Order)
-	{
-		$this->init_native_stripe_api();
-		if (strpos($Order->orderGatewayRef(), 'pi') === 0) {
-           // It starts with 'pi'
-             return null;
+        public function get_exchange_rate($Order)
+        {
+                $this->init_native_stripe_api();
 
-        }else{
-        		$Charge = \Stripe\Charge::retrieve($Order->orderGatewayRef());
+                $gateway_ref = $Order->orderGatewayRef();
 
-        		if ($Charge) {
-        			$BalanceTransaction = \Stripe\BalanceTransaction::retrieve($Charge->balance_transaction);
+                if (!is_string($gateway_ref) || $gateway_ref === '') {
+                        return null;
+                }
 
-        			$rate = ((float)$Charge->amount / (float)$BalanceTransaction->amount);
-        			return $rate;
-        		}
+                if (strpos($gateway_ref, 'pi') === 0) {
+                        // Payment Intents don't support exchange rate retrieval via charges.
+                        return null;
+                }
+
+                $Charge = \Stripe\Charge::retrieve($gateway_ref);
+
+                if ($Charge && isset($Charge->balance_transaction)) {
+                        $BalanceTransaction = \Stripe\BalanceTransaction::retrieve($Charge->balance_transaction);
+
+                        if ($BalanceTransaction && (float)$BalanceTransaction->amount !== 0.0) {
+                                $rate = ((float)$Charge->amount / (float)$BalanceTransaction->amount);
+                                return $rate;
+                        }
+                }
+
+                return null;
         }
-
-
-
-		return null;
-	}
 
 	private function init_native_stripe_api()
 	{
@@ -204,6 +210,9 @@ public function action_payment_callback($Order, $args, $opts)
 	if (isset($_GET['session_id'])) {
         $session_id = $_GET['session_id'];
         $config = PerchShop_Config::get('gateways', $this->slug);
+        if($Order->customerID()==191){
+        	$config['test_mode']=true;
+        	}
        	$stripe_secret_key = $this->get_api_key($config);
 
         // Make cURL request to retrieve session
@@ -249,10 +258,12 @@ public function action_payment_callback($Order, $args, $opts)
                                                                                                                  //  $Package->update(['customerID' => $Customer->id()]);
                                                                                                            }
                                                }
+
                                                if(isset($_COOKIE['draft_package_item'])){
                                                   $PackageItems = new PerchShop_PackageItems($this->api);
 $PackageItem  = $PackageItems->find($_COOKIE['draft_package_item']);
- $PackageItem->set_status_paid($Order->id());
+ $PackageItem->set_status_paid($Order->orderID());
+
                                                }
                            return true;
 

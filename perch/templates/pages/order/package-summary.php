@@ -18,7 +18,11 @@ if (!isset($_SESSION['perch_shop_package_id']) && isset($_GET['package'])) {
 } //include('../perch/runtime.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $quantities = perch_post('qty');
+ if (perch_post('action') === 'update') {
+ perch_shop_package_remove( $_SESSION['perch_shop_package_id']);
+      PerchUtil::redirect('/order/package-builder');
+ }
+   /* $quantities = perch_post('qty');
     $removals = perch_post('remove');
     if (is_array($quantities)) {
         foreach ($quantities as $itemID => $qty) {
@@ -31,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 perch_shop_package_remove_item($itemID);
             }
         }
-    }
+    }*/
     if (perch_post('action') === 'checkout') {
         try {
             $package = perch_shop_update_package_status("confirmed");
@@ -63,11 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
 ?>
-  <section class="shippin_section">
-    <div class="container all_content mt-4">
-        <h2 class="text-center fw-bolder">Package Summary</h2>
+    <section class="main_order_summary">
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Left Section -->
+                <div class="col-md-7">
 
-        <div class="plans mt-4">
+                        <h2 class="fw-bold">Order summary</h2>
+
+                    <div class="main_page">
+                       <div class="your_order">
 <form method="post">
     <?php
        PerchSystem::set_var('monthly_checkout',$_SESSION['perch_shop_package_monthly_checkout']);
@@ -76,15 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
     if (isset( $_SESSION['perch_shop_package_monthly_checkout']) &&  $_SESSION['perch_shop_package_monthly_checkout']){
     ?>
-     <button type="submit" name="action" value="checkout">Proceed to checkout</button>
+     <button type="submit" class="add-btn" name="action" value="checkout">Proceed to checkout</button>
 
  <?}else{?>
 
-    <button type="submit" name="action" value="update">Update package</button>
-    <button type="submit" name="action" value="checkout">Proceed to checkout</button>
+    <button class="add-btn" type="submit" name="action" value="update">Reset package</button>
+    <button  class="add-btn" type="submit" name="action" value="checkout">Proceed to checkout</button>
     <?php  }?>
 </form>
-
+ </div>
+    </div>
+   </div>
         </div>
     </div>
 </section>
