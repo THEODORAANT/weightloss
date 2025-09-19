@@ -590,23 +590,28 @@ class PerchAdminListing
 		return $this->HTML->encode($this->Lang->get($val), $escape_quotes);
 	}
 
-	private function get_value($def, $row, $use_prop=true)
-	{
-		if (is_bool($def)) {
-			return $def;
-		}
+        private function get_value($def, $row, $use_prop=true)
+        {
+                if (is_bool($def)) {
+                        return $def;
+                }
 
-		if (is_callable($def)) {
-			$func = $def;
-			return $func($row, $this->HTML, $this->Lang);
+                if ($use_prop && is_string($def) && strpos($def, '::') === false && strpos($def, '->') === false) {
+                        $prop = $def;
+                        return $this->HTML->encode($row->$prop());
+                }
 
-		} elseif ($use_prop) {
-			$prop = (string)$def;
-			return $this->HTML->encode($row->$prop());	
-		} else {
-			return $this->HTML->encode((string)$def);
-		}
-	}
+                if (is_callable($def)) {
+                        $func = $def;
+                        return $func($row, $this->HTML, $this->Lang);
+
+                } elseif ($use_prop) {
+                        $prop = (string)$def;
+                        return $this->HTML->encode($row->$prop());
+                } else {
+                        return $this->HTML->encode((string)$def);
+                }
+        }
 
 	private function format_value($def, $value)
 	{
