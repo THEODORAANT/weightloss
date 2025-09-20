@@ -10,6 +10,20 @@
 
     if (isset($message)) echo $message;
 
+    $Smartbar = new PerchSmartbar($CurrentUser, $HTML, $Lang);
+    $Smartbar->add_item([
+        'active' => true,
+        'title'  => $Lang->get('Questions'),
+        'link'   => $API->app_nav().'/questionnaire_questions/',
+    ]);
+    $Smartbar->add_item([
+        'active' => false,
+        'title'  => $Lang->get('Flowchart'),
+        'link'   => $API->app_nav().'/questionnaire_questions/flowchart/',
+    ]);
+
+    echo $Smartbar->render();
+
     $Listing = new PerchAdminListing($CurrentUser, $HTML, $Lang, $Paging);
     $Listing->add_col([
             'title'     => 'Question',
