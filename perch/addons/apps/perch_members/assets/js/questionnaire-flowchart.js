@@ -118,25 +118,42 @@
 
         Object.keys(data.questions).forEach(function (key) {
             var question = data.questions[key];
-            if (!question || !question.dependencies) return;
+            if (!question) return;
+
             var fromEl = nodes[key];
             if (!fromEl) return;
 
-            question.dependencies.forEach(function (dependency) {
-                if (!dependency) return;
+            var connections = [];
+            if (Array.isArray(question.connections) && question.connections.length) {
+                connections = question.connections;
+            } else if (Array.isArray(question.dependencies) && question.dependencies.length) {
+                connections = question.dependencies;
+            }
+
+            connections.forEach(function (connection) {
+                if (!connection) return;
+
                 var target = null;
-                if (dependency.question && nodes[dependency.question]) {
-                    target = nodes[dependency.question];
-                } else if (dependency.step && steps[dependency.step]) {
-                    target = steps[dependency.step];
+                if (connection.question && nodes[connection.question]) {
+                    target = nodes[connection.question];
+                } else if (connection.step && steps[connection.step]) {
+                    target = steps[connection.step];
                 }
 
                 if (!target || target === fromEl) {
                     return;
                 }
 
-                var valuesLabel = Array.isArray(dependency.values) ? dependency.values.join(', ') : '';
-                drawPath(svg, canvas, fromEl, target, valuesLabel);
+                var label = '';
+                if (typeof connection.label === 'string' && connection.label.length) {
+                    label = connection.label;
+                } else if (Array.isArray(connection.displayValues) && connection.displayValues.length) {
+                    label = connection.displayValues.join(', ');
+                } else if (Array.isArray(connection.values) && connection.values.length) {
+                    label = connection.values.join(', ');
+                }
+
+                drawPath(svg, canvas, fromEl, target, label);
             });
         });
     }

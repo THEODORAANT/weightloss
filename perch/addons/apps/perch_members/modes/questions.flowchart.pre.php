@@ -1,4 +1,99 @@
 <?php
+    if (!function_exists('perch_members_flowchart_normalize_option_label')) {
+        function perch_members_flowchart_normalize_option_label($value, $option)
+        {
+            if (is_array($option)) {
+                if (isset($option['label'])) {
+                    $label = $option['label'];
+                } else {
+                    $parts = [];
+                    foreach ($option as $part) {
+                        if (is_scalar($part)) {
+                            $parts[] = (string)$part;
+                        }
+                    }
+                    $label = implode(' ', $parts);
+                }
+            } else {
+                $label = $option;
+            }
+
+            $label = trim((string)$label);
+
+            if ($label === '') {
+                $label = (string)$value;
+            }
+
+            return $label;
+        }
+    }
+
+    if (!function_exists('perch_members_flowchart_option_labels')) {
+        function perch_members_flowchart_option_labels($options)
+        {
+            $map = [];
+
+            if (!is_array($options) || !PerchUtil::count($options)) {
+                return $map;
+            }
+
+            foreach ($options as $value => $option) {
+                $candidates = [];
+
+                if (is_string($value) || is_numeric($value)) {
+                    $candidates[] = (string)$value;
+                }
+
+                if (is_array($option) && array_key_exists('value', $option)) {
+                    $candidate_value = $option['value'];
+                    if ($candidate_value !== null) {
+                        $candidates[] = (string)$candidate_value;
+                    }
+                }
+
+                if (!count($candidates)) {
+                    if (is_scalar($option)) {
+                        $candidates[] = (string)$option;
+                    }
+                }
+
+                $label = perch_members_flowchart_normalize_option_label($value, $option);
+
+                foreach ($candidates as $candidate) {
+                    $map[(string)$candidate] = $label;
+                }
+            }
+
+            return $map;
+        }
+    }
+
+    if (!function_exists('perch_members_flowchart_follow_label')) {
+        function perch_members_flowchart_follow_label($follow_step, $Lang)
+        {
+            $display_values = [];
+            if (isset($follow_step['displayValues']) && is_array($follow_step['displayValues']) && PerchUtil::count($follow_step['displayValues'])) {
+                $display_values = $follow_step['displayValues'];
+            }
+
+            $type = isset($follow_step['type']) ? $follow_step['type'] : 'dependency';
+
+            if (PerchUtil::count($display_values)) {
+                $label = implode(', ', $display_values);
+                if ($type === 'order') {
+                    $label .= ' ('.$Lang->get('Default order').')';
+                }
+                return $label;
+            }
+
+            if ($type === 'order') {
+                return $Lang->get('Default order');
+            }
+
+            return $Lang->get('Any value');
+        }
+    }
+
     $message = false;
     $Questions = new PerchMembers_QuestionnaireQuestions($API);
 
@@ -99,6 +194,7 @@
                 'sort'         => (int)$Question->sort(),
                 'dependencies' => $dependencies,
                 'followSteps'  => [],
+                'connections'  => [],
                 'options'      => $Question->option_list(),
                 'optionSummary'=> $Question->option_summary(),
             ];
@@ -232,11 +328,44 @@
                 $dependencies = isset($question['dependencies']) && is_array($question['dependencies']) ? $question['dependencies'] : [];
                 $follow_steps = [];
 
+                $option_labels = [];
+                if (isset($question['options'])) {
+                    $option_labels = perch_members_flowchart_option_labels($question['options']);
+                }
+
+                $covered_values = [];
+                $covers_all_values = false;
+
                 foreach ($dependencies as &$dependency) {
                     $resolved_step = null;
                     $resolved_order = null;
                     $target_question_label = null;
                     $target_question_sort = null;
+
+                    $dependency_values = isset($dependency['values']) && is_array($dependency['values']) ? $dependency['values'] : [];
+                    $normalized_values = [];
+                    $display_values = [];
+
+                    if (PerchUtil::count($dependency_values)) {
+                        foreach ($dependency_values as $value) {
+                            if ($value === null) continue;
+                            $value_key = (string)$value;
+                            if (!in_array($value_key, $normalized_values, true)) {
+                                $normalized_values[] = $value_key;
+                            }
+                            $covered_values[$value_key] = true;
+                            if (isset($option_labels[$value_key])) {
+                                $display_values[] = $option_labels[$value_key];
+                            } else {
+                                $display_values[] = $value_key;
+                            }
+                        }
+                    } else {
+                        $covers_all_values = true;
+                    }
+
+                    $dependency['values'] = $normalized_values;
+                    $dependency['valueLabels'] = $display_values;
 
                     $target_question_key = isset($dependency['question']) ? $dependency['question'] : null;
                     if ($target_question_key && isset($data['questions'][$target_question_key])) {
@@ -261,8 +390,9 @@
                     $dependency['targetQuestionLabel'] = $target_question_label;
                     $dependency['targetQuestionSort'] = $target_question_sort;
 
-                    $follow_steps[] = [
-                        'values'        => isset($dependency['values']) ? $dependency['values'] : [],
+                    $follow_step = [
+                        'values'        => $normalized_values,
+                        'displayValues' => $display_values,
                         'step'          => $resolved_step,
                         'order'         => $resolved_order,
                         'question'      => $target_question_key,
@@ -270,6 +400,8 @@
                         'type'          => 'dependency',
                         'index'         => isset($dependency['index']) ? $dependency['index'] : null,
                     ];
+                    $follow_step['label'] = perch_members_flowchart_follow_label($follow_step, $Lang);
+                    $follow_steps[] = $follow_step;
                 }
                 unset($dependency);
 
@@ -280,8 +412,25 @@
                     $default_question_label = ($default_question_key && isset($data['questions'][$default_question_key]['label'])) ? $data['questions'][$default_question_key]['label'] : null;
                     $default_order = ($default_step && isset($step_order_map[$default_step])) ? $step_order_map[$default_step] : null;
 
-                    $follow_steps[] = [
-                        'values'        => [],
+                    $default_values = [];
+                    $default_display_values = [];
+
+                    if (!$covers_all_values && PerchUtil::count($option_labels)) {
+                        foreach ($option_labels as $value_key => $label_text) {
+                            if (!isset($covered_values[$value_key])) {
+                                if (!in_array($value_key, $default_values, true)) {
+                                    $default_values[] = $value_key;
+                                }
+                                if (!in_array($label_text, $default_display_values, true)) {
+                                    $default_display_values[] = $label_text;
+                                }
+                            }
+                        }
+                    }
+
+                    $follow_step = [
+                        'values'        => $default_values,
+                        'displayValues' => $default_display_values,
                         'step'          => $default_step,
                         'order'         => $default_order,
                         'question'      => $default_question_key,
@@ -289,6 +438,8 @@
                         'type'          => 'order',
                         'index'         => null,
                     ];
+                    $follow_step['label'] = perch_members_flowchart_follow_label($follow_step, $Lang);
+                    $follow_steps[] = $follow_step;
                 }
 
                 if (PerchUtil::count($follow_steps)) {
@@ -321,7 +472,29 @@
                     });
                 }
 
+                $connections = [];
+                if (PerchUtil::count($follow_steps)) {
+                    foreach ($follow_steps as $follow_step_item) {
+                        $target_question_key = isset($follow_step_item['question']) ? $follow_step_item['question'] : null;
+                        $target_step = isset($follow_step_item['step']) ? $follow_step_item['step'] : null;
+
+                        if ($target_question_key === null && ($target_step === null || $target_step === '')) {
+                            continue;
+                        }
+
+                        $connections[] = [
+                            'question'      => $target_question_key,
+                            'step'          => $target_step,
+                            'type'          => isset($follow_step_item['type']) ? $follow_step_item['type'] : 'dependency',
+                            'label'         => isset($follow_step_item['label']) ? $follow_step_item['label'] : null,
+                            'values'        => isset($follow_step_item['values']) ? $follow_step_item['values'] : [],
+                            'displayValues' => isset($follow_step_item['displayValues']) ? $follow_step_item['displayValues'] : [],
+                        ];
+                    }
+                }
+
                 $question['followSteps'] = $follow_steps;
+                $question['connections'] = $connections;
                 $question['dependencies'] = $dependencies;
             }
             unset($question);
@@ -353,6 +526,7 @@
         foreach ($data['questions'] as $key => $question) {
             $flowchart_payload[$type]['questions'][$key] = [
                 'dependencies' => $question['dependencies'],
+                'connections'  => isset($question['connections']) ? $question['connections'] : [],
                 'step'         => $question['step'],
             ];
         }

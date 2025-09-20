@@ -146,10 +146,28 @@
                                             $step_type = isset($follow_step['type']) ? $follow_step['type'] : 'dependency';
                                             $answer_classes = 'flowchart-node__follow-step-answer';
                                             if ($step_type === 'order') {
-                                                $values_label = $Lang->get('Default order');
                                                 $answer_classes .= ' flowchart-node__follow-step-answer--default';
+                                            }
+
+                                            $display_values = [];
+                                            if (isset($follow_step['displayValues']) && is_array($follow_step['displayValues']) && PerchUtil::count($follow_step['displayValues'])) {
+                                                $display_values = $follow_step['displayValues'];
+                                            }
+
+                                            $values_label = '';
+                                            if (isset($follow_step['label']) && $follow_step['label'] !== '') {
+                                                $values_label = $follow_step['label'];
+                                            } elseif (PerchUtil::count($display_values)) {
+                                                $values_label = implode(', ', $display_values);
+                                                if ($step_type === 'order') {
+                                                    $values_label .= ' ('.$Lang->get('Default order').')';
+                                                }
                                             } else {
-                                                $values_label = PerchUtil::count($follow_step['values']) ? implode(', ', $follow_step['values']) : $Lang->get('Any value');
+                                                if ($step_type === 'order') {
+                                                    $values_label = $Lang->get('Default order');
+                                                } else {
+                                                    $values_label = $Lang->get('Any value');
+                                                }
                                             }
 
                                             $step_label = (isset($follow_step['step']) && $follow_step['step'] !== '') ? $follow_step['step'] : $Lang->get('Unknown step');
@@ -183,7 +201,14 @@
                                     echo '<strong>'.$HTML->encode($Lang->get('Dependencies')).'</strong>';
                                     echo '<ul>';
                                         foreach ($dependencies as $dependency) {
-                                            $values_label = PerchUtil::count($dependency['values']) ? implode(', ', $dependency['values']) : $Lang->get('Any value');
+                                            $display_values = [];
+                                            if (isset($dependency['valueLabels']) && is_array($dependency['valueLabels']) && PerchUtil::count($dependency['valueLabels'])) {
+                                                $display_values = $dependency['valueLabels'];
+                                            } elseif (isset($dependency['values']) && is_array($dependency['values']) && PerchUtil::count($dependency['values'])) {
+                                                $display_values = $dependency['values'];
+                                            }
+
+                                            $values_label = PerchUtil::count($display_values) ? implode(', ', $display_values) : $Lang->get('Any value');
                                             $parts = [];
 
                                             if (isset($dependency['resolvedStep']) && $dependency['resolvedStep']) {
