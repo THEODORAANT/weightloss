@@ -61,12 +61,25 @@
         } else {
             echo '<div class="flowchart-grid">';
             foreach ($flowchart_data[$type]['steps'] as $step_slug => $step_data) {
-                echo '<div class="flowchart-step" data-step-slug="'.$HTML->encode($step_slug).'">';
+                $step_classes = 'flowchart-step';
+                if (!empty($step_data['isVirtual'])) {
+                    $step_classes .= ' flowchart-step--virtual';
+                }
+
+                echo '<div class="'.$step_classes.'" data-step-slug="'.$HTML->encode($step_slug).'">';
                     echo '<header class="flowchart-step__header">';
+                        if (isset($step_data['order']) && $step_data['order']) {
+                            echo '<span class="flowchart-step__index">'.$HTML->encode('#'.(string)$step_data['order']).'</span>';
+                        }
                         echo '<span class="flowchart-step__title">'.$HTML->encode($step_slug).'</span>';
                     echo '</header>';
 
                     echo '<div class="flowchart-step__questions">';
+                    if (!PerchUtil::count($step_data['questions'])) {
+                        if (!empty($step_data['isVirtual'])) {
+                            echo '<p class="flowchart-step__empty">'.$HTML->encode($Lang->get('No questions assigned to this step yet.')).'</p>';
+                        }
+                    }
                     foreach ($step_data['questions'] as $question_key) {
                         if (!isset($flowchart_data[$type]['questions'][$question_key])) continue;
 
@@ -78,6 +91,7 @@
                         $option_list = $question['options'];
                         $option_summary = trim($question['optionSummary']);
                         $dependencies = $question['dependencies'];
+                        $follow_steps = isset($question['followSteps']) ? $question['followSteps'] : [];
                         $edit_url = $API->app_path().'/questionnaire_questions/edit/?id='.$question['id'];
 
                         $aria_label = $Lang->get('Edit question').' – '.$question['label'];
@@ -124,18 +138,82 @@
                                 echo '</div>';
                             }
 
+                            if (PerchUtil::count($follow_steps)) {
+                                echo '<div class="flowchart-node__follow-steps">';
+                                    echo '<strong>'.$HTML->encode($Lang->get('Follow-up steps')).'</strong>';
+                                    echo '<ul>';
+                                        foreach ($follow_steps as $follow_step) {
+                                            $step_type = isset($follow_step['type']) ? $follow_step['type'] : 'dependency';
+                                            $answer_classes = 'flowchart-node__follow-step-answer';
+                                            if ($step_type === 'order') {
+                                                $values_label = $Lang->get('Default order');
+                                                $answer_classes .= ' flowchart-node__follow-step-answer--default';
+                                            } else {
+                                                $values_label = PerchUtil::count($follow_step['values']) ? implode(', ', $follow_step['values']) : $Lang->get('Any value');
+                                            }
+
+                                            $step_label = (isset($follow_step['step']) && $follow_step['step'] !== '') ? $follow_step['step'] : $Lang->get('Unknown step');
+                                            $order_number = isset($follow_step['order']) ? $follow_step['order'] : null;
+                                            $question_text = null;
+                                            if (!empty($follow_step['question'])) {
+                                                $question_text = $Lang->get('Question').': '.$follow_step['question'];
+                                                if (!empty($follow_step['questionLabel'])) {
+                                                    $question_text .= ' – '.$follow_step['questionLabel'];
+                                                }
+                                            }
+
+                                            echo '<li>';
+                                                echo '<span class="'.$answer_classes.'">'.$HTML->encode($values_label).'</span>';
+                                                echo '<span class="flowchart-node__follow-step-arrow">&rarr;</span>';
+                                                echo '<span class="flowchart-node__follow-step-target">'.$HTML->encode($Lang->get('Step').': '.$step_label).'</span>';
+                                                if ($order_number !== null) {
+                                                    echo '<span class="flowchart-node__follow-step-order">'.$HTML->encode('#'.(string)$order_number).'</span>';
+                                                }
+                                                if ($question_text !== null) {
+                                                    echo '<span class="flowchart-node__follow-step-question">'.$HTML->encode($question_text).'</span>';
+                                                }
+                                            echo '</li>';
+                                        }
+                                    echo '</ul>';
+                                echo '</div>';
+                            }
+
                             if (PerchUtil::count($dependencies)) {
                                 echo '<div class="flowchart-node__dependencies">';
                                     echo '<strong>'.$HTML->encode($Lang->get('Dependencies')).'</strong>';
                                     echo '<ul>';
                                         foreach ($dependencies as $dependency) {
                                             $values_label = PerchUtil::count($dependency['values']) ? implode(', ', $dependency['values']) : $Lang->get('Any value');
-                                            $target = $dependency['question'] ?: $dependency['step'];
-                                            if (!$target) {
-                                                $target = $Lang->get('Unknown target');
+                                            $parts = [];
+
+                                            if (isset($dependency['resolvedStep']) && $dependency['resolvedStep']) {
+                                                $step_text = $Lang->get('Step').': '.$dependency['resolvedStep'];
+                                                if (isset($dependency['resolvedStepOrder']) && $dependency['resolvedStepOrder'] !== null) {
+                                                    $step_text .= ' (#'.$dependency['resolvedStepOrder'].')';
+                                                }
+                                                $parts[] = $step_text;
+                                            } elseif (!empty($dependency['step'])) {
+                                                $parts[] = $Lang->get('Step').': '.$dependency['step'];
                                             }
-                                            $target_label = $dependency['question'] ? $Lang->get('Question') : $Lang->get('Step');
-                                            echo '<li>'.$HTML->encode($values_label).' &rarr; '.$HTML->encode($target_label.': '.$target).'</li>';
+
+                                            if (!empty($dependency['question'])) {
+                                                $question_target = $Lang->get('Question').': '.$dependency['question'];
+                                                if (!empty($dependency['targetQuestionLabel'])) {
+                                                    $question_target .= ' – '.$dependency['targetQuestionLabel'];
+                                                }
+                                                $parts[] = $question_target;
+                                            }
+
+                                            if (!PerchUtil::count($parts)) {
+                                                $parts[] = $Lang->get('Unknown target');
+                                            }
+
+                                            $encoded_parts = [];
+                                            foreach ($parts as $part_text) {
+                                                $encoded_parts[] = $HTML->encode($part_text);
+                                            }
+
+                                            echo '<li>'.$HTML->encode($values_label).' &rarr; '.implode(' | ', $encoded_parts).'</li>';
                                         }
                                     echo '</ul>';
                                 echo '</div>';

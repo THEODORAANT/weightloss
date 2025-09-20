@@ -108,10 +108,32 @@
     box-shadow: 0 4px 12px rgba(15,23,42,0.04);
 }
 
+.flowchart-step--virtual {
+    background: #f9faff;
+    border-style: dashed;
+    border-color: #d5defa;
+}
+
 .flowchart-step__header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
     border-bottom: 1px solid #bcc8f2;
     padding-bottom: 0.45rem;
     margin-bottom: 0.75rem;
+}
+
+.flowchart-step__index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .flowchart-step__title {
@@ -123,6 +145,14 @@
 .flowchart-step__questions {
     display: grid;
     gap: 0.85rem;
+}
+
+.flowchart-step__empty {
+    margin: 0;
+    padding: 0.35rem 0;
+    font-size: 0.78rem;
+    color: #64748b;
+    font-style: italic;
 }
 
 .flowchart-node {
@@ -175,20 +205,23 @@
 }
 
 .flowchart-node__options,
-.flowchart-node__dependencies {
+.flowchart-node__dependencies,
+.flowchart-node__follow-steps {
     margin-top: 0.7rem;
     font-size: 0.78rem;
     color: #1f2937;
 }
 
 .flowchart-node__options ul,
-.flowchart-node__dependencies ul {
+.flowchart-node__dependencies ul,
+.flowchart-node__follow-steps ul {
     margin: 0.4rem 0 0;
     padding-left: 1.1rem;
 }
 
 .flowchart-node__options li,
-.flowchart-node__dependencies li {
+.flowchart-node__dependencies li,
+.flowchart-node__follow-steps li {
     margin-bottom: 0.3rem;
     line-height: 1.35;
 }
@@ -196,6 +229,44 @@
 .flowchart-node__option-value {
     color: #64748b;
     font-size: 0.75rem;
+}
+
+.flowchart-node__follow-step-answer {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.flowchart-node__follow-step-answer--default {
+    background: #eef2ff;
+    border-radius: 999px;
+    padding: 0.05rem 0.45rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #4338ca;
+}
+
+.flowchart-node__follow-step-arrow {
+    margin: 0 0.35rem;
+    color: #4c51bf;
+}
+
+.flowchart-node__follow-step-target {
+    color: #1f2937;
+}
+
+.flowchart-node__follow-step-order {
+    margin-left: 0.35rem;
+    color: #4338ca;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.flowchart-node__follow-step-question {
+    display: block;
+    margin-left: 1.35rem;
+    color: #475569;
+    font-size: 0.74rem;
 }
 
 .flowchart-node__option-more {
