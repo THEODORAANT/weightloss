@@ -10,6 +10,20 @@
 
     if (isset($message)) echo $message;
 
+    $Smartbar = new PerchSmartbar($CurrentUser, $HTML, $Lang);
+    $Smartbar->add_item([
+        'active' => true,
+        'title'  => $Lang->get('Questions'),
+        'link'   => $API->app_nav().'/questionnaire_questions/',
+    ]);
+    $Smartbar->add_item([
+        'active' => false,
+        'title'  => $Lang->get('Flowchart'),
+        'link'   => $API->app_nav().'/questionnaire_questions/flowchart/',
+    ]);
+
+    echo $Smartbar->render();
+
     $Listing = new PerchAdminListing($CurrentUser, $HTML, $Lang, $Paging);
     $Listing->add_col([
             'title'     => 'Question',
@@ -35,6 +49,54 @@
             'title'     => $Lang->get('Answer type'),
             'value'     => 'type',
             'sort'      => 'type',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Field name'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $field = $Question->fieldName();
+                if ($field === null || $field === '') {
+                    $field = $Question->questionKey();
+                }
+
+                return $HTML->encode($field);
+            },
+            'sort'  => 'fieldName',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Step'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $step = $Question->stepSlug();
+                if ($step === null || $step === '') {
+                    return $HTML->encode('—');
+                }
+
+                return $HTML->encode($step);
+            },
+            'sort'  => 'stepSlug',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Dependencies'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $raw = $Question->dependencies();
+                if (!$raw) {
+                    return $HTML->encode('—');
+                }
+
+                $decoded = PerchUtil::json_safe_decode($raw, true);
+                if (!is_array($decoded)) {
+                    return $HTML->encode('—');
+                }
+
+                $count = PerchUtil::count($decoded);
+                if ($count === false || $count === 0) {
+                    return $HTML->encode('—');
+                }
+
+                return $HTML->encode((string)$count);
+            },
         ]);
 
     $Listing->add_col([
