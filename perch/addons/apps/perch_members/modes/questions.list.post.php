@@ -38,6 +38,54 @@
         ]);
 
     $Listing->add_col([
+            'title' => $Lang->get('Field name'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $field = $Question->fieldName();
+                if ($field === null || $field === '') {
+                    $field = $Question->questionKey();
+                }
+
+                return $HTML->encode($field);
+            },
+            'sort'  => 'fieldName',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Step'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $step = $Question->stepSlug();
+                if ($step === null || $step === '') {
+                    return $HTML->encode('—');
+                }
+
+                return $HTML->encode($step);
+            },
+            'sort'  => 'stepSlug',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Dependencies'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $raw = $Question->dependencies();
+                if (!$raw) {
+                    return $HTML->encode('—');
+                }
+
+                $decoded = PerchUtil::json_safe_decode($raw, true);
+                if (!is_array($decoded)) {
+                    return $HTML->encode('—');
+                }
+
+                $count = PerchUtil::count($decoded);
+                if ($count === false || $count === 0) {
+                    return $HTML->encode('—');
+                }
+
+                return $HTML->encode((string)$count);
+            },
+        ]);
+
+    $Listing->add_col([
             'title' => $Lang->get('Answers'),
             'value' => function ($Question, $HTML, $Lang) {
                 $summary = $Question->option_summary();

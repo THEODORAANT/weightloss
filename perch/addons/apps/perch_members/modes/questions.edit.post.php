@@ -16,6 +16,12 @@
 
         echo $Form->text_field('label', 'Label', isset($details['label'])?$details['label']:false);
 
+        echo $Form->hint($Lang->get('Leave blank to reuse the question key as the form field name.'));
+        echo $Form->text_field('fieldName', 'Form field name', isset($details['fieldName'])?$details['fieldName']:false);
+
+        echo $Form->hint($Lang->get('Defines the questionnaire step slug. Leave blank to reuse the question key.'));
+        echo $Form->text_field('stepSlug', 'Step slug', isset($details['stepSlug'])?$details['stepSlug']:false);
+
         echo $Form->select_field('type', 'Field type', [
             ['value'=>'text','label'=>'Text'],
             ['value'=>'textarea','label'=>'Textarea'],
@@ -26,6 +32,9 @@
         ], isset($details['type'])?$details['type']:'text');
 
         echo $Form->textarea_field('options', 'Options (value:label per line)', isset($details['options'])?$details['options']:'');
+
+        echo $Form->hint($Lang->get('Provide dependency rules as JSON. Each rule should include "values" and optionally "question" and "step" keys. Leave blank if not required.'));
+        echo $Form->textarea_field('dependencies', 'Dependencies (JSON)', isset($details['dependencies'])?$details['dependencies']:'', 'input-simple code');
 
         echo $Form->hint($Lang->get('Use numbers to control the question order shown to clients. Lower numbers display first; leave blank to add to the end.'));
         echo $Form->text_field('sort', 'Display order', isset($details['sort'])?$details['sort']:'');
