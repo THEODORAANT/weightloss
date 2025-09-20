@@ -24,5 +24,6 @@
                 ['page'=>[
                                         'perch_members/questionnaire_questions',
                                         'perch_members/questionnaire_questions/edit',
+                                        'perch_members/questionnaire_questions/flowchart',
                         ], 'label'=>'Questionnaires',  'priv'=>'perch_members.questionnaires.manage'],
         ], $CurrentUser);
