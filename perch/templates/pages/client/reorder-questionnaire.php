@@ -16,9 +16,11 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
          mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
      );
  }
+    $requested_step = isset($_GET['step']) ? trim((string)$_GET['step']) : null;
+
     if (isset($_POST['nextstep'])) {
     $user_id = generateUUID();
-    $current_step = $_GET["step"];
+    $current_step = $requested_step ?? '';
     $timestamp = time();
        // Secret key (keep this safe, use env file ideally)
                         $secret_key = 'theoloss1066';
@@ -127,13 +129,14 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
         <div class="main_product">
             <div id="product-selection">
                <h2 class="text-center fw-bolder">Before we send you your next dose we have a few questions! </h2>
-    <?php
-if(isset( $_GET["step"])){
-
-PerchSystem::set_var('step', $_GET["step"]);
-}
-
+<?php
 $reorder_structure = perch_member_questionnaire_structure('re-order');
+$grouped_steps = [];
+$step_sort_index = [];
+$dependency_steps = [];
+$ordered_step_keys = [];
+$first_step = 'weight';
+
 if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
     PerchSystem::set_var('questionnaire_structure_json', PerchUtil::json_safe_encode($reorder_structure));
 
@@ -142,8 +145,6 @@ if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
         PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($reorder_dependencies));
     }
 
-    $grouped_steps = [];
-    $step_sort_index = [];
     foreach ($reorder_structure as $question) {
         $step = isset($question['step']) && $question['step'] !== '' ? $question['step'] : $question['key'];
         $question_sort = isset($question['sort']) ? (int)$question['sort'] : PHP_INT_MAX;
@@ -158,6 +159,28 @@ if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
         }
 
         $grouped_steps[$step][] = $question['key'];
+
+        if (isset($question['dependencies']) && is_array($question['dependencies'])) {
+            foreach ($question['dependencies'] as $dependency) {
+                if (!is_array($dependency)) {
+                    continue;
+                }
+
+                if (!empty($dependency['step'])) {
+                    $dependency_steps[] = $dependency['step'];
+                    continue;
+                }
+
+                if (!empty($dependency['question'])) {
+                    $target_question = $dependency['question'];
+                    if (isset($reorder_structure[$target_question]['step']) && $reorder_structure[$target_question]['step'] !== '') {
+                        $dependency_steps[] = $reorder_structure[$target_question]['step'];
+                    } else {
+                        $dependency_steps[] = $target_question;
+                    }
+                }
+            }
+        }
     }
 
     foreach ($grouped_steps as $step => &$keys) {
@@ -188,16 +211,26 @@ if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
         }
 
         PerchSystem::set_var('questionnaire_steps_json', PerchUtil::json_safe_encode($grouped_steps));
-        reset($grouped_steps);
-        $first_step = key($grouped_steps);
-        if (!$first_step) {
-            $first_step = 'weight';
+        $ordered_step_keys = array_keys($grouped_steps);
+        if (count($ordered_step_keys)) {
+            $first_step = $ordered_step_keys[0];
         }
-        $current_step = $_GET['step'] ?? $first_step;
-        PerchSystem::set_var('questionnaire_default_step', $first_step);
-        PerchSystem::set_var('questionnaire_current_step', $current_step);
     }
 }
+
+$allowed_steps = array_values(array_unique(array_merge($ordered_step_keys, $dependency_steps)));
+if (!in_array($first_step, $allowed_steps, true)) {
+    $allowed_steps[] = $first_step;
+}
+
+$current_step = $requested_step ?: $first_step;
+if (!in_array($current_step, $allowed_steps, true)) {
+    $current_step = $first_step;
+}
+
+PerchSystem::set_var('step', $current_step);
+PerchSystem::set_var('questionnaire_default_step', $first_step);
+PerchSystem::set_var('questionnaire_current_step', $current_step);
 
 $reorder_answers = $_SESSION['questionnaire-reorder'] ?? [];
 if (PerchUtil::count($reorder_answers)) {
