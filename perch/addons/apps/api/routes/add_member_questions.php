@@ -41,7 +41,11 @@
        if(isset($data['questionnaire']) && !empty($data['questionnaire'])){
          $data['questionnaire']["documents"]="https://getweightloss.co.uk/perch/addons/apps/perch_members/edit/?id=".$memberid;
 
-     $id= perch_member_add_questionnaire_api($memberid,$data['questionnaire'],$data['type']);
+     $orderID = isset($data['order_id']) ? (int)$data['order_id'] : null;
+     if ($orderID !== null && isset($data['questionnaire']['order_id'])) {
+         unset($data['questionnaire']['order_id']);
+     }
+     $id= perch_member_add_questionnaire_api($memberid,$data['questionnaire'],$data['type'],$orderID);
       echo json_encode(["success" => true,"questionnaireID"=>$id]);
        }
   // }
