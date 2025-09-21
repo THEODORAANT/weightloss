@@ -1551,6 +1551,48 @@
                 return (value || '').toString().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
             }
 
+            function normalizeValues(values) {
+                var list = Array.isArray(values) ? values : [values];
+                var normalized = [];
+
+                for (var i = 0; i < list.length; i++) {
+                    var item = list[i];
+                    if (item === null || typeof item === 'undefined') {
+                        continue;
+                    }
+
+                    if (Array.isArray(item)) {
+                        normalized = normalized.concat(normalizeValues(item));
+                        continue;
+                    }
+
+                    var str = String(item);
+                    var trimmed = str.trim();
+
+                    if (trimmed === '') {
+                        normalized.push('');
+                    } else {
+                        normalized.push(trimmed.toLowerCase());
+                    }
+                }
+
+                return normalized;
+            }
+
+            function hasIntersection(valuesA, valuesB) {
+                if (!valuesA.length || !valuesB.length) {
+                    return false;
+                }
+
+                for (var i = 0; i < valuesA.length; i++) {
+                    if (valuesB.indexOf(valuesA[i]) !== -1) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             var structure = parseJSON(structureScript) || {};
             var dependencyScript = form.querySelector('.js-questionnaire-dependencies');
             var dependencies = dependencyScript ? parseJSON(dependencyScript) || {} : {};
@@ -1825,30 +1867,46 @@
 
             function dependencyRouting(question, value) {
                 var key = question.key || question.name;
+                if (!key) {
+                    return null;
+                }
+
                 var questionDependencies = dependencies[key];
-                if (!questionDependencies) {
+                if (!questionDependencies || !questionDependencies.length) {
                     return null;
                 }
 
                 var values = Array.isArray(value) ? value : [value];
+                var normalizedValues = normalizeValues(values);
 
                 for (var i = 0; i < questionDependencies.length; i++) {
                     var dependency = questionDependencies[i];
-                    if (!dependency || !dependency.step) {
+                    if (!dependency) {
                         continue;
-                    }
-                    var dependencyValues = dependency.values;
-                    if (typeof dependencyValues === 'undefined') {
-                        continue;
-                    }
-                    if (!Array.isArray(dependencyValues)) {
-                        dependencyValues = [dependencyValues];
                     }
 
-                    for (var j = 0; j < values.length; j++) {
-                        if (dependencyValues.indexOf(values[j]) !== -1) {
-                            return dependency.step;
+                    var dependencyValues = typeof dependency.values === 'undefined' ? null : dependency.values;
+                    if (dependencyValues === null) {
+                        continue;
+                    }
+
+                    var targetStep = dependency.step;
+                    if (!targetStep && dependency.question) {
+                        var dependencyQuestion = structure[dependency.question];
+                        if (dependencyQuestion && dependencyQuestion.step) {
+                            targetStep = dependencyQuestion.step;
+                        } else {
+                            targetStep = dependency.question;
                         }
+                    }
+
+                    if (!targetStep) {
+                        continue;
+                    }
+
+                    var normalizedDependencyValues = normalizeValues(dependencyValues);
+                    if (hasIntersection(normalizedValues, normalizedDependencyValues)) {
+                        return targetStep;
                     }
                 }
 

@@ -162,8 +162,22 @@ if (is_array($reorder_structure) && PerchUtil::count($reorder_structure)) {
 
         if (isset($question['dependencies']) && is_array($question['dependencies'])) {
             foreach ($question['dependencies'] as $dependency) {
-                if (is_array($dependency) && !empty($dependency['step'])) {
+                if (!is_array($dependency)) {
+                    continue;
+                }
+
+                if (!empty($dependency['step'])) {
                     $dependency_steps[] = $dependency['step'];
+                    continue;
+                }
+
+                if (!empty($dependency['question'])) {
+                    $target_question = $dependency['question'];
+                    if (isset($reorder_structure[$target_question]['step']) && $reorder_structure[$target_question]['step'] !== '') {
+                        $dependency_steps[] = $reorder_structure[$target_question]['step'];
+                    } else {
+                        $dependency_steps[] = $target_question;
+                    }
                 }
             }
         }

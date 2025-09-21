@@ -353,7 +353,7 @@ $back_links['conditions']="/get-started/questionnaire?step=more_pancreatitis";
         $back_links['medications']="/get-started/questionnaire?step=medical_conditions";
        }
 
-           if(isset($_SESSION['questionnaire']['effects_with_wegovy']) && $_SESSION['questionnaire']['effects_with_wegovy']=="no"){ 
+           if(isset($_SESSION['questionnaire']['effects_with_wegovy']) && $_SESSION['questionnaire']['effects_with_wegovy']=="no"){
                     $back_links['medication_allergies']="/get-started/questionnaire?step=effects_with_wegovy";
           }
 
@@ -389,8 +389,22 @@ if (is_array($questionnaire_structure) && PerchUtil::count($questionnaire_struct
 
         if (isset($question['dependencies']) && is_array($question['dependencies'])) {
             foreach ($question['dependencies'] as $dependency) {
-                if (is_array($dependency) && !empty($dependency['step'])) {
+                if (!is_array($dependency)) {
+                    continue;
+                }
+
+                if (!empty($dependency['step'])) {
                     $dependency_steps[] = $dependency['step'];
+                    continue;
+                }
+
+                if (!empty($dependency['question'])) {
+                    $target_question = $dependency['question'];
+                    if (isset($questionnaire_structure[$target_question]['step']) && $questionnaire_structure[$target_question]['step'] !== '') {
+                        $dependency_steps[] = $questionnaire_structure[$target_question]['step'];
+                    } else {
+                        $dependency_steps[] = $target_question;
+                    }
                 }
             }
         }
