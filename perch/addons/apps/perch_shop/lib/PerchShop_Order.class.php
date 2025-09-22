@@ -217,27 +217,51 @@ class PerchShop_Order extends PerchShop_Base
         }
 
 
-        	$sql_questionnaire = 'SELECT * FROM '.PERCH_DB_PREFIX.'questionnaire
-                                                WHERE `type`="'.$questionnaire_type.'" and member_id='.$this->db->pdb((int)$Member->id());
-                                                 // echo "products_match_pharmacy";
-                     //	print_r($sql_questionnaire);
-                     $questionnaire = $this->db->get_rows($sql_questionnaire);
-                    // print_r($questionnaire);
-                       if (PerchUtil::count($questionnaire)) {
-                       	foreach($questionnaire as $questiondet) {
-                       	if(isset( $questiondet["question_text"]) && isset($questiondet["answer_text"])){
-                       	if($questiondet["question_text"]!="" && $questiondet["answer_text"]!="" ){
+                $questionnaireID = null;
+                $dynamicFields  = PerchUtil::json_safe_decode($this->orderDynamicFields(), true);
 
+                if (is_array($dynamicFields)) {
+                    if (isset($dynamicFields['questionnaires']) && is_array($dynamicFields['questionnaires'])) {
+                        if (!empty($dynamicFields['questionnaires'][$questionnaire_type])) {
+                            $questionnaireID = (int)$dynamicFields['questionnaires'][$questionnaire_type];
+                        }
+                    } elseif (!empty($dynamicFields['questionnaire_qid'])) {
+                        $questionnaireID = (int)$dynamicFields['questionnaire_qid'];
+                    }
+                }
 
-                       		$questions_items[]  =  [
-                                                                                 "question" =>  $questiondet["question_text"],
-                                                                                 "answer" =>  $questiondet["answer_text"],
-                                                                             ];
-                                                                             }
-                                                                             }
-                                                                             }
+                if (!$questionnaireID) {
+                    $sql_latest_qid = 'SELECT qid FROM '.PERCH_DB_PREFIX.'questionnaire'
+                        .' WHERE `type`='.$this->db->pdb($questionnaire_type)
+                        .' AND member_id='.$this->db->pdb((int)$Member->id())
+                        .' ORDER BY created_at DESC LIMIT 1';
+                    $questionnaireID = (int)$this->db->get_value($sql_latest_qid);
+                }
 
-                       	}
+                $sql_questionnaire = 'SELECT * FROM '.PERCH_DB_PREFIX.'questionnaire'
+                        .' WHERE `type`='.$this->db->pdb($questionnaire_type)
+                        .' AND member_id='.$this->db->pdb((int)$Member->id());
+
+                if ($questionnaireID) {
+                    $sql_questionnaire .= ' AND qid='.$this->db->pdb($questionnaireID);
+                }
+
+                $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
+
+                $questionnaire = $this->db->get_rows($sql_questionnaire);
+
+                if (PerchUtil::count($questionnaire)) {
+                    foreach ($questionnaire as $questiondet) {
+                        if (isset($questiondet["question_text"]) && isset($questiondet["answer_text"])) {
+                            if ($questiondet["question_text"] != "" && $questiondet["answer_text"] != "") {
+                                $questions_items[] = [
+                                    "question" => $questiondet["question_text"],
+                                    "answer" => $questiondet["answer_text"],
+                                ];
+                            }
+                        }
+                    }
+                }
 
 
         /*echo "order_items";
