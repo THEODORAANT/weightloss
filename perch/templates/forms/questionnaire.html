@@ -381,19 +381,132 @@
         <script>
             function radioheight(value){
 
-                const weight = document.getElementById("height");
-                document.getElementById("heightunit").value=document.querySelector('input[name=heightunit-radio]:checked').value;
-                document.getElementById("spanheight").innerHTML=value;
+                const heightField = document.getElementById("height");
+                const unitField = document.getElementById("heightunit");
+                const unitLabel = document.getElementById("spanheight");
+                const secondaryField = document.getElementById("height2");
+
+                const selectedRadio = document.querySelector('input[name=heightunit-radio]:checked');
+                if (selectedRadio && unitField) {
+                    unitField.value = selectedRadio.value;
+                }
+
+                if (unitLabel) {
+                    unitLabel.innerHTML = value;
+                }
+
+                if (!heightField || !secondaryField) {
+                    return;
+                }
+
                 if (value === "cm") {
-                    weight.placeholder = "Cm";
-                    document.getElementById("height2").type="hidden";
+                    heightField.placeholder = "Cm";
+                    secondaryField.type = "hidden";
                 }else{
-                    document.getElementById("height2").type="number";
-                    weight.placeholder = "Ft";
+                    secondaryField.type = "number";
+                    heightField.placeholder = "Ft";
 
                 }
 
             }
+
+            window.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('questionnaire');
+                if (!form) {
+                    return;
+                }
+
+                const parseNumeric = (rawValue) => {
+                    if (typeof rawValue !== 'string') {
+                        return null;
+                    }
+
+                    const normalised = rawValue.replace(',', '.').trim();
+                    if (normalised === '') {
+                        return null;
+                    }
+
+                    const numericValue = parseFloat(normalised);
+                    return Number.isFinite(numericValue) ? numericValue : null;
+                };
+
+                const toCentimetres = (primaryValue, secondaryValue, unit) => {
+                    const primary = parseNumeric(primaryValue);
+                    if (primary === null || primary <= 0) {
+                        return null;
+                    }
+
+                    if (unit === 'cm') {
+                        return primary;
+                    }
+
+                    if (unit === 'ft-in') {
+                        const secondaryParsed = parseNumeric(secondaryValue);
+                        const secondary = secondaryParsed === null ? 0 : secondaryParsed;
+                        const totalInches = (primary * 12) + secondary;
+                        return totalInches * 2.54;
+                    }
+
+                    if (unit === 'in') {
+                        return primary * 2.54;
+                    }
+
+                    return null;
+                };
+
+                const originalSubmitForm = window.submitForm;
+
+                window.submitForm = function (nextStep) {
+                    if (nextStep === 'height') {
+                        const unitRadio = document.querySelector('input[name="heightunit-radio"]:checked');
+                        const unitField = document.getElementById('heightunit');
+                        const primaryField = document.getElementById('height');
+                        const secondaryField = document.getElementById('height2');
+
+                        let unit = 'cm';
+                        if (unitRadio && unitRadio.value) {
+                            unit = unitRadio.value;
+                        } else if (unitField && unitField.value) {
+                            unit = unitField.value;
+                        }
+
+                        if (unitField && unitRadio && unitRadio.value) {
+                            unitField.value = unitRadio.value;
+                        }
+
+                        const heightInCm = toCentimetres(
+                            primaryField ? primaryField.value : '',
+                            secondaryField ? secondaryField.value : '',
+                            unit
+                        );
+
+                        if (heightInCm !== null && heightInCm < 100) {
+                            const confirmationMessage = `You entered ${heightInCm.toFixed(1)} cm. The shortest adult in the UK is 89 cm. Please confirm that your height is correct before continuing.`;
+                            const confirmed = window.confirm(confirmationMessage);
+                            if (!confirmed) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (typeof originalSubmitForm === 'function') {
+                        return originalSubmitForm(nextStep);
+                    }
+
+                    const nextStepField = document.getElementById('nextstep');
+                    if (nextStepField) {
+                        nextStepField.value = nextStep;
+                    }
+
+                    if (typeof form.requestSubmit === 'function') {
+                        form.requestSubmit();
+                    } else {
+                        form.submit();
+                    }
+
+                    return false;
+                };
+            });
         </script>
     </perch:if>
 
