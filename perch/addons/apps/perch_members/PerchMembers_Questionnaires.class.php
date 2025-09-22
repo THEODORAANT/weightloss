@@ -440,14 +440,106 @@ public $doses = [
     }
     return $this->questions;
     }
-    public function get_questions_answers($type='first-order')
+        public function get_questions_answers($type='first-order')
         {
         if($type=="re-order"){
          return $this->reorder_questions_answers;
         }
         return $this->questions_and_answers;
         }
-	public function get_for_member($memberID,$type="first-order")
+
+    protected function resolveAnswerTextFromConfig($value, array $questionConfig)
+    {
+        $options = (isset($questionConfig['options']) && is_array($questionConfig['options']))
+            ? $questionConfig['options']
+            : null;
+
+        if (is_array($value)) {
+            $formatted = [];
+            $rawValues = [];
+
+            foreach ($value as $optionKey => $optionValue) {
+                if (is_scalar($optionValue)) {
+                    $rawValues[] = trim((string)$optionValue);
+                } elseif (is_array($optionValue)) {
+                    $rawValues[] = trim(implode(', ', array_map('strval', $optionValue)));
+                }
+
+                if (is_array($optionValue)) {
+                    $candidate = $optionValue;
+                } elseif (!is_numeric($optionKey) && ($optionValue === 'on' || $optionValue === true || $optionValue === 1)) {
+                    $candidate = $optionKey;
+                } else {
+                    $candidate = $optionValue;
+                }
+
+                if ((is_string($candidate) || is_numeric($candidate)) && trim((string)$candidate) === '' && !is_numeric($optionKey)) {
+                    $candidate = $optionKey;
+                }
+
+                if (is_array($candidate)) {
+                    $candidate = trim(implode(', ', array_map('strval', $candidate)));
+                }
+
+                $label = $this->mapOptionValueToLabel($candidate, $options);
+
+                if ($label !== '') {
+                    $formatted[] = $label;
+                }
+            }
+
+            $formatted = array_values(array_unique(array_filter(array_map(function ($text) {
+                return trim((string)$text);
+            }, $formatted), 'strlen')));
+
+            if (!empty($formatted)) {
+                return implode(', ', $formatted);
+            }
+
+            $rawValues = array_values(array_unique(array_filter($rawValues, 'strlen')));
+            if (!empty($rawValues)) {
+                return implode(', ', $rawValues);
+            }
+
+            return '';
+        }
+
+        return $this->mapOptionValueToLabel($value, $options);
+    }
+
+    protected function mapOptionValueToLabel($value, ?array $options)
+    {
+        if (is_array($value)) {
+            $value = implode(', ', array_map('strval', $value));
+        }
+
+        if ($value === null) {
+            $value = '';
+        }
+
+        if (!is_array($options) || empty($options)) {
+            return is_scalar($value) ? trim((string)$value) : '';
+        }
+
+        if (isset($options[$value])) {
+            return trim((string)$options[$value]);
+        }
+
+        foreach ($options as $optionKey => $optionLabel) {
+            if (strcasecmp((string)$optionKey, (string)$value) === 0) {
+                return trim((string)$optionLabel);
+            }
+        }
+
+        foreach ($options as $optionKey => $optionLabel) {
+            if (strcasecmp((string)$optionLabel, (string)$value) === 0) {
+                return trim((string)$optionLabel);
+            }
+        }
+
+        return is_scalar($value) ? trim((string)$value) : '';
+    }
+        public function get_for_member($memberID,$type="first-order")
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'questionnaire d
@@ -931,35 +1023,40 @@ $out=[];
 
 
 
+      $questionLookup = ($type=="first-order") ? $this->questions : $this->reorder_questions;
+      $questionConfigSet = ($type=="first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
+
       if($type=="first-order"){
-          $weightradiounit=$data["weightunit"];
-           $heightunitradio=$data["heightunit"];
+          $weightradiounit=$data["weightunit"] ?? '';
+           $heightunitradio=$data["heightunit"] ?? '';
            if(isset($data["unit-wegovy"])){
            $unitwegovyradio=$data["unit-wegovy"];
            }
-
-      if (array_key_exists($key, $this->questions)) {
-
-      $qdata['question_text']=$this->questions[$key];
-       if(is_array($value)){
-                  $qdata['answer_text']=implode(", ", $value);
-
-                }else{
-                   $qdata['answer_text']=$value;
-
-                }
       }
-      }else{
-       if (array_key_exists($key, $this->reorder_questions)) {
-       $qdata['question_text']=$this->reorder_questions[$key];
-        if(is_array($value)){
-                   $qdata['answer_text']=implode(", ", $value);
 
-                 }else{
-                    $qdata['answer_text']=$value;
+      $questionConfig = $questionConfigSet[$key] ?? null;
+      $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
 
-                 }
-       }
+      if ($questionConfig) {
+          $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
+      } elseif (is_array($value)) {
+          $flattened = array_filter(array_map(function ($item) {
+              if (is_scalar($item)) {
+                  return (string)$item;
+              }
+
+              if (is_array($item)) {
+                  return implode(', ', array_map('strval', $item));
+              }
+
+              return '';
+          }, $value), 'strlen');
+
+          $qdata['answer_text'] = implode(', ', $flattened);
+      } elseif (is_scalar($value) || $value === null) {
+          $qdata['answer_text'] = trim((string)$value);
+      } else {
+          $qdata['answer_text'] = '';
       }
          if($type=="first-order"){
   if($key=="weight"){
@@ -973,7 +1070,7 @@ $out=[];
             }
             }
         }
-        if($key=="weight-wegovy"){
+        if($key=="weight-wegovy" && isset($unitwegovyradio)){
             $weightwegovyunit=explode("-",$unitwegovyradio);
                 if(count($weightwegovyunit)>1){
                  $qdata['answer_text'].= " ".$weightwegovyunit[0];
@@ -983,9 +1080,9 @@ $out=[];
                     }
                     }
         }
-           if($key=="weight-wegovy"){
+           if($key=="weight-wegovy" && isset($this->doses[$value])){
 
-            $qdata['answer_text']=$doses[$value];
+            $qdata['answer_text']=$this->doses[$value];
         }
 
          if($key=="height"){
