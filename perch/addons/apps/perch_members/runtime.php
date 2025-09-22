@@ -414,16 +414,16 @@ function perch_member_questionsForQuestionnaire($type) {
 
                              return true;
             }
-      function perch_member_add_questionnaire_api($memberid,$data,$type)
+      function perch_member_add_questionnaire_api($memberid,$data,$type,$orderID=null)
         {
             $API  = new PerchAPI(1.0, 'perch_members');
                            $Questionnaires = new PerchMembers_Questionnaires($API);
-                        return  $Questionnaires->add_to_member($memberid,$data,$type);
+                        return  $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
 
 
                        //  return true;
         }
-    function perch_member_add_questionnaire($data,$type)
+    function perch_member_add_questionnaire($data,$type,$orderID=null)
     { //echo "perch_member_add_questionnaire";print_r($data);
       $Session = PerchMembers_Session::fetch();
 $memberid=0;
@@ -432,7 +432,7 @@ $memberid=0;
                 }
                  $API  = new PerchAPI(1.0, 'perch_members');
                    $Questionnaires = new PerchMembers_Questionnaires($API);
-                   $Questionnaires->add_to_member($memberid,$data,$type);
+                   $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
 
 
                  return true;

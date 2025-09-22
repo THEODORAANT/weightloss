@@ -1590,14 +1590,86 @@
                 updateNextStep();
             }, true);
 
-            form.addEventListener('submit', function () {
+            form.addEventListener('submit', function (event) {
+                if (!confirmHeightMeasurement()) {
+                    if (event && typeof event.preventDefault === 'function') {
+                        event.preventDefault();
+                    }
+                    return;
+                }
+
                 updateNextStep();
             });
 
             window.submitForm = function () {
+                if (!confirmHeightMeasurement()) {
+                    return false;
+                }
+
                 updateNextStep();
                 form.submit();
             };
+
+            function confirmHeightMeasurement() {
+                var heightField = document.getElementById('height');
+                if (!heightField) {
+                    return true;
+                }
+
+                var rawHeight = (heightField.value || '').trim();
+                if (rawHeight === '') {
+                    return true;
+                }
+
+                var unitField = document.getElementById('heightunit');
+                var unit = unitField && unitField.value ? unitField.value : 'cm';
+                var parsedHeight = parseMeasurementValue(rawHeight);
+                if (parsedHeight === null) {
+                    return true;
+                }
+
+                var inchesField = null;
+                var rawInches = '';
+                var parsedInches = 0;
+                var totalCentimetres = parsedHeight;
+
+                if (unit === 'ft-in') {
+                    inchesField = document.getElementById('height2');
+                    rawInches = inchesField && inchesField.value ? inchesField.value.trim() : '';
+                    var inchesValue = rawInches !== '' ? parseMeasurementValue(rawInches) : null;
+                    if (inchesValue !== null) {
+                        parsedInches = inchesValue;
+                    }
+                    totalCentimetres = ((parsedHeight * 12) + parsedInches) * 2.54;
+                }
+
+                if (typeof totalCentimetres !== 'number' || !isFinite(totalCentimetres)) {
+                    return true;
+                }
+
+                if (totalCentimetres < 100) {
+                    var measurementDisplay = unit === 'ft-in'
+                        ? rawHeight + 'ft' + (rawInches ? ' ' + rawInches + 'in' : '')
+                        : rawHeight + ' cm';
+
+                    return window.confirm(
+                        'The height you entered (' + measurementDisplay + ') is below 100cm. Please confirm this is correct before continuing.'
+                    );
+                }
+
+                return true;
+            }
+
+            function parseMeasurementValue(value) {
+                if (typeof value !== 'string') {
+                    return null;
+                }
+
+                var normalizedValue = value.replace(',', '.');
+                var numericValue = parseFloat(normalizedValue);
+
+                return isNaN(numericValue) ? null : numericValue;
+            }
 
             window.setValuesForm = function (questionKey, value) {
                 setHiddenValue(questionKey, value);

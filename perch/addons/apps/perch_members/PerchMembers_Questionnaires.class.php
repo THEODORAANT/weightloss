@@ -19,11 +19,14 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     protected $default_sort_column = 'created_at';
     public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
 
+    protected static $questionnaire_table_checked = false;
+
     public function __construct($api=false)
     {
         parent::__construct($api);
 
         $this->ensure_question_schema();
+        $this->ensure_questionnaire_table_schema();
         $this->backfill_question_metadata();
 
         $Questions = new PerchMembers_QuestionnaireQuestions($api);
@@ -61,6 +64,33 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
         if (!in_array('dependencies', $fields)) {
             $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN dependencies text AFTER `options`');
+        }
+    }
+
+    protected function ensure_questionnaire_table_schema()
+    {
+        if (self::$questionnaire_table_checked) {
+            return;
+        }
+
+        self::$questionnaire_table_checked = true;
+
+        $table = PERCH_DB_PREFIX.'questionnaire';
+        $columns = $this->db->get_rows('SHOW COLUMNS FROM '.$table);
+
+        if (!is_array($columns)) {
+            return;
+        }
+
+        $fields = [];
+        foreach ($columns as $col) {
+            if (isset($col['Field'])) {
+                $fields[] = $col['Field'];
+            }
+        }
+
+        if (!in_array('order_id', $fields)) {
+            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN order_id int(10) unsigned DEFAULT NULL AFTER member_id');
         }
     }
 
@@ -334,11 +364,17 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
         return $structure;
     }
-	public function get_for_member($memberID,$type="first-order")
+        public function get_for_member($memberID,$type="first-order",$orderID=null)
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'questionnaire d
-                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'" order by created_at desc';
+                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'"';
+
+        if ($orderID !== null) {
+            $sql .= ' AND d.order_id='.$this->db->pdb((int)$orderID);
+        }
+
+        $sql .= ' order by created_at desc';
 
         return $this->return_instances($this->db->get_rows($sql));
     }
@@ -733,7 +769,7 @@ $this->db->execute($update_status);
     $update_status ="UPDATE ".PERCH_DB_PREFIX."questionnaire_member_status  SET `accepted`=".$accepted." where `questionnaire_id`='v1' and memberID=".$memberID." and id=".$questionnaireID." ";
 $this->db->execute($update_status);
      }
-    public function add_to_member($memberID,$data,$type)
+    public function add_to_member($memberID,$data,$type,$orderID=null)
      { // echo "add_to_member";
 
 // print_r($memberID);print_r($type); echo PerchUtil::count($this->get_for_member($memberID));
@@ -887,6 +923,10 @@ if(isset($data["uuid"])){
                 $qdata['member_id']=$memberID;
                 $qdata['version']="v1";
                  $qdata['qid']= $new_id;
+           if ($orderID !== null) {
+                $qdata['order_id'] = (int)$orderID;
+           }
+
            $columns = implode(", ", array_keys($qdata)); // Columns as a string
                         $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
            $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
