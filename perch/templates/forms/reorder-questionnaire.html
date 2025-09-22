@@ -376,6 +376,35 @@
                 }
             }
 
+            function resolveConsole() {
+                if (typeof window !== 'undefined' && window.console) {
+                    return window.console;
+                }
+                if (typeof console !== 'undefined') {
+                    return console;
+                }
+                return null;
+            }
+
+            var debugConsole = resolveConsole();
+
+            function logNextStep(context, details) {
+                if (!debugConsole || typeof debugConsole.log !== 'function') {
+                    return;
+                }
+
+                if (typeof details === 'undefined') {
+                    debugConsole.log('[Questionnaire][NextStep]', context);
+                    return;
+                }
+
+                try {
+                    debugConsole.log('[Questionnaire][NextStep]', context, details);
+                } catch (error) {
+                    debugConsole.log('[Questionnaire][NextStep]', context);
+                }
+            }
+
             function slugify(value) {
                 return (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
             }
@@ -650,7 +679,6 @@
                 }
                 storeAnswerValue(target.name, updatedValue);
                 updateNextStep(target.name, updatedValue);
-
             }, true);
 
             form.addEventListener('submit', function () {
@@ -936,6 +964,12 @@
 
                 var dependencyNext = dependencyRouting(question, value);
                 if (dependencyNext) {
+                    logNextStep('context-dependency', {
+                        identifier: identifier,
+                        question: resolvedKey,
+                        value: value,
+                        nextStep: dependencyNext
+                    });
                     return dependencyNext;
                 }
 
@@ -946,9 +980,22 @@
 
                 var index = stepOrder.indexOf(questionStep);
                 if (index !== -1 && index + 1 < stepOrder.length) {
-                    return stepOrder[index + 1];
+                    var subsequent = stepOrder[index + 1];
+                    logNextStep('context-step-order', {
+                        identifier: identifier,
+                        question: resolvedKey,
+                        value: value,
+                        nextStep: subsequent
+                    });
+                    return subsequent;
                 }
 
+                logNextStep('context-final-step', {
+                    identifier: identifier,
+                    question: resolvedKey,
+                    value: value,
+                    nextStep: finalStep
+                });
                 return finalStep;
             }
 
@@ -1050,6 +1097,11 @@
                     return;
                 }
                 var next = computeNextStep(changedIdentifier, providedValue);
+                logNextStep('update', {
+                    identifier: changedIdentifier || null,
+                    providedValue: providedValue,
+                    nextStep: next
+                });
                 Array.prototype.forEach.call(fields, function (field) {
                     field.value = next || '';
                 });
@@ -1058,6 +1110,11 @@
             function computeNextStep(changedIdentifier, providedValue) {
                 var contextual = computeNextStepFromContext(changedIdentifier, providedValue);
                 if (contextual) {
+                    logNextStep('contextual', {
+                        identifier: changedIdentifier || null,
+                        providedValue: providedValue,
+                        nextStep: contextual
+                    });
                     return contextual;
                 }
 
@@ -1080,15 +1137,32 @@
 
                     var dependencyNext = dependencyRouting(question, value);
                     if (dependencyNext) {
+                        logNextStep('fallback-dependency', {
+                            identifier: changedIdentifier || null,
+                            question: key,
+                            value: value,
+                            nextStep: dependencyNext
+                        });
                         return dependencyNext;
                     }
                 }
 
                 var index = stepOrder.indexOf(step);
                 if (index !== -1 && index + 1 < stepOrder.length) {
-                    return stepOrder[index + 1];
+                    var orderedNext = stepOrder[index + 1];
+                    logNextStep('step-order', {
+                        identifier: changedIdentifier || null,
+                        step: step,
+                        nextStep: orderedNext
+                    });
+                    return orderedNext;
                 }
 
+                logNextStep('final-step', {
+                    identifier: changedIdentifier || null,
+                    step: step,
+                    nextStep: finalStep
+                });
                 return finalStep;
             }
 
@@ -1133,6 +1207,12 @@
 
                     var normalizedDependencyValues = normalizeValues(dependencyValues);
                     if (hasIntersection(normalizedValues, normalizedDependencyValues)) {
+                        logNextStep('dependency-match', {
+                            question: key,
+                            answerValues: normalizedValues,
+                            dependencyValues: normalizedDependencyValues,
+                            targetStep: targetStep
+                        });
                         return targetStep;
                     }
                 }
@@ -1202,7 +1282,6 @@
                 if (name && idCandidates.indexOf(name) === -1) {
                     idCandidates.push(name);
                 }
-
 
                 for (var index = 0; index < idCandidates.length; index++) {
                     var element = document.getElementById(idCandidates[index]);
