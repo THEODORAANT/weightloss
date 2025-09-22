@@ -649,29 +649,37 @@
                     toggleActiveButtons(target.name, updatedValue);
                 }
                 storeAnswerValue(target.name, updatedValue);
-                updateNextStep();
+                updateNextStep(target.name, updatedValue);
+
             }, true);
 
             form.addEventListener('submit', function () {
                 updateNextStep();
             });
 
-            window.submitForm = function () {
-                updateNextStep();
+            window.submitForm = function (questionKey) {
+                var providedValue;
+                if (typeof questionKey !== 'undefined') {
+                    providedValue = readImmediateValue(questionKey);
+                    if (typeof providedValue !== 'undefined') {
+                        storeAnswerValue(questionKey, providedValue);
+                    }
+                }
+                updateNextStep(questionKey, providedValue);
                 form.submit();
             };
 
             window.setValuesForm = function (questionKey, value) {
                 setHiddenValue(questionKey, value);
                 toggleActiveButtons(questionKey, value);
-                updateNextStep();
+                updateNextStep(questionKey, value);
                 form.submit();
             };
 
             window.setValuesreorderForm = function (questionKey, value) {
                 setHiddenValue(questionKey, value);
                 toggleActiveButtons(questionKey, value);
-                updateNextStep();
+                updateNextStep(questionKey, value);
                 form.submit();
             };
 
@@ -853,18 +861,206 @@
                 });
             }
 
-            function updateNextStep() {
+            function resolveQuestionKey(identifier) {
+                if (!identifier) {
+                    return null;
+                }
+
+                if (Object.prototype.hasOwnProperty.call(structure, identifier)) {
+                    return identifier;
+                }
+
+                if (Object.prototype.hasOwnProperty.call(questionByName, identifier)) {
+                    return questionByName[identifier];
+                }
+
+                if (identifier.slice(-2) === '[]') {
+                    var trimmed = identifier.slice(0, -2);
+                    if (Object.prototype.hasOwnProperty.call(structure, trimmed)) {
+                        return trimmed;
+                    }
+                    if (Object.prototype.hasOwnProperty.call(questionByName, trimmed)) {
+                        return questionByName[trimmed];
+                    }
+                }
+
+                if (identifier.indexOf('-') !== -1) {
+                    var normalized = identifier.replace(/-/g, '_');
+                    if (Object.prototype.hasOwnProperty.call(structure, normalized)) {
+                        return normalized;
+                    }
+                    if (Object.prototype.hasOwnProperty.call(questionByName, normalized)) {
+                        return questionByName[normalized];
+                    }
+                }
+
+                return null;
+            }
+
+            function getStepForQuestionKey(questionKey) {
+                if (!questionKey || !Object.prototype.hasOwnProperty.call(structure, questionKey)) {
+                    return null;
+                }
+
+                var question = structure[questionKey];
+                if (!question) {
+                    return null;
+                }
+
+                if (question.step && question.step !== '') {
+                    return question.step;
+                }
+
+                return questionKey;
+            }
+
+            function computeNextStepFromContext(identifier, providedValue) {
+                if (!identifier) {
+                    return null;
+                }
+
+                var resolvedKey = resolveQuestionKey(identifier);
+                if (!resolvedKey) {
+                    return null;
+                }
+
+                var question = structure[resolvedKey];
+                if (!question) {
+                    return null;
+                }
+
+                var value = (typeof providedValue === 'undefined') ? readAnswer(question, resolvedKey) : providedValue;
+                if (!hasUsableValue(value)) {
+                    return null;
+                }
+
+                var dependencyNext = dependencyRouting(question, value);
+                if (dependencyNext) {
+                    return dependencyNext;
+                }
+
+                var questionStep = getStepForQuestionKey(resolvedKey);
+                if (!questionStep) {
+                    return null;
+                }
+
+                var index = stepOrder.indexOf(questionStep);
+                if (index !== -1 && index + 1 < stepOrder.length) {
+                    return stepOrder[index + 1];
+                }
+
+                return finalStep;
+            }
+
+            function readImmediateValue(identifier) {
+                if (!identifier) {
+                    return undefined;
+                }
+
+                var resolvedKey = resolveQuestionKey(identifier) || identifier;
+                var question = Object.prototype.hasOwnProperty.call(structure, resolvedKey) ? structure[resolvedKey] : null;
+                var selectorNames = collectSelectorNames(resolvedKey, question);
+
+                if (!selectorNames.length) {
+                    selectorNames = [];
+                    if (resolvedKey) {
+                        selectorNames.push(resolvedKey);
+                    }
+                    if (identifier && selectorNames.indexOf(identifier) === -1) {
+                        selectorNames.push(identifier);
+                    }
+                }
+
+                for (var i = 0; i < selectorNames.length; i++) {
+                    var field = form.querySelector('[name="' + cssEscape(selectorNames[i]) + '"]');
+                    if (!field) {
+                        continue;
+                    }
+
+                    if (field.type === 'checkbox') {
+                        return readValueFromInput(field);
+                    }
+
+                    if (field.type === 'radio') {
+                        var checkedRadio = form.querySelector('[name="' + cssEscape(selectorNames[i]) + '"]:checked');
+                        return checkedRadio ? checkedRadio.value : null;
+                    }
+
+                    return field.value;
+                }
+
+                var idCandidates = [];
+
+                if (identifier && idCandidates.indexOf(identifier) === -1) {
+                    idCandidates.push(identifier);
+                }
+
+                if (resolvedKey && idCandidates.indexOf(resolvedKey) === -1) {
+                    idCandidates.push(resolvedKey);
+                }
+
+                for (var j = 0; j < selectorNames.length; j++) {
+                    if (idCandidates.indexOf(selectorNames[j]) === -1) {
+                        idCandidates.push(selectorNames[j]);
+                    }
+                }
+
+                if (resolvedKey && Object.prototype.hasOwnProperty.call(questionAliasesByKey, resolvedKey)) {
+                    var aliasList = questionAliasesByKey[resolvedKey];
+                    for (var k = 0; k < aliasList.length; k++) {
+                        var aliasName = aliasList[k];
+                        if (typeof aliasName !== 'string') {
+                            continue;
+                        }
+                        if (idCandidates.indexOf(aliasName) === -1) {
+                            idCandidates.push(aliasName);
+                        }
+                    }
+                }
+
+                for (var index = 0; index < idCandidates.length; index++) {
+                    var element = document.getElementById(idCandidates[index]);
+                    if (!element) {
+                        continue;
+                    }
+
+                    if (element.type === 'checkbox') {
+                        return readValueFromInput(element);
+                    }
+
+                    if (element.type === 'radio') {
+                        if (element.name) {
+                            var checkedByName = form.querySelector('[name="' + cssEscape(element.name) + '"]:checked');
+                            if (checkedByName) {
+                                return checkedByName.value;
+                            }
+                        }
+                        return element.checked ? element.value : null;
+                    }
+
+                    return element.value;
+                }
+
+                return undefined;
+            }
+
+            function updateNextStep(changedIdentifier, providedValue) {
                 var fields = form.querySelectorAll('input[name="nextstep"]');
                 if (!fields.length) {
                     return;
                 }
-                var next = computeNextStep();
+                var next = computeNextStep(changedIdentifier, providedValue);
                 Array.prototype.forEach.call(fields, function (field) {
                     field.value = next || '';
                 });
             }
 
-            function computeNextStep() {
+            function computeNextStep(changedIdentifier, providedValue) {
+                var contextual = computeNextStepFromContext(changedIdentifier, providedValue);
+                if (contextual) {
+                    return contextual;
+                }
+
                 var step = currentStep || stepOrder[0] || '';
                 if (!step) {
                     return '';
@@ -1006,6 +1202,7 @@
                 if (name && idCandidates.indexOf(name) === -1) {
                     idCandidates.push(name);
                 }
+
 
                 for (var index = 0; index < idCandidates.length; index++) {
                     var element = document.getElementById(idCandidates[index]);
