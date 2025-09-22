@@ -323,30 +323,6 @@ function perch_member_questionsForQuestionnaire($type) {
 
 
     }
-
-    function perch_member_questionnaire_structure($type = 'first-order')
-    {
-        $API  = new PerchAPI(1.0, 'perch_members');
-        $Questionnaires = new PerchMembers_Questionnaires($API);
-
-        return $Questionnaires->get_question_structure($type);
-    }
-
-    function perch_member_questionnaire_dependencies($type = 'first-order')
-    {
-        $structure = perch_member_questionnaire_structure($type);
-        $dependencies = [];
-
-        if (is_array($structure)) {
-            foreach ($structure as $key => $question) {
-                if (!empty($question['dependencies'])) {
-                    $dependencies[$key] = $question['dependencies'];
-                }
-            }
-        }
-
-        return $dependencies;
-    }
     function perch_member_check_questionnaire_status_for_member($memberid,$qid) {
             $API  = new PerchAPI(1.0, 'perch_members');
               $Questionnaires = new PerchMembers_Questionnaires($API);
@@ -414,16 +390,16 @@ function perch_member_questionsForQuestionnaire($type) {
 
                              return true;
             }
-      function perch_member_add_questionnaire_api($memberid,$data,$type,$orderID=null)
+      function perch_member_add_questionnaire_api($memberid,$data,$type)
         {
             $API  = new PerchAPI(1.0, 'perch_members');
                            $Questionnaires = new PerchMembers_Questionnaires($API);
-                        return  $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
+                        return  $Questionnaires->add_to_member($memberid,$data,$type);
 
 
                        //  return true;
         }
-    function perch_member_add_questionnaire($data,$type,$orderID=null)
+    function perch_member_add_questionnaire($data,$type)
     { //echo "perch_member_add_questionnaire";print_r($data);
       $Session = PerchMembers_Session::fetch();
 $memberid=0;
@@ -432,7 +408,7 @@ $memberid=0;
                 }
                  $API  = new PerchAPI(1.0, 'perch_members');
                    $Questionnaires = new PerchMembers_Questionnaires($API);
-                   $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
+                   $Questionnaires->add_to_member($memberid,$data,$type);
 
 
                  return true;

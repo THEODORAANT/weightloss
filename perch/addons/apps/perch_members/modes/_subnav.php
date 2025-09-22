@@ -17,13 +17,8 @@
             					'perch_members/affiliates/payouts',
             					'perch_members/affiliates/payouts',
             			], 'label'=>'Affiliate Payouts', 'priv'=>'perch_members.affiliates.manage'],
-                ['page'=>[
-                                        'perch_members/forms',
-                                        'perch_members/forms/edit',
-                        ], 'label'=>'Forms',  'priv'=>'perch_members.forms.manage'],
-                ['page'=>[
-                                        'perch_members/questionnaire_questions',
-                                        'perch_members/questionnaire_questions/edit',
-                                        'perch_members/questionnaire_questions/flowchart',
-                        ], 'label'=>'Questionnaires',  'priv'=>'perch_members.questionnaires.manage'],
-        ], $CurrentUser);
+		['page'=>[
+					'perch_members/forms',
+					'perch_members/forms/edit',
+			], 'label'=>'Forms',  'priv'=>'perch_members.forms.manage'],
+	], $CurrentUser);

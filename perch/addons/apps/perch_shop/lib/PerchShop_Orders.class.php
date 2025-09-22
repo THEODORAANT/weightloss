@@ -300,7 +300,7 @@ $sql= $selectsql. $fromsql.$wheresql;
 
         return $this->return_instances($results);
 	}
-	    public function send_monthly_notification( $Customer,$message)
+	    public function send_monthly_notificationtest( $Customer,$message)
         {
 
          	$Members = new PerchMembers_Members($this->api);
@@ -321,7 +321,7 @@ $sql= $selectsql. $fromsql.$wheresql;
 
                    return $Email->send();
         }
-    public function send_monthly_notificationtest( $Customer,$message)
+    public function send_monthly_notification( $Customer,$message)
     {
 
      	$Members = new PerchMembers_Members($this->api);
@@ -339,8 +339,9 @@ if(isset( $data["FirstName"])){  $data["FirstName"]=$properties["first_name"];} 
 
                $Email->recipientEmail($Customer->customerEmail());
                //$Email->body($message);
-
-               return $Email->send();
+$Email->send();
+print_r($Email);
+               return true;
     }
 	public function get_dashboard_widget()
 	{

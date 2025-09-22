@@ -3,378 +3,455 @@
 class PerchMembers_Questionnaires extends PerchAPI_Factory
 {
     protected $table     = 'questionnaire';
-    protected $pk        = 'id';
-    protected $singular_classname = 'PerchMembers_Questionnaire';
-
-    public $reorder_questions = [];
-    public $reorder_questions_answers = [];
-    public $questions_and_answers = [];
-    public $questions = [];
-
-    protected $question_aliases = [
-        'reorder'      => [],
-        'first-order'  => [],
+	protected $pk        = 'id';
+	protected $singular_classname = 'PerchMembers_Questionnaire';
+	public $reorder_questions=[
+	"weight"=>"What is your weight?",
+	"weight2"=>"inches",
+	"weightunit"=>"weight unit",
+	"bmi"=>"BMI",
+	"side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
+	"more_side_effects"=>"Please tell us as much as you can about your side effects",
+	"additional-medication"=>"Have you started taking any additional medication?",
+	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
+	"rate_current_experience"=>"Are you happy with your monthly weight loss?",
+	"no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
+	"chat_with_us"=>"Would you like to chat with someone?",
+	"email_address"=>"Please enter your  email address",
+	 "multiple_answers"=>"Have client alter answers?",
+	 "documents"=>"Member Documents",
+	];
+	public $steps=[
+    "age"=>"howold",
+    "ethnicity"=>"18to74",
+    "ethnicity-more"=>"Mixed",
+    "gender"=>"ethnicity",
+    "pregnancy"=>"Female",
+    "weight"=>"weight",
+    "height"=>"height",
+    "diabetes"=>"diabetes",
+    "conditions"=>"weight2",
+    "bariatricoperation"=>"bariatricoperation",
+    "more_pancreatitis"=>"more_pancreatitis",
+    "thyroidoperation"=>"thyroidoperation",
+    "more_conditions"=>"more",
+    "conditions2"=>"conditions",
+    "medical_conditions"=>"medical_conditions",
+    "medications"=>"medications",
+    "weight-wegovy"=>"starting_wegovy",
+    "dose-wegovy"=>"dose_wegovy",
+    "recently-dose-wegovy"=>"recently_wegovy",
+    "continue-dose-wegovy"=>"continue_with_wegovy",
+    "effects_with_wegovy"=>"effects_with_wegovy",
+    "medication_allergies"=>"medication_allergies",
+    "other_medical_conditions"=>"list_any",
+    "wegovy_side_effects"=>"wegovy_side_effects",
+    "gp_informed"=>"gp_informed",
+    "GP_email_address"=>"gp_address",
+    "Get access to special offers"=>"access_special_offers"
+    ];
+    public $reorder_questions_answers = [
+        "weight" => [
+            "label" => "What is your current weight?",
+            "type" => "text",
+            "name" => "weight"
+        ],
+        "weight2" => [
+            "label" => "Weight (lbs hidden input)",
+            "type" => "hidden",
+            "name" => "weight2"
+        ],
+        "weightunit" => [
+            "label" => "Weight Unit (kg or st/lbs)",
+            "type" => "radio",
+            "name" => "weightradio-unit",
+            "options" => [
+                "kg" => "kg",
+                "st-lbs" => "st/lbs"
+            ]
+        ],
+        "side_effects" => [
+            "label" => "Have you experienced any side effects whilst taking the medication?",
+            "type" => "button",
+            "name" => "more_side_effects",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
+            ]
+        ],
+        "more_side_effects" => [
+            "label" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.",
+            "type" => "textarea",
+            "name" => "more_side_effects"
+        ],
+        "additional_medication" => [
+            "label" => "Have you started taking any additional medication?",
+            "type" => "button",
+            "name" => "additional-medication",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
+            ]
+        ],
+        "list_additional_medication" => [
+            "label" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.",
+            "type" => "textarea",
+            "name" => "list_additional_medication"
+        ],
+        "rate_current_experience" => [
+            "label" => "Are you happy with your monthly weight loss?",
+            "type" => "button",
+            "name" => "rate_current_experience",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
+            ]
+        ],
+        "no_happy_reasons" => [
+            "label" => "Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
+            "type" => "textarea",
+            "name" => "no_happy_reasons"
+        ],
+        "chat_with_us" => [
+            "label" => "Would you like to chat with someone?",
+            "type" => "button",
+            "name" => "chat_with_us",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
+            ]
+        ],
+        "email_address" => [
+            "label" => "Please enter your  email address",
+            "type" => "text",
+            "name" => "email_address"
+        ]
     ];
 
-    protected $default_sort_column = 'created_at';
-    public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
+    public $questions_and_answers  = [
+                                       "consultation" => [
+                                           "label" => "agree-consultation",
+                                           "type" => "text",
+                                           "name" => "consultation"
+                                       ],
+                                       "age" => [
+                                           "label" => "How old are you?",
+                                           "type" => "radio",
+                                           "name" => "age",
+                                           "options" => [
+                                               "under18" => "Under 18",
+                                               "18to74" => "18 to 74",
+                                               "75over" => "75 or over"
+                                           ]
+                                       ],
+                                       "ethnicity" => [
+                                           "label" => "Which ethnicity are you?",
+                                           "type" => "radio",
+                                           "name" => "ethnicity",
+                                           "options" => [
+                                               "asian" => "Asian or Asian British",
+                                               "black" => "Black (Caribbean, African)",
+                                               "mixed" => "Mixed ethnicities",
+                                               "other" => "Other ethnic group",
+                                               "white" => "White"
+                                           ]
+                                       ],
+                                       "ethnicity-more" => [
+                                           "label" => "Please tell us which ethnicities",
+                                           "type" => "text",
+                                           "name" => "ethnicity-more"
+                                       ],
+                                       "gender" => [
+                                           "label" => "What sex were you assigned at birth?",
+                                           "type" => "radio",
+                                           "name" => "gender",
+                                           "options" => [
+                                               "male" => "Male",
+                                               "female" => "Female"
+                                           ]
+                                       ],
+                                       "pregnancy" => [
+                                           "label" => "Are you currently pregnant, trying to get pregnant, or breastfeeding?",
+                                           "type" => "radio",
+                                           "name" => "pregnancy",
+                                           "options" => [
+                                               "yes" => "Yes",
+                                               "no" => "No"
+                                           ]
+                                       ],
+                                       "weight" => [
+                                           "label" => "What is your weight?",
+                                           "type" => "text",
+                                           "name" => "weight"
+                                       ],
+                                       "weightunit" => [
+                                           "label" => "weight unit",
+                                           "type" => "radio",
+                                           "name" => "weightradio-unit",
+                                           "options" => [
+                                               "kg" => "kg",
+                                               "st" => "st/lbs"
+                                           ]
+                                       ],
+                                       "height" => [
+                                           "label" => "What is your height?",
+                                           "type" => "text",
+                                           "name" => "height"
+                                       ],
+                                       "heightunit" => [
+                                           "label" => "height unit",
+                                           "type" => "radio",
+                                           "name" => "heightunit-radio",
+                                           "options" => [
+                                               "cm" => "cm",
+                                               "ft-in" => "ft/in"
+                                           ]
+                                       ],
+                                       "diabetes" => [
+                                           "label" => "Have you been diagnosed with diabetes?",
+                                           "type" => "radio",
+                                           "name" => "diabetes",
+                                           "options" => [
+                                               "medicated" => "I have diabetes and take medication for it",
+                                               "diet" => "I have diabetes and it's diet-controlled",
+                                               "family-history" => "No, but there is history of diabetes in my family",
+                                               "pre-diabetes" => "I have pre-diabetes",
+                                               "none" => "I don't have diabetes"
+                                           ]
+                                       ],
+                                       "conditions" => [
+                                           "label" => "Do any of the following statements apply to you?",
+                                           "type" => "checkbox",
+                                           "name" => "conditions[]",
+                                           "options" => [
+                                               "malabsorption" => "I have chronic malabsorption syndrome (problems absorbing food)",
+                                               "cholestasis" => "I have cholestasis",
+                                               "cancer" => "I’m currently being treated for cancer",
+                                               "retinopathy" => "I have diabetic retinopathy",
+                                               "heart-failure" => "I have severe heart failure",
+                                               "thyroid-cancer" => "I have a family history of thyroid cancer and/or I’ve had thyroid cancer",
+                                               "men2" => "I have Multiple endocrine neoplasia type 2 (MEN2)",
+                                               "pancreatitis" => "I have a history of pancreatitis",
+                                               "eating-disorder" => "I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder",
+                                               "thyroid-op" => "I have had surgery or an operation to my thyroid",
+                                               "bariatric-op" => "I have had a bariatric operation such as gastric band or sleeve surgery",
+                                               "none" => "None of these statements apply to me"
+                                           ]
+                                       ],
+                                       "bariatricoperation" => [
+                                           "label" => "Was your bariatric operation in the last 6 months?",
+                                           "type" => "radio",
+                                           "name" => "bariatricoperation",
+                                           "options" => [
+                                               "yes" => "Yes",
+                                               "no" => "No"
+                                           ]
+                                       ],
+                                       "more_pancreatitis" => [
+                                           "label" => "Please tell us more about your health condition and how you manage it.",
+                                           "type" => "text",
+                                           "name" => "more_pancreatitis"
+                                       ],
+                                       "thyroidoperation" => [
+                                           "label" => "Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
+                                           "type" => "text",
+                                           "name" => "thyroidoperation"
+                                       ],
+                                       "conditions2" => [
+                                           "label" => "Do any of the following statements apply to you?",
+                                           "type" => "checkbox",
+                                           "name" => "conditions2[]",
+                                           "options" => [
+                                               "mentalhealth" => "I have been diagnosed with a mental health condition such as depression or anxiety",
+                                               "social-anxiety" => "My weight makes me anxious in social situations",
+                                               "joint-pain" => "I have joint pains and/or aches",
+                                               "osteoarthritis" => "I have osteoarthritis",
+                                               "gord" => "I have GORD and/or indigestion",
+                                               "cardio" => "I have a heart/cardiovascular problem",
+                                               "bp" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
+                                               "cholesterol" => "I’ve been diagnosed with, or have a family history of, high cholesterol",
+                                               "fatty-liver" => "I have fatty liver disease",
+                                               "apnoea" => "I have sleep apnoea",
+                                               "asthma" => "I have asthma or COPD",
+                                               "ed" => "I have erectile dysfunction",
+                                               "low-t" => "I have low testosterone",
+                                               "menopause" => "I have menopausal symptoms",
+                                               "pcos" => "I have polycystic ovary syndrome (PCOS)",
+                                               "none" => "None of these statements apply to me"
+                                           ]
+                                       ],
+                                       "medical_conditions" => [
+                                           "label" => "Do you have any other medical conditions?",
+                                           "type" => "radio",
+                                           "name" => "medical_conditions",
+                                           "options" => [
+                                               "yes" => "Yes",
+                                               "no" => "No"
+                                           ]
+                                       ],
+                                       "medications" => [
+                                           "label" => "Have you ever taken any of the following medications to help you lose weight?",
+                                           "type" => "checkbox",
+                                           "name" => "medications[]",
+                                           "options" => [
+                                               "wegovy" => "Wegovy",
+                                               "ozempic" => "Ozempic",
+                                               "saxenda" => "Saxenda",
+                                               "rybelsus" => "Rybelsus",
+                                               "mounjaro" => "Mounjaro",
+                                               "alli" => "Alli",
+                                               "mysimba" => "Mysimba",
+                                               "other" => "Other",
+                                               "never" => "I have never taken medication to lose weight"
+                                           ]
+                                       ],
+                                       "weight-wegovy" => [
+                                           "label" => "What was your weight in kg before starting the weight loss medication?",
+                                           "type" => "text",
+                                           "name" => "weight-wegovy"
+                                       ],
+                                       "dose-wegovy" => [
+                                           "label" => "When was your last dose of the weight loss medication?",
+                                           "type" => "radio",
+                                           "name" => "dose-wegovy",
+                                           "options" => [
+                                               "lt4" => "Less than 4 weeks ago",
+                                               "4-6" => "4–6 weeks ago",
+                                               "gt6" => "More than 6 weeks ago"
+                                           ]
+                                       ],
+                                       "recently-dose-wegovy" => [
+                                           "label" => "What dose of the weight loss medication were you prescribed most recently?",
+                                           "type" => "radio",
+                                           "name" => "recently-dose-wegovy",
+                                           "options" => [
+                                               "0.25" => "0.25mg/2.5mg",
+                                               "0.5" => "0.5mg/5mg",
+                                               "1.0" => "1mg/7.5mg",
+                                               "1.7" => "1.7mg/12.5mg",
+                                               "2.4" => "2.4mg/15mg",
+                                               "other" => "Other"
+                                           ]
+                                       ],
+                                       "continue-dose-wegovy" => [
+                                           "label" => "What dose would you like to continue with?",
+                                           "type" => "radio",
+                                           "name" => "continue-dose-wegovy",
+                                           "options" => [
+                                               "increase" => "Increase my dose",
+                                               "keep" => "Keep my dose",
+                                               "decrease" => "Decrease my dose",
+                                               "stop" => "I don't want to continue with this medication"
+                                           ]
+                                       ],
+                                       "effects_with_wegovy" => [
+                                           "label" => "Have you experienced any side effects with the weight loss medication?",
+                                           "type" => "radio",
+                                           "name" => "effects_with_wegovy",
+                                           "options" => [
+                                               "yes" => "Yes",
+                                               "no" => "No"
+                                           ]
+                                       ],
+                                       "wegovy_side_effects" => [
+                                           "label" => "Please tell us as much as you can about your side effects",
+                                           "type" => "text",
+                                           "name" => "wegovy_side_effects"
+                                       ],
+                                       "medication_allergies" => [
+                                           "label" => "Do you currently take any other medication or have any allergies?",
+                                           "type" => "checkbox",
+                                           "name" => "medication_allergies[]",
+                                           "options" => [
+                                               "levothyroxine" => "I’m on levothyroxine",
+                                               "warfarin" => "I’m on warfarin",
+                                               "multiple" => "Other / I take more than one prescription medication",
+                                               "none" => "I don’t take any medication",
+                                               "allergy" => "I have allergies"
+                                           ]
+                                       ],
+                                       "email_address" => [
+                                           "label" => "Please enter your GP's email address",
+                                           "type" => "text",
+                                           "name" => "email_address"
+                                       ]
+                                   ];
 
-    protected static $questionnaire_table_checked = false;
 
-    public function __construct($api=false)
+		public $questions=[
+	"consultation"=>"agree-consultation",
+    "age"=>"How old are you?",
+    "ethnicity"=>"Which ethnicity are you?",
+    "ethnicity-more"=>"Please tell us which ethnicities",
+    "gender"=>"What sex were you assigned at birth?",
+    "pregnancy"=>"Are you currently pregnant, trying to get pregnant, or breastfeeding?",
+    "weight"=>"What is your weight?",
+      //"weight2"=>"",
+    "weightunit"=>"weight unit",
+    "height"=>"What is your height?",
+    // "height2"=>"",
+    "heightunit"=>"height unit",
+    "diabetes"=>"Have you been diagnosed with diabetes?",
+    "conditions"=>"Do any of the following statements apply to you?",
+    "bariatricoperation"=>"Was your bariatric operation in the last 6 months? ",
+    "more_pancreatitis"=>"Please tell us more about your mental health condition and how you manage it",
+    "thyroidoperation"=>"Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
+    "more_conditions"=>"Please tell us more about your mental health condition and how you manage it",
+    "conditions2"=>"Do any of the following statements apply to you?",
+    "medical_conditions"=>"Do you have any other medical conditions?",
+    "medications"=>"Have you ever taken any of the following medications to help you lose weight?",
+    "weight-wegovy"=>"What was your weight in kg before starting the weight loss medication?",
+    "dose-wegovy"=>"When was your last dose of the weight loss medication?",
+    "recently-dose-wegovy"=>"What dose of the weight loss medication were you prescribed most recently?",
+    "continue-dose-wegovy"=>"If you want to continue with the weight loss medication, what dose would you like to continue with?",
+    "effects_with_wegovy"=>"Have you experienced any side effects with the weight loss medication?",
+    "medication_allergies"=>"Do you currently take any other medication or have any allergies?",
+    "other_medical_conditions"=>"Please list any other medical conditions you have. ",
+    "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
+    "gp_informed"=>"Would you like your GP to be informed of this consultation?",
+    "email_address"=>"Please enter your GP's email address",
+    "Get access to special offers"=>"email_address",
+    "multiple_answers"=>"Have client alter answers?",
+    "documents"=>"Member Documents",
+    "bmi"=>"BMI",
+    ];
+public $doses = [
+    '25mg' => '0.25mg/2.5mg',
+    '05mg' => '0.5mg/5mg',
+    '1mg'  => '1mg/7.5mg',
+    '17mg' => '1.7mg/12.5mg',
+    '24mg' => '2.4mg/15mg',
+    'other'=> 'Other'
+];
+
+
+   /* protected $required_answers=[
+    "age"=>["18to74"],
+     "ethnicity"=>["asian","African"],
+
+    ]*/
+
+	protected $default_sort_column = 'created_at';
+	public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
+	public function get_questions($type='first-order')
     {
-        parent::__construct($api);
-
-        $this->ensure_question_schema();
-        $this->ensure_questionnaire_table_schema();
-        $this->backfill_question_metadata();
-
-        $Questions = new PerchMembers_QuestionnaireQuestions($api);
-
-        $this->load_questions_for_type($Questions, 'reorder');
-        $this->load_questions_for_type($Questions, 'first-order');
+    if($type=="re-order"){
+     return $this->reorder_questions;
     }
-
-    protected function ensure_question_schema()
-    {
-        static $checked = false;
-        if ($checked) {
-            return;
-        }
-
-        $checked = true;
-        $table = PERCH_DB_PREFIX.'members_questionnaire_questions';
-        $columns = $this->db->get_rows('SHOW COLUMNS FROM '.$table);
-        $fields = [];
-        if (is_array($columns)) {
-            foreach ($columns as $col) {
-                if (isset($col['Field'])) {
-                    $fields[] = $col['Field'];
-                }
-            }
-        }
-
-        if (!in_array('fieldName', $fields)) {
-            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN fieldName varchar(64) DEFAULT NULL AFTER `type`');
-        }
-
-        if (!in_array('stepSlug', $fields)) {
-            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN stepSlug varchar(64) DEFAULT NULL AFTER `fieldName`');
-        }
-
-        if (!in_array('dependencies', $fields)) {
-            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN dependencies text AFTER `options`');
-        }
+    return $this->questions;
     }
-
-    protected function ensure_questionnaire_table_schema()
-    {
-        if (self::$questionnaire_table_checked) {
-            return;
-        }
-
-        self::$questionnaire_table_checked = true;
-
-        $table = PERCH_DB_PREFIX.'questionnaire';
-        $columns = $this->db->get_rows('SHOW COLUMNS FROM '.$table);
-
-        if (!is_array($columns)) {
-            return;
-        }
-
-        $fields = [];
-        foreach ($columns as $col) {
-            if (isset($col['Field'])) {
-                $fields[] = $col['Field'];
-            }
-        }
-
-        if (!in_array('order_id', $fields)) {
-            $this->db->execute('ALTER TABLE '.$table.' ADD COLUMN order_id int(10) unsigned DEFAULT NULL AFTER member_id');
-        }
-    }
-
-    protected function backfill_question_metadata()
-    {
-        $table = PERCH_DB_PREFIX.'members_questionnaire_questions';
-        $needs = $this->db->get_value('SELECT COUNT(*) FROM '.$table.' WHERE fieldName IS NULL OR fieldName="" OR stepSlug IS NULL OR stepSlug=""');
-
-        $needsDependencies = $this->db->get_value('SELECT COUNT(*) FROM '.$table.' WHERE dependencies IS NULL OR dependencies=""');
-
-        if ((int)$needs === 0 && (int)$needsDependencies === 0) {
-            return;
-        }
-
-        $seed_file = __DIR__ . '/questionnaire_default_questions.php';
-        if (!file_exists($seed_file)) {
-            return;
-        }
-
-        $definitions = include $seed_file;
-        if (!is_array($definitions)) {
-            return;
-        }
-
-        $rows = $this->db->get_rows('SELECT questionID, questionnaireType, questionKey, fieldName, stepSlug, dependencies FROM '.$table);
-        if (!is_array($rows)) {
-            return;
-        }
-
-        foreach ($rows as $row) {
-            $type = $row['questionnaireType'];
-            $key  = $row['questionKey'];
-
-            if (!isset($definitions[$type]) || !isset($definitions[$type][$key])) {
-                continue;
-            }
-
-            $definition = $definitions[$type][$key];
-            $update = [];
-
-            if ((empty($row['fieldName'])) && isset($definition['name'])) {
-                $update['fieldName'] = $definition['name'];
-            }
-
-            if ((empty($row['stepSlug'])) && isset($definition['step'])) {
-                $update['stepSlug'] = $definition['step'];
-            }
-
-            $dependencies_empty = empty($row['dependencies']);
-            if (!$dependencies_empty) {
-                $decoded_dependencies = PerchUtil::json_safe_decode($row['dependencies'], true);
-                if (is_array($decoded_dependencies) && !PerchUtil::count($decoded_dependencies)) {
-                    $dependencies_empty = true;
-                }
-            }
-
-            if ($dependencies_empty && isset($definition['dependencies'])) {
-                $encoded = PerchUtil::json_safe_encode($definition['dependencies']);
-                if ($encoded !== false) {
-                    $update['dependencies'] = $encoded;
-                }
-            }
-
-            if (!empty($update)) {
-                $this->db->update($table, $update, 'questionID', $row['questionID']);
-            }
-        }
-    }
-
-    protected function load_questions_for_type(PerchMembers_QuestionnaireQuestions $Questions, $type)
-    {
-        $canonical = $this->normalise_type($type);
-        $rows = $Questions->get_for_type($canonical);
-        if (!$rows) {
-            return;
-        }
-
-        foreach ($rows as $row) {
-            $opts = $row['options'] ? PerchUtil::json_safe_decode($row['options'], true) : [];
-            if (!is_array($opts)) {
-                $opts = [];
-            }
-
-            $deps = $row['dependencies'] ? PerchUtil::json_safe_decode($row['dependencies'], true) : [];
-            if (!is_array($deps)) {
-                $deps = [];
-            }
-
-            $field_name = isset($row['fieldName']) && $row['fieldName'] !== '' ? $row['fieldName'] : $row['questionKey'];
-            $step = isset($row['stepSlug']) && $row['stepSlug'] !== '' ? $row['stepSlug'] : $row['questionKey'];
-
-            $question = [
-                'label'        => $row['label'],
-                'type'         => $row['type'],
-                'name'         => $field_name,
-                'options'      => $opts,
-                'step'         => $step,
-                'dependencies' => $deps,
-                'sort'         => isset($row['sort']) ? (int)$row['sort'] : null,
-                'question_id'  => isset($row['questionID']) ? (int)$row['questionID'] : null,
-            ];
-
-            $aliases = $this->expand_aliases($row['questionKey'], $row['type']);
-            if ($field_name && $field_name !== $row['questionKey']) {
-                $aliases = array_merge($aliases, $this->expand_aliases($field_name, $row['type']));
-            }
-
-            $aliases = array_values(array_unique(array_filter($aliases)));
-            $question['aliases'] = array_values(array_diff($aliases, [$row['questionKey']]));
-
-            if ($canonical === 'reorder') {
-                $this->reorder_questions[$row['questionKey']] = $row['label'];
-                $this->reorder_questions_answers[$row['questionKey']] = $question;
-            } else {
-                $this->questions[$row['questionKey']] = $row['label'];
-                $this->questions_and_answers[$row['questionKey']] = $question;
-            }
-
-            foreach ($aliases as $alias) {
-                $this->question_aliases[$canonical][$alias] = $row['questionKey'];
-            }
-        }
-    }
-
-    protected function expand_aliases($value, $type = null)
-    {
-        $aliases = [];
-        $value = trim((string)$value);
-        if ($value === '') {
-            return $aliases;
-        }
-
-        $aliases[] = $value;
-
-        if (substr($value, -2) === '[]') {
-            $aliases[] = substr($value, 0, -2);
-        } elseif ($type === 'checkbox') {
-            $aliases[] = $value.'[]';
-        }
-
-        $extra = [];
-        foreach ($aliases as $alias) {
-            if (strpos($alias, '-') !== false) {
-                $extra[] = str_replace('-', '_', $alias);
-            }
-            if (strpos($alias, '_') !== false) {
-                $extra[] = str_replace('_', '-', $alias);
-            }
-        }
-
-        return array_values(array_unique(array_merge($aliases, $extra)));
-    }
-
-    protected function normalise_type($type)
-    {
-        return ($type === 're-order') ? 'reorder' : $type;
-    }
-
-    protected function resolve_question_key($type, $key)
-    {
-        $type = $this->normalise_type($type);
-        if (isset($this->question_aliases[$type][$key])) {
-            return $this->question_aliases[$type][$key];
-        }
-
-        foreach ($this->expand_aliases($key) as $alias) {
-            if (isset($this->question_aliases[$type][$alias])) {
-                return $this->question_aliases[$type][$alias];
-            }
-        }
-
-        return $key;
-    }
-
-    protected function get_question_definition($type, $key)
-    {
-        $type = $this->normalise_type($type);
-        $questions = $this->get_questions_answers($type);
-        if (!is_array($questions)) {
-            return null;
-        }
-
-        $canonical = $this->resolve_question_key($type, $key);
-        return $questions[$canonical] ?? null;
-    }
-
-    protected function format_answer_value($type, $key, $value)
-    {
-        $definition = $this->get_question_definition($type, $key);
-        if (!$definition) {
-            return is_array($value) ? implode(', ', $value) : $value;
-        }
-
-        $options = isset($definition['options']) && is_array($definition['options']) ? $definition['options'] : [];
-
-        if (!PerchUtil::count($options)) {
-            return is_array($value) ? implode(', ', $value) : $value;
-        }
-
-        if (is_array($value)) {
-            $labels = [];
-            foreach ($value as $item) {
-                $labels[] = isset($options[$item]) ? $options[$item] : $item;
-            }
-            return implode(', ', $labels);
-        }
-
-        return isset($options[$value]) ? $options[$value] : $value;
-    }
-
-    public function get_questions($type='first-order')
-    {
-        $type = $this->normalise_type($type);
-        if ($type === 'reorder') {
-            return $this->reorder_questions;
-        }
-
-        return $this->questions;
-    }
-
     public function get_questions_answers($type='first-order')
-    {
-        $type = $this->normalise_type($type);
-        if ($type === 'reorder') {
-            return $this->reorder_questions_answers;
+        {
+        if($type=="re-order"){
+         return $this->reorder_questions_answers;
         }
-
         return $this->questions_and_answers;
-    }
-
-    public function get_question_structure($type = 'first-order')
-    {
-        $type = $this->normalise_type($type);
-        $questions = $this->get_questions_answers($type);
-        $structure = [];
-
-        if (PerchUtil::count($questions)) {
-            foreach ($questions as $key => $question) {
-                $structure[$key] = [
-                    'key'          => $key,
-                    'label'        => $question['label'],
-                    'type'         => $question['type'],
-                    'name'         => $question['name'] ?? $key,
-                    'options'      => isset($question['options']) && is_array($question['options']) ? $question['options'] : [],
-                    'step'         => $question['step'] ?? $key,
-                    'dependencies' => isset($question['dependencies']) && is_array($question['dependencies']) ? $question['dependencies'] : [],
-                    'sort'         => isset($question['sort']) ? (int)$question['sort'] : null,
-                    'question_id'  => isset($question['question_id']) ? (int)$question['question_id'] : null,
-                ];
-
-                if (!empty($question['aliases'])) {
-                    $structure[$key]['aliases'] = $question['aliases'];
-                }
-            }
         }
-
-        if (PerchUtil::count($structure)) {
-            uasort($structure, function ($a, $b) {
-                $sortA = isset($a['sort']) ? (int)$a['sort'] : PHP_INT_MAX;
-                $sortB = isset($b['sort']) ? (int)$b['sort'] : PHP_INT_MAX;
-
-                if ($sortA === $sortB) {
-                    $keyA = isset($a['key']) ? (string)$a['key'] : '';
-                    $keyB = isset($b['key']) ? (string)$b['key'] : '';
-                    return strcmp($keyA, $keyB);
-                }
-
-                return $sortA <=> $sortB;
-            });
-        }
-
-        return $structure;
-    }
-        public function get_for_member($memberID,$type="first-order",$orderID=null)
+	public function get_for_member($memberID,$type="first-order")
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'questionnaire d
-                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'"';
-
-        if ($orderID !== null) {
-            $sql .= ' AND d.order_id='.$this->db->pdb((int)$orderID);
-        }
-
-        $sql .= ' order by created_at desc';
+                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'" order by created_at desc';
 
         return $this->return_instances($this->db->get_rows($sql));
     }
@@ -769,7 +846,7 @@ $this->db->execute($update_status);
     $update_status ="UPDATE ".PERCH_DB_PREFIX."questionnaire_member_status  SET `accepted`=".$accepted." where `questionnaire_id`='v1' and memberID=".$memberID." and id=".$questionnaireID." ";
 $this->db->execute($update_status);
      }
-    public function add_to_member($memberID,$data,$type,$orderID=null)
+    public function add_to_member($memberID,$data,$type)
      { // echo "add_to_member";
 
 // print_r($memberID);print_r($type); echo PerchUtil::count($this->get_for_member($memberID));
@@ -864,12 +941,24 @@ $out=[];
       if (array_key_exists($key, $this->questions)) {
 
       $qdata['question_text']=$this->questions[$key];
-      $qdata['answer_text']=$this->format_answer_value('first-order', $key, $value);
+       if(is_array($value)){
+                  $qdata['answer_text']=implode(", ", $value);
+
+                }else{
+                   $qdata['answer_text']=$value;
+
+                }
       }
       }else{
        if (array_key_exists($key, $this->reorder_questions)) {
        $qdata['question_text']=$this->reorder_questions[$key];
-       $qdata['answer_text']=$this->format_answer_value('reorder', $key, $value);
+        if(is_array($value)){
+                   $qdata['answer_text']=implode(", ", $value);
+
+                 }else{
+                    $qdata['answer_text']=$value;
+
+                 }
        }
       }
          if($type=="first-order"){
@@ -877,9 +966,9 @@ $out=[];
 
         $weightunit=explode("-",$weightradiounit);
         if(count($weightunit)>1){
-         $qdata['answer_text']=trim(($qdata['answer_text'] ?? '')." ".$weightunit[0]);
+         $qdata['answer_text'].= " ".$weightunit[0];
           if(isset($data["weight2"]) ){
-                $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
+                 $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
 
             }
             }
@@ -887,18 +976,23 @@ $out=[];
         if($key=="weight-wegovy"){
             $weightwegovyunit=explode("-",$unitwegovyradio);
                 if(count($weightwegovyunit)>1){
-                 $qdata['answer_text']=trim(($qdata['answer_text'] ?? '')." ".$weightwegovyunit[0]);
+                 $qdata['answer_text'].= " ".$weightwegovyunit[0];
                   if(isset($data["weight2-wegovy"]) ){
                          $qdata['answer_text'].= " ".$data["weight2-wegovy"]."  ".$weightwegovyunit[1];
 
                     }
                     }
         }
+           if($key=="weight-wegovy"){
+
+            $qdata['answer_text']=$doses[$value];
+        }
+
          if($key=="height"){
 
              $heightunit=explode("-",$heightunitradio);
               if(count($heightunit)>1){
-                $qdata['answer_text']=trim(($qdata['answer_text'] ?? '')." ".$heightunit[0]);
+                 $qdata['answer_text'].= " ".$heightunit[0];
                    if(isset($data["height2"])){
                                      $qdata['answer_text'].= " ".$data["height2"]."  ".$heightunit[1];
 
@@ -923,10 +1017,6 @@ if(isset($data["uuid"])){
                 $qdata['member_id']=$memberID;
                 $qdata['version']="v1";
                  $qdata['qid']= $new_id;
-           if ($orderID !== null) {
-                $qdata['order_id'] = (int)$orderID;
-           }
-
            $columns = implode(", ", array_keys($qdata)); // Columns as a string
                         $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
            $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";

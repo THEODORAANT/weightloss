@@ -169,13 +169,11 @@ if ($lastPart === 'consultation') {
     $_SESSION['questionnaire']['consultation'] = 'agree';
 }
 
-$requested_step = isset($_GET['step']) ? trim((string)$_GET['step']) : null;
-
 if (isset($_POST['nextstep'])) {
     $_SESSION['questionnaire']['confirmed'] = false;
 
     $user_id = generateUUID();
-    $current_step = $requested_step ?? '';
+    $current_step = $_GET['step'] ?? '';
     $timestamp = time();
 
     $secret_key = 'theoloss1066';
@@ -287,7 +285,7 @@ setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()
 
     ?>
 
-<?php
+<?php PerchSystem::set_var('step', $_GET["step"]);
 PerchSystem::set_var('reviewed', $_SESSION['questionnaire']['reviewed']);
 $back_links = [
     'howold' => '/get-started',
@@ -297,7 +295,7 @@ $back_links = [
     'Other' => '/get-started/questionnaire?step=18to74',
     'Mixed' => '/get-started/questionnaire?step=18to74',
     'asian' => '/get-started/questionnaire?step=18to74',
-    'Black (African/Caribbean)' => '/get-started/questionnaire?step=18to74',
+    'African' => '/get-started/questionnaire?step=18to74',
     'White' => '/get-started/questionnaire?step=18to74',
     'ethnicity' => '/get-started/questionnaire?step=18to74',
     'Female' => '/get-started/questionnaire?step=ethnicity',
@@ -357,117 +355,11 @@ $back_links['conditions']="/get-started/questionnaire?step=more_pancreatitis";
                     $back_links['medication_allergies']="/get-started/questionnaire?step=effects_with_wegovy";
           }
 
-$questionnaire_structure = perch_member_questionnaire_structure('first-order');
-$grouped_steps = [];
-$step_sort_index = [];
-$dependency_steps = [];
-$ordered_step_keys = [];
-$first_step = 'howold';
+$back_link = $back_links[$_GET["step"]] ?? '/get-started';
 
-if (is_array($questionnaire_structure) && PerchUtil::count($questionnaire_structure)) {
-    PerchSystem::set_var('questionnaire_structure_json', PerchUtil::json_safe_encode($questionnaire_structure));
-
-    $questionnaire_dependencies = perch_member_questionnaire_dependencies('first-order');
-    if (is_array($questionnaire_dependencies) && PerchUtil::count($questionnaire_dependencies)) {
-        PerchSystem::set_var('questionnaire_dependencies_json', PerchUtil::json_safe_encode($questionnaire_dependencies));
-    }
-
-    foreach ($questionnaire_structure as $question) {
-        $step = isset($question['step']) && $question['step'] !== '' ? $question['step'] : $question['key'];
-        $question_sort = isset($question['sort']) ? (int)$question['sort'] : PHP_INT_MAX;
-
-        if (!isset($grouped_steps[$step])) {
-            $grouped_steps[$step] = [];
-            $step_sort_index[$step] = $question_sort;
-        } else {
-            if ($question_sort < $step_sort_index[$step]) {
-                $step_sort_index[$step] = $question_sort;
-            }
-        }
-
-        $grouped_steps[$step][] = $question['key'];
-
-        if (isset($question['dependencies']) && is_array($question['dependencies'])) {
-            foreach ($question['dependencies'] as $dependency) {
-                if (!is_array($dependency)) {
-                    continue;
-                }
-
-                if (!empty($dependency['step'])) {
-                    $dependency_steps[] = $dependency['step'];
-                    continue;
-                }
-
-                if (!empty($dependency['question'])) {
-                    $target_question = $dependency['question'];
-                    if (isset($questionnaire_structure[$target_question]['step']) && $questionnaire_structure[$target_question]['step'] !== '') {
-                        $dependency_steps[] = $questionnaire_structure[$target_question]['step'];
-                    } else {
-                        $dependency_steps[] = $target_question;
-                    }
-                }
-            }
-        }
-    }
-
-    foreach ($grouped_steps as $step => &$keys) {
-        usort($keys, function ($a, $b) use ($questionnaire_structure) {
-            $definitionA = $questionnaire_structure[$a] ?? null;
-            $definitionB = $questionnaire_structure[$b] ?? null;
-
-            $sortA = is_array($definitionA) && isset($definitionA['sort']) ? (int)$definitionA['sort'] : PHP_INT_MAX;
-            $sortB = is_array($definitionB) && isset($definitionB['sort']) ? (int)$definitionB['sort'] : PHP_INT_MAX;
-
-            if ($sortA === $sortB) {
-                return strcmp((string)$a, (string)$b);
-            }
-
-            return $sortA <=> $sortB;
-        });
-    }
-    unset($keys);
-
-    if (PerchUtil::count($grouped_steps)) {
-        if (PerchUtil::count($step_sort_index)) {
-            asort($step_sort_index, SORT_NUMERIC);
-            $ordered_steps = [];
-            foreach (array_keys($step_sort_index) as $stepKey) {
-                $ordered_steps[$stepKey] = $grouped_steps[$stepKey];
-            }
-            $grouped_steps = $ordered_steps;
-        }
-
-        PerchSystem::set_var('questionnaire_steps_json', PerchUtil::json_safe_encode($grouped_steps));
-        $ordered_step_keys = array_keys($grouped_steps);
-        if (count($ordered_step_keys)) {
-            $first_step = $ordered_step_keys[0];
-        }
-    }
-}
-
-$allowed_steps = array_values(array_unique(array_merge($ordered_step_keys, $dependency_steps)));
-if (!in_array($first_step, $allowed_steps, true)) {
-    $allowed_steps[] = $first_step;
-}
-
-$current_step = $requested_step ?: $first_step;
-if (!in_array($current_step, $allowed_steps, true)) {
-    $current_step = $first_step;
-}
-
-$back_link = $back_links[$current_step] ?? '/get-started';
-
-PerchSystem::set_var('step', $current_step);
-PerchSystem::set_var('questionnaire_default_step', $first_step);
-PerchSystem::set_var('questionnaire_current_step', $current_step);
-
-$answers = $_SESSION['questionnaire'] ?? [];
 PerchSystem::set_var('previousPage', $back_link);
-PerchSystem::set_var('answers', $answers);
-if (PerchUtil::count($answers)) {
-    PerchSystem::set_var('questionnaire_answers_json', PerchUtil::json_safe_encode($answers));
-}
- PerchSystem::set_vars($answers);
+PerchSystem::set_var('answers', $_SESSION['questionnaire']);
+ PerchSystem::set_vars($_SESSION['questionnaire']);
  perch_form('questionnaire.html');
 ?>
 
