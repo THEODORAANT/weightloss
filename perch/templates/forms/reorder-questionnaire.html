@@ -650,6 +650,7 @@
                 }
                 storeAnswerValue(target.name, updatedValue);
                 updateNextStep(target.name, updatedValue);
+
             }, true);
 
             form.addEventListener('submit', function () {
@@ -1201,6 +1202,7 @@
                 if (name && idCandidates.indexOf(name) === -1) {
                     idCandidates.push(name);
                 }
+
 
                 for (var index = 0; index < idCandidates.length; index++) {
                     var element = document.getElementById(idCandidates[index]);
