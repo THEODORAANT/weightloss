@@ -150,7 +150,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "name" => "ethnicity",
                                            "options" => [
                                                "asian" => "Asian or Asian British",
-                                               "black" => "Black (Caribbean, African)",
+                                               "Black (African/Caribbean)" => "Black (African/Caribbean)",
                                                "mixed" => "Mixed ethnicities",
                                                "other" => "Other ethnic group",
                                                "white" => "White"
@@ -427,7 +427,7 @@ public $doses = [
 
    /* protected $required_answers=[
     "age"=>["18to74"],
-     "ethnicity"=>["asian","African"],
+    "ethnicity"=>["asian","Black (African/Caribbean)"],
 
     ]*/
 

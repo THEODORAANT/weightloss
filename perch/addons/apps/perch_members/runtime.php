@@ -390,16 +390,21 @@ function perch_member_questionsForQuestionnaire($type) {
 
                              return true;
             }
-      function perch_member_add_questionnaire_api($memberid,$data,$type)
+      function perch_member_add_questionnaire_api($memberid,$data,$type,$orderID=null)
         {
             $API  = new PerchAPI(1.0, 'perch_members');
                            $Questionnaires = new PerchMembers_Questionnaires($API);
-                        return  $Questionnaires->add_to_member($memberid,$data,$type);
+                        $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type);
 
+                        if ($orderID) {
+                            perch_members_link_questionnaire_to_order($orderID, $questionnaireID, $type);
+                        }
+
+                        return  $questionnaireID;
 
                        //  return true;
         }
-    function perch_member_add_questionnaire($data,$type)
+    function perch_member_add_questionnaire($data,$type,$orderID=null)
     { //echo "perch_member_add_questionnaire";print_r($data);
       $Session = PerchMembers_Session::fetch();
 $memberid=0;
@@ -408,10 +413,53 @@ $memberid=0;
                 }
                  $API  = new PerchAPI(1.0, 'perch_members');
                    $Questionnaires = new PerchMembers_Questionnaires($API);
-                   $Questionnaires->add_to_member($memberid,$data,$type);
+
+                   if ($orderID === null && function_exists('perch_shop_successful_order_id')) {
+                       $orderID = perch_shop_successful_order_id();
+                   }
+
+                   if ($orderID === null && class_exists('PerchShop_Session') && PerchShop_Session::is_set('shop_order_id')) {
+                       $orderID = PerchShop_Session::get('shop_order_id');
+                   }
+
+                   $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type);
+
+                   if ($orderID) {
+                       perch_members_link_questionnaire_to_order($orderID, $questionnaireID, $type);
+                   }
 
 
-                 return true;
+                 return $questionnaireID;
+    }
+   function perch_members_link_questionnaire_to_order($orderID, $questionnaireID, $type)
+    {
+        if (!$orderID || !$questionnaireID) {
+            return;
+        }
+
+        $ShopAPI = new PerchAPI(1.0, 'perch_shop');
+        $Orders  = new PerchShop_Orders($ShopAPI);
+        $Order   = $Orders->find((int)$orderID);
+
+        if (!$Order) {
+            return;
+        }
+
+        $fields = PerchUtil::json_safe_decode($Order->orderDynamicFields(), true);
+
+        if (!is_array($fields)) {
+            $fields = [];
+        }
+
+        if (!isset($fields['questionnaires']) || !is_array($fields['questionnaires'])) {
+            $fields['questionnaires'] = [];
+        }
+
+        $fields['questionnaires'][$type] = (int)$questionnaireID;
+
+        $Order->update([
+            'orderDynamicFields' => PerchUtil::json_safe_encode($fields),
+        ]);
     }
    function perch_member_add_commission($amount)
     { //echo "perch_member_add_questionnaire";print_r($data);
