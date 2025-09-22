@@ -521,6 +521,11 @@
                 var maxSort = (typeof Number !== 'undefined' && typeof Number.MAX_SAFE_INTEGER === 'number')
                     ? Number.MAX_SAFE_INTEGER
                     : Math.pow(2, 53) - 1;
+                var originalOrder = {};
+
+                for (var index = 0; index < steps.length; index++) {
+                    originalOrder[steps[index]] = index;
+                }
 
                 function minSortForStep(stepKey) {
                     var questions = stepQuestions[stepKey] || [];
@@ -539,11 +544,17 @@
                     return min;
                 }
 
-                return steps.sort(function (a, b) {
+                var sortedSteps = steps.slice();
+                return sortedSteps.sort(function (a, b) {
                     var sortA = minSortForStep(a);
                     var sortB = minSortForStep(b);
                     if (sortA === sortB) {
-                        return a.localeCompare(b);
+                        var originalA = Object.prototype.hasOwnProperty.call(originalOrder, a) ? originalOrder[a] : 0;
+                        var originalB = Object.prototype.hasOwnProperty.call(originalOrder, b) ? originalOrder[b] : 0;
+                        if (originalA === originalB) {
+                            return String(a).localeCompare(String(b));
+                        }
+                        return originalA - originalB;
                     }
                     return sortA - sortB;
                 });
