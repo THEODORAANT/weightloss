@@ -64,16 +64,25 @@ $steps = [
 ];
 
 // Render a field with optional second value and unit
-function renderMeasurement($value, $unitKey, $secondKey, $questionnaire) {
-    $output = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-    if (isset($questionnaire[$unitKey])) {
-        $unitParts = explode("-", $questionnaire[$unitKey]);
-        $output .= " " . htmlspecialchars($unitParts[0]);
-        if (isset($questionnaire[$secondKey])) {
-            $output .= " " . htmlspecialchars($questionnaire[$secondKey]) . " " . htmlspecialchars($unitParts[1]);
+function renderMeasurement($value, $unitKey, $secondKey, $questionnaire)
+{
+    $parts = [];
+
+    if ($value !== null && $value !== '') {
+        $parts[] = htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    }
+
+    if (!empty($questionnaire[$unitKey])) {
+        $unitParts = explode('-', (string) $questionnaire[$unitKey]);
+        $parts[] = htmlspecialchars($unitParts[0], ENT_QUOTES, 'UTF-8');
+
+        if ((isset($questionnaire[$secondKey]) || array_key_exists($secondKey, $questionnaire)) && isset($unitParts[1])) {
+            $parts[] = htmlspecialchars((string) $questionnaire[$secondKey], ENT_QUOTES, 'UTF-8');
+            $parts[] = htmlspecialchars($unitParts[1], ENT_QUOTES, 'UTF-8');
         }
     }
-    return $output;
+
+    return implode(' ', array_filter($parts, static fn($part) => $part !== ''));
 }
 
 // Page header
