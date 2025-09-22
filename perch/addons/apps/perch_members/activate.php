@@ -65,7 +65,7 @@
               `note` char(255) NOT NULL DEFAULT '',
               PRIMARY KEY (`noteID`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
- CREATE TABLE `__PREFIX__members_notifications` (
+        CREATE TABLE `__PREFIX__members_notifications` (
           `notificationID` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `memberID` int(10) unsigned NOT NULL,
           `notificationTitle` varchar(255) NOT NULL DEFAULT '',
@@ -75,6 +75,20 @@
           PRIMARY KEY (`notificationID`),
           KEY `idx_member` (`memberID`),
           KEY `idx_read` (`notificationRead`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+        CREATE TABLE `__PREFIX__members_questionnaire_questions` (
+          `questionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `questionnaireType` enum('first-order','reorder') NOT NULL DEFAULT 'first-order',
+          `questionKey` varchar(64) NOT NULL DEFAULT '',
+          `label` varchar(255) NOT NULL,
+          `type` char(32) NOT NULL DEFAULT 'text',
+          `fieldName` varchar(64) DEFAULT NULL,
+          `stepSlug` varchar(64) DEFAULT NULL,
+          `options` text,
+          `dependencies` text,
+          `sort` int(10) unsigned NOT NULL DEFAULT 0,
+          PRIMARY KEY (`questionID`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     ";
 
@@ -90,8 +104,51 @@
     $API = new PerchAPI(1.0, 'perch_members');
     $UserPrivileges = $API->get('UserPrivileges');
     $UserPrivileges->create_privilege('perch_members', 'Manage members');
+    $UserPrivileges->create_privilege('perch_members.questionnaires.manage', 'Manage questionnaires');
 
 
+
+    // Seed default questionnaire questions if none exist
+    $seed_file = __DIR__ . '/questionnaire_default_questions.php';
+    if (file_exists($seed_file)) {
+        $DB       = PerchDB::fetch();
+        $existing = $DB->get_value('SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'members_questionnaire_questions');
+        if ((int)$existing === 0) {
+            $data = include $seed_file;
+
+            $sort = 0;
+            foreach ($data['reorder'] as $key => $q) {
+                $sort += 10;
+                $DB->insert(PERCH_DB_PREFIX.'members_questionnaire_questions', [
+                    'questionnaireType' => 'reorder',
+                    'questionKey'       => $key,
+                    'label'             => $q['label'],
+                    'type'              => $q['type'],
+                    'fieldName'         => isset($q['name']) ? $q['name'] : $key,
+                    'stepSlug'          => isset($q['step']) ? $q['step'] : $key,
+                    'options'           => isset($q['options']) ? PerchUtil::json_safe_encode($q['options']) : null,
+                    'dependencies'      => isset($q['dependencies']) ? PerchUtil::json_safe_encode($q['dependencies']) : null,
+                    'sort'              => $sort,
+                ]);
+            }
+
+            $sort = 0;
+            foreach ($data['first-order'] as $key => $q) {
+                $sort += 10;
+                $DB->insert(PERCH_DB_PREFIX.'members_questionnaire_questions', [
+                    'questionnaireType' => 'first-order',
+                    'questionKey'       => $key,
+                    'label'             => $q['label'],
+                    'type'              => $q['type'],
+                    'fieldName'         => isset($q['name']) ? $q['name'] : $key,
+                    'stepSlug'          => isset($q['step']) ? $q['step'] : $key,
+                    'options'           => isset($q['options']) ? PerchUtil::json_safe_encode($q['options']) : null,
+                    'dependencies'      => isset($q['dependencies']) ? PerchUtil::json_safe_encode($q['dependencies']) : null,
+                    'sort'              => $sort,
+                ]);
+            }
+        }
+    }
 
     $sql = 'SHOW TABLES LIKE "'.$this->table.'"';
     $result = $this->db->get_value($sql);
