@@ -366,8 +366,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "levothyroxine" => "I’m on levothyroxine",
                                                "warfarin" => "I’m on warfarin",
                                                "multiple" => "Other / I take more than one prescription medication",
-                                               "none" => "I don’t take any medication",
-                                               "allergy" => "I have allergies"
+                                               "no-medication" => "I don’t take any medication",
+                                               "allergies" => "I have allergies"
                                            ]
                                        ],
                                        "email_address" => [
@@ -938,7 +938,7 @@ $this->db->execute($update_status);
     $update_status ="UPDATE ".PERCH_DB_PREFIX."questionnaire_member_status  SET `accepted`=".$accepted." where `questionnaire_id`='v1' and memberID=".$memberID." and id=".$questionnaireID." ";
 $this->db->execute($update_status);
      }
-    public function add_to_member($memberID,$data,$type)
+    public function add_to_member($memberID,$data,$type,$orderID)
      { // echo "add_to_member";
 
 // print_r($memberID);print_r($type); echo PerchUtil::count($this->get_for_member($memberID));
@@ -1112,6 +1112,7 @@ if(isset($data["uuid"])){
 
 
                 $qdata['member_id']=$memberID;
+                  $qdata['order_id']=$orderID;
                 $qdata['version']="v1";
                  $qdata['qid']= $new_id;
            $columns = implode(", ", array_keys($qdata)); // Columns as a string

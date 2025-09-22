@@ -394,11 +394,11 @@ function perch_member_questionsForQuestionnaire($type) {
         {
             $API  = new PerchAPI(1.0, 'perch_members');
                            $Questionnaires = new PerchMembers_Questionnaires($API);
-                        $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type);
+                        $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
 
-                        if ($orderID) {
+                      /*  if ($orderID) {
                             perch_members_link_questionnaire_to_order($orderID, $questionnaireID, $type);
-                        }
+                        }*/
 
                         return  $questionnaireID;
 
@@ -422,11 +422,11 @@ $memberid=0;
                        $orderID = PerchShop_Session::get('shop_order_id');
                    }
 
-                   $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type);
+                   $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
 
-                   if ($orderID) {
+                   /*if ($orderID) {
                        perch_members_link_questionnaire_to_order($orderID, $questionnaireID, $type);
-                   }
+                   }*/
 
 
                  return $questionnaireID;

@@ -42,7 +42,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/templates/pages/order",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -54,11 +54,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch/templates" />
       <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/perch/addons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -97,15 +97,7 @@
       <workItem from="1758098878074" duration="8525000" />
       <workItem from="1758184145571" duration="107000" />
       <workItem from="1758186730396" duration="16359000" />
-      <workItem from="1758352825565" duration="15018000" />
-    </task>
-    <task id="LOCAL-00005" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1755858686362</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1755858686362</updated>
+      <workItem from="1758352825565" duration="15828000" />
     </task>
     <task id="LOCAL-00006" summary="weightloss">
       <option name="closed" value="true" />
@@ -491,7 +483,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758550006084</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1758554519095</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1758554519095</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

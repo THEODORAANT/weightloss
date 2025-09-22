@@ -238,9 +238,16 @@ class PerchShop_Order extends PerchShop_Base
                     $questionnaireID = (int)$this->db->get_value($sql_latest_qid);
                 }
 
-                $sql_questionnaire = 'SELECT * FROM '.PERCH_DB_PREFIX.'questionnaire'
+              /*  $sql_questionnaire = 'SELECT * FROM '.PERCH_DB_PREFIX.'questionnaire'
                         .' WHERE `type`='.$this->db->pdb($questionnaire_type)
-                        .' AND member_id='.$this->db->pdb((int)$Member->id());
+                        .' AND member_id='.$this->db->pdb((int)$Member->id());*/
+
+                        $sql_questionnaire = 'SELECT *
+                            FROM '.PERCH_DB_PREFIX.'questionnaire
+                            WHERE `type` = '.$this->db->pdb($questionnaire_type).'
+                              AND member_id = '.$this->db->pdb((int)$Member->id()).'
+                              AND (order_id IS NULL OR order_id = '.$this->db->pdb((int)$this->id()).')';
+
 
                 if ($questionnaireID) {
                     $sql_questionnaire .= ' AND qid='.$this->db->pdb($questionnaireID);
