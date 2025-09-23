@@ -146,7 +146,7 @@ if (!function_exists('wl_weight_measurements_repository')) {
         static $repository = null;
 
         if ($repository === null) {
-            $repository = new WeightMeasurementsRepository();
+            $repository = new WeightMeasurementsRepository("getweightloss_measurements");
         }
 
         return $repository;

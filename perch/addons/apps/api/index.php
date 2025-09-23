@@ -37,7 +37,7 @@ for ($i = count($segments); $i >= 0; $i--) {
         break;
     }
 }
-
+//print_r($routeFile);
 if ($routeFile) {
     global $_ROUTE;
     $_ROUTE = [

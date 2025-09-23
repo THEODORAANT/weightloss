@@ -1,4 +1,6 @@
 <?php
+///var/www/html/perch/addons/apps/api/routes/weight-measurements<br />
+
 include(__DIR__ . '/../../../../../core/runtime/runtime.php');
 
 require_once __DIR__ . '/../../auth.php';
@@ -290,12 +292,12 @@ function wl_validate_weight_measurement_payload(array $input)
         }
     }
 
-    if (!empty($percentValues)) {
+  /*  if (!empty($percentValues)) {
         $sum = array_sum($percentValues);
         if (abs($sum - 100) > 5) {
             $errors[] = 'Body composition percentages should total approximately 100%.';
         }
-    }
+    }*/
 
     return [$errors, $sanitized];
 }
