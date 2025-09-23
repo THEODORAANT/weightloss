@@ -22,7 +22,7 @@ $product = perch_shop_product($id, [
     'api' => true,
 ]);
 $product=$product[0];
-print_r($product);
+//print_r($product);
 if ($product) {
     $formatted = wl_format_product($product);
     if ($formatted === null) {

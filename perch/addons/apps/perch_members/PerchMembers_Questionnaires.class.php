@@ -938,155 +938,8 @@ $this->db->execute($update_status);
     $update_status ="UPDATE ".PERCH_DB_PREFIX."questionnaire_member_status  SET `accepted`=".$accepted." where `questionnaire_id`='v1' and memberID=".$memberID." and id=".$questionnaireID." ";
 $this->db->execute($update_status);
      }
-     public function add_to_member($memberID, $data, $type, $orderID)
-     {
-         $Members = new PerchMembers_Members;
-         $Member = $Members->find($memberID);
-         $memberdetails = $Member ? $Member->to_array() : [];
 
-         // --- Defensive defaults ---
-         if (!is_array($data)) $data = [];
-         if (!is_array($memberdetails)) $memberdetails = [];
-
-         $data['heightunit']  = $data['heightunit']  ?? ($data['heightunit-radio']  ?? 'cm');
-         $data['weightunit']  = $data['weightunit']  ?? ($data['weightunit-radio']  ?? 'kg');
-         $memberdetails['heightunit'] = $memberdetails['heightunit'] ?? ($memberdetails['heightunit-radio'] ?? 'cm');
-         $memberdetails['weightunit'] = $memberdetails['weightunit'] ?? ($memberdetails['weightunit-radio'] ?? 'kg');
-
-         $data['height']  = $data['height']  ?? '';
-         $data['height2'] = $data['height2'] ?? 0;
-         $data['weight']  = $data['weight']  ?? '';
-         $data['weight2'] = $data['weight2'] ?? 0;
-         $memberdetails['height']  = $memberdetails['height']  ?? '';
-         $memberdetails['height2'] = $memberdetails['height2'] ?? 0;
-         $memberdetails['weight']  = $memberdetails['weight']  ?? '';
-         $memberdetails['weight2'] = $memberdetails['weight2'] ?? 0;
-
-         $height2 = $data["height2"];
-         $weight2 = $data["weight2"];
-
-         // Calculate BMI & update member if first order
-         if ($type === "first-order") {
-             $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $data["height"], $weight2, $height2, $data["heightunit"]);
-
-             $props = PerchUtil::json_safe_decode($Member->memberProperties(), true);
-             if (!is_array($props)) $props = [];
-
-             $props["height"] = $data["height"];
-             $props["height2"] = $height2;
-             $props["heightunit"] = $data["heightunit"];
-             $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
-
-             $Member->update([
-                 'memberProperties' => PerchUtil::json_safe_encode($props)
-             ]);
-
-         } else {
-             $heightcheck = $this->parseHeight($memberdetails["height"]);
-             if ($heightcheck) {
-                 $memberdetails["height"]  = $heightcheck["feet"];
-                 $memberdetails["height2"] = $heightcheck["inches"];
-             }
-             $result = $this->calculateBMIAdvanced(
-                 $data["weight"],
-                 $data["weightunit"],
-                 $memberdetails["height"],
-                 $data["weight2"],
-                 $memberdetails["height2"],
-                 $memberdetails["heightunit"]
-             );
-         }
-
-         // Insert status
-         $insert_status = "INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`, memberID, `status`) VALUES ('v1', ?, 'pending')";
-         $stmt_status = $this->db->prepare($insert_status);
-         $stmt_status->execute([$memberID]);
-         $new_id = $this->db->last_insert_id();
-
-         $data['bmi'] = $result;
-
-         // Prepare reusable insert statement for questionnaire
-         $columns = [
-             'type', 'question_slug', 'question_text', 'answer_text',
-             'uuid', 'member_id', 'order_id', 'version', 'qid'
-         ];
-         $placeholders = implode(", ", array_fill(0, count($columns), '?'));
-
-         $insert_sql = "INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".implode(", ", $columns).") VALUES ($placeholders)";
-         $stmt = $this->db->prepare($insert_sql);
-
-         foreach ($data as $key => $value) {
-             $qdata = [];
-             $qdata['type'] = $type;
-             $qdata['question_slug'] = $key;
-
-             $questionLookup = ($type === "first-order") ? $this->questions : $this->reorder_questions;
-             $questionConfigSet = ($type === "first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
-             $questionConfig = $questionConfigSet[$key] ?? null;
-
-             $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
-
-             if ($questionConfig) {
-                 $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
-             } elseif (is_array($value)) {
-                 $flattened = array_filter(array_map(function ($item) {
-                     return is_scalar($item) ? (string)$item : (is_array($item) ? implode(', ', array_map('strval', $item)) : '');
-                 }, $value), 'strlen');
-                 $qdata['answer_text'] = implode(', ', $flattened);
-             } else {
-                 $qdata['answer_text'] = trim((string)$value);
-             }
-
-             // Handle special cases for weight/height formatting
-             if ($type === "first-order") {
-                 if ($key === "weight" && !empty($data["weightunit"])) {
-                     $weightunit = explode("-", $data["weightunit"]);
-                     if (count($weightunit) > 1) {
-                         $qdata['answer_text'] .= " ".$weightunit[0];
-                         if (!empty($data["weight2"])) {
-                             $qdata['answer_text'] .= " ".$data["weight2"]." ".$weightunit[1];
-                         }
-                     }
-                 }
-
-                 if ($key === "weight-wegovy" && isset($data["unit-wegovy"])) {
-                     $weightwegovyunit = explode("-", $data["unit-wegovy"]);
-                     if (count($weightwegovyunit) > 1) {
-                         $qdata['answer_text'] .= " ".$weightwegovyunit[0];
-                         if (!empty($data["weight2-wegovy"])) {
-                             $qdata['answer_text'] .= " ".$data["weight2-wegovy"]." ".$weightwegovyunit[1];
-                         }
-                     }
-                     if (isset($this->doses[$value])) {
-                         $qdata['answer_text'] = $this->doses[$value];
-                     }
-                 }
-
-                 if ($key === "height" && !empty($data["heightunit"])) {
-                     $heightunit = explode("-", $data["heightunit"]);
-                     if (count($heightunit) > 1) {
-                         $qdata['answer_text'] .= " ".$heightunit[0];
-                         if (!empty($data["height2"])) {
-                             $qdata['answer_text'] .= " ".$data["height2"]." ".$heightunit[1];
-                         }
-                     }
-                 }
-             }
-
-             $qdata['uuid'] = $data["uuid"] ?? "unknown";
-             $qdata['member_id'] = $memberID;
-             $qdata['order_id'] = $orderID;
-             $qdata['version'] = "v1";
-             $qdata['qid'] = $new_id;
-
-             // Execute insert for each question
-             $stmt->execute(array_values($qdata));
-         }
-
-         return $new_id;
-     }
-
-    public function add_to_memberold($memberID,$data,$type,$orderID)
+    public function add_to_member($memberID,$data,$type,$orderID)
      { // echo "add_to_member";
 
 // print_r($memberID);print_r($type); echo PerchUtil::count($this->get_for_member($memberID));
@@ -1264,7 +1117,14 @@ if(isset($data["uuid"])){
                 $qdata['version']="v1";
                  $qdata['qid']= $new_id;
            $columns = implode(", ", array_keys($qdata)); // Columns as a string
-                        $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
+                      //  $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
+
+          $escaped_values = array_map(function($value) {
+              return mysqli_real_escape_string($this->db->get_link(), $value);
+          }, array_values($qdata));
+
+          $values = "'" . implode("', '", $escaped_values) . "'";
+
            $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
 
       }
