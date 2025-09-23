@@ -379,6 +379,10 @@
 
         </section>
         <script>
+            const MIN_HEIGHT_CM = 89;
+            const MAX_HEIGHT_CM = 272;
+            const SHORT_HEIGHT_CONFIRMATION_THRESHOLD_CM = 100;
+
             function radioheight(value){
 
                 const heightField = document.getElementById("height");
@@ -402,9 +406,13 @@
                 if (value === "cm") {
                     heightField.placeholder = "Cm";
                     secondaryField.type = "hidden";
+                    secondaryField.required = false;
+                    secondaryField.value = "";
                 }else{
                     secondaryField.type = "number";
                     heightField.placeholder = "Ft";
+                    secondaryField.required = false;
+                    secondaryField.placeholder = "In";
 
                 }
 
@@ -443,6 +451,9 @@
                     if (unit === 'ft-in') {
                         const secondaryParsed = parseNumeric(secondaryValue);
                         const secondary = secondaryParsed === null ? 0 : secondaryParsed;
+                        if (secondary < 0 || secondary >= 12) {
+                            return null;
+                        }
                         const totalInches = (primary * 12) + secondary;
                         return totalInches * 2.54;
                     }
@@ -452,6 +463,38 @@
                     }
 
                     return null;
+                };
+
+                const formatHeightRangeForUnit = (unit) => {
+                    if (unit === 'ft-in') {
+                        const format = (cm) => {
+                            const totalInches = cm / 2.54;
+                            let feet = Math.floor(totalInches / 12);
+                            let inches = Math.round(totalInches - (feet * 12));
+
+                            if (inches === 12) {
+                                feet += 1;
+                                inches = 0;
+                            }
+
+                            return `${feet} ft ${inches} in`;
+                        };
+
+                        return `${format(MIN_HEIGHT_CM)} and ${format(MAX_HEIGHT_CM)}`;
+                    }
+
+                    if (unit === 'in') {
+                        const toInches = (cm) => (cm / 2.54).toFixed(1);
+                        return `${toInches(MIN_HEIGHT_CM)} in and ${toInches(MAX_HEIGHT_CM)} in`;
+                    }
+
+                    return `${MIN_HEIGHT_CM} cm and ${MAX_HEIGHT_CM} cm`;
+                };
+
+                const focusField = (field) => {
+                    if (field && typeof field.focus === 'function') {
+                        field.focus();
+                    }
                 };
 
                 const originalSubmitForm = window.submitForm;
@@ -474,16 +517,54 @@
                             unitField.value = unitRadio.value;
                         }
 
+                        const primaryRawValue = primaryField ? primaryField.value : '';
+                        const primaryNumeric = parseNumeric(primaryRawValue);
+
+                        if (primaryNumeric === null || primaryNumeric <= 0) {
+                            window.alert('Please enter your height using numbers greater than zero.');
+                            focusField(primaryField);
+                            return false;
+                        }
+
+                        let secondaryValue = secondaryField ? secondaryField.value : '';
+                        if (unit === 'ft-in') {
+                            const secondaryNumeric = parseNumeric(secondaryValue);
+                            if (secondaryNumeric === null) {
+                                secondaryValue = '0';
+                            } else if (secondaryNumeric < 0 || secondaryNumeric >= 12) {
+                                window.alert('Please enter the inches part of your height as a number between 0 and 11.9.');
+                                focusField(secondaryField);
+                                return false;
+                            } else {
+                                secondaryValue = String(secondaryNumeric);
+                            }
+                        }
+
                         const heightInCm = toCentimetres(
-                            primaryField ? primaryField.value : '',
-                            secondaryField ? secondaryField.value : '',
+                            String(primaryNumeric),
+                            secondaryValue,
                             unit
                         );
 
-                        if (heightInCm !== null && heightInCm < 100) {
+                        if (heightInCm === null) {
+                            const rangeDescription = formatHeightRangeForUnit(unit);
+                            window.alert(`Please enter a valid height between ${rangeDescription}. The shortest adult in the UK is 89 cm.`);
+                            focusField(primaryField);
+                            return false;
+                        }
+
+                        if (heightInCm < MIN_HEIGHT_CM || heightInCm > MAX_HEIGHT_CM) {
+                            const rangeDescription = formatHeightRangeForUnit(unit);
+                            window.alert(`Please enter a realistic height between ${rangeDescription}. The shortest adult in the UK is 89 cm.`);
+                            focusField(primaryField);
+                            return false;
+                        }
+
+                        if (heightInCm < SHORT_HEIGHT_CONFIRMATION_THRESHOLD_CM) {
                             const confirmationMessage = `You entered ${heightInCm.toFixed(1)} cm. The shortest adult in the UK is 89 cm. Please confirm that your height is correct before continuing.`;
                             const confirmed = window.confirm(confirmationMessage);
                             if (!confirmed) {
+                                focusField(primaryField);
                                 return false;
                             }
                         }
