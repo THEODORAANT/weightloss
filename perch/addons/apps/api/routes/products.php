@@ -1,8 +1,8 @@
 <?php
 include(__DIR__ .'/../../../../core/runtime/runtime.php');
 require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../lib/product_format.php';
-
+//require_once __DIR__ . '/../lib/product_format.php';
+require_once 'lib/product_format.php';
 $data = json_decode(file_get_contents('php://input'), true);
 if (!is_array($data)) {
     $data = [];

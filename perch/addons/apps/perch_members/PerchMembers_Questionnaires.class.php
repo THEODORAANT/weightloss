@@ -212,11 +212,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "radio",
                                            "name" => "diabetes",
                                            "options" => [
-                                               "medicated" => "I have diabetes and take medication for it",
-                                               "diet" => "I have diabetes and it's diet-controlled",
-                                               "family-history" => "No, but there is history of diabetes in my family",
+                                               "yes-medication" => "I have diabetes and take medication for it",
+                                               "yes-diet" => "I have diabetes and it's diet-controlled",
+                                               "nohistory" => "No, but there is history of diabetes in my family",
                                                "pre-diabetes" => "I have pre-diabetes",
-                                               "none" => "I don't have diabetes"
+                                               "no" => "I don't have diabetes"
                                            ]
                                        ],
                                        "conditions" => [
@@ -228,13 +228,13 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "cholestasis" => "I have cholestasis",
                                                "cancer" => "I’m currently being treated for cancer",
                                                "retinopathy" => "I have diabetic retinopathy",
-                                               "heart-failure" => "I have severe heart failure",
-                                               "thyroid-cancer" => "I have a family history of thyroid cancer and/or I’ve had thyroid cancer",
-                                               "men2" => "I have Multiple endocrine neoplasia type 2 (MEN2)",
-                                               "pancreatitis" => "I have a history of pancreatitis",
-                                               "eating-disorder" => "I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder",
-                                               "thyroid-op" => "I have had surgery or an operation to my thyroid",
-                                               "bariatric-op" => "I have had a bariatric operation such as gastric band or sleeve surgery",
+                                               "heartfailure" => "I have severe heart failure",
+                                               "familythyroid" => "I have a family history of thyroid cancer and/or I’ve had thyroid cancer",
+                                               "neoplasia" => "I have Multiple endocrine neoplasia type 2 (MEN2)",
+                                               "pancreatitishistory" => "I have a history of pancreatitis",
+                                               "eatingdisorder" => "I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder",
+                                               "thyroidoperation" => "I have had surgery or an operation to my thyroid",
+                                               "bariatricoperation" => "I have had a bariatric operation such as gastric band or sleeve surgery",
                                                "none" => "None of these statements apply to me"
                                            ]
                                        ],
@@ -263,19 +263,19 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "name" => "conditions2[]",
                                            "options" => [
                                                "mentalhealth" => "I have been diagnosed with a mental health condition such as depression or anxiety",
-                                               "social-anxiety" => "My weight makes me anxious in social situations",
-                                               "joint-pain" => "I have joint pains and/or aches",
+                                               "anxious" => "My weight makes me anxious in social situations",
+                                               "joint" => "I have joint pains and/or aches",
                                                "osteoarthritis" => "I have osteoarthritis",
-                                               "gord" => "I have GORD and/or indigestion",
-                                               "cardio" => "I have a heart/cardiovascular problem",
-                                               "bp" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
+                                               "indigestion" => "I have GORD and/or indigestion",
+                                               "cardiovascular" => "I have a heart/cardiovascular problem",
+                                               "bloodpressure" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
                                                "cholesterol" => "I’ve been diagnosed with, or have a family history of, high cholesterol",
-                                               "fatty-liver" => "I have fatty liver disease",
+                                               "fattyliver" => "I have fatty liver disease",
                                                "apnoea" => "I have sleep apnoea",
                                                "asthma" => "I have asthma or COPD",
-                                               "ed" => "I have erectile dysfunction",
-                                               "low-t" => "I have low testosterone",
-                                               "menopause" => "I have menopausal symptoms",
+                                               "erectile" => "I have erectile dysfunction",
+                                               "testosterone" => "I have low testosterone",
+                                               "menopausal" => "I have menopausal symptoms",
                                                "pcos" => "I have polycystic ovary syndrome (PCOS)",
                                                "none" => "None of these statements apply to me"
                                            ]
@@ -315,9 +315,9 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "radio",
                                            "name" => "dose-wegovy",
                                            "options" => [
-                                               "lt4" => "Less than 4 weeks ago",
-                                               "4-6" => "4–6 weeks ago",
-                                               "gt6" => "More than 6 weeks ago"
+                                               "less4" => "Less than 4 weeks ago",
+                                               "4to6" => "4–6 weeks ago",
+                                               "over6" => "More than 6 weeks ago"
                                            ]
                                        ],
                                        "recently-dose-wegovy" => [
@@ -325,11 +325,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "radio",
                                            "name" => "recently-dose-wegovy",
                                            "options" => [
-                                               "0.25" => "0.25mg/2.5mg",
-                                               "0.5" => "0.5mg/5mg",
-                                               "1.0" => "1mg/7.5mg",
-                                               "1.7" => "1.7mg/12.5mg",
-                                               "2.4" => "2.4mg/15mg",
+                                               "25mg" => "0.25mg/2.5mg",
+                                               "05mg" => "0.5mg/5mg",
+                                               "1mg" => "1mg/7.5mg",
+                                               "17mg" => "1.7mg/12.5mg",
+                                               "24mg" => "2.4mg/15mg",
                                                "other" => "Other"
                                            ]
                                        ],
@@ -341,7 +341,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "increase" => "Increase my dose",
                                                "keep" => "Keep my dose",
                                                "decrease" => "Decrease my dose",
-                                               "stop" => "I don't want to continue with this medication"
+                                               "not-continue" => "I don't want to continue with this medication"
                                            ]
                                        ],
                                        "effects_with_wegovy" => [
@@ -938,7 +938,155 @@ $this->db->execute($update_status);
     $update_status ="UPDATE ".PERCH_DB_PREFIX."questionnaire_member_status  SET `accepted`=".$accepted." where `questionnaire_id`='v1' and memberID=".$memberID." and id=".$questionnaireID." ";
 $this->db->execute($update_status);
      }
-    public function add_to_member($memberID,$data,$type,$orderID)
+     public function add_to_member($memberID, $data, $type, $orderID)
+     {
+         $Members = new PerchMembers_Members;
+         $Member = $Members->find($memberID);
+         $memberdetails = $Member ? $Member->to_array() : [];
+
+         // --- Defensive defaults ---
+         if (!is_array($data)) $data = [];
+         if (!is_array($memberdetails)) $memberdetails = [];
+
+         $data['heightunit']  = $data['heightunit']  ?? ($data['heightunit-radio']  ?? 'cm');
+         $data['weightunit']  = $data['weightunit']  ?? ($data['weightunit-radio']  ?? 'kg');
+         $memberdetails['heightunit'] = $memberdetails['heightunit'] ?? ($memberdetails['heightunit-radio'] ?? 'cm');
+         $memberdetails['weightunit'] = $memberdetails['weightunit'] ?? ($memberdetails['weightunit-radio'] ?? 'kg');
+
+         $data['height']  = $data['height']  ?? '';
+         $data['height2'] = $data['height2'] ?? 0;
+         $data['weight']  = $data['weight']  ?? '';
+         $data['weight2'] = $data['weight2'] ?? 0;
+         $memberdetails['height']  = $memberdetails['height']  ?? '';
+         $memberdetails['height2'] = $memberdetails['height2'] ?? 0;
+         $memberdetails['weight']  = $memberdetails['weight']  ?? '';
+         $memberdetails['weight2'] = $memberdetails['weight2'] ?? 0;
+
+         $height2 = $data["height2"];
+         $weight2 = $data["weight2"];
+
+         // Calculate BMI & update member if first order
+         if ($type === "first-order") {
+             $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $data["height"], $weight2, $height2, $data["heightunit"]);
+
+             $props = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+             if (!is_array($props)) $props = [];
+
+             $props["height"] = $data["height"];
+             $props["height2"] = $height2;
+             $props["heightunit"] = $data["heightunit"];
+             $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
+
+             $Member->update([
+                 'memberProperties' => PerchUtil::json_safe_encode($props)
+             ]);
+
+         } else {
+             $heightcheck = $this->parseHeight($memberdetails["height"]);
+             if ($heightcheck) {
+                 $memberdetails["height"]  = $heightcheck["feet"];
+                 $memberdetails["height2"] = $heightcheck["inches"];
+             }
+             $result = $this->calculateBMIAdvanced(
+                 $data["weight"],
+                 $data["weightunit"],
+                 $memberdetails["height"],
+                 $data["weight2"],
+                 $memberdetails["height2"],
+                 $memberdetails["heightunit"]
+             );
+         }
+
+         // Insert status
+         $insert_status = "INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`, memberID, `status`) VALUES ('v1', ?, 'pending')";
+         $stmt_status = $this->db->prepare($insert_status);
+         $stmt_status->execute([$memberID]);
+         $new_id = $this->db->last_insert_id();
+
+         $data['bmi'] = $result;
+
+         // Prepare reusable insert statement for questionnaire
+         $columns = [
+             'type', 'question_slug', 'question_text', 'answer_text',
+             'uuid', 'member_id', 'order_id', 'version', 'qid'
+         ];
+         $placeholders = implode(", ", array_fill(0, count($columns), '?'));
+
+         $insert_sql = "INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".implode(", ", $columns).") VALUES ($placeholders)";
+         $stmt = $this->db->prepare($insert_sql);
+
+         foreach ($data as $key => $value) {
+             $qdata = [];
+             $qdata['type'] = $type;
+             $qdata['question_slug'] = $key;
+
+             $questionLookup = ($type === "first-order") ? $this->questions : $this->reorder_questions;
+             $questionConfigSet = ($type === "first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
+             $questionConfig = $questionConfigSet[$key] ?? null;
+
+             $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
+
+             if ($questionConfig) {
+                 $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
+             } elseif (is_array($value)) {
+                 $flattened = array_filter(array_map(function ($item) {
+                     return is_scalar($item) ? (string)$item : (is_array($item) ? implode(', ', array_map('strval', $item)) : '');
+                 }, $value), 'strlen');
+                 $qdata['answer_text'] = implode(', ', $flattened);
+             } else {
+                 $qdata['answer_text'] = trim((string)$value);
+             }
+
+             // Handle special cases for weight/height formatting
+             if ($type === "first-order") {
+                 if ($key === "weight" && !empty($data["weightunit"])) {
+                     $weightunit = explode("-", $data["weightunit"]);
+                     if (count($weightunit) > 1) {
+                         $qdata['answer_text'] .= " ".$weightunit[0];
+                         if (!empty($data["weight2"])) {
+                             $qdata['answer_text'] .= " ".$data["weight2"]." ".$weightunit[1];
+                         }
+                     }
+                 }
+
+                 if ($key === "weight-wegovy" && isset($data["unit-wegovy"])) {
+                     $weightwegovyunit = explode("-", $data["unit-wegovy"]);
+                     if (count($weightwegovyunit) > 1) {
+                         $qdata['answer_text'] .= " ".$weightwegovyunit[0];
+                         if (!empty($data["weight2-wegovy"])) {
+                             $qdata['answer_text'] .= " ".$data["weight2-wegovy"]." ".$weightwegovyunit[1];
+                         }
+                     }
+                     if (isset($this->doses[$value])) {
+                         $qdata['answer_text'] = $this->doses[$value];
+                     }
+                 }
+
+                 if ($key === "height" && !empty($data["heightunit"])) {
+                     $heightunit = explode("-", $data["heightunit"]);
+                     if (count($heightunit) > 1) {
+                         $qdata['answer_text'] .= " ".$heightunit[0];
+                         if (!empty($data["height2"])) {
+                             $qdata['answer_text'] .= " ".$data["height2"]." ".$heightunit[1];
+                         }
+                     }
+                 }
+             }
+
+             $qdata['uuid'] = $data["uuid"] ?? "unknown";
+             $qdata['member_id'] = $memberID;
+             $qdata['order_id'] = $orderID;
+             $qdata['version'] = "v1";
+             $qdata['qid'] = $new_id;
+
+             // Execute insert for each question
+             $stmt->execute(array_values($qdata));
+         }
+
+         return $new_id;
+     }
+
+    public function add_to_memberold($memberID,$data,$type,$orderID)
      { // echo "add_to_member";
 
 // print_r($memberID);print_r($type); echo PerchUtil::count($this->get_for_member($memberID));
@@ -1123,8 +1271,9 @@ if(isset($data["uuid"])){
 
      // }
 
-//echo  $insert_query;
-
+echo  $insert_query;
+exit();
+die();
 try{
 
     	$this->db->execute($insert_query);
