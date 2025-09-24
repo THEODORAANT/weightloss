@@ -371,6 +371,17 @@ if (!empty($_SESSION['questionnaire']['medications']) && is_array($_SESSION['que
             continue;
         }
 
+        $recentDoseOptionsConfig = perch_questionnaire_recent_dose_options($slug);
+        $recentDoseOptions = [];
+        if (is_array($recentDoseOptionsConfig)) {
+            foreach ($recentDoseOptionsConfig as $value => $displayLabel) {
+                $recentDoseOptions[] = [
+                    'value' => $value,
+                    'label' => $displayLabel,
+                ];
+            }
+        }
+
         $selectedMedications[$slug] = [
             'slug' => $slug,
             'label' => perch_questionnaire_medication_label($slug),
@@ -379,12 +390,23 @@ if (!empty($_SESSION['questionnaire']['medications']) && is_array($_SESSION['que
             'unit' => $_SESSION['questionnaire']["unit-{$slug}"] ?? 'kg',
             'dose' => $_SESSION['questionnaire']["dose-{$slug}"] ?? '',
             'recentDose' => $_SESSION['questionnaire']["recently-dose-{$slug}"] ?? '',
+            'recentDoseOptions' => $recentDoseOptions,
         ];
     }
 }
 
 if (empty($selectedMedications)) {
     $defaultSlug = 'wegovy';
+    $recentDoseOptionsConfig = perch_questionnaire_recent_dose_options($defaultSlug);
+    $recentDoseOptions = [];
+    if (is_array($recentDoseOptionsConfig)) {
+        foreach ($recentDoseOptionsConfig as $value => $displayLabel) {
+            $recentDoseOptions[] = [
+                'value' => $value,
+                'label' => $displayLabel,
+            ];
+        }
+    }
     $selectedMedications[$defaultSlug] = [
         'slug' => $defaultSlug,
         'label' => perch_questionnaire_medication_label($defaultSlug),
@@ -393,6 +415,7 @@ if (empty($selectedMedications)) {
         'unit' => $_SESSION['questionnaire']['unit-wegovy'] ?? 'kg',
         'dose' => $_SESSION['questionnaire']['dose-wegovy'] ?? '',
         'recentDose' => $_SESSION['questionnaire']['recently-dose-wegovy'] ?? '',
+        'recentDoseOptions' => $recentDoseOptions,
     ];
 }
 

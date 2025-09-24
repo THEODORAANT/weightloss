@@ -40,16 +40,8 @@ $doseOptions = [
     'over6' => 'More than 6 weeks ago',
 ];
 
-$recentDoseOptions = [
-    '25mg' => '0.25mg/2.5mg',
-    '05mg' => '0.5mg/5mg',
-    '1mg' => '1mg/7.5mg',
-    '17mg' => '1.7mg/12.5mg',
-    '24mg' => '2.4mg/15mg',
-    'other' => 'Other',
-];
-
 $medicationSlugs = [];
+$recentDoseOptionsBySlug = [];
 foreach (perch_questionnaire_medications() as $slug => $label) {
     if ($slug === 'none') {
         continue;
@@ -60,6 +52,11 @@ foreach (perch_questionnaire_medications() as $slug => $label) {
     $questions["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $medicationLabel . '?';
     $questions["dose-{$slug}"] = "When was your last dose of " . $medicationLabel . '?';
     $questions["recently-dose-{$slug}"] = "What dose of " . $medicationLabel . " were you prescribed most recently?";
+
+    $options = perch_questionnaire_recent_dose_options($slug);
+    if ($options !== null) {
+        $recentDoseOptionsBySlug[$slug] = $options;
+    }
 }
 
 $steps = [
@@ -159,7 +156,9 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                             $slug = substr($key, 7);
                             echo renderMeasurement($value, "unit-{$slug}", "weight2-{$slug}", $_SESSION['questionnaire']);
                         } elseif (strpos($key, 'recently-dose-') === 0) {
-                            $answer = $recentDoseOptions[$value] ?? $value;
+                            $medicationSlug = substr($key, strlen('recently-dose-'));
+                            $options = $recentDoseOptionsBySlug[$medicationSlug] ?? [];
+                            $answer = $options[$value] ?? $value;
                             echo htmlspecialchars($answer);
                         } elseif (strpos($key, 'dose-') === 0) {
                             $answer = $doseOptions[$value] ?? $value;

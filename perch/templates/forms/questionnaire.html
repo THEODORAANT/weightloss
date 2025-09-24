@@ -42,6 +42,42 @@
                         ? item.slug.trim()
                         : `medication-${index + 1}`;
 
+                    const recentDoseOptions = (item && Array.isArray(item.recentDoseOptions))
+                        ? item.recentDoseOptions.reduce(function (options, option) {
+                            if (!option || typeof option !== 'object') {
+                                return options;
+                            }
+
+                            const hasValue = Object.prototype.hasOwnProperty.call(option, 'value');
+                            const hasLabel = Object.prototype.hasOwnProperty.call(option, 'label');
+
+                            if (!hasValue || !hasLabel) {
+                                return options;
+                            }
+
+                            const value = option.value;
+                            const label = option.label;
+
+                            if ((value === null || value === undefined) || (label === null || label === undefined)) {
+                                return options;
+                            }
+
+                            const valueString = String(value).trim();
+                            const labelString = String(label).trim();
+
+                            if (valueString === '' || labelString === '') {
+                                return options;
+                            }
+
+                            options.push({
+                                value: valueString,
+                                label: labelString,
+                            });
+
+                            return options;
+                        }, [])
+                        : [];
+
                     return {
                         slug: slug,
                         label: (item && typeof item.label === 'string' && item.label.trim() !== '') ? item.label : 'the weight loss medication',
@@ -49,7 +85,8 @@
                         weight2: item && typeof item.weight2 !== 'undefined' && item.weight2 !== null ? item.weight2 : '',
                         unit: item && item.unit === 'st-lbs' ? 'st-lbs' : 'kg',
                         dose: item && typeof item.dose !== 'undefined' && item.dose !== null ? item.dose : '',
-                        recentDose: item && typeof item.recentDose !== 'undefined' && item.recentDose !== null ? item.recentDose : ''
+                        recentDose: item && typeof item.recentDose !== 'undefined' && item.recentDose !== null ? item.recentDose : '',
+                        recentDoseOptions: recentDoseOptions
                     };
                 });
 
@@ -1441,21 +1478,34 @@
                         .replace(/'/g, '&#039;');
                 };
 
-                const options = [
-                    { value: '25mg', label: '0.25mg/2.5mg' },
-                    { value: '05mg', label: '0.5mg/5mg' },
-                    { value: '1mg', label: '1mg/7.5mg' },
-                    { value: '17mg', label: '1.7mg/12.5mg' },
-                    { value: '24mg', label: '2.4mg/15mg' },
-                    { value: 'other', label: 'Other' }
-                ];
+                const normalizeValue = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value).trim().toLowerCase();
+                };
+
+                const toIdSuffix = function (value, fallbackIndex) {
+                    const normalized = normalizeValue(value)
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    if (normalized !== '') {
+                        return normalized;
+                    }
+
+                    return String(fallbackIndex);
+                };
 
                 const medicationConfigs = window.getMedicationStepData();
 
                 medicationConfigs.forEach(function (config, index) {
                     const slug = config.slug || `medication-${index + 1}`;
                     const label = config.label || 'the weight loss medication';
-                    const hasExistingValue = typeof config.recentDose === 'string' && config.recentDose !== '';
+                    const storedRecentDose = typeof config.recentDose === 'string' ? config.recentDose : '';
+                    const recentDoseOptions = Array.isArray(config.recentDoseOptions) ? config.recentDoseOptions : [];
+                    const hasRadioOptions = recentDoseOptions.length > 0;
 
                     let fieldHtml = `
                         <div class="medication-recent-dose" data-medication="${escapeHtml(label)}">
@@ -1465,15 +1515,34 @@
                             <div class="under">
                     `;
 
-                    options.forEach(function (option, optionIndex) {
-                        const isChecked = hasExistingValue ? config.recentDose === option.value : optionIndex === 0;
-                        const requiredAttr = optionIndex === 0 ? ' required' : '';
-                        const inputId = `recently-dose-${slug}-${option.value}`;
+                    if (hasRadioOptions) {
+                        const normalizedStoredValue = normalizeValue(storedRecentDose);
+
+                        recentDoseOptions.forEach(function (option, optionIndex) {
+                            if (!option || typeof option.value === 'undefined' || typeof option.label === 'undefined') {
+                                return;
+                            }
+
+                            const optionValue = option.value;
+                            const optionLabel = option.label;
+                            const normalizedOptionValue = normalizeValue(optionValue);
+                            const isChecked = normalizedStoredValue !== ''
+                                ? normalizedStoredValue === normalizedOptionValue
+                                : optionIndex === 0;
+                            const requiredAttr = optionIndex === 0 ? ' required' : '';
+                            const inputId = `recently-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
+
+                            fieldHtml += `
+                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="recently-dose-${slug}"${requiredAttr}${isChecked ? ' checked' : ''}>
+                                <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
+                            `;
+                        });
+                    } else {
+                        const inputId = `recently-dose-${slug}`;
                         fieldHtml += `
-                                <input type="radio" value="${option.value}" id="${inputId}" name="recently-dose-${slug}"${requiredAttr}${isChecked ? ' checked' : ''}>
-                                <label for="${inputId}">${escapeHtml(option.label)}</label>
+                                <input type="text" id="${escapeHtml(inputId)}" name="recently-dose-${slug}" value="${escapeHtml(storedRecentDose)}" required placeholder="Enter your most recent dose">
                         `;
-                    });
+                    }
 
                     fieldHtml += `
                             </div>

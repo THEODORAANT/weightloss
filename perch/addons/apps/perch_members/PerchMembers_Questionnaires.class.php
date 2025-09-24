@@ -47,12 +47,20 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                     'options' => $doseOptions,
                 ];
 
-                $this->questions_and_answers["recently-dose-{$slug}"] = [
+                $recentDoseOptions = perch_questionnaire_recent_dose_options($slug);
+                $recentDoseField = [
                     'label' => $recentDoseLabel,
-                    'type' => 'radio',
                     'name' => "recently-dose-{$slug}",
-                    'options' => $this->doses,
                 ];
+
+                if ($recentDoseOptions !== null) {
+                    $recentDoseField['type'] = 'radio';
+                    $recentDoseField['options'] = $recentDoseOptions;
+                } else {
+                    $recentDoseField['type'] = 'text';
+                }
+
+                $this->questions_and_answers["recently-dose-{$slug}"] = $recentDoseField;
             }
         }
 
@@ -489,16 +497,6 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "documents"=>"Member Documents",
     "bmi"=>"BMI",
     ];
-public $doses = [
-    '25mg' => '0.25mg/2.5mg',
-    '05mg' => '0.5mg/5mg',
-    '1mg'  => '1mg/7.5mg',
-    '17mg' => '1.7mg/12.5mg',
-    '24mg' => '2.4mg/15mg',
-    'other'=> 'Other'
-];
-
-
    /* protected $required_answers=[
     "age"=>["18to74"],
     "ethnicity"=>["asian","Black (African/Caribbean)"],
@@ -1193,9 +1191,12 @@ $out=[];
                 }
             }
         }
-           if (strpos($key, 'recently-dose-') === 0 && isset($this->doses[$value])) {
-
-            $qdata['answer_text'] = $this->doses[$value];
+           if (strpos($key, 'recently-dose-') === 0) {
+            $medicationSlug = substr($key, strlen('recently-dose-'));
+            $recentDoseOptions = perch_questionnaire_recent_dose_options($medicationSlug);
+            if (is_array($recentDoseOptions) && isset($recentDoseOptions[$value])) {
+                $qdata['answer_text'] = $recentDoseOptions[$value];
+            }
         }
 
          if($key=="height"){
