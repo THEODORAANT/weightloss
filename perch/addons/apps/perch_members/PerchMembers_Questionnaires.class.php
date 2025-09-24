@@ -1,11 +1,85 @@
 <?php
 
+require_once __DIR__ . '/questionnaire_medication_helpers.php';
+
 class PerchMembers_Questionnaires extends PerchAPI_Factory
 {
     protected $table     = 'questionnaire';
-	protected $pk        = 'id';
-	protected $singular_classname = 'PerchMembers_Questionnaire';
-	public $reorder_questions=[
+        protected $pk        = 'id';
+        protected $singular_classname = 'PerchMembers_Questionnaire';
+        protected $medicationSlugs;
+        public function __construct($api = null)
+        {
+            parent::__construct($api);
+
+            $doseOptions = [
+                'less4' => 'Less than 4 weeks ago',
+                '4to6' => '4-6 weeks ago',
+                'over6' => 'More than 6 weeks ago',
+            ];
+
+            foreach ($this->getMedicationSlugs() as $slug) {
+                $label = $this->getMedicationLabel($slug);
+                $weightLabel = 'What was your weight in kg/st-lbs before starting ' . $label . '?';
+                $lastDoseLabel = 'When was your last dose of ' . $label . '?';
+                $recentDoseLabel = 'What dose of ' . $label . ' were you prescribed most recently?';
+
+                $this->steps["weight-{$slug}"] = 'starting_wegovy';
+                $this->steps["unit-{$slug}"] = 'starting_wegovy';
+                $this->steps["weight2-{$slug}"] = 'starting_wegovy';
+                $this->steps["dose-{$slug}"] = 'dose_wegovy';
+                $this->steps["recently-dose-{$slug}"] = 'recently_wegovy';
+
+                $this->questions["weight-{$slug}"] = $weightLabel;
+                $this->questions["dose-{$slug}"] = $lastDoseLabel;
+                $this->questions["recently-dose-{$slug}"] = $recentDoseLabel;
+
+                $this->questions_and_answers["weight-{$slug}"] = [
+                    'label' => $weightLabel,
+                    'type' => 'text',
+                    'name' => "weight-{$slug}",
+                ];
+
+                $this->questions_and_answers["dose-{$slug}"] = [
+                    'label' => $lastDoseLabel,
+                    'type' => 'radio',
+                    'name' => "dose-{$slug}",
+                    'options' => $doseOptions,
+                ];
+
+                $this->questions_and_answers["recently-dose-{$slug}"] = [
+                    'label' => $recentDoseLabel,
+                    'type' => 'radio',
+                    'name' => "recently-dose-{$slug}",
+                    'options' => $this->doses,
+                ];
+            }
+        }
+
+        protected function getMedicationSlugs(): array
+        {
+            if ($this->medicationSlugs === null) {
+                $options = perch_questionnaire_medications();
+                $slugs = [];
+                foreach ($options as $slug => $label) {
+                    if ($slug === 'none') {
+                        continue;
+                    }
+                    $slugs[] = $slug;
+                }
+
+                $this->medicationSlugs = $slugs;
+            }
+
+            return $this->medicationSlugs;
+        }
+
+        protected function getMedicationLabel(string $slug): string
+        {
+            return perch_questionnaire_medication_label($slug);
+        }
+
+        public $reorder_questions=[
 	"weight"=>"What is your weight?",
 	"weight2"=>"inches",
 	"weightunit"=>"weight unit",
@@ -634,19 +708,28 @@ function getNextStepforFirstOrder(array $data): string {
 
        }
            if ($step=="medications" ){
-           if (is_array($value) &&!empty(array_intersect(['wegovy','ozempic','saxenda','rybelsus','mounjaro','alli','mysimba','other'], $value))) {
+           if (is_array($value) && !empty(array_intersect($this->getMedicationSlugs(), array_map('perch_questionnaire_medication_slug', (array)$value)))) {
             return true;
            }
            }
 
-              if ($step=="starting_wegovy" || $step=="unit-wegovy" || $step=="weight2-wegovy" ||  $step=="weight-wegovy"){
+              if ($step=="starting_wegovy"){
 
                      return true;
                      }
 
-                     if ($step==="dose-wegovy" || $step=="recently-dose-wegovy") {
-
-                         return true;
+                     if (is_string($step)) {
+                         foreach ($this->getMedicationSlugs() as $slug) {
+                             if (
+                                 $step === "unit-{$slug}" ||
+                                 $step === "weight2-{$slug}" ||
+                                 $step === "weight-{$slug}" ||
+                                 $step === "dose-{$slug}" ||
+                                 $step === "recently-dose-{$slug}"
+                             ) {
+                                 return true;
+                             }
+                         }
                      }
 
                      if ($step=="recently_wegovy") {
@@ -781,19 +864,33 @@ function getNextStepforFirstOrder(array $data): string {
           }
 
           // If 'wegovy' selected, check extra info
-          if (in_array('wegovy', $data['medications'])) {
-              if (empty($data['weight-wegovy'])) {
-                  $errors[] = 'Please provide your weight before starting Wegovy.';
+          $selectedMedicationSlugs = is_array($data['medications'])
+              ? array_map('perch_questionnaire_medication_slug', $data['medications'])
+              : [];
+
+          foreach ($this->getMedicationSlugs() as $medicationSlug) {
+              if (!in_array($medicationSlug, $selectedMedicationSlugs, true)) {
+                  continue;
               }
 
-              if (empty($data['dose-wegovy'])) {
-                  $errors[] = 'Please indicate your last dose of Wegovy.';
+              $label = $this->getMedicationLabel($medicationSlug);
+              $weightKey = "weight-{$medicationSlug}";
+              if (empty($data[$weightKey])) {
+                  $errors[] = 'Please provide your weight before starting ' . $label . '.';
               }
 
-              if (empty($data['recently-dose-wegovy'])) {
-                  $errors[] = 'Please provide the most recent dose prescribed.';
+              $doseKey = "dose-{$medicationSlug}";
+              if (empty($data[$doseKey])) {
+                  $errors[] = 'Please indicate your last dose of ' . $label . '.';
               }
 
+              $recentDoseKey = "recently-dose-{$medicationSlug}";
+              if (empty($data[$recentDoseKey])) {
+                  $errors[] = 'Please provide the most recent dose prescribed for ' . $label . '.';
+              }
+          }
+
+          if (in_array('wegovy', $selectedMedicationSlugs, true)) {
               if (empty($data['continue-dose-wegovy'])) {
                   $errors[] = 'Please select your preferred continuation dose.';
               }
@@ -1025,13 +1122,25 @@ $out=[];
 
 
       $questionLookup = ($type=="first-order") ? $this->questions : $this->reorder_questions;
+      if ($type=="first-order") {
+          foreach ($this->getMedicationSlugs() as $slug) {
+              $label = $this->getMedicationLabel($slug);
+              $questionLookup["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $label . '?';
+              $questionLookup["dose-{$slug}"] = "When was your last dose of " . $label . '?';
+              $questionLookup["recently-dose-{$slug}"] = "What dose of " . $label . " were you prescribed most recently?";
+          }
+      }
       $questionConfigSet = ($type=="first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
 
+      $medicationUnits = [];
       if($type=="first-order"){
           $weightradiounit=$data["weightunit"] ?? '';
            $heightunitradio=$data["heightunit"] ?? '';
-           if(isset($data["unit-wegovy"])){
-           $unitwegovyradio=$data["unit-wegovy"];
+           foreach ($this->getMedicationSlugs() as $slug) {
+               $unitKey = "unit-{$slug}";
+               if (isset($data[$unitKey])) {
+                   $medicationUnits[$slug] = $data[$unitKey];
+               }
            }
       }
 
@@ -1071,19 +1180,22 @@ $out=[];
             }
             }
         }
-        if($key=="weight-wegovy" && isset($unitwegovyradio)){
-            $weightwegovyunit=explode("-",$unitwegovyradio);
-                if(count($weightwegovyunit)>1){
-                 $qdata['answer_text'].= " ".$weightwegovyunit[0];
-                  if(isset($data["weight2-wegovy"]) ){
-                         $qdata['answer_text'].= " ".$data["weight2-wegovy"]."  ".$weightwegovyunit[1];
-
+        if (strpos($key, 'weight-') === 0 && !empty($medicationUnits)) {
+            $slug = substr($key, 7);
+            if (isset($medicationUnits[$slug])) {
+                $unitParts = explode('-', $medicationUnits[$slug]);
+                if (count($unitParts) > 1) {
+                    $qdata['answer_text'] .= ' ' . $unitParts[0];
+                    $secondKey = "weight2-{$slug}";
+                    if (isset($data[$secondKey]) && $data[$secondKey] !== '') {
+                        $qdata['answer_text'] .= ' ' . $data[$secondKey] . '  ' . $unitParts[1];
                     }
-                    }
+                }
+            }
         }
-           if($key=="weight-wegovy" && isset($this->doses[$value])){
+           if (strpos($key, 'recently-dose-') === 0 && isset($this->doses[$value])) {
 
-            $qdata['answer_text']=$this->doses[$value];
+            $qdata['answer_text'] = $this->doses[$value];
         }
 
          if($key=="height"){
