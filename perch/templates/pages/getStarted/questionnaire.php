@@ -1,6 +1,8 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
 
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_medication_helpers.php';
+
 /*
 function generateUUID() {
     return sprintf(
@@ -359,8 +361,68 @@ $back_link = $back_links[$_GET["step"]] ?? '/get-started';
 
 PerchSystem::set_var('previousPage', $back_link);
 PerchSystem::set_var('answers', $_SESSION['questionnaire']);
- PerchSystem::set_vars($_SESSION['questionnaire']);
- perch_form('questionnaire.html');
+PerchSystem::set_vars($_SESSION['questionnaire']);
+
+$selectedMedications = [];
+if (!empty($_SESSION['questionnaire']['medications']) && is_array($_SESSION['questionnaire']['medications'])) {
+    foreach ($_SESSION['questionnaire']['medications'] as $medication) {
+        $slug = perch_questionnaire_medication_slug((string) $medication);
+        if ($slug === '' || $slug === 'none') {
+            continue;
+        }
+
+        $recentDoseOptionsConfig = perch_questionnaire_recent_dose_options($slug);
+        $recentDoseOptions = [];
+        if (is_array($recentDoseOptionsConfig)) {
+            foreach ($recentDoseOptionsConfig as $value => $displayLabel) {
+                $recentDoseOptions[] = [
+                    'value' => $value,
+                    'label' => $displayLabel,
+                ];
+            }
+        }
+
+        $selectedMedications[$slug] = [
+            'slug' => $slug,
+            'label' => perch_questionnaire_medication_label($slug),
+            'weight' => $_SESSION['questionnaire']["weight-{$slug}"] ?? '',
+            'weight2' => $_SESSION['questionnaire']["weight2-{$slug}"] ?? '',
+            'unit' => $_SESSION['questionnaire']["unit-{$slug}"] ?? 'kg',
+            'dose' => $_SESSION['questionnaire']["dose-{$slug}"] ?? '',
+            'recentDose' => $_SESSION['questionnaire']["recently-dose-{$slug}"] ?? '',
+            'recentDoseOptions' => $recentDoseOptions,
+        ];
+    }
+}
+
+if (empty($selectedMedications)) {
+    $defaultSlug = 'wegovy';
+    $recentDoseOptionsConfig = perch_questionnaire_recent_dose_options($defaultSlug);
+    $recentDoseOptions = [];
+    if (is_array($recentDoseOptionsConfig)) {
+        foreach ($recentDoseOptionsConfig as $value => $displayLabel) {
+            $recentDoseOptions[] = [
+                'value' => $value,
+                'label' => $displayLabel,
+            ];
+        }
+    }
+    $selectedMedications[$defaultSlug] = [
+        'slug' => $defaultSlug,
+        'label' => perch_questionnaire_medication_label($defaultSlug),
+        'weight' => $_SESSION['questionnaire']['weight-wegovy'] ?? '',
+        'weight2' => $_SESSION['questionnaire']['weight2-wegovy'] ?? '',
+        'unit' => $_SESSION['questionnaire']['unit-wegovy'] ?? 'kg',
+        'dose' => $_SESSION['questionnaire']['dose-wegovy'] ?? '',
+        'recentDose' => $_SESSION['questionnaire']['recently-dose-wegovy'] ?? '',
+        'recentDoseOptions' => $recentDoseOptions,
+    ];
+}
+
+$medicationWeightJson = json_encode(array_values($selectedMedications), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+PerchSystem::set_var('medication_weight_json', $medicationWeightJson ?: '[]');
+
+perch_form('questionnaire.html');
 ?>
 
 

@@ -1,5 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_medication_helpers.php';
 if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
@@ -33,6 +34,31 @@ $questions = [
     "Get access to special offers" => "email_address"
 ];
 
+$doseOptions = [
+    'less4' => 'Less than 4 weeks ago',
+    '4to6' => '4-6 weeks ago',
+    'over6' => 'More than 6 weeks ago',
+];
+
+$medicationSlugs = [];
+$recentDoseOptionsBySlug = [];
+foreach (perch_questionnaire_medications() as $slug => $label) {
+    if ($slug === 'none') {
+        continue;
+    }
+
+    $medicationSlugs[] = $slug;
+    $medicationLabel = perch_questionnaire_medication_label($slug);
+    $questions["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $medicationLabel . '?';
+    $questions["dose-{$slug}"] = "When was your last dose of " . $medicationLabel . '?';
+    $questions["recently-dose-{$slug}"] = "What dose of " . $medicationLabel . " were you prescribed most recently?";
+
+    $options = perch_questionnaire_recent_dose_options($slug);
+    if ($options !== null) {
+        $recentDoseOptionsBySlug[$slug] = $options;
+    }
+}
+
 $steps = [
     "age" => "howold",
     "ethnicity" => "18to74",
@@ -62,6 +88,12 @@ $steps = [
     "email_address" => "gp_address",
     "Get access to special offers" => "access_special_offers"
 ];
+
+foreach ($medicationSlugs as $slug) {
+    $steps["weight-{$slug}"] = "starting_wegovy";
+    $steps["dose-{$slug}"] = "dose_wegovy";
+    $steps["recently-dose-{$slug}"] = "recently_wegovy";
+}
 
 // Render a field with optional second value and unit
 function renderMeasurement($value, $unitKey, $secondKey, $questionnaire)
@@ -120,8 +152,17 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                             echo htmlspecialchars(implode(", ", $value));
                         } elseif ($key === "weight") {
                             echo renderMeasurement($value, "weightunit", "weight2", $_SESSION['questionnaire']);
-                        } elseif ($key === "weight-wegovy") {
-                            echo renderMeasurement($value, "unit-wegovy", "weight2-wegovy", $_SESSION['questionnaire']);
+                        } elseif (strpos($key, 'weight-') === 0) {
+                            $slug = substr($key, 7);
+                            echo renderMeasurement($value, "unit-{$slug}", "weight2-{$slug}", $_SESSION['questionnaire']);
+                        } elseif (strpos($key, 'recently-dose-') === 0) {
+                            $medicationSlug = substr($key, strlen('recently-dose-'));
+                            $options = $recentDoseOptionsBySlug[$medicationSlug] ?? [];
+                            $answer = $options[$value] ?? $value;
+                            echo htmlspecialchars($answer);
+                        } elseif (strpos($key, 'dose-') === 0) {
+                            $answer = $doseOptions[$value] ?? $value;
+                            echo htmlspecialchars($answer);
                         } elseif ($key === "height") {
                             echo renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
                         } else {
