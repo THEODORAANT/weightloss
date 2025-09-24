@@ -14,13 +14,14 @@ class PerchShop_Order extends PerchShop_Base
 
     protected $date_fields = ['orderUpdated', 'orderCreated'];
 
-	protected $duplicate_fields  = [
-										'orderStatus'       => 'status',
-										'customerID'        => 'customer',
-										'orderTotal'        => 'total',
-										'orderCurrency'     => 'currency',
-										'orderGateway'      => 'gateway'
-									];
+        protected $duplicate_fields  = [
+                                                                                'orderStatus'       => 'status',
+                                                                                'customerID'        => 'customer',
+                                                                                'orderTotal'        => 'total',
+                                                                                'orderCurrency'     => 'currency',
+                                                                                'orderGateway'      => 'gateway'
+                                                                        ];
+    protected static $questionnaireOrderColumnAvailable = null;
 
 	public function get_currency_code()
 	{
@@ -67,6 +68,21 @@ class PerchShop_Order extends PerchShop_Base
             return $out;
         }
         return null;
+    }
+
+    protected function questionnaireHasOrderColumn()
+    {
+        if (self::$questionnaireOrderColumnAvailable !== null) {
+            return self::$questionnaireOrderColumnAvailable;
+        }
+
+        $table = PERCH_DB_PREFIX.'questionnaire';
+        $sql   = "SHOW COLUMNS FROM `{$table}` LIKE 'question_order'";
+        $exists = $this->db->get_value($sql);
+
+        self::$questionnaireOrderColumnAvailable = $exists ? true : false;
+
+        return self::$questionnaireOrderColumnAvailable;
     }
 
     public function get_discount_code()
@@ -253,7 +269,11 @@ class PerchShop_Order extends PerchShop_Base
                     $sql_questionnaire .= ' AND qid='.$this->db->pdb($questionnaireID);
                 }
 
-                $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
+                if ($this->questionnaireHasOrderColumn()) {
+                    $sql_questionnaire .= ' ORDER BY (question_order IS NULL), question_order ASC, created_at ASC, id ASC';
+                } else {
+                    $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
+                }
 
                 $questionnaire = $this->db->get_rows($sql_questionnaire);
 
