@@ -8,6 +8,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         protected $pk        = 'id';
         protected $singular_classname = 'PerchMembers_Questionnaire';
         protected $medicationSlugs;
+        protected static $questionOrderColumnEnsured = false;
+        protected static $questionOrderColumnAvailable = null;
         public function __construct($api = null)
         {
             parent::__construct($api);
@@ -62,6 +64,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
                 $this->questions_and_answers["recently-dose-{$slug}"] = $recentDoseField;
             }
+
+            $this->ensureQuestionOrderColumnExists();
         }
 
         protected function getMedicationSlugs(): array
@@ -87,8 +91,75 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             return perch_questionnaire_medication_label($slug);
         }
 
+        protected function ensureQuestionOrderColumnExists(): void
+        {
+            if (self::$questionOrderColumnEnsured && self::$questionOrderColumnAvailable !== null) {
+                return;
+            }
+
+            $table = PERCH_DB_PREFIX . 'questionnaire';
+            $sql   = "SHOW COLUMNS FROM `{$table}` LIKE 'question_order'";
+            $exists = $this->db->get_value($sql);
+
+            if (!$exists) {
+                $alter = "ALTER TABLE `{$table}` ADD COLUMN `question_order` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `question_slug`";
+                try {
+                    $this->db->execute($alter);
+                } catch (Exception $e) {
+                    // If the column still cannot be created we silently ignore to avoid blocking execution.
+                }
+
+                $exists = $this->db->get_value($sql);
+            }
+
+            self::$questionOrderColumnAvailable = $exists ? true : false;
+            self::$questionOrderColumnEnsured = true;
+        }
+
+        protected function questionOrderColumnAvailable(): bool
+        {
+            if (self::$questionOrderColumnAvailable !== null) {
+                return self::$questionOrderColumnAvailable;
+            }
+
+            $this->ensureQuestionOrderColumnExists();
+
+            if (self::$questionOrderColumnAvailable !== null) {
+                return self::$questionOrderColumnAvailable;
+            }
+
+            $table = PERCH_DB_PREFIX . 'questionnaire';
+            $sql   = "SHOW COLUMNS FROM `{$table}` LIKE 'question_order'";
+            $exists = $this->db->get_value($sql);
+
+            self::$questionOrderColumnAvailable = $exists ? true : false;
+
+            return self::$questionOrderColumnAvailable;
+        }
+
+        protected function buildQuestionOrderMap($type): array
+        {
+            $orderMap = [];
+            $position = 1;
+
+            $questionSets = [$this->get_questions($type), $this->get_questions_answers($type)];
+            foreach ($questionSets as $set) {
+                if (!is_array($set)) {
+                    continue;
+                }
+
+                foreach (array_keys($set) as $slug) {
+                    if (!isset($orderMap[$slug])) {
+                        $orderMap[$slug] = $position++;
+                    }
+                }
+            }
+
+            return [$orderMap, $position];
+        }
+
         public $reorder_questions=[
-	"weight"=>"What is your weight?",
+        "weight"=>"What is your weight?",
 	"weight2"=>"inches",
 	"weightunit"=>"weight unit",
 	"bmi"=>"BMI",
@@ -503,8 +574,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
     ]*/
 
-	protected $default_sort_column = 'created_at';
-	public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
+        protected $default_sort_column = 'created_at';
+        public $static_fields = array('version','question_text', 'question_slug', 'question_order', 'question_slug', 'answer', 'answer_text','member_id');
 	public function get_questions($type='first-order')
     {
     if($type=="re-order"){
@@ -615,7 +686,14 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'questionnaire d
-                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'" order by id desc';
+                WHERE d.member_id='.$this->db->pdb((int)$memberID)
+                .' AND d.type='.$this->db->pdb($type);
+
+        if ($this->questionOrderColumnAvailable()) {
+            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+        } else {
+            $sql .= ' ORDER BY d.id DESC';
+        }
 
         return $this->return_instances($this->db->get_rows($sql));
     }
@@ -1241,6 +1319,7 @@ $out=[];
             $insert_status ="INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`,memberID,`status`) VALUES ('v1',".$memberID.",'pending'); ";
          $new_id =$this->db->execute($insert_status);
  $data['bmi']=$result;
+      list($questionOrderMap, $nextQuestionOrder) = $this->buildQuestionOrderMap($type);
       foreach ($data as $key => $value) {
        $qdata = array();
         $qdata['type'] = $type;
@@ -1274,6 +1353,10 @@ $out=[];
 
       $questionConfig = $questionConfigSet[$key] ?? null;
       $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
+      if (!isset($questionOrderMap[$key])) {
+          $questionOrderMap[$key] = $nextQuestionOrder++;
+      }
+      $qdata['question_order'] = $questionOrderMap[$key];
 
       if ($questionConfig) {
           $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
