@@ -1,4 +1,62 @@
 <perch:form id="questionnaire" method="POST" app="perch_forms" action="/get-started/questionnaire" >
+    <script type="application/json" id="medication-step-data"><perch:forms id="medication_weight_json" encode="false" /></script>
+    <script>
+        (function () {
+            if (window.getMedicationStepData) {
+                return;
+            }
+
+            window.getMedicationStepData = function () {
+                if (window.__medicationStepData) {
+                    return window.__medicationStepData;
+                }
+
+                const dataElement = document.getElementById('medication-step-data');
+                let parsed = [];
+
+                if (dataElement) {
+                    const raw = dataElement.textContent ? dataElement.textContent.trim() : '';
+                    if (raw) {
+                        try {
+                            parsed = JSON.parse(raw);
+                        } catch (error) {
+                            console.error('Unable to parse medication configuration data', error);
+                        }
+                    }
+                }
+
+                if (!Array.isArray(parsed) || parsed.length === 0) {
+                    parsed = [{
+                        slug: 'wegovy',
+                        label: 'the weight loss medication',
+                        weight: '',
+                        weight2: '',
+                        unit: 'kg',
+                        dose: '',
+                        recentDose: ''
+                    }];
+                }
+
+                window.__medicationStepData = parsed.map(function (item, index) {
+                    const slug = (item && typeof item.slug === 'string' && item.slug.trim() !== '')
+                        ? item.slug.trim()
+                        : `medication-${index + 1}`;
+
+                    return {
+                        slug: slug,
+                        label: (item && typeof item.label === 'string' && item.label.trim() !== '') ? item.label : 'the weight loss medication',
+                        weight: item && typeof item.weight !== 'undefined' && item.weight !== null ? item.weight : '',
+                        weight2: item && typeof item.weight2 !== 'undefined' && item.weight2 !== null ? item.weight2 : '',
+                        unit: item && item.unit === 'st-lbs' ? 'st-lbs' : 'kg',
+                        dose: item && typeof item.dose !== 'undefined' && item.dose !== null ? item.dose : '',
+                        recentDose: item && typeof item.recentDose !== 'undefined' && item.recentDose !== null ? item.recentDose : ''
+                    };
+                });
+
+                return window.__medicationStepData;
+            };
+        })();
+    </script>
  <!--  <a href="/get-started/questionnaire?step=startagain" style="text-decoration: none;color: #000;" >Start again </a>-->
 
     <perch:if id="step" value="howold">
@@ -1138,7 +1196,6 @@
 
                    </div>-->
                     <div id="medication-weight-fields"></div>
-                    <script type="application/json" id="medication-weight-data"><perch:forms id="medication_weight_json" encode="false" /></script>
 
                   <!--  <div class="buttons skip ">
                         <button class="back skip_button "><a href="/get-started/questionnaire?step=dose_wegovy" style="text-decoration: none;color: #000;" >Skip</a></button>
@@ -1160,15 +1217,14 @@
         </section>
         <script>
             (function () {
-                const dataElement = document.getElementById('medication-weight-data');
                 const container = document.getElementById('medication-weight-fields');
                 const nextButton = document.getElementById('medication-weight-next');
 
-                if (!container || !dataElement) {
+                if (!container) {
                     return;
                 }
 
-                const escapeHtml = (value) => {
+                const escapeHtml = function (value) {
                     if (value === null || value === undefined) {
                         return '';
                     }
@@ -1181,26 +1237,10 @@
                         .replace(/'/g, '&#039;');
                 };
 
-                let medicationWeights = [];
-                try {
-                    const raw = dataElement.textContent ? dataElement.textContent.trim() : '';
-                    medicationWeights = raw ? JSON.parse(raw) : [];
-                } catch (error) {
-                    console.error('Unable to parse medication weight data', error);
-                }
+                const medicationWeights = window.getMedicationStepData();
 
-                if (!Array.isArray(medicationWeights) || medicationWeights.length === 0) {
-                    medicationWeights = [{
-                        slug: 'wegovy',
-                        label: 'the weight loss medication',
-                        weight: '',
-                        weight2: '',
-                        unit: 'kg'
-                    }];
-                }
-
-                medicationWeights.forEach((config, index) => {
-                    const slug = config.slug || `medication-${index}`;
+                medicationWeights.forEach(function (config, index) {
+                    const slug = config.slug || `medication-${index + 1}`;
                     const unit = config.unit === 'st-lbs' ? 'st-lbs' : 'kg';
                     const placeholder = unit === 'kg' ? 'Kg' : 'St';
                     const weight2Type = unit === 'st-lbs' ? 'text' : 'hidden';
@@ -1210,8 +1250,8 @@
                         <div class="medication-weight" data-medication="${escapeHtml(label)}">
                             <h2>What was your weight in kg/st-lbs before starting <span class="medication-name">${escapeHtml(label)}</span>?</h2>
                             <div class="weight-inputs">
-                                <input type="text" name="weight-${slug}" id="weight-${slug}" placeholder="${placeholder}" value="${escapeHtml(config.weight ?? '')}">
-                                <input type="${weight2Type}" id="weight2-${slug}" name="weight2-${slug}" placeholder="lbs" value="${escapeHtml(config.weight2 ?? '')}" />
+                                <input type="text" name="weight-${slug}" id="weight-${slug}" placeholder="${placeholder}" value="${escapeHtml(config.weight)}">
+                                <input type="${weight2Type}" id="weight2-${slug}" name="weight2-${slug}" placeholder="lbs" value="${escapeHtml(config.weight2)}" />
                                 <input type="hidden" id="unit-${slug}" value="${unit}" name="unit-${slug}">
                                 <div class="st_lbs" id="st-lbs-inputs-${slug}" style="display: none;">
                                     <input type="text" placeholder="St">
@@ -1272,43 +1312,14 @@
 
                     </div>-->
 
+                    <div id="medication-dose-fields"></div>
 
-                    <div class="old_title">
-                        <h2>When was your last dose of <span id="medication">the weight loss medication</span>?</h2>
-                    </div>
-
-
-
-                    <div class="under">
-
-
-                        <input type="radio" value="less4" onclick="submitForm('dose-wegovy')" name="dose-wegovy"  required id="Under" checked="checked">
-                        <label for="Under" id="Less">Less than 4 weeks ago</label>
-
-                        <input type="radio" value="4to6"  onclick="submitForm('dose-wegovy')" name="dose-wegovy"  id="4to6">
-                        <label for="4to6" id="ago">4-6 weeks ago</label>
-
-                        <input type="radio" value="over6" onclick="submitForm('dose-wegovy')" name="dose-wegovy"  id="over">
-                        <label for="over" id="More">More than 6 weeks ago</label>
-
+                    <div class="buttons">
                         <input type="hidden" id="nextstep" name="nextstep" value="recently_wegovy">
 
-                    </div>
+                        <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
 
-
-
-
-
-
-
-                    <div class="get_started">
-                        <div class="started_button">
-                            <div class="get_btn">
-                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
-                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
-
-                            </div>
-                        </div>
+                        <button id="medication-dose-next" class="next" onclick="submitForm('dose-wegovy')"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
 
                 </div>
@@ -1318,6 +1329,72 @@
 
 
         </section>
+        <script>
+            (function () {
+                const container = document.getElementById('medication-dose-fields');
+                const nextButton = document.getElementById('medication-dose-next');
+
+                if (!container) {
+                    return;
+                }
+
+                const escapeHtml = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                };
+
+                const options = [
+                    { value: 'less4', label: 'Less than 4 weeks ago' },
+                    { value: '4to6', label: '4-6 weeks ago' },
+                    { value: 'over6', label: 'More than 6 weeks ago' }
+                ];
+
+                const medicationConfigs = window.getMedicationStepData();
+
+                medicationConfigs.forEach(function (config, index) {
+                    const slug = config.slug || `medication-${index + 1}`;
+                    const label = config.label || 'the weight loss medication';
+                    const hasExistingValue = typeof config.dose === 'string' && config.dose !== '';
+
+                    let fieldHtml = `
+                        <div class="medication-dose" data-medication="${escapeHtml(label)}">
+                            <div class="old_title">
+                                <h2>When was your last dose of <span class="medication-name">${escapeHtml(label)}</span>?</h2>
+                            </div>
+                            <div class="under">
+                    `;
+
+                    options.forEach(function (option, optionIndex) {
+                        const isChecked = hasExistingValue ? config.dose === option.value : optionIndex === 0;
+                        const requiredAttr = optionIndex === 0 ? ' required' : '';
+                        const inputId = `dose-${slug}-${option.value}`;
+                        fieldHtml += `
+                                <input type="radio" value="${option.value}" id="${inputId}" name="dose-${slug}"${requiredAttr}${isChecked ? ' checked' : ''}>
+                                <label for="${inputId}">${escapeHtml(option.label)}</label>
+                        `;
+                    });
+
+                    fieldHtml += `
+                            </div>
+                        </div>
+                    `;
+
+                    container.insertAdjacentHTML('beforeend', fieldHtml);
+
+                    if (index === 0 && nextButton) {
+                        nextButton.setAttribute('onclick', `submitForm('dose-${slug}')`);
+                    }
+                });
+            })();
+        </script>
     </perch:if>
     <perch:if id="step" value="recently_wegovy" >
         <section class="how_old">
@@ -1329,51 +1406,88 @@
                      </div>
 
                  </div>-->
-                    <div class="old_title">
-                        <h2>What dose of <span id="medication">the weight loss medication</span> were you prescribed most recently?</h2><br>
+                    <div id="medication-recent-dose-fields"></div>
 
-
-                    </div>
-                    <div class="under">
-                        <input type="radio" value="25mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy"  required id="25mg" checked="checked">
-                        <label for="25mg" >0.25mg/2.5mg</label>
-
-
-                        <input type="radio" id="05mg"  value="05mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy" >
-                        <label for="05mg" >0.5mg/5mg</label>
-
-
-                        <input type="radio" id="1mg"  value="1mg"  onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
-                        <label for="1mg" >1mg/7.5mg</label>
-
-                        <input type="radio" id="17mg" value="17mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
-                        <label for="17mg" >1.7mg/12.5mg</label>
-
-
-                        <input type="radio" value="24mg" id="24mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
-                        <label for="24mg" >2.4mg/15mg</label>
-
-                        <input type="radio" value="other" id="other" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
-                        <label for="other" >Other</label>
-
+                    <div class="buttons">
                         <input type="hidden" id="nextstep" name="nextstep" value="continue_with_wegovy">
 
+                        <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
 
-                    </div>
-
-                    <div class="get_started">
-                        <div class="started_button">
-                            <div class="get_btn">
-                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
-                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
-
-                            </div>
-                        </div>
+                        <button id="medication-recent-dose-next" class="next" onclick="submitForm('recently-dose-wegovy')"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
 
                 </div>
             </div>
         </section>
+        <script>
+            (function () {
+                const container = document.getElementById('medication-recent-dose-fields');
+                const nextButton = document.getElementById('medication-recent-dose-next');
+
+                if (!container) {
+                    return;
+                }
+
+                const escapeHtml = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                };
+
+                const options = [
+                    { value: '25mg', label: '0.25mg/2.5mg' },
+                    { value: '05mg', label: '0.5mg/5mg' },
+                    { value: '1mg', label: '1mg/7.5mg' },
+                    { value: '17mg', label: '1.7mg/12.5mg' },
+                    { value: '24mg', label: '2.4mg/15mg' },
+                    { value: 'other', label: 'Other' }
+                ];
+
+                const medicationConfigs = window.getMedicationStepData();
+
+                medicationConfigs.forEach(function (config, index) {
+                    const slug = config.slug || `medication-${index + 1}`;
+                    const label = config.label || 'the weight loss medication';
+                    const hasExistingValue = typeof config.recentDose === 'string' && config.recentDose !== '';
+
+                    let fieldHtml = `
+                        <div class="medication-recent-dose" data-medication="${escapeHtml(label)}">
+                            <div class="old_title">
+                                <h2>What dose of <span class="medication-name">${escapeHtml(label)}</span> were you prescribed most recently?</h2>
+                            </div>
+                            <div class="under">
+                    `;
+
+                    options.forEach(function (option, optionIndex) {
+                        const isChecked = hasExistingValue ? config.recentDose === option.value : optionIndex === 0;
+                        const requiredAttr = optionIndex === 0 ? ' required' : '';
+                        const inputId = `recently-dose-${slug}-${option.value}`;
+                        fieldHtml += `
+                                <input type="radio" value="${option.value}" id="${inputId}" name="recently-dose-${slug}"${requiredAttr}${isChecked ? ' checked' : ''}>
+                                <label for="${inputId}">${escapeHtml(option.label)}</label>
+                        `;
+                    });
+
+                    fieldHtml += `
+                            </div>
+                        </div>
+                    `;
+
+                    container.insertAdjacentHTML('beforeend', fieldHtml);
+
+                    if (index === 0 && nextButton) {
+                        nextButton.setAttribute('onclick', `submitForm('recently-dose-${slug}')`);
+                    }
+                });
+            })();
+        </script>
 
     </perch:if>
     <perch:if id="step" value="continue_with_wegovy">
