@@ -615,7 +615,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'questionnaire d
-                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'" order by created_at desc';
+                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'" order by id desc';
 
         return $this->return_instances($this->db->get_rows($sql));
     }
