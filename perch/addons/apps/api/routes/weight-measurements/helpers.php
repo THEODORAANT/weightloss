@@ -2,7 +2,7 @@
 if (!function_exists('wl_weight_measurements_table')) {
     function wl_weight_measurements_table()
     {
-        return PERCH_DB_PREFIX . 'weight_measurements';
+        return PERCH_DB_PREFIX . 'getweightloss_measurements';
     }
 }
 
@@ -146,7 +146,7 @@ if (!function_exists('wl_weight_measurements_repository')) {
         static $repository = null;
 
         if ($repository === null) {
-            $repository = new WeightMeasurementsRepository("getweightloss_measurements");
+            $repository = new WeightMeasurementsRepository(null, 'getweightloss_measurements');
         }
 
         return $repository;
