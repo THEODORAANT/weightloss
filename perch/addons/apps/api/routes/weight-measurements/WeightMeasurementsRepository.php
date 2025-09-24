@@ -5,10 +5,26 @@ class WeightMeasurementsRepository
     private $db;
     private $table;
 
-    public function __construct($db = null)
+    public function __construct($db = null, $table = null)
     {
-        $this->db = $db ?: PerchDB::fetch();
-        $this->table = wl_weight_measurements_table();
+        if (is_string($db) && $db !== '' && $table === null) {
+            $table = $db;
+            $db = null;
+        }
+
+        if ($db === null) {
+            $this->db = PerchDB::fetch();
+        } elseif (is_object($db)) {
+            $this->db = $db;
+        } else {
+            $this->db = PerchDB::fetch($db);
+        }
+
+        if (is_string($table) && $table !== '') {
+            $this->table = $this->resolveTableName($table);
+        } else {
+            $this->table = wl_weight_measurements_table();
+        }
     }
 
     public function countForMember($memberId, $startDate = null, $endDate = null)
@@ -190,6 +206,19 @@ class WeightMeasurementsRepository
         }
 
         return implode(' AND ', $clauses);
+    }
+
+    private function resolveTableName($table)
+    {
+        if (!defined('PERCH_DB_PREFIX') || PERCH_DB_PREFIX === '') {
+            return $table;
+        }
+
+        if (strpos($table, PERCH_DB_PREFIX) === 0) {
+            return $table;
+        }
+
+        return PERCH_DB_PREFIX . $table;
     }
 
     private function isDateTime($value)
