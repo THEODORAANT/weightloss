@@ -1,5 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_medication_helpers.php';
 if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
@@ -33,6 +34,16 @@ $questions = [
     "Get access to special offers" => "email_address"
 ];
 
+$medicationSlugs = [];
+foreach (perch_questionnaire_medications() as $slug => $label) {
+    if ($slug === 'none') {
+        continue;
+    }
+
+    $medicationSlugs[] = $slug;
+    $questions["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . perch_questionnaire_medication_label($slug) . '?';
+}
+
 $steps = [
     "age" => "howold",
     "ethnicity" => "18to74",
@@ -62,6 +73,10 @@ $steps = [
     "email_address" => "gp_address",
     "Get access to special offers" => "access_special_offers"
 ];
+
+foreach ($medicationSlugs as $slug) {
+    $steps["weight-{$slug}"] = "starting_wegovy";
+}
 
 // Render a field with optional second value and unit
 function renderMeasurement($value, $unitKey, $secondKey, $questionnaire)
@@ -120,8 +135,9 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                             echo htmlspecialchars(implode(", ", $value));
                         } elseif ($key === "weight") {
                             echo renderMeasurement($value, "weightunit", "weight2", $_SESSION['questionnaire']);
-                        } elseif ($key === "weight-wegovy") {
-                            echo renderMeasurement($value, "unit-wegovy", "weight2-wegovy", $_SESSION['questionnaire']);
+                        } elseif (strpos($key, 'weight-') === 0) {
+                            $slug = substr($key, 7);
+                            echo renderMeasurement($value, "unit-{$slug}", "weight2-{$slug}", $_SESSION['questionnaire']);
                         } elseif ($key === "height") {
                             echo renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
                         } else {
