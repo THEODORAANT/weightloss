@@ -7,19 +7,19 @@ class WeightMeasurementsRepository
 
     public function __construct($db = null, $table = null)
     {
-        if (is_string($db) && $db !== '' && $table === null) {
+       /*  if (is_string($db) && $db !== '' && $table === null) {
             $table = $db;
             $db = null;
         }
 
-        if ($db === null) {
+       if ($db === null) {
             $this->db = PerchDB::fetch();
         } elseif (is_object($db)) {
             $this->db = $db;
         } else {
             $this->db = PerchDB::fetch($db);
-        }
-
+        }*/
+         $this->db = PerchDB::fetch();
         if (is_string($table) && $table !== '') {
             $this->table = $this->resolveTableName($table);
         } else {
@@ -115,8 +115,12 @@ class WeightMeasurementsRepository
         $sql = 'INSERT INTO ' . $this->table
             . ' (' . implode(',', $columns) . ')'
             . ' VALUES (' . implode(',', $values) . ')';
+ try {
+          $insertId = $this->db->execute($sql);
+        } catch (Exception $e) {
+            wl_weight_measurements_error(400, json_decode($e, true));
+        }
 
-        $insertId = $this->db->execute($sql);
 
         if ($insertId === false) {
             return false;
@@ -218,7 +222,7 @@ class WeightMeasurementsRepository
             return $table;
         }
 
-        return PERCH_DB_PREFIX . $table;
+        return "getweightloss_measurements.".PERCH_DB_PREFIX . $table;
     }
 
     private function isDateTime($value)
