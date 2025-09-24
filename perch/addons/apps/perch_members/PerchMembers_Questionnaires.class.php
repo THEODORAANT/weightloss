@@ -1231,11 +1231,17 @@ if(isset($data["uuid"])){
            $columns = implode(", ", array_keys($qdata)); // Columns as a string
                       //  $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
 
-          $escaped_values = array_map(function($value) {
-              return mysqli_real_escape_string($this->db->get_link(), $value);
-          }, array_values($qdata));
+           $db = $this->db;
 
-          $values = "'" . implode("', '", $escaped_values) . "'";
+           $escaped_values = array_map(function ($value) use ($db) {
+               if (is_string($value)) {
+                   $value = PerchUtil::safe_stripslashes($value);
+               }
+
+               return $db->pdb($value);
+           }, array_values($qdata));
+
+           $values = implode(', ', $escaped_values);
 
            $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
 
@@ -1243,9 +1249,9 @@ if(isset($data["uuid"])){
 
      // }
 
-echo  $insert_query;
-exit();
-die();
+//echo  $insert_query;
+//exit();
+//die();
 try{
 
     	$this->db->execute($insert_query);
