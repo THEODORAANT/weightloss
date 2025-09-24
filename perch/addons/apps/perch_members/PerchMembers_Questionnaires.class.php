@@ -807,8 +807,26 @@ function getNextStepforFirstOrder(array $data): string {
               $errors[] = 'Please provide your weight and select a unit.';
           }
 
-          if (empty($data['height']) || empty($data['heightunit'])) {
+          $heightUnit = $this->resolveHeightUnit($data);
+          $heightPrimary = isset($data['height']) ? trim((string)$data['height']) : '';
+
+          if ($heightPrimary === '' || $heightUnit === null) {
               $errors[] = 'Please provide your height and select a unit.';
+          } else {
+              $heightSecondary = $data['height2'] ?? null;
+              $heightInCm = $this->normaliseHeightToCentimetres($heightPrimary, $heightSecondary, $heightUnit);
+
+              if ($heightInCm === null) {
+                  $errors[] = 'Please enter your height using valid numbers. The shortest adult in the UK is 89 cm.';
+              } else {
+                  $minHeightCm = 89;
+                  $maxHeightCm = 272;
+
+                  if ($heightInCm < $minHeightCm || $heightInCm > $maxHeightCm) {
+                      $rangeDescription = $this->formatHeightRangeForUnit($heightUnit, $minHeightCm, $maxHeightCm);
+                      $errors[] = 'Please enter a realistic height between ' . $rangeDescription . '. The shortest adult in the UK is 89 cm.';
+                  }
+              }
           }
 
           // Diabetes required
@@ -920,6 +938,118 @@ function getNextStepforFirstOrder(array $data): string {
       }
 
       return $errors;
+  }
+
+  private function resolveHeightUnit(array $data): ?string
+  {
+      $unit = $data['heightunit'] ?? ($data['heightunit-radio'] ?? null);
+
+      if ($unit === null) {
+          return null;
+      }
+
+      $unit = strtolower(trim((string)$unit));
+
+      if ($unit === '') {
+          return null;
+      }
+
+      if ($unit === 'ft_in' || $unit === 'ftin') {
+          return 'ft-in';
+      }
+
+      return $unit;
+  }
+
+  private function normaliseHeightToCentimetres($primaryValue, $secondaryValue, string $unit): ?float
+  {
+      $unit = strtolower(trim($unit));
+      $primaryNumeric = $this->normaliseNumericValue($primaryValue);
+
+      if ($primaryNumeric === null || $primaryNumeric <= 0) {
+          return null;
+      }
+
+      if ($unit === 'cm') {
+          return $primaryNumeric;
+      }
+
+      if ($unit === 'in') {
+          return $primaryNumeric * 2.54;
+      }
+
+      if ($unit === 'ft-in') {
+          $secondaryNumeric = $this->normaliseNumericValue($secondaryValue);
+
+          if ($secondaryNumeric === null) {
+              $secondaryNumeric = 0.0;
+          }
+
+          if ($secondaryNumeric < 0 || $secondaryNumeric >= 12) {
+              return null;
+          }
+
+          $totalInches = ($primaryNumeric * 12) + $secondaryNumeric;
+
+          return $totalInches * 2.54;
+      }
+
+      return null;
+  }
+
+  private function normaliseNumericValue($value): ?float
+  {
+      if (is_array($value)) {
+          return null;
+      }
+
+      if ($value === null) {
+          return null;
+      }
+
+      $value = str_replace(',', '.', trim((string)$value));
+
+      if ($value === '') {
+          return null;
+      }
+
+      if (!is_numeric($value)) {
+          return null;
+      }
+
+      return (float)$value;
+  }
+
+  private function formatHeightRangeForUnit(string $unit, float $minHeightCm, float $maxHeightCm): string
+  {
+      $unit = strtolower(trim($unit));
+
+      if ($unit === 'ft-in') {
+          $format = function (float $cm): string {
+              $totalInches = $cm / 2.54;
+              $feet = floor($totalInches / 12);
+              $inches = round($totalInches - ($feet * 12));
+
+              if ($inches === 12) {
+                  $feet += 1;
+                  $inches = 0;
+              }
+
+              return $feet . ' ft ' . $inches . ' in';
+          };
+
+          return $format($minHeightCm) . ' and ' . $format($maxHeightCm);
+      }
+
+      if ($unit === 'in') {
+          $toInches = function (float $cm): string {
+              return rtrim(rtrim(number_format($cm / 2.54, 1, '.', ''), '0'), '.');
+          };
+
+          return $toInches($minHeightCm) . ' in and ' . $toInches($maxHeightCm) . ' in';
+      }
+
+      return $minHeightCm . ' cm and ' . $maxHeightCm . ' cm';
   }
 
   function calculateBMIAdvanced($weight, $weightUnit, $height1, $weight2=0, $height2 = 0, $heightUnit = 'cm') {
