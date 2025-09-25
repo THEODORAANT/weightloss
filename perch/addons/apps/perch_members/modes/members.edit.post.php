@@ -233,7 +233,19 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             echo '<tr>';
                             echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
                             echo '<td>';
-                            echo PerchUtil::html($Questionnaire->answer_text());
+                            if ($slug === 'bmi') {
+                                $bmiValue = $Questionnaire->answer_text();
+                                if ($bmiValue === null || $bmiValue === '') {
+                                    $entryDetails = $Questionnaire->to_array();
+                                    if (is_array($entryDetails) && isset($entryDetails['answer']) && $entryDetails['answer'] !== '') {
+                                        $bmiValue = $entryDetails['answer'];
+                                    }
+                                }
+
+                                echo $Form->text('questionnaire_bmi['.$Questionnaire->id().']', $bmiValue, 'input-simple', false, 'number', 'step="0.1" min="0"');
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
@@ -293,7 +305,19 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             echo '<tr>';
                             echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
                             echo '<td>';
-                            echo PerchUtil::html($Questionnaire->answer_text());
+                            if ($slug === 'bmi') {
+                                $bmiValue = $Questionnaire->answer_text();
+                                if ($bmiValue === null || $bmiValue === '') {
+                                    $entryDetails = $Questionnaire->to_array();
+                                    if (is_array($entryDetails) && isset($entryDetails['answer']) && $entryDetails['answer'] !== '') {
+                                        $bmiValue = $entryDetails['answer'];
+                                    }
+                                }
+
+                                echo $Form->text('questionnaire_bmi['.$Questionnaire->id().']', $bmiValue, 'input-simple', false, 'number', 'step="0.1" min="0"');
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
