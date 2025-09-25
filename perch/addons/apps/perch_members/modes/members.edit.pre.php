@@ -108,6 +108,41 @@
 
         // Tags
         if ($result) {
+            if (is_object($Member) && isset($post['questionnaire_bmi']) && is_array($post['questionnaire_bmi'])) {
+                foreach ($post['questionnaire_bmi'] as $questionnaireID => $bmiValue) {
+                    $questionnaireID = (int) $questionnaireID;
+                    if ($questionnaireID <= 0) {
+                        continue;
+                    }
+
+                    $bmiValue = trim((string) $bmiValue);
+
+                    $QuestionnaireEntry = $Questionnaires->find($questionnaireID);
+                    if (!$QuestionnaireEntry) {
+                        continue;
+                    }
+
+                    if ((int) $QuestionnaireEntry->member_id() !== (int) $Member->id()) {
+                        continue;
+                    }
+
+                    $currentValue = trim((string) $QuestionnaireEntry->answer_text());
+                    if ($currentValue === $bmiValue) {
+                        continue;
+                    }
+
+                    $updateData = [
+                        'answer_text' => $bmiValue,
+                    ];
+
+                    $entryDetails = $QuestionnaireEntry->to_array();
+                    if (is_array($entryDetails) && array_key_exists('answer', $entryDetails)) {
+                        $updateData['answer'] = $bmiValue;
+                    }
+
+                    $QuestionnaireEntry->update($updateData);
+                }
+            }
 
             // existing tags
             $Tags->remove_from_member($Member->id(), $existing_tagIDs);

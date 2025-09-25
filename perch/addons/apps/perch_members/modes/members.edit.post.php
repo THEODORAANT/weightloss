@@ -233,7 +233,11 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             echo '<tr>';
                             echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
                             echo '<td>';
-                            echo PerchUtil::html($Questionnaire->answer_text());
+                            if ($slug === 'bmi') {
+                                echo $Form->text('questionnaire_bmi['.$Questionnaire->id().']', $Questionnaire->answer_text(), 'input-simple', false, 'number', 'step="0.1" min="0"');
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
@@ -293,7 +297,11 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             echo '<tr>';
                             echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
                             echo '<td>';
-                            echo PerchUtil::html($Questionnaire->answer_text());
+                            if ($slug === 'bmi') {
+                                echo $Form->text('questionnaire_bmi['.$Questionnaire->id().']', $Questionnaire->answer_text(), 'input-simple', false, 'number', 'step="0.1" min="0"');
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
