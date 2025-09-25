@@ -208,6 +208,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
              <?php
 
              $questions=$Questionnaires->get_questions();
+             $bmi_edit_controls_needed = false;
 
                 if (PerchUtil::count($questionnaire)) {
                     $answers_by_slug = [];
@@ -233,7 +234,32 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             echo '<tr>';
                             echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
                             echo '<td>';
-                            echo PerchUtil::html($Questionnaire->answer_text());
+                            if ($slug === 'bmi') {
+                                $bmiValue = $Questionnaire->answer_text();
+                                if ($bmiValue === null || $bmiValue === '') {
+                                    $entryDetails = $Questionnaire->to_array();
+                                    if (is_array($entryDetails) && isset($entryDetails['answer']) && $entryDetails['answer'] !== '') {
+                                        $bmiValue = $entryDetails['answer'];
+                                    }
+                                }
+
+                                $trimmedBmiValue = trim((string) $bmiValue);
+                                $inputID = 'bmi-input-'.$Questionnaire->id();
+                                $inputName = 'questionnaire_bmi['.$Questionnaire->id().']';
+
+                                if ($trimmedBmiValue === '') {
+                                    echo $Form->text($inputName, $bmiValue, 'input-simple', false, 'number', 'step="0.1" min="0"');
+                                } else {
+                                    echo '<div class="bmi-field">';
+                                    echo '<span class="js-bmi-display">'.PerchUtil::html($trimmedBmiValue).'</span>';
+                                    echo ' <button type="button" class="button button-simple js-bmi-edit" data-input-id="'.$inputID.'">Edit</button>';
+                                    echo '</div>';
+                                    echo $Form->text($inputName, $bmiValue, 'input-simple', false, 'number', 'step="0.1" min="0" id="'.$inputID.'" style="display:none;"');
+                                    $bmi_edit_controls_needed = true;
+                                }
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
@@ -293,7 +319,32 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             echo '<tr>';
                             echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
                             echo '<td>';
-                            echo PerchUtil::html($Questionnaire->answer_text());
+                            if ($slug === 'bmi') {
+                                $bmiValue = $Questionnaire->answer_text();
+                                if ($bmiValue === null || $bmiValue === '') {
+                                    $entryDetails = $Questionnaire->to_array();
+                                    if (is_array($entryDetails) && isset($entryDetails['answer']) && $entryDetails['answer'] !== '') {
+                                        $bmiValue = $entryDetails['answer'];
+                                    }
+                                }
+
+                                $trimmedBmiValue = trim((string) $bmiValue);
+                                $inputID = 'bmi-input-'.$Questionnaire->id();
+                                $inputName = 'questionnaire_bmi['.$Questionnaire->id().']';
+
+                                if ($trimmedBmiValue === '') {
+                                    echo $Form->text($inputName, $bmiValue, 'input-simple', false, 'number', 'step="0.1" min="0"');
+                                } else {
+                                    echo '<div class="bmi-field">';
+                                    echo '<span class="js-bmi-display">'.PerchUtil::html($trimmedBmiValue).'</span>';
+                                    echo ' <button type="button" class="button button-simple js-bmi-edit" data-input-id="'.$inputID.'">Edit</button>';
+                                    echo '</div>';
+                                    echo $Form->text($inputName, $bmiValue, 'input-simple', false, 'number', 'step="0.1" min="0" id="'.$inputID.'" style="display:none;"');
+                                    $bmi_edit_controls_needed = true;
+                                }
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
                             echo '</td>';
                             echo '</tr>';
                         }
@@ -309,6 +360,11 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
          </div>
 
     <?php
+        if (!empty($bmi_edit_controls_needed)) {
+            echo '<script>(function(){var buttons=document.querySelectorAll(".js-bmi-edit");if(!buttons.length){return;}Array.prototype.forEach.call(buttons,function(button){button.addEventListener("click",function(){var inputId=button.getAttribute("data-input-id");if(!inputId){return;}var input=document.getElementById(inputId);if(!input){return;}var container=button.parentNode;while(container&&!(container.className&&container.className.indexOf("bmi-field")!==-1)){container=container.parentNode;}if(container){var display=container.querySelector(".js-bmi-display");if(display){display.style.display="none";}}button.style.display="none";input.style.display="";input.focus();});});})();</script>';
+        }
+
+    ?>
 
 
           echo $HTML->heading2('Notes');
