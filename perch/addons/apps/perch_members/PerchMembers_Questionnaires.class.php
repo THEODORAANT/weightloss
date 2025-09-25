@@ -214,6 +214,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "continue-dose-wegovy"=>"continue_with_wegovy",
     "effects_with_wegovy"=>"effects_with_wegovy",
     "medication_allergies"=>"medication_allergies",
+    "other_medication_details"=>"medication_allergies_other",
     "other_medical_conditions"=>"list_any",
     "wegovy_side_effects"=>"wegovy_side_effects",
     "gp_informed"=>"gp_informed",
@@ -535,10 +536,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "options" => [
                                                "levothyroxine" => "I’m on levothyroxine",
                                                "warfarin" => "I’m on warfarin",
-                                               "multiple" => "Other / I take more than one prescription medication",
+                                               "other" => "Other / I take more than one prescription medication",
                                                "no-medication" => "I don’t take any medication",
                                                "allergies" => "I have allergies"
                                            ]
+                                       ],
+                                       "other_medication_details" => [
+                                           "label" => "Please provide details of the other medication you take, including the name, dose, and how often you take this.",
+                                           "type" => "textarea",
+                                           "name" => "other_medication_details"
                                        ],
                                        "email_address" => [
                                            "label" => "Please enter your GP's email address",
@@ -576,6 +582,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "continue-dose-wegovy"=>"If you want to continue with the weight loss medication, what dose would you like to continue with?",
     "effects_with_wegovy"=>"Have you experienced any side effects with the weight loss medication?",
     "medication_allergies"=>"Do you currently take any other medication or have any allergies?",
+    "other_medication_details"=>"Please provide details of the other medication you take, including the name, dose, and how often you take this.",
     "other_medical_conditions"=>"Please list any other medical conditions you have. ",
     "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed"=>"Would you like your GP to be informed of this consultation?",
@@ -768,6 +775,19 @@ function getNextStepforFirstOrder(array $data): string {
         return $data['more_side_effects'] === 'yes' ? 'wegovy_side_effects' : 'medication_allergies';
     }
 
+    if (isset($data['medication_allergies'])) {
+        $values = $data['medication_allergies'];
+        if (!is_array($values)) {
+            $values = [$values];
+        }
+
+        if (in_array('other', $values, true)) {
+            return 'medication_allergies_other';
+        }
+
+        return 'gp_informed';
+    }
+
     if (isset($data['gp_informed'])) {
         return $data['gp_informed'] === 'yes' ? 'gp_address' : 'access_special_offers';
     }
@@ -799,6 +819,12 @@ function getNextStepforFirstOrder(array $data): string {
               // document.getElementById("nextstep").value="list_any";
            }
 
+       }
+       if($step=="medication_allergies"){
+           $values = is_array($value) ? $value : [$value];
+           if (in_array('other', $values, true)) {
+               return true;
+           }
        }
            if ($step=="medications" ){
            if (is_array($value) && !empty(array_intersect($this->getMedicationSlugs(), array_map('perch_questionnaire_medication_slug', (array)$value)))) {
@@ -1019,6 +1045,17 @@ function getNextStepforFirstOrder(array $data): string {
           // Medication allergies check
           if (empty($data['medication_allergies']) || !is_array($data['medication_allergies'])) {
               $errors[] = 'Please tell us about any medications or allergies.';
+          }
+
+          $medicationAllergies = is_array($data['medication_allergies'] ?? null)
+              ? $data['medication_allergies']
+              : [];
+
+          if (in_array('other', $medicationAllergies, true)) {
+              $otherMedicationDetails = trim((string)($data['other_medication_details'] ?? ''));
+              if ($otherMedicationDetails === '') {
+                  $errors[] = 'Please provide details of the other medication you take, including the name, dose, and how often you take this.';
+              }
           }
 
           // GP informed

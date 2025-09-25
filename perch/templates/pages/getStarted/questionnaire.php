@@ -323,6 +323,7 @@ $back_links = [
     'effects_with_wegovy' => '/get-started/questionnaire?step=continue_with_wegovy',
     'wegovy_side_effects' => '/get-started/questionnaire?step=effects_with_wegovy',
     'medication_allergies' => '/get-started/questionnaire?step=wegovy_side_effects',
+    'medication_allergies_other' => '/get-started/questionnaire?step=medication_allergies',
     'gp_informed' => '/get-started/questionnaire?step=medication_allergies',
     'gp_address' => '/get-started/questionnaire?step=gp_informed',
     'access_special_offers' => '/get-started/questionnaire?step=gp_address',
