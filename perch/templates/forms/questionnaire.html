@@ -270,7 +270,7 @@
                 </form>
             </div>
         </section>
-        
+
     </perch:if>
     <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White" match="within" >
 
@@ -1682,6 +1682,8 @@
                                 <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
                                <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
+                                <button id="medication-continue-dose-next" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+
                             </div>
                         </div>
                     </div>
@@ -1692,6 +1694,7 @@
         <script>
             (function () {
                 const container = document.getElementById('medication-continue-dose-fields');
+                const nextButton = document.getElementById('medication-continue-dose-next');
 
                 if (!container) {
                     return;
@@ -1763,7 +1766,7 @@
                         const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
                         fieldHtml += `
-                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="continue-dose-${escapeHtml(slug)}"${requiredAttr}${isChecked ? ' checked' : ''} onclick="submitForm('continue-dose-${slug}')">
+                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="continue-dose-${escapeHtml(slug)}"${requiredAttr}${isChecked ? ' checked' : ''}>
                                 <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
                         `;
                     });
@@ -1774,6 +1777,10 @@
                     `;
 
                     container.insertAdjacentHTML('beforeend', fieldHtml);
+
+                    if (index === 0 && nextButton) {
+                        nextButton.setAttribute('onclick', `submitForm('continue-dose-${slug}')`);
+                    }
                 });
             })();
         </script>
