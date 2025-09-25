@@ -503,7 +503,7 @@ return [
                 [
                     'values' => ['other'],
                     'question' => 'other_medication_details',
-                    'step' => 'medication_allergies_other',
+                    'step' => 'medication_allergies',
                 ],
             ],
         ],
@@ -511,7 +511,7 @@ return [
             'label' => 'Please provide details of the other medication you take, including the name, dose, and how often you take this.',
             'type' => 'textarea',
             'name' => 'other_medication_details',
-            'step' => 'medication_allergies_other',
+            'step' => 'medication_allergies',
         ],
         'gp_informed' => [
             'label' => 'Would you like your GP to be informed of this consultation?',

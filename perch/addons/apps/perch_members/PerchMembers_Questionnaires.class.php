@@ -214,7 +214,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "continue-dose-wegovy"=>"continue_with_wegovy",
     "effects_with_wegovy"=>"effects_with_wegovy",
     "medication_allergies"=>"medication_allergies",
-    "other_medication_details"=>"medication_allergies_other",
+    "other_medication_details"=>"medication_allergies",
     "other_medical_conditions"=>"list_any",
     "wegovy_side_effects"=>"wegovy_side_effects",
     "gp_informed"=>"gp_informed",
@@ -782,7 +782,10 @@ function getNextStepforFirstOrder(array $data): string {
         }
 
         if (in_array('other', $values, true)) {
-            return 'medication_allergies_other';
+            $details = trim((string)($data['other_medication_details'] ?? ''));
+            if ($details === '') {
+                return 'medication_allergies';
+            }
         }
 
         return 'gp_informed';
