@@ -20,21 +20,31 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 'over6' => 'More than 6 weeks ago',
             ];
 
+            $continueDoseOptions = [
+                'increase' => 'Increase my dose',
+                'keep' => 'Keep my dose',
+                'decrease' => 'Decrease my dose',
+                'not-continue' => "I don't want to continue with this medication",
+            ];
+
             foreach ($this->getMedicationSlugs() as $slug) {
                 $label = $this->getMedicationLabel($slug);
                 $weightLabel = 'What was your weight in kg/st-lbs before starting ' . $label . '?';
                 $lastDoseLabel = 'When was your last dose of ' . $label . '?';
                 $recentDoseLabel = 'What dose of ' . $label . ' were you prescribed most recently?';
+                $continueDoseLabel = 'If you want to continue with ' . $label . ', what dose would you like to continue with?';
 
                 $this->steps["weight-{$slug}"] = 'starting_wegovy';
                 $this->steps["unit-{$slug}"] = 'starting_wegovy';
                 $this->steps["weight2-{$slug}"] = 'starting_wegovy';
                 $this->steps["dose-{$slug}"] = 'dose_wegovy';
                 $this->steps["recently-dose-{$slug}"] = 'recently_wegovy';
+                $this->steps["continue-dose-{$slug}"] = 'continue_with_wegovy';
 
                 $this->questions["weight-{$slug}"] = $weightLabel;
                 $this->questions["dose-{$slug}"] = $lastDoseLabel;
                 $this->questions["recently-dose-{$slug}"] = $recentDoseLabel;
+                $this->questions["continue-dose-{$slug}"] = $continueDoseLabel;
 
                 $this->questions_and_answers["weight-{$slug}"] = [
                     'label' => $weightLabel,
@@ -63,6 +73,13 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 }
 
                 $this->questions_and_answers["recently-dose-{$slug}"] = $recentDoseField;
+
+                $this->questions_and_answers["continue-dose-{$slug}"] = [
+                    'label' => $continueDoseLabel,
+                    'type' => 'radio',
+                    'name' => "continue-dose-{$slug}",
+                    'options' => $continueDoseOptions,
+                ];
             }
 
             $this->ensureQuestionOrderColumnExists();
@@ -982,13 +999,14 @@ function getNextStepforFirstOrder(array $data): string {
               if (empty($data[$recentDoseKey])) {
                   $errors[] = 'Please provide the most recent dose prescribed for ' . $label . '.';
               }
+
+              $continueDoseKey = "continue-dose-{$medicationSlug}";
+              if (array_key_exists($continueDoseKey, $data) && empty($data[$continueDoseKey])) {
+                  $errors[] = 'Please select how you would like to continue with ' . $label . '.';
+              }
           }
 
           if (in_array('wegovy', $selectedMedicationSlugs, true)) {
-              if (empty($data['continue-dose-wegovy'])) {
-                  $errors[] = 'Please select your preferred continuation dose.';
-              }
-
               if (empty($data['effects_with_wegovy'])) {
                   $errors[] = 'Please indicate if you’ve had any side effects.';
               }

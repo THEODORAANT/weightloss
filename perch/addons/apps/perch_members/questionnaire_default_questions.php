@@ -460,7 +460,7 @@ return [
                 'increase' => 'Increase my dose',
                 'keep' => 'Keep my dose',
                 'decrease' => 'Decrease my dose',
-                'stop' => 'I don\'t want to continue with this medication',
+                'not-continue' => 'I don\'t want to continue with this medication',
             ],
             'step' => 'continue_with_wegovy',
         ],

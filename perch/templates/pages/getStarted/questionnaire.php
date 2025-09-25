@@ -390,6 +390,7 @@ if (!empty($_SESSION['questionnaire']['medications']) && is_array($_SESSION['que
             'unit' => $_SESSION['questionnaire']["unit-{$slug}"] ?? 'kg',
             'dose' => $_SESSION['questionnaire']["dose-{$slug}"] ?? '',
             'recentDose' => $_SESSION['questionnaire']["recently-dose-{$slug}"] ?? '',
+            'continueDose' => $_SESSION['questionnaire']["continue-dose-{$slug}"] ?? '',
             'recentDoseOptions' => $recentDoseOptions,
         ];
     }
@@ -415,6 +416,7 @@ if (empty($selectedMedications)) {
         'unit' => $_SESSION['questionnaire']['unit-wegovy'] ?? 'kg',
         'dose' => $_SESSION['questionnaire']['dose-wegovy'] ?? '',
         'recentDose' => $_SESSION['questionnaire']['recently-dose-wegovy'] ?? '',
+        'continueDose' => $_SESSION['questionnaire']['continue-dose-wegovy'] ?? '',
         'recentDoseOptions' => $recentDoseOptions,
     ];
 }
