@@ -1868,6 +1868,12 @@
                             </div>
                             <!--////////////========chekbox section END=======/////////////-->
 
+                            <div class="mt-4" id="otherMedicationDetailsWrapper" style="display:none;">
+                                <label for="other_medication_details">Please provide details of the other medication you take, including the name, dose, and how often you take this.</label>
+                                <textarea id="other_medication_details" name="other_medication_details" placeholder="Medication name – dose – how often"></textarea>
+                                <p id="otherMedicationDetailsError" class="error-message">Please provide an answer before continuing.</p>
+                            </div>
+
                             <!--////////////========Button section Start=======/////////////-->
                             <div class="bottom_btn mt-5">
                                 <input type="hidden" id="nextstep" name="nextstep" value="gp_informed">
@@ -1885,6 +1891,71 @@
                 </div>
             </div>
         </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var checkboxes = document.querySelectorAll('input[name="medication_allergies[]"]');
+                var nextButton = document.getElementById('nextButton');
+                var nextStepField = document.getElementById('nextstep');
+                var detailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
+                var detailsField = document.getElementById('other_medication_details');
+                var detailsError = document.getElementById('otherMedicationDetailsError');
+
+                if (!checkboxes.length || !nextStepField) {
+                    return;
+                }
+
+                var toArray = function (nodeList) {
+                    return Array.prototype.slice.call(nodeList);
+                };
+
+                var updateState = function () {
+                    var selectedValues = toArray(checkboxes)
+                        .filter(function (checkbox) {
+                            return checkbox.checked;
+                        })
+                        .map(function (checkbox) {
+                            return checkbox.value;
+                        });
+
+                    var hasSelection = selectedValues.length > 0;
+                    var requiresDetails = selectedValues.indexOf('other') !== -1;
+                    var detailsFilled = true;
+
+                    if (detailsWrapper) {
+                        detailsWrapper.style.display = requiresDetails ? '' : 'none';
+                    }
+
+                    if (detailsField) {
+                        detailsField.required = requiresDetails;
+                        if (requiresDetails) {
+                            detailsFilled = detailsField.value.trim() !== '';
+                        }
+                    }
+
+                    if (detailsError) {
+                        detailsError.style.display = requiresDetails && !detailsFilled ? '' : 'none';
+                    }
+
+                    if (nextButton) {
+                        nextButton.disabled = !(hasSelection && detailsFilled);
+                    }
+
+                    if (nextStepField) {
+                        nextStepField.value = 'gp_informed';
+                    }
+                };
+
+                toArray(checkboxes).forEach(function (checkbox) {
+                    checkbox.addEventListener('change', updateState);
+                });
+
+                if (detailsField) {
+                    detailsField.addEventListener('input', updateState);
+                }
+
+                updateState();
+            });
+        </script>
     </perch:if>
     <perch:if id="step" value="list_any_medications" >
         <section class="how_old ">
