@@ -367,9 +367,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
     ?>
 
 
-          echo $HTML->heading2('Notes');
-
-          ?>
+    <?php echo $HTML->heading2('Notes'); ?>
 
            <div class="form-inner">
                   <table class="notes">
