@@ -385,8 +385,8 @@
                   </div>-->
                     <h2>What is your weight?</h2>
                     <div class="weight-inputs">
-                        <input type="text" id="weight"  required name="weight" placeholder="Kg">
-                        <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs">
+                        <input type="number" id="weight"  required name="weight" placeholder="Kg" step="0.1" min="0">
+                        <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs" step="0.1" min="0">
 
                          <input type="hidden" id="weightunit" value="kg"   name="weightunit" >
 
@@ -419,7 +419,7 @@
                     weight.placeholder = "Kg";
                     document.getElementById("weight2").type = "hidden";
                 } else {
-                    document.getElementById("weight2").type = "text";
+                    document.getElementById("weight2").type = "number";
                     weight.placeholder = "st";
 
                 }
@@ -451,7 +451,7 @@
                         </div>-->
                     <h2>What is your height?</h2>
                     <div class="weight-inputs">
-                        <input type="text" id="height" name="height" required placeholder="Cm">
+                        <input type="number" id="height" name="height" required placeholder="Cm" step="0.1" min="0">
                         <input type="hidden" id="height2" name="height2" required placeholder="7.5"  step="0.1" min="0.5" max="12" required title="Enter your height in total inches">
 
                         <input type="hidden" id="heightunit" value="cm"   name="heightunit" >
@@ -500,10 +500,12 @@
 
                 if (value === "cm") {
                     heightField.placeholder = "Cm";
+                    heightField.type = "number";
                     secondaryField.type = "hidden";
                     secondaryField.required = false;
                     secondaryField.value = "";
                 }else{
+                    heightField.type = "number";
                     secondaryField.type = "number";
                     heightField.placeholder = "Ft";
                     secondaryField.required = false;
@@ -1280,19 +1282,19 @@
                     const slug = config.slug || `medication-${index + 1}`;
                     const unit = config.unit === 'st-lbs' ? 'st-lbs' : 'kg';
                     const placeholder = unit === 'kg' ? 'Kg' : 'St';
-                    const weight2Type = unit === 'st-lbs' ? 'text' : 'hidden';
+                    const weight2Type = unit === 'st-lbs' ? 'number' : 'hidden';
                     const label = config.label || 'the weight loss medication';
 
                     const fieldHtml = `
                         <div class="medication-weight" data-medication="${escapeHtml(label)}">
                             <h2>What was your weight in kg/st-lbs before starting <span class="medication-name">${escapeHtml(label)}</span>?</h2>
                             <div class="weight-inputs">
-                                <input type="text" name="weight-${slug}" id="weight-${slug}" placeholder="${placeholder}" value="${escapeHtml(config.weight)}">
-                                <input type="${weight2Type}" id="weight2-${slug}" name="weight2-${slug}" placeholder="lbs" value="${escapeHtml(config.weight2)}" />
+                                <input type="number" name="weight-${slug}" id="weight-${slug}" placeholder="${placeholder}" value="${escapeHtml(config.weight)}" step="0.1" min="0">
+                                <input type="${weight2Type}" id="weight2-${slug}" name="weight2-${slug}" placeholder="lbs" value="${escapeHtml(config.weight2)}" step="0.1" min="0" />
                                 <input type="hidden" id="unit-${slug}" value="${unit}" name="unit-${slug}">
                                 <div class="st_lbs" id="st-lbs-inputs-${slug}" style="display: none;">
-                                    <input type="text" placeholder="St">
-                                    <input type="text" placeholder="Lbs">
+                                    <input type="number" placeholder="St" step="0.1" min="0">
+                                    <input type="number" placeholder="Lbs" step="0.1" min="0">
                                 </div>
                             </div>
                             <div class="unit-selector unit_selector">
@@ -1326,7 +1328,7 @@
                     weight2.type = 'hidden';
                 } else {
                     weight.placeholder = 'St';
-                    weight2.type = 'text';
+                    weight2.type = 'number';
                     weight2.placeholder = 'lbs';
                 }
             }
