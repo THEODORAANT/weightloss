@@ -33,7 +33,8 @@
                         weight2: '',
                         unit: 'kg',
                         dose: '',
-                        recentDose: ''
+                        recentDose: '',
+                        continueDose: ''
                     }];
                 }
 
@@ -86,6 +87,7 @@
                         unit: item && item.unit === 'st-lbs' ? 'st-lbs' : 'kg',
                         dose: item && typeof item.dose !== 'undefined' && item.dose !== null ? item.dose : '',
                         recentDose: item && typeof item.recentDose !== 'undefined' && item.recentDose !== null ? item.recentDose : '',
+                        continueDose: item && typeof item.continueDose !== 'undefined' && item.continueDose !== null ? item.continueDose : '',
                         recentDoseOptions: recentDoseOptions
                     };
                 });
@@ -268,6 +270,7 @@
                 </form>
             </div>
         </section>
+        
     </perch:if>
     <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White" match="within" >
 
@@ -745,6 +748,94 @@
                 </div>
             </div>
         </section>
+        <script>
+            (function () {
+                const container = document.getElementById('medication-continue-dose-fields');
+
+                if (!container) {
+                    return;
+                }
+
+                const escapeHtml = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                };
+
+                const normalizeValue = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value).trim().toLowerCase();
+                };
+
+                const toIdSuffix = function (value, fallbackIndex) {
+                    const normalized = normalizeValue(value)
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    if (normalized !== '') {
+                        return normalized;
+                    }
+
+                    return String(fallbackIndex);
+                };
+
+                const medicationConfigs = window.getMedicationStepData();
+                const options = [
+                    { value: 'increase', label: 'Increase my dose' },
+                    { value: 'keep', label: 'Keep my dose' },
+                    { value: 'decrease', label: 'Decrease my dose' },
+                    { value: 'not-continue', label: "I don't want to continue with this medication" }
+                ];
+
+                medicationConfigs.forEach(function (config, index) {
+                    const slug = config.slug || `medication-${index + 1}`;
+                    const label = config.label || 'the weight loss medication';
+                    const storedValue = typeof config.continueDose === 'string' ? config.continueDose : '';
+                    const normalizedStoredValue = normalizeValue(storedValue);
+
+                    let fieldHtml = `
+                        <div class="medication-continue-dose" data-medication="${escapeHtml(label)}">
+                            <div class="old_title">
+                                <h3 class="medication-subtitle">${escapeHtml(label)}</h3>
+                            </div>
+                            <div class="under">
+                    `;
+
+                    options.forEach(function (option, optionIndex) {
+                        const optionValue = option.value;
+                        const optionLabel = option.label;
+                        const normalizedOptionValue = normalizeValue(optionValue);
+                        const isChecked = normalizedStoredValue !== ''
+                            ? normalizedStoredValue === normalizedOptionValue
+                            : optionIndex === 0;
+                        const requiredAttr = optionIndex === 0 ? ' required' : '';
+                        const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
+
+                        fieldHtml += `
+                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="continue-dose-${escapeHtml(slug)}"${requiredAttr}${isChecked ? ' checked' : ''} onclick="submitForm('continue-dose-${slug}')">
+                                <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
+                        `;
+                    });
+
+                    fieldHtml += `
+                            </div>
+                        </div>
+                    `;
+
+                    container.insertAdjacentHTML('beforeend', fieldHtml);
+                });
+            })();
+        </script>
     </perch:if>
 
 
@@ -1581,26 +1672,8 @@
 
                     </div>
                     <div class="under">
-                        <input type="radio" id="increase" value="increase" required onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy"  checked="checked">
-                        <label for="increase" >Increase my dose</label>
-
-
-                        <input type="radio" id="keep" value="keep"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy" >
-                        <label for="keep" >Keep my dose </label>
-
-
-                        <input type="radio"  id="decrease"  value="decrease"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy">
-                        <label for="decrease" id="dose">Decrease my dose</label>
-
-                        <input type="radio" id="not-continue"  value="not-continue"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy">
-                        <label for="not-continue" >I don't want to continue with this medication</label>
+                        <div id="medication-continue-dose-fields"></div>
                         <input type="hidden" id="nextstep" name="nextstep" value="effects_with_wegovy">
-
-
-
-
-
-
                     </div>
 
                     <div class="get_started">
@@ -1616,6 +1689,94 @@
                 </div>
             </div>
         </section>
+        <script>
+            (function () {
+                const container = document.getElementById('medication-continue-dose-fields');
+
+                if (!container) {
+                    return;
+                }
+
+                const escapeHtml = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                };
+
+                const normalizeValue = function (value) {
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+
+                    return String(value).trim().toLowerCase();
+                };
+
+                const toIdSuffix = function (value, fallbackIndex) {
+                    const normalized = normalizeValue(value)
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    if (normalized !== '') {
+                        return normalized;
+                    }
+
+                    return String(fallbackIndex);
+                };
+
+                const medicationConfigs = window.getMedicationStepData();
+                const options = [
+                    { value: 'increase', label: 'Increase my dose' },
+                    { value: 'keep', label: 'Keep my dose' },
+                    { value: 'decrease', label: 'Decrease my dose' },
+                    { value: 'not-continue', label: "I don't want to continue with this medication" }
+                ];
+
+                medicationConfigs.forEach(function (config, index) {
+                    const slug = config.slug || `medication-${index + 1}`;
+                    const label = config.label || 'the weight loss medication';
+                    const storedValue = typeof config.continueDose === 'string' ? config.continueDose : '';
+                    const normalizedStoredValue = normalizeValue(storedValue);
+
+                    let fieldHtml = `
+                        <div class="medication-continue-dose" data-medication="${escapeHtml(label)}">
+                            <div class="old_title">
+                                <h3 class="medication-subtitle">${escapeHtml(label)}</h3>
+                            </div>
+                            <div class="under">
+                    `;
+
+                    options.forEach(function (option, optionIndex) {
+                        const optionValue = option.value;
+                        const optionLabel = option.label;
+                        const normalizedOptionValue = normalizeValue(optionValue);
+                        const isChecked = normalizedStoredValue !== ''
+                            ? normalizedStoredValue === normalizedOptionValue
+                            : optionIndex === 0;
+                        const requiredAttr = optionIndex === 0 ? ' required' : '';
+                        const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
+
+                        fieldHtml += `
+                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="continue-dose-${escapeHtml(slug)}"${requiredAttr}${isChecked ? ' checked' : ''} onclick="submitForm('continue-dose-${slug}')">
+                                <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
+                        `;
+                    });
+
+                    fieldHtml += `
+                            </div>
+                        </div>
+                    `;
+
+                    container.insertAdjacentHTML('beforeend', fieldHtml);
+                });
+            })();
+        </script>
     </perch:if>
     <perch:if id="step" value="effects_with_wegovy">
         <section class="how_old">
