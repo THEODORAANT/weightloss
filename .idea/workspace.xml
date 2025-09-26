@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/runtime/orders.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/runtime/orders.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/cart/cart-sum.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/cart/cart-sum.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/forms/reorder-questionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/forms/reorder-questionnaire.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="upstream/codex/add-weight-input-fields-for-medications-6jxvg0" />
+    <option name="BRANCH" value="upstream/codex/make-bmi-editable-in-member-admin-ybvbpy" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -42,7 +45,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_members",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/templates",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -99,15 +102,8 @@
       <workItem from="1758186730396" duration="16359000" />
       <workItem from="1758352825565" duration="17387000" />
       <workItem from="1758619781114" duration="8358000" />
-      <workItem from="1758704519047" duration="5638000" />
-    </task>
-    <task id="LOCAL-00013" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1756812683664</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1756812683664</updated>
+      <workItem from="1758704519047" duration="9310000" />
+      <workItem from="1758791690260" duration="12778000" />
     </task>
     <task id="LOCAL-00014" summary="weightloss">
       <option name="closed" value="true" />
@@ -493,7 +489,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758716311155</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1758721234846</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1758721234846</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

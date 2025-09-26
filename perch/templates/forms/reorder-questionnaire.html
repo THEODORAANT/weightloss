@@ -23,7 +23,7 @@
                         <label><input type="radio" onchange="radioweight(this.value)" name="weightradio-unit"  id="weightradio-lbs" value="st-lbs"> st/lbs</label>
                     </div>
                     <div class="buttons">
-                        <input type="hidden" id="nextstep" name="nextstep" value="<perch:forms id='next_step_after_weight' />">
+                        <input type="hidden" id="nextstep" name="nextstep" value="<perch:forms id="next_step_after_weight" />">
                         <button class="back"><a href="/client/re-order" style="text-decoration: none;color: #000;" >Back</a></button>
                         <button onclick="submitForm('weight')"   class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
@@ -69,7 +69,7 @@
                                 <button id="yesBtn" onclick="setValuesreorderForm('pregnancy_status','yes')" class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
                                 <button id="noBtn" onclick="setValuesreorderForm('pregnancy_status','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
                                 <input type="hidden" id="nextstep" name="nextstep" value="side-effects">
-                                <input type="hidden" id="pregnancy_status" name="pregnancy_status" value="<perch:forms id='pregnancy_status' />">
+                                <input type="hidden" id="pregnancy_status" name="pregnancy_status" value="<perch:forms id="pregnancy_status" />">
                             </div>
                         </div>
 
@@ -116,7 +116,7 @@
                     <div class="get_started">
                         <div class="started_button">
                             <div class="get_btn">
-                                <button><a href="/client/questionnaire-re-order?step=<perch:forms id='side_effects_back_step' />">Back</a></button>
+                                <button><a href="/client/questionnaire-re-order?step=<perch:forms id="side_effects_back_step" />">Back</a></button>
                             </div>
                         </div>
                     </div>

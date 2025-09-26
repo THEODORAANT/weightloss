@@ -175,10 +175,27 @@ $opts = PerchUtil::extend([
                 if (!$last_order_id) {
                         return $details;
                 }
+    $perch_shop_api   = new PerchAPI(1.0, 'perch_shop');
+		$memberID   = perch_member_get('memberID');
+		$OrderItems     = new PerchShop_OrderItems($perch_shop_api );
+		$Customers     = new PerchShop_Customers($perch_shop_api );
 
-                $order_items = perch_shop_order_items($last_order_id, [
+$Customer   = $Customers->find_by_memberID($memberID);
+
+
+		//$OrdersItems = $OrdersItems->find_runtime_for_customer($last_order_id, $Customer);
+ $items = $OrderItems->get_by('orderID', $last_order_id);
+
+        $order_items = [];
+
+        if (PerchUtil::count($items)) {
+        	foreach($items as $Item) {
+        		$order_items[]  = $Item->to_array();
+        	}
+        }
+               /* $order_items = perch_shop_order_items($last_order_id, [
                         'skip-template' => true,
-                ], true);
+                ], true);*/
 
                 if (!is_array($order_items)) {
                         return $details;
@@ -192,13 +209,12 @@ $opts = PerchUtil::extend([
                                 continue;
                         }
 
-                        if (!empty($item['parentID'])) {
+                        if (!empty($item['productID'])) {
                                 if ($perch_shop_api === null) {
-                                        $perch_shop_api   = new PerchAPI(1.0, 'perch_shop');
                                         $products_factory = new PerchShop_Products($perch_shop_api);
                                 }
 
-                                $ParentProduct = $products_factory ? $products_factory->find((int)$item['parentID']) : null;
+                                $ParentProduct = $products_factory ? $products_factory->find((int)$item['productID']) : null;
 
                                 if ($ParentProduct) {
                                         $details['brand'] = $ParentProduct->productTitle();
@@ -220,6 +236,6 @@ $opts = PerchUtil::extend([
 
                         break;
                 }
-
+echo "details";print_r($details);
                 return $details;
         }
