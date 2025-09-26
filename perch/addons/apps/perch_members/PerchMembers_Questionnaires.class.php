@@ -250,10 +250,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
         public $reorder_questions=[
         "weight"=>"What is your weight?",
-	"weight2"=>"inches",
-	"weightunit"=>"weight unit",
-	"bmi"=>"BMI",
-	"side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
+        "weight2"=>"inches",
+        "weightunit"=>"weight unit",
+        "pregnancy_status"=>"Are you pregnant or trying to conceive?",
+        "bmi"=>"BMI",
+        "side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
 	"more_side_effects"=>"Please tell us as much as you can about your side effects",
 	"additional-medication"=>"Have you started taking any additional medication?",
 	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
@@ -312,6 +313,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "options" => [
                 "kg" => "kg",
                 "st-lbs" => "st/lbs"
+            ]
+        ],
+        "pregnancy_status" => [
+            "label" => "Are you pregnant or trying to conceive?",
+            "type" => "button",
+            "name" => "pregnancy_status",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
             ]
         ],
         "side_effects" => [
