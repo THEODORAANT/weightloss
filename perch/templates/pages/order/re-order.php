@@ -47,6 +47,12 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
               border-color: #007bff;
               background-color: #fff;
             }
+            .last-pen-reminder {
+              margin: 0 auto 1.5rem;
+              text-align: center;
+              color: #555;
+              max-width: 480px;
+            }
           </style>
              <?php if (perch_member_logged_in()) { ?>
   <div class="subheader">
@@ -89,11 +95,89 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
 
 
    </div>
-    <?php  } ?>
+   <?php  } ?>
+
+    <?php
+        $last_pen_brand = null;
+        $last_pen_dose = null;
+
+        if (perch_member_logged_in()) {
+            $recent_orders = perch_shop_orders([
+                'sort' => 'orderCreated',
+                'sort-order' => 'DESC',
+                'count' => 1,
+                'skip-template' => true,
+            ], true);
+
+            if (is_array($recent_orders) && !empty($recent_orders)) {
+                $last_order = $recent_orders[0];
+                $last_order_id = $last_order['orderID'] ?? null;
+
+                if ($last_order_id) {
+                    $order_items = perch_shop_order_items($last_order_id, [
+                        'skip-template' => true,
+                    ], true);
+
+                    if (is_array($order_items)) {
+                        $perch_shop_api = null;
+                        $products_factory = null;
+
+                        foreach ($order_items as $item) {
+                            if (($item['itemType'] ?? '') !== 'product') {
+                                continue;
+                            }
+
+                            if (!empty($item['parentID'])) {
+                                if ($perch_shop_api === null) {
+                                    $perch_shop_api = new PerchAPI(1.0, 'perch_shop');
+                                    $products_factory = new PerchShop_Products($perch_shop_api);
+                                }
+
+                                $ParentProduct = $products_factory ? $products_factory->find((int)$item['parentID']) : null;
+
+                                if ($ParentProduct) {
+                                    $last_pen_brand = $ParentProduct->productTitle();
+                                }
+                            }
+
+                            if ($last_pen_brand === null) {
+                                $last_pen_brand = $item['productTitle'] ?? $item['title'] ?? null;
+                            }
+
+                            $last_pen_dose = $item['productVariantDesc'] ?? $item['variant_desc'] ?? null;
+
+                            if ($last_pen_dose === null && isset($item['title'])) {
+                                $title = $item['title'];
+                                if ($last_pen_brand === null || strcasecmp($title, $last_pen_brand) !== 0) {
+                                    $last_pen_dose = $title;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    ?>
 
         <div class="main_product">
             <div id="product-selection">
                <h2 class="text-center fw-bolder">Order your next dose </h2>
+               <?php if ($last_pen_brand || $last_pen_dose) { ?>
+               <p class="last-pen-reminder">
+                 <?php
+                     $parts = [];
+                     if ($last_pen_brand) {
+                         $parts[] = PerchUtil::html($last_pen_brand);
+                     }
+                     if ($last_pen_dose) {
+                         $parts[] = PerchUtil::html($last_pen_dose);
+                     }
+                     echo 'Your last pen was ' . implode(' – ', $parts) . '.';
+                 ?>
+               </p>
+               <?php } ?>
     <?php
 
 
