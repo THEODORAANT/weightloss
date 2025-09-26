@@ -805,6 +805,25 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         return $this->return_instances($this->db->get_rows($sql));
     }
 
+    public function get_for_order($orderID, $type = null)
+    {
+        $sql = 'SELECT d.*
+                FROM  '.PERCH_DB_PREFIX.'questionnaire d
+                WHERE d.order_id='.$this->db->pdb((int)$orderID);
+
+        if ($type !== null) {
+            $sql .= ' AND d.type='.$this->db->pdb($type);
+        }
+
+        if ($this->questionOrderColumnAvailable()) {
+            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+        } else {
+            $sql .= ' ORDER BY d.id DESC';
+        }
+
+        return $this->return_instances($this->db->get_rows($sql));
+    }
+
 function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs') {
     $filePath = "/var/www/html/{$logDir}/{$userId}_raw_log.json";
 

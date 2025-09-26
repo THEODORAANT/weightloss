@@ -1,7 +1,7 @@
 <?php 
 
 echo $HTML->title_panel([
-    'heading' => $Lang->get('Listing all orders'),
+    'heading' => isset($list_heading) ? $list_heading : $Lang->get('Listing all orders'),
     'button'  => [
         'text' => $Lang->get('Add order'),
         'link' => $API->app_nav().'/order/edit/',
@@ -139,6 +139,32 @@ echo $HTML->title_panel([
             },
             'sort'      => 'billing_type',
         ]);
+
+    if (!empty($show_question_link)) {
+        $Listing->add_col([
+            'title'     => 'Questions',
+            'value'     => function($Item) use ($API, $Lang, $Customers) {
+                $order_id = (int)$Item->id();
+                if ($order_id > 0) {
+                    $url = $API->app_nav().'/order/questions/?id='.$order_id;
+                    $label = $Lang->get('Questions');
+                    return '<a class="button button-simple" target="_blank" rel="noopener" href="'.$url.'">'.$label.'</a>';
+                }
+
+                $customer_id = (int)$Item->customerID();
+                if ($customer_id > 0) {
+                    $Customer = $Customers->find($customer_id);
+                    if ($Customer && $Customer->memberID()) {
+                        $url = '/perch/addons/apps/perch_members/edit/?id='.$Customer->memberID();
+                        $label = $Lang->get('Member profile');
+                        return '<a class="button button-simple" target="_blank" rel="noopener" href="'.$url.'">'.$label.'</a>';
+                    }
+                }
+
+                return '';
+            },
+        ]);
+    }
     
  $Listing->add_col([
             'title'     => 'Send To pharmacy',

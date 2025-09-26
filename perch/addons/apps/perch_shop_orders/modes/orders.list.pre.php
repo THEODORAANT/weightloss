@@ -4,6 +4,7 @@
 $sort="^orderCreated";
         $Orders   = new PerchShop_Orders($API);
         $OrderItems = new PerchShop_OrderItems($API);
+        $Customers = new PerchShop_Customers($API);
         $Statuses = new PerchShop_OrderStatuses($API);
         $Tags = new PerchMembers_Tags($API);
  $Documents = new PerchMembers_Documents($API);
