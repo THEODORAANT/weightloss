@@ -4,6 +4,23 @@ if (!perch_member_logged_in()) { exit;}
 if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
     $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
 }
+
+$memberGender = perch_member_get('gender');
+$memberGender = is_string($memberGender) ? trim($memberGender) : '';
+$memberIsFemale = (strcasecmp($memberGender, 'Female') === 0);
+
+if (!$memberIsFemale && isset($_SESSION['questionnaire-reorder']['pregnancy_status'])) {
+    unset($_SESSION['questionnaire-reorder']['pregnancy_status']);
+}
+
+$pregnancyStatus = '';
+if (!empty($_SESSION['questionnaire-reorder']) && is_array($_SESSION['questionnaire-reorder'])) {
+    $pregnancyStatus = $_SESSION['questionnaire-reorder']['pregnancy_status'] ?? '';
+}
+
+$nextStepAfterWeight = $memberIsFemale ? 'pregnancy-status' : 'side-effects';
+$sideEffectsBackStep = $memberIsFemale ? 'pregnancy-status' : 'weight';
+$memberGenderForTemplate = $memberIsFemale ? 'Female' : $memberGender;
     //  echo "session";
       //  print_r($_SESSION);
  function generateUUID() {
@@ -128,9 +145,12 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
             <div id="product-selection">
                <h2 class="text-center fw-bolder">Before we send you your next dose we have a few questions! </h2>
     <?php
+PerchSystem::set_var('member_gender', $memberGenderForTemplate);
+PerchSystem::set_var('pregnancy_status', $pregnancyStatus);
+PerchSystem::set_var('next_step_after_weight', $nextStepAfterWeight);
+PerchSystem::set_var('side_effects_back_step', $sideEffectsBackStep);
 if(isset( $_GET["step"])){
-
-PerchSystem::set_var('step', $_GET["step"]);
+    PerchSystem::set_var('step', $_GET["step"]);
 }
 
  perch_form('reorder-questionnaire.html');
