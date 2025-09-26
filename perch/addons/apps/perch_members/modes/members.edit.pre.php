@@ -126,18 +126,32 @@
                         continue;
                     }
 
+                    $entryDetails = $QuestionnaireEntry->to_array();
+
                     $currentValue = trim((string) $QuestionnaireEntry->answer_text());
-                    if ($currentValue === $bmiValue) {
+                    if ($currentValue === '' && is_array($entryDetails) && isset($entryDetails['answer'])) {
+                        $currentValue = trim((string) $entryDetails['answer']);
+                    }
+
+                    $newValue = $bmiValue;
+
+                    if ($currentValue !== '' && strpos($currentValue, ',') !== false && strpos($newValue, ',') === false) {
+                        $suffix = trim((string) substr($currentValue, strpos($currentValue, ',') + 1));
+                        if ($suffix !== '') {
+                            $newValue .= ', '.$suffix;
+                        }
+                    }
+
+                    if ($currentValue === $newValue) {
                         continue;
                     }
 
                     $updateData = [
-                        'answer_text' => $bmiValue,
+                        'answer_text' => $newValue,
                     ];
 
-                    $entryDetails = $QuestionnaireEntry->to_array();
                     if (is_array($entryDetails) && array_key_exists('answer', $entryDetails)) {
-                        $updateData['answer'] = $bmiValue;
+                        $updateData['answer'] = $newValue;
                     }
 
                     $QuestionnaireEntry->update($updateData);
