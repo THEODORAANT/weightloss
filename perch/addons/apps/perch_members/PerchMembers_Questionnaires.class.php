@@ -10,6 +10,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         protected $medicationSlugs;
         protected static $questionOrderColumnEnsured = false;
         protected static $questionOrderColumnAvailable = null;
+        protected static $questionOrderBackfilled = false;
+        protected static $questionOrderSessionState = [];
         public function __construct($api = null)
         {
             parent::__construct($api);
@@ -131,6 +133,10 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
             self::$questionOrderColumnAvailable = $exists ? true : false;
             self::$questionOrderColumnEnsured = true;
+
+            if (self::$questionOrderColumnAvailable) {
+                $this->backfillQuestionOrderValues();
+            }
         }
 
         protected function questionOrderColumnAvailable(): bool
@@ -151,7 +157,50 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
             self::$questionOrderColumnAvailable = $exists ? true : false;
 
+            if (self::$questionOrderColumnAvailable) {
+                $this->backfillQuestionOrderValues();
+            }
+
             return self::$questionOrderColumnAvailable;
+        }
+
+        protected function backfillQuestionOrderValues(): void
+        {
+            if (self::$questionOrderBackfilled || !self::$questionOrderColumnAvailable) {
+                return;
+            }
+
+            $table = PERCH_DB_PREFIX . 'questionnaire';
+            $types = ['first-order', 're-order'];
+
+            foreach ($types as $type) {
+                [$orderMap] = $this->buildQuestionOrderMap($type);
+
+                if (empty($orderMap)) {
+                    continue;
+                }
+
+                $caseStatements = [];
+                foreach ($orderMap as $slug => $position) {
+                    $caseStatements[] = 'WHEN ' . $this->db->pdb($slug) . ' THEN ' . (int)$position;
+                }
+
+                if (empty($caseStatements)) {
+                    continue;
+                }
+
+                $caseSql = implode(' ', $caseStatements);
+                $sql = "UPDATE `{$table}` SET question_order = CASE question_slug {$caseSql} ELSE question_order END "
+                    . 'WHERE question_order IS NULL AND type = ' . $this->db->pdb($type);
+
+                try {
+                    $this->db->execute($sql);
+                } catch (Exception $e) {
+                    // If the backfill fails we ignore the error so that normal execution can continue.
+                }
+            }
+
+            self::$questionOrderBackfilled = true;
         }
 
         protected function buildQuestionOrderMap($type): array
@@ -173,6 +222,30 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             }
 
             return [$orderMap, $position];
+        }
+
+        protected function getQuestionOrderForSession($sessionKey, $type, $slug): ?int
+        {
+            if (!$this->questionOrderColumnAvailable()) {
+                return null;
+            }
+
+            if (!isset(self::$questionOrderSessionState[$sessionKey])) {
+                [$orderMap, $nextPosition] = $this->buildQuestionOrderMap($type);
+                self::$questionOrderSessionState[$sessionKey] = [
+                    'map' => $orderMap,
+                    'next' => $nextPosition,
+                ];
+            }
+
+            $state =& self::$questionOrderSessionState[$sessionKey];
+
+            if (!isset($state['map'][$slug])) {
+                $state['map'][$slug] = $state['next'];
+                $state['next']++;
+            }
+
+            return $state['map'][$slug];
         }
 
         public $reorder_questions=[
@@ -738,7 +811,57 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs') {
     }
 
     $logEntries = $data['log'];
-return $logEntries;
+
+    if (is_array($logEntries)) {
+        foreach ($logEntries as $index => &$entry) {
+            if (!is_array($entry)) {
+                $entry = ['_value' => $entry, '_sequence' => $index];
+                continue;
+            }
+
+            $entry['_sequence'] = $index;
+        }
+        unset($entry);
+
+        usort($logEntries, function ($a, $b) {
+            $timeA = isset($a['time']) ? strtotime((string)$a['time']) : false;
+            $timeB = isset($b['time']) ? strtotime((string)$b['time']) : false;
+
+            if ($timeA !== false && $timeB !== false && $timeA !== $timeB) {
+                return $timeA <=> $timeB;
+            }
+
+            if ($timeA !== false && $timeB === false) {
+                return -1;
+            }
+
+            if ($timeA === false && $timeB !== false) {
+                return 1;
+            }
+
+            $seqA = $a['_sequence'] ?? 0;
+            $seqB = $b['_sequence'] ?? 0;
+
+            return $seqA <=> $seqB;
+        });
+
+        foreach ($logEntries as &$entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            if (array_key_exists('_sequence', $entry)) {
+                unset($entry['_sequence']);
+            }
+
+            if (array_key_exists('_value', $entry)) {
+                $entry = $entry['_value'];
+            }
+        }
+        unset($entry);
+    }
+
+    return $logEntries;
 }
 function getNextStepforFirstOrder(array $data): string {
     // Priority-based conditional routing
@@ -1377,7 +1500,7 @@ $out=[];
             $insert_status ="INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`,memberID,`status`) VALUES ('v1',".$memberID.",'pending'); ";
          $new_id =$this->db->execute($insert_status);
  $data['bmi']=$result;
-      list($questionOrderMap, $nextQuestionOrder) = $this->buildQuestionOrderMap($type);
+      $sessionKey = $new_id ?: ($memberID . ':' . $type);
       foreach ($data as $key => $value) {
        $qdata = array();
         $qdata['type'] = $type;
@@ -1411,10 +1534,10 @@ $out=[];
 
       $questionConfig = $questionConfigSet[$key] ?? null;
       $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
-      if (!isset($questionOrderMap[$key])) {
-          $questionOrderMap[$key] = $nextQuestionOrder++;
+      $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
+      if ($questionOrder !== null) {
+          $qdata['question_order'] = $questionOrder;
       }
-      $qdata['question_order'] = $questionOrderMap[$key];
 
       if ($questionConfig) {
           $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
