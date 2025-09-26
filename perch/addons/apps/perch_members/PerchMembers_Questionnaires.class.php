@@ -1440,8 +1440,18 @@ $this->db->execute($update_status);
        //     if(!PerchUtil::count($this->get_for_member($memberID)) ){
 // echo "add_to_member inn";
 $Members = new PerchMembers_Members;
-			$Member = $Members->find($memberID);
-			  $memberdetails = $Member->to_array();
+        $Member = $Members->find($memberID);
+        $memberdetails = $Member ? $Member->to_array() : [];
+
+        $props = [];
+        $propsUpdated = false;
+
+        if (is_object($Member)) {
+            $props = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+            if (!is_array($props)) {
+                $props = [];
+            }
+        }
 
   // --- BEGIN defensive defaults normalization ---
   if (!is_array($data)) { $data = []; }
@@ -1478,20 +1488,14 @@ $Members = new PerchMembers_Members;
           }
       if($type=="first-order"){
       $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $data["height"],$weight2, $height2, $data["heightunit"]);
- //$props = json_decode($memberdetails['memberProperties'], true);
-     	$props = PerchUtil::json_safe_decode($Member->memberProperties(), true);
 
-        if (!is_array($props)) $props = [];
-
-
-        $props["height"]=$data["height"];
-        $props["height2"]=$height2;
- $props["heightunit"]= $data["heightunit"];
-        $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
-$out=[];
- 	$out['memberProperties'] = PerchUtil::json_safe_encode($props);
-
-    	$Member->update($out);
+        if (is_object($Member)) {
+            $props["height"]=$data["height"];
+            $props["height2"]=$height2;
+            $props["heightunit"]= $data["heightunit"];
+            $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
+            $propsUpdated = true;
+        }
     	}else{
     	$heightcheck=$this->parseHeight($memberdetails["height"]);
     	if($heightcheck){
@@ -1505,8 +1509,33 @@ $out=[];
     	      $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $memberdetails["height"],$data["weight2"], $memberdetails["height2"], $memberdetails["heightunit"]);
 
 
-    	}
-    	    	//insert_status
+        }
+
+        if (is_object($Member) && array_key_exists('gender', $data)) {
+            $genderValue = $data['gender'];
+            if (is_array($genderValue)) {
+                $genderValue = array_filter($genderValue, function ($item) {
+                    return $item !== '' && $item !== null;
+                });
+                $genderValue = $genderValue ? reset($genderValue) : '';
+            }
+
+            $genderValue = is_scalar($genderValue) ? trim((string) $genderValue) : '';
+
+            if ($genderValue !== '') {
+                if (!isset($props['gender']) || $props['gender'] !== $genderValue) {
+                    $props['gender'] = $genderValue;
+                    $propsUpdated = true;
+                }
+            }
+        }
+
+        if ($propsUpdated && is_object($Member)) {
+            $out = [];
+            $out['memberProperties'] = PerchUtil::json_safe_encode($props);
+            $Member->update($out);
+        }
+                //insert_status
             $insert_status ="INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`,memberID,`status`) VALUES ('v1',".$memberID.",'pending'); ";
          $new_id =$this->db->execute($insert_status);
  $data['bmi']=$result;
