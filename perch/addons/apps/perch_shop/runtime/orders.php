@@ -147,3 +147,79 @@ $opts = PerchUtil::extend([
 		echo $r;
 		PerchUtil::flush_output();
 	}
+        function perch_shop_last_pen_details()
+        {
+                $details = [
+                        'brand' => null,
+                        'dose'  => null,
+                ];
+
+                if (!perch_member_logged_in()) {
+                        return $details;
+                }
+
+                $recent_orders = perch_shop_orders([
+                        'sort' => 'orderCreated',
+                        'sort-order' => 'DESC',
+                        'count' => 1,
+                        'skip-template' => true,
+                ], true);
+
+                if (!is_array($recent_orders) || empty($recent_orders)) {
+                        return $details;
+                }
+
+                $last_order = $recent_orders[0];
+                $last_order_id = $last_order['orderID'] ?? null;
+
+                if (!$last_order_id) {
+                        return $details;
+                }
+
+                $order_items = perch_shop_order_items($last_order_id, [
+                        'skip-template' => true,
+                ], true);
+
+                if (!is_array($order_items)) {
+                        return $details;
+                }
+
+                $perch_shop_api   = null;
+                $products_factory = null;
+
+                foreach ($order_items as $item) {
+                        if (($item['itemType'] ?? '') !== 'product') {
+                                continue;
+                        }
+
+                        if (!empty($item['parentID'])) {
+                                if ($perch_shop_api === null) {
+                                        $perch_shop_api   = new PerchAPI(1.0, 'perch_shop');
+                                        $products_factory = new PerchShop_Products($perch_shop_api);
+                                }
+
+                                $ParentProduct = $products_factory ? $products_factory->find((int)$item['parentID']) : null;
+
+                                if ($ParentProduct) {
+                                        $details['brand'] = $ParentProduct->productTitle();
+                                }
+                        }
+
+                        if ($details['brand'] === null) {
+                                $details['brand'] = $item['productTitle'] ?? $item['title'] ?? null;
+                        }
+
+                        $details['dose'] = $item['productVariantDesc'] ?? $item['variant_desc'] ?? null;
+
+                        if ($details['dose'] === null && isset($item['title'])) {
+                                $title = $item['title'];
+                                if ($details['brand'] === null || strcasecmp($title, $details['brand']) !== 0) {
+                                        $details['dose'] = $title;
+                                }
+                        }
+
+                        break;
+                }
+
+                return $details;
+        }

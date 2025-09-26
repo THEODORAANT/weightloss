@@ -101,63 +101,11 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
         $last_pen_brand = null;
         $last_pen_dose = null;
 
-        if (perch_member_logged_in()) {
-            $recent_orders = perch_shop_orders([
-                'sort' => 'orderCreated',
-                'sort-order' => 'DESC',
-                'count' => 1,
-                'skip-template' => true,
-            ], true);
+        $last_pen_details = perch_shop_last_pen_details();
 
-            if (is_array($recent_orders) && !empty($recent_orders)) {
-                $last_order = $recent_orders[0];
-                $last_order_id = $last_order['orderID'] ?? null;
-
-                if ($last_order_id) {
-                    $order_items = perch_shop_order_items($last_order_id, [
-                        'skip-template' => true,
-                    ], true);
-
-                    if (is_array($order_items)) {
-                        $perch_shop_api = null;
-                        $products_factory = null;
-
-                        foreach ($order_items as $item) {
-                            if (($item['itemType'] ?? '') !== 'product') {
-                                continue;
-                            }
-
-                            if (!empty($item['parentID'])) {
-                                if ($perch_shop_api === null) {
-                                    $perch_shop_api = new PerchAPI(1.0, 'perch_shop');
-                                    $products_factory = new PerchShop_Products($perch_shop_api);
-                                }
-
-                                $ParentProduct = $products_factory ? $products_factory->find((int)$item['parentID']) : null;
-
-                                if ($ParentProduct) {
-                                    $last_pen_brand = $ParentProduct->productTitle();
-                                }
-                            }
-
-                            if ($last_pen_brand === null) {
-                                $last_pen_brand = $item['productTitle'] ?? $item['title'] ?? null;
-                            }
-
-                            $last_pen_dose = $item['productVariantDesc'] ?? $item['variant_desc'] ?? null;
-
-                            if ($last_pen_dose === null && isset($item['title'])) {
-                                $title = $item['title'];
-                                if ($last_pen_brand === null || strcasecmp($title, $last_pen_brand) !== 0) {
-                                    $last_pen_dose = $title;
-                                }
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
+        if (is_array($last_pen_details)) {
+            $last_pen_brand = $last_pen_details['brand'] ?? null;
+            $last_pen_dose  = $last_pen_details['dose'] ?? null;
         }
     ?>
 
