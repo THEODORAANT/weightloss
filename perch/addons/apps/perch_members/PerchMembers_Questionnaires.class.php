@@ -1660,6 +1660,10 @@ $Members = new PerchMembers_Members;
               $qdata['answer_text'] = '';
           }
 
+          if ($key === 'other_medication_details' && trim((string)$qdata['answer_text']) === '') {
+              $qdata['answer_text'] = 'No medication being taken.';
+          }
+
       $isMedicationWeightQuestion = (strpos($key, 'weight-') === 0);
       if (($key === 'weight' || $isMedicationWeightQuestion) && $qdata['answer_text'] !== '') {
           $qdata['answer_text'] = $this->formatWeightValue($qdata['answer_text']);
