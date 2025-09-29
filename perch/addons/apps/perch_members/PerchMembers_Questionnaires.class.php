@@ -1573,7 +1573,20 @@ $Members = new PerchMembers_Members;
           }
       }
 
+      $questionConfigSet = ($type=="first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
+      $questionLookup = ($type=="first-order") ? $this->questions : $this->reorder_questions;
+      if ($type=="first-order") {
+          foreach ($this->getMedicationSlugs() as $slug) {
+              $label = $this->getMedicationLabel($slug);
+              $questionLookup["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $label . '?';
+              $questionLookup["dose-{$slug}"] = "When was your last dose of " . $label . '?';
+              $questionLookup["recently-dose-{$slug}"] = "What dose of " . $label . " were you prescribed most recently?";
+          }
+      }
+
       foreach ($data as $key => $value) {
+          $questionConfig = $questionConfigSet[$key] ?? null;
+
           if ($key === 'email_address') {
               $emailValue = '';
               if (is_array($value)) {
@@ -1586,7 +1599,12 @@ $Members = new PerchMembers_Members;
               }
 
               if ($emailValue === '') {
-                  $value = 'no-email-added';
+                  $questionStep = is_array($questionConfig) ? ($questionConfig['step'] ?? null) : null;
+                  if ($questionStep === 'access_special_offers') {
+                      $value = 'skipped';
+                  } else {
+                      $value = 'no-email-added';
+                  }
               } else {
                   $value = $emailValue;
               }
@@ -1597,48 +1615,33 @@ $Members = new PerchMembers_Members;
           $qdata = array();
           $qdata['type'] = $type;
           $qdata['question_slug'] = $key;
-
-
-
-
-      $questionLookup = ($type=="first-order") ? $this->questions : $this->reorder_questions;
-      if ($type=="first-order") {
-          foreach ($this->getMedicationSlugs() as $slug) {
-              $label = $this->getMedicationLabel($slug);
-              $questionLookup["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $label . '?';
-              $questionLookup["dose-{$slug}"] = "When was your last dose of " . $label . '?';
-              $questionLookup["recently-dose-{$slug}"] = "What dose of " . $label . " were you prescribed most recently?";
+          $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
+          $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
+          if ($questionOrder !== null) {
+              $qdata['question_order'] = $questionOrder;
           }
-      }
-      $questionConfigSet = ($type=="first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
-      $questionConfig = $questionConfigSet[$key] ?? null;
-      $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
-      $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
-      if ($questionOrder !== null) {
-          $qdata['question_order'] = $questionOrder;
-      }
 
-      if ($questionConfig) {
-          $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
-      } elseif (is_array($value)) {
-          $flattened = array_filter(array_map(function ($item) {
-              if (is_scalar($item)) {
-                  return (string)$item;
-              }
+          if ($questionConfig) {
+              $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
+          } elseif (is_array($value)) {
+              $flattened = array_filter(array_map(function ($item) {
+                  if (is_scalar($item)) {
+                      return (string)$item;
+                  }
 
-              if (is_array($item)) {
-                  return implode(', ', array_map('strval', $item));
-              }
+                  if (is_array($item)) {
+                      return implode(', ', array_map('strval', $item));
+                  }
 
-              return '';
-          }, $value), 'strlen');
+                  return '';
+              }, $value), 'strlen');
 
-          $qdata['answer_text'] = implode(', ', $flattened);
-      } elseif (is_scalar($value) || $value === null) {
-          $qdata['answer_text'] = trim((string)$value);
-      } else {
-          $qdata['answer_text'] = '';
-      }
+              $qdata['answer_text'] = implode(', ', $flattened);
+          } elseif (is_scalar($value) || $value === null) {
+              $qdata['answer_text'] = trim((string)$value);
+          } else {
+              $qdata['answer_text'] = '';
+          }
       if ($key === 'weight') {
           $weightunit = array_values(array_filter(array_map('trim', explode('-', (string)$weightUnitValue)), 'strlen'));
           if (!empty($weightunit) && $qdata['answer_text'] !== '') {
