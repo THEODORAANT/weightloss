@@ -1557,12 +1557,46 @@ $Members = new PerchMembers_Members;
                 //insert_status
             $insert_status ="INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`,memberID,`status`) VALUES ('v1',".$memberID.",'pending'); ";
          $new_id =$this->db->execute($insert_status);
- $data['bmi']=$result;
+      $data['bmi']=$result;
       $sessionKey = $new_id ?: ($memberID . ':' . $type);
+
+      $weightUnitValue = $data['weightunit'] ?? ($data['weightunit-radio'] ?? ($data['weightradio-unit'] ?? ''));
+      $heightUnitValue = $data['heightunit'] ?? ($data['heightunit-radio'] ?? '');
+
+      $medicationUnits = [];
+      if ($type=="first-order") {
+          foreach ($this->getMedicationSlugs() as $slug) {
+              $unitKey = "unit-{$slug}";
+              if (isset($data[$unitKey])) {
+                  $medicationUnits[$slug] = $data[$unitKey];
+              }
+          }
+      }
+
       foreach ($data as $key => $value) {
-       $qdata = array();
-        $qdata['type'] = $type;
-      $qdata['question_slug']=$key;
+          if ($key === 'email_address') {
+              $emailValue = '';
+              if (is_array($value)) {
+                  $firstEmail = reset($value);
+                  if (is_scalar($firstEmail) || $firstEmail === null) {
+                      $emailValue = trim((string)$firstEmail);
+                  }
+              } elseif (is_scalar($value) || $value === null) {
+                  $emailValue = trim((string)$value);
+              }
+
+              if ($emailValue === '') {
+                  $value = 'no-email-added';
+              } else {
+                  $value = $emailValue;
+              }
+
+              $data[$key] = $value;
+          }
+
+          $qdata = array();
+          $qdata['type'] = $type;
+          $qdata['question_slug'] = $key;
 
 
 
@@ -1577,19 +1611,6 @@ $Members = new PerchMembers_Members;
           }
       }
       $questionConfigSet = ($type=="first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
-
-      $medicationUnits = [];
-      if($type=="first-order"){
-          $weightradiounit=$data["weightunit"] ?? '';
-           $heightunitradio=$data["heightunit"] ?? '';
-           foreach ($this->getMedicationSlugs() as $slug) {
-               $unitKey = "unit-{$slug}";
-               if (isset($data[$unitKey])) {
-                   $medicationUnits[$slug] = $data[$unitKey];
-               }
-           }
-      }
-
       $questionConfig = $questionConfigSet[$key] ?? null;
       $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
       $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
@@ -1618,27 +1639,59 @@ $Members = new PerchMembers_Members;
       } else {
           $qdata['answer_text'] = '';
       }
-         if($type=="first-order"){
-  if($key=="weight"){
+      if ($key === 'weight') {
+          $weightunit = array_values(array_filter(array_map('trim', explode('-', (string)$weightUnitValue)), 'strlen'));
+          if (!empty($weightunit) && $qdata['answer_text'] !== '') {
+              if (count($weightunit) === 1) {
+                  $qdata['answer_text'] .= ' ' . $weightunit[0];
+              } else {
+                  $qdata['answer_text'] .= ' ' . $weightunit[0];
+                  $secondWeight = $data['weight2'] ?? null;
+                  if ($secondWeight !== null && $secondWeight !== '') {
+                      $qdata['answer_text'] .= ' ' . $secondWeight;
+                      if (isset($weightunit[1])) {
+                          $qdata['answer_text'] .= ' ' . $weightunit[1];
+                      }
+                  }
+              }
+          }
+      }
 
-        $weightunit=explode("-",$weightradiounit);
-        if(count($weightunit)>1){
-         $qdata['answer_text'].= " ".$weightunit[0];
-          if(isset($data["weight2"]) ){
-                 $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
+      if ($key === 'height') {
+          $heightunit = array_values(array_filter(array_map('trim', explode('-', (string)$heightUnitValue)), 'strlen'));
+          if (!empty($heightunit) && $qdata['answer_text'] !== '') {
+              if (count($heightunit) === 1) {
+                  $qdata['answer_text'] .= ' ' . $heightunit[0];
+              } else {
+                  $qdata['answer_text'] .= ' ' . $heightunit[0];
+                  $secondHeight = $data['height2'] ?? null;
+                  if ($secondHeight !== null && $secondHeight !== '') {
+                      $qdata['answer_text'] .= ' ' . $secondHeight;
+                      if (isset($heightunit[1])) {
+                          $qdata['answer_text'] .= ' ' . $heightunit[1];
+                      }
+                  }
+              }
+          }
+      }
 
-            }
-            }
-        }
+      if($type=="first-order"){
         if (strpos($key, 'weight-') === 0 && !empty($medicationUnits)) {
             $slug = substr($key, 7);
             if (isset($medicationUnits[$slug])) {
-                $unitParts = explode('-', $medicationUnits[$slug]);
-                if (count($unitParts) > 1) {
-                    $qdata['answer_text'] .= ' ' . $unitParts[0];
-                    $secondKey = "weight2-{$slug}";
-                    if (isset($data[$secondKey]) && $data[$secondKey] !== '') {
-                        $qdata['answer_text'] .= ' ' . $data[$secondKey] . '  ' . $unitParts[1];
+                $unitParts = array_values(array_filter(array_map('trim', explode('-', (string)$medicationUnits[$slug])), 'strlen'));
+                if (!empty($unitParts) && $qdata['answer_text'] !== '') {
+                    if (count($unitParts) === 1) {
+                        $qdata['answer_text'] .= ' ' . $unitParts[0];
+                    } else {
+                        $qdata['answer_text'] .= ' ' . $unitParts[0];
+                        $secondKey = "weight2-{$slug}";
+                        if (isset($data[$secondKey]) && $data[$secondKey] !== '') {
+                            $qdata['answer_text'] .= ' ' . $data[$secondKey];
+                            if (isset($unitParts[1])) {
+                                $qdata['answer_text'] .= ' ' . $unitParts[1];
+                            }
+                        }
                     }
                 }
             }
@@ -1650,19 +1703,6 @@ $Members = new PerchMembers_Members;
                 $qdata['answer_text'] = $recentDoseOptions[$value];
             }
         }
-
-         if($key=="height"){
-
-             $heightunit=explode("-",$heightunitradio);
-              if(count($heightunit)>1){
-                 $qdata['answer_text'].= " ".$heightunit[0];
-                   if(isset($data["height2"])){
-                                     $qdata['answer_text'].= " ".$data["height2"]."  ".$heightunit[1];
-
-                                }
-                                }
-
-       }
 
 }
 if(isset($data["uuid"])){
