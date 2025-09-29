@@ -350,34 +350,42 @@ function perch_member_questionsForQuestionnaire($type) {
 
     function logAnswerChange($question, $answer,$type="firstorder") {
 
-    if($type=="reorder"){
-     if (!isset($_SESSION['reorder_answer_log'])) {
-                    $_SESSION['reorder_answer_log'] = [];
+        $isReorder = ($type=="reorder");
+        $logKey = $isReorder ? 'reorder_answer_log' : 'answer_log';
+
+        if (!isset($_SESSION[$logKey]) || !is_array($_SESSION[$logKey])) {
+            $_SESSION[$logKey] = [];
+        }
+
+        $normalisedAnswer = is_array($answer) ? implode(", ", $answer) : (string) $answer;
+
+        $previousAnswer = null;
+        for ($idx = count($_SESSION[$logKey]) - 1; $idx >= 0; $idx--) {
+            if ($question === ($_SESSION[$logKey][$idx]['question'] ?? null)) {
+                $previousAnswer = $_SESSION[$logKey][$idx]['answer'] ?? null;
+                if (is_array($previousAnswer)) {
+                    $previousAnswer = implode(", ", $previousAnswer);
                 }
-
-
-                $logEntry = [
-                    'question' => $question,
-                    'answer' => $answer,
-                    'time' => date('Y-m-d H:i:s')
-                ];
-
-                $_SESSION['reorder_answer_log'][] = $logEntry;
-    }else{
-    if (!isset($_SESSION['answer_log'])) {
-                $_SESSION['answer_log'] = [];
+                break;
             }
+        }
 
+        $changed = ($previousAnswer !== null && $previousAnswer !== $normalisedAnswer);
+        $action = 'new';
+        if ($previousAnswer !== null) {
+            $action = $changed ? 'updated' : 'reaffirmed';
+        }
 
-            $logEntry = [
-                'question' => $question,
-                'answer' => $answer,
-                'time' => date('Y-m-d H:i:s')
-            ];
+        $logEntry = [
+            'question' => $question,
+            'answer' => $normalisedAnswer,
+            'previous_answer' => $previousAnswer,
+            'changed' => $changed,
+            'action' => $action,
+            'time' => date('Y-m-d H:i:s')
+        ];
 
-            $_SESSION['answer_log'][] = $logEntry;
-
-    }
+        $_SESSION[$logKey][] = $logEntry;
 
     }
 
