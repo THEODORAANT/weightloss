@@ -789,6 +789,23 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
         return is_scalar($value) ? trim((string)$value) : '';
     }
+
+    protected function formatWeightValue($value): string
+    {
+        if (is_string($value)) {
+            $value = trim($value);
+        }
+
+        if ($value === '' || $value === null) {
+            return '';
+        }
+
+        if (is_numeric($value)) {
+            return number_format((float)$value, 2, '.', '');
+        }
+
+        return is_scalar($value) ? (string)$value : '';
+    }
         public function get_for_member($memberID,$type="first-order")
     {
         $sql = 'SELECT d.*
@@ -1642,6 +1659,12 @@ $Members = new PerchMembers_Members;
           } else {
               $qdata['answer_text'] = '';
           }
+
+      $isMedicationWeightQuestion = (strpos($key, 'weight-') === 0);
+      if (($key === 'weight' || $isMedicationWeightQuestion) && $qdata['answer_text'] !== '') {
+          $qdata['answer_text'] = $this->formatWeightValue($qdata['answer_text']);
+      }
+
       if ($key === 'weight') {
           $weightunit = array_values(array_filter(array_map('trim', explode('-', (string)$weightUnitValue)), 'strlen'));
           if (!empty($weightunit) && $qdata['answer_text'] !== '') {
@@ -1651,7 +1674,7 @@ $Members = new PerchMembers_Members;
                   $qdata['answer_text'] .= ' ' . $weightunit[0];
                   $secondWeight = $data['weight2'] ?? null;
                   if ($secondWeight !== null && $secondWeight !== '') {
-                      $qdata['answer_text'] .= ' ' . $secondWeight;
+                      $qdata['answer_text'] .= ' ' . $this->formatWeightValue($secondWeight);
                       if (isset($weightunit[1])) {
                           $qdata['answer_text'] .= ' ' . $weightunit[1];
                       }
@@ -1690,7 +1713,7 @@ $Members = new PerchMembers_Members;
                         $qdata['answer_text'] .= ' ' . $unitParts[0];
                         $secondKey = "weight2-{$slug}";
                         if (isset($data[$secondKey]) && $data[$secondKey] !== '') {
-                            $qdata['answer_text'] .= ' ' . $data[$secondKey];
+                            $qdata['answer_text'] .= ' ' . $this->formatWeightValue($data[$secondKey]);
                             if (isset($unitParts[1])) {
                                 $qdata['answer_text'] .= ' ' . $unitParts[1];
                             }
