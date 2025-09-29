@@ -1633,7 +1633,7 @@
                     } else {
                         const inputId = `recently-dose-${slug}`;
                         fieldHtml += `
-                                <input type="text" id="${escapeHtml(inputId)}" name="recently-dose-${slug}" value="${escapeHtml(storedRecentDose)}" required placeholder="Enter your most recent dose">
+                                <textarea  id="${escapeHtml(inputId)}" name="recently-dose-${slug}" value="${escapeHtml(storedRecentDose)}" required placeholder="Enter your most recent dose">
                         `;
                     }
 
@@ -1678,11 +1678,12 @@
 
                     <div class="get_started">
                         <div class="started_button">
-                            <div class="get_btn">
-                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                            <div class="buttons">
+                                <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
                                <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
                                 <button id="medication-continue-dose-next" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+
 
                             </div>
                         </div>
