@@ -16,6 +16,32 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
          mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
      );
  }
+ if (!function_exists('formatMeasurementAnswer')) {
+     function formatMeasurementAnswer($value, $unitRaw, $secondaryValue = null)
+     {
+         if ($value === '' || $unitRaw === null || $unitRaw === '') {
+             return $value;
+         }
+
+         $formatted = $value;
+         $units = explode('-', (string)$unitRaw);
+         $primaryUnit = trim($units[0] ?? '');
+
+         if ($primaryUnit !== '') {
+             $formatted .= ' ' . $primaryUnit;
+         }
+
+         if (!empty($units[1])) {
+             $secondaryValue = trim((string)($secondaryValue ?? ''));
+             $secondaryUnit = trim($units[1]);
+             if ($secondaryValue !== '' && $secondaryUnit !== '') {
+                 $formatted .= ' ' . $secondaryValue . ' ' . $secondaryUnit;
+             }
+         }
+
+         return $formatted;
+     }
+ }
     if (isset($_POST['nextstep'])) {
     $user_id = generateUUID();
     $current_step = $_GET["step"];
@@ -38,15 +64,36 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
                             'step' => $current_step,
                             'timestamp' => $timestamp
                         ];
-         foreach ($_POST as $key => $value) {
+        if (array_key_exists('email_address', $_POST) && trim((string)$_POST['email_address']) === '') {
+            $_POST['email_address'] = 'no-email-added';
+        }
+
+        foreach ($_POST as $key => $value) {
            if(is_array($value)){
                       $_SESSION['questionnaire-reorder'][$key] = $value;
+                      $loggedAnswer = $value;
 
                    }else{
                      $_SESSION['questionnaire-reorder'][$key] = htmlspecialchars($value);
+                     $loggedAnswer = $_SESSION['questionnaire-reorder'][$key];
 
                    }
-                     logAnswerChange($key, $_SESSION['questionnaire-reorder'][$key],"reorder");
+
+                   if (!is_array($loggedAnswer) && $key === 'weight') {
+                       $unitValue = $_SESSION['questionnaire-reorder']['weightunit'] ?? null;
+                       if ($unitValue === null && isset($_POST['weightunit'])) {
+                           $unitValue = htmlspecialchars($_POST['weightunit']);
+                       }
+
+                       $secondaryValue = $_SESSION['questionnaire-reorder']['weight2'] ?? null;
+                       if ($secondaryValue === null && isset($_POST['weight2'])) {
+                           $secondaryValue = htmlspecialchars($_POST['weight2']);
+                       }
+
+                       $loggedAnswer = formatMeasurementAnswer($loggedAnswer, $unitValue, $secondaryValue);
+                   }
+
+                     logAnswerChange($key, $loggedAnswer,"reorder");
          }
         setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
         //print_r($_SESSION['reorder_answer_log']);
