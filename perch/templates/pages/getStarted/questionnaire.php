@@ -12,6 +12,32 @@ function generateUUID() {
         mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
     );
 }
+if (!function_exists('formatMeasurementAnswer')) {
+    function formatMeasurementAnswer($value, $unitRaw, $secondaryValue = null)
+    {
+        if ($value === '' || $unitRaw === null || $unitRaw === '') {
+            return $value;
+        }
+
+        $formatted = $value;
+        $units = explode('-', (string)$unitRaw);
+        $primaryUnit = trim($units[0] ?? '');
+
+        if ($primaryUnit !== '') {
+            $formatted .= ' ' . $primaryUnit;
+        }
+
+        if (!empty($units[1])) {
+            $secondaryValue = trim((string)($secondaryValue ?? ''));
+            $secondaryUnit = trim($units[1]);
+            if ($secondaryValue !== '' && $secondaryUnit !== '') {
+                $formatted .= ' ' . $secondaryValue . ' ' . $secondaryUnit;
+            }
+        }
+
+        return $formatted;
+    }
+}
 $previousPage = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'No referrer';
 
 //echo "get step"; echo $_GET["step"];
@@ -170,6 +196,10 @@ if ($lastPart === 'consultation') {
 }
 
 if (isset($_POST['nextstep'])) {
+    if (array_key_exists('email_address', $_POST) && trim((string)$_POST['email_address']) === '') {
+        $_POST['email_address'] = 'no-email-added';
+    }
+
     $_SESSION['questionnaire']['confirmed'] = false;
 
     $user_id = generateUUID();
@@ -224,6 +254,23 @@ if (isset($_POST['nextstep'])) {
             $loggedValue = is_array($_SESSION['questionnaire'][$key])
                 ? implode(", ", $_SESSION['questionnaire'][$key])
                 : $_SESSION['questionnaire'][$key];
+
+            if (!is_array($_SESSION['questionnaire'][$key]) && ($key === 'weight' || $key === 'height')) {
+                $unitKey = $key === 'weight' ? 'weightunit' : 'heightunit';
+                $secondaryKey = $key === 'weight' ? 'weight2' : 'height2';
+
+                $unitValue = $_SESSION['questionnaire'][$unitKey] ?? null;
+                if ($unitValue === null && isset($_POST[$unitKey])) {
+                    $unitValue = htmlspecialchars($_POST[$unitKey]);
+                }
+
+                $secondaryValue = $_SESSION['questionnaire'][$secondaryKey] ?? null;
+                if ($secondaryValue === null && isset($_POST[$secondaryKey])) {
+                    $secondaryValue = htmlspecialchars($_POST[$secondaryKey]);
+                }
+
+                $loggedValue = formatMeasurementAnswer($loggedValue, $unitValue, $secondaryValue);
+            }
 
             logAnswerChange($key, $loggedValue);
 

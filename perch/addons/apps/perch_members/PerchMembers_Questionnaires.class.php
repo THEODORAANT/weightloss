@@ -128,6 +128,39 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         ]
     ];
 
+    protected function formatMeasurementAnswer($value, $unitRaw, $secondaryValue = null)
+    {
+        if ($value === null) {
+            return $value;
+        }
+
+        $value = trim((string)$value);
+        $unitRaw = $unitRaw !== null ? trim((string)$unitRaw) : null;
+
+        if ($value === '' || $unitRaw === null || $unitRaw === '') {
+            return $value;
+        }
+
+        $formatted = $value;
+        $units = explode('-', (string)$unitRaw);
+        $primaryUnit = trim($units[0] ?? '');
+
+        if ($primaryUnit !== '') {
+            $formatted .= ' ' . $primaryUnit;
+        }
+
+        if (!empty($units[1])) {
+            $secondaryValue = trim((string)($secondaryValue ?? ''));
+            $secondaryUnit = trim($units[1]);
+
+            if ($secondaryValue !== '' && $secondaryUnit !== '') {
+                $formatted .= ' ' . $secondaryValue . ' ' . $secondaryUnit;
+            }
+        }
+
+        return $formatted;
+    }
+
     public $questions_and_answers  = [
                                        "consultation" => [
                                            "label" => "agree-consultation",
@@ -936,16 +969,16 @@ $out=[];
        }
       }
          if($type=="first-order"){
-  if($key=="weight"){
-
-        $weightunit=explode("-",$weightradiounit);
-        if(count($weightunit)>1){
-         $qdata['answer_text'].= " ".$weightunit[0];
-          if(isset($data["weight2"]) ){
-                 $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
-
-            }
-            }
+        if($key=="weight"){
+        if(isset($qdata['answer_text'])){
+            $unitValue = $weightradiounit ?? ($data["weightunit"] ?? null);
+            $secondaryValue = $data["weight2"] ?? null;
+            $qdata['answer_text'] = $this->formatMeasurementAnswer(
+                $qdata['answer_text'],
+                $unitValue,
+                $secondaryValue
+            );
+        }
         }
         if($key=="weight-wegovy"){
             $weightwegovyunit=explode("-",$unitwegovyradio);
@@ -963,18 +996,40 @@ $out=[];
         }
 
          if($key=="height"){
-
-             $heightunit=explode("-",$heightunitradio);
-              if(count($heightunit)>1){
-                 $qdata['answer_text'].= " ".$heightunit[0];
-                   if(isset($data["height2"])){
-                                     $qdata['answer_text'].= " ".$data["height2"]."  ".$heightunit[1];
-
-                                }
-                                }
+        if(isset($qdata['answer_text'])){
+            $unitValue = $heightunitradio ?? ($data["heightunit"] ?? null);
+            $secondaryValue = $data["height2"] ?? null;
+            $qdata['answer_text'] = $this->formatMeasurementAnswer(
+                $qdata['answer_text'],
+                $unitValue,
+                $secondaryValue
+            );
+        }
 
        }
 
+}
+        if($type=="re-order"){
+    if(isset($qdata['answer_text'])){
+        if($key=="weight"){
+            $unitValue = $data["weightunit"] ?? ($memberdetails["weightunit"] ?? null);
+            $secondaryValue = $data["weight2"] ?? null;
+            $qdata['answer_text'] = $this->formatMeasurementAnswer(
+                $qdata['answer_text'],
+                $unitValue,
+                $secondaryValue
+            );
+        }
+        if($key=="height"){
+            $unitValue = $data["heightunit"] ?? ($memberdetails["heightunit"] ?? null);
+            $secondaryValue = $data["height2"] ?? ($memberdetails["height2"] ?? null);
+            $qdata['answer_text'] = $this->formatMeasurementAnswer(
+                $qdata['answer_text'],
+                $unitValue,
+                $secondaryValue
+            );
+        }
+    }
 }
 if(isset($data["uuid"])){
   $qdata['uuid']=$data["uuid"];
