@@ -187,7 +187,12 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                         } elseif ($key === "height") {
                             echo renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
                         } else {
-                            echo htmlspecialchars($value);
+                            $displayValue = $value;
+                            if ($key === "other_medication_details" && trim((string)$displayValue) === '') {
+                                $displayValue = 'No medication being taken.';
+                            }
+
+                            echo htmlspecialchars((string)$displayValue);
                         }
                         ?>
                     </p>
