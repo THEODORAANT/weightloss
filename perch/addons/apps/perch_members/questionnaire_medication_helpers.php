@@ -12,7 +12,7 @@ if (!function_exists('perch_questionnaire_medications')) {
             'alli' => 'Alli',
             'mysimba' => 'Mysimba',
             'other' => 'the weight loss medication',
-            'none' => 'None',
+            'none' => 'I have never taken medication to lose weight',
         ];
     }
 }

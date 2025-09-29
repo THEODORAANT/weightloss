@@ -170,7 +170,22 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                     <p>
                         <?php
                         if (is_array($value)) {
-                            echo htmlspecialchars(implode(", ", $value));
+                            if ($key === 'medications') {
+                                $labels = [];
+                                foreach ($value as $rawSelection) {
+                                    $slug = perch_questionnaire_medication_slug((string) $rawSelection);
+                                    if ($slug === '') {
+                                        continue;
+                                    }
+
+                                    $labels[] = perch_questionnaire_medication_label($slug);
+                                }
+
+                                $labels = array_values(array_unique(array_filter($labels, static fn($label) => trim((string) $label) !== '')));
+                                echo htmlspecialchars(implode(', ', $labels));
+                            } else {
+                                echo htmlspecialchars(implode(", ", $value));
+                            }
                         } elseif ($key === "weight") {
                             echo renderMeasurement($value, "weightunit", "weight2", $_SESSION['questionnaire']);
                         } elseif (strpos($key, 'weight-') === 0) {

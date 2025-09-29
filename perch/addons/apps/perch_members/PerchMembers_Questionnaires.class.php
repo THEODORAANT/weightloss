@@ -556,6 +556,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "alli" => "Alli",
                                                "mysimba" => "Mysimba",
                                                "other" => "Other",
+                                               "none" => "I have never taken medication to lose weight",
                                                "never" => "I have never taken medication to lose weight"
                                            ]
                                        ],
@@ -1601,6 +1602,12 @@ $Members = new PerchMembers_Members;
           }
       }
 
+      $rowsToInsert = [];
+      $medicationsRowIndex = null;
+      $medicationsOriginalAnswer = '';
+      $selectedMedicationSlugs = [];
+      $medicationDetails = [];
+
       foreach ($data as $key => $value) {
           $questionConfig = $questionConfigSet[$key] ?? null;
 
@@ -1727,7 +1734,7 @@ $Members = new PerchMembers_Members;
             }
         }
            if (strpos($key, 'recently-dose-') === 0) {
-            $medicationSlug = substr($key, strlen('recently-dose-'));
+           $medicationSlug = substr($key, strlen('recently-dose-'));
             $recentDoseOptions = perch_questionnaire_recent_dose_options($medicationSlug);
             if (is_array($recentDoseOptions) && isset($recentDoseOptions[$value])) {
                 $qdata['answer_text'] = $recentDoseOptions[$value];
@@ -1751,22 +1758,123 @@ if(isset($data["uuid"])){
                   $qdata['order_id']=$orderID;
                 $qdata['version']="v1";
                  $qdata['qid']= $new_id;
-           $columns = implode(", ", array_keys($qdata)); // Columns as a string
-                      //  $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
+          if ($key === 'medications') {
+              $medicationsRowIndex = count($rowsToInsert);
+              $medicationsOriginalAnswer = $qdata['answer_text'];
 
-           $db = $this->db;
+              $rawSelections = [];
+              if (is_array($value)) {
+                  $rawSelections = $value;
+              } elseif ($value !== null && $value !== '') {
+                  $rawSelections = [$value];
+              }
 
-           $escaped_values = array_map(function ($value) use ($db) {
-               if (is_string($value)) {
-                   $value = PerchUtil::safe_stripslashes($value);
-               }
+              $selectedMedicationSlugs = [];
+              foreach ($rawSelections as $selection) {
+                  $slug = perch_questionnaire_medication_slug((string)$selection);
+                  if ($slug !== '') {
+                      $selectedMedicationSlugs[] = $slug;
+                  }
+              }
 
-               return $db->pdb($value);
-           }, array_values($qdata));
+              if (!empty($selectedMedicationSlugs)) {
+                  $selectedMedicationSlugs = array_values(array_unique($selectedMedicationSlugs));
+              }
+          }
 
-           $values = implode(', ', $escaped_values);
+          if ($isMedicationWeightQuestion) {
+              $slug = substr($key, 7);
+              if ($slug !== '' && $qdata['answer_text'] !== '') {
+                  $medicationDetails[$slug]['weight'] = $qdata['answer_text'];
+              }
+          }
 
-           $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
+          if (strpos($key, 'dose-') === 0) {
+              $slug = substr($key, strlen('dose-'));
+              if ($slug !== '' && $qdata['answer_text'] !== '') {
+                  $medicationDetails[$slug]['dose'] = $qdata['answer_text'];
+              }
+          }
+
+          if (strpos($key, 'recently-dose-') === 0) {
+              $slug = substr($key, strlen('recently-dose-'));
+              if ($slug !== '' && $qdata['answer_text'] !== '') {
+                  $medicationDetails[$slug]['recent'] = $qdata['answer_text'];
+              }
+          }
+
+          if (strpos($key, 'continue-dose-') === 0) {
+              $slug = substr($key, strlen('continue-dose-'));
+              if ($slug !== '' && $qdata['answer_text'] !== '') {
+                  $medicationDetails[$slug]['continue'] = $qdata['answer_text'];
+              }
+          }
+
+          $rowsToInsert[] = $qdata;
+
+      }
+
+      if ($medicationsRowIndex !== null && isset($rowsToInsert[$medicationsRowIndex])) {
+          $summaries = [];
+          foreach ($selectedMedicationSlugs as $slug) {
+              if ($slug === '' || $slug === 'none') {
+                  continue;
+              }
+
+              $label = $this->getMedicationLabel($slug);
+              $details = $medicationDetails[$slug] ?? [];
+              $detailParts = [];
+
+              if (!empty($details['weight'])) {
+                  $detailParts[] = 'Starting weight: ' . $details['weight'];
+              }
+
+              if (!empty($details['dose'])) {
+                  $detailParts[] = 'Last dose: ' . $details['dose'];
+              }
+
+              if (!empty($details['recent'])) {
+                  $detailParts[] = 'Most recent dose: ' . $details['recent'];
+              }
+
+              if (!empty($details['continue'])) {
+                  $detailParts[] = 'Continuation preference: ' . $details['continue'];
+              }
+
+              $detailParts = array_values(array_filter($detailParts, 'strlen'));
+
+              if (!empty($detailParts)) {
+                  $summaries[] = $label . ' — ' . implode('; ', $detailParts);
+              } else {
+                  $summaries[] = $label;
+              }
+          }
+
+          $summaries = array_values(array_filter($summaries, 'strlen'));
+
+          if (!empty($summaries)) {
+              $rowsToInsert[$medicationsRowIndex]['answer_text'] = implode(' | ', $summaries);
+          } elseif ($medicationsOriginalAnswer !== '') {
+              $rowsToInsert[$medicationsRowIndex]['answer_text'] = $medicationsOriginalAnswer;
+          }
+      }
+
+      foreach ($rowsToInsert as $qdata) {
+          $columns = implode(", ", array_keys($qdata));
+
+          $db = $this->db;
+
+          $escaped_values = array_map(function ($value) use ($db) {
+              if (is_string($value)) {
+                  $value = PerchUtil::safe_stripslashes($value);
+              }
+
+              return $db->pdb($value);
+          }, array_values($qdata));
+
+          $values = implode(', ', $escaped_values);
+
+          $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
 
       }
 
