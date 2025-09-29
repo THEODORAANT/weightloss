@@ -73,4 +73,29 @@ Administrators can also add notifications for a member from the member edit scre
 
 `{id}` corresponds to the product slug in Perch Shop.
 
+## Social sign-in API
+
+Two new endpoints enable native mobile and web clients to exchange Google or Apple
+identity tokens for a Weightloss member session token:
+
+- `POST /api/login/google` – accepts a Google `id_token` and returns the
+  application token together with the member profile.
+- `POST /api/login/apple` – accepts an Apple `identity_token` and returns the
+  application token and profile data.
+
+If the supplied email address does not yet exist, the member record, associated
+shop customer, and relevant tags are created automatically so that follow-up
+flows (packages, questionnaires, etc.) continue to work without manual setup.
+
+For additional security you can restrict accepted OAuth clients via environment
+variables:
+
+- `GOOGLE_SIGNIN_CLIENT_IDS` – comma-separated list of allowed Google OAuth
+  client IDs.
+- `APPLE_SIGNIN_CLIENT_IDS` – comma-separated list of allowed Apple Sign In
+  client IDs.
+
+When the variables are omitted the endpoints will accept any valid token issued
+by the provider.
+
 # perchDocumenttion
