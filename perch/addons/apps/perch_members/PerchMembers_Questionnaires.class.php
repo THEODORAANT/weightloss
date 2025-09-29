@@ -1,16 +1,260 @@
 <?php
 
+require_once __DIR__ . '/questionnaire_medication_helpers.php';
+
 class PerchMembers_Questionnaires extends PerchAPI_Factory
 {
     protected $table     = 'questionnaire';
-	protected $pk        = 'id';
-	protected $singular_classname = 'PerchMembers_Questionnaire';
-	public $reorder_questions=[
-	"weight"=>"What is your weight?",
-	"weight2"=>"inches",
-	"weightunit"=>"weight unit",
-	"bmi"=>"BMI",
-	"side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
+        protected $pk        = 'id';
+        protected $singular_classname = 'PerchMembers_Questionnaire';
+        protected $medicationSlugs;
+        protected static $questionOrderColumnEnsured = false;
+        protected static $questionOrderColumnAvailable = null;
+        protected static $questionOrderBackfilled = false;
+        protected static $questionOrderSessionState = [];
+        public function __construct($api = null)
+        {
+            parent::__construct($api);
+
+            $doseOptions = [
+                'less4' => 'Less than 4 weeks ago',
+                '4to6' => '4-6 weeks ago',
+                'over6' => 'More than 6 weeks ago',
+            ];
+
+            $continueDoseOptions = [
+                'increase' => 'Increase my dose',
+                'keep' => 'Keep my dose',
+                'decrease' => 'Decrease my dose',
+                'not-continue' => "I don't want to continue with this medication",
+            ];
+
+            foreach ($this->getMedicationSlugs() as $slug) {
+                $label = $this->getMedicationLabel($slug);
+                $weightLabel = 'What was your weight in kg/st-lbs before starting ' . $label . '?';
+                $lastDoseLabel = 'When was your last dose of ' . $label . '?';
+                $recentDoseLabel = 'What dose of ' . $label . ' were you prescribed most recently?';
+                $continueDoseLabel = 'If you want to continue with ' . $label . ', what dose would you like to continue with?';
+
+                $this->steps["weight-{$slug}"] = 'starting_wegovy';
+                $this->steps["unit-{$slug}"] = 'starting_wegovy';
+                $this->steps["weight2-{$slug}"] = 'starting_wegovy';
+                $this->steps["dose-{$slug}"] = 'dose_wegovy';
+                $this->steps["recently-dose-{$slug}"] = 'recently_wegovy';
+                $this->steps["continue-dose-{$slug}"] = 'continue_with_wegovy';
+
+                $this->questions["weight-{$slug}"] = $weightLabel;
+                $this->questions["dose-{$slug}"] = $lastDoseLabel;
+                $this->questions["recently-dose-{$slug}"] = $recentDoseLabel;
+                $this->questions["continue-dose-{$slug}"] = $continueDoseLabel;
+
+                $this->questions_and_answers["weight-{$slug}"] = [
+                    'label' => $weightLabel,
+                    'type' => 'text',
+                    'name' => "weight-{$slug}",
+                ];
+
+                $this->questions_and_answers["dose-{$slug}"] = [
+                    'label' => $lastDoseLabel,
+                    'type' => 'radio',
+                    'name' => "dose-{$slug}",
+                    'options' => $doseOptions,
+                ];
+
+                $recentDoseOptions = perch_questionnaire_recent_dose_options($slug);
+                $recentDoseField = [
+                    'label' => $recentDoseLabel,
+                    'name' => "recently-dose-{$slug}",
+                ];
+
+                if ($recentDoseOptions !== null) {
+                    $recentDoseField['type'] = 'radio';
+                    $recentDoseField['options'] = $recentDoseOptions;
+                } else {
+                    $recentDoseField['type'] = 'text';
+                }
+
+                $this->questions_and_answers["recently-dose-{$slug}"] = $recentDoseField;
+
+                $this->questions_and_answers["continue-dose-{$slug}"] = [
+                    'label' => $continueDoseLabel,
+                    'type' => 'radio',
+                    'name' => "continue-dose-{$slug}",
+                    'options' => $continueDoseOptions,
+                ];
+            }
+
+            $this->ensureQuestionOrderColumnExists();
+        }
+
+        protected function getMedicationSlugs(): array
+        {
+            if ($this->medicationSlugs === null) {
+                $options = perch_questionnaire_medications();
+                $slugs = [];
+                foreach ($options as $slug => $label) {
+                    if ($slug === 'none') {
+                        continue;
+                    }
+                    $slugs[] = $slug;
+                }
+
+                $this->medicationSlugs = $slugs;
+            }
+
+            return $this->medicationSlugs;
+        }
+
+        protected function getMedicationLabel(string $slug): string
+        {
+            return perch_questionnaire_medication_label($slug);
+        }
+
+        protected function ensureQuestionOrderColumnExists(): void
+        {
+            if (self::$questionOrderColumnEnsured && self::$questionOrderColumnAvailable !== null) {
+                return;
+            }
+
+            $table = PERCH_DB_PREFIX . 'questionnaire';
+            $sql   = "SHOW COLUMNS FROM `{$table}` LIKE 'question_order'";
+            $exists = $this->db->get_value($sql);
+
+            if (!$exists) {
+                $alter = "ALTER TABLE `{$table}` ADD COLUMN `question_order` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `question_slug`";
+                try {
+                    $this->db->execute($alter);
+                } catch (Exception $e) {
+                    // If the column still cannot be created we silently ignore to avoid blocking execution.
+                }
+
+                $exists = $this->db->get_value($sql);
+            }
+
+            self::$questionOrderColumnAvailable = $exists ? true : false;
+            self::$questionOrderColumnEnsured = true;
+
+            if (self::$questionOrderColumnAvailable) {
+                $this->backfillQuestionOrderValues();
+            }
+        }
+
+        protected function questionOrderColumnAvailable(): bool
+        {
+            if (self::$questionOrderColumnAvailable !== null) {
+                return self::$questionOrderColumnAvailable;
+            }
+
+            $this->ensureQuestionOrderColumnExists();
+
+            if (self::$questionOrderColumnAvailable !== null) {
+                return self::$questionOrderColumnAvailable;
+            }
+
+            $table = PERCH_DB_PREFIX . 'questionnaire';
+            $sql   = "SHOW COLUMNS FROM `{$table}` LIKE 'question_order'";
+            $exists = $this->db->get_value($sql);
+
+            self::$questionOrderColumnAvailable = $exists ? true : false;
+
+            if (self::$questionOrderColumnAvailable) {
+                $this->backfillQuestionOrderValues();
+            }
+
+            return self::$questionOrderColumnAvailable;
+        }
+
+        protected function backfillQuestionOrderValues(): void
+        {
+            if (self::$questionOrderBackfilled || !self::$questionOrderColumnAvailable) {
+                return;
+            }
+
+            $table = PERCH_DB_PREFIX . 'questionnaire';
+            $types = ['first-order', 're-order'];
+
+            foreach ($types as $type) {
+                [$orderMap] = $this->buildQuestionOrderMap($type);
+
+                if (empty($orderMap)) {
+                    continue;
+                }
+
+                $caseStatements = [];
+                foreach ($orderMap as $slug => $position) {
+                    $caseStatements[] = 'WHEN ' . $this->db->pdb($slug) . ' THEN ' . (int)$position;
+                }
+
+                if (empty($caseStatements)) {
+                    continue;
+                }
+
+                $caseSql = implode(' ', $caseStatements);
+                $sql = "UPDATE `{$table}` SET question_order = CASE question_slug {$caseSql} ELSE question_order END "
+                    . 'WHERE question_order IS NULL AND type = ' . $this->db->pdb($type);
+
+                try {
+                    $this->db->execute($sql);
+                } catch (Exception $e) {
+                    // If the backfill fails we ignore the error so that normal execution can continue.
+                }
+            }
+
+            self::$questionOrderBackfilled = true;
+        }
+
+        protected function buildQuestionOrderMap($type): array
+        {
+            $orderMap = [];
+            $position = 1;
+
+            $questionSets = [$this->get_questions($type), $this->get_questions_answers($type)];
+            foreach ($questionSets as $set) {
+                if (!is_array($set)) {
+                    continue;
+                }
+
+                foreach (array_keys($set) as $slug) {
+                    if (!isset($orderMap[$slug])) {
+                        $orderMap[$slug] = $position++;
+                    }
+                }
+            }
+
+            return [$orderMap, $position];
+        }
+
+        protected function getQuestionOrderForSession($sessionKey, $type, $slug): ?int
+        {
+            if (!$this->questionOrderColumnAvailable()) {
+                return null;
+            }
+
+            if (!isset(self::$questionOrderSessionState[$sessionKey])) {
+                [$orderMap, $nextPosition] = $this->buildQuestionOrderMap($type);
+                self::$questionOrderSessionState[$sessionKey] = [
+                    'map' => $orderMap,
+                    'next' => $nextPosition,
+                ];
+            }
+
+            $state =& self::$questionOrderSessionState[$sessionKey];
+
+            if (!isset($state['map'][$slug])) {
+                $state['map'][$slug] = $state['next'];
+                $state['next']++;
+            }
+
+            return $state['map'][$slug];
+        }
+
+        public $reorder_questions=[
+        "weight"=>"What is your weight?",
+        "weight2"=>"inches",
+        "weightunit"=>"weight unit",
+        "pregnancy_status"=>"Are you pregnant or trying to conceive?",
+        "bmi"=>"BMI",
+        "side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
 	"more_side_effects"=>"Please tell us as much as you can about your side effects",
 	"additional-medication"=>"Have you started taking any additional medication?",
 	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
@@ -44,6 +288,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "continue-dose-wegovy"=>"continue_with_wegovy",
     "effects_with_wegovy"=>"effects_with_wegovy",
     "medication_allergies"=>"medication_allergies",
+    "other_medication_details"=>"medication_allergies",
     "other_medical_conditions"=>"list_any",
     "wegovy_side_effects"=>"wegovy_side_effects",
     "gp_informed"=>"gp_informed",
@@ -68,6 +313,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "options" => [
                 "kg" => "kg",
                 "st-lbs" => "st/lbs"
+            ]
+        ],
+        "pregnancy_status" => [
+            "label" => "Are you pregnant or trying to conceive?",
+            "type" => "button",
+            "name" => "pregnancy_status",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
             ]
         ],
         "side_effects" => [
@@ -128,39 +382,6 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         ]
     ];
 
-    protected function formatMeasurementAnswer($value, $unitRaw, $secondaryValue = null)
-    {
-        if ($value === null) {
-            return $value;
-        }
-
-        $value = trim((string)$value);
-        $unitRaw = $unitRaw !== null ? trim((string)$unitRaw) : null;
-
-        if ($value === '' || $unitRaw === null || $unitRaw === '') {
-            return $value;
-        }
-
-        $formatted = $value;
-        $units = explode('-', (string)$unitRaw);
-        $primaryUnit = trim($units[0] ?? '');
-
-        if ($primaryUnit !== '') {
-            $formatted .= ' ' . $primaryUnit;
-        }
-
-        if (!empty($units[1])) {
-            $secondaryValue = trim((string)($secondaryValue ?? ''));
-            $secondaryUnit = trim($units[1]);
-
-            if ($secondaryValue !== '' && $secondaryUnit !== '') {
-                $formatted .= ' ' . $secondaryValue . ' ' . $secondaryUnit;
-            }
-        }
-
-        return $formatted;
-    }
-
     public $questions_and_answers  = [
                                        "consultation" => [
                                            "label" => "agree-consultation",
@@ -183,7 +404,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "name" => "ethnicity",
                                            "options" => [
                                                "asian" => "Asian or Asian British",
-                                               "black" => "Black (Caribbean, African)",
+                                               "Black (African/Caribbean)" => "Black (African/Caribbean)",
                                                "mixed" => "Mixed ethnicities",
                                                "other" => "Other ethnic group",
                                                "white" => "White"
@@ -245,11 +466,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "radio",
                                            "name" => "diabetes",
                                            "options" => [
-                                               "medicated" => "I have diabetes and take medication for it",
-                                               "diet" => "I have diabetes and it's diet-controlled",
-                                               "family-history" => "No, but there is history of diabetes in my family",
+                                               "yes-medication" => "I have diabetes and take medication for it",
+                                               "yes-diet" => "I have diabetes and it's diet-controlled",
+                                               "nohistory" => "No, but there is history of diabetes in my family",
                                                "pre-diabetes" => "I have pre-diabetes",
-                                               "none" => "I don't have diabetes"
+                                               "no" => "I don't have diabetes"
                                            ]
                                        ],
                                        "conditions" => [
@@ -261,13 +482,13 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "cholestasis" => "I have cholestasis",
                                                "cancer" => "I’m currently being treated for cancer",
                                                "retinopathy" => "I have diabetic retinopathy",
-                                               "heart-failure" => "I have severe heart failure",
-                                               "thyroid-cancer" => "I have a family history of thyroid cancer and/or I’ve had thyroid cancer",
-                                               "men2" => "I have Multiple endocrine neoplasia type 2 (MEN2)",
-                                               "pancreatitis" => "I have a history of pancreatitis",
-                                               "eating-disorder" => "I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder",
-                                               "thyroid-op" => "I have had surgery or an operation to my thyroid",
-                                               "bariatric-op" => "I have had a bariatric operation such as gastric band or sleeve surgery",
+                                               "heartfailure" => "I have severe heart failure",
+                                               "familythyroid" => "I have a family history of thyroid cancer and/or I’ve had thyroid cancer",
+                                               "neoplasia" => "I have Multiple endocrine neoplasia type 2 (MEN2)",
+                                               "pancreatitishistory" => "I have a history of pancreatitis",
+                                               "eatingdisorder" => "I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder",
+                                               "thyroidoperation" => "I have had surgery or an operation to my thyroid",
+                                               "bariatricoperation" => "I have had a bariatric operation such as gastric band or sleeve surgery",
                                                "none" => "None of these statements apply to me"
                                            ]
                                        ],
@@ -296,19 +517,19 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "name" => "conditions2[]",
                                            "options" => [
                                                "mentalhealth" => "I have been diagnosed with a mental health condition such as depression or anxiety",
-                                               "social-anxiety" => "My weight makes me anxious in social situations",
-                                               "joint-pain" => "I have joint pains and/or aches",
+                                               "anxious" => "My weight makes me anxious in social situations",
+                                               "joint" => "I have joint pains and/or aches",
                                                "osteoarthritis" => "I have osteoarthritis",
-                                               "gord" => "I have GORD and/or indigestion",
-                                               "cardio" => "I have a heart/cardiovascular problem",
-                                               "bp" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
+                                               "indigestion" => "I have GORD and/or indigestion",
+                                               "cardiovascular" => "I have a heart/cardiovascular problem",
+                                               "bloodpressure" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
                                                "cholesterol" => "I’ve been diagnosed with, or have a family history of, high cholesterol",
-                                               "fatty-liver" => "I have fatty liver disease",
+                                               "fattyliver" => "I have fatty liver disease",
                                                "apnoea" => "I have sleep apnoea",
                                                "asthma" => "I have asthma or COPD",
-                                               "ed" => "I have erectile dysfunction",
-                                               "low-t" => "I have low testosterone",
-                                               "menopause" => "I have menopausal symptoms",
+                                               "erectile" => "I have erectile dysfunction",
+                                               "testosterone" => "I have low testosterone",
+                                               "menopausal" => "I have menopausal symptoms",
                                                "pcos" => "I have polycystic ovary syndrome (PCOS)",
                                                "none" => "None of these statements apply to me"
                                            ]
@@ -348,9 +569,9 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "radio",
                                            "name" => "dose-wegovy",
                                            "options" => [
-                                               "lt4" => "Less than 4 weeks ago",
-                                               "4-6" => "4–6 weeks ago",
-                                               "gt6" => "More than 6 weeks ago"
+                                               "less4" => "Less than 4 weeks ago",
+                                               "4to6" => "4–6 weeks ago",
+                                               "over6" => "More than 6 weeks ago"
                                            ]
                                        ],
                                        "recently-dose-wegovy" => [
@@ -358,11 +579,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "radio",
                                            "name" => "recently-dose-wegovy",
                                            "options" => [
-                                               "0.25" => "0.25mg/2.5mg",
-                                               "0.5" => "0.5mg/5mg",
-                                               "1.0" => "1mg/7.5mg",
-                                               "1.7" => "1.7mg/12.5mg",
-                                               "2.4" => "2.4mg/15mg",
+                                               "25mg" => "0.25mg/2.5mg",
+                                               "05mg" => "0.5mg/5mg",
+                                               "1mg" => "1mg/7.5mg",
+                                               "17mg" => "1.7mg/12.5mg",
+                                               "24mg" => "2.4mg/15mg",
                                                "other" => "Other"
                                            ]
                                        ],
@@ -374,7 +595,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "increase" => "Increase my dose",
                                                "keep" => "Keep my dose",
                                                "decrease" => "Decrease my dose",
-                                               "stop" => "I don't want to continue with this medication"
+                                               "not-continue" => "I don't want to continue with this medication"
                                            ]
                                        ],
                                        "effects_with_wegovy" => [
@@ -398,10 +619,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "options" => [
                                                "levothyroxine" => "I’m on levothyroxine",
                                                "warfarin" => "I’m on warfarin",
-                                               "multiple" => "Other / I take more than one prescription medication",
-                                               "none" => "I don’t take any medication",
-                                               "allergy" => "I have allergies"
+                                               "other" => "Other / I take more than one prescription medication",
+                                               "no-medication" => "I don’t take any medication",
+                                               "allergies" => "I have allergies"
                                            ]
+                                       ],
+                                       "other_medication_details" => [
+                                           "label" => "Please provide details of the other medication you take, including the name, dose, and how often you take this.",
+                                           "type" => "textarea",
+                                           "name" => "other_medication_details"
                                        ],
                                        "email_address" => [
                                            "label" => "Please enter your GP's email address",
@@ -439,6 +665,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "continue-dose-wegovy"=>"If you want to continue with the weight loss medication, what dose would you like to continue with?",
     "effects_with_wegovy"=>"Have you experienced any side effects with the weight loss medication?",
     "medication_allergies"=>"Do you currently take any other medication or have any allergies?",
+    "other_medication_details"=>"Please provide details of the other medication you take, including the name, dose, and how often you take this.",
     "other_medical_conditions"=>"Please list any other medical conditions you have. ",
     "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed"=>"Would you like your GP to be informed of this consultation?",
@@ -448,24 +675,14 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "documents"=>"Member Documents",
     "bmi"=>"BMI",
     ];
-public $doses = [
-    '25mg' => '0.25mg/2.5mg',
-    '05mg' => '0.5mg/5mg',
-    '1mg'  => '1mg/7.5mg',
-    '17mg' => '1.7mg/12.5mg',
-    '24mg' => '2.4mg/15mg',
-    'other'=> 'Other'
-];
-
-
    /* protected $required_answers=[
     "age"=>["18to74"],
-     "ethnicity"=>["asian","African"],
+    "ethnicity"=>["asian","Black (African/Caribbean)"],
 
     ]*/
 
-	protected $default_sort_column = 'created_at';
-	public $static_fields = array('version','question_text', 'question_slug', 'question_slug', 'answer', 'answer_text','member_id');
+        protected $default_sort_column = 'created_at';
+        public $static_fields = array('version','question_text', 'question_slug', 'question_order', 'question_slug', 'answer', 'answer_text','member_id');
 	public function get_questions($type='first-order')
     {
     if($type=="re-order"){
@@ -473,18 +690,136 @@ public $doses = [
     }
     return $this->questions;
     }
-    public function get_questions_answers($type='first-order')
+        public function get_questions_answers($type='first-order')
         {
         if($type=="re-order"){
          return $this->reorder_questions_answers;
         }
         return $this->questions_and_answers;
         }
-	public function get_for_member($memberID,$type="first-order")
+
+    protected function resolveAnswerTextFromConfig($value, array $questionConfig)
+    {
+        $options = (isset($questionConfig['options']) && is_array($questionConfig['options']))
+            ? $questionConfig['options']
+            : null;
+
+        if (is_array($value)) {
+            $formatted = [];
+            $rawValues = [];
+
+            foreach ($value as $optionKey => $optionValue) {
+                if (is_scalar($optionValue)) {
+                    $rawValues[] = trim((string)$optionValue);
+                } elseif (is_array($optionValue)) {
+                    $rawValues[] = trim(implode(', ', array_map('strval', $optionValue)));
+                }
+
+                if (is_array($optionValue)) {
+                    $candidate = $optionValue;
+                } elseif (!is_numeric($optionKey) && ($optionValue === 'on' || $optionValue === true || $optionValue === 1)) {
+                    $candidate = $optionKey;
+                } else {
+                    $candidate = $optionValue;
+                }
+
+                if ((is_string($candidate) || is_numeric($candidate)) && trim((string)$candidate) === '' && !is_numeric($optionKey)) {
+                    $candidate = $optionKey;
+                }
+
+                if (is_array($candidate)) {
+                    $candidate = trim(implode(', ', array_map('strval', $candidate)));
+                }
+
+                $label = $this->mapOptionValueToLabel($candidate, $options);
+
+                if ($label !== '') {
+                    $formatted[] = $label;
+                }
+            }
+
+            $formatted = array_values(array_unique(array_filter(array_map(function ($text) {
+                return trim((string)$text);
+            }, $formatted), 'strlen')));
+
+            if (!empty($formatted)) {
+                return implode(', ', $formatted);
+            }
+
+            $rawValues = array_values(array_unique(array_filter($rawValues, 'strlen')));
+            if (!empty($rawValues)) {
+                return implode(', ', $rawValues);
+            }
+
+            return '';
+        }
+
+        return $this->mapOptionValueToLabel($value, $options);
+    }
+
+    protected function mapOptionValueToLabel($value, ?array $options)
+    {
+        if (is_array($value)) {
+            $value = implode(', ', array_map('strval', $value));
+        }
+
+        if ($value === null) {
+            $value = '';
+        }
+
+        if (!is_array($options) || empty($options)) {
+            return is_scalar($value) ? trim((string)$value) : '';
+        }
+
+        if (isset($options[$value])) {
+            return trim((string)$options[$value]);
+        }
+
+        foreach ($options as $optionKey => $optionLabel) {
+            if (strcasecmp((string)$optionKey, (string)$value) === 0) {
+                return trim((string)$optionLabel);
+            }
+        }
+
+        foreach ($options as $optionKey => $optionLabel) {
+            if (strcasecmp((string)$optionLabel, (string)$value) === 0) {
+                return trim((string)$optionLabel);
+            }
+        }
+
+        return is_scalar($value) ? trim((string)$value) : '';
+    }
+        public function get_for_member($memberID,$type="first-order")
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'questionnaire d
-                WHERE d.member_id='.$this->db->pdb((int)$memberID).' and type="'.$type.'" order by created_at desc';
+                WHERE d.member_id='.$this->db->pdb((int)$memberID)
+                .' AND d.type='.$this->db->pdb($type);
+
+        if ($this->questionOrderColumnAvailable()) {
+            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+        } else {
+            $sql .= ' ORDER BY d.id DESC';
+        }
+
+        return $this->return_instances($this->db->get_rows($sql));
+    }
+
+    public function get_for_order($orderID, $type = null)
+    {
+        $sql = 'SELECT d.*
+                FROM  '.PERCH_DB_PREFIX.'questionnaire d
+                WHERE d.order_id='.$this->db->pdb((int)$orderID);
+
+        if ($type !== null) {
+            $sql .= ' AND d.type='.$this->db->pdb($type);
+        }
+
+        if ($this->questionOrderColumnAvailable()) {
+            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+        } else {
+            $sql .= ' ORDER BY d.id DESC';
+        }
 
         return $this->return_instances($this->db->get_rows($sql));
     }
@@ -505,7 +840,57 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs') {
     }
 
     $logEntries = $data['log'];
-return $logEntries;
+
+    if (is_array($logEntries)) {
+        foreach ($logEntries as $index => &$entry) {
+            if (!is_array($entry)) {
+                $entry = ['_value' => $entry, '_sequence' => $index];
+                continue;
+            }
+
+            $entry['_sequence'] = $index;
+        }
+        unset($entry);
+
+        usort($logEntries, function ($a, $b) {
+            $timeA = isset($a['time']) ? strtotime((string)$a['time']) : false;
+            $timeB = isset($b['time']) ? strtotime((string)$b['time']) : false;
+
+            if ($timeA !== false && $timeB !== false && $timeA !== $timeB) {
+                return $timeA <=> $timeB;
+            }
+
+            if ($timeA !== false && $timeB === false) {
+                return -1;
+            }
+
+            if ($timeA === false && $timeB !== false) {
+                return 1;
+            }
+
+            $seqA = $a['_sequence'] ?? 0;
+            $seqB = $b['_sequence'] ?? 0;
+
+            return $seqA <=> $seqB;
+        });
+
+        foreach ($logEntries as &$entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            if (array_key_exists('_sequence', $entry)) {
+                unset($entry['_sequence']);
+            }
+
+            if (array_key_exists('_value', $entry)) {
+                $entry = $entry['_value'];
+            }
+        }
+        unset($entry);
+    }
+
+    return $logEntries;
 }
 function getNextStepforFirstOrder(array $data): string {
     // Priority-based conditional routing
@@ -542,6 +927,22 @@ function getNextStepforFirstOrder(array $data): string {
         return $data['more_side_effects'] === 'yes' ? 'wegovy_side_effects' : 'medication_allergies';
     }
 
+    if (isset($data['medication_allergies'])) {
+        $values = $data['medication_allergies'];
+        if (!is_array($values)) {
+            $values = [$values];
+        }
+
+        if (in_array('other', $values, true)) {
+            $details = trim((string)($data['other_medication_details'] ?? ''));
+            if ($details === '') {
+                return 'medication_allergies';
+            }
+        }
+
+        return 'gp_informed';
+    }
+
     if (isset($data['gp_informed'])) {
         return $data['gp_informed'] === 'yes' ? 'gp_address' : 'access_special_offers';
     }
@@ -574,20 +975,35 @@ function getNextStepforFirstOrder(array $data): string {
            }
 
        }
+       if($step=="medication_allergies"){
+           $values = is_array($value) ? $value : [$value];
+           if (in_array('other', $values, true)) {
+               return true;
+           }
+       }
            if ($step=="medications" ){
-           if (is_array($value) &&!empty(array_intersect(['wegovy','ozempic','saxenda','rybelsus','mounjaro','alli','mysimba','other'], $value))) {
+           if (is_array($value) && !empty(array_intersect($this->getMedicationSlugs(), array_map('perch_questionnaire_medication_slug', (array)$value)))) {
             return true;
            }
            }
 
-              if ($step=="starting_wegovy" || $step=="unit-wegovy" || $step=="weight2-wegovy" ||  $step=="weight-wegovy"){
+              if ($step=="starting_wegovy"){
 
                      return true;
                      }
 
-                     if ($step==="dose-wegovy" || $step=="recently-dose-wegovy") {
-
-                         return true;
+                     if (is_string($step)) {
+                         foreach ($this->getMedicationSlugs() as $slug) {
+                             if (
+                                 $step === "unit-{$slug}" ||
+                                 $step === "weight2-{$slug}" ||
+                                 $step === "weight-{$slug}" ||
+                                 $step === "dose-{$slug}" ||
+                                 $step === "recently-dose-{$slug}"
+                             ) {
+                                 return true;
+                             }
+                         }
                      }
 
                      if ($step=="recently_wegovy") {
@@ -667,8 +1083,26 @@ function getNextStepforFirstOrder(array $data): string {
               $errors[] = 'Please provide your weight and select a unit.';
           }
 
-          if (empty($data['height']) || empty($data['heightunit'])) {
+          $heightUnit = $this->resolveHeightUnit($data);
+          $heightPrimary = isset($data['height']) ? trim((string)$data['height']) : '';
+
+          if ($heightPrimary === '' || $heightUnit === null) {
               $errors[] = 'Please provide your height and select a unit.';
+          } else {
+              $heightSecondary = $data['height2'] ?? null;
+              $heightInCm = $this->normaliseHeightToCentimetres($heightPrimary, $heightSecondary, $heightUnit);
+
+              if ($heightInCm === null) {
+                  $errors[] = 'Please enter your height using valid numbers. The shortest adult in the UK is 89 cm.';
+              } else {
+                  $minHeightCm = 89;
+                  $maxHeightCm = 272;
+
+                  if ($heightInCm < $minHeightCm || $heightInCm > $maxHeightCm) {
+                      $rangeDescription = $this->formatHeightRangeForUnit($heightUnit, $minHeightCm, $maxHeightCm);
+                      $errors[] = 'Please enter a realistic height between ' . $rangeDescription . '. The shortest adult in the UK is 89 cm.';
+                  }
+              }
           }
 
           // Diabetes required
@@ -722,23 +1156,38 @@ function getNextStepforFirstOrder(array $data): string {
           }
 
           // If 'wegovy' selected, check extra info
-          if (in_array('wegovy', $data['medications'])) {
-              if (empty($data['weight-wegovy'])) {
-                  $errors[] = 'Please provide your weight before starting Wegovy.';
+          $selectedMedicationSlugs = is_array($data['medications'])
+              ? array_map('perch_questionnaire_medication_slug', $data['medications'])
+              : [];
+
+          foreach ($this->getMedicationSlugs() as $medicationSlug) {
+              if (!in_array($medicationSlug, $selectedMedicationSlugs, true)) {
+                  continue;
               }
 
-              if (empty($data['dose-wegovy'])) {
-                  $errors[] = 'Please indicate your last dose of Wegovy.';
+              $label = $this->getMedicationLabel($medicationSlug);
+              $weightKey = "weight-{$medicationSlug}";
+              if (empty($data[$weightKey])) {
+                  $errors[] = 'Please provide your weight before starting ' . $label . '.';
               }
 
-              if (empty($data['recently-dose-wegovy'])) {
-                  $errors[] = 'Please provide the most recent dose prescribed.';
+              $doseKey = "dose-{$medicationSlug}";
+              if (empty($data[$doseKey])) {
+                  $errors[] = 'Please indicate your last dose of ' . $label . '.';
               }
 
-              if (empty($data['continue-dose-wegovy'])) {
-                  $errors[] = 'Please select your preferred continuation dose.';
+              $recentDoseKey = "recently-dose-{$medicationSlug}";
+              if (empty($data[$recentDoseKey])) {
+                  $errors[] = 'Please provide the most recent dose prescribed for ' . $label . '.';
               }
 
+              $continueDoseKey = "continue-dose-{$medicationSlug}";
+              if (array_key_exists($continueDoseKey, $data) && empty($data[$continueDoseKey])) {
+                  $errors[] = 'Please select how you would like to continue with ' . $label . '.';
+              }
+          }
+
+          if (in_array('wegovy', $selectedMedicationSlugs, true)) {
               if (empty($data['effects_with_wegovy'])) {
                   $errors[] = 'Please indicate if you’ve had any side effects.';
               }
@@ -751,6 +1200,17 @@ function getNextStepforFirstOrder(array $data): string {
           // Medication allergies check
           if (empty($data['medication_allergies']) || !is_array($data['medication_allergies'])) {
               $errors[] = 'Please tell us about any medications or allergies.';
+          }
+
+          $medicationAllergies = is_array($data['medication_allergies'] ?? null)
+              ? $data['medication_allergies']
+              : [];
+
+          if (in_array('other', $medicationAllergies, true)) {
+              $otherMedicationDetails = trim((string)($data['other_medication_details'] ?? ''));
+              if ($otherMedicationDetails === '') {
+                  $errors[] = 'Please provide details of the other medication you take, including the name, dose, and how often you take this.';
+              }
           }
 
           // GP informed
@@ -768,26 +1228,163 @@ function getNextStepforFirstOrder(array $data): string {
       return $errors;
   }
 
+  private function resolveHeightUnit(array $data): ?string
+  {
+      $unit = $data['heightunit'] ?? ($data['heightunit-radio'] ?? null);
+
+      if ($unit === null) {
+          return null;
+      }
+
+      $unit = strtolower(trim((string)$unit));
+
+      if ($unit === '') {
+          return null;
+      }
+
+      if ($unit === 'ft_in' || $unit === 'ftin') {
+          return 'ft-in';
+      }
+
+      return $unit;
+  }
+
+  private function normaliseHeightToCentimetres($primaryValue, $secondaryValue, string $unit): ?float
+  {
+      $unit = strtolower(trim($unit));
+      $primaryNumeric = $this->normaliseNumericValue($primaryValue);
+
+      if ($primaryNumeric === null || $primaryNumeric <= 0) {
+          return null;
+      }
+
+      if ($unit === 'cm') {
+          return $primaryNumeric;
+      }
+
+      if ($unit === 'in') {
+          return $primaryNumeric * 2.54;
+      }
+
+      if ($unit === 'ft-in') {
+          $secondaryNumeric = $this->normaliseNumericValue($secondaryValue);
+
+          if ($secondaryNumeric === null) {
+              $secondaryNumeric = 0.0;
+          }
+
+          if ($secondaryNumeric < 0 || $secondaryNumeric >= 12) {
+              return null;
+          }
+
+          $totalInches = ($primaryNumeric * 12) + $secondaryNumeric;
+
+          return $totalInches * 2.54;
+      }
+
+      return null;
+  }
+
+  private function normaliseNumericValue($value): ?float
+  {
+      if (is_array($value)) {
+          return null;
+      }
+
+      if ($value === null) {
+          return null;
+      }
+
+      $value = str_replace(',', '.', trim((string)$value));
+
+      if ($value === '') {
+          return null;
+      }
+
+      if (!is_numeric($value)) {
+          return null;
+      }
+
+      return (float)$value;
+  }
+
+  private function formatHeightRangeForUnit(string $unit, float $minHeightCm, float $maxHeightCm): string
+  {
+      $unit = strtolower(trim($unit));
+
+      if ($unit === 'ft-in') {
+          $format = function (float $cm): string {
+              $totalInches = $cm / 2.54;
+              $feet = floor($totalInches / 12);
+              $inches = round($totalInches - ($feet * 12));
+
+              if ($inches === 12) {
+                  $feet += 1;
+                  $inches = 0;
+              }
+
+              return $feet . ' ft ' . $inches . ' in';
+          };
+
+          return $format($minHeightCm) . ' and ' . $format($maxHeightCm);
+      }
+
+      if ($unit === 'in') {
+          $toInches = function (float $cm): string {
+              return rtrim(rtrim(number_format($cm / 2.54, 1, '.', ''), '0'), '.');
+          };
+
+          return $toInches($minHeightCm) . ' in and ' . $toInches($maxHeightCm) . ' in';
+      }
+
+      return $minHeightCm . ' cm and ' . $maxHeightCm . ' cm';
+  }
+
   function calculateBMIAdvanced($weight, $weightUnit, $height1, $weight2=0, $height2 = 0, $heightUnit = 'cm') {
+      // Normalise numeric values defensively before calculations
+      $weightNumeric  = is_numeric($weight)  ? (float)$weight  : null;
+      $weight2Numeric = is_numeric($weight2) ? (float)$weight2 : null;
+      $height1Numeric = is_numeric($height1) ? (float)$height1 : null;
+      $height2Numeric = is_numeric($height2) ? (float)$height2 : null;
+
       // Convert weight to kilograms if needed
       if ($weightUnit === 'st-lbs') {
-         $totalPounds = ($weight * 14) + $weight2;
+          if ($weightNumeric === null || $weight2Numeric === null) {
+              return "Invalid weight value.";
+          }
+
+          $totalPounds = ($weightNumeric * 14) + $weight2Numeric;
           $weightKg = $totalPounds * 0.453592;
 
       } elseif ($weightUnit === 'kg') {
-          $weightKg = $weight;
+          if ($weightNumeric === null) {
+              return "Invalid weight value.";
+          }
+
+          $weightKg = $weightNumeric;
       } else {
           return "Invalid weight unit. Use 'kg' or 'lbs'.";
       }
 
       // Convert height to meters based on unit
       if ($heightUnit === 'cm') {
-          $heightM = $height1 / 100;
-      } elseif ($heightUnit === 'in') {
-          $heightM = $height1 * 0.0254;
-      } elseif ($heightUnit === 'ft-in') {
+          if ($height1Numeric === null) {
+              return "Invalid height value.";
+          }
 
-          $totalInches = ($height1 * 12) + $height2;
+          $heightM = $height1Numeric / 100;
+      } elseif ($heightUnit === 'in') {
+          if ($height1Numeric === null) {
+              return "Invalid height value.";
+          }
+
+          $heightM = $height1Numeric * 0.0254;
+      } elseif ($heightUnit === 'ft-in') {
+          if ($height1Numeric === null || $height2Numeric === null) {
+              return "Invalid height value.";
+          }
+
+          $totalInches = ($height1Numeric * 12) + $height2Numeric;
           $heightM = $totalInches * 0.0254;
       } else {
           return "Invalid height unit. Use 'cm', 'in', or 'ft_in'.";
@@ -854,15 +1451,26 @@ $this->db->execute($update_status);
     $update_status ="UPDATE ".PERCH_DB_PREFIX."questionnaire_member_status  SET `accepted`=".$accepted." where `questionnaire_id`='v1' and memberID=".$memberID." and id=".$questionnaireID." ";
 $this->db->execute($update_status);
      }
-    public function add_to_member($memberID,$data,$type)
+
+    public function add_to_member($memberID,$data,$type,$orderID)
      { // echo "add_to_member";
 
 // print_r($memberID);print_r($type); echo PerchUtil::count($this->get_for_member($memberID));
        //     if(!PerchUtil::count($this->get_for_member($memberID)) ){
 // echo "add_to_member inn";
 $Members = new PerchMembers_Members;
-			$Member = $Members->find($memberID);
-			  $memberdetails = $Member->to_array();
+        $Member = $Members->find($memberID);
+        $memberdetails = $Member ? $Member->to_array() : [];
+
+        $props = [];
+        $propsUpdated = false;
+
+        if (is_object($Member)) {
+            $props = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+            if (!is_array($props)) {
+                $props = [];
+            }
+        }
 
   // --- BEGIN defensive defaults normalization ---
   if (!is_array($data)) { $data = []; }
@@ -899,19 +1507,14 @@ $Members = new PerchMembers_Members;
           }
       if($type=="first-order"){
       $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $data["height"],$weight2, $height2, $data["heightunit"]);
- //$props = json_decode($memberdetails['memberProperties'], true);
-     	$props = PerchUtil::json_safe_decode($Member->memberProperties(), true);
 
-        if (!is_array($props)) $props = [];
-
-
-$props["height"]=$data["height"];
-$props["height2"]=$height2;
- $props["heightunit"]= $data["heightunit"];
-$out=[];
- 	$out['memberProperties'] = PerchUtil::json_safe_encode($props);
-
-    	$Member->update($out);
+        if (is_object($Member)) {
+            $props["height"]=$data["height"];
+            $props["height2"]=$height2;
+            $props["heightunit"]= $data["heightunit"];
+            $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
+            $propsUpdated = true;
+        }
     	}else{
     	$heightcheck=$this->parseHeight($memberdetails["height"]);
     	if($heightcheck){
@@ -925,11 +1528,37 @@ $out=[];
     	      $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $memberdetails["height"],$data["weight2"], $memberdetails["height2"], $memberdetails["heightunit"]);
 
 
-    	}
-    	    	//insert_status
+        }
+
+        if (is_object($Member) && array_key_exists('gender', $data)) {
+            $genderValue = $data['gender'];
+            if (is_array($genderValue)) {
+                $genderValue = array_filter($genderValue, function ($item) {
+                    return $item !== '' && $item !== null;
+                });
+                $genderValue = $genderValue ? reset($genderValue) : '';
+            }
+
+            $genderValue = is_scalar($genderValue) ? trim((string) $genderValue) : '';
+
+            if ($genderValue !== '') {
+                if (!isset($props['gender']) || $props['gender'] !== $genderValue) {
+                    $props['gender'] = $genderValue;
+                    $propsUpdated = true;
+                }
+            }
+        }
+
+        if ($propsUpdated && is_object($Member)) {
+            $out = [];
+            $out['memberProperties'] = PerchUtil::json_safe_encode($props);
+            $Member->update($out);
+        }
+                //insert_status
             $insert_status ="INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`,memberID,`status`) VALUES ('v1',".$memberID.",'pending'); ";
          $new_id =$this->db->execute($insert_status);
  $data['bmi']=$result;
+      $sessionKey = $new_id ?: ($memberID . ':' . $type);
       foreach ($data as $key => $value) {
        $qdata = array();
         $qdata['type'] = $type;
@@ -938,98 +1567,103 @@ $out=[];
 
 
 
-      if($type=="first-order"){
-          $weightradiounit=$data["weightunit"];
-           $heightunitradio=$data["heightunit"];
-           if(isset($data["unit-wegovy"])){
-           $unitwegovyradio=$data["unit-wegovy"];
-           }
-
-      if (array_key_exists($key, $this->questions)) {
-
-      $qdata['question_text']=$this->questions[$key];
-       if(is_array($value)){
-                  $qdata['answer_text']=implode(", ", $value);
-
-                }else{
-                   $qdata['answer_text']=$value;
-
-                }
+      $questionLookup = ($type=="first-order") ? $this->questions : $this->reorder_questions;
+      if ($type=="first-order") {
+          foreach ($this->getMedicationSlugs() as $slug) {
+              $label = $this->getMedicationLabel($slug);
+              $questionLookup["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $label . '?';
+              $questionLookup["dose-{$slug}"] = "When was your last dose of " . $label . '?';
+              $questionLookup["recently-dose-{$slug}"] = "What dose of " . $label . " were you prescribed most recently?";
+          }
       }
-      }else{
-       if (array_key_exists($key, $this->reorder_questions)) {
-       $qdata['question_text']=$this->reorder_questions[$key];
-        if(is_array($value)){
-                   $qdata['answer_text']=implode(", ", $value);
+      $questionConfigSet = ($type=="first-order") ? $this->questions_and_answers : $this->reorder_questions_answers;
 
-                 }else{
-                    $qdata['answer_text']=$value;
+      $medicationUnits = [];
+      if($type=="first-order"){
+          $weightradiounit=$data["weightunit"] ?? '';
+           $heightunitradio=$data["heightunit"] ?? '';
+           foreach ($this->getMedicationSlugs() as $slug) {
+               $unitKey = "unit-{$slug}";
+               if (isset($data[$unitKey])) {
+                   $medicationUnits[$slug] = $data[$unitKey];
+               }
+           }
+      }
 
-                 }
-       }
+      $questionConfig = $questionConfigSet[$key] ?? null;
+      $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
+      $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
+      if ($questionOrder !== null) {
+          $qdata['question_order'] = $questionOrder;
+      }
+
+      if ($questionConfig) {
+          $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
+      } elseif (is_array($value)) {
+          $flattened = array_filter(array_map(function ($item) {
+              if (is_scalar($item)) {
+                  return (string)$item;
+              }
+
+              if (is_array($item)) {
+                  return implode(', ', array_map('strval', $item));
+              }
+
+              return '';
+          }, $value), 'strlen');
+
+          $qdata['answer_text'] = implode(', ', $flattened);
+      } elseif (is_scalar($value) || $value === null) {
+          $qdata['answer_text'] = trim((string)$value);
+      } else {
+          $qdata['answer_text'] = '';
       }
          if($type=="first-order"){
-        if($key=="weight"){
-        if(isset($qdata['answer_text'])){
-            $unitValue = $weightradiounit ?? ($data["weightunit"] ?? null);
-            $secondaryValue = $data["weight2"] ?? null;
-            $qdata['answer_text'] = $this->formatMeasurementAnswer(
-                $qdata['answer_text'],
-                $unitValue,
-                $secondaryValue
-            );
-        }
-        }
-        if($key=="weight-wegovy"){
-            $weightwegovyunit=explode("-",$unitwegovyradio);
-                if(count($weightwegovyunit)>1){
-                 $qdata['answer_text'].= " ".$weightwegovyunit[0];
-                  if(isset($data["weight2-wegovy"]) ){
-                         $qdata['answer_text'].= " ".$data["weight2-wegovy"]."  ".$weightwegovyunit[1];
+  if($key=="weight"){
 
-                    }
-                    }
-        }
-           if($key=="weight-wegovy"){
+        $weightunit=explode("-",$weightradiounit);
+        if(count($weightunit)>1){
+         $qdata['answer_text'].= " ".$weightunit[0];
+          if(isset($data["weight2"]) ){
+                 $qdata['answer_text'].= " ".$data["weight2"]."  ".$weightunit[1];
 
-            $qdata['answer_text']=$doses[$value];
+            }
+            }
+        }
+        if (strpos($key, 'weight-') === 0 && !empty($medicationUnits)) {
+            $slug = substr($key, 7);
+            if (isset($medicationUnits[$slug])) {
+                $unitParts = explode('-', $medicationUnits[$slug]);
+                if (count($unitParts) > 1) {
+                    $qdata['answer_text'] .= ' ' . $unitParts[0];
+                    $secondKey = "weight2-{$slug}";
+                    if (isset($data[$secondKey]) && $data[$secondKey] !== '') {
+                        $qdata['answer_text'] .= ' ' . $data[$secondKey] . '  ' . $unitParts[1];
+                    }
+                }
+            }
+        }
+           if (strpos($key, 'recently-dose-') === 0) {
+            $medicationSlug = substr($key, strlen('recently-dose-'));
+            $recentDoseOptions = perch_questionnaire_recent_dose_options($medicationSlug);
+            if (is_array($recentDoseOptions) && isset($recentDoseOptions[$value])) {
+                $qdata['answer_text'] = $recentDoseOptions[$value];
+            }
         }
 
          if($key=="height"){
-        if(isset($qdata['answer_text'])){
-            $unitValue = $heightunitradio ?? ($data["heightunit"] ?? null);
-            $secondaryValue = $data["height2"] ?? null;
-            $qdata['answer_text'] = $this->formatMeasurementAnswer(
-                $qdata['answer_text'],
-                $unitValue,
-                $secondaryValue
-            );
-        }
+
+             $heightunit=explode("-",$heightunitradio);
+              if(count($heightunit)>1){
+                 $qdata['answer_text'].= " ".$heightunit[0];
+                   if(isset($data["height2"])){
+                                     $qdata['answer_text'].= " ".$data["height2"]."  ".$heightunit[1];
+
+                                }
+                                }
 
        }
 
-}
-        if($type=="re-order"){
-    if(isset($qdata['answer_text'])){
-        if($key=="weight"){
-            $unitValue = $data["weightunit"] ?? ($memberdetails["weightunit"] ?? null);
-            $secondaryValue = $data["weight2"] ?? null;
-            $qdata['answer_text'] = $this->formatMeasurementAnswer(
-                $qdata['answer_text'],
-                $unitValue,
-                $secondaryValue
-            );
-        }
-        if($key=="height"){
-            $unitValue = $data["heightunit"] ?? ($memberdetails["heightunit"] ?? null);
-            $secondaryValue = $data["height2"] ?? ($memberdetails["height2"] ?? null);
-            $qdata['answer_text'] = $this->formatMeasurementAnswer(
-                $qdata['answer_text'],
-                $unitValue,
-                $secondaryValue
-            );
-        }
-    }
 }
 if(isset($data["uuid"])){
   $qdata['uuid']=$data["uuid"];
@@ -1044,10 +1678,24 @@ if(isset($data["uuid"])){
 
 
                 $qdata['member_id']=$memberID;
+                  $qdata['order_id']=$orderID;
                 $qdata['version']="v1";
                  $qdata['qid']= $new_id;
            $columns = implode(", ", array_keys($qdata)); // Columns as a string
-                        $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
+                      //  $values = "'" . implode("', '", array_map('addslashes', array_values($qdata))) . "'";
+
+           $db = $this->db;
+
+           $escaped_values = array_map(function ($value) use ($db) {
+               if (is_string($value)) {
+                   $value = PerchUtil::safe_stripslashes($value);
+               }
+
+               return $db->pdb($value);
+           }, array_values($qdata));
+
+           $values = implode(', ', $escaped_values);
+
            $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
 
       }
@@ -1055,7 +1703,8 @@ if(isset($data["uuid"])){
      // }
 
 //echo  $insert_query;
-
+//exit();
+//die();
 try{
 
     	$this->db->execute($insert_query);

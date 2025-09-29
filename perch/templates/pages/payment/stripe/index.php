@@ -14,16 +14,38 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
    $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
 //$success_url="/payment/success";
 //$cancel_url ="/payment/went/wrong";
-     $result= perch_shop_complete_payment('stripe',[
-         'success_url' => $success_url,
-         'cancel_url'=> $cancel_url
-       ]);
 
 
-        if ($result) {
+
+        $order_complete = perch_shop_active_order_has_status(['paid', 'pending']);
+        $redirect_to_success = $order_complete;
+        if(!isset($_GET["pending"])){
+           $result= perch_shop_complete_payment('stripe',[
+                 'success_url' => $success_url,
+                 'cancel_url'=> $cancel_url
+               ]);
+        }
+
+
+        if (!$redirect_to_success && $result === true) {
+            $redirect_to_success = true;
+        }
+
+        if ($redirect_to_success) {
+        $orderIdForQuestionnaire = perch_shop_successful_order_id();
+        if (!$orderIdForQuestionnaire) {
+            $ShopRuntime = PerchShop_Runtime::fetch();
+            if ($ShopRuntime) {
+                $ActiveOrder = $ShopRuntime->get_active_order();
+                if ($ActiveOrder) {
+                    $orderIdForQuestionnaire = $ActiveOrder->id();
+                }
+            }
+        }
+
         if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
         unset($_SESSION['questionnaire-reorder']['nextstep']);
-    perch_member_add_questionnaire($_SESSION['questionnaire-reorder'],'re-order');
+    perch_member_add_questionnaire($_SESSION['questionnaire-reorder'],'re-order',$orderIdForQuestionnaire);
     $_SESSION['questionnaire-reorder'] = array();
     setcookie('questionnaire_reorder', '', time()-3600, '/');
     }
@@ -76,7 +98,7 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
             }
             $_SESSION['questionnaire']["documents"]="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/edit/?id=".perch_member_get('id');
             //print_r( $_SESSION['questionnaire']);
-             perch_member_add_questionnaire($_SESSION['questionnaire'],'first-order');
+             perch_member_add_questionnaire($_SESSION['questionnaire'],'first-order',$orderIdForQuestionnaire);
 
              if (file_put_contents("{$logDir}/{$userId}_grouped_log.json", json_encode([
                     'metadata' => $metadata,

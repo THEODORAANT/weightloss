@@ -208,40 +208,70 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
              <?php
 
              $questions=$Questionnaires->get_questions();
+             $bmi_edit_controls_needed = false;
 
-                 if (PerchUtil::count($questionnaire)) {
-                 $count=0;
+                if (PerchUtil::count($questionnaire)) {
+                    $answers_by_slug = [];
 
-                     foreach($questionnaire as $Questionnaire) {
-                        if (array_key_exists($Questionnaire->question_slug(),$questions)){
-                        $count++;
-                                    if($count==1){
-                                                      echo '<tr><td colspan="2">
+                    foreach ($questionnaire as $Questionnaire) {
+                        $slug = $Questionnaire->question_slug();
+                        if (array_key_exists($slug, $questions) && !isset($answers_by_slug[$slug])) {
+                            $answers_by_slug[$slug] = $Questionnaire;
+                        }
+                    }
 
-                                                                  <a class="button button button-simple" target="_blank" href="https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Questionnaire->uuid().'">History</a>
+                    if (PerchUtil::count($answers_by_slug)) {
+                        $historyPrinted = false;
+                        foreach ($questions as $slug => $question_label) {
+                            if (!isset($answers_by_slug[$slug])) {
+                                continue;
+                            }
+                            $Questionnaire = $answers_by_slug[$slug];
+                            if (!$historyPrinted) {
+                                echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Questionnaire->uuid().'">History</a></td></tr>';
+                                $historyPrinted = true;
+                            }
+                            echo '<tr>';
+                            echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
+                            echo '<td>';
+                            if ($slug === 'bmi') {
+                                $bmiValue = $Questionnaire->answer_text();
+                                if ($bmiValue === null || $bmiValue === '') {
+                                    $entryDetails = $Questionnaire->to_array();
+                                    if (is_array($entryDetails) && isset($entryDetails['answer']) && $entryDetails['answer'] !== '') {
+                                        $bmiValue = $entryDetails['answer'];
+                                    }
+                                }
 
+                                $trimmedBmiValue = trim((string) $bmiValue);
+                                $inputID = 'bmi-input-'.$Questionnaire->id();
+                                $inputName = 'questionnaire_bmi['.$Questionnaire->id().']';
 
-                                                     </tr> </td>
+                                $numericBmiValue = '';
+                                if ($trimmedBmiValue !== '' && preg_match('/-?\d+(?:\.\d+)?/', $trimmedBmiValue, $matches)) {
+                                    $numericBmiValue = $matches[0];
+                                }
 
-                                                      ';
-                                                      }
-                         echo '<tr>';
+                                $baseAttributes = 'step="0.1" min="0"';
 
-                             echo '<td class="action">'.PerchUtil::html( $questions[$Questionnaire->question_slug()]).'</td>';
-
-                             echo '<td>';
-
-                          echo  PerchUtil::html($Questionnaire->answer_text());
-
-
-
-                             echo '</td>';
-
-                              echo '</tr>';
-                              }
-
-                     }
-                 }
+                                if ($trimmedBmiValue === '') {
+                                    echo $Form->text($inputName, $numericBmiValue, 'input-simple', false, 'number', $baseAttributes);
+                                } else {
+                                    echo '<div class="bmi-field">';
+                                    echo '<span class="js-bmi-display">'.PerchUtil::html($trimmedBmiValue).'</span>';
+                                    echo ' <button type="button" class="button button-simple js-bmi-edit" data-input-id="'.$inputID.'">Edit</button>';
+                                    echo '</div>';
+                                    echo $Form->text($inputName, $numericBmiValue, 'input-simple', false, 'number', $baseAttributes.' id="'.$inputID.'" style="display:none;"');
+                                    $bmi_edit_controls_needed = true;
+                                }
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    }
+                }
 
 
 
@@ -272,50 +302,68 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
 
              $questions=$Questionnaires->get_questions("re-order");
 
-                 if (PerchUtil::count($questionnaire_reorder)) {
-                 $count=0;
+                if (PerchUtil::count($questionnaire_reorder)) {
+                    $answers_by_slug = [];
 
-                     foreach($questionnaire_reorder as $Questionnaire) {
-                        if (array_key_exists($Questionnaire->question_slug(),$questions)){
-                        $count++;
-                                    if($count==1){
-                                                      echo '<tr><td colspan="2">
+                    foreach ($questionnaire_reorder as $Questionnaire) {
+                        $slug = $Questionnaire->question_slug();
+                        if (array_key_exists($slug, $questions) && !isset($answers_by_slug[$slug])) {
+                            $answers_by_slug[$slug] = $Questionnaire;
+                        }
+                    }
 
-                                                                  <a class="button button button-simple" target="_blank" href="https://getweightloss.co.uk/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Questionnaire->uuid().'&type=re-order">History</a>
-
-
-                                                     </tr> </td>
-
-                                                      ';
-                                                      }
-                         echo '<tr>';
-
-                             echo '<td class="action">'.PerchUtil::html( $questions[$Questionnaire->question_slug()]).'</td>';
-
-                             echo '<td>';
-                     /*  if($Questionnaire->question_slug()=="weight"){ echo PerchUtil::html($Questionnaire->answer_text());
-                       if(isset($_SESSION['questionnaire']["weight2"])){
-                                                                          echo $_SESSION['questionnaire']["weight2"];
-                               }
-                                    echo " ".$_SESSION['questionnaire']["weightradio-unit"];
-                        }else if($Questionnaire->question_slug()=="height"){
-                           echo PerchUtil::html($Questionnaire->answer_text());
-                          if(isset($_SESSION['questionnaire']["height2"])){
-                                    echo $_SESSION['questionnaire']["height2"];
+                    if (PerchUtil::count($answers_by_slug)) {
+                        $historyPrinted = false;
+                        foreach ($questions as $slug => $question_label) {
+                            if (!isset($answers_by_slug[$slug])) {
+                                continue;
+                            }
+                            $Questionnaire = $answers_by_slug[$slug];
+                            if (!$historyPrinted) {
+                                echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="https://getweightloss.co.uk/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Questionnaire->uuid().'&type=re-order">History</a></td></tr>';
+                                $historyPrinted = true;
+                            }
+                            echo '<tr>';
+                            echo '<td class="action">'.PerchUtil::html($question_label).'</td>';
+                            echo '<td>';
+                            if ($slug === 'bmi') {
+                                $bmiValue = $Questionnaire->answer_text();
+                                if ($bmiValue === null || $bmiValue === '') {
+                                    $entryDetails = $Questionnaire->to_array();
+                                    if (is_array($entryDetails) && isset($entryDetails['answer']) && $entryDetails['answer'] !== '') {
+                                        $bmiValue = $entryDetails['answer'];
+                                    }
                                 }
-                                echo " ".$_SESSION['questionnaire']["heightunit-radio"];
-                        }else*/
-                          echo  PerchUtil::html($Questionnaire->answer_text());
-                    //   }
 
+                                $trimmedBmiValue = trim((string) $bmiValue);
+                                $inputID = 'bmi-input-'.$Questionnaire->id();
+                                $inputName = 'questionnaire_bmi['.$Questionnaire->id().']';
 
-                             echo '</td>';
+                                $numericBmiValue = '';
+                                if ($trimmedBmiValue !== '' && preg_match('/-?\d+(?:\.\d+)?/', $trimmedBmiValue, $matches)) {
+                                    $numericBmiValue = $matches[0];
+                                }
 
-                              echo '</tr>';
-                              }
+                                $baseAttributes = 'step="0.1" min="0"';
 
-                     }
-                 }
+                                if ($trimmedBmiValue === '') {
+                                    echo $Form->text($inputName, $numericBmiValue, 'input-simple', false, 'number', $baseAttributes);
+                                } else {
+                                    echo '<div class="bmi-field">';
+                                    echo '<span class="js-bmi-display">'.PerchUtil::html($trimmedBmiValue).'</span>';
+                                    echo ' <button type="button" class="button button-simple js-bmi-edit" data-input-id="'.$inputID.'">Edit</button>';
+                                    echo '</div>';
+                                    echo $Form->text($inputName, $numericBmiValue, 'input-simple', false, 'number', $baseAttributes.' id="'.$inputID.'" style="display:none;"');
+                                    $bmi_edit_controls_needed = true;
+                                }
+                            } else {
+                                echo PerchUtil::html($Questionnaire->answer_text());
+                            }
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    }
+                }
 
 
 
@@ -326,11 +374,14 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
          </div>
 
     <?php
+        if (!empty($bmi_edit_controls_needed)) {
+            echo '<script>(function(){var buttons=document.querySelectorAll(".js-bmi-edit");if(!buttons.length){return;}Array.prototype.forEach.call(buttons,function(button){button.addEventListener("click",function(){var inputId=button.getAttribute("data-input-id");if(!inputId){return;}var input=document.getElementById(inputId);if(!input){return;}var container=button.parentNode;while(container&&!(container.className&&container.className.indexOf("bmi-field")!==-1)){container=container.parentNode;}if(container){var display=container.querySelector(".js-bmi-display");if(display){display.style.display="none";}}button.style.display="none";input.style.display="";input.focus();});});})();</script>';
+        }
+
+    ?>
 
 
-          echo $HTML->heading2('Notes');
-
-          ?>
+    <?php echo $HTML->heading2('Notes'); ?>
 
            <div class="form-inner">
                   <table class="notes">

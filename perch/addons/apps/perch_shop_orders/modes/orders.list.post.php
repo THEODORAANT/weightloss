@@ -1,7 +1,7 @@
 <?php 
 
 echo $HTML->title_panel([
-    'heading' => $Lang->get('Listing all orders'),
+    'heading' => isset($list_heading) ? $list_heading : $Lang->get('Listing all orders'),
     'button'  => [
         'text' => $Lang->get('Add order'),
         'link' => $API->app_nav().'/order/edit/',
@@ -14,7 +14,7 @@ echo $HTML->title_panel([
 	/* ----------------------------------------- SMART BAR ----------------------------------------- */
 
     include('_orders_smartbar.php');
-       
+
 	/* ----------------------------------------- /SMART BAR ----------------------------------------- */
  echo $Form->form_start(false, "ordersclass");
         echo $Form->fields_from_template($Template, $details, array(), false);
@@ -35,17 +35,18 @@ echo $HTML->title_panel([
                 return $invoice_number;
             },
             'sort'      => 'orderInvoiceNumber',
-            'edit_link' => 'order',
+            'edit_link' => '/perch/addons/apps/perch_shop_orders/order',
             'priv'      => 'perch_shop.orders.edit',
         ]);
      $Listing->add_col([
                 'title'     => 'Order Product',
                 'value'     => function($Item) use ($OrderItems){
                   $items = $OrderItems->get_for_admin($Item->id());
-                    $product = $items[0]->sku();
-                    if ($product == '') {
+
+                    if (!isset($items[0]) ) {
                         return "";
                     }
+                     $product = $items[0]->sku();
                     return $product;
                 },
 
@@ -138,6 +139,32 @@ echo $HTML->title_panel([
             },
             'sort'      => 'billing_type',
         ]);
+
+    if (!empty($show_question_link)) {
+        $Listing->add_col([
+            'title'     => 'Questions',
+            'value'     => function($Item) use ($API, $Lang, $Customers) {
+                $order_id = (int)$Item->id();
+                if ($order_id > 0) {
+                    $url = $API->app_nav().'/order/questions/?id='.$order_id;
+                    $label = $Lang->get('Questions');
+                    return '<a class="button button-simple" target="_blank" rel="noopener" href="'.$url.'">'.$label.'</a>';
+                }
+
+                $customer_id = (int)$Item->customerID();
+                if ($customer_id > 0) {
+                    $Customer = $Customers->find($customer_id);
+                    if ($Customer && $Customer->memberID()) {
+                        $url = '/perch/addons/apps/perch_members/edit/?id='.$Customer->memberID();
+                        $label = $Lang->get('Member profile');
+                        return '<a class="button button-simple" target="_blank" rel="noopener" href="'.$url.'">'.$label.'</a>';
+                    }
+                }
+
+                return '';
+            },
+        ]);
+    }
     
  $Listing->add_col([
             'title'     => 'Send To pharmacy',

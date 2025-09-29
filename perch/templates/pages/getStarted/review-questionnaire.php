@@ -1,5 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_medication_helpers.php';
 if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
@@ -26,12 +27,38 @@ $questions = [
     "continue-dose-wegovy" => "If you want to continue with the weight loss medication, what dose would you like to continue with?",
     "effects_with_wegovy" => "Have you experienced any side effects with the weight loss medication?",
     "medication_allergies" => "Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.",
+    "other_medication_details" => "Please provide details of the other medication you take, including the name, dose, and how often you take this.",
     "other_medical_conditions" => "Please list any other medical conditions you have.",
     "wegovy_side_effects" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed" => "Would you like your GP to be informed of this consultation?",
     "email_address" => "Please enter your GP's email address",
     "Get access to special offers" => "email_address"
 ];
+
+$doseOptions = [
+    'less4' => 'Less than 4 weeks ago',
+    '4to6' => '4-6 weeks ago',
+    'over6' => 'More than 6 weeks ago',
+];
+
+$medicationSlugs = [];
+$recentDoseOptionsBySlug = [];
+foreach (perch_questionnaire_medications() as $slug => $label) {
+    if ($slug === 'none') {
+        continue;
+    }
+
+    $medicationSlugs[] = $slug;
+    $medicationLabel = perch_questionnaire_medication_label($slug);
+    $questions["weight-{$slug}"] = "What was your weight in kg/st-lbs before starting " . $medicationLabel . '?';
+    $questions["dose-{$slug}"] = "When was your last dose of " . $medicationLabel . '?';
+    $questions["recently-dose-{$slug}"] = "What dose of " . $medicationLabel . " were you prescribed most recently?";
+
+    $options = perch_questionnaire_recent_dose_options($slug);
+    if ($options !== null) {
+        $recentDoseOptionsBySlug[$slug] = $options;
+    }
+}
 
 $steps = [
     "age" => "howold",
@@ -56,6 +83,7 @@ $steps = [
     "continue-dose-wegovy" => "continue_with_wegovy",
     "effects_with_wegovy" => "effects_with_wegovy",
     "medication_allergies" => "medication_allergies",
+    "other_medication_details" => "medication_allergies",
     "other_medical_conditions" => "list_any",
     "wegovy_side_effects" => "wegovy_side_effects",
     "gp_informed" => "gp_informed",
@@ -63,17 +91,32 @@ $steps = [
     "Get access to special offers" => "access_special_offers"
 ];
 
+foreach ($medicationSlugs as $slug) {
+    $steps["weight-{$slug}"] = "starting_wegovy";
+    $steps["dose-{$slug}"] = "dose_wegovy";
+    $steps["recently-dose-{$slug}"] = "recently_wegovy";
+}
+
 // Render a field with optional second value and unit
-function renderMeasurement($value, $unitKey, $secondKey, $questionnaire) {
-    $output = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-    if (isset($questionnaire[$unitKey])) {
-        $unitParts = explode("-", $questionnaire[$unitKey]);
-        $output .= " " . htmlspecialchars($unitParts[0]);
-        if (isset($questionnaire[$secondKey])) {
-            $output .= " " . htmlspecialchars($questionnaire[$secondKey]) . " " . htmlspecialchars($unitParts[1]);
+function renderMeasurement($value, $unitKey, $secondKey, $questionnaire)
+{
+    $parts = [];
+
+    if ($value !== null && $value !== '') {
+        $parts[] = htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    }
+
+    if (!empty($questionnaire[$unitKey])) {
+        $unitParts = explode('-', (string) $questionnaire[$unitKey]);
+        $parts[] = htmlspecialchars($unitParts[0], ENT_QUOTES, 'UTF-8');
+
+        if ((isset($questionnaire[$secondKey]) || array_key_exists($secondKey, $questionnaire)) && isset($unitParts[1])) {
+            $parts[] = htmlspecialchars((string) $questionnaire[$secondKey], ENT_QUOTES, 'UTF-8');
+            $parts[] = htmlspecialchars($unitParts[1], ENT_QUOTES, 'UTF-8');
         }
     }
-    return $output;
+
+    return implode(' ', array_filter($parts, static fn($part) => $part !== ''));
 }
 
 // Page header
@@ -111,8 +154,17 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                             echo htmlspecialchars(implode(", ", $value));
                         } elseif ($key === "weight") {
                             echo renderMeasurement($value, "weightunit", "weight2", $_SESSION['questionnaire']);
-                        } elseif ($key === "weight-wegovy") {
-                            echo renderMeasurement($value, "unit-wegovy", "weight2-wegovy", $_SESSION['questionnaire']);
+                        } elseif (strpos($key, 'weight-') === 0) {
+                            $slug = substr($key, 7);
+                            echo renderMeasurement($value, "unit-{$slug}", "weight2-{$slug}", $_SESSION['questionnaire']);
+                        } elseif (strpos($key, 'recently-dose-') === 0) {
+                            $medicationSlug = substr($key, strlen('recently-dose-'));
+                            $options = $recentDoseOptionsBySlug[$medicationSlug] ?? [];
+                            $answer = $options[$value] ?? $value;
+                            echo htmlspecialchars($answer);
+                        } elseif (strpos($key, 'dose-') === 0) {
+                            $answer = $doseOptions[$value] ?? $value;
+                            echo htmlspecialchars($answer);
                         } elseif ($key === "height") {
                             echo renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
                         } else {

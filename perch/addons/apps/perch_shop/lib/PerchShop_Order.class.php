@@ -14,13 +14,14 @@ class PerchShop_Order extends PerchShop_Base
 
     protected $date_fields = ['orderUpdated', 'orderCreated'];
 
-	protected $duplicate_fields  = [
-										'orderStatus'       => 'status',
-										'customerID'        => 'customer',
-										'orderTotal'        => 'total',
-										'orderCurrency'     => 'currency',
-										'orderGateway'      => 'gateway'
-									];
+        protected $duplicate_fields  = [
+                                                                                'orderStatus'       => 'status',
+                                                                                'customerID'        => 'customer',
+                                                                                'orderTotal'        => 'total',
+                                                                                'orderCurrency'     => 'currency',
+                                                                                'orderGateway'      => 'gateway'
+                                                                        ];
+    protected static $questionnaireOrderColumnAvailable = null;
 
 	public function get_currency_code()
 	{
@@ -69,6 +70,21 @@ class PerchShop_Order extends PerchShop_Base
         return null;
     }
 
+    protected function questionnaireHasOrderColumn()
+    {
+        if (self::$questionnaireOrderColumnAvailable !== null) {
+            return self::$questionnaireOrderColumnAvailable;
+        }
+
+        $table = PERCH_DB_PREFIX.'questionnaire';
+        $sql   = "SHOW COLUMNS FROM `{$table}` LIKE 'question_order'";
+        $exists = $this->db->get_value($sql);
+
+        self::$questionnaireOrderColumnAvailable = $exists ? true : false;
+
+        return self::$questionnaireOrderColumnAvailable;
+    }
+
     public function get_discount_code()
     {
         $promos = $this->get_promotions();
@@ -90,6 +106,9 @@ class PerchShop_Order extends PerchShop_Base
 
 		 if ((float)$this->orderTotal() <= 0) {
                                 $this->finalize_as_paid('pending');
+
+                                       echo "<script>window.location.href = '" . $opts['return_url'] . "?pending=1';</script>";
+
                                 return true;
                         }
                         $Gateway = PerchShop_Gateways::get($this->orderGateway());
@@ -214,27 +233,62 @@ class PerchShop_Order extends PerchShop_Base
         }
 
 
-        	$sql_questionnaire = 'SELECT * FROM '.PERCH_DB_PREFIX.'questionnaire
-                                                WHERE `type`="'.$questionnaire_type.'" and member_id='.$this->db->pdb((int)$Member->id());
-                                                 // echo "products_match_pharmacy";
-                     //	print_r($sql_questionnaire);
-                     $questionnaire = $this->db->get_rows($sql_questionnaire);
-                    // print_r($questionnaire);
-                       if (PerchUtil::count($questionnaire)) {
-                       	foreach($questionnaire as $questiondet) {
-                       	if(isset( $questiondet["question_text"]) && isset($questiondet["answer_text"])){
-                       	if($questiondet["question_text"]!="" && $questiondet["answer_text"]!="" ){
+                $questionnaireID = null;
+                $dynamicFields  = PerchUtil::json_safe_decode($this->orderDynamicFields(), true);
+
+                if (is_array($dynamicFields)) {
+                    if (isset($dynamicFields['questionnaires']) && is_array($dynamicFields['questionnaires'])) {
+                        if (!empty($dynamicFields['questionnaires'][$questionnaire_type])) {
+                            $questionnaireID = (int)$dynamicFields['questionnaires'][$questionnaire_type];
+                        }
+                    } elseif (!empty($dynamicFields['questionnaire_qid'])) {
+                        $questionnaireID = (int)$dynamicFields['questionnaire_qid'];
+                    }
+                }
+
+                if (!$questionnaireID) {
+                    $sql_latest_qid = 'SELECT qid FROM '.PERCH_DB_PREFIX.'questionnaire'
+                        .' WHERE `type`='.$this->db->pdb($questionnaire_type)
+                        .' AND member_id='.$this->db->pdb((int)$Member->id())
+                        .' ORDER BY created_at DESC LIMIT 1';
+                    $questionnaireID = (int)$this->db->get_value($sql_latest_qid);
+                }
+
+              /*  $sql_questionnaire = 'SELECT * FROM '.PERCH_DB_PREFIX.'questionnaire'
+                        .' WHERE `type`='.$this->db->pdb($questionnaire_type)
+                        .' AND member_id='.$this->db->pdb((int)$Member->id());*/
+
+                        $sql_questionnaire = 'SELECT *
+                            FROM '.PERCH_DB_PREFIX.'questionnaire
+                            WHERE `type` = '.$this->db->pdb($questionnaire_type).'
+                              AND member_id = '.$this->db->pdb((int)$Member->id()).'
+                              AND (order_id IS NULL OR order_id = '.$this->db->pdb((int)$this->id()).')';
 
 
-                       		$questions_items[]  =  [
-                                                                                 "question" =>  $questiondet["question_text"],
-                                                                                 "answer" =>  $questiondet["answer_text"],
-                                                                             ];
-                                                                             }
-                                                                             }
-                                                                             }
+                if ($questionnaireID) {
+                    $sql_questionnaire .= ' AND qid='.$this->db->pdb($questionnaireID);
+                }
 
-                       	}
+                if ($this->questionnaireHasOrderColumn()) {
+                    $sql_questionnaire .= ' ORDER BY (question_order IS NULL), question_order ASC, created_at ASC, id ASC';
+                } else {
+                    $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
+                }
+
+                $questionnaire = $this->db->get_rows($sql_questionnaire);
+
+                if (PerchUtil::count($questionnaire)) {
+                    foreach ($questionnaire as $questiondet) {
+                        if (isset($questiondet["question_text"]) && isset($questiondet["answer_text"])) {
+                            if ($questiondet["question_text"] != "" && $questiondet["answer_text"] != "") {
+                                $questions_items[] = [
+                                    "question" => $questiondet["question_text"],
+                                    "answer" => $questiondet["answer_text"],
+                                ];
+                            }
+                        }
+                    }
+                }
 
 
         /*echo "order_items";

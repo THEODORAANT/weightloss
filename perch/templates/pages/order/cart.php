@@ -1,5 +1,14 @@
  <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+    if(isset($_POST["dose"])){
+                $_SESSION['questionnaire-reorder']["dose"] = $_POST["dose"];
+                setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
+               $result= perch_shop_add_to_cart($_POST["dose"]);
+               echo "<script>window.location.href='/client/questionnaire-re-order?step=weight';</script> ";
+               exit;
+
+                }
+
 if (!isset($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
@@ -37,14 +46,7 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
       // print_r($_SESSION);
 
 
-            if(isset($_POST["dose"])){
-                $_SESSION['questionnaire-reorder']["dose"] = $_POST["dose"];
-                setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
-               $result= perch_shop_add_to_cart($_POST["dose"]);
-               echo "<script>window.location.href='/client/questionnaire-re-order?step=weight';</script> ";
-               exit;
 
-                }
 
 
             //  echo "perch_member_logged_in".perch_member_logged_in() ;

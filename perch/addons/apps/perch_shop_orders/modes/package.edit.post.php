@@ -8,6 +8,19 @@
    // include('_order_smartbar.php');
 
 
+    if ($message) echo $message;
+
+
+
+    $form_action = $HTML->encode($Form->action());
+    $csrf_token  = $HTML->encode(PerchSession::get('csrf_token'));
+
+    if (!isset($status_choices) || !is_array($status_choices)) {
+        $status_choices = ['confirmed', 'completed', 'cancelled'];
+    }
+
+    $current_status = trim((string)$Package->status());
+
 
 
 $output= $HTML->heading2('Package');
@@ -31,6 +44,24 @@ $output= $HTML->heading2('Package');
     $output.=  '<tr>';
         $output.=  '<th>'.$Lang->get('PaymentStatus').'</th>';
         $output.=  '<td>'.$HTML->encode(ucfirst($Package->paymentStatus())).'</td>';
+    $output.=  '</tr>';
+
+    $output.=  '<tr>';
+        $output.=  '<th>'.$Lang->get('Status').'</th>';
+        $output.=  '<td>';
+            $output.=  '<form method="post" action="'.$form_action.'" class="inline-package-status">';
+            $output.=  '<input type="hidden" name="formaction" value="update_status">';
+            $output.=  '<input type="hidden" name="token" value="'.$csrf_token.'">';
+            $output.=  '<select name="status">';
+            foreach ($status_choices as $status_option) {
+                $label = $Lang->get(ucfirst($status_option));
+                $selected = ($status_option === $current_status) ? ' selected="selected"' : '';
+                $output.=  '<option value="'.$HTML->encode($status_option).'"'.$selected.'>'.$HTML->encode($label).'</option>';
+            }
+            $output.=  '</select>';
+            $output.=  '<button type="submit" class="button button-simple button-small">'.$HTML->encode($Lang->get('Save')).'</button>';
+            $output.=  '</form>';
+        $output.=  '</td>';
     $output.=  '</tr>';
 
     $output.=  '<tr>';
@@ -104,16 +135,39 @@ $output.=  $HTML->heading2('Customer');
         $output.=  '</tr>';
         $output.=  '</thead>';
 
+        $form_action = $HTML->encode($Form->action());
+        $csrf_token  = $HTML->encode(PerchSession::get('csrf_token'));
+
         foreach($items as $Item) {
             #PerchUtil::debug($Item);
             $output.=  '<tr>';
-                $output.=  '<td>'.$Item->itemID().'</td>';
-                $output.=  '<td>'.($Item->productID() ? $Item->productVariantDesc() : '').'</td>';
-                 $output.=  '<td>'.$Item->month().'</td>';
-                $output.=  '<td>'.$Item->qty().'</td>';
-                $output.=  '<td>'.$Item->paymentStatus().'</td>';
-                $output.=  '<td>'.$Item->billingDate().'</td>';
-                $output.=  '<td>'.$Item->orderID().'</td>';
+                $output.=  '<td>'.$HTML->encode($Item->itemID()).'</td>';
+                $product_desc = $Item->productID() ? $Item->productVariantDesc() : '';
+                $output.=  '<td>'.$HTML->encode($product_desc).'</td>';
+                $output.=  '<td>'.$HTML->encode($Item->month()).'</td>';
+                $output.=  '<td>'.$HTML->encode($Item->qty()).'</td>';
+                $output.=  '<td>'.$HTML->encode($Item->paymentStatus()).'</td>';
+                $output.=  '<td>';
+
+                if ((int)$Item->month() === 1) {
+                    $billing_value = $Item->billingDate() ? $HTML->encode($Item->billingDate()) : '';
+
+                     $output.=  $HTML->encode($Item->billingDate());
+                      $billing_value = date($billing_value);
+
+                    $output.=  '<form method="post" action="'.$form_action.'" class="inline-billing-date">';
+                    $output.=  '<input type="hidden" name="formaction" value="update_billing_date">';
+                    $output.=  '<input type="hidden" name="token" value="'.$csrf_token.'">';
+                    $output.=  '<input type="hidden" name="itemID" value="'.$HTML->encode($Item->itemID()).'">';
+                    $output.=  '<input type="date" name="billingDate" value="'.$billing_value.'" required />';
+                    $output.=  '<button type="submit" class="button button-simple button-small">'.$HTML->encode($Lang->get('Save')).'</button>';
+                    $output.=  '</form>';
+                } else {
+                    $output.=  $HTML->encode($Item->billingDate());
+                }
+
+                $output.=  '</td>';
+                $output.=  '<td>'.$HTML->encode($Item->orderID()).'</td>';
             $output.=  '</tr>';
         }
 

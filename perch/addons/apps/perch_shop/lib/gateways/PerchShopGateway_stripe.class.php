@@ -52,28 +52,34 @@ class PerchShopGateway_stripe extends PerchShopGateway_default
 		return false;
 	}
 
-	public function get_exchange_rate($Order)
-	{
-		$this->init_native_stripe_api();
-		if (strpos($Order->orderGatewayRef(), 'pi') === 0) {
-           // It starts with 'pi'
-             return null;
+        public function get_exchange_rate($Order)
+        {
+                $this->init_native_stripe_api();
 
-        }else{
-        		$Charge = \Stripe\Charge::retrieve($Order->orderGatewayRef());
+                $gateway_ref = $Order->orderGatewayRef();
 
-        		if ($Charge) {
-        			$BalanceTransaction = \Stripe\BalanceTransaction::retrieve($Charge->balance_transaction);
+                if (!is_string($gateway_ref) || $gateway_ref === '') {
+                        return null;
+                }
 
-        			$rate = ((float)$Charge->amount / (float)$BalanceTransaction->amount);
-        			return $rate;
-        		}
+                if (strpos($gateway_ref, 'pi') === 0) {
+                        // Payment Intents don't support exchange rate retrieval via charges.
+                        return null;
+                }
+
+                $Charge = \Stripe\Charge::retrieve($gateway_ref);
+
+                if ($Charge && isset($Charge->balance_transaction)) {
+                        $BalanceTransaction = \Stripe\BalanceTransaction::retrieve($Charge->balance_transaction);
+
+                        if ($BalanceTransaction && (float)$BalanceTransaction->amount !== 0.0) {
+                                $rate = ((float)$Charge->amount / (float)$BalanceTransaction->amount);
+                                return $rate;
+                        }
+                }
+
+                return null;
         }
-
-
-
-		return null;
-	}
 
 	private function init_native_stripe_api()
 	{

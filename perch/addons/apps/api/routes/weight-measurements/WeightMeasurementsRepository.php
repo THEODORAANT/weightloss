@@ -62,6 +62,7 @@ class WeightMeasurementsRepository
             . ' WHERE ' . $where
             . ' ORDER BY measurement_date ASC';
 
+
         $rows = $this->db->get_rows($sql);
 
         return is_array($rows) ? $rows : [];
@@ -81,9 +82,10 @@ class WeightMeasurementsRepository
     public function findForMember($memberId, $measurementId)
     {
         $sql = 'SELECT * FROM ' . $this->table
-            . ' WHERE measurement_id = ' . $this->db->pdb($measurementId)
+            . ' WHERE id = ' . $this->db->pdb($measurementId)
             . ' AND member_id = ' . $this->db->pdb($memberId)
             . ' LIMIT 1';
+
 
         $row = $this->db->get_row($sql);
 
@@ -115,8 +117,10 @@ class WeightMeasurementsRepository
         $sql = 'INSERT INTO ' . $this->table
             . ' (' . implode(',', $columns) . ')'
             . ' VALUES (' . implode(',', $values) . ')';
+
  try {
           $insertId = $this->db->execute($sql);
+
         } catch (Exception $e) {
             wl_weight_measurements_error(400, json_decode($e, true));
         }

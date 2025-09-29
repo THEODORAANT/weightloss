@@ -17,6 +17,13 @@ setcookie('questionnaire', '', time()-3600, '/');
 setcookie('questionnaire_reorder', '', time()-3600, '/');
 setcookie('draft_package_item', '', time()-3600, '/');
 
+$order_complete = perch_shop_order_successful();
+
+if (!$order_complete) {
+    $order_complete = perch_shop_active_order_has_status('pending');
+
+}
+
      perch_layout('product/header', [
           'page_title' => perch_page_title(true),
       ]);
@@ -109,7 +116,7 @@ setcookie('draft_package_item', '', time()-3600, '/');
 <?php  } ?>
   <section class="shippin_section">
     <div class="container all_content mt-4">
-    <?php if (perch_shop_order_successful()) {
+    <?php if ($order_complete) {
     perch_shop_empty_cart();
     ?>
         <h2 class="text-center fw-bolder">Complete your consultation. <br/>Upload your identification document and video here.<br/>

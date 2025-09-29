@@ -34,6 +34,12 @@
             'link'  => $API->app_nav().'/order/evidence/?id='.$Order->id(),
             'icon'  => 'ext/o-museum',
         ]);
+        $Smartbar->add_item([
+            'active' => $smartbar_selection=='questions',
+            'title' => $Lang->get('Questions'),
+            'link'  => $API->app_nav().'/order/questions/?id='.$Order->id(),
+            'icon'  => 'core/o-help',
+        ]);
         echo $HTML->title_panel([
             'button'  => [
              'text' => 'Download PDF',

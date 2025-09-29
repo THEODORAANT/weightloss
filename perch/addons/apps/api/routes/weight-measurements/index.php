@@ -128,14 +128,14 @@ function wl_handle_weight_measurements_create($memberId)
         exit;
     }
 
-    if (wl_weight_measurements_rate_limit_exceeded($memberId, $sanitized['created_at'])) {
+   /* if (wl_weight_measurements_rate_limit_exceeded($memberId, $sanitized['created_at'])) {
         wl_weight_measurements_error(429, 'Rate limit exceeded. You can submit up to 10 measurements per hour.');
-    }
+    }*/
 
     $repository = wl_weight_measurements_repository();
     $measurement = $repository->createMeasurement($memberId, $sanitized);
 
-    if (!is_array($measurement)) {
+  if (!is_array($measurement)) {
         wl_weight_measurements_error(500, 'Unable to save measurement.');
     }
 

@@ -2,10 +2,11 @@
 	$Paging = $API->get('Paging');
 	$Paging->set_per_page(24);
 $sort="^orderCreated";
-	$Orders   = new PerchShop_Orders($API);
-	$OrderItems = new PerchShop_OrderItems($API);
-	$Statuses = new PerchShop_OrderStatuses($API);
-	$Tags = new PerchMembers_Tags($API);
+        $Orders   = new PerchShop_Orders($API);
+        $OrderItems = new PerchShop_OrderItems($API);
+        $Customers = new PerchShop_Customers($API);
+        $Statuses = new PerchShop_OrderStatuses($API);
+        $Tags = new PerchMembers_Tags($API);
  $Documents = new PerchMembers_Documents($API);
     $Template   = $API->get('Template');
     $Template->set('shop/orders/filter.html', 'shop');
@@ -14,6 +15,9 @@ $sort="^orderCreated";
     $Form->handle_empty_block_generation($Template);
 
      $details = array();
+    if (!isset($default_statuses) || !is_array($default_statuses) || !count($default_statuses)) {
+        $default_statuses = $Statuses->get_status_and_above('paid');
+    }
             if ($Form->submitted()) {
 
                    $post = $_POST;
@@ -24,10 +28,10 @@ $sort="^orderCreated";
 
                     $details=$data["orderDynamicFields"];
                 $details =json_decode($details, TRUE);
- $orders = $Orders->get_by_properties($details, $Paging);
+$orders = $Orders->get_by_properties($details, $Paging, $default_statuses);
 
 
                      }else{
-                     	$orders   = $Orders->get_admin_listing($Statuses->get_status_and_above('paid'), $Paging);
+                        $orders   = $Orders->get_admin_listing($default_statuses, $Paging);
 
                      }

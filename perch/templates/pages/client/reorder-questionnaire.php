@@ -4,6 +4,23 @@ if (!perch_member_logged_in()) { exit;}
 if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
     $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
 }
+
+$memberGender = perch_member_get('gender');
+$memberGender = is_string($memberGender) ? trim($memberGender) : '';
+$memberIsFemale = (strcasecmp($memberGender, 'Female') === 0);
+
+if (!$memberIsFemale && isset($_SESSION['questionnaire-reorder']['pregnancy_status'])) {
+    unset($_SESSION['questionnaire-reorder']['pregnancy_status']);
+}
+
+$pregnancyStatus = '';
+if (!empty($_SESSION['questionnaire-reorder']) && is_array($_SESSION['questionnaire-reorder'])) {
+    $pregnancyStatus = $_SESSION['questionnaire-reorder']['pregnancy_status'] ?? '';
+}
+
+$nextStepAfterWeight = $memberIsFemale ? 'pregnancy-status' : 'side-effects';
+$sideEffectsBackStep = $memberIsFemale ? 'pregnancy-status' : 'weight';
+$memberGenderForTemplate = $memberIsFemale ? 'Female' : $memberGender;
     //  echo "session";
       //  print_r($_SESSION);
  function generateUUID() {
@@ -15,32 +32,6 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
          mt_rand(0, 0x3fff) | 0x8000,
          mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
      );
- }
- if (!function_exists('formatMeasurementAnswer')) {
-     function formatMeasurementAnswer($value, $unitRaw, $secondaryValue = null)
-     {
-         if ($value === '' || $unitRaw === null || $unitRaw === '') {
-             return $value;
-         }
-
-         $formatted = $value;
-         $units = explode('-', (string)$unitRaw);
-         $primaryUnit = trim($units[0] ?? '');
-
-         if ($primaryUnit !== '') {
-             $formatted .= ' ' . $primaryUnit;
-         }
-
-         if (!empty($units[1])) {
-             $secondaryValue = trim((string)($secondaryValue ?? ''));
-             $secondaryUnit = trim($units[1]);
-             if ($secondaryValue !== '' && $secondaryUnit !== '') {
-                 $formatted .= ' ' . $secondaryValue . ' ' . $secondaryUnit;
-             }
-         }
-
-         return $formatted;
-     }
  }
     if (isset($_POST['nextstep'])) {
     $user_id = generateUUID();
@@ -64,36 +55,15 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
                             'step' => $current_step,
                             'timestamp' => $timestamp
                         ];
-        if (array_key_exists('email_address', $_POST) && trim((string)$_POST['email_address']) === '') {
-            $_POST['email_address'] = 'no-email-added';
-        }
-
-        foreach ($_POST as $key => $value) {
+         foreach ($_POST as $key => $value) {
            if(is_array($value)){
                       $_SESSION['questionnaire-reorder'][$key] = $value;
-                      $loggedAnswer = $value;
 
                    }else{
                      $_SESSION['questionnaire-reorder'][$key] = htmlspecialchars($value);
-                     $loggedAnswer = $_SESSION['questionnaire-reorder'][$key];
 
                    }
-
-                   if (!is_array($loggedAnswer) && $key === 'weight') {
-                       $unitValue = $_SESSION['questionnaire-reorder']['weightunit'] ?? null;
-                       if ($unitValue === null && isset($_POST['weightunit'])) {
-                           $unitValue = htmlspecialchars($_POST['weightunit']);
-                       }
-
-                       $secondaryValue = $_SESSION['questionnaire-reorder']['weight2'] ?? null;
-                       if ($secondaryValue === null && isset($_POST['weight2'])) {
-                           $secondaryValue = htmlspecialchars($_POST['weight2']);
-                       }
-
-                       $loggedAnswer = formatMeasurementAnswer($loggedAnswer, $unitValue, $secondaryValue);
-                   }
-
-                     logAnswerChange($key, $loggedAnswer,"reorder");
+                     logAnswerChange($key, $_SESSION['questionnaire-reorder'][$key],"reorder");
          }
         setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
         //print_r($_SESSION['reorder_answer_log']);
@@ -175,9 +145,12 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
             <div id="product-selection">
                <h2 class="text-center fw-bolder">Before we send you your next dose we have a few questions! </h2>
     <?php
+PerchSystem::set_var('member_gender', $memberGenderForTemplate);
+PerchSystem::set_var('pregnancy_status', $pregnancyStatus);
+PerchSystem::set_var('next_step_after_weight', $nextStepAfterWeight);
+PerchSystem::set_var('side_effects_back_step', $sideEffectsBackStep);
 if(isset( $_GET["step"])){
-
-PerchSystem::set_var('step', $_GET["step"]);
+    PerchSystem::set_var('step', $_GET["step"]);
 }
 
  perch_form('reorder-questionnaire.html');
