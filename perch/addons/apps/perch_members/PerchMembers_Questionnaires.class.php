@@ -250,7 +250,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
         public $reorder_questions=[
         "weight"=>"What is your weight?",
-        "weight2"=>"inches",
+       // "weight2"=>"inches",
         "weightunit"=>"weight unit",
         "pregnancy_status"=>"Are you pregnant or trying to conceive?",
         "bmi"=>"BMI",
