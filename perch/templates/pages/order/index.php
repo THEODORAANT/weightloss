@@ -1,17 +1,41 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!isset($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
-if(isset($_SESSION['questionnaire'])) {$errors =perch_member_validateQuestionnaire($_SESSION['questionnaire']) ;
- if (!empty($errors)) {header("Location: /get-started/review-questionnaire");    }}else{header("Location: /get-started");}
-setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
 
+$questionnaire = $_SESSION['questionnaire'] ?? [];
+$errors = [];
 
- // output the top of the page
-    perch_layout('getStarted/header', [
-        'page_title' => perch_page_title(true),
-    ]);
+if (!empty($questionnaire)) {
+    $errors = perch_member_validateQuestionnaire($questionnaire);
+    if (!empty($errors)) {
+        header('Location: /get-started/review-questionnaire');
+        exit;
+    }
+} else {
+    header('Location: /get-started');
+    exit;
+}
+
+$is_confirming = isset($_POST['confirm']);
+if ($is_confirming || !empty($questionnaire['confirmed'])) {
+    $_SESSION['questionnaire']['confirmed'] = true;
+    $_SESSION['questionnaire']['reviewed'] = 'Completed';
+    $questionnaire = $_SESSION['questionnaire'];
+}
+
+setcookie('questionnaire', json_encode($questionnaire), time() + 3600, '/');
+
+$should_show_products = !empty($questionnaire['confirmed']) && empty($errors);
+
+// output the top of the page
+perch_layout('getStarted/header', [
+    'page_title' => perch_page_title(true),
+]);
 
 
 
@@ -19,24 +43,9 @@ setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()
 
     <div class="main_product">
         <div id="product-selection">
-<?php
-if(isset($_POST["confirm"]) || $_SESSION['questionnaire']["confirmed"]){
-$_SESSION['questionnaire']["confirmed"] = true;
-$_SESSION['questionnaire']["reviewed"] = "Completed";
-setcookie('questionnaire', json_encode($_SESSION['questionnaire']), time()+3600, '/');
-
-    if (empty($errors)) {
-
-
-
-          perch_shop_products(['category' => 'products/weight-loss']);
-
-
-    }
-}
-
-
-        ?>
+<?php if ($should_show_products) {
+    perch_shop_products(['category' => 'products/weight-loss']);
+} ?>
 
 
 
