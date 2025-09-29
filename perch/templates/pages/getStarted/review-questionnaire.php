@@ -97,13 +97,28 @@ foreach ($medicationSlugs as $slug) {
     $steps["recently-dose-{$slug}"] = "recently_wegovy";
 }
 
+function formatMeasurementNumber($value)
+{
+    if ($value === null || $value === '') {
+        return '';
+    }
+
+    if (is_numeric($value)) {
+        return number_format((float) $value, 2, '.', '');
+    }
+
+    return (string) $value;
+}
+
 // Render a field with optional second value and unit
 function renderMeasurement($value, $unitKey, $secondKey, $questionnaire)
 {
     $parts = [];
+    $isWeightMeasurement = $unitKey === 'weightunit' || strpos($unitKey, 'unit-') === 0;
 
     if ($value !== null && $value !== '') {
-        $parts[] = htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+        $displayValue = $isWeightMeasurement ? formatMeasurementNumber($value) : (string) $value;
+        $parts[] = htmlspecialchars($displayValue, ENT_QUOTES, 'UTF-8');
     }
 
     if (!empty($questionnaire[$unitKey])) {
@@ -111,7 +126,11 @@ function renderMeasurement($value, $unitKey, $secondKey, $questionnaire)
         $parts[] = htmlspecialchars($unitParts[0], ENT_QUOTES, 'UTF-8');
 
         if ((isset($questionnaire[$secondKey]) || array_key_exists($secondKey, $questionnaire)) && isset($unitParts[1])) {
-            $parts[] = htmlspecialchars((string) $questionnaire[$secondKey], ENT_QUOTES, 'UTF-8');
+            $secondValue = $questionnaire[$secondKey] ?? '';
+            if ($isWeightMeasurement) {
+                $secondValue = formatMeasurementNumber($secondValue);
+            }
+            $parts[] = htmlspecialchars((string) $secondValue, ENT_QUOTES, 'UTF-8');
             $parts[] = htmlspecialchars($unitParts[1], ENT_QUOTES, 'UTF-8');
         }
     }
