@@ -12,39 +12,6 @@
 		return false;
 	}
 
-	function perch_shop_active_order_status()
-	{
-		$ShopRuntime = PerchShop_Runtime::fetch();
-		$ActiveOrder = $ShopRuntime->get_active_order();
-
-		if ($ActiveOrder) {
-			return strtolower((string)$ActiveOrder->orderStatus());
-		}
-
-		return null;
-	}
-
-	function perch_shop_active_order_has_status($statuses)
-	{
-		$status = perch_shop_active_order_status();
-
-		if ($status === null) {
-			return false;
-		}
-
-		if (!is_array($statuses)) {
-			$statuses = [$statuses];
-		}
-
-		foreach ($statuses as $expected_status) {
-			if ($status === strtolower((string)$expected_status)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	function perch_shop_successful_order_id()
 	{
 		$ShopRuntime = PerchShop_Runtime::fetch();
@@ -56,6 +23,8 @@
 
 		return false;
 	}
+
+
 
 	function perch_shop_orders($opts=array(), $return=false)
 	{
@@ -147,95 +116,3 @@ $opts = PerchUtil::extend([
 		echo $r;
 		PerchUtil::flush_output();
 	}
-        function perch_shop_last_pen_details()
-        {
-                $details = [
-                        'brand' => null,
-                        'dose'  => null,
-                ];
-
-                if (!perch_member_logged_in()) {
-                        return $details;
-                }
-
-                $recent_orders = perch_shop_orders([
-                        'sort' => 'orderCreated',
-                        'sort-order' => 'DESC',
-                        'count' => 1,
-                        'skip-template' => true,
-                ], true);
-
-                if (!is_array($recent_orders) || empty($recent_orders)) {
-                        return $details;
-                }
-
-                $last_order = $recent_orders[0];
-                $last_order_id = $last_order['orderID'] ?? null;
-
-                if (!$last_order_id) {
-                        return $details;
-                }
-    $perch_shop_api   = new PerchAPI(1.0, 'perch_shop');
-		$memberID   = perch_member_get('memberID');
-		$OrderItems     = new PerchShop_OrderItems($perch_shop_api );
-		$Customers     = new PerchShop_Customers($perch_shop_api );
-
-$Customer   = $Customers->find_by_memberID($memberID);
-
-
-		//$OrdersItems = $OrdersItems->find_runtime_for_customer($last_order_id, $Customer);
- $items = $OrderItems->get_by('orderID', $last_order_id);
-
-        $order_items = [];
-
-        if (PerchUtil::count($items)) {
-        	foreach($items as $Item) {
-        		$order_items[]  = $Item->to_array();
-        	}
-        }
-               /* $order_items = perch_shop_order_items($last_order_id, [
-                        'skip-template' => true,
-                ], true);*/
-
-                if (!is_array($order_items)) {
-                        return $details;
-                }
-
-                $perch_shop_api   = null;
-                $products_factory = null;
-
-                foreach ($order_items as $item) {
-                        if (($item['itemType'] ?? '') !== 'product') {
-                                continue;
-                        }
-
-                        if (!empty($item['productID'])) {
-                                if ($perch_shop_api === null) {
-                                        $products_factory = new PerchShop_Products($perch_shop_api);
-                                }
-
-                                $ParentProduct = $products_factory ? $products_factory->find((int)$item['productID']) : null;
-
-                                if ($ParentProduct) {
-                                        $details['brand'] = $ParentProduct->productTitle();
-                                }
-                        }
-
-                        if ($details['brand'] === null) {
-                                $details['brand'] = $item['productTitle'] ?? $item['title'] ?? null;
-                        }
-
-                        $details['dose'] = $item['productVariantDesc'] ?? $item['variant_desc'] ?? null;
-
-                        if ($details['dose'] === null && isset($item['title'])) {
-                                $title = $item['title'];
-                                if ($details['brand'] === null || strcasecmp($title, $details['brand']) !== 0) {
-                                        $details['dose'] = $title;
-                                }
-                        }
-
-                        break;
-                }
-echo "details";print_r($details);
-                return $details;
-        }

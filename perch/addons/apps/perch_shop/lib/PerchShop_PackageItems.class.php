@@ -33,17 +33,15 @@ class PerchShop_PackageItems extends PerchShop_Factory
         }
         public function get_for_customer($customerID)
         {
-        $sql = 'SELECT i.*, p.nextBillingDate, p.billing_type AS packageBillingType, '
-            . 'p.paymentStatus AS packagePaymentStatus, po.* '
-            . 'FROM ' . $this->table . ' i '
-            . 'INNER JOIN ' . PERCH_DB_PREFIX . 'shop_packages p ON i.packageID = p.uuid '
-            . 'INNER JOIN ' . PERCH_DB_PREFIX . 'shop_products po ON i.productID = po.productID '
-            . 'WHERE i.paymentStatus=' . $this->db->pdb('pending') . ' '
-            . 'AND p.paymentStatus=' . $this->db->pdb('pending') . ' '
-            . 'AND p.customerID=' . $this->db->pdb((int)$customerID) . ' '
-            . 'ORDER BY i.billingDate ASC, i.month ASC';
+            $sql = 'SELECT i.*,p.nextBillingDate,po.* FROM ' . $this->table . ' as i,'.PERCH_DB_PREFIX.'shop_products po,
+            '.PERCH_DB_PREFIX.'shop_packages as p  WHERE
+            i.packageID=p.uuid and
+             i.productID = po.productID and
+             i.paymentStatus="pending"
+            and p.customerID=' . $this->db->pdb((int)$customerID);
 
-        return $this->return_instances($this->db->get_rows($sql));
+
+            return $this->return_instances($this->db->get_rows($sql));
         }
         	public function get_for_admin($packageID)
         	{

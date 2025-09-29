@@ -1,101 +1,4 @@
 <perch:form id="questionnaire" method="POST" app="perch_forms" action="/get-started/questionnaire" >
-    <script type="application/json" id="medication-step-data"><perch:forms id="medication_weight_json" encode="false" /></script>
-    <script>
-        (function () {
-            if (window.getMedicationStepData) {
-                return;
-            }
-
-            window.getMedicationStepData = function () {
-                if (window.__medicationStepData) {
-                    return window.__medicationStepData;
-                }
-
-                const dataElement = document.getElementById('medication-step-data');
-                let parsed = [];
-
-                if (dataElement) {
-                    const raw = dataElement.textContent ? dataElement.textContent.trim() : '';
-                    if (raw) {
-                        try {
-                            parsed = JSON.parse(raw);
-                        } catch (error) {
-                            console.error('Unable to parse medication configuration data', error);
-                        }
-                    }
-                }
-
-                if (!Array.isArray(parsed) || parsed.length === 0) {
-                    parsed = [{
-                        slug: 'wegovy',
-                        label: 'the weight loss medication',
-                        weight: '',
-                        weight2: '',
-                        unit: 'kg',
-                        dose: '',
-                        recentDose: '',
-                        continueDose: ''
-                    }];
-                }
-
-                window.__medicationStepData = parsed.map(function (item, index) {
-                    const slug = (item && typeof item.slug === 'string' && item.slug.trim() !== '')
-                        ? item.slug.trim()
-                        : `medication-${index + 1}`;
-
-                    const recentDoseOptions = (item && Array.isArray(item.recentDoseOptions))
-                        ? item.recentDoseOptions.reduce(function (options, option) {
-                            if (!option || typeof option !== 'object') {
-                                return options;
-                            }
-
-                            const hasValue = Object.prototype.hasOwnProperty.call(option, 'value');
-                            const hasLabel = Object.prototype.hasOwnProperty.call(option, 'label');
-
-                            if (!hasValue || !hasLabel) {
-                                return options;
-                            }
-
-                            const value = option.value;
-                            const label = option.label;
-
-                            if ((value === null || value === undefined) || (label === null || label === undefined)) {
-                                return options;
-                            }
-
-                            const valueString = String(value).trim();
-                            const labelString = String(label).trim();
-
-                            if (valueString === '' || labelString === '') {
-                                return options;
-                            }
-
-                            options.push({
-                                value: valueString,
-                                label: labelString,
-                            });
-
-                            return options;
-                        }, [])
-                        : [];
-
-                    return {
-                        slug: slug,
-                        label: (item && typeof item.label === 'string' && item.label.trim() !== '') ? item.label : 'the weight loss medication',
-                        weight: item && typeof item.weight !== 'undefined' && item.weight !== null ? item.weight : '',
-                        weight2: item && typeof item.weight2 !== 'undefined' && item.weight2 !== null ? item.weight2 : '',
-                        unit: item && item.unit === 'st-lbs' ? 'st-lbs' : 'kg',
-                        dose: item && typeof item.dose !== 'undefined' && item.dose !== null ? item.dose : '',
-                        recentDose: item && typeof item.recentDose !== 'undefined' && item.recentDose !== null ? item.recentDose : '',
-                        continueDose: item && typeof item.continueDose !== 'undefined' && item.continueDose !== null ? item.continueDose : '',
-                        recentDoseOptions: recentDoseOptions
-                    };
-                });
-
-                return window.__medicationStepData;
-            };
-        })();
-    </script>
  <!--  <a href="/get-started/questionnaire?step=startagain" style="text-decoration: none;color: #000;" >Start again </a>-->
 
     <perch:if id="step" value="howold">
@@ -212,8 +115,8 @@
                             <label for="asian" onclick="submitForm('ethnicity')"  id="asianlabel">Asian or Asian British</label>
 
 
-                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="African" value="Black (African/Caribbean)" <perch:if id="ethnicity" value="Black (African/Caribbean)"> checked="checked" </perch:if>>
-                            <label for="African" id="Africanlabel">Black (African/Caribbean)</label>
+                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="African" value="African" <perch:if id="ethnicity" value="African"> checked="checked" </perch:if>>
+                            <label for="African" id="Africanlabel">Black (Caribbean, African)</label>
 
 
                             <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')"  id="Mixed"  value="Mixed" <perch:if id="ethnicity" value="Mixed"> checked="checked" </perch:if>>
@@ -270,9 +173,8 @@
                 </form>
             </div>
         </section>
-
     </perch:if>
-    <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White" match="within" >
+    <perch:if id="step" value="ethnicity,asian,African,White" match="within" >
 
         <section class="how_old">
             <div class="contanier">
@@ -388,8 +290,8 @@
                   </div>-->
                     <h2>What is your weight?</h2>
                     <div class="weight-inputs">
-                        <input type="number" id="weight"  required name="weight" placeholder="Kg" step="0.1" min="0">
-                        <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs" step="0.1" min="0">
+                        <input type="text" id="weight"  required name="weight" placeholder="Kg">
+                        <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs">
 
                          <input type="hidden" id="weightunit" value="kg"   name="weightunit" >
 
@@ -422,7 +324,7 @@
                     weight.placeholder = "Kg";
                     document.getElementById("weight2").type = "hidden";
                 } else {
-                    document.getElementById("weight2").type = "number";
+                    document.getElementById("weight2").type = "text";
                     weight.placeholder = "st";
 
                 }
@@ -454,7 +356,7 @@
                         </div>-->
                     <h2>What is your height?</h2>
                     <div class="weight-inputs">
-                        <input type="number" id="height" name="height" required placeholder="Cm" step="0.1" min="0">
+                        <input type="text" id="height" name="height" required placeholder="Cm">
                         <input type="hidden" id="height2" name="height2" required placeholder="7.5"  step="0.1" min="0.5" max="12" required title="Enter your height in total inches">
 
                         <input type="hidden" id="heightunit" value="cm"   name="heightunit" >
@@ -477,217 +379,21 @@
 
         </section>
         <script>
-            const MIN_HEIGHT_CM = 89;
-            const MAX_HEIGHT_CM = 272;
-            const SHORT_HEIGHT_CONFIRMATION_THRESHOLD_CM = 100;
-
             function radioheight(value){
 
-                const heightField = document.getElementById("height");
-                const unitField = document.getElementById("heightunit");
-                const unitLabel = document.getElementById("spanheight");
-                const secondaryField = document.getElementById("height2");
-
-                const selectedRadio = document.querySelector('input[name=heightunit-radio]:checked');
-                if (selectedRadio && unitField) {
-                    unitField.value = selectedRadio.value;
-                }
-
-                if (unitLabel) {
-                    unitLabel.innerHTML = value;
-                }
-
-                if (!heightField || !secondaryField) {
-                    return;
-                }
-
+                const weight = document.getElementById("height");
+                document.getElementById("heightunit").value=document.querySelector('input[name=heightunit-radio]:checked').value;
+                document.getElementById("spanheight").innerHTML=value;
                 if (value === "cm") {
-                    heightField.placeholder = "Cm";
-                    heightField.type = "number";
-                    secondaryField.type = "hidden";
-                    secondaryField.required = false;
-                    secondaryField.value = "";
+                    weight.placeholder = "Cm";
+                    document.getElementById("height2").type="hidden";
                 }else{
-                    heightField.type = "number";
-                    secondaryField.type = "number";
-                    heightField.placeholder = "Ft";
-                    secondaryField.required = false;
-                    secondaryField.placeholder = "In";
+                    document.getElementById("height2").type="number";
+                    weight.placeholder = "Ft";
 
                 }
 
             }
-
-            window.addEventListener('DOMContentLoaded', function () {
-                const form = document.getElementById('questionnaire');
-                if (!form) {
-                    return;
-                }
-
-                const parseNumeric = (rawValue) => {
-                    if (typeof rawValue !== 'string') {
-                        return null;
-                    }
-
-                    const normalised = rawValue.replace(',', '.').trim();
-                    if (normalised === '') {
-                        return null;
-                    }
-
-                    const numericValue = parseFloat(normalised);
-                    return Number.isFinite(numericValue) ? numericValue : null;
-                };
-
-                const toCentimetres = (primaryValue, secondaryValue, unit) => {
-                    const primary = parseNumeric(primaryValue);
-                    if (primary === null || primary <= 0) {
-                        return null;
-                    }
-
-                    if (unit === 'cm') {
-                        return primary;
-                    }
-
-                    if (unit === 'ft-in') {
-                        const secondaryParsed = parseNumeric(secondaryValue);
-                        const secondary = secondaryParsed === null ? 0 : secondaryParsed;
-                        if (secondary < 0 || secondary >= 12) {
-                            return null;
-                        }
-                        const totalInches = (primary * 12) + secondary;
-                        return totalInches * 2.54;
-                    }
-
-                    if (unit === 'in') {
-                        return primary * 2.54;
-                    }
-
-                    return null;
-                };
-
-                const formatHeightRangeForUnit = (unit) => {
-                    if (unit === 'ft-in') {
-                        const format = (cm) => {
-                            const totalInches = cm / 2.54;
-                            let feet = Math.floor(totalInches / 12);
-                            let inches = Math.round(totalInches - (feet * 12));
-
-                            if (inches === 12) {
-                                feet += 1;
-                                inches = 0;
-                            }
-
-                            return `${feet} ft ${inches} in`;
-                        };
-
-                        return `${format(MIN_HEIGHT_CM)} and ${format(MAX_HEIGHT_CM)}`;
-                    }
-
-                    if (unit === 'in') {
-                        const toInches = (cm) => (cm / 2.54).toFixed(1);
-                        return `${toInches(MIN_HEIGHT_CM)} in and ${toInches(MAX_HEIGHT_CM)} in`;
-                    }
-
-                    return `${MIN_HEIGHT_CM} cm and ${MAX_HEIGHT_CM} cm`;
-                };
-
-                const focusField = (field) => {
-                    if (field && typeof field.focus === 'function') {
-                        field.focus();
-                    }
-                };
-
-                const originalSubmitForm = window.submitForm;
-
-                window.submitForm = function (nextStep) {
-                    if (nextStep === 'height') {
-                        const unitRadio = document.querySelector('input[name="heightunit-radio"]:checked');
-                        const unitField = document.getElementById('heightunit');
-                        const primaryField = document.getElementById('height');
-                        const secondaryField = document.getElementById('height2');
-
-                        let unit = 'cm';
-                        if (unitRadio && unitRadio.value) {
-                            unit = unitRadio.value;
-                        } else if (unitField && unitField.value) {
-                            unit = unitField.value;
-                        }
-
-                        if (unitField && unitRadio && unitRadio.value) {
-                            unitField.value = unitRadio.value;
-                        }
-
-                        const primaryRawValue = primaryField ? primaryField.value : '';
-                        const primaryNumeric = parseNumeric(primaryRawValue);
-
-                        if (primaryNumeric === null || primaryNumeric <= 0) {
-                            window.alert('Please enter your height using numbers greater than zero.');
-                            focusField(primaryField);
-                            return false;
-                        }
-
-                        let secondaryValue = secondaryField ? secondaryField.value : '';
-                        if (unit === 'ft-in') {
-                            const secondaryNumeric = parseNumeric(secondaryValue);
-                            if (secondaryNumeric === null) {
-                                secondaryValue = '0';
-                            } else if (secondaryNumeric < 0 || secondaryNumeric >= 12) {
-                                window.alert('Please enter the inches part of your height as a number between 0 and 11.9.');
-                                focusField(secondaryField);
-                                return false;
-                            } else {
-                                secondaryValue = String(secondaryNumeric);
-                            }
-                        }
-
-                        const heightInCm = toCentimetres(
-                            String(primaryNumeric),
-                            secondaryValue,
-                            unit
-                        );
-
-                        if (heightInCm === null) {
-                            const rangeDescription = formatHeightRangeForUnit(unit);
-                            window.alert(`Please enter a valid height between ${rangeDescription}. The shortest adult in the UK is 89 cm.`);
-                            focusField(primaryField);
-                            return false;
-                        }
-
-                        if (heightInCm < MIN_HEIGHT_CM || heightInCm > MAX_HEIGHT_CM) {
-                            const rangeDescription = formatHeightRangeForUnit(unit);
-                            window.alert(`Please enter a realistic height between ${rangeDescription}. The shortest adult in the UK is 89 cm.`);
-                            focusField(primaryField);
-                            return false;
-                        }
-
-                        if (heightInCm < SHORT_HEIGHT_CONFIRMATION_THRESHOLD_CM) {
-                            const confirmationMessage = `You entered ${heightInCm.toFixed(1)} cm. The shortest adult in the UK is 89 cm. Please confirm that your height is correct before continuing.`;
-                            const confirmed = window.confirm(confirmationMessage);
-                            if (!confirmed) {
-                                focusField(primaryField);
-                                return false;
-                            }
-                        }
-                    }
-
-                    if (typeof originalSubmitForm === 'function') {
-                        return originalSubmitForm(nextStep);
-                    }
-
-                    const nextStepField = document.getElementById('nextstep');
-                    if (nextStepField) {
-                        nextStepField.value = nextStep;
-                    }
-
-                    if (typeof form.requestSubmit === 'function') {
-                        form.requestSubmit();
-                    } else {
-                        form.submit();
-                    }
-
-                    return false;
-                };
-            });
         </script>
     </perch:if>
 
@@ -748,94 +454,6 @@
                 </div>
             </div>
         </section>
-        <script>
-            (function () {
-                const container = document.getElementById('medication-continue-dose-fields');
-
-                if (!container) {
-                    return;
-                }
-
-                const escapeHtml = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value)
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
-                };
-
-                const normalizeValue = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value).trim().toLowerCase();
-                };
-
-                const toIdSuffix = function (value, fallbackIndex) {
-                    const normalized = normalizeValue(value)
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/^-+|-+$/g, '');
-
-                    if (normalized !== '') {
-                        return normalized;
-                    }
-
-                    return String(fallbackIndex);
-                };
-
-                const medicationConfigs = window.getMedicationStepData();
-                const options = [
-                    { value: 'increase', label: 'Increase my dose' },
-                    { value: 'keep', label: 'Keep my dose' },
-                    { value: 'decrease', label: 'Decrease my dose' },
-                    { value: 'not-continue', label: "I don't want to continue with this medication" }
-                ];
-
-                medicationConfigs.forEach(function (config, index) {
-                    const slug = config.slug || `medication-${index + 1}`;
-                    const label = config.label || 'the weight loss medication';
-                    const storedValue = typeof config.continueDose === 'string' ? config.continueDose : '';
-                    const normalizedStoredValue = normalizeValue(storedValue);
-
-                    let fieldHtml = `
-                        <div class="medication-continue-dose" data-medication="${escapeHtml(label)}">
-                            <div class="old_title">
-                                <h3 class="medication-subtitle">${escapeHtml(label)}</h3>
-                            </div>
-                            <div class="under">
-                    `;
-
-                    options.forEach(function (option, optionIndex) {
-                        const optionValue = option.value;
-                        const optionLabel = option.label;
-                        const normalizedOptionValue = normalizeValue(optionValue);
-                        const isChecked = normalizedStoredValue !== ''
-                            ? normalizedStoredValue === normalizedOptionValue
-                            : optionIndex === 0;
-                        const requiredAttr = optionIndex === 0 ? ' required' : '';
-                        const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
-
-                        fieldHtml += `
-                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="continue-dose-${escapeHtml(slug)}"${requiredAttr}${isChecked ? ' checked' : ''} onclick="submitForm('continue-dose-${slug}')">
-                                <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
-                        `;
-                    });
-
-                    fieldHtml += `
-                            </div>
-                        </div>
-                    `;
-
-                    container.insertAdjacentHTML('beforeend', fieldHtml);
-                });
-            })();
-        </script>
     </perch:if>
 
 
@@ -1325,7 +943,21 @@
                        </div>
 
                    </div>-->
-                    <div id="medication-weight-fields"></div>
+                    <h2>What was your weight in kg/st-lbs before starting <span id="medication">the weight loss medication</span>?</h2>
+                    <div class="weight-inputs">
+                        <input type="text" name="weight-wegovy" id="weight-wegovy" placeholder="Kg">
+                        <input type="hidden" id="weight2-wegovy" required name="weight2-wegovy" placeholder="lbs"/>
+                        <input type="hidden" id="unit-wegovy" value="kg"   name="unit-wegovy" >
+
+                        <div class="st_lbs" id="st-lbs-inputs" style="display: none;">
+                            <input type="text" placeholder="St">
+                            <input type="text" placeholder="Lbs">
+                        </div>
+                    </div>
+                    <div class="unit-selector unit_selector">
+                        <label><input type="radio" required onchange="radioweight(this.value)" name="unit-wegovyradio" required value="kg" checked>kg</label>
+                        <label><input type="radio"  onchange="radioweight(this.value)" name="unit-wegovyradio" value="st-lbs"> st/lbs</label>
+                    </div>
 
                   <!--  <div class="buttons skip ">
                         <button class="back skip_button "><a href="/get-started/questionnaire?step=dose_wegovy" style="text-decoration: none;color: #000;" >Skip</a></button>
@@ -1338,7 +970,7 @@
                         <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
                        <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
-                        <button id="medication-weight-next" onclick="submitForm('weight-wegovy')" class="next"><span  style="text-decoration: none;color: #000;" >Next →</span></button>
+                        <button onclick="submitForm('weight-wegovy')" class="next"><span  style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
                 </div>
 
@@ -1346,83 +978,34 @@
 
         </section>
         <script>
-            (function () {
-                const container = document.getElementById('medication-weight-fields');
-                const nextButton = document.getElementById('medication-weight-next');
 
-                if (!container) {
-                    return;
-                }
+            function radioweight(value) {
 
-                const escapeHtml = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
+                const weight = document.getElementById("weight-wegovy");
+                document.getElementById("unit-wegovy").value = document.querySelector('input[name=unit-wegovyradio]:checked').value;
 
-                    return String(value)
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
-                };
-
-                const medicationWeights = window.getMedicationStepData();
-
-                medicationWeights.forEach(function (config, index) {
-                    const slug = config.slug || `medication-${index + 1}`;
-                    const unit = config.unit === 'st-lbs' ? 'st-lbs' : 'kg';
-                    const placeholder = unit === 'kg' ? 'Kg' : 'St';
-                    const weight2Type = unit === 'st-lbs' ? 'number' : 'hidden';
-                    const label = config.label || 'the weight loss medication';
-
-                    const fieldHtml = `
-                        <div class="medication-weight" data-medication="${escapeHtml(label)}">
-                            <h2>What was your weight in kg/st-lbs before starting <span class="medication-name">${escapeHtml(label)}</span>?</h2>
-                            <div class="weight-inputs">
-                                <input type="number" name="weight-${slug}" id="weight-${slug}" placeholder="${placeholder}" value="${escapeHtml(config.weight)}" step="0.1" min="0">
-                                <input type="${weight2Type}" id="weight2-${slug}" name="weight2-${slug}" placeholder="lbs" value="${escapeHtml(config.weight2)}" step="0.1" min="0" />
-                                <input type="hidden" id="unit-${slug}" value="${unit}" name="unit-${slug}">
-                                <div class="st_lbs" id="st-lbs-inputs-${slug}" style="display: none;">
-                                    <input type="number" placeholder="St" step="0.1" min="0">
-                                    <input type="number" placeholder="Lbs" step="0.1" min="0">
-                                </div>
-                            </div>
-                            <div class="unit-selector unit_selector">
-                                <label><input type="radio" onchange="radioweightMedication(this.value, '${slug}')" name="unit-${slug}radio" value="kg" ${unit === 'kg' ? 'checked' : ''}>kg</label>
-                                <label><input type="radio" onchange="radioweightMedication(this.value, '${slug}')" name="unit-${slug}radio" value="st-lbs" ${unit === 'st-lbs' ? 'checked' : ''}> st/lbs</label>
-                            </div>
-                        </div>
-                    `;
-
-                    container.insertAdjacentHTML('beforeend', fieldHtml);
-
-                    if (index === 0 && nextButton) {
-                        nextButton.setAttribute('onclick', `submitForm('weight-${slug}')`);
-                    }
-                });
-            })();
-
-            function radioweightMedication(value, slug) {
-                const weight = document.getElementById(`weight-${slug}`);
-                const weight2 = document.getElementById(`weight2-${slug}`);
-                const unitInput = document.getElementById(`unit-${slug}`);
-
-                if (!weight || !weight2 || !unitInput) {
-                    return;
-                }
-
-                unitInput.value = value;
-
-                if (value === 'kg') {
-                    weight.placeholder = 'Kg';
-                    weight2.type = 'hidden';
+                if (value === "kg") {
+                    weight.placeholder = "Kg";
+                    document.getElementById("weight2-wegovy").type = "hidden";
                 } else {
-                    weight.placeholder = 'St';
-                    weight2.type = 'number';
-                    weight2.placeholder = 'lbs';
+                    document.getElementById("weight2-wegovy").type = "text";
+                    weight.placeholder = "st";
+
                 }
+                /*  const weightkg = document.getElementById("weight");
+                  const weightlbs = document.getElementById("weight-lbs");
+
+                  if (value === "kg") {
+                      weightlbs.style.display = "none";
+                      weightkg.style.display = "flex";
+                  } else {
+                      weightlbs.style.display = "block";
+                      weightkg.style.display = "none";
+                  }*/
+
             }
+
+
         </script>
     </perch:if>
     <perch:if id="step" value="dose_wegovy" >
@@ -1442,14 +1025,43 @@
 
                     </div>-->
 
-                    <div id="medication-dose-fields"></div>
 
-                    <div class="buttons">
+                    <div class="old_title">
+                        <h2>When was your last dose of <span id="medication">the weight loss medication</span>?</h2>
+                    </div>
+
+
+
+                    <div class="under">
+
+
+                        <input type="radio" value="less4" onclick="submitForm('dose-wegovy')" name="dose-wegovy"  required id="Under" checked="checked">
+                        <label for="Under" id="Less">Less than 4 weeks ago</label>
+
+                        <input type="radio" value="4to6"  onclick="submitForm('dose-wegovy')" name="dose-wegovy"  id="4to6">
+                        <label for="4to6" id="ago">4-6 weeks ago</label>
+
+                        <input type="radio" value="over6" onclick="submitForm('dose-wegovy')" name="dose-wegovy"  id="over">
+                        <label for="over" id="More">More than 6 weeks ago</label>
+
                         <input type="hidden" id="nextstep" name="nextstep" value="recently_wegovy">
 
-                        <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                    </div>
 
-                        <button id="medication-dose-next" class="next" onclick="submitForm('dose-wegovy')"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+
+
+
+
+
+
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -1459,72 +1071,6 @@
 
 
         </section>
-        <script>
-            (function () {
-                const container = document.getElementById('medication-dose-fields');
-                const nextButton = document.getElementById('medication-dose-next');
-
-                if (!container) {
-                    return;
-                }
-
-                const escapeHtml = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value)
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
-                };
-
-                const options = [
-                    { value: 'less4', label: 'Less than 4 weeks ago' },
-                    { value: '4to6', label: '4-6 weeks ago' },
-                    { value: 'over6', label: 'More than 6 weeks ago' }
-                ];
-
-                const medicationConfigs = window.getMedicationStepData();
-
-                medicationConfigs.forEach(function (config, index) {
-                    const slug = config.slug || `medication-${index + 1}`;
-                    const label = config.label || 'the weight loss medication';
-                    const hasExistingValue = typeof config.dose === 'string' && config.dose !== '';
-
-                    let fieldHtml = `
-                        <div class="medication-dose" data-medication="${escapeHtml(label)}">
-                            <div class="old_title">
-                                <h2>When was your last dose of <span class="medication-name">${escapeHtml(label)}</span>?</h2>
-                            </div>
-                            <div class="under">
-                    `;
-
-                    options.forEach(function (option, optionIndex) {
-                        const isChecked = hasExistingValue ? config.dose === option.value : optionIndex === 0;
-                        const requiredAttr = optionIndex === 0 ? ' required' : '';
-                        const inputId = `dose-${slug}-${option.value}`;
-                        fieldHtml += `
-                                <input type="radio" value="${option.value}" id="${inputId}" name="dose-${slug}"${requiredAttr}${isChecked ? ' checked' : ''}>
-                                <label for="${inputId}">${escapeHtml(option.label)}</label>
-                        `;
-                    });
-
-                    fieldHtml += `
-                            </div>
-                        </div>
-                    `;
-
-                    container.insertAdjacentHTML('beforeend', fieldHtml);
-
-                    if (index === 0 && nextButton) {
-                        nextButton.setAttribute('onclick', `submitForm('dose-${slug}')`);
-                    }
-                });
-            })();
-        </script>
     </perch:if>
     <perch:if id="step" value="recently_wegovy" >
         <section class="how_old">
@@ -1536,120 +1082,51 @@
                      </div>
 
                  </div>-->
-                    <div id="medication-recent-dose-fields"></div>
+                    <div class="old_title">
+                        <h2>What dose of <span id="medication">the weight loss medication</span> were you prescribed most recently?</h2><br>
 
-                    <div class="buttons">
+
+                    </div>
+                    <div class="under">
+                        <input type="radio" value="25mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy"  required id="25mg" checked="checked">
+                        <label for="25mg" >0.25mg/2.5mg</label>
+
+
+                        <input type="radio" id="05mg"  value="05mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy" >
+                        <label for="05mg" >0.5mg/5mg</label>
+
+
+                        <input type="radio" id="1mg"  value="1mg"  onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="1mg" >1mg/7.5mg</label>
+
+                        <input type="radio" id="17mg" value="17mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="17mg" >1.7mg/12.5mg</label>
+
+
+                        <input type="radio" value="24mg" id="24mg" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="24mg" >2.4mg/15mg</label>
+
+                        <input type="radio" value="other" id="other" onclick="submitForm('recently-dose-wegovy')" name="recently-dose-wegovy">
+                        <label for="other" >Other</label>
+
                         <input type="hidden" id="nextstep" name="nextstep" value="continue_with_wegovy">
 
-                        <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
 
-                        <button id="medication-recent-dose-next" class="next" onclick="submitForm('recently-dose-wegovy')"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
             </div>
         </section>
-        <script>
-            (function () {
-                const container = document.getElementById('medication-recent-dose-fields');
-                const nextButton = document.getElementById('medication-recent-dose-next');
-
-                if (!container) {
-                    return;
-                }
-
-                const escapeHtml = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value)
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
-                };
-
-                const normalizeValue = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value).trim().toLowerCase();
-                };
-
-                const toIdSuffix = function (value, fallbackIndex) {
-                    const normalized = normalizeValue(value)
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/^-+|-+$/g, '');
-
-                    if (normalized !== '') {
-                        return normalized;
-                    }
-
-                    return String(fallbackIndex);
-                };
-
-                const medicationConfigs = window.getMedicationStepData();
-
-                medicationConfigs.forEach(function (config, index) {
-                    const slug = config.slug || `medication-${index + 1}`;
-                    const label = config.label || 'the weight loss medication';
-                    const storedRecentDose = typeof config.recentDose === 'string' ? config.recentDose : '';
-                    const recentDoseOptions = Array.isArray(config.recentDoseOptions) ? config.recentDoseOptions : [];
-                    const hasRadioOptions = recentDoseOptions.length > 0;
-
-                    let fieldHtml = `
-                        <div class="medication-recent-dose" data-medication="${escapeHtml(label)}">
-                            <div class="old_title">
-                                <h2>What dose of <span class="medication-name">${escapeHtml(label)}</span> were you prescribed most recently?</h2>
-                            </div>
-                            <div class="under">
-                    `;
-
-                    if (hasRadioOptions) {
-                        const normalizedStoredValue = normalizeValue(storedRecentDose);
-
-                        recentDoseOptions.forEach(function (option, optionIndex) {
-                            if (!option || typeof option.value === 'undefined' || typeof option.label === 'undefined') {
-                                return;
-                            }
-
-                            const optionValue = option.value;
-                            const optionLabel = option.label;
-                            const normalizedOptionValue = normalizeValue(optionValue);
-                            const isChecked = normalizedStoredValue !== ''
-                                ? normalizedStoredValue === normalizedOptionValue
-                                : optionIndex === 0;
-                            const requiredAttr = optionIndex === 0 ? ' required' : '';
-                            const inputId = `recently-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
-
-                            fieldHtml += `
-                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="recently-dose-${slug}"${requiredAttr}${isChecked ? ' checked' : ''}>
-                                <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
-                            `;
-                        });
-                    } else {
-                        const inputId = `recently-dose-${slug}`;
-                        fieldHtml += `
-                                <input type="text" id="${escapeHtml(inputId)}" name="recently-dose-${slug}" value="${escapeHtml(storedRecentDose)}" required placeholder="Enter your most recent dose">
-                        `;
-                    }
-
-                    fieldHtml += `
-                            </div>
-                        </div>
-                    `;
-
-                    container.insertAdjacentHTML('beforeend', fieldHtml);
-
-                    if (index === 0 && nextButton) {
-                        nextButton.setAttribute('onclick', `submitForm('recently-dose-${slug}')`);
-                    }
-                });
-            })();
-        </script>
 
     </perch:if>
     <perch:if id="step" value="continue_with_wegovy">
@@ -1672,8 +1149,26 @@
 
                     </div>
                     <div class="under">
-                        <div id="medication-continue-dose-fields"></div>
+                        <input type="radio" id="increase" value="increase" required onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy"  checked="checked">
+                        <label for="increase" >Increase my dose</label>
+
+
+                        <input type="radio" id="keep" value="keep"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy" >
+                        <label for="keep" >Keep my dose </label>
+
+
+                        <input type="radio"  id="decrease"  value="decrease"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy">
+                        <label for="decrease" id="dose">Decrease my dose</label>
+
+                        <input type="radio" id="not-continue"  value="not-continue"  onclick="submitForm('continue-dose-wegovy')" name="continue-dose-wegovy">
+                        <label for="not-continue" >I don't want to continue with this medication</label>
                         <input type="hidden" id="nextstep" name="nextstep" value="effects_with_wegovy">
+
+
+
+
+
+
                     </div>
 
                     <div class="get_started">
@@ -1682,8 +1177,6 @@
                                 <button><a href='<perch:forms id="previousPage"  />'>Back</a></button>
                                <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
-                                <button id="medication-continue-dose-next" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
-
                             </div>
                         </div>
                     </div>
@@ -1691,99 +1184,6 @@
                 </div>
             </div>
         </section>
-        <script>
-            (function () {
-                const container = document.getElementById('medication-continue-dose-fields');
-                const nextButton = document.getElementById('medication-continue-dose-next');
-
-                if (!container) {
-                    return;
-                }
-
-                const escapeHtml = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value)
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#039;');
-                };
-
-                const normalizeValue = function (value) {
-                    if (value === null || value === undefined) {
-                        return '';
-                    }
-
-                    return String(value).trim().toLowerCase();
-                };
-
-                const toIdSuffix = function (value, fallbackIndex) {
-                    const normalized = normalizeValue(value)
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/^-+|-+$/g, '');
-
-                    if (normalized !== '') {
-                        return normalized;
-                    }
-
-                    return String(fallbackIndex);
-                };
-
-                const medicationConfigs = window.getMedicationStepData();
-                const options = [
-                    { value: 'increase', label: 'Increase my dose' },
-                    { value: 'keep', label: 'Keep my dose' },
-                    { value: 'decrease', label: 'Decrease my dose' },
-                    { value: 'not-continue', label: "I don't want to continue with this medication" }
-                ];
-
-                medicationConfigs.forEach(function (config, index) {
-                    const slug = config.slug || `medication-${index + 1}`;
-                    const label = config.label || 'the weight loss medication';
-                    const storedValue = typeof config.continueDose === 'string' ? config.continueDose : '';
-                    const normalizedStoredValue = normalizeValue(storedValue);
-
-                    let fieldHtml = `
-                        <div class="medication-continue-dose" data-medication="${escapeHtml(label)}">
-                            <div class="old_title">
-                                <h3 class="medication-subtitle">${escapeHtml(label)}</h3>
-                            </div>
-                            <div class="under">
-                    `;
-
-                    options.forEach(function (option, optionIndex) {
-                        const optionValue = option.value;
-                        const optionLabel = option.label;
-                        const normalizedOptionValue = normalizeValue(optionValue);
-                        const isChecked = normalizedStoredValue !== ''
-                            ? normalizedStoredValue === normalizedOptionValue
-                            : optionIndex === 0;
-                        const requiredAttr = optionIndex === 0 ? ' required' : '';
-                        const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
-
-                        fieldHtml += `
-                                <input type="radio" value="${escapeHtml(optionValue)}" id="${escapeHtml(inputId)}" name="continue-dose-${escapeHtml(slug)}"${requiredAttr}${isChecked ? ' checked' : ''}>
-                                <label for="${escapeHtml(inputId)}">${escapeHtml(optionLabel)}</label>
-                        `;
-                    });
-
-                    fieldHtml += `
-                            </div>
-                        </div>
-                    `;
-
-                    container.insertAdjacentHTML('beforeend', fieldHtml);
-
-                    if (index === 0 && nextButton) {
-                        nextButton.setAttribute('onclick', `submitForm('continue-dose-${slug}')`);
-                    }
-                });
-            })();
-        </script>
     </perch:if>
     <perch:if id="step" value="effects_with_wegovy">
         <section class="how_old">
@@ -1875,12 +1275,6 @@
                             </div>
                             <!--////////////========chekbox section END=======/////////////-->
 
-                            <div class="mt-4" id="otherMedicationDetailsWrapper" style="display:none;">
-                                <label for="other_medication_details">Please provide details of the other medication you take, including the name, dose, and how often you take this.</label>
-                                <textarea id="other_medication_details" name="other_medication_details" placeholder="Medication name – dose – how often"></textarea>
-                                <p id="otherMedicationDetailsError" class="error-message">Please provide an answer before continuing.</p>
-                            </div>
-
                             <!--////////////========Button section Start=======/////////////-->
                             <div class="bottom_btn mt-5">
                                 <input type="hidden" id="nextstep" name="nextstep" value="gp_informed">
@@ -1898,71 +1292,6 @@
                 </div>
             </div>
         </section>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var checkboxes = document.querySelectorAll('input[name="medication_allergies[]"]');
-                var nextButton = document.getElementById('nextButton');
-                var nextStepField = document.getElementById('nextstep');
-                var detailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
-                var detailsField = document.getElementById('other_medication_details');
-                var detailsError = document.getElementById('otherMedicationDetailsError');
-
-                if (!checkboxes.length || !nextStepField) {
-                    return;
-                }
-
-                var toArray = function (nodeList) {
-                    return Array.prototype.slice.call(nodeList);
-                };
-
-                var updateState = function () {
-                    var selectedValues = toArray(checkboxes)
-                        .filter(function (checkbox) {
-                            return checkbox.checked;
-                        })
-                        .map(function (checkbox) {
-                            return checkbox.value;
-                        });
-
-                    var hasSelection = selectedValues.length > 0;
-                    var requiresDetails = selectedValues.indexOf('other') !== -1;
-                    var detailsFilled = true;
-
-                    if (detailsWrapper) {
-                        detailsWrapper.style.display = requiresDetails ? '' : 'none';
-                    }
-
-                    if (detailsField) {
-                        detailsField.required = requiresDetails;
-                        if (requiresDetails) {
-                            detailsFilled = detailsField.value.trim() !== '';
-                        }
-                    }
-
-                    if (detailsError) {
-                        detailsError.style.display = requiresDetails && !detailsFilled ? '' : 'none';
-                    }
-
-                    if (nextButton) {
-                        nextButton.disabled = !(hasSelection && detailsFilled);
-                    }
-
-                    if (nextStepField) {
-                        nextStepField.value = 'gp_informed';
-                    }
-                };
-
-                toArray(checkboxes).forEach(function (checkbox) {
-                    checkbox.addEventListener('change', updateState);
-                });
-
-                if (detailsField) {
-                    detailsField.addEventListener('input', updateState);
-                }
-
-                updateState();
-            });
-        </script>
     </perch:if>
     <perch:if id="step" value="list_any_medications" >
         <section class="how_old ">

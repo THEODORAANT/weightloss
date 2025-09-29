@@ -65,16 +65,7 @@ class PerchMembers_Member extends PerchAPI_Base
 
     	$out['memberProperties'] = PerchUtil::json_safe_encode($properties);
 
-        $this->update($out);
-
-        $Session = PerchMembers_Session::fetch();
-        if ($Session->logged_in && $Session->get('memberID') == $this->id()) {
-                if (array_key_exists('gender', $properties)) {
-                        $Session->set('gender', $properties['gender']);
-                } elseif (isset($data['gender'])) {
-                        $Session->set('gender', $data['gender']);
-                }
-        }
+    	$this->update($out);
 
     }
 

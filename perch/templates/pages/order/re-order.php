@@ -47,12 +47,6 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
               border-color: #007bff;
               background-color: #fff;
             }
-            .last-pen-reminder {
-              margin: 0 auto 1.5rem;
-              text-align: center;
-              color: #555;
-              max-width: 480px;
-            }
           </style>
              <?php if (perch_member_logged_in()) { ?>
   <div class="subheader">
@@ -95,37 +89,11 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
 
 
    </div>
-   <?php  } ?>
-
-    <?php
-        $last_pen_brand = null;
-        $last_pen_dose = null;
-
-        $last_pen_details = perch_shop_last_pen_details();
-
-        if (is_array($last_pen_details)) {
-            $last_pen_brand = $last_pen_details['brand'] ?? null;
-            $last_pen_dose  = $last_pen_details['dose'] ?? null;
-        }
-    ?>
+    <?php  } ?>
 
         <div class="main_product">
             <div id="product-selection">
                <h2 class="text-center fw-bolder">Order your next dose </h2>
-               <?php if ($last_pen_brand || $last_pen_dose) { ?>
-               <p class="last-pen-reminder">
-                 <?php
-                     $parts = [];
-                     if ($last_pen_brand) {
-                         $parts[] = PerchUtil::html($last_pen_brand);
-                     }
-                     if ($last_pen_dose) {
-                         $parts[] = PerchUtil::html($last_pen_dose);
-                     }
-                     echo 'Your last pen was ' . implode(' – ', $parts) . '.';
-                 ?>
-               </p>
-               <?php } ?>
     <?php
 
 

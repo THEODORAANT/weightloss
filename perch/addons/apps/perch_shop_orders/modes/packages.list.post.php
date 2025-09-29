@@ -15,15 +15,7 @@
 
     include('_orders_smartbar.php');
        
-        /* ----------------------------------------- /SMART BAR ----------------------------------------- */
-
-
-    echo $Form->form_start(false, 'packages-filter');
-        echo $Form->fields_from_template($Template, $details, array(), false);
-
-        echo $Form->submit_field('btnSubmit', 'Search', $API->app_path());
-
-        echo $Form->form_end();
+	/* ----------------------------------------- /SMART BAR ----------------------------------------- */
 
 
     $Listing = new PerchAdminListing($CurrentUser, $HTML, $Lang, $Paging);

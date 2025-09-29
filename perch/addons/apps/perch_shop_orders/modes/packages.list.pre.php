@@ -6,7 +6,7 @@ $sort="^orderCreated";
 	$PackageItems = new PerchShop_PackageItems($API);
 
     $Template   = $API->get('Template');
-    $Template->set('shop/orders/packages_filter.html', 'shop');
+    $Template->set('shop/orders/filter.html', 'shop');
 
     $Form = $API->get('Form');
     $Form->handle_empty_block_generation($Template);
@@ -16,16 +16,12 @@ $sort="^orderCreated";
 
                    $post = $_POST;
 
-                   $data = $Form->get_posted_content($Template, $Packages, false, false);
+                   $data = $Form->get_posted_content($Template, $Orders, false, false);
+                   $filerdata= json_encode($data);
+                 // print_r( $filerdata);
 
-                    $details_json = $data["packageDynamicFields"] ?? '[]';
-                if (!is_string($details_json)) {
-                    $details_json = json_encode($details_json);
-                }
-                $details = json_decode($details_json, TRUE);
-                if (!is_array($details)) {
-                    $details = [];
-                }
+                    $details=$data["orderDynamicFields"];
+                $details =json_decode($details, TRUE);
  $packages = $Packages->get_by_properties($details, $Paging);
 
 

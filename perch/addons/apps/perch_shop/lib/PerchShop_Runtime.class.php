@@ -905,11 +905,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		return $r;
 	}
-public function send_monthly_notification( $Customer,$message){
- $Orders = new PerchShop_Orders($this->api);
 
-return $Orders->send_monthly_notification( $Customer,$message);
-}
 public function get_package_future_items($opts){
 
     $customerID = $this->get_customer_id();
@@ -918,63 +914,31 @@ public function get_package_future_items($opts){
     $PackageItems = new PerchShop_PackageItems($this->api);
     $packages = $PackageItems->get_for_customer($customerID);
     $data  = [];
-    $today = strtotime(date('Y-m-d'));
-    $handled_prepaid = [];
-
+    $today =strtotime(date('Y-m-d'));
+// echo "today-".$today;
     if (PerchUtil::count($packages)) {
         foreach ($packages as $Package) {
             $date   = $Package->billingDate();
-            $status = strtolower((string)$Package->paymentStatus());
-            $billing_type = strtolower((string)$Package->packageBillingType());
-            $fields = PerchUtil::json_safe_decode($Package->productDynamicFields(), true);
 
-            $price = null;
-            if (isset($fields['price'])) {
-                $price = $fields['price'];
-                if (is_array($price) && isset($price['_default'])) {
-                    $price = $price['_default'];
-                }
-            }
 
-            if ($date !== null && $date !== '') {
+            $status = $Package->paymentStatus();
+                $fields = PerchUtil::json_safe_decode($Package->productDynamicFields(), true);
+if($date!=null){
+
+
                 $ts = strtotime($date);
 
-                if ($ts !== false && $ts >= $today) {
+                if ($ts >= $today) {
                     $data[] = [
-                        'id'          => $Package->itemID(),
-                        'price'       => $price,
-                        'item'        => $Package->productVariantDesc(),
+                        'id'        => $Package->itemID(),
+                        'price'  => $fields["price"],
+                        'item'  => $Package->productVariantDesc(),
                         'packageDate' => $date,
                         'due'         => ($ts <= $today ? 1 : 0),
                     ];
                 }
-
-                continue;
-            }
-
-            if ($billing_type === 'prepaid' && $status === 'pending') {
-                $package_uuid = $Package->packageID();
-                if ($package_uuid && isset($handled_prepaid[$package_uuid])) {
-                    continue;
                 }
 
-                if ($package_uuid) {
-                    $handled_prepaid[$package_uuid] = true;
-                }
-
-                $display_date = $Package->nextBillingDate();
-                if (!$display_date || strtotime($display_date) === false) {
-                    $display_date = date('Y-m-d');
-                }
-
-                $data[] = [
-                    'id'          => $Package->itemID(),
-                    'price'       => $price,
-                    'item'        => $Package->productVariantDesc(),
-                    'packageDate' => $display_date,
-                    'due'         => 1,
-                ];
-            }
         }
     }
  $Template = $this->api->get("Template");

@@ -108,55 +108,6 @@
 
         // Tags
         if ($result) {
-            if (is_object($Member) && isset($post['questionnaire_bmi']) && is_array($post['questionnaire_bmi'])) {
-                foreach ($post['questionnaire_bmi'] as $questionnaireID => $bmiValue) {
-                    $questionnaireID = (int) $questionnaireID;
-                    if ($questionnaireID <= 0) {
-                        continue;
-                    }
-
-                    $bmiValue = trim((string) $bmiValue);
-
-                    $QuestionnaireEntry = $Questionnaires->find($questionnaireID);
-                    if (!$QuestionnaireEntry) {
-                        continue;
-                    }
-
-                    if ((int) $QuestionnaireEntry->member_id() !== (int) $Member->id()) {
-                        continue;
-                    }
-
-                    $entryDetails = $QuestionnaireEntry->to_array();
-
-                    $currentValue = trim((string) $QuestionnaireEntry->answer_text());
-                    if ($currentValue === '' && is_array($entryDetails) && isset($entryDetails['answer'])) {
-                        $currentValue = trim((string) $entryDetails['answer']);
-                    }
-
-                    $newValue = $bmiValue;
-
-                    if ($currentValue !== '' && strpos($currentValue, ',') !== false && strpos($newValue, ',') === false) {
-                        $suffix = trim((string) substr($currentValue, strpos($currentValue, ',') + 1));
-                        if ($suffix !== '') {
-                            $newValue .= ', '.$suffix;
-                        }
-                    }
-
-                    if ($currentValue === $newValue) {
-                        continue;
-                    }
-
-                    $updateData = [
-                        'answer_text' => $newValue,
-                    ];
-
-                    if (is_array($entryDetails) && array_key_exists('answer', $entryDetails)) {
-                        $updateData['answer'] = $newValue;
-                    }
-
-                    $QuestionnaireEntry->update($updateData);
-                }
-            }
 
             // existing tags
             $Tags->remove_from_member($Member->id(), $existing_tagIDs);
