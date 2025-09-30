@@ -191,7 +191,7 @@ if (isset($_POST['nextstep'])) {
  $_SESSION['question_order']++;
     foreach ($_POST as $key => $value) {
         // Cleanup based on logic
-        if (
+        if (isset($_SESSION['questionnaire']['gender']) &&
             $_SESSION['questionnaire']['gender'] === 'Male' &&
             isset($_SESSION['questionnaire']['pregnancy'])
         ) {
