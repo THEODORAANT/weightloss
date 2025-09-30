@@ -999,11 +999,11 @@ function getNextStepforFirstOrder(array $data): string {
                return true;
            }
        }
-           if ($step=="medications" ){
+         /*  if ($step=="medications" ){
            if (is_array($value) && !empty(array_intersect($this->getMedicationSlugs(), array_map('perch_questionnaire_medication_slug', (array)$value)))) {
             return true;
            }
-           }
+           }*/
 
               if ($step=="starting_wegovy"){
 
