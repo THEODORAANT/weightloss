@@ -4,6 +4,9 @@ if (!perch_member_logged_in()) { exit;}
 if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
     $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
 }
+if (!isset($_SESSION['questionnaire-reorder']) || !is_array($_SESSION['questionnaire-reorder'])) {
+    $_SESSION['questionnaire-reorder'] = [];
+}
 
 $memberGender = perch_member_get('gender');
 $memberGender = is_string($memberGender) ? trim($memberGender) : '';
@@ -55,6 +58,7 @@ $memberGenderForTemplate = $memberIsFemale ? 'Female' : $memberGender;
                             'step' => $current_step,
                             'timestamp' => $timestamp
                         ];
+                        $_SESSION['questionnaire-reorder']['uuid'] = $user_id;
          foreach ($_POST as $key => $value) {
            if(is_array($value)){
                       $_SESSION['questionnaire-reorder'][$key] = $value;
@@ -134,6 +138,9 @@ $memberGenderForTemplate = $memberIsFemale ? 'Female' : $memberGender;
                                     exit();
                                     }
 
+    }
+    if (isset($_SESSION['step_data']['user_id'])) {
+        $_SESSION['questionnaire-reorder']['uuid'] = $_SESSION['step_data']['user_id'];
     }
     setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
         perch_layout('getStarted/header', [
