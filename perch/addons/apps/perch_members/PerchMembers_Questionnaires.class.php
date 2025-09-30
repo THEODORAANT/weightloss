@@ -1828,7 +1828,7 @@ if(isset($data["uuid"])){
 
       }
 
-      if ($medicationsRowIndex !== null && isset($rowsToInsert[$medicationsRowIndex])) {
+    /*  if ($medicationsRowIndex !== null && isset($rowsToInsert[$medicationsRowIndex])) {
           $summaries = [];
           foreach ($selectedMedicationSlugs as $slug) {
               if ($slug === '' || $slug === 'none') {
@@ -1871,7 +1871,7 @@ if(isset($data["uuid"])){
           } elseif ($medicationsOriginalAnswer !== '') {
               $rowsToInsert[$medicationsRowIndex]['answer_text'] = $medicationsOriginalAnswer;
           }
-      }
+      }*/
 
       foreach ($rowsToInsert as $qdata) {
           $columns = implode(", ", array_keys($qdata));

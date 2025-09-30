@@ -49,6 +49,7 @@
         echo '<tbody>';
 
         foreach ($questions as $slug => $label) {
+         $historyPrinted = false;
             if (!isset($answers_by_slug[$slug])) {
                 continue;
             }
@@ -64,7 +65,10 @@
             }
 
             $answer_text = trim((string) $answer_text);
-
+   if (!$historyPrinted) {
+                                echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Answer->uuid().'">History</a></td></tr>';
+                                $historyPrinted = true;
+                            }
             echo '<tr>';
             echo '<td class="action">'.PerchUtil::html($label).'</td>';
             echo '<td>'.PerchUtil::html($answer_text).'</td>';

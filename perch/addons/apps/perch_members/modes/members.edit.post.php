@@ -189,7 +189,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
       </tbody>
              </table>
          </div>
-     <?php
+     <?php /*
        //Questionnaire
              echo $HTML->heading2('Questionnaire');
      ?>
@@ -377,7 +377,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
         if (!empty($bmi_edit_controls_needed)) {
             echo '<script>(function(){var buttons=document.querySelectorAll(".js-bmi-edit");if(!buttons.length){return;}Array.prototype.forEach.call(buttons,function(button){button.addEventListener("click",function(){var inputId=button.getAttribute("data-input-id");if(!inputId){return;}var input=document.getElementById(inputId);if(!input){return;}var container=button.parentNode;while(container&&!(container.className&&container.className.indexOf("bmi-field")!==-1)){container=container.parentNode;}if(container){var display=container.querySelector(".js-bmi-display");if(display){display.style.display="none";}}button.style.display="none";input.style.display="";input.focus();});});})();</script>';
         }
-
+*/
     ?>
 
 
