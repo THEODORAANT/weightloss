@@ -815,7 +815,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 .' AND d.type='.$this->db->pdb($type);
 
         if ($this->questionOrderColumnAvailable()) {
-            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+         $sql .= ' ORDER BY d.question_order DESC';
+           // $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
         } else {
             $sql .= ' ORDER BY d.id DESC';
         }
@@ -834,7 +835,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         }
 
         if ($this->questionOrderColumnAvailable()) {
-            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+          $sql .= ' ORDER BY d.question_order DESC';
+          //  $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
         } else {
             $sql .= ' ORDER BY d.id DESC';
         }
@@ -1640,11 +1642,11 @@ $Members = new PerchMembers_Members;
           $qdata['type'] = $type;
           $qdata['question_slug'] = $key;
           $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
-          $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
-          if ($questionOrder !== null) {
+         // $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
+          /*if ($questionOrder !== null) {
               $qdata['question_order'] = $questionOrder;
-          }
-
+          }*/
+ $qdata['question_order'] = $data[$key]["questionOrder"];
           if ($questionConfig) {
               $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
           } elseif (is_array($value)) {

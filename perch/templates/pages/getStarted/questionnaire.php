@@ -164,7 +164,7 @@ if (isset($_GET['step']) && $_GET['step'] === 'startagain') {
 if (!isset($_SESSION['questionnaire']['reviewed']) || $_SESSION['questionnaire']['reviewed'] !== 'InProcess') {
     $_SESSION['questionnaire']['reviewed'] = 'Pending';
 }
-
+ $_SESSION['question_order']=0;
 // Check if coming from consultation page
 $lastPart = basename(parse_url($previousPage, PHP_URL_PATH));
 if ($lastPart === 'consultation') {
@@ -188,7 +188,7 @@ if (isset($_POST['nextstep'])) {
         'step' => $current_step,
         'timestamp' => $timestamp
     ];
-
+ $_SESSION['question_order']++;
     foreach ($_POST as $key => $value) {
         // Cleanup based on logic
         if (
@@ -221,6 +221,8 @@ if (isset($_POST['nextstep'])) {
             } else {
                 $_SESSION['questionnaire'][$key] = htmlspecialchars($value);
             }
+  $_SESSION['questionnaire'][$key]["question_order"]=  $_SESSION['question_order'];
+   $_SESSION['question_order']++;
 
             // Log answer
             $loggedValue = is_array($_SESSION['questionnaire'][$key])
