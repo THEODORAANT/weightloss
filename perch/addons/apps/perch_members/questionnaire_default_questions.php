@@ -102,19 +102,6 @@ return [
                 'no' => 'No',
             ],
             'step' => 'chat_with_us',
-            'dependencies' => [
-                [
-                    'values' => ['yes'],
-                    'question' => 'email_address',
-                    'step' => 'contact',
-                ],
-            ],
-        ],
-        'email_address' => [
-            'label' => 'Please enter your email address',
-            'type' => 'text',
-            'name' => 'email_address',
-            'step' => 'contact',
         ],
     ],
     'first-order' => [
