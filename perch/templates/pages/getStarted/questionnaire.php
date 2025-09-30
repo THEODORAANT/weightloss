@@ -150,11 +150,15 @@ $cookieQuestionnaire = isset($_COOKIE['questionnaire'])
 if (!isset($_SESSION['questionnaire']) || empty($_SESSION['questionnaire'])) {
     $_SESSION['questionnaire'] = $cookieQuestionnaire;
 }
+if (!isset($_SESSION['questionnaire_question_order']) || !is_array($_SESSION['questionnaire_question_order'])) {
+    $_SESSION['questionnaire_question_order'] = [];
+}
 
 $previousPage = $_SERVER['HTTP_REFERER'] ?? 'No referrer';
 $redirect=true;
 if (isset($_GET['step']) && $_GET['step'] === 'startagain') {
     $_SESSION['questionnaire'] = [];
+    $_SESSION['questionnaire_question_order'] = [];
     setcookie('questionnaire', '', time()-3600, '/');
     header("Location: /get-started/questionnaire?step=howold");
     exit();
@@ -196,6 +200,7 @@ if (isset($_POST['nextstep'])) {
             isset($_SESSION['questionnaire']['pregnancy'])
         ) {
             unset($_SESSION['questionnaire']['pregnancy']);
+            unset($_SESSION['questionnaire_question_order']['pregnancy']);
         }
 
         if (
@@ -203,6 +208,7 @@ if (isset($_POST['nextstep'])) {
             $_SESSION['questionnaire']['weightunit'] === 'kg'
         ) {
             unset($_SESSION['questionnaire']['weight2']);
+            unset($_SESSION['questionnaire_question_order']['weight2']);
         }
 
         if (
@@ -210,6 +216,7 @@ if (isset($_POST['nextstep'])) {
             $_SESSION['questionnaire']['heightunit'] == 'cm'
         ) {
             unset($_SESSION['questionnaire']['height2']);
+            unset($_SESSION['questionnaire_question_order']['height2']);
         }
       /*  if ($key == 'diabetes') {
         $redirect=false;
@@ -221,8 +228,9 @@ if (isset($_POST['nextstep'])) {
             } else {
                 $_SESSION['questionnaire'][$key] = htmlspecialchars($value);
             }
-  $_SESSION['questionnaire'][$key]["question_order"]=  $_SESSION['question_order'];
-   $_SESSION['question_order']++;
+
+            $_SESSION['questionnaire_question_order'][$key] = $_SESSION['question_order'];
+            $_SESSION['question_order']++;
 
             // Log answer
             $loggedValue = is_array($_SESSION['questionnaire'][$key])

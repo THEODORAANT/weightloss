@@ -111,6 +111,9 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
              }
 
              $_SESSION['questionnaire'] = array();
+             if (isset($_SESSION['questionnaire_question_order'])) {
+                 $_SESSION['questionnaire_question_order'] = [];
+             }
             setcookie('questionnaire', '', time()-3600, '/');
             }
 

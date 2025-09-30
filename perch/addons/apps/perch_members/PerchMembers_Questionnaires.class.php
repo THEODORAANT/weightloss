@@ -1579,6 +1579,10 @@ $Members = new PerchMembers_Members;
          $new_id =$this->db->execute($insert_status);
       $data['bmi']=$result;
       $sessionKey = $new_id ?: ($memberID . ':' . $type);
+      $sessionQuestionOrderMap = [];
+      if (isset($_SESSION['questionnaire_question_order']) && is_array($_SESSION['questionnaire_question_order'])) {
+          $sessionQuestionOrderMap = $_SESSION['questionnaire_question_order'];
+      }
 
       $weightUnitValue = $data['weightunit'] ?? ($data['weightunit-radio'] ?? ($data['weightradio-unit'] ?? ''));
       $heightUnitValue = $data['heightunit'] ?? ($data['heightunit-radio'] ?? '');
@@ -1642,11 +1646,19 @@ $Members = new PerchMembers_Members;
           $qdata['type'] = $type;
           $qdata['question_slug'] = $key;
           $qdata['question_text'] = $questionConfig['label'] ?? ($questionLookup[$key] ?? $key);
-         // $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
-          /*if ($questionOrder !== null) {
-              $qdata['question_order'] = $questionOrder;
-          }*/
- $qdata['question_order'] = $data[$key]["questionOrder"];
+
+          $questionOrder = null;
+          if (is_array($value) && array_key_exists('questionOrder', $value)) {
+              $questionOrder = $value['questionOrder'];
+          } elseif (isset($sessionQuestionOrderMap[$key])) {
+              $questionOrder = $sessionQuestionOrderMap[$key];
+          } else {
+              $questionOrder = $this->getQuestionOrderForSession($sessionKey, $type, $key);
+          }
+
+          if ($questionOrder !== null) {
+              $qdata['question_order'] = (int) $questionOrder;
+          }
           if ($questionConfig) {
               $qdata['answer_text'] = $this->resolveAnswerTextFromConfig($value, $questionConfig);
           } elseif (is_array($value)) {
