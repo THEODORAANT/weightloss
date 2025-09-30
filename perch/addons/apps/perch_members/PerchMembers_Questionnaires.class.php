@@ -260,10 +260,9 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
 	"rate_current_experience"=>"Are you happy with your monthly weight loss?",
 	"no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
-	"chat_with_us"=>"Would you like to chat with someone?",
-	"email_address"=>"Please enter your  email address",
-	 "multiple_answers"=>"Have client alter answers?",
-	 "documents"=>"Member Documents",
+        "chat_with_us"=>"Would you like to chat with someone?",
+        "multiple_answers"=>"Have client alter answers?",
+        "documents"=>"Member Documents",
 	];
 	public $steps=[
     "age"=>"howold",
@@ -374,11 +373,6 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 "yes" => "Yes",
                 "no" => "No"
             ]
-        ],
-        "email_address" => [
-            "label" => "Please enter your  email address",
-            "type" => "text",
-            "name" => "email_address"
         ]
     ];
 
@@ -924,11 +918,11 @@ function getNextStepforFirstOrder(array $data): string {
     }
 
     if (isset($data['rate_current_experience'])) {
-        return $data['rate_current_experience'] === 'no' ? 'no-happy' : 'contact';
+        return $data['rate_current_experience'] === 'no' ? 'no-happy' : 'chat_with_us';
     }
 
     if (isset($data['chat_with_us'])) {
-        return $data['chat_with_us'] === 'no' ? 'cart' : 'contact';
+        return 'cart';
     }
 
     if (isset($data['pregnancy'])) {

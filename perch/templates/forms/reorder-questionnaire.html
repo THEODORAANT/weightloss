@@ -246,7 +246,7 @@
                         <div class="button-group">
                             <button id="yesBtn" onclick="setValuesreorderForm('rate_current_experience','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
                             <button id="noBtn" onclick="setValuesreorderForm('rate_current_experience','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
-                            <input type="hidden" id="nextstep" name="nextstep" value="contact">
+                            <input type="hidden" id="nextstep" name="nextstep" value="chat_with_us">
                             <input type="hidden" id="rate_current_experience" name="rate_current_experience" value="">
 
 
@@ -284,7 +284,7 @@
                     <div class="buttons">
                         <button type="button" class="back"><a style="text-decoration: none;
                                     color: #000;" href="/client/questionnaire-re-order?step=rate_current_experience">Back</a></button>
-                        <input type="hidden" id="nextstep" name="nextstep" value="contact">
+                        <input type="hidden" id="nextstep" name="nextstep" value="chat_with_us">
                         <button type="submit"  onclick="submitForm('no_happy_reasons')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
 
                     </div>
@@ -317,7 +317,7 @@
                         <div class="button-group">
                             <button id="yesBtn" onclick="setValuesreorderForm('chat_with_us','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
                             <button id="noBtn" onclick="setValuesreorderForm('chat_with_us','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
-                            <input type="hidden" id="nextstep" name="nextstep" value="contact">
+                            <input type="hidden" id="nextstep" name="nextstep" value="cart">
                             <input type="hidden" id="chat_with_us" name="chat_with_us" value="">
 
 
@@ -335,43 +335,6 @@
                 </div>
             </div>
         </section>
-    </perch:if>
-
-    <perch:if id="step" value="contact" >
-
-        <section class="how_old ">
-            <div class="mixed">
-                <div class="bar">
-                    <!--  <div class="progress_bar">
-                      <div class="nambar">
-                          <span>22%</span>
-                      </div>
-
-                  </div>-->
-                </div>
-                <h2>Please enter your  email address</h2>
-                <div class="weight-inputs">
-                    <input type="text" id="email_address"  name="email_address" placeholder="e-mail address" style="width: 100%;" >
-
-                    <input type="hidden" id="nextstep" name="nextstep" value="cart">
-
-                </div>
-
-
-                <div class="buttons skip ">
-                    <button class="back skip_button "><a href="/order/cart" style="text-decoration: none;color: #000;" >Skip</a></button>
-                </div>
-
-
-                <div class="buttons">
-                    <button class="back"><a href="/client/questionnaire-re-order?step=chat_with_us" style="text-decoration: none;color: #000;" >Back</a></button>
-                    <button onclick="submitForm('email_address')" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
-                </div>
-            </div>
-        </section>
-
-
-
     </perch:if>
 
 </perch:form>
