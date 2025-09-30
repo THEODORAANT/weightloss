@@ -47,9 +47,9 @@
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
-
+  $historyPrinted = false;
         foreach ($questions as $slug => $label) {
-         $historyPrinted = false;
+
             if (!isset($answers_by_slug[$slug])) {
                 continue;
             }
