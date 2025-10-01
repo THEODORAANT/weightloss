@@ -5,8 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
+      <change afterPath="$PROJECT_DIR$/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/custom.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/due.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/jquery-3.7.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/lazyload.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/my-2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/my.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/popper.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/slick.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/custom.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/jquery-3.7.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/lazyload.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/my-2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/my.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/popper.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/product.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/slick.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/started/theme.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/theme.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/cart/cart-sum.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/cart/cart-sum.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +62,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_shop/templates/shop/cart",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -55,11 +74,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/cart" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch/templates" />
-      <recent name="$PROJECT_DIR$/perch" />
-      <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -103,15 +122,7 @@
       <workItem from="1758704519047" duration="9310000" />
       <workItem from="1758791690260" duration="13098000" />
       <workItem from="1759138808743" duration="8667000" />
-      <workItem from="1759222055479" duration="7780000" />
-    </task>
-    <task id="LOCAL-00025" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757112422109</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1757112422109</updated>
+      <workItem from="1759222055479" duration="9825000" />
     </task>
     <task id="LOCAL-00026" summary="weightloss">
       <option name="closed" value="true" />
@@ -497,7 +508,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759241679030</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1759316467370</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1759316467370</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
