@@ -292,7 +292,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "wegovy_side_effects"=>"wegovy_side_effects",
     "gp_informed"=>"gp_informed",
     "GP_email_address"=>"gp_address",
-    "Get access to special offers"=>"access_special_offers"
+    "special_offers_email"=>"access_special_offers"
     ];
     public $reorder_questions_answers = [
         "weight" => [
@@ -627,9 +627,16 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                        "email_address" => [
                                            "label" => "Please enter your GP's email address",
                                            "type" => "text",
-                                           "name" => "email_address"
+                                           "name" => "email_address",
+                                           "step" => "gp_address"
+                                       ],
+                                       "special_offers_email" => [
+                                           "label" => "Get access to special offers",
+                                           "type" => "text",
+                                           "name" => "special_offers_email",
+                                           "step" => "access_special_offers"
                                        ]
-                                   ];
+                                  ];
 
 
 		public $questions=[
@@ -665,7 +672,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed"=>"Would you like your GP to be informed of this consultation?",
     "email_address"=>"Please enter your GP's email address",
-    "Get access to special offers"=>"email_address",
+    "special_offers_email"=>"Get access to special offers",
     "multiple_answers"=>"Have client alter answers?",
     "documents"=>"Member Documents",
     "bmi"=>"BMI",
@@ -1611,7 +1618,7 @@ $Members = new PerchMembers_Members;
       foreach ($data as $key => $value) {
           $questionConfig = $questionConfigSet[$key] ?? null;
 
-          if ($key === 'email_address') {
+          if ($key === 'email_address' || $key === 'special_offers_email') {
               $emailValue = '';
               if (is_array($value)) {
                   $firstEmail = reset($value);
@@ -1624,7 +1631,7 @@ $Members = new PerchMembers_Members;
 
               if ($emailValue === '') {
                   $questionStep = is_array($questionConfig) ? ($questionConfig['step'] ?? null) : null;
-                  if ($questionStep === 'access_special_offers') {
+                  if ($questionStep === 'access_special_offers' || $key === 'special_offers_email') {
                       $value = 'skipped';
                   } else {
                       $value = 'no-email-added';
