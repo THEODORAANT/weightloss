@@ -265,7 +265,10 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                                     $bmi_edit_controls_needed = true;
                                 }
                             } else {
-                                echo PerchUtil::html($Questionnaire->answer_text());
+                                $answerText = (string)$Questionnaire->answer_text();
+                                $output = PerchUtil::html($answerText);
+
+                                echo $output;
                             }
                             echo '</td>';
                             echo '</tr>';

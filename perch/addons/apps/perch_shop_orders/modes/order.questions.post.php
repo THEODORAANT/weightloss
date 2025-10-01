@@ -71,7 +71,42 @@
                             }
             echo '<tr>';
             echo '<td class="action">'.PerchUtil::html($label).'</td>';
-            echo '<td>'.PerchUtil::html($answer_text).'</td>';
+
+            $output = PerchUtil::html($answer_text);
+
+            if ($slug === 'gp_informed') {
+                $normalised_answer = strtolower(trim($answer_text));
+
+                if ($normalised_answer === 'yes') {
+                    $email_answer = '';
+
+                    foreach (['email_address', 'GP_email_address'] as $email_slug) {
+                        if (!isset($answers_by_slug[$email_slug])) {
+                            continue;
+                        }
+
+                        $email_entry = $answers_by_slug[$email_slug];
+                        $email_answer = trim((string) $email_entry->answer_text());
+
+                        if ($email_answer === '') {
+                            $entry_details = $email_entry->to_array();
+                            if (is_array($entry_details) && isset($entry_details['answer'])) {
+                                $email_answer = trim((string) $entry_details['answer']);
+                            }
+                        }
+
+                        if ($email_answer !== '') {
+                            break;
+                        }
+                    }
+
+                    if ($email_answer !== '') {
+                        $output .= '<br><small>GP email: '.PerchUtil::html($email_answer).'</small>';
+                    }
+                }
+            }
+
+            echo '<td>'.$output.'</td>';
             echo '</tr>';
         }
 
