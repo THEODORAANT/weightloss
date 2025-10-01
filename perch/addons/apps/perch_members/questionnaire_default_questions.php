@@ -526,7 +526,7 @@ return [
         'access_special_offers' => [
             'label' => 'Get access to special offers',
             'type' => 'text',
-            'name' => 'email_address',
+            'name' => 'special_offers_email',
             'step' => 'access_special_offers',
         ],
     ],
