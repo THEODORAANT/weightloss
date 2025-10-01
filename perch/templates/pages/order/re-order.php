@@ -128,7 +128,7 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
                <?php } ?>
     <?php
 
-
+perch_shop_empty_cart();
             perch_shop_products(['category' => 'products/weight-loss','template'=>'products/list_for_reorder']);
 
             ?>
