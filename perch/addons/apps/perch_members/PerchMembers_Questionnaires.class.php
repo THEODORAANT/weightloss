@@ -1361,6 +1361,145 @@ function getNextStepforFirstOrder(array $data): string {
       return $minHeightCm . ' cm and ' . $maxHeightCm . ' cm';
   }
 
+  private function extractNumericHeightValue($value): ?float
+  {
+      if ($value === null) {
+          return null;
+      }
+
+      if (is_numeric($value)) {
+          return (float)$value;
+      }
+
+      if (!is_scalar($value)) {
+          return null;
+      }
+
+      $value = str_replace(',', '.', trim((string)$value));
+
+      if ($value === '') {
+          return null;
+      }
+
+      if (preg_match('/-?\d+(?:\.\d+)?/', $value, $matches)) {
+          return (float)$matches[0];
+      }
+
+      return null;
+  }
+
+  private function extractHeightValuesFromAnswer($value): array
+  {
+      $result = ['primary' => null, 'secondary' => null];
+
+      if (!is_scalar($value)) {
+          return $result;
+      }
+
+      $value = str_replace(',', '.', trim((string)$value));
+
+      if ($value === '') {
+          return $result;
+      }
+
+      if (preg_match_all('/-?\d+(?:\.\d+)?/', $value, $matches) && isset($matches[0])) {
+          if (isset($matches[0][0])) {
+              $result['primary'] = (float)$matches[0][0];
+          }
+
+          if (isset($matches[0][1])) {
+              $result['secondary'] = (float)$matches[0][1];
+          }
+      }
+
+      return $result;
+  }
+
+  private function getLatestFirstOrderHeightDataForMember(int $memberID): ?array
+  {
+      $questionSlugs = [
+          $this->db->pdb('height'),
+          $this->db->pdb('height2'),
+          $this->db->pdb('heightunit'),
+      ];
+
+      $sql = 'SELECT id, qid, question_slug, answer_text'
+          . ' FROM  ' . PERCH_DB_PREFIX . 'questionnaire'
+          . ' WHERE member_id=' . $this->db->pdb($memberID)
+          . ' AND type=' . $this->db->pdb('first-order')
+          . ' AND question_slug IN (' . implode(',', $questionSlugs) . ')'
+          . ' ORDER BY qid DESC, id DESC';
+
+      $rows = $this->db->get_rows($sql);
+
+      if (!is_array($rows) || empty($rows)) {
+          return null;
+      }
+
+      $latestQid = null;
+      $heightData = [
+          'height' => null,
+          'height2' => null,
+          'heightunit' => null,
+      ];
+
+      foreach ($rows as $row) {
+          $rowQid = $row['qid'] ?? null;
+
+          if ($latestQid === null) {
+              $latestQid = $rowQid;
+          } elseif ($rowQid !== $latestQid) {
+              break;
+          }
+
+          $slug = $row['question_slug'] ?? '';
+          $answer = $row['answer_text'] ?? '';
+
+          switch ($slug) {
+              case 'height':
+                  $values = $this->extractHeightValuesFromAnswer($answer);
+                  if ($values['primary'] !== null) {
+                      $heightData['height'] = $values['primary'];
+                  }
+                  if ($values['secondary'] !== null && $heightData['height2'] === null) {
+                      $heightData['height2'] = $values['secondary'];
+                  }
+                  break;
+              case 'height2':
+                  $secondary = $this->extractNumericHeightValue($answer);
+                  if ($secondary !== null) {
+                      $heightData['height2'] = $secondary;
+                  }
+                  break;
+              case 'heightunit':
+                  $unit = $this->resolveHeightUnit(['heightunit' => $answer]);
+                  if ($unit === null) {
+                      $unit = $this->resolveHeightUnit(['heightunit-radio' => $answer]);
+                  }
+
+                  if ($unit === null) {
+                      $unit = strtolower(trim((string)$answer));
+                      if ($unit === 'ft_in' || $unit === 'ftin') {
+                          $unit = 'ft-in';
+                      }
+                  }
+
+                  $heightData['heightunit'] = $unit;
+                  break;
+          }
+      }
+
+      if ($heightData['height'] === null || $heightData['heightunit'] === null || $heightData['heightunit'] === '') {
+          return null;
+      }
+
+      if ($heightData['height2'] === null) {
+          $heightData['height2'] = 0;
+      }
+
+      return $heightData;
+  }
+
   function calculateBMIAdvanced($weight, $weightUnit, $height1, $weight2=0, $height2 = 0, $heightUnit = 'cm') {
       // Normalise numeric values defensively before calculations
       $weightNumeric  = is_numeric($weight)  ? (float)$weight  : null;
@@ -1526,8 +1665,47 @@ $Members = new PerchMembers_Members;
      if(isset($data["height2"])){
            $height2=$data["height2"];
           }
-      if($type=="first-order"){
-      $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $data["height"],$weight2, $height2, $data["heightunit"]);
+     $questionnaireHeight = $this->getLatestFirstOrderHeightDataForMember((int)$memberID);
+
+     $heightForBMI = null;
+
+     if (is_array($questionnaireHeight)) {
+         $heightForBMI = [
+             'primary' => $questionnaireHeight['height'],
+             'secondary' => $questionnaireHeight['height2'] ?? 0,
+             'unit' => $questionnaireHeight['heightunit'] ?? 'cm',
+         ];
+     }
+
+     if ($type=="first-order" && $heightForBMI === null) {
+     $heightForBMI = [
+         'primary' => $data["height"],
+         'secondary' => $height2,
+         'unit' => $data["heightunit"],
+     ];
+     }
+
+     if ($heightForBMI === null) {
+     $heightcheck=$this->parseHeight($memberdetails["height"]);
+     if($heightcheck){
+     $memberdetails["height"]=$heightcheck["feet"];
+     $memberdetails["height2"]=$heightcheck["inches"];
+     }
+     if(!isset($memberdetails["heightunit"])){
+     $memberdetails["heightunit"]=$memberdetails["heightunit-radio"];
+     }
+
+     $heightForBMI = [
+         'primary' => $memberdetails["height"],
+         'secondary' => $memberdetails["height2"],
+         'unit' => $memberdetails["heightunit"],
+     ];
+     }
+
+     $heightForBMI['secondary'] = $heightForBMI['secondary'] ?? 0;
+
+     if($type=="first-order"){
+     $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $heightForBMI['primary'],$weight2, $heightForBMI['secondary'], $heightForBMI['unit']);
 
         if (is_object($Member)) {
             $props["height"]=$data["height"];
@@ -1536,17 +1714,9 @@ $Members = new PerchMembers_Members;
             $props['heightunit-radio'] = $data['heightunit-radio'] ?? $data['heightunit'] ?? 'cm';
             $propsUpdated = true;
         }
-    	}else{
-    	$heightcheck=$this->parseHeight($memberdetails["height"]);
-    	if($heightcheck){
-    	$memberdetails["height"]=$heightcheck["feet"];
-    	$memberdetails["height2"]=$heightcheck["inches"];
-    	}
-    	if(!isset($memberdetails["heightunit"])){
-    	$memberdetails["heightunit"]=$memberdetails["heightunit-radio"];
-    	}
+        }else{
 
-    	      $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $memberdetails["height"],$data["weight2"], $memberdetails["height2"], $memberdetails["heightunit"]);
+              $result = $this->calculateBMIAdvanced($data["weight"], $data["weightunit"], $heightForBMI['primary'],$data["weight2"], $heightForBMI['secondary'], $heightForBMI['unit']);
 
 
         }
