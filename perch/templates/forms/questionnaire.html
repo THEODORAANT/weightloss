@@ -1538,13 +1538,18 @@
                  </div>-->
                     <div id="medication-recent-dose-fields"></div>
 
+                    <div class="buttons">
 
+                        <button class="back"><a style="text-decoration: none;color: #000;" href="<perch:forms id="previousPage"  />">Back</a></button>
+
+                        <button id="medication-dose-next" class="next" onclick="submitForm('recently-dose-wegovy')"><span style="text-decoration: none;color: #000;">Next →</span></button>
+                    </div>
                     <div class="bottom_btn mt-5">
                         <input type="hidden" id="nextstep" name="nextstep" value="continue_with_wegovy">
 
-                        <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                     <!--   <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
 
-                        <button id="medication-recent-dose-next" class="next" onclick="submitForm('recently-dose-wegovy')"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                        <button id="medication-recent-dose-next" class="next" onclick="submitForm('recently-dose-wegovy')"><span style="text-decoration: none;color: #000;" >Next →</span></button>-->
                     </div>
 
                 </div>
@@ -1676,15 +1681,20 @@
                         <input type="hidden" id="nextstep" name="nextstep" value="effects_with_wegovy">
                     </div>
 
+                    <div class="buttons">
 
+                        <button class="back"><a style="text-decoration: none;color: #000;" href="<perch:forms id="previousPage"  />">Back</a></button>
+
+                        <button id="medication-continue-dose-next" class="next" ><span style="text-decoration: none;color: #000;">Next →</span></button>
+                    </div>
                             <div class="bottom_btn mt-5">
 
-                            <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
-                               <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
+                                <!-- <button class="back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
+                                <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>
 
                                 <button id="medication-continue-dose-next" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
 
-
+-->
                             </div>
 
 

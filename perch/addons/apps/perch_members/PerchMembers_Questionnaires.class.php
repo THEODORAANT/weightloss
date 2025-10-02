@@ -815,13 +815,13 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 WHERE d.member_id='.$this->db->pdb((int)$memberID)
                 .' AND d.type='.$this->db->pdb($type);
 
-        if ($this->questionOrderColumnAvailable()) {
+     /*   if ($this->questionOrderColumnAvailable()) {
          $sql .= ' ORDER BY d.question_order DESC';
-           // $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
         } else {
             $sql .= ' ORDER BY d.id DESC';
-        }
-
+        }*/
+    $sql .= ' ORDER BY d.id DESC';
         return $this->return_instances($this->db->get_rows($sql));
     }
 
@@ -834,13 +834,13 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         if ($type !== null) {
             $sql .= ' AND d.type='.$this->db->pdb($type);
         }
-
-        if ($this->questionOrderColumnAvailable()) {
+  $sql .= ' ORDER BY d.id DESC';
+      /*  if ($this->questionOrderColumnAvailable()) {
           $sql .= ' ORDER BY d.question_order DESC';
-          //  $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+            $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
         } else {
             $sql .= ' ORDER BY d.id DESC';
-        }
+        }*/
 
         return $this->return_instances($this->db->get_rows($sql));
     }
