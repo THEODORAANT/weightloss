@@ -183,33 +183,11 @@ class PerchShop_Order extends PerchShop_Base
 
         private function getPharmacyDetailsFromDatabase($orderNumber)
         {
-                $db = $this->db;
+                $db     = $this->db;
+                $table  = 'p4_orders_match_pharmacy';
 
                 try {
-                        $table_sql = 'SELECT DISTINCT TABLE_NAME FROM information_schema.COLUMNS '
-                                .'WHERE TABLE_SCHEMA = DATABASE() AND COLUMN_NAME='.$db->pdb('pharmacy_orderID');
-                        $tables = $db->get_rows_flat($table_sql);
-                } catch (Exception $e) {
-                        return null;
-                }
-
-                if (!PerchUtil::count($tables)) {
-                        return null;
-                }
-
-                $tables = array_values(array_filter($tables, function ($table) {
-                        return strpos($table, PERCH_DB_PREFIX) === 0;
-                }));
-
-                if (!PerchUtil::count($tables)) {
-                        return null;
-                }
-
-                try {
-                        $table_list = $db->implode_for_sql_in($tables);
-                        $column_sql = 'SELECT TABLE_NAME, COLUMN_NAME FROM information_schema.COLUMNS '
-                                .'WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN ('.$table_list.')';
-                        $columns = $db->get_rows($column_sql);
+                        $columns = $db->get_rows('SHOW COLUMNS FROM `'.$table.'`');
                 } catch (Exception $e) {
                         return null;
                 }
@@ -218,95 +196,56 @@ class PerchShop_Order extends PerchShop_Base
                         return null;
                 }
 
-                $meta = [];
+                $column_map = [];
 
                 foreach ($columns as $column) {
-                        $table = $column['TABLE_NAME'];
-                        $name  = $column['COLUMN_NAME'];
-
-                        if (!isset($meta[$table])) {
-                                $meta[$table] = [
-                                        'column_map'        => [],
-                                        'has_detail_column' => false,
-                                        'order_column'      => null,
-                                ];
-                        }
-
-                        $lower = strtolower($name);
-                        $meta[$table]['column_map'][$lower] = $name;
-                }
-
-                $detail_candidates = [
-                        'status',
-                        'pharmacy_status',
-                        'order_status',
-                        'status_text',
-                        'dispatchdate',
-                        'dispatch_date',
-                        'dispatched_at',
-                        'dispatcheddate',
-                        'trackingno',
-                        'tracking_no',
-                        'trackingnumber',
-                        'tracking_number',
-                        'trackingref',
-                        'tracking_reference',
-                ];
-
-                $order_candidates = ['updated_at', 'modified_at', 'created_at', 'created', 'id'];
-
-                foreach ($meta as $table => &$info) {
-                        foreach ($detail_candidates as $candidate) {
-                                if (isset($info['column_map'][$candidate])) {
-                                        $info['has_detail_column'] = true;
-                                        break;
-                                }
-                        }
-
-                        foreach ($order_candidates as $candidate) {
-                                if (isset($info['column_map'][$candidate])) {
-                                        $info['order_column'] = $info['column_map'][$candidate];
-                                        break;
-                                }
-                        }
-                }
-                unset($info);
-
-                $ordered_tables = array_keys($meta);
-                usort($ordered_tables, function ($a, $b) use ($meta) {
-                        $a_has = $meta[$a]['has_detail_column'];
-                        $b_has = $meta[$b]['has_detail_column'];
-
-                        if ($a_has === $b_has) {
-                                return 0;
-                        }
-
-                        return $a_has ? -1 : 1;
-                });
-
-                foreach ($ordered_tables as $table) {
-                        $order_sql = '';
-
-                        if (!empty($meta[$table]['order_column'])) {
-                                $order_sql = ' ORDER BY `'.$meta[$table]['order_column'].'` DESC';
-                        }
-
-                        $sql = 'SELECT * FROM '.$table
-                                .' WHERE pharmacy_orderID='.$db->pdb($orderNumber)
-                                .$order_sql
-                                .' LIMIT 1';
-
-                        $row = $db->get_row($sql);
-
-                        if (!PerchUtil::count($row)) {
+                        if (!isset($column['Field'])) {
                                 continue;
                         }
 
-                        $details = $this->normalizePharmacyDetailsFromRow($row);
+                        $field = $column['Field'];
+                        $column_map[strtolower($field)] = $field;
+                }
 
-                        if ($this->hasPharmacyDetails($details)) {
-                                return $details;
+                if (!isset($column_map['pharmacy_orderid'])) {
+                        return null;
+                }
+
+                $order_column    = null;
+                $order_candidates = ['updated_at', 'modified_at', 'created_at', 'created', 'id'];
+
+                foreach ($order_candidates as $candidate) {
+                        if (isset($column_map[$candidate])) {
+                                $order_column = $column_map[$candidate];
+                                break;
                         }
+                }
+
+                $order_sql = '';
+
+                if (!empty($order_column)) {
+                        $order_sql = ' ORDER BY `'.$order_column.'` DESC';
+                }
+
+                $sql = 'SELECT * FROM `'.$table.'`'
+                        .' WHERE `'.$column_map['pharmacy_orderid'].'`='.$db->pdb($orderNumber)
+                        .$order_sql
+                        .' LIMIT 1';
+
+                try {
+                        $row = $db->get_row($sql);
+                } catch (Exception $e) {
+                        return null;
+                }
+
+                if (!PerchUtil::count($row)) {
+                        return null;
+                }
+
+                $details = $this->normalizePharmacyDetailsFromRow($row);
+
+                if ($this->hasPharmacyDetails($details)) {
+                        return $details;
                 }
 
                 return null;
