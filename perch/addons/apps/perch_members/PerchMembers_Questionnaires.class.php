@@ -821,7 +821,12 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         } else {
             $sql .= ' ORDER BY d.id DESC';
         }*/
-    $sql .= ' ORDER BY d.id DESC';
+
+       if ($this->questionOrderColumnAvailable()) {
+                        $sql .= ' ORDER BY (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+                    } else {
+                        $sql .= ' ORDER BY d.created_at ASC, d.id ASC';
+                    }
         return $this->return_instances($this->db->get_rows($sql));
     }
 
@@ -834,7 +839,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         if ($type !== null) {
             $sql .= ' AND d.type='.$this->db->pdb($type);
         }
-  $sql .= ' ORDER BY d.id DESC';
+       if ($this->questionOrderColumnAvailable()) {
+                        $sql .= ' ORDER BY (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
+                    } else {
+                        $sql .= ' ORDER BY d.created_at ASC, d.id ASC';
+                    }
       /*  if ($this->questionOrderColumnAvailable()) {
           $sql .= ' ORDER BY d.question_order DESC';
             $sql .= ' ORDER BY d.qid DESC, (d.question_order IS NULL), d.question_order ASC, d.created_at ASC, d.id ASC';
