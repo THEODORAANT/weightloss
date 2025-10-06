@@ -399,111 +399,37 @@ $output.=  $HTML->heading2('Customer');
    $output.=  '<th>'.$Lang->get('Date').'</th>';
                                                    $output.=  '</tr>';
                                                    $output.=  '</thead>';
-                        $pharmacydetails_pharmacy = [];
-                        foreach($orders_pharmacy as $pharmacy_order_row) {
-                                if(isset($pharmacy_order_row["pharmacy_orderID"]) && $pharmacy_order_row["pharmacy_orderID"] !== '') {
-                                        $pharmacydetails_pharmacy = $Order->getOrderPharmacyDetails($pharmacy_order_row["pharmacy_orderID"]);
-                                        break;
-                                }
-                        }
                                                       $count=0;
                                                                                                        foreach($orders_pharmacy as $order) {
                                                                                                        if(isset($order["pharmacy_orderID"]) ) {    $count++;    }
                                                                                                                   #PerchUtil::debug($Item);
                                                                                                                   $output.=  '<tr>';
-                                                                                                                      $output.= '<td>'.$order["pharmacy_orderID"].'</td>';
+                                                                                                                      $output.=  '<td>'.$order["pharmacy_orderID"].'</td>';
 
-                                                                                                                      $output.= '<td>'.$order["pharmacy_message"].'</td>';
-                                                                                                                      $output.= '<td>'.$order["created_at"].'</td>';
+                                                                                                                      $output.=  '<td>'.$order["pharmacy_message"].'</td>';
+                                                                                                                      $output.=  '<td>'.$order["created_at"].'</td>';
 
                                                                                                                   $output.=  '</tr>';
-                                                                                                                  if($count==1){
+                                                                                                                  if($count==1) {
 
-                                                                                                                   if(is_array($pharmacydetails_pharmacy) && PerchUtil::count($pharmacydetails_pharmacy)){
-                                                                                                                   $status_text = isset($pharmacydetails_pharmacy["status"]) ? $pharmacydetails_pharmacy["status"] : '';
-                                                                                                                   $dispatch_text = isset($pharmacydetails_pharmacy["dispatchDate"]) ? $pharmacydetails_pharmacy["dispatchDate"] : '';
-                                                                                                                   $tracking_text = isset($pharmacydetails_pharmacy["trackingNo"]) ? $pharmacydetails_pharmacy["trackingNo"] : '';
 
-                                                                                                                   if($status_text !== '' || $dispatch_text !== '' || $tracking_text !== ''){
+                                                                                                                   $pharmacydetails_pharmacy=$Order->getOrderPharmacyDetails($order["pharmacy_orderID"]);
+                                                                                                                   if(isset( $pharmacydetails_pharmacy["status"])){
                                                                                                                    $output.=  '<tr>';
-                                                                                                                    $output.=  '<td >Status: '. PerchUtil::html($status_text).'</td>';
+                                                                                                                    $output.=  '<td >Status: '. $pharmacydetails_pharmacy["status"].'</td>';
 
-                                                                                                                  $output.=  '<td >Dispatch Date: '.PerchUtil::html($dispatch_text).'</td>';
-                                                                                                                    $output.=  ' <td >Tracking No :'.PerchUtil::html($tracking_text).'</td>';
+                                                                                                                  $output.=  '<td >Dispatch Date: '; if(isset( $pharmacydetails_pharmacy["dispatchDate"])) $output.= $pharmacydetails_pharmacy["dispatchDate"];
+                                                                                                                  $output.='</td>';
+                                                                                                                    $output.=  ' <td >Tracking No :'; if(isset( $pharmacydetails_pharmacy["trackingNo"])) $output.=$pharmacydetails_pharmacy["trackingNo"];
+                                                                                                                    $output.='</td>';
                                                                                                                              $output.=  '</tr>';
                                                                                                                    }
 
-                                                                                                                   if (isset($pharmacydetails_pharmacy["history"]) && is_array($pharmacydetails_pharmacy["history"]) && PerchUtil::count($pharmacydetails_pharmacy["history"])) {
-                                                                                                                           $output.=  '<tr>';
-                                                                                                                           $output.=  '<td colspan="3">';
-                                                                                                                           $output.=  '<div class="pharmacy-history">';
-                                                                                                                           $output.=  '<strong>'.$Lang->get('Pharmacy status history').'</strong>';
-                                                                                                                           $output.=  '<table class="d">';
-                                                                                                                           $output.=  '<thead><tr>';
-                                                                                                                           $output.=  '<th>'.$Lang->get('Status').'</th>';
-                                                                                                                           $output.=  '<th>'.$Lang->get('Dispatch date').'</th>';
-                                                                                                                           $output.=  '<th>'.$Lang->get('Tracking no.').'</th>';
-                                                                                                                           $output.=  '<th>'.$Lang->get('Recorded').'</th>';
-                                                                                                                           $output.=  '<th>'.$Lang->get('Message').'</th>';
-                                                                                                                           $output.=  '</tr></thead><tbody>';
-
-                                                                                                                           foreach ($pharmacydetails_pharmacy["history"] as $history_entry) {
-                                                                                                                                    if (!is_array($history_entry)) {
-                                                                                                                                            continue;
-                                                                                                                                    }
-
-                                                                                                                                    $statusValue = isset($history_entry["status"]) ? $history_entry["status"] : '';
-                                                                                                                                    $dispatchValue = isset($history_entry["dispatchDate"]) ? $history_entry["dispatchDate"] : '';
-                                                                                                                                    $trackingValue = isset($history_entry["trackingNo"]) ? $history_entry["trackingNo"] : '';
-                                                                                                                                    $recordedValue = isset($history_entry["recordedAt"]) ? $history_entry["recordedAt"] : '';
-                                                                                                                                    if ($recordedValue === '' && isset($history_entry["raw"]) && is_array($history_entry["raw"])) {
-                                                                                                                                            foreach (['updated_at','modified_at','created_at','created','timestamp','logged_at'] as $recordKey) {
-                                                                                                                                                    if (isset($history_entry["raw"][$recordKey]) && $history_entry["raw"][$recordKey] !== '') {
-                                                                                                                                                            $recordedValue = $history_entry["raw"][$recordKey];
-                                                                                                                                                            break;
-                                                                                                                                                    }
-                                                                                                                                                    $altKey = strtolower($recordKey);
-                                                                                                                                                    if (isset($history_entry["raw"][$altKey]) && $history_entry["raw"][$altKey] !== '') {
-                                                                                                                                                            $recordedValue = $history_entry["raw"][$altKey];
-                                                                                                                                                            break;
-                                                                                                                                                    }
-                                                                                                                                            }
-                                                                                                                                    }
-
-                                                                                                                                    $messageValue = '';
-                                                                                                                                    if (isset($history_entry["message"]) && $history_entry["message"] !== '') {
-                                                                                                                                            $messageValue = $history_entry["message"];
-                                                                                                                                    } elseif (isset($history_entry["raw"]) && is_array($history_entry["raw"])) {
-                                                                                                                                            foreach (['pharmacy_message','message','notes'] as $messageKey) {
-                                                                                                                                                    if (isset($history_entry["raw"][$messageKey]) && $history_entry["raw"][$messageKey] !== '') {
-                                                                                                                                                            $messageValue = $history_entry["raw"][$messageKey];
-                                                                                                                                                            break;
-                                                                                                                                                    }
-                                                                                                                                                    $altMessageKey = strtolower($messageKey);
-                                                                                                                                                    if (isset($history_entry["raw"][$altMessageKey]) && $history_entry["raw"][$altMessageKey] !== '') {
-                                                                                                                                                            $messageValue = $history_entry["raw"][$altMessageKey];
-                                                                                                                                                            break;
-                                                                                                                                                    }
-                                                                                                                                            }
-                                                                                                                                    }
-
-                                                                                                                                    $output.=  '<tr>';
-                                                                                                                                    $output.=  '<td>'.PerchUtil::html($statusValue).'</td>';
-                                                                                                                                    $output.=  '<td>'.PerchUtil::html($dispatchValue).'</td>';
-                                                                                                                                    $output.=  '<td>'.PerchUtil::html($trackingValue).'</td>';
-                                                                                                                                    $output.=  '<td>'.PerchUtil::html($recordedValue).'</td>';
-                                                                                                                                    $output.=  '<td>'.PerchUtil::html($messageValue).'</td>';
-                                                                                                                                    $output.=  '</tr>';
-                                                                                                                           }
-
-                                                                                                                           $output.=  '</tbody></table></div>';
-                                                                                                                           $output.=  '</td></tr>';
-                                                                                                                   }
-                                                                                                                   }
 
                                                                                                                   }
 
                                                                                                               }
+
 
                                               $output.=  '</table></td></tr>';
 
