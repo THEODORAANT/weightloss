@@ -3,8 +3,15 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../perch/runtime.php';
 
+if (!function_exists('write_to_stderr')) {
+    function write_to_stderr(string $message): void
+    {
+        file_put_contents('php://stderr', $message, FILE_APPEND);
+    }
+}
+
 if (PHP_SAPI !== 'cli') {
-    fwrite(STDERR, "This script must be run from the command line." . PHP_EOL);
+    write_to_stderr("This script must be run from the command line." . PHP_EOL);
     exit(1);
 }
 
@@ -14,7 +21,7 @@ $Members = new PerchMembers_Members($API);
 
 $columns = $DB->get_rows('SHOW COLUMNS FROM ' . PERCH_DB_PREFIX . 'purchases LIKE "payout_id"');
 if (!PerchUtil::count($columns)) {
-    fwrite(STDERR, "The purchases table does not contain a payout_id column. Nothing to do." . PHP_EOL);
+    write_to_stderr("The purchases table does not contain a payout_id column. Nothing to do." . PHP_EOL);
     exit(1);
 }
 
