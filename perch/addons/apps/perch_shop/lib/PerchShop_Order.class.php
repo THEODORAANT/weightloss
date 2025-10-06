@@ -245,6 +245,8 @@ class PerchShop_Order extends PerchShop_Base
                 $details = $this->normalizePharmacyDetailsFromRow($row);
 
                 if ($this->hasPharmacyDetails($details)) {
+                        $this->updatePharmacyRowIfChanged($table, $row, $column_map, $order_column, $details);
+
                         return $details;
                 }
 
@@ -428,6 +430,114 @@ class PerchShop_Order extends PerchShop_Base
                 }
 
                 return $details;
+        }
+
+        private function updatePharmacyRowIfChanged($table, array $row, array $column_map, $order_column, array $details)
+        {
+                $db = $this->db;
+
+                $status_column = $this->findFirstColumnForKeys($column_map, ['status', 'pharmacy_status', 'order_status', 'status_text']);
+                $dispatch_column = $this->findFirstColumnForKeys($column_map, ['dispatchdate', 'dispatch_date', 'dispatched_at', 'dispatcheddate']);
+                $tracking_column = $this->findFirstColumnForKeys($column_map, ['trackingno', 'tracking_no', 'trackingnumber', 'tracking_number', 'trackingref', 'tracking_reference']);
+
+                $updates = [];
+
+                if ($status_column && isset($details['status']) && $details['status'] !== null && $details['status'] !== '') {
+                        $current = isset($row[$status_column]) ? $row[$status_column] : null;
+
+                        if ($this->pharmacyValuesDiffer($current, $details['status'])) {
+                                $updates[$status_column] = $details['status'];
+                        }
+                }
+
+                if ($dispatch_column && isset($details['dispatchDate']) && $details['dispatchDate'] !== null && $details['dispatchDate'] !== '') {
+                        $current = isset($row[$dispatch_column]) ? $row[$dispatch_column] : null;
+
+                        if ($this->pharmacyValuesDiffer($current, $details['dispatchDate'])) {
+                                $updates[$dispatch_column] = $details['dispatchDate'];
+                        }
+                }
+
+                if ($tracking_column && isset($details['trackingNo']) && $details['trackingNo'] !== null && $details['trackingNo'] !== '') {
+                        $current = isset($row[$tracking_column]) ? $row[$tracking_column] : null;
+
+                        if ($this->pharmacyValuesDiffer($current, $details['trackingNo'])) {
+                                $updates[$tracking_column] = $details['trackingNo'];
+                        }
+                }
+
+                if (!count($updates)) {
+                        return;
+                }
+
+                $id_column = $this->findFirstColumnForKeys($column_map, ['id', 'rowid', 'match_id', 'orders_match_pharmacyid', 'orders_match_id']);
+
+                $where_clauses = [];
+
+                if ($id_column && isset($row[$id_column]) && $row[$id_column] !== null && $row[$id_column] !== '') {
+                        $where_clauses[] = '`'.$id_column.'`='.$db->pdb($row[$id_column]);
+                }
+
+                $pharmacy_order_column = $this->findFirstColumnForKeys($column_map, ['pharmacy_orderid']);
+
+                if ($pharmacy_order_column && isset($row[$pharmacy_order_column]) && $row[$pharmacy_order_column] !== null && $row[$pharmacy_order_column] !== '') {
+                        $where_clauses[] = '`'.$pharmacy_order_column.'`='.$db->pdb($row[$pharmacy_order_column]);
+                }
+
+                if ($order_column && isset($row[$order_column]) && $row[$order_column] !== null && $row[$order_column] !== '') {
+                        $where_clauses[] = '`'.$order_column.'`='.$db->pdb($row[$order_column]);
+                }
+
+                if (!count($where_clauses)) {
+                        return;
+                }
+
+                $set_sql = [];
+
+                foreach ($updates as $column => $value) {
+                        $set_sql[] = '`'.$column.'`='.$db->pdb(is_string($value) ? trim($value) : $value);
+                }
+
+                if (!count($set_sql)) {
+                        return;
+                }
+
+                $sql = 'UPDATE `'.$table.'` SET '.implode(', ', $set_sql).' WHERE '.implode(' AND ', $where_clauses).' LIMIT 1';
+
+                try {
+                        $db->execute($sql);
+                } catch (Exception $e) {
+                        // ignore update issues and continue returning details
+                }
+        }
+
+        private function findFirstColumnForKeys(array $column_map, array $keys)
+        {
+                foreach ($keys as $key) {
+                        $normalized = strtolower($key);
+
+                        if (isset($column_map[$normalized])) {
+                                return $column_map[$normalized];
+                        }
+                }
+
+                return null;
+        }
+
+        private function pharmacyValuesDiffer($current, $new)
+        {
+                if ($current === null || $current === '') {
+                        return true;
+                }
+
+                if ($new === null || $new === '') {
+                        return false;
+                }
+
+                $current_value = is_string($current) ? trim($current) : $current;
+                $new_value = is_string($new) ? trim($new) : $new;
+
+                return $current_value != $new_value;
         }
 
         private function findFirstValueForKeys(array $data, array $keys)
