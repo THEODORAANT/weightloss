@@ -22,6 +22,7 @@ class PerchShop_Order extends PerchShop_Base
                                                                                 'orderGateway'      => 'gateway'
                                                                         ];
     protected static $questionnaireOrderColumnAvailable = null;
+    private static $pharmacyTableMetadata = null;
 
 	public function get_currency_code()
 	{
@@ -168,6 +169,8 @@ class PerchShop_Order extends PerchShop_Base
                 $history = $this->getPharmacyHistoryFromDatabase($orderNumber);
 
                 if (PerchUtil::count($history)) {
+                        $this->syncPharmacyHistorySummaries($history);
+
                         return $this->buildPharmacyHistoryResult($history);
                 }
 
@@ -215,42 +218,19 @@ class PerchShop_Order extends PerchShop_Base
 
         private function getPharmacyHistoryFromDatabase($orderNumber)
         {
-                $db    = $this->db;
-                $table = 'p4_orders_match_pharmacy';
+                $metadata = $this->getPharmacyTableMetadata();
 
-                try {
-                        $columns = $db->get_rows('SHOW COLUMNS FROM `'.$table.'`');
-                } catch (Exception $e) {
+                if (!$metadata) {
                         return [];
                 }
 
-                if (!PerchUtil::count($columns)) {
-                        return [];
-                }
-
-                $column_map = [];
-
-                foreach ($columns as $column) {
-                        if (!isset($column['Field'])) {
-                                continue;
-                        }
-
-                        $field = $column['Field'];
-                        $column_map[strtolower($field)] = $field;
-                }
+                $db           = $this->db;
+                $table        = $metadata['table'];
+                $column_map   = $metadata['column_map'];
+                $order_column = $metadata['order_column'];
 
                 if (!isset($column_map['pharmacy_orderid'])) {
                         return [];
-                }
-
-                $order_column     = null;
-                $order_candidates = ['updated_at', 'modified_at', 'created_at', 'created', 'id'];
-
-                foreach ($order_candidates as $candidate) {
-                        if (isset($column_map[$candidate])) {
-                                $order_column = $column_map[$candidate];
-                                break;
-                        }
                 }
 
                 $order_sql = '';
@@ -290,9 +270,9 @@ class PerchShop_Order extends PerchShop_Base
         {
                 $lower_row = array_change_key_case($row, CASE_LOWER);
 
-                $status = $this->findFirstValueForKeys($lower_row, ['status', 'pharmacy_status', 'order_status', 'status_text']);
-                $dispatch_date = $this->findFirstValueForKeys($lower_row, ['dispatchdate', 'dispatch_date', 'dispatched_at', 'dispatcheddate']);
-                $tracking_no = $this->findFirstValueForKeys($lower_row, ['trackingno', 'tracking_no', 'trackingnumber', 'tracking_number', 'trackingref', 'tracking_reference']);
+                $status = $this->findFirstValueForKeys($lower_row, $this->getPharmacyStatusKeys());
+                $dispatch_date = $this->findFirstValueForKeys($lower_row, $this->getPharmacyDispatchKeys());
+                $tracking_no = $this->findFirstValueForKeys($lower_row, $this->getPharmacyTrackingKeys());
                 $message = $this->findFirstValueForKeys($lower_row, ['pharmacy_message', 'message', 'notes']);
 
                 $payload = $this->extractPharmacyPayload($lower_row);
@@ -301,15 +281,15 @@ class PerchShop_Order extends PerchShop_Base
                         $payload_lower = array_change_key_case($payload, CASE_LOWER);
 
                         if ($status === null) {
-                                $status = $this->findFirstValueForKeys($payload_lower, ['status', 'orderstatus', 'status_text']);
+                                $status = $this->findFirstValueForKeys($payload_lower, $this->getPharmacyStatusPayloadKeys());
                         }
 
                         if ($dispatch_date === null) {
-                                $dispatch_date = $this->findFirstValueForKeys($payload_lower, ['dispatchdate', 'dispatch_date', 'dispatcheddate']);
+                                $dispatch_date = $this->findFirstValueForKeys($payload_lower, $this->getPharmacyDispatchPayloadKeys());
                         }
 
                         if ($tracking_no === null) {
-                                $tracking_no = $this->findFirstValueForKeys($payload_lower, ['trackingno', 'tracking_no', 'trackingnumber', 'tracking_number', 'trackingref', 'tracking_reference']);
+                                $tracking_no = $this->findFirstValueForKeys($payload_lower, $this->getPharmacyTrackingPayloadKeys());
                         }
 
                         if ($message === null) {
@@ -406,6 +386,77 @@ class PerchShop_Order extends PerchShop_Base
                 return $result;
         }
 
+        private function syncPharmacyHistorySummaries(array $history)
+        {
+                if (!PerchUtil::count($history)) {
+                        return;
+                }
+
+                $metadata = $this->getPharmacyTableMetadata();
+
+                if (!$metadata) {
+                        return;
+                }
+
+                $table           = $metadata['table'];
+                $id_column       = $metadata['id_column'];
+                $status_column   = $metadata['status_column'];
+                $dispatch_column = $metadata['dispatch_column'];
+                $tracking_column = $metadata['tracking_column'];
+
+                if (!$id_column || (!($status_column || $dispatch_column || $tracking_column))) {
+                        return;
+                }
+
+                foreach ($history as $entry) {
+                        if (!isset($entry['raw']) || !is_array($entry['raw'])) {
+                                continue;
+                        }
+
+                        $raw = $entry['raw'];
+
+                        if (!array_key_exists($id_column, $raw)) {
+                                continue;
+                        }
+
+                        $updates = [];
+
+                        if ($status_column && isset($entry['status']) && $entry['status'] !== null && $entry['status'] !== '') {
+                                $current = array_key_exists($status_column, $raw) ? $raw[$status_column] : null;
+
+                                if ($this->pharmacyValuesDiffer($current, $entry['status'])) {
+                                        $updates[$status_column] = $entry['status'];
+                                }
+                        }
+
+                        if ($dispatch_column && isset($entry['dispatchDate']) && $entry['dispatchDate'] !== null && $entry['dispatchDate'] !== '') {
+                                $current = array_key_exists($dispatch_column, $raw) ? $raw[$dispatch_column] : null;
+
+                                if ($this->pharmacyValuesDiffer($current, $entry['dispatchDate'])) {
+                                        $updates[$dispatch_column] = $entry['dispatchDate'];
+                                }
+                        }
+
+                        if ($tracking_column && isset($entry['trackingNo']) && $entry['trackingNo'] !== null && $entry['trackingNo'] !== '') {
+                                $current = array_key_exists($tracking_column, $raw) ? $raw[$tracking_column] : null;
+
+                                if ($this->pharmacyValuesDiffer($current, $entry['trackingNo'])) {
+                                        $updates[$tracking_column] = $entry['trackingNo'];
+                                }
+                        }
+
+                        if (!PerchUtil::count($updates)) {
+                                continue;
+                        }
+
+                        try {
+                                $this->db->update($table, $updates, $id_column, $raw[$id_column]);
+                        } catch (Exception $e) {
+                                // Silently ignore update failures; history retrieval should continue.
+                        }
+                }
+        }
+
         private function extractPharmacyPayload(array $row)
         {
                 $candidates = ['payload', 'pharmacy_payload', 'response_payload', 'data', 'pharmacy_data', 'pharmacy_message', 'message'];
@@ -442,6 +493,140 @@ class PerchShop_Order extends PerchShop_Base
                         if ($unserialized !== false && is_array($unserialized)) {
                                 return $unserialized;
                         }
+                }
+
+                return null;
+        }
+
+        private function getPharmacyTableMetadata()
+        {
+                if (self::$pharmacyTableMetadata === false) {
+                        return null;
+                }
+
+                if (self::$pharmacyTableMetadata !== null) {
+                        return self::$pharmacyTableMetadata;
+                }
+
+                $table = 'p4_orders_match_pharmacy';
+
+                try {
+                        $columns = $this->db->get_rows('SHOW COLUMNS FROM `'.$table.'`');
+                } catch (Exception $e) {
+                        self::$pharmacyTableMetadata = false;
+                        return null;
+                }
+
+                if (!PerchUtil::count($columns)) {
+                        self::$pharmacyTableMetadata = false;
+                        return null;
+                }
+
+                $column_map = [];
+
+                foreach ($columns as $column) {
+                        if (!isset($column['Field'])) {
+                                continue;
+                        }
+
+                        $field = $column['Field'];
+                        $column_map[strtolower($field)] = $field;
+                }
+
+                if (!isset($column_map['pharmacy_orderid'])) {
+                        self::$pharmacyTableMetadata = false;
+                        return null;
+                }
+
+                $metadata = [
+                        'table'           => $table,
+                        'columns'         => $columns,
+                        'column_map'      => $column_map,
+                        'order_column'    => $this->findFirstColumnInMap($column_map, ['updated_at', 'modified_at', 'created_at', 'created', 'id']),
+                        'id_column'       => $this->findFirstColumnInMap($column_map, ['id']),
+                        'status_column'   => $this->findFirstColumnInMap($column_map, $this->getPharmacyStatusKeys()),
+                        'dispatch_column' => $this->findFirstColumnInMap($column_map, $this->getPharmacyDispatchKeys()),
+                        'tracking_column' => $this->findFirstColumnInMap($column_map, $this->getPharmacyTrackingKeys()),
+                ];
+
+                self::$pharmacyTableMetadata = $metadata;
+
+                return self::$pharmacyTableMetadata;
+        }
+
+        private function findFirstColumnInMap(array $column_map, array $candidates)
+        {
+                foreach ($candidates as $candidate) {
+                        $key = strtolower($candidate);
+
+                        if (isset($column_map[$key])) {
+                                return $column_map[$key];
+                        }
+                }
+
+                return null;
+        }
+
+        private function getPharmacyStatusKeys()
+        {
+                return ['status', 'pharmacy_status', 'order_status', 'status_text'];
+        }
+
+        private function getPharmacyDispatchKeys()
+        {
+                return ['dispatchdate', 'dispatch_date', 'dispatched_at', 'dispatcheddate'];
+        }
+
+        private function getPharmacyTrackingKeys()
+        {
+                return ['trackingno', 'tracking_no', 'trackingnumber', 'tracking_number', 'trackingref', 'tracking_reference'];
+        }
+
+        private function getPharmacyStatusPayloadKeys()
+        {
+                return ['status', 'orderstatus', 'status_text'];
+        }
+
+        private function getPharmacyDispatchPayloadKeys()
+        {
+                return ['dispatchdate', 'dispatch_date', 'dispatcheddate'];
+        }
+
+        private function getPharmacyTrackingPayloadKeys()
+        {
+                return ['trackingno', 'tracking_no', 'trackingnumber', 'tracking_number', 'trackingref', 'tracking_reference'];
+        }
+
+        private function pharmacyValuesDiffer($current, $new)
+        {
+                $current_normalised = $this->normalisePharmacyComparisonValue($current);
+                $new_normalised     = $this->normalisePharmacyComparisonValue($new);
+
+                if ($new_normalised === null || $new_normalised === '') {
+                        return false;
+                }
+
+                if ($current_normalised === null || $current_normalised === '') {
+                        return true;
+                }
+
+                return $current_normalised !== $new_normalised;
+        }
+
+        private function normalisePharmacyComparisonValue($value)
+        {
+                if ($value === null) {
+                        return null;
+                }
+
+                if (is_string($value)) {
+                        $value = trim($value);
+
+                        return $value;
+                }
+
+                if (is_scalar($value)) {
+                        return trim((string)$value);
                 }
 
                 return null;
