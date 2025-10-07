@@ -109,37 +109,45 @@ $payout_id = $pdo->lastInsertId();*/
 
    //$sql="INSERT INTO ".PERCH_DB_PREFIX."affiliate_payouts (affiliate_id, total_amount, method, reference) VALUES (".$member_id.", '".$details["referrer"]."',".$tier.", ".$tierAmount.");";
   // $this->db->execute($sql);
-// Step 3: Update the referral/purchase records to lock them to this payout
-if ($referrals) {
-    $ids = implode(",", array_column($referrals, 'id'));
-     $sql="UPDATE ".PERCH_DB_PREFIX."referrals SET payout_id = $payout_id WHERE id IN ($ids)";
-     $this->db->execute($sql);
-     $sql = "INSERT INTO ".PERCH_DB_PREFIX."affiliate_payout_details
-             (payout_id, referral_snapshot, purchase_snapshot)
-             VALUES (?, ?, ?)";
+    // Step 3: Create payout record
+    $payout_id = $this->db->insert(
+        PERCH_DB_PREFIX.'affiliate_payouts',
+        [
+            'affiliate_id'   => $affiliate_id,
+            'amount'         => $credit,
+            'payout_method'  => $payout_method,
+            'payout_details' => $payout_details,
+        ]
+    );
 
-     $this->db->execute($sql, [
-         $payout_id,
-         json_encode($referrals),
-         json_encode($purchases)
-     ]);
+    if (!$payout_id) {
+        return [
+            'status' => 'Unable to create payout request.'
+        ];
+    }
 
-}
+    // Step 4: Update the referral/purchase records to lock them to this payout
+    if ($referrals) {
+        $ids = implode(",", array_column($referrals, 'id'));
+        $sql="UPDATE ".PERCH_DB_PREFIX."referrals SET payout_id = $payout_id WHERE id IN ($ids)";
+        $this->db->execute($sql);
+        $sql = "INSERT INTO ".PERCH_DB_PREFIX."affiliate_payout_details
+                (payout_id, referral_snapshot, purchase_snapshot)
+                VALUES (?, ?, ?)";
 
+        $this->db->execute($sql, [
+            $payout_id,
+            json_encode($referrals),
+            json_encode($purchases)
+        ]);
 
+    }
 
-// Step 4: Save snapshot as JSON
-
-$sql="INSERT INTO ".PERCH_DB_PREFIX."affiliate_payouts (affiliate_id, amount, payout_method, payout_details) VALUES (".$affiliate_id.",'".$credit."','".$payout_method."','".$payout_details."');";
-
-     $payout_id=  $this->db->execute($sql);
-    // Insert payout request
-
-if ($purchases) {
-    $ids = implode(",", array_column($purchases, 'id'));
-    $sql="UPDATE ".PERCH_DB_PREFIX."purchases SET payout_id = $payout_id WHERE id IN ($ids)";
-      $this->db->execute($sql);
-}
+    if ($purchases) {
+        $ids = implode(",", array_column($purchases, 'id'));
+        $sql="UPDATE ".PERCH_DB_PREFIX."purchases SET payout_id = $payout_id WHERE id IN ($ids)";
+        $this->db->execute($sql);
+    }
 
   $sql="UPDATE ".PERCH_DB_PREFIX."affiliates  SET credit = 0 WHERE id=".$this->db->pdb($affiliate_id);
      $this->db->execute($sql);
