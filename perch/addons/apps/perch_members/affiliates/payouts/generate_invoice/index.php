@@ -67,11 +67,29 @@ function generateInvoiceHTML($data) {
         $Affiliate = new PerchMembers_Affiliate($API);
         $Members = new PerchMembers_Members($API);
   $payout_details=$Affiliate->getAffiliatePayoutDetails($_GET['payout_id']);
-  $affdetails=$Affiliate->getAffiliateDetails($payout_details['affiliate_id']);
-  $Member = $Members->find($affdetails["member_id"]);
-     $details = $Member->to_array();
+  if (!$payout_details) {
+      PerchUtil::redirect('../../../../../../core/apps/content/index.php');
+  }
 
- $activity= json_decode($payout_details["referral_snapshot"]);
+  $affdetails=$Affiliate->getAffiliateDetails($payout_details['affiliate_id']);
+  if (!$affdetails) {
+      PerchUtil::redirect('../../../../../../core/apps/content/index.php');
+  }
+
+  $Member = $Members->find($affdetails["member_id"]);
+  $details = [
+      'first_name' => '',
+      'last_name' => '',
+      'email' => '',
+  ];
+  if ($Member instanceof PerchMembers_Member) {
+      $details = $Member->to_array();
+  }
+
+ $activity= json_decode($payout_details["referral_snapshot"], true);
+ if (!is_array($activity)) {
+     $activity = [];
+ }
 // Sample data
 $data = [
     'invoice_date' => date("d/M/Y"),
