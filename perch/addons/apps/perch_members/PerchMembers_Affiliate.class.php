@@ -87,8 +87,20 @@ function requestPayout($affID, $payout_method = 'manual', $payout_details = '') 
   $sql ="SELECT * FROM ".PERCH_DB_PREFIX."referrals   WHERE referrer_affiliate_id =".$affiliate_id." AND payout_id IS NULL";
 $referrals = $this->db->get_rows($sql);
 
-  $sql ="SELECT * FROM ".PERCH_DB_PREFIX."purchases   WHERE member_id =".$memberId." AND payout_id IS NULL";
-$purchases = $this->db->get_rows($sql);
+  $purchases = [];
+  $member_ids = [];
+  if (PerchUtil::count($referrals)) {
+      $member_ids = array_filter(array_column($referrals, 'referred_member_id'));
+  }
+  if (!empty($affrow['member_id'])) {
+      $member_ids[] = (int) $affrow['member_id'];
+  }
+  $member_ids = array_unique(array_map('intval', $member_ids));
+  if (!empty($member_ids)) {
+      $member_ids = implode(',', $member_ids);
+      $sql ="SELECT * FROM ".PERCH_DB_PREFIX."purchases   WHERE member_id IN (".$member_ids.") AND payout_id IS NULL";
+      $purchases = $this->db->get_rows($sql);
+  }
 
 // Step 2: Insert payout
 /*$stmt = $pdo->prepare("INSERT INTO perch_affiliate_payouts (affiliate_id, amount) VALUES (:id, :amount)");
