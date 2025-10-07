@@ -232,6 +232,11 @@ class PerchShop_Order extends PerchShop_Base
         	}
         }
 
+                $Questionnaires = new PerchMembers_Questionnaires($this->api);
+                $questionnaire_type_key = ($questionnaire_type === 're-order') ? 're-order' : 'first-order';
+                $allowed_questions = array_keys($Questionnaires->get_questions_answers($questionnaire_type_key));
+                $allowed_questions = array_flip($allowed_questions);
+
 
                 $questionnaireID = null;
                 $dynamicFields  = PerchUtil::json_safe_decode($this->orderDynamicFields(), true);
@@ -279,6 +284,12 @@ class PerchShop_Order extends PerchShop_Base
 
                 if (PerchUtil::count($questionnaire)) {
                     foreach ($questionnaire as $questiondet) {
+                        $question_slug = $questiondet['question_slug'] ?? null;
+
+                        if ($question_slug === null || !isset($allowed_questions[$question_slug])) {
+                            continue;
+                        }
+
                         if (isset($questiondet["question_text"]) && isset($questiondet["answer_text"])) {
                             if ($questiondet["question_text"] != "" && $questiondet["answer_text"] != "") {
                                 $questions_items[] = [
