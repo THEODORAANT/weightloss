@@ -126,20 +126,20 @@ if ($referrals) {
 
 }
 
-if ($purchases) {
-    $ids = implode(",", array_column($purchases, 'id'));
-    $sql="UPDATE ".PERCH_DB_PREFIX."purchases SET payout_id = $payout_id WHERE id IN ($ids)";
-      $this->db->execute($sql);
-}
+
 
 // Step 4: Save snapshot as JSON
 
 $sql="INSERT INTO ".PERCH_DB_PREFIX."affiliate_payouts (affiliate_id, amount, payout_method, payout_details) VALUES (".$affiliate_id.",'".$credit."','".$payout_method."','".$payout_details."');";
 
-       $this->db->execute($sql);
+     $payout_id=  $this->db->execute($sql);
     // Insert payout request
 
-
+if ($purchases) {
+    $ids = implode(",", array_column($purchases, 'id'));
+    $sql="UPDATE ".PERCH_DB_PREFIX."purchases SET payout_id = $payout_id WHERE id IN ($ids)";
+      $this->db->execute($sql);
+}
 
   $sql="UPDATE ".PERCH_DB_PREFIX."affiliates  SET credit = 0 WHERE id=".$this->db->pdb($affiliate_id);
      $this->db->execute($sql);
