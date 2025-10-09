@@ -326,7 +326,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         "side_effects" => [
             "label" => "Have you experienced any side effects whilst taking the medication?",
             "type" => "button",
-            "name" => "more_side_effects",
+            "name" => "side_effects",
             "options" => [
                 "yes" => "Yes",
                 "no" => "No"
@@ -337,7 +337,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "type" => "textarea",
             "name" => "more_side_effects"
         ],
-        "additional_medication" => [
+        "additional-medication" => [
             "label" => "Have you started taking any additional medication?",
             "type" => "button",
             "name" => "additional-medication",

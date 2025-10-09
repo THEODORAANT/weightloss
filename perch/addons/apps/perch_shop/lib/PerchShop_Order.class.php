@@ -234,6 +234,7 @@ class PerchShop_Order extends PerchShop_Base
 
                 $Questionnaires = new PerchMembers_Questionnaires($this->api);
                 $questionnaire_type_key = ($questionnaire_type === 're-order') ? 're-order' : 'first-order';
+               // echo "questionnaire_type_key"; echo $questionnaire_type_key;
                 $allowed_questions = array_keys($Questionnaires->get_questions_answers($questionnaire_type_key));
                 $allowed_questions = array_flip($allowed_questions);
 
@@ -279,8 +280,11 @@ class PerchShop_Order extends PerchShop_Base
                 } else {
                     $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
                 }
+                //echo "questionnaire";
+               // echo $sql_questionnaire;
 
                 $questionnaire = $this->db->get_rows($sql_questionnaire);
+             //   print_r($questionnaire);
 
                 if (PerchUtil::count($questionnaire)) {
                     foreach ($questionnaire as $questiondet) {
@@ -301,7 +305,8 @@ class PerchShop_Order extends PerchShop_Base
                     }
                 }
 
-
+//echo "questions_items";
+	//print_r($questions_items);
         /*echo "order_items";
 	print_r($order_items);
                       echo "ShippingAdr";
@@ -333,9 +338,9 @@ class PerchShop_Order extends PerchShop_Base
              "assessment"=>$questions_items,
              "notes" => ""
          ];
-           //print_r($orderData);
+           print_r($orderData);
            $response =[];
-         $response = $pharmacy_api->createOrder($orderData);
+    $response = $pharmacy_api->createOrder($orderData);
                              //  echo "response";
          	//print_r($response);
          if($response["success"]){

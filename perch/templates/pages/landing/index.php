@@ -216,7 +216,7 @@
           ✓ UK-regulated • GMC/GPhC registered
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
-        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a professional consultation. Our UK clinicians will assess if prescription treatments like Mounjaro® or Wegovy® are right for you.</p>
+        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a professional consultation. Our UK clinicians will assess if prescription treatments are right for you.Prices from as low as £95 per prescription plus postage and packaging.</p>
         <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
           <a href="https://www.getweightloss.co.uk/get-started" class="btn-lime inline-flex items-center justify-center rounded-2xl px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 transition-all">
             <span>Start free assessment</span>
@@ -302,8 +302,8 @@
         </div>
         <div class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <p class="text-xs font-bold tracking-wide" style="color: var(--blue)">STEP 3</p>
-          <h3 class="mt-3 text-lg sm:text-xl font-semibold">Personalised plan</h3>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">You'll receive guidance on next steps. If appropriate, a prescription may be offered with advice on use, follow-up, and lifestyle support.</p>
+          <h3 class="mt-3 text-lg sm:text-xl font-semibold">Prescription Delivery</h3>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">On being eligible and completing the process, you will receive a Royal Mail tracking ID with your package arriving 2 days later. You are ready to start your journey.</p>
         </div>
       </div>
     </div>
@@ -312,9 +312,8 @@
   <!-- Treatments -->
   <section id="treatments" style="background-color: var(--grey)">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">About the treatments</h2>
-      <p class="mt-4 text-base sm:text-lg leading-relaxed">We offer consultations regarding two prescription-only weight-management injections. Any use is alongside a reduced-calorie diet and increased physical activity, and only when deemed appropriate by a prescriber.</p>
-      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore the treatments</h2>
+      <p class="mt-4 text-base sm:text-lg leading-relaxed">There are numerous weight-loss medications available to be used in conjunction with a reduced calorie diet and exercise, all of which are only available if deemed appropriate by a prescriber.</p>      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Mounjaro® (tirzepatide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
@@ -382,7 +381,7 @@
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">What will it cost?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">You'll see consultation fees upfront before you start. If a prescription is issued, medication and follow-up costs are shown before you choose to proceed.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80"> If a prescription is issued, medication and follow-up costs are shown before you choose to proceed.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Can you guarantee weight loss?</summary>
@@ -405,7 +404,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
       <div class="rounded-3xl p-6 sm:p-8 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Questions before you start?</h2>
-        <p class="mt-3 text-base sm:text-lg">Email us at <a class="underline font-medium hover:opacity-75 transition" href="mailto:info@getweightloss.co.uk" style="color: var(--blue)">info@getweightloss.co.uk</a></p>
+        <p class="mt-3 text-base sm:text-lg">Email us at <a class="underline font-medium hover:opacity-75 transition" href="mailto:support@getweightloss.co.uk" style="color: var(--blue)">support@getweightloss.co.uk</a></p>
         <div class="mt-6">
           <a href="https://www.getweightloss.co.uk/get-started" class="btn-lime inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-medium shadow hover:opacity-90 focus:outline-none focus:ring-2 transition">Get started</a>
         </div>
@@ -421,9 +420,9 @@
       <p class="mt-4 opacity-80 leading-relaxed">Medical disclaimer: The information on this site provides general guidance only and does not replace a consultation with a qualified healthcare professional. We do not guarantee prescriptions or outcomes.</p>
       <p class="mt-4 opacity-80 leading-relaxed">Mounjaro® is a registered trademark of Eli Lilly and Company. Wegovy® is a registered trademark of Novo Nordisk A/S. We are not affiliated with these manufacturers.</p>
       <div class="mt-6 flex flex-wrap gap-4 sm:gap-6">
-        <a href="#" class="underline hover:opacity-75 transition" style="color: var(--white)">Privacy</a>
-        <a href="#" class="underline hover:opacity-75 transition" style="color: var(--white)">Terms</a>
-        <a href="#" class="underline hover:opacity-75 transition" style="color: var(--white)">Complaints</a>
+        <a href="https://getweightloss.co.uk/privacy-notice" class="underline hover:opacity-75 transition" style="color: var(--white)">Privacy</a>
+        <a href="https://getweightloss.co.uk/terms-and-conditions" class="underline hover:opacity-75 transition" style="color: var(--white)">Terms</a>
+        <a href="https://getweightloss.co.uk/make-a-complaint" class="underline hover:opacity-75 transition" style="color: var(--white)">Complaints</a>
       </div>
     </div>
   </footer>

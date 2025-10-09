@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Affiliate.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Affiliate.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/affiliates/payouts/generate_invoice/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/affiliates/payouts/generate_invoice/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Order.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Order.class.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +25,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="mainuestion" />
+        <entry key="$PROJECT_DIR$" value="uat" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,27 +42,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
+      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members" />
       <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
-      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/cart" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -105,23 +109,7 @@
       <workItem from="1759222055479" duration="11330000" />
       <workItem from="1759335583029" duration="4974000" />
       <workItem from="1759743479952" duration="7339000" />
-      <workItem from="1759826825876" duration="2746000" />
-    </task>
-    <task id="LOCAL-00030" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757434888647</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1757434888647</updated>
-    </task>
-    <task id="LOCAL-00031" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757494622745</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1757494622745</updated>
+      <workItem from="1759826825876" duration="10949000" />
     </task>
     <task id="LOCAL-00032" summary="weightloss">
       <option name="closed" value="true" />
@@ -499,7 +487,23 @@
       <option name="project" value="LOCAL" />
       <updated>1759759866177</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1759834823988</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1759834823988</updated>
+    </task>
+    <task id="LOCAL-00080" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1759934616539</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1759934616539</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
