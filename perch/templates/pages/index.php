@@ -524,7 +524,7 @@
               'template'   => 'weight_post_in_list.html',
               'sort'       => 'postDateTime',
               'sort-order' => 'DESC',
-              'count'      => '7'
+              'count'      => '3'
             ));
           ?>
         </div>
