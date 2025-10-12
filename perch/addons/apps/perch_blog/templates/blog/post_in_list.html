@@ -1,0 +1,45 @@
+<perch:before>
+
+
+</perch:before>
+
+<div class="success_card" style="margin-top: 25px;" >
+    <div class="i_feel">
+        <div class="card_button">
+            <a href=""><span>weight loss</span><span>4 minute read</span></a>
+        </div>
+        <div class="card_heading">
+            <h5><a href="<perch:blog id="postURL" />" rel="bookmark" class="entry-title"><perch:blog id="postTitle" /></a></h5>
+        </div>
+        <div class="card_content">
+            <p>
+                <perch:blog id="excerpt" type="textarea" textile="true" />
+        </div>
+    </div>
+    <div class="card_mega_img" style="margin-top: 45px;" >
+        <div class="card_title">
+            <a  href="<perch:blog id="postURL" />" style="text-decoration: none;color: #000;" ><b>Read more <i class="fa-solid fa-arrow-right"></i></b></a>
+        </div>
+        <img src="asset/4 minute read.webp" alt="">
+        <perch:if exists="image"><img class="img-fluid" src="<perch:blog id="image" type="image" />" alt="<perch:blog id="postTitle" />" /></perch:if>
+
+    </div>
+</div>
+
+<perch:after>
+
+    <perch:if exists="paging">
+        <div class="paging">
+            Page <perch:blog id="current_page" /> of <perch:blog id="number_of_pages" />
+            <perch:blog id="page_links" encode="false" />
+            <perch:if exists="not_first_page">
+                <a href="<perch:blog id="prev_url" encode="false" />">Previous</a>
+            </perch:if>
+            <perch:if exists="not_last_page">
+                <a href="<perch:blog id="next_url" encode="false" />">Next</a>
+            </perch:if>
+        </div>
+    </perch:if>
+</perch:after>
+
+

@@ -1,0 +1,42 @@
+
+
+
+
+<section class="preparing">
+
+
+
+
+    <div class="ovarlye"></div>
+    <div class="containe">
+        <header class="text-muted small"> <span style="font-weight: 600; color: #000;"></span> 8 minute read </header>
+        <h1 class="title"> <perch:blog id="postTitle" type="text" label="Title" required="true" size="xl autowidth" order="1" /></h1>
+        <p class="author">
+            <perch:if exists="authorGivenName">
+                By <span class="p-author h-card"><perch:blog id="authorGivenName" type="hidden" /> <perch:blog id="authorFamilyName" type="hidden" /></span>
+            </perch:if>
+        </p>
+
+        <div class="image-container">
+            <perch:if exists="image">
+
+                <img src="<perch:blog id="image" type="image" width="320" height="240" crop="true" label="Image" order="4" />" alt="<perch:blog id="postTitle" />" />
+
+            </perch:if>
+        </div>
+
+        <div class="share-icons">
+            <span>Share:</span>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+        </div>
+    </div>
+
+    <div class="preparing_content">
+        <perch:blog id="postDescHTML" type="textarea" label="Post" order="2" editor="markitup" markdown="true" size="xxl autowidth" required="true" />
+
+
+    </div>
+
+</section>
