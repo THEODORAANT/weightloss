@@ -695,6 +695,21 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "special_offers_email",
                                            "step" => "access_special_offers"
+                                       ],
+                                       "multiple_answers" => [
+                                           "label" => "Have client alter answers?",
+                                           "type" => "text",
+                                           "name" => "multiple_answers"
+                                       ],
+                                       "documents" => [
+                                           "label" => "Member Documents",
+                                           "type" => "text",
+                                           "name" => "documents"
+                                       ],
+                                       "bmi" => [
+                                           "label" => "BMI",
+                                           "type" => "text",
+                                           "name" => "bmi"
                                        ]
                                   ];
 
