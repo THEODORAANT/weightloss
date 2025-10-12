@@ -518,54 +518,15 @@
           <p class="font-medium leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px]">Weight loss: what you need to know</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] md:gap-[28px] lg:gap-[32px] w-full lg:max-w-[1120px]">
-          <a href="#blog" class="border border-[#d6d6d6] rounded-[20px] overflow-hidden hover:shadow-lg transition-shadow">
-            <div class="flex flex-col h-full items-center w-full">
-              <div class="h-[200px] md:h-[220px] lg:h-[250px] w-full overflow-hidden">
-                <img src="/new/images/post-image-1.png" alt="Blog Post" class="w-full h-full object-cover" />
-              </div>
-              <div class="border-t border-[#d6d6d6] flex flex-col gap-[24px] md:gap-[30px] items-start px-[24px] md:px-[30px] py-[30px] md:py-[40px] w-full">
-                <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px] w-full">Mounjaro Journey – Day 16: "It Just Works"</p>
-                <div class="flex items-center justify-between w-full">
-                  <p class="font-medium leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Sep 4, 2025</p>
-                  <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.5 5L12.5 10L7.5 15" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#blog" class="border border-[#d6d6d6] rounded-[20px] overflow-hidden hover:shadow-lg transition-shadow">
-            <div class="flex flex-col h-full items-center w-full">
-              <div class="h-[200px] md:h-[220px] lg:h-[250px] w-full overflow-hidden">
-                <img src="/new/images/post-image-2.png" alt="Blog Post" class="w-full h-full object-cover" />
-              </div>
-              <div class="border-t border-[#d6d6d6] flex flex-col gap-[24px] md:gap-[30px] items-start px-[24px] md:px-[30px] py-[30px] md:py-[40px] w-full">
-                <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px] w-full">Mounjaro Journey – Day 16: "It Just Works"</p>
-                <div class="flex items-center justify-between w-full">
-                  <p class="font-medium leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Sep 4, 2025</p>
-                  <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.5 5L12.5 10L7.5 15" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#blog" class="border border-[#d6d6d6] rounded-[20px] overflow-hidden hover:shadow-lg transition-shadow">
-            <div class="flex flex-col h-full items-center w-full">
-              <div class="h-[200px] md:h-[220px] lg:h-[250px] w-full overflow-hidden">
-                <img src="/new/images/post-image-3.png" alt="Blog Post" class="w-full h-full object-cover" />
-              </div>
-              <div class="border-t border-[#d6d6d6] flex flex-col gap-[24px] md:gap-[30px] items-start px-[24px] md:px-[30px] py-[30px] md:py-[40px] w-full">
-                <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px] w-full">Mounjaro Journey – Day 16: "It Just Works"</p>
-                <div class="flex items-center justify-between w-full">
-                  <p class="font-medium leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Sep 4, 2025</p>
-                  <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.5 5L12.5 10L7.5 15" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
+          <?php
+            perch_blog_custom(array(
+              'filter'     => 'postDateTime',
+              'template'   => 'weight_post_in_list.html',
+              'sort'       => 'postDateTime',
+              'sort-order' => 'DESC',
+              'count'      => '7'
+            ));
+          ?>
         </div>
       </div>
     </div>

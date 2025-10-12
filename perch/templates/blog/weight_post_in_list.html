@@ -1,0 +1,37 @@
+<perch:blog id="permalink" type="hidden" />
+<perch:blog id="postTitle" type="hidden" />
+<perch:blog id="postDateTime" type="hidden" />
+<a href="<perch:if exists="permalink"><perch:blog id="permalink" /><perch:else /><perch:blog id="postURL" /></perch:if>" class="border border-[#d6d6d6] rounded-[20px] overflow-hidden hover:shadow-lg transition-shadow">
+    <div class="flex flex-col h-full items-center w-full">
+        <div class="h-[200px] md:h-[220px] lg:h-[250px] w-full overflow-hidden">
+            <perch:if exists="image">
+                <perch:blog id="image" type="image" width="640" height="480" crop="true" density="2" class="w-full h-full object-cover" />
+            <perch:else:if exists="postImage">
+                <perch:blog id="postImage" type="image" width="640" height="480" crop="true" density="2" class="w-full h-full object-cover" />
+            <perch:else />
+                <img src="/new/images/post-image-1.png" alt="<perch:if exists="postTitle"><perch:blog id="postTitle" /><perch:else /><perch:blog id="title" /></perch:if>" class="w-full h-full object-cover" />
+            </perch:if>
+        </div>
+        <div class="border-t border-[#d6d6d6] flex flex-col gap-[24px] md:gap-[30px] items-start px-[24px] md:px-[30px] py-[30px] md:py-[40px] w-full">
+            <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px] w-full">
+                <perch:if exists="postTitle">
+                    <perch:blog id="postTitle" />
+                <perch:else />
+                    <perch:blog id="title" />
+                </perch:if>
+            </p>
+            <div class="flex items-center justify-between w-full">
+                <p class="font-medium leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">
+                    <perch:if exists="postDateTime">
+                        <perch:blog id="postDateTime" format="M j, Y" />
+                    <perch:else />
+                        <perch:blog id="date" format="M j, Y" />
+                    </perch:if>
+                </p>
+                <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.5 5L12.5 10L7.5 15" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</a>
