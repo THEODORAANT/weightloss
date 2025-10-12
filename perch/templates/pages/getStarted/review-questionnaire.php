@@ -31,7 +31,7 @@ $questions = [
     "other_medical_conditions" => "Please list any other medical conditions you have.",
     "wegovy_side_effects" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed" => "Would you like your GP to be informed of this consultation?",
-    "email_address" => "Please enter your GP's email address",
+    "GP_email_address" => "Please enter your GP's email address",
     "special_offers_email" => "Get access to special offers"
 ];
 
@@ -87,7 +87,7 @@ $steps = [
     "other_medical_conditions" => "list_any",
     "wegovy_side_effects" => "wegovy_side_effects",
     "gp_informed" => "gp_informed",
-    "email_address" => "gp_address",
+    "GP_email_address" => "gp_address",
     "special_offers_email" => "access_special_offers"
 ];
 

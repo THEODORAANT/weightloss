@@ -259,5 +259,4 @@
       link.addEventListener('click', closeMobileMenu);
     });
   </script>
-</body>
-</html>
+

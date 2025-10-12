@@ -1,217 +1,191 @@
-
-
-
- <!--======================================================== footer section start================================================================= -->
-
-
-
-  <!--====================== Footer Section Start =============================-->
-  <section class="footer_section container-fluid">
-
-
-
-  <div class="as_seen">
-
+    <!-- Footer -->
+    <footer id="contact" class="bg-[#324ea0] w-full flex flex-col items-center justify-center">
+      <div class="flex flex-col gap-[40px] md:gap-[50px] items-center justify-center pb-0 pt-[40px] md:pt-[60px] lg:pt-[70px] px-[20px] md:px-[40px] lg:px-[60px] w-full">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[32px] md:gap-[24px] items-start w-full lg:max-w-[1120px]">
+          <div class="flex flex-col gap-[16px] items-start">
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Company</p>
+            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+              <a href="#about" class="hover:text-[#afd136] transition-colors">About us</a>
+              <a href="#features" class="hover:text-[#afd136] transition-colors">Services</a>
+              <a href="#about" class="hover:text-[#afd136] transition-colors">Team</a>
+              <a href="#about" class="hover:text-[#afd136] transition-colors">Project</a>
+              <a href="#blog" class="hover:text-[#afd136] transition-colors">Blog</a>
+              <a href="#pricing" class="hover:text-[#afd136] transition-colors">Pricing</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-[16px] items-start">
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Treatments</p>
+            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+              <a href="#injections" class="hover:text-[#afd136] transition-colors">Wegovy</a>
+              <a href="#injections" class="hover:text-[#afd136] transition-colors">Mounjaro</a>
+              <a href="#injections" class="hover:text-[#afd136] transition-colors">Ozempic</a>
+              <a href="#features" class="hover:text-[#afd136] transition-colors">Blood Tests</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-[16px] items-start">
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Quick Link</p>
+            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+              <a href="#about" class="hover:text-[#afd136] transition-colors">Why Choose Us?</a>
+              <a href="#pricing" class="hover:text-[#afd136] transition-colors">Pricing Plan</a>
+              <a href="#blog" class="hover:text-[#afd136] transition-colors">News & Articles</a>
+              <a href="#faq" class="hover:text-[#afd136] transition-colors">FAQ's</a>
+              <a href="#pricing" class="hover:text-[#afd136] transition-colors">Appointment</a>
+              <a href="#testimonials" class="hover:text-[#afd136] transition-colors">Patients</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-[16px] items-start">
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Social</p>
+            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">Twitter</a>
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">LinkedIn</a>
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">Facebook</a>
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">GitHub</a>
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">AngelList</a>
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">Dribbble</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-[16px] items-start">
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Legal</p>
+            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+              <a href="#terms" class="hover:text-[#afd136] transition-colors">Terms</a>
+              <a href="#privacy" class="hover:text-[#afd136] transition-colors">Privacy</a>
+              <a href="#contact" class="hover:text-[#afd136] transition-colors">Contact</a>
+              <a href="#licenses" class="hover:text-[#afd136] transition-colors">Licenses</a>
+              <a href="#coming-soon" class="hover:text-[#afd136] transition-colors">Coming Soon</a>
+              <a href="#404" class="hover:text-[#afd136] transition-colors">404</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Disclaimer -->
+        <div class="w-full px-0 py-[24px] lg:max-w-[1120px]">
+          <div class="text-white text-[12px] leading-[18px] space-y-[12px]">
+            <p>GetWeightLoss, the website and consultations are owned and operated by MI Health Ltd, a company registered in the United Kingdom under company number 13008704. The business operates under a General Pharmaceutical Council registered premises number 9011648. You are able to verify the pharmacy's registration and our superintendent pharmacist, Imran Tailor SI pharmacist with GPhC 2216145.</p>
+            <p>Medical disclaimer: The information on this site provides general guidance only and does not replace a consultation with a qualified healthcare professional. We do not guarantee prescriptions or outcomes.</p>
+            <p>Mounjaro® is a registered trademark of Eli Lilly and Company. Wegovy® is a registered trademark of Novo Nordisk A/S. We are not affiliated with these manufacturers.</p>
+          </div>
+        </div>
+        
+        <div class="border-t border-[#d6d6d6] flex flex-col md:flex-row items-center justify-between gap-[24px] md:gap-0 px-0 py-[24px] w-full lg:max-w-[1120px]">
+          <div class="flex flex-col items-center md:items-start gap-[8px] w-full md:w-auto">
+            <p class="font-medium leading-[24px] md:leading-[32px] text-[12px] text-white text-center md:text-left">Copyright @ 2025 GetWeightLoss, All rights reserved.</p>
+          </div>
+          <div class="flex gap-[10px] md:gap-[14px] items-center">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <img src="/new/images/footer-facebook.svg" alt="Facebook" class="w-[50px] h-[50px] md:w-[60px] md:h-[60px] hover:opacity-80 transition-opacity" />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <img src="/new/images/footer-instagram.svg" alt="Instagram" class="w-[50px] h-[50px] md:w-[60px] md:h-[60px] hover:opacity-80 transition-opacity" />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <img src="/new/images/footer-x.svg" alt="X (Twitter)" class="w-[50px] h-[50px] md:w-[60px] md:h-[60px] hover:opacity-80 transition-opacity" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+              <img src="/new/images/footer-linkedin.svg" alt="LinkedIn" class="w-[50px] h-[50px] md:w-[60px] md:h-[60px] hover:opacity-80 transition-opacity" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
 
+  <script>
+    // Navbar scroll effect
+    const mainNav = document.getElementById('mainNav');
+    const logoContainer = document.querySelector('.logo-container');
+    let lastScrollTop = 0;
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > 50) {
+        logoContainer.style.width = '115px';
+        mainNav.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+      } else {
+        logoContainer.style.width = '150px';
+        mainNav.style.boxShadow = 'none';
+      }
+      
+      lastScrollTop = scrollTop;
+    });
 
-    <div class="container">
-      <div class="main_footer">
-        <div class="row">
-          <div class="col-md-3">
-              <div class="footer_list">
-                <h5 class="footer_title">Treatments</h5>
-                <ul>
-                  <li><a href="/medications/wegovy">Wegovy
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileMenu = mobileMenuOverlay.querySelector('.mobile-menu');
+    const mobileBackdrop = mobileMenuOverlay.querySelector('.mobile-backdrop');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
 
-</a></li>
-                  <li><a href="/medications/mounjaro">Mounjaro</a></li>
-                  <li><a href="/medications/ozempic">Ozempic</a></li>
-                  <li><a href="/tests">Blood Tests</a></li>
-
-                </ul>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="footer_list">
-                <h5 class="footer_title">Contact</h5>
-                <ul>
-                 <li><a href="/contact-us">Contact Us</a></li>
-                  <li><a href="/faqs">FAQS</a></li>
-                  <li><a href="mailto:support@getweightloss.co.uk"> support@getweightloss.co.uk</a></li>
-
-                </ul>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="footer_list">
-                <h5 class="footer_title">Get weight loss</h5>
-
-   <ul>
-        <li><a style="text-decoration: none;" href="/get-started">Get Started</a></li>
-                  <li><a style="text-decoration: none;" href="/client">Log in</a></li>
-                  <li><a style="text-decoration: none;"  href="/sitemap">Sitemap</a></li>
-                      <li><a style="text-decoration: none;" href="/terms-and-conditions">Terms & conditions</a></li>
-                                      <li><a style="text-decoration: none;" href="/refer-a-friend">Refer a friend</a></li>
-                                      <li><a style="text-decoration: none;" href="/privacy-notice">Privacy notice</a></li>
-                                      <li><a style="text-decoration: none;" href="/cookies-policy">Cookies policy</a></li>
-                                      <li><a style="text-decoration: none;"  href="/make-a-complaint">Make a complaint</a></li>
-                </ul>
-              </div>
-            </div>
-          <div class="col-md-3">
-              <div class="footer_list">
-                <h5 class="footer_title">Follow</h5>
-                <ul>
-                  <li><a href="/blog">Blog</a></li>
-                 <!-- <li><a href="https://www.facebook.com/">Facebook</a></li>
-                  <li><a href="https://x.com/">Twitter</a></li>
-                  <li><a href="https://www.instagram.com/">Instagram</a></li>-->
-                </ul>
-              </div>
-          </div>
-
-
-          <div class="logo_section">
-            <div class="row">
-          <!--================= Logo section Start=====================    <div class="col-md-6">
-
-              </div>
-              <div class="col-md-6">
-                <div class="right_side">
-                  <div class="icon_links">
-
-                  </div>
-                </div>
-                  <ul>
-                    <li><a href="/terms-and-conditions">Terms & conditions</a></li>
-                    <li><a href="/refer-a-friend">Refer a friend</a></li>
-                    <li><a href="/privacy-notice">Privacy notice</a></li>
-                    <li><a href="/cookies-policy">Cookies policy</a></li>
-                    <li><a href="/complaints">Make a complaint</a></li>
-                  </ul>
-              </div> --================= Logo section End=====================-->
-              <br/>
-              <br/>
-            </div>
-          </div>
-        </div>
-        <!--=============== copyright Section Start ===============-->
-        <div style="margin-top: 17px;" class="copyright">
-
-          <p>Copyright © . All rights reserved. Getweightloss is a trading name of MI Health Limited. Registered in England and Wales, 13008704.</p>
-        </div>
-<button id="scrollToTop">↑</button>
-        <!--=============== copyright Section End =================-->
-      </div>
-    </div>
-  </section>
-  <!--====================== Footer Section End =============================-->
-
-
-
-
-
- <!--======================================================== footer section end================================================================= -->=
-
-
-
-
-
-    <!-- ==================================================================coding End======================================================================================================== -->
-
-
-
-
-
-    <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
-    <script type="text/javascript" src="/js/popper.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/slick.min.js"></script>
-    <script type="text/javascript" src="/js/lazyload.min.js"></script>
-    <script type="text/javascript" src="/js/theme.js"></script>
-    <script type="text/javascript" src="/js/my-2.js"></script>
-    <script src="/js/my.js"></script>
-    <script src="/js/due.js"></script>
-
-
-    <script>
-        // next button active when any checkbox selected
-document.addEventListener("DOMContentLoaded", function () {
-    let checkboxes = document.querySelectorAll(".check1");
-    let nextButton = document.getElementById("nextButton");
-    let nextLink = nextButton.querySelector("a");
-
-    function toggleNextButton() {
-        let isAnyChecked = Array.from(checkboxes).some(chk => chk.checked);
-
-        if (isAnyChecked) {
-            nextButton.classList.remove("disabled");
-            nextButton.style.backgroundColor = "#000000";
-            nextLink.style.color = "black";
-            nextButton.style.cursor = "pointer";
-            nextLink.style.pointerEvents = "auto";
-        } else {
-            nextButton.classList.add("disabled");
-            nextButton.style.backgroundColor = "#d3d3d3";
-            nextLink.style.color = "#a0a0a0";
-            nextButton.style.cursor = "default";
-            nextLink.style.pointerEvents = "none";
-        }
+    function openMobileMenu() {
+      mobileMenuOverlay.classList.remove('hidden');
+      setTimeout(() => {
+        mobileMenu.classList.add('active');
+        mobileBackdrop.classList.add('active');
+      }, 10);
+      document.body.style.overflow = 'hidden';
     }
 
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", toggleNextButton);
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('active');
+      mobileBackdrop.classList.remove('active');
+      setTimeout(() => {
+        mobileMenuOverlay.classList.add('hidden');
+      }, 300);
+      document.body.style.overflow = '';
+    }
+
+    mobileMenuBtn.addEventListener('click', openMobileMenu);
+    closeMobileMenuBtn.addEventListener('click', closeMobileMenu);
+    mobileBackdrop.addEventListener('click', closeMobileMenu);
+    
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
     });
 
-    toggleNextButton();
-});
-// next button active when any checkbox selected
-
-</script>
-<!--  -->
-
-  <style>
-
-
-        #scrollToTop {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            display: none;
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.querySelector('.faq-answer');
+        const isActive = answer.classList.contains('active');
+        
+        // Close all other FAQs
+        document.querySelectorAll('.faq-answer').forEach(ans => {
+          ans.classList.remove('active');
+        });
+        
+        // Toggle current FAQ
+        if (!isActive) {
+          answer.classList.add('active');
         }
-    </style>
+      });
+    });
 
-
-
-
-<script>
-    const scrollButton = document.getElementById("scrollToTop");
-
-    window.addEventListener("scroll", () => {
-        const scrollTop = window.scrollY;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = window.innerHeight;
-
-        // Show button only when at the bottom
-        if (scrollTop + clientHeight >= scrollHeight) {
-            scrollButton.style.display = "block";
-        } else {
-            scrollButton.style.display = "none";
+    // Testimonial Carousel (Desktop only)
+    const carousel = document.getElementById('testimonialCarousel');
+    if (carousel && window.innerWidth >= 1024) {
+      let scrollPosition = 0;
+      const scrollSpeed = 1;
+      const cardWidth = 544 + 32; // card width + gap
+      
+      function autoScroll() {
+        scrollPosition += scrollSpeed;
+        carousel.style.transform = `translateX(-${scrollPosition}px)`;
+        
+        // Reset when first card is fully scrolled out
+        if (scrollPosition >= cardWidth) {
+          scrollPosition = 0;
+          carousel.appendChild(carousel.firstElementChild);
+          carousel.style.transform = `translateX(0)`;
         }
-    });
-
-    scrollButton.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-</script>
-
+        
+        requestAnimationFrame(autoScroll);
+      }
+      
+      autoScroll();
+    }
+  </script>
 </body>
 </html>
