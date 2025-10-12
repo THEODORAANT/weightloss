@@ -407,103 +407,15 @@
         </div>
         
         <div class="bg-white border border-[#dbdbdb] flex flex-col items-start pb-[20px] pt-[30px] md:pt-[40px] px-0 rounded-[10px] w-full lg:w-[670px]">
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="0">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">01</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">What does the Weight Loss Programme involve?</p>
-                <div class="faq-answer active">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">The Weight Loss Programme combines the use of weight loss medication to help suppress appetite and should be used along with exercise and better nutritional habits. By addressing the key areas of weight, you'll have the tools to help you achieve sustainable weight loss.</p>
-                </div>
-              </div>
-            </div>
-            <div class="h-[1px] bg-[#dbdbdb] w-full my-[12px]"></div>
-          </div>
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="1">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">02</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">What are weight loss injections?</p>
-                <div class="faq-answer">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">Weight loss injections are medications that help suppress appetite and promote weight loss. They work by mimicking natural hormones in your body that regulate hunger and metabolism.</p>
-                </div>
-              </div>
-            </div>
-            <div class="h-[1px] bg-[#dbdbdb] w-full my-[12px]"></div>
-          </div>
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="2">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">03</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">How do weight loss injections work?</p>
-                <div class="faq-answer">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">Weight loss injections work by targeting specific receptors in your brain that control appetite and food intake. They help you feel fuller for longer and reduce cravings.</p>
-                </div>
-              </div>
-            </div>
-            <div class="h-[1px] bg-[#dbdbdb] w-full my-[12px]"></div>
-          </div>
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="3">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">04</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">Are weight loss injections effective for losing weight?</p>
-                <div class="faq-answer">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">Yes, clinical studies have shown that weight loss injections can be very effective when combined with a healthy diet and regular exercise. Most people see significant results within the first few months.</p>
-                </div>
-              </div>
-            </div>
-            <div class="h-[1px] bg-[#dbdbdb] w-full my-[12px]"></div>
-          </div>
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="4">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">05</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">What are the most common types of weight loss injections?</p>
-                <div class="faq-answer">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">The most common types include Wegovy (semaglutide), Mounjaro (tirzepatide), and Ozempic (semaglutide). Each has slightly different mechanisms but all work to help with weight loss.</p>
-                </div>
-              </div>
-            </div>
-            <div class="h-[1px] bg-[#dbdbdb] w-full my-[12px]"></div>
-          </div>
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="5">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">06</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">What is semaglutide (Ozempic/Wegovy)?</p>
-                <div class="faq-answer">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">Semaglutide is a GLP-1 receptor agonist that mimics a hormone naturally produced in the body. It helps regulate blood sugar levels and reduces appetite, leading to weight loss.</p>
-                </div>
-              </div>
-            </div>
-            <div class="h-[1px] bg-[#dbdbdb] w-full my-[12px]"></div>
-          </div>
-          <div class="faq-item w-full">
-            <div class="faq-question flex gap-[16px] md:gap-[24px] items-center px-[20px] md:px-[30px] cursor-pointer transition-all duration-300 py-[8px]" data-index="6">
-              <div class="flex flex-col items-center justify-center rounded-[50px] w-[60px] md:w-[80px] min-w-[60px] md:min-w-[80px]">
-                <p class="font-semibold leading-[36px] md:leading-[44px] text-[#0d0d0d] text-[28px] md:text-[36px] text-center tracking-[-0.56px] md:tracking-[-0.72px] whitespace-nowrap">07</p>
-              </div>
-              <div class="flex-1 flex flex-col gap-[14px] items-start">
-                <p class="font-medium leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px] w-full">How is tirzepatide (Mounjaro/Zepbound) different from semaglutide?</p>
-                <div class="faq-answer">
-                  <p class="leading-[24px] md:leading-[28px] text-[#595959] text-[16px] md:text-[18px] w-full">Tirzepatide is a dual GIP and GLP-1 receptor agonist, meaning it targets two hormones instead of one. This dual action can result in more significant weight loss for some people.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php
+                perch_collection('FAQS', [
+
+
+                    'count'      => 7,
+                ]);
+            ?>
+
+
         </div>
       </div>
     </div>
