@@ -66,7 +66,7 @@ $sql = "SELECT * FROM ".PERCH_DB_PREFIX."affiliate_payouts WHERE affiliate_id ="
 
 function getAffiliatePayoutDetails($payoutID){
 
-$sql = "SELECT * FROM ".PERCH_DB_PREFIX."affiliate_payouts p,".PERCH_DB_PREFIX."affiliate_payout_details d WHERE p.id = d.payout_id and payout_id =".$this->db->pdb($payoutID)."";
+$sql = "SELECT * FROM ".PERCH_DB_PREFIX."affiliate_payouts p,".PERCH_DB_PREFIX."affiliate_payout_details d WHERE p.id = d.payout_id and d.payout_id =".$this->db->pdb($payoutID)."";
 
   	return $this->db->get_rows($sql);
 

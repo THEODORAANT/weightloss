@@ -66,37 +66,61 @@ function generateInvoiceHTML($data) {
 
         $Affiliate = new PerchMembers_Affiliate($API);
         $Members = new PerchMembers_Members($API);
+        $Addresses = new PerchShop_Addresses($API);
+
+         	$Customers = new PerchShop_Customers($API);
+
   $payout_details=$Affiliate->getAffiliatePayoutDetails($_GET['payout_id']);
+
   if (!$payout_details) {
-      PerchUtil::redirect('../../../../../../core/apps/content/index.php');
+    echo "no payouts";
+
+      //PerchUtil::redirect('../../../../../../core/apps/content/index.php');
   }
 
-  $affdetails=$Affiliate->getAffiliateDetails($payout_details['affiliate_id']);
+  $affdetails=$Affiliate->getAffiliateDetails($payout_details[0]['affiliate_id']);
+
   if (!$affdetails) {
-      PerchUtil::redirect('../../../../../../core/apps/content/index.php');
+  echo "no affiliate";
+      //PerchUtil::redirect('../../../../../../core/apps/content/index.php');
   }
 
   $Member = $Members->find($affdetails["member_id"]);
+  	$Customer=$Customers->find_by_memberID($affdetails["member_id"]);
   $details = [
       'first_name' => '',
       'last_name' => '',
       'email' => '',
   ];
+
+ // echo "member";  print_r($Member);
   if ($Member instanceof PerchMembers_Member) {
       $details = $Member->to_array();
   }
-
- $activity= json_decode($payout_details["referral_snapshot"], true);
+//print_r($details);
+ $activity= json_decode($payout_details[0]["referral_snapshot"], true);
  if (!is_array($activity)) {
      $activity = [];
  }
+ // echo "activity";  print_r($activity);
+
+ $BillingAddress = $Addresses->find_for_customer($Customer->id(), 'default');
+   if (!$BillingAddress) {
+   $address="no address";
+       //PerchUtil::redirect('../../../../../../core/apps/content/index.php');
+   }else{
+     $address= $BillingAddress->getBillingAddress1();
+
+   }
+ //requested_at
+// processed_at
 // Sample data
 $data = [
     'invoice_date' => date("d/M/Y"),
     'affiliate_id' => $affdetails['affid'],
     'name' => $details["first_name"]." ".$details["last_name"],
-    'address' => "",
-    'email' => $details["email"],
+    'address' =>  $address,
+    'email' => $details["memberEmail"],
     'period_start' => '12/06/2025',
     'period_end' => '31/07/2025',
     'bank_name' => 'xxxx',
@@ -106,6 +130,7 @@ $data = [
 ];
 
 // Generate PDF
+  //echo "data";  print_r($data);
 
 
 $html = generateInvoiceHTML($data);

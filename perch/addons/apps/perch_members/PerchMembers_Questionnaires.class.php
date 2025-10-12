@@ -54,6 +54,22 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                     'name' => "weight-{$slug}",
                 ];
 
+                $this->questions_and_answers["weight2-{$slug}"] = [
+                    'label' => 'Weight before medication (secondary value)',
+                    'type' => 'hidden',
+                    'name' => "weight2-{$slug}",
+                ];
+
+                $this->questions_and_answers["unit-{$slug}"] = [
+                    'label' => 'Weight before medication unit',
+                    'type' => 'radio',
+                    'name' => "unit-{$slug}",
+                    'options' => [
+                        'kg' => 'kg',
+                        'st-lbs' => 'st/lbs',
+                    ],
+                ];
+
                 $this->questions_and_answers["dose-{$slug}"] = [
                     'label' => $lastDoseLabel,
                     'type' => 'radio',
@@ -300,11 +316,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "type" => "text",
             "name" => "weight"
         ],
-        "weight2" => [
+      /*  "weight2" => [
             "label" => "Weight (lbs hidden input)",
             "type" => "hidden",
             "name" => "weight2"
-        ],
+        ],*/
         "weightunit" => [
             "label" => "Weight Unit (kg or st/lbs)",
             "type" => "radio",
@@ -326,7 +342,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         "side_effects" => [
             "label" => "Have you experienced any side effects whilst taking the medication?",
             "type" => "button",
-            "name" => "more_side_effects",
+            "name" => "side_effects",
             "options" => [
                 "yes" => "Yes",
                 "no" => "No"
@@ -337,7 +353,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "type" => "textarea",
             "name" => "more_side_effects"
         ],
-        "additional_medication" => [
+        "additional-medication" => [
             "label" => "Have you started taking any additional medication?",
             "type" => "button",
             "name" => "additional-medication",
@@ -373,6 +389,21 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                 "yes" => "Yes",
                 "no" => "No"
             ]
+        ],
+        "bmi" => [
+            "label" => "BMI",
+            "type" => "text",
+            "name" => "bmi"
+        ],
+        "multiple_answers" => [
+            "label" => "Have client alter answers?",
+            "type" => "text",
+            "name" => "multiple_answers"
+        ],
+        "documents" => [
+            "label" => "Member Documents",
+            "type" => "text",
+            "name" => "documents"
         ]
     ];
 
@@ -432,13 +463,18 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "weight"
                                        ],
+                                     /*  "weight2" => [
+                                           "label" => "Weight (lbs hidden input)",
+                                           "type" => "hidden",
+                                           "name" => "weight2"
+                                       ],*/
                                        "weightunit" => [
                                            "label" => "weight unit",
                                            "type" => "radio",
-                                           "name" => "weightradio-unit",
+                                           "name" => "weightunit",
                                            "options" => [
                                                "kg" => "kg",
-                                               "st" => "st/lbs"
+                                               "st-lbs" => "st/lbs"
                                            ]
                                        ],
                                        "height" => [
@@ -446,10 +482,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "height"
                                        ],
+                                      /* "height2" => [
+                                           "label" => "Height (secondary value)",
+                                           "type" => "hidden",
+                                           "name" => "height2"
+                                       ],*/
                                        "heightunit" => [
                                            "label" => "height unit",
                                            "type" => "radio",
-                                           "name" => "heightunit-radio",
+                                           "name" => "heightunit",
                                            "options" => [
                                                "cm" => "cm",
                                                "ft-in" => "ft/in"
@@ -504,6 +545,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "label" => "Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
                                            "type" => "text",
                                            "name" => "thyroidoperation"
+                                       ],
+                                       "more_conditions" => [
+                                           "label" => "Please tell us more about your health condition and how you manage it.",
+                                           "type" => "textarea",
+                                           "name" => "more_conditions"
                                        ],
                                        "conditions2" => [
                                            "label" => "Do any of the following statements apply to you?",
@@ -624,10 +670,24 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "textarea",
                                            "name" => "other_medication_details"
                                        ],
-                                       "email_address" => [
+                                       "other_medical_conditions" => [
+                                           "label" => "Please list any other medical conditions you have.",
+                                           "type" => "textarea",
+                                           "name" => "other_medical_conditions"
+                                       ],
+                                       "gp_informed" => [
+                                           "label" => "Would you like your GP to be informed of this consultation?",
+                                           "type" => "radio",
+                                           "name" => "gp_informed",
+                                           "options" => [
+                                               "yes" => "Yes",
+                                               "no" => "No"
+                                           ]
+                                       ],
+                                       "GP_email_address" => [
                                            "label" => "Please enter your GP's email address",
                                            "type" => "text",
-                                           "name" => "email_address",
+                                           "name" => "GP_email_address",
                                            "step" => "gp_address"
                                        ],
                                        "special_offers_email" => [
@@ -635,6 +695,21 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "special_offers_email",
                                            "step" => "access_special_offers"
+                                       ],
+                                       "multiple_answers" => [
+                                           "label" => "Have client alter answers?",
+                                           "type" => "text",
+                                           "name" => "multiple_answers"
+                                       ],
+                                       "documents" => [
+                                           "label" => "Member Documents",
+                                           "type" => "text",
+                                           "name" => "documents"
+                                       ],
+                                       "bmi" => [
+                                           "label" => "BMI",
+                                           "type" => "text",
+                                           "name" => "bmi"
                                        ]
                                   ];
 
@@ -671,7 +746,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "other_medical_conditions"=>"Please list any other medical conditions you have. ",
     "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed"=>"Would you like your GP to be informed of this consultation?",
-    "email_address"=>"Please enter your GP's email address",
+    "GP_email_address"=>"Please enter your GP's email address",
     "special_offers_email"=>"Get access to special offers",
     "multiple_answers"=>"Have client alter answers?",
     "documents"=>"Member Documents",
@@ -1797,7 +1872,7 @@ $Members = new PerchMembers_Members;
       foreach ($data as $key => $value) {
           $questionConfig = $questionConfigSet[$key] ?? null;
 
-          if ($key === 'email_address' || $key === 'special_offers_email') {
+          if (in_array($key, ['email_address', 'GP_email_address', 'special_offers_email'], true)) {
               $emailValue = '';
               if (is_array($value)) {
                   $firstEmail = reset($value);
