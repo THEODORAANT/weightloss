@@ -201,9 +201,27 @@ function perch_member_api_login($data)
 {
   $API  = new PerchAPI(1.0, 'perch_members');
 
-	$PerchMembers_Auth = new PerchMembers_Auth($API);
-	return $PerchMembers_Auth->handle_login_api($data);
+        $PerchMembers_Auth = new PerchMembers_Auth($API);
+        return $PerchMembers_Auth->handle_login_api($data);
 
+}
+
+function reset_member_password_api($email)
+{
+    $API = new PerchAPI(1.0, 'perch_members');
+    $Members = new PerchMembers_Members($API);
+
+    if (!is_object($Members)) {
+        return false;
+    }
+
+    $Member = $Members->get_one_by('memberEmail', $email);
+
+    if (!is_object($Member)) {
+        return true;
+    }
+
+    return (bool) $Member->reset_password();
 }
 
 function perch_member_upload_document_api($memberID,$data){
