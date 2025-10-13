@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GetWeightLoss - Weight Loss Success</title>
   <!-- Version: 2025-01-08-LATEST -->
-  <link rel="stylesheet" href="/css/tailwind-subset.css?v=20250108">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Catamaran:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -231,46 +231,43 @@
   </div>
 
   <script>
-    (() => {
-      const mainNav = document.getElementById('mainNav');
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-      const mobileMenu = mobileMenuOverlay?.querySelector('.mobile-menu');
-      const mobileBackdrop = mobileMenuOverlay?.querySelector('.mobile-backdrop');
-      const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+    const mainNav = document.getElementById('mainNav');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileMenu = mobileMenuOverlay?.querySelector('.mobile-menu');
+    const mobileBackdrop = mobileMenuOverlay?.querySelector('.mobile-backdrop');
+    const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
 
-      window.addEventListener('scroll', () => {
-        if (!mainNav) return;
-        if (window.scrollY > 10) {
-          mainNav.classList.add('shadow-md');
-          mainNav.classList.add('bg-white/90');
-        } else {
-          mainNav.classList.remove('shadow-md');
-          mainNav.classList.remove('bg-white/90');
-        }
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) {
+        mainNav.classList.add('shadow-md');
+        mainNav.classList.add('bg-white/90');
+      } else {
+        mainNav.classList.remove('shadow-md');
+        mainNav.classList.remove('bg-white/90');
+      }
+    });
+
+    const openMobileMenu = () => {
+      mobileMenuOverlay?.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        mobileMenu?.classList.add('active');
+        mobileBackdrop?.classList.add('active');
       });
+    };
 
-      const openMobileMenu = () => {
-        mobileMenuOverlay?.classList.remove('hidden');
-        requestAnimationFrame(() => {
-          mobileMenu?.classList.add('active');
-          mobileBackdrop?.classList.add('active');
-        });
-      };
+    const closeMobileMenu = () => {
+      mobileMenu?.classList.remove('active');
+      mobileBackdrop?.classList.remove('active');
+      setTimeout(() => mobileMenuOverlay?.classList.add('hidden'), 300);
+    };
 
-      const closeMobileMenu = () => {
-        mobileMenu?.classList.remove('active');
-        mobileBackdrop?.classList.remove('active');
-        setTimeout(() => mobileMenuOverlay?.classList.add('hidden'), 300);
-      };
+    mobileMenuBtn?.addEventListener('click', openMobileMenu);
+    closeMobileMenuBtn?.addEventListener('click', closeMobileMenu);
+    mobileBackdrop?.addEventListener('click', closeMobileMenu);
 
-      mobileMenuBtn?.addEventListener('click', openMobileMenu);
-      closeMobileMenuBtn?.addEventListener('click', closeMobileMenu);
-      mobileBackdrop?.addEventListener('click', closeMobileMenu);
-
-      document.querySelectorAll('.mobile-menu-link').forEach(link => {
-        link.addEventListener('click', closeMobileMenu);
-      });
-    })();
+    document.querySelectorAll('.mobile-menu-link').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
   </script>
 

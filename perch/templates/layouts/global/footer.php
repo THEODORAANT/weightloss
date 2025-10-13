@@ -90,118 +90,139 @@
   </div>
 
   <script>
-    (() => {
-      const mainNav = document.getElementById('mainNav');
-      const logoContainer = document.querySelector('.logo-container');
-      if (mainNav && logoContainer) {
-        window.addEventListener('scroll', () => {
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    // Navbar scroll effect
+    const mainNav = document.getElementById('mainNav');
+    const logoContainer = document.querySelector('.logo-container');
+    let lastScrollTop = 0;
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > 50) {
+        logoContainer.style.width = '115px';
+        mainNav.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+      } else {
+        logoContainer.style.width = '150px';
+        mainNav.style.boxShadow = 'none';
+      }
+      
+      lastScrollTop = scrollTop;
+    });
 
-          if (scrollTop > 50) {
-            logoContainer.style.width = '115px';
-            mainNav.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-          } else {
-            logoContainer.style.width = '150px';
-            mainNav.style.boxShadow = 'none';
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileMenu = mobileMenuOverlay.querySelector('.mobile-menu');
+    const mobileBackdrop = mobileMenuOverlay.querySelector('.mobile-backdrop');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+    function openMobileMenu() {
+      mobileMenuOverlay.classList.remove('hidden');
+      setTimeout(() => {
+        mobileMenu.classList.add('active');
+        mobileBackdrop.classList.add('active');
+      }, 10);
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('active');
+      mobileBackdrop.classList.remove('active');
+      setTimeout(() => {
+        mobileMenuOverlay.classList.add('hidden');
+      }, 300);
+      document.body.style.overflow = '';
+    }
+
+    mobileMenuBtn.addEventListener('click', openMobileMenu);
+    closeMobileMenuBtn.addEventListener('click', closeMobileMenu);
+    mobileBackdrop.addEventListener('click', closeMobileMenu);
+    
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    const toggleFaq = (question, shouldOpen) => {
+      if (!question) return;
+      const answer = question.querySelector('.faq-answer');
+      const plusIcon = question.querySelector('[data-icon="plus"]');
+      const minusIcon = question.querySelector('[data-icon="minus"]');
+
+      if (!answer) return;
+
+      if (shouldOpen) {
+        question.classList.add('active');
+        answer.classList.add('active');
+        question.setAttribute('aria-expanded', 'true');
+        if (plusIcon) plusIcon.classList.add('hidden');
+        if (minusIcon) minusIcon.classList.remove('hidden');
+      } else {
+        question.classList.remove('active');
+        answer.classList.remove('active');
+        question.setAttribute('aria-expanded', 'false');
+        if (plusIcon) plusIcon.classList.remove('hidden');
+        if (minusIcon) minusIcon.classList.add('hidden');
+      }
+    };
+
+    faqQuestions.forEach(question => {
+      question.setAttribute('role', 'button');
+      if (!question.hasAttribute('tabindex')) {
+        question.setAttribute('tabindex', '0');
+      }
+      question.setAttribute('aria-expanded', question.classList.contains('active') ? 'true' : 'false');
+
+      question.addEventListener('click', () => {
+        const isExpanded = question.classList.contains('active');
+
+        faqQuestions.forEach(otherQuestion => {
+          if (otherQuestion !== question) {
+            toggleFaq(otherQuestion, false);
           }
         });
-      }
 
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
-      const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-      const mobileMenu = mobileMenuOverlay?.querySelector('.mobile-menu');
-      const mobileBackdrop = mobileMenuOverlay?.querySelector('.mobile-backdrop');
-      const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
-
-      const openMobileMenu = () => {
-        mobileMenuOverlay?.classList.remove('hidden');
-        setTimeout(() => {
-          mobileMenu?.classList.add('active');
-          mobileBackdrop?.classList.add('active');
-        }, 10);
-        document.body.style.overflow = 'hidden';
-      };
-
-      const closeMobileMenu = () => {
-        mobileMenu?.classList.remove('active');
-        mobileBackdrop?.classList.remove('active');
-        setTimeout(() => {
-          mobileMenuOverlay?.classList.add('hidden');
-        }, 300);
-        document.body.style.overflow = '';
-      };
-
-      mobileMenuBtn?.addEventListener('click', openMobileMenu);
-      closeMobileMenuBtn?.addEventListener('click', closeMobileMenu);
-      mobileBackdrop?.addEventListener('click', closeMobileMenu);
-
-      mobileMenuLinks.forEach(link => {
-        link.addEventListener('click', closeMobileMenu);
+        toggleFaq(question, !isExpanded);
       });
 
-      const faqQuestions = document.querySelectorAll('.faq-question');
-
-      const toggleFaq = (question, shouldOpen) => {
-        if (!question) return;
-        const answer = question.querySelector('.faq-answer');
-        const plusIcon = question.querySelector('[data-icon="plus"]');
-        const minusIcon = question.querySelector('[data-icon="minus"]');
-
-        if (!answer) return;
-
-        if (shouldOpen) {
-          question.classList.add('active');
-          answer.classList.add('active');
-          question.setAttribute('aria-expanded', 'true');
-          if (plusIcon) plusIcon.classList.add('hidden');
-          if (minusIcon) minusIcon.classList.remove('hidden');
-        } else {
-          question.classList.remove('active');
-          answer.classList.remove('active');
-          question.setAttribute('aria-expanded', 'false');
-          if (plusIcon) plusIcon.classList.remove('hidden');
-          if (minusIcon) minusIcon.classList.add('hidden');
+      question.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          question.click();
         }
-      };
-
-      faqQuestions.forEach(question => {
-        question.setAttribute('role', 'button');
-        if (!question.hasAttribute('tabindex')) {
-          question.setAttribute('tabindex', '0');
-        }
-        question.setAttribute('aria-expanded', question.classList.contains('active') ? 'true' : 'false');
-
-        question.addEventListener('click', () => {
-          const isExpanded = question.classList.contains('active');
-
-          faqQuestions.forEach(otherQuestion => {
-            if (otherQuestion !== question) {
-              toggleFaq(otherQuestion, false);
-            }
-          });
-
-          toggleFaq(question, !isExpanded);
-        });
-
-        question.addEventListener('keydown', event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            question.click();
-          }
-        });
       });
+    });
 
-      if (faqQuestions.length > 0) {
-        toggleFaq(faqQuestions[0], true);
-      }
+    if (faqQuestions.length > 0) {
+      toggleFaq(faqQuestions[0], true);
+    }
 
+    // Testimonial Carousel (Desktop only)
+    const carousel = document.getElementById('testimonialCarousel');
+    if (carousel && window.innerWidth >= 1024) {
+      let scrollPosition = 0;
+      const scrollSpeed = 1;
+      const cardWidth = 544 + 32; // card width + gap
+      
+      function autoScroll() {
+        scrollPosition += scrollSpeed;
+        carousel.style.transform = `translateX(-${scrollPosition}px)`;
+        
+        // Reset when first card is fully scrolled out
+        if (scrollPosition >= cardWidth) {
+          scrollPosition = 0;
+          carousel.appendChild(carousel.firstElementChild);
+          carousel.style.transform = `translateX(0)`;
+        }
+        
         requestAnimationFrame(autoScroll);
       }
       
       autoScroll();
     }
-    })();
   </script>
 </body>
 </html>
