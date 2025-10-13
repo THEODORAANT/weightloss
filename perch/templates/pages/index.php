@@ -64,14 +64,15 @@
           <div class="absolute bg-white flex flex-col gap-[20px] lg:gap-[25px] items-start bottom-[-40px] left-[20px] right-[20px] lg:left-[-80px] xl:left-[-120px] lg:right-auto lg:bottom-auto lg:top-[400px] xl:top-[480px] p-[24px] lg:p-[40px] rounded-[10px] shadow-[0px_100px_200px_0px_rgba(52,64,84,0.18)] max-w-[calc(100%-40px)] lg:max-w-none">
             <div class="flex flex-col justify-center leading-[0] text-[#0d0d0d]">
               <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">From</p>
-              <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£95</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
+              <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£109</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
             </div>
-            <div class="flex gap-[4px] items-center justify-center px-0 py-[10px] rounded-[8px]">
+                    <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+    <div class="flex gap-[4px] items-center justify-center px-0 py-[10px] rounded-[8px]">
               <p class="font-semibold leading-[24px] text-[16px] text-[grey] whitespace-nowrap">Get started</p>
               <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.5 5L12.5 10L7.5 15" stroke="grey" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </div>
+            </div></a>
           </div>
         </div>
       </div>
@@ -386,7 +387,7 @@
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[32px] lg:gap-0 px-0 pt-[30px] md:pt-[40px] lg:pt-[50px] pb-[60px] md:pb-[80px] lg:pb-[100px] w-full lg:max-w-[1120px]">
           <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-[544px]">Let's Find Your Perfect Plan Together</p>
           <div class="flex flex-col sm:flex-row gap-[10px] items-stretch sm:items-start w-full sm:w-auto">
-            <a href="#pricing" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+            <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
                 <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
               </div>
