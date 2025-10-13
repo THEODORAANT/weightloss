@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/content/faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/content/faq.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/content/medication_short.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/content/medication_short.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/templates/pages/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +45,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_blog/templates/blog",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/templates/pages",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -55,11 +57,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch/templates/pages" />
+      <recent name="$PROJECT_DIR$/perch/templates" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_blog/templates/blog" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch" />
-      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members" />
-      <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />

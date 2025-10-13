@@ -178,6 +178,14 @@
             <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">Effective solutions to manage your weight loss and Type-2 diabetes.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">
+               <?php
+                                                         perch_collection('MedicationProgrammes', [
+
+                                                             'count'      => 6,
+                                                         ]);
+                                                     ?>
+
+
             <div class="border border-[#d6d6d6] flex flex-col justify-between px-[24px] py-[30px] rounded-[20px]">
               <div class="flex flex-col gap-[24px] items-start w-full">
                 <div class="flex flex-col gap-[12px] items-start w-full">
@@ -254,101 +262,30 @@
       <div class="bg-white w-full flex flex-col items-center justify-center pb-[60px] md:pb-[80px] lg:pb-[100px]">
         <!-- Mobile/Tablet Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[24px] w-full lg:hidden px-[20px] md:px-[40px]">
-          <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[20px] md:p-[24px] rounded-[20px]">
-            <div class="mb-4">
-              <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-            </div>
-            <p class="text-[16px] text-[grey] leading-[24px] mb-6">I discovered an old bag of clothes and couldn't believe how many of them fit me where I would have had no chance before. I feel amazing. I think I look much better than I ever did.</p>
-            <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-              <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Andy, 55</p>
-            </div>
-          </div>
-          <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[20px] md:p-[24px] rounded-[20px]">
-            <div class="mb-4">
-              <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-            </div>
-            <p class="text-[16px] text-[grey] leading-[24px] mb-6">I want to be in good shape to enjoy life, but be happy as I'm doing it, rather than miserable. Given where I am I think I've managed that with weight loss injections. In short I feel happier that I started and will continue with it.</p>
-            <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-              <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Mark, 59</p>
-            </div>
-          </div>
-          <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[20px] md:p-[24px] rounded-[20px]">
-            <div class="mb-4">
-              <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-            </div>
-            <p class="text-[16px] text-[grey] leading-[24px] mb-6">I want to be in good shape to enjoy life, but be happy as I'm doing it, rather than miserable. Given where I am I think I've managed that with weight loss injections. In short I feel happier that I started and will continue with it.</p>
-            <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-              <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Sarah, 42</p>
-            </div>
-          </div>
-          <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[20px] md:p-[24px] rounded-[20px]">
-            <div class="mb-4">
-              <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-            </div>
-            <p class="text-[16px] text-[grey] leading-[24px] mb-6">The support I received was incredible. I never felt alone in my journey and the results speak for themselves. I've lost over 30 pounds and feel healthier than I have in years.</p>
-            <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-              <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">John, 48</p>
-            </div>
-          </div>
-          <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[20px] md:p-[24px] rounded-[20px]">
-            <div class="mb-4">
-              <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-            </div>
-            <p class="text-[16px] text-[grey] leading-[24px] mb-6">Starting this program was the best decision I made. The injections made it easier to stick to my diet and the weight just started coming off. I'm more confident than ever!</p>
-            <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-              <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Emma, 37</p>
-            </div>
-          </div>
+           <?php
+                          perch_collection('SuccessStories', [
+
+                              'count'      => 3,
+                          ]);
+                      ?>
+
+
+
         </div>
         
         <!-- Desktop Carousel -->
         <div class="relative w-full overflow-hidden hidden lg:block">
           <div id="testimonialCarousel" class="testimonial-carousel flex gap-[32px]">
-            <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[24px] rounded-[20px] min-w-[544px]">
-              <div class="mb-4">
-                <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-              </div>
-              <p class="text-[16px] text-[grey] leading-[24px] mb-6">I discovered an old bag of clothes and couldn't believe how many of them fit me where I would have had no chance before. I feel amazing. I think I look much better than I ever did.</p>
-              <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-                <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Andy, 55</p>
-              </div>
-            </div>
-            <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[24px] rounded-[20px] min-w-[544px]">
-              <div class="mb-4">
-                <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-              </div>
-              <p class="text-[16px] text-[grey] leading-[24px] mb-6">I want to be in good shape to enjoy life, but be happy as I'm doing it, rather than miserable. Given where I am I think I've managed that with weight loss injections. In short I feel happier that I started and will continue with it.</p>
-              <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-                <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Mark, 59</p>
-              </div>
-            </div>
-            <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[24px] rounded-[20px] min-w-[544px]">
-              <div class="mb-4">
-                <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-              </div>
-              <p class="text-[16px] text-[grey] leading-[24px] mb-6">I want to be in good shape to enjoy life, but be happy as I'm doing it, rather than miserable. Given where I am I think I've managed that with weight loss injections. In short I feel happier that I started and will continue with it.</p>
-              <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-                <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Sarah, 42</p>
-              </div>
-            </div>
-            <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[24px] rounded-[20px] min-w-[544px]">
-              <div class="mb-4">
-                <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-              </div>
-              <p class="text-[16px] text-[grey] leading-[24px] mb-6">The support I received was incredible. I never felt alone in my journey and the results speak for themselves. I've lost over 30 pounds and feel healthier than I have in years.</p>
-              <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-                <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">John, 48</p>
-              </div>
-            </div>
-            <div class="bg-[#f9f9fb] flex flex-col items-start justify-between p-[24px] rounded-[20px] min-w-[544px]">
-              <div class="mb-4">
-                <img src="/new/images/stars.svg" alt="5 stars" class="h-[18px] w-[122px]" />
-              </div>
-              <p class="text-[16px] text-[grey] leading-[24px] mb-6">Starting this program was the best decision I made. The injections made it easier to stick to my diet and the weight just started coming off. I'm more confident than ever!</p>
-              <div class="border-t border-[#d6d6d6] flex gap-[8px] items-center pt-[24px] w-full">
-                <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Emma, 37</p>
-              </div>
-            </div>
+             <?php
+                            perch_collection('SuccessStories', [
+
+                                'count'      => 3,
+                            ]);
+                        ?>
+
+
+
+
           </div>
         </div>
       </div>
@@ -407,13 +344,13 @@
         </div>
         
         <div class="bg-white border border-[#dbdbdb] flex flex-col items-start pb-[20px] pt-[30px] md:pt-[40px] px-0 rounded-[10px] w-full lg:w-[670px]">
-          <?php
-                perch_collection('FAQS', [
+           <?php
+                        perch_collection('FAQS', [
 
 
-                    'count'      => 7,
-                ]);
-            ?>
+                            'count'      => 7,
+                        ]);
+                    ?>
 
 
         </div>
