@@ -1,34 +1,36 @@
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5><perch:content id="heading" type="text" label="Heading" required title></h5>
+<div class="border border-[#d6d6d6] flex flex-col justify-between px-[24px] py-[30px] rounded-[20px]">
+    <div class="flex flex-col gap-[24px] items-start w-full">
+        <div class="flex flex-col gap-[12px] items-start w-full">
+            <perch:if exists="heading">
+                <p class="font-semibold leading-[24px] text-[18px] text-[#3328bf]"><perch:content id='heading' type='text' label='Heading' required title></p>
+            </perch:if>
+            <perch:if exists="card_parag">
+                <p class="leading-[24px] text-[16px] text-[grey] w-full"><perch:content id='card_parag' type='text' label='Paragraph' required title></p>
+            </perch:if>
         </div>
-        <span class="proven" ><perch:content id="card_parag" type="text" label="Paragraph" required title></span>
-        <p class="price">
-            <perch:content id="price" type="text" label="Price" required title>
-           <!-- From <span class="old-price">&pound;209.00</span>
-            <span class="new-price" style="color: #288881 !important;" >&pound;78.00</span> / kit-->
-        </p>
-       <div class="imges">
-           <perch:content id="imgtext" type="text" label="Image Text" required title>
-
-           <!--   <img style="width: 178px;" src="<perch:content type="image" id="image" label="Image" width="800">" alt="">
-        -->
-        </div>
-         <div class="slide_butto">
-
-                 <perch:if exists="url_buynow">
-
-                     <button ><a href="<perch:content id="url_buynow" type="text" label="URL Buy now"  title>">Buy now <i class="fa-solid fa-arrow-right"></i></a></button>
-                 </perch:if>
-                 <perch:if exists="url_learnmore">
-                     <button><a href="<perch:content id="url_learnmore" type="text" label="URL Learn more"  title>">Learn more</a></i></button>
-
-
-
-                 </perch:if>
-
-         </div>
-     </div>
-
- </div>
+        <perch:if exists="price">
+            <div class="border-[#d6d6d6] border-b flex items-end pb-[24px] w-full">
+                <p class="font-medium leading-[48px] md:leading-[60px] text-[40px] md:text-[48px] tracking-[-0.8px] md:tracking-[-0.96px] text-[#0d0d0d]">
+                    <perch:content id='price' type='text' label='Price' required title>
+                </p>
+                <p class="leading-[24px] text-[16px] text-[#0d0d0d]"> / month</p>
+            </div>
+        </perch:if>
+        <perch:if exists="imgtext">
+            <div class="flex flex-col gap-[16px] items-start w-full">
+                <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px]"><perch:content id='imgtext' type='text' label='Image Text' required title></p>
+            </div>
+        </perch:if>
+    </div>
+    <perch:if exists="url_learnmore">
+        <a href="<perch:content id='url_learnmore' type='text' label='URL Learn more' title>" class="bg-[#3328bf] flex gap-[10px] items-center justify-center overflow-clip px-[22px] py-[16px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-full mt-[30px] btn-glow">
+            <p class="font-semibold leading-[28px] text-[#fcfcfc] text-[18px] whitespace-nowrap">Learn more</p>
+        </a>
+    <perch:else />
+        <perch:if exists="url_buynow">
+            <a href="<perch:content id='url_buynow' type='text' label='URL Buy now' title>" class="bg-[#3328bf] flex gap-[10px] items-center justify-center overflow-clip px-[22px] py-[16px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-full mt-[30px] btn-glow">
+                <p class="font-semibold leading-[28px] text-[#fcfcfc] text-[18px] whitespace-nowrap">Buy now</p>
+            </a>
+        </perch:if>
+    </perch:if>
+</div>
