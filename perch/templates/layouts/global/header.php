@@ -26,6 +26,17 @@
       max-height: 500px;
       opacity: 1;
     }
+
+    .faq-question:focus-visible {
+      outline: 2px solid #3328bf;
+      outline-offset: 4px;
+    }
+
+    .faq-question.active .faq-toggle-icon {
+      background-color: #3328bf;
+      border-color: #3328bf;
+      color: #ffffff;
+    }
     
     /* Mobile Sidebar Animations */
     .mobile-menu {

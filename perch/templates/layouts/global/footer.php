@@ -145,23 +145,60 @@
 
     // FAQ Accordion
     const faqQuestions = document.querySelectorAll('.faq-question');
-    
+
+    const toggleFaq = (question, shouldOpen) => {
+      if (!question) return;
+      const answer = question.querySelector('.faq-answer');
+      const plusIcon = question.querySelector('[data-icon="plus"]');
+      const minusIcon = question.querySelector('[data-icon="minus"]');
+
+      if (!answer) return;
+
+      if (shouldOpen) {
+        question.classList.add('active');
+        answer.classList.add('active');
+        question.setAttribute('aria-expanded', 'true');
+        if (plusIcon) plusIcon.classList.add('hidden');
+        if (minusIcon) minusIcon.classList.remove('hidden');
+      } else {
+        question.classList.remove('active');
+        answer.classList.remove('active');
+        question.setAttribute('aria-expanded', 'false');
+        if (plusIcon) plusIcon.classList.remove('hidden');
+        if (minusIcon) minusIcon.classList.add('hidden');
+      }
+    };
+
     faqQuestions.forEach(question => {
+      question.setAttribute('role', 'button');
+      if (!question.hasAttribute('tabindex')) {
+        question.setAttribute('tabindex', '0');
+      }
+      question.setAttribute('aria-expanded', question.classList.contains('active') ? 'true' : 'false');
+
       question.addEventListener('click', () => {
-        const answer = question.querySelector('.faq-answer');
-        const isActive = answer.classList.contains('active');
-        
-        // Close all other FAQs
-        document.querySelectorAll('.faq-answer').forEach(ans => {
-          ans.classList.remove('active');
+        const isExpanded = question.classList.contains('active');
+
+        faqQuestions.forEach(otherQuestion => {
+          if (otherQuestion !== question) {
+            toggleFaq(otherQuestion, false);
+          }
         });
-        
-        // Toggle current FAQ
-        if (!isActive) {
-          answer.classList.add('active');
+
+        toggleFaq(question, !isExpanded);
+      });
+
+      question.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          question.click();
         }
       });
     });
+
+    if (faqQuestions.length > 0) {
+      toggleFaq(faqQuestions[0], true);
+    }
 
     // Testimonial Carousel (Desktop only)
     const carousel = document.getElementById('testimonialCarousel');
