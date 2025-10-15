@@ -577,7 +577,7 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
     }
 
        public function send_order_email_trustpilot($status)
-        { echo "send_order_email_trustpilot"; echo $status;
+        { //echo "send_order_email_trustpilot"; echo $status;
         if ($status) {
 
           $OrderStatuses = new PerchShop_OrderStatuses($this->api);
@@ -586,9 +586,9 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
         			##PerchUtil::debug($OrderStatus);
 
         		}
-        		 echo "OrderStatus";print_r($OrderStatus);
+        		 //echo "OrderStatus";print_r($OrderStatus->statusID());
         $ShopEmails = new PerchShop_Emails($this->api);
-        $ShopEmail = $ShopEmails->get_for_status($OrderStatus->id());
+        $ShopEmail = $ShopEmails->get_for_status($OrderStatus->statusID());
 	 echo "ShopEmail";print_r($ShopEmail);
 
     	$Customers = new PerchShop_Customers($this->api);
