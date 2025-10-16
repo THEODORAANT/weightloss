@@ -1,6 +1,7 @@
- <?php  // output the top of the page
+
+<?php  // output the top of the page
     perch_layout('global/head');
-    perch_layout('global/header', [
+   perch_layout('global/header', [
         'page_title' => perch_page_title(true),
     ]);
 
@@ -23,8 +24,8 @@
                 <p class="font-semibold text-[#0d0d0d] text-[36px] md:text-[52px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.04px] lg:tracking-[-1.44px] leading-[44px] md:leading-[60px] lg:leading-[90px]">Get expert weight-loss support today.</p>
               </div>
               <div class="flex flex-col justify-center w-full lg:w-[457px]">
-                <p class="leading-[24px] text-[16px] text-[grey]">Start your journey with a professional consultation. Our UK clinicians will assess if prescription treatments are right for you. 
-                  </p>
+                <p class="leading-[24px] text-[16px] text-[grey]">
+Our team of licensed UK clinicians will take the time to understand your health before recommending a plan that’s right for you. Through the consultation, they’ll assess which treatments are a safe and effective option for you.                  </p>
               </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-[10px] sm:h-[64px] items-stretch sm:items-center p-[8px] rounded-[8px] w-full sm:w-auto">
@@ -66,7 +67,7 @@
               <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">From</p>
               <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£109</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
             </div>
-                    <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+                    <a href="/get-started" >
     <div class="flex gap-[4px] items-center justify-center px-0 py-[10px] rounded-[8px]">
               <p class="font-semibold leading-[24px] text-[16px] text-[grey] whitespace-nowrap">Get started</p>
               <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +106,7 @@
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
                 <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Support</p>
-                <p class="text-[16px] text-[grey] leading-[24px]">We will always be on hand via email, chat or scheduled call* to help you along the way.</p>
+                <p class="text-[16px] text-[grey] leading-[24px]">We will always be on hand via email or scheduled call* to help you along the way.  *Scheduled calls may be requested via email.</p>
               </div>
             </div>
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
@@ -187,60 +188,8 @@
                                                      ?>
 
 
-            <div class="border border-[#d6d6d6] flex flex-col justify-between px-[24px] py-[30px] rounded-[20px]">
-              <div class="flex flex-col gap-[24px] items-start w-full">
-                <div class="flex flex-col gap-[12px] items-start w-full">
-                  <p class="font-semibold leading-[24px] text-[18px] text-[#3328bf]">Wegovy Weight Loss Consultation</p>
-                  <p class="leading-[24px] text-[16px] text-[grey] w-full">Clinically proven weight loss</p>
-                </div>
-                <div class="border-[#d6d6d6] border-b flex items-end pb-[24px] w-full">
-                  <p class="font-medium leading-[48px] md:leading-[60px] text-[40px] md:text-[48px] tracking-[-0.8px] md:tracking-[-0.96px] text-[#0d0d0d]">$109</p>
-                  <p class="leading-[24px] text-[16px] text-[#0d0d0d]"> / month</p>
-                </div>
-                <div class="flex flex-col gap-[16px] items-start w-full">
-                  <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px]">Wegovy is a weekly injection that mimics GLP-1 hormone, suppresses appetite, and aids in significant, sustainable weight loss when used alongside a healthy lifestyle.</p>
-                </div>
-              </div>
-              <a href="#pricing" class="bg-[#3328bf] flex gap-[10px] items-center justify-center overflow-clip px-[22px] py-[16px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-full mt-[30px] btn-glow">
-                <p class="font-semibold leading-[28px] text-[#fcfcfc] text-[18px] whitespace-nowrap">Learn more</p>
-              </a>
-            </div>
-            <div class="border border-[#d6d6d6] flex flex-col justify-between px-[24px] py-[30px] rounded-[20px]">
-              <div class="flex flex-col gap-[24px] items-start w-full">
-                <div class="flex flex-col gap-[12px] items-start w-full">
-                  <p class="font-semibold leading-[24px] text-[18px] text-[#3328bf]">Weight Loss Blood Test</p>
-                  <p class="leading-[24px] text-[16px] text-[grey] w-full">Biochemistry profile for your weight loss journey.</p>
-                </div>
-                <div class="border-[#d6d6d6] border-b flex items-end pb-[24px] w-full">
-                  <p class="font-medium leading-[48px] md:leading-[60px] text-[40px] md:text-[48px] tracking-[-0.8px] md:tracking-[-0.96px] text-[#0d0d0d]">$99</p>
-                  <p class="leading-[24px] text-[16px] text-[#0d0d0d]"> / month</p>
-                </div>
-                <div class="flex flex-col gap-[16px] items-start w-full">
-                  <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px]">Our weight loss blood test analyzes hormone levels, metabolism, thyroid function, and nutrient deficiencies to identify underlying issues that may affect weight loss and overall health.</p>
-                </div>
-              </div>
-              <a href="#pricing" class="bg-[#3328bf] flex gap-[10px] items-center justify-center overflow-clip px-[22px] py-[16px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-full mt-[30px] btn-glow">
-                <p class="font-semibold leading-[28px] text-[#fcfcfc] text-[18px] whitespace-nowrap">Learn more</p>
-              </a>
-            </div>
-            <div class="border border-[#d6d6d6] flex flex-col justify-between px-[24px] py-[30px] rounded-[20px]">
-              <div class="flex flex-col gap-[24px] items-start w-full">
-                <div class="flex flex-col gap-[12px] items-start w-full">
-                  <p class="font-semibold leading-[24px] text-[18px] text-[#3328bf]">Mounjaro Weight Loss Consultation</p>
-                  <p class="leading-[24px] text-[16px] text-[grey] w-full">Clinically-proven weight loss</p>
-                </div>
-                <div class="border-[#d6d6d6] border-b flex items-end pb-[24px] w-full">
-                  <p class="font-medium leading-[48px] md:leading-[60px] text-[40px] md:text-[48px] tracking-[-0.8px] md:tracking-[-0.96px] text-[#0d0d0d]">$129</p>
-                  <p class="leading-[24px] text-[16px] text-[#0d0d0d]"> / month</p>
-                </div>
-                <div class="flex flex-col gap-[16px] items-start w-full">
-                  <p class="font-medium leading-[24px] text-[#0d0d0d] text-[16px]">Mounjaro helps with weight loss by mimicking gut hormones, reducing appetite, improving blood sugar, and supporting long-term weight management when combined with diet and exercise.</p>
-                </div>
-              </div>
-              <a href="#pricing" class="bg-[#3328bf] flex gap-[10px] items-center justify-center overflow-clip px-[22px] py-[16px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] w-full mt-[30px] btn-glow">
-                <p class="font-semibold leading-[28px] text-[#fcfcfc] text-[18px] whitespace-nowrap">Learn more</p>
-              </a>
-            </div>
+
+
           </div>
         </div>
       </div>
@@ -280,7 +229,7 @@
              <?php
                             perch_collection('SuccessStories', [
 
-                                'count'      => 3,
+                                'count'      => 4,
                             ]);
                         ?>
 

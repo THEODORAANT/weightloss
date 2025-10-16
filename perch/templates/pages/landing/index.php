@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/tailwind-subset.css?v=20250108">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --lime: #afd136;
@@ -213,7 +213,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-20 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style="background-color: #e3f2d3; color: #5a7c2e;">
-          ✓ UK-regulated • GPhC registered
+          ✓ UK-regulated • GMC/GPhC registered
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
         <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a professional consultation. Our UK clinicians will assess if prescription treatments are right for you.Prices from as low as £95 per prescription plus postage and packaging.</p>

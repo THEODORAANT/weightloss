@@ -4,16 +4,19 @@
             <perch:if exists="heading">
                 <p class="font-semibold leading-[24px] text-[18px] text-[#3328bf]"><perch:content id="heading" type="text" label="Heading" required title></p>
             </perch:if>
-            <perch:if exists="card_parag">
-                <p class="leading-[24px] text-[16px] text-[grey] w-full"><perch:content id="card_parag" type="text" label="Paragraph" required title></p>
-            </perch:if>
+
+                <p class="leading-[24px] text-[16px] text-[grey] w-full">
+                    <perch:content id="card_parag" type="text" label="Paragraph" required title>
+
+                </p>
+
         </div>
         <perch:if exists="price">
             <div class="border-[#d6d6d6] border-b flex items-end pb-[24px] w-full">
                 <p class="font-medium leading-[48px] md:leading-[60px] text-[40px] md:text-[48px] tracking-[-0.8px] md:tracking-[-0.96px] text-[#0d0d0d]">
                     <perch:content id="price" type="text" label="Price" required title>
                 </p>
-                <p class="leading-[24px] text-[16px] text-[#0d0d0d]"> / month</p>
+                <p class="leading-[24px] text-[16px] text-[#0d0d0d]"> </p>
             </div>
         </perch:if>
         <perch:if exists="imgtext">
