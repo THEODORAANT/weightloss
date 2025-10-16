@@ -396,15 +396,15 @@
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Do you work with my GP?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.   <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
+                                                                                                                                                                                                                                <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
+                                                                                                                                                                                                                                <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
+                                                                                                                                                                                                                                <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
+                                                                                                                                                                                                                                <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
+                                                                                                                                                                                                                              </ol></p>
         </details>
       </div>
-      <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
-        <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
-        <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
-        <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
-        <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
-      </ol>
+
     </div>
   </section>
 
