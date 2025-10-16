@@ -216,7 +216,7 @@
           ✓ UK-regulated • GMC/GPhC registered
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
-        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a professional consultation. Our UK clinicians will assess if prescription treatments are right for you.Prices from as low as £95 per prescription plus postage and packaging.</p>
+        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">   <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a confidential consultation from one of our UK-registered clinicians. They’ll assess your health needs and determine if a prescription treatment is suitable for you.</p></p>
         <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
           <a href="https://www.getweightloss.co.uk/get-started" class="btn-lime inline-flex items-center justify-center rounded-2xl px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 transition-all">
             <span>Start free assessment</span>
@@ -280,6 +280,10 @@
               </div>
             </li>
           </ul>
+            <div class="mt-6 space-y-2 text-xs sm:text-sm italic opacity-75">
+                      <p>*If appropriate, a private prescription can be issued, and medication dispensed by our partner pharmacy.</p>
+                      <p>*Consultation fees apply; treatment costs may vary depending on what’s prescribed.</p>
+                    </div>
         </div>
       </div>
     </div>
@@ -303,7 +307,7 @@
         <div class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <p class="text-xs font-bold tracking-wide" style="color: var(--blue)">STEP 3</p>
           <h3 class="mt-3 text-lg sm:text-xl font-semibold">Prescription Delivery</h3>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">On being eligible and completing the process, you will receive a Royal Mail tracking ID with your package arriving 2 days later. You are ready to start your journey.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">If your clinician decides a prescription is appropriate, it will be dispensed by our partner pharmacy and sent via tracked Royal Mail delivery (usually within 2 working days). You’ll receive your tracking details once your prescription has been processed.</p>
         </div>
       </div>
     </div>
@@ -313,7 +317,8 @@
   <section id="treatments" style="background-color: var(--grey)">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore the treatments</h2>
-      <p class="mt-4 text-base sm:text-lg leading-relaxed">There are numerous weight-loss medications available to be used in conjunction with a reduced calorie diet and exercise, all of which are only available if deemed appropriate by a prescriber.</p>      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+      <p class="mt-4 text-base sm:text-lg leading-relaxed">A range of prescription-only medicines may be considered to support weight management alongside a reduced-calorie diet and regular physical activity.
+                                                           These medicines are only supplied if a UK-registered prescriber determines they are clinically appropriate for you following a detailed consultation.</p>      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Mounjaro® (tirzepatide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
@@ -335,7 +340,10 @@
       </div>
       <div class="mt-6 rounded-2xl p-4 sm:p-5 text-sm sm:text-base" style="background-color: #afd13622; border: 1px solid var(--lime)">
         <p class="font-semibold">Important:</p>
-        <p class="mt-2 leading-relaxed">We do not supply medicines without a valid prescription. Availability of any medicine may be affected by supply constraints. If treatment is not suitable, we will explain alternative options.</p>
+        <p class="mt-2 leading-relaxed">   <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
+        <li>Medicines are only supplied following a valid prescription from a qualified prescriber.</li>
+                                         <li>Availability may vary depending on stock and supply.</li>
+                                         <li>If a treatment is not suitable, your clinician will discuss alternative evidence-based options with you. </li></ul></p>
       </div>
     </div>
   </section>
