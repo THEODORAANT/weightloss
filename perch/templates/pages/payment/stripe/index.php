@@ -68,10 +68,8 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
         die("Failed to create log directory: $logDir");
     }
 
-            $_SESSION['questionnaire']["multiple_answers"]="No";
-
           if(isset($_SESSION['answer_log'])){
-            $rawLog = is_array($_SESSION['answer_log']) ? $_SESSION['answer_log'] : [];
+            $rawLog = $_SESSION['answer_log'];
 
             if (file_put_contents("{$logDir}/{$userId}_raw_log.json", json_encode([
                 'metadata' => $metadata,
@@ -80,11 +78,23 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
                 die("Failed to write log file.");
             }
 
-            $summary = perch_members_summarise_answer_log($rawLog);
-            $grouped = $summary['grouped'];
 
-            if (!empty($summary['has_changes'])) {
-                $_SESSION['questionnaire']["multiple_answers"]="Yes-"."https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/questionnaire_logs/?userId=".$userId;
+            // Step 5: Save grouped log
+            $grouped = [];
+            $multiple_answers=false;
+            foreach ($rawLog as $entry) {
+                $question = $entry['question'];
+                unset($entry['question']);
+                $grouped[$question][] = $entry;
+               // echo $question ;echo count( $grouped[$question]);
+                if(count( $grouped[$question])>=2){
+    $multiple_answers=true;
+                }
+            }
+            $_SESSION['questionnaire']["multiple_answers"]="No";
+            if($multiple_answers){
+            $_SESSION['questionnaire']["multiple_answers"]="Yes-"."https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/questionnaire_logs/?userId=".$userId;
+            //.$_SERVER['HTTP_HOST']."/logs/{$userId}_grouped_log.json";
             }
             $_SESSION['questionnaire']["documents"]="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/edit/?id=".perch_member_get('id');
             //print_r( $_SESSION['questionnaire']);

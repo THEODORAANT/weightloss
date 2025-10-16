@@ -201,27 +201,9 @@ function perch_member_api_login($data)
 {
   $API  = new PerchAPI(1.0, 'perch_members');
 
-        $PerchMembers_Auth = new PerchMembers_Auth($API);
-        return $PerchMembers_Auth->handle_login_api($data);
+	$PerchMembers_Auth = new PerchMembers_Auth($API);
+	return $PerchMembers_Auth->handle_login_api($data);
 
-}
-
-function reset_member_password_api($email)
-{
-    $API = new PerchAPI(1.0, 'perch_members');
-    $Members = new PerchMembers_Members($API);
-
-    if (!is_object($Members)) {
-        return false;
-    }
-
-    $Member = $Members->get_one_by('memberEmail', $email);
-
-    if (!is_object($Member)) {
-        return true;
-    }
-
-    return (bool) $Member->reset_password();
 }
 
 function perch_member_upload_document_api($memberID,$data){
@@ -405,99 +387,6 @@ function perch_member_questionsForQuestionnaire($type) {
 
         $_SESSION[$logKey][] = $logEntry;
 
-    }
-
-    function perch_members_normalise_answer_log_value($value)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        if (is_bool($value)) {
-            return $value ? '1' : '0';
-        }
-
-        if (is_array($value)) {
-            $flattened = [];
-            array_walk_recursive($value, function ($item) use (&$flattened) {
-                if (is_scalar($item) || $item === null) {
-                    $flattened[] = (string)$item;
-                }
-            });
-
-            if (empty($flattened)) {
-                return '';
-            }
-
-            return trim(implode(', ', $flattened));
-        }
-
-        if (is_object($value) && method_exists($value, '__toString')) {
-            $value = (string)$value;
-        }
-
-        if (is_scalar($value)) {
-            return trim((string)$value);
-        }
-
-        $encoded = json_encode($value);
-
-        return $encoded === false ? '' : trim($encoded);
-    }
-
-    function perch_members_summarise_answer_log($rawLog)
-    {
-        if (!is_array($rawLog)) {
-            $rawLog = [];
-        }
-
-        $grouped = [];
-        $answersSeen = [];
-        $hasChanges = false;
-
-        foreach ($rawLog as $entry) {
-            if (!is_array($entry)) {
-                continue;
-            }
-
-            $question = $entry['question'] ?? null;
-
-            if (!is_string($question) || $question === '') {
-                continue;
-            }
-
-            $entryCopy = $entry;
-            unset($entryCopy['question']);
-            $grouped[$question][] = $entryCopy;
-
-            if (!isset($answersSeen[$question])) {
-                $answersSeen[$question] = [];
-            }
-
-            $currentAnswer = perch_members_normalise_answer_log_value($entry['answer'] ?? null);
-            $previousAnswer = perch_members_normalise_answer_log_value($entry['previous_answer'] ?? null);
-
-            if ($currentAnswer !== null) {
-                $answersSeen[$question][$currentAnswer] = true;
-
-                if (count($answersSeen[$question]) > 1) {
-                    $hasChanges = true;
-                }
-            }
-
-            if (!$hasChanges) {
-                if (!empty($entry['changed'])) {
-                    $hasChanges = true;
-                } elseif ($previousAnswer !== null && $previousAnswer !== $currentAnswer) {
-                    $hasChanges = true;
-                }
-            }
-        }
-
-        return [
-            'grouped' => $grouped,
-            'has_changes' => $hasChanges,
-        ];
     }
 
     function perch_member_accept_questionnaire_api($memberid,$questionnaireID,$accepted)

@@ -37,7 +37,6 @@ class PerchShop_Emails extends PerchShop_Factory
 	public function get_for_status($statusID)
 	{
 		$sql = 'SELECT * FROM '.$this->table.' WHERE emailStatus='.$this->db->pdb((int)$statusID).' AND emailActive=1';
-		echo $sql;
 		return $this->return_instances($this->db->get_rows($sql));
 	}
 }

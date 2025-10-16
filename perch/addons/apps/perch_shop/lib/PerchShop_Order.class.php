@@ -340,7 +340,7 @@ class PerchShop_Order extends PerchShop_Base
          ];
            print_r($orderData);
            $response =[];
-   // $response = $pharmacy_api->createOrder($orderData);
+    $response = $pharmacy_api->createOrder($orderData);
                              //  echo "response";
          	//print_r($response);
          if($response["success"]){
@@ -357,7 +357,7 @@ class PerchShop_Order extends PerchShop_Base
                        ];
          	}
 
-         //	$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
+         	$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
 
 return $response;
 	}
@@ -441,7 +441,7 @@ return $response;
                  // exit();
         perch_emailoctopus_update_contact($data);
        // echo "perch_member_add_commission";
-$this->send_order_email_trustpilot($this->details['orderStatus']);
+
 
         }
 
@@ -576,68 +576,6 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
     	$this->update(['orderGatewayRef'=>$ref]);
     }
 
-       public function send_order_email_trustpilot($status)
-        { //echo "send_order_email_trustpilot"; echo $status;
-        if ($status) {
-
-          $OrderStatuses = new PerchShop_OrderStatuses($this->api);
-
-        			$OrderStatus = $OrderStatuses->find_by_key($status);
-        			##PerchUtil::debug($OrderStatus);
-
-        		}
-        		 //echo "OrderStatus";print_r($OrderStatus->statusID());
-        $ShopEmails = new PerchShop_Emails($this->api);
-        $ShopEmail = $ShopEmails->get_for_status($OrderStatus->statusID());
-	 echo "ShopEmail";print_r($ShopEmail);
-
-    	$Customers = new PerchShop_Customers($this->api);
-    	$Customer = $Customers->find($this->customerID());
-
-    	$Members = new PerchMembers_Members($this->api);
-    	$Member = $Members->find($Customer->memberID());
-
-
-
-    	$Email = $this->api->get('Email');
-        $Email->set_template('shop/emails/'.$ShopEmail->emailTemplate(), 'shop');
-        $Email->set_bulk($this->to_array());
-        $Email->set_bulk($ShopEmail->to_array());
-        $Email->set_bulk($Customer->to_array());
-        $Email->set_bulk($Member->to_array());
-
-        $Addresses = new PerchShop_Addresses($this->api);
-
-        $ShippingAddr = $Addresses->find((int)$this->orderShippingAddress());
-        $Email->set_bulk($ShippingAddr->format_for_template('shipping'));
-
-		$BillingAddr = $Addresses->find((int)$this->orderBillingAddress());
-        $Email->set_bulk($BillingAddr->format_for_template('billing'));
-
-        $OrderItems = new PerchShop_OrderItems($this->api);
-        $items = $OrderItems->get_by('orderID', $this->id());
-
-        $order_items = [];
-
-        if (PerchUtil::count($items)) {
-        	foreach($items as $Item) {
-        		$order_items[]  = $Item->to_array();
-        	}
-        }
-        $result = $this->to_array();
-        $result['items'] = $order_items;
-
-        $data = $this->format_invoice_for_template($result);
-
-		$Email->set_bulk($data);
-
-        $Email->senderName($ShopEmail->sender_name());
-        $Email->senderEmail($ShopEmail->sender_email());
-          //  $Email->recipientEmail("getweightloss.co.uk+25a853a1a5@invite.trustpilot.com");
-             $Email->recipientEmail("perchrunway@gmail.com");
-                            $Email->bccToEmail("getweightloss.co.uk+25a853a1a5@invite.trustpilot.com");
-    $Email->send();
-}
     public function send_order_email(PerchShop_Email $ShopEmail)
     {
         PerchUtil::debug('Sending customer email');
