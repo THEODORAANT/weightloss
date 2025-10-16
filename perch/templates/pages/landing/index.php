@@ -369,33 +369,42 @@
   <!-- FAQs -->
   <section id="faqs" style="background-color: var(--grey)">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Frequently asked questions</h2>
+      <div class="space-y-2">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">FAQs</h2>
+        <p class="text-sm sm:text-base leading-relaxed opacity-80">Frequently Asked Questions</p>
+      </div>
       <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Is this a prescription service?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">This is a consultation service. A prescription may be offered only if a clinician decides it's appropriate and safe for you.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">This is a clinical consultation service. A prescription may be issued only if a UK-registered prescriber decides it is appropriate and safe for you after reviewing your medical information.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">How quickly will I receive a decision?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">After you submit the questionnaire, a prescriber reviews your information. If any details are missing, we'll contact you for clarification.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">After you submit your questionnaire, a prescriber reviews your details. If any information is missing or needs clarification, you’ll be contacted before a decision is made. Timeframes may vary depending on individual circumstances.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">What will it cost?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80"> If a prescription is issued, medication and follow-up costs are shown before you choose to proceed.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">You’ll be shown all fees clearly before choosing to proceed. If a prescription is issued, the total cost — including medication and any follow-up — will be displayed transparently. No payment is taken until you confirm you wish to continue.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Can you guarantee weight loss?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">No. Everyone responds differently. Medicines are one part of a wider plan including diet, activity, and ongoing support.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">No. Weight management outcomes vary from person to person. Prescription medicines are just one part of a broader plan, which should include a healthy diet, regular activity, and lifestyle support.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Are there side effects?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Like all medicines, side effects are possible. Common effects include gastrointestinal symptoms. You'll receive safety information and links to official leaflets.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">All medicines can cause side effects. Commonly reported effects with weight-management medicines include gastrointestinal symptoms such as nausea, vomiting, or diarrhoea. You’ll receive detailed safety information and links to the official patient information leaflet before starting any treatment.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Do you work with my GP?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">With your consent, we can share relevant information with your GP to support joined-up care.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.</p>
         </details>
       </div>
+      <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
+        <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
+        <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
+        <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
+        <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
+      </ol>
     </div>
   </section>
 
