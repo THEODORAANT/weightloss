@@ -322,19 +322,21 @@
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Mounjaro® (tirzepatide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
-            <li>Prescription-only medicine administered as a once-weekly injection.</li>
+            <li>A prescription-only medicine administered as a once-weekly injection.</li>
             <li>Contains tirzepatide, which acts on GIP and GLP-1 receptors.</li>
-            <li>Provided only if a clinician decides it's suitable for you after reviewing your health information.</li>
-            <li>Commonly reported side effects include nausea, vomiting, diarrhoea and decreased appetite. Always read the patient information leaflet.</li>
+            <li>May be prescribed only if a clinician decides it is suitable for you based on your medical history and current health.</li>
+            <li>Commonly reported side effects include nausea, vomiting, diarrhoea, and decreased appetite.</li>
+            <li>Always read the patient information leaflet carefully before use.</li>
           </ul>
         </article>
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Wegovy® (semaglutide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
-            <li>Prescription-only medicine administered as a once-weekly injection.</li>
+            <li>A prescription-only medicine administered as a once-weekly injection.</li>
             <li>Contains semaglutide, a GLP-1 receptor agonist.</li>
-            <li>Provided only if a clinician decides it's suitable for you after reviewing your health information.</li>
-            <li>Commonly reported side effects include nausea, vomiting, diarrhoea and constipation. Always read the patient information leaflet.</li>
+            <li>May be prescribed only if a clinician decides it is suitable for you based on your medical history and current health.</li>
+            <li>Commonly reported side effects include nausea, vomiting, diarrhoea, and constipation.</li>
+            <li>Always read the patient information leaflet carefully before use.</li>
           </ul>
         </article>
       </div>
