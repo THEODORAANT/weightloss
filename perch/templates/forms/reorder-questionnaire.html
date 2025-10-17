@@ -1,0 +1,340 @@
+<perch:form id="questionnaire" method="POST" app="perch_forms" action="/client/questionnaire-re-order" >
+
+    <perch:if id="step" match="within" value="weight">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <h2>What is your current weight?</h2>
+                    <div class="weight-inputs">
+                        <input type="text" id="weight"  required name="weight" placeholder="Kg">
+                        <input type="hidden" id="weight2"  required name="weight2" placeholder="lbs">
+                        <input type="hidden" id="weightunit" value="kg"   name="weightunit" >
+
+
+                    </div>
+                    <div class="unit-selector unit_selector">
+                        <label><input type="radio" required onchange="radioweight(this.value)" name="weightradio-unit" id="weightradio-kg" value="kg" checked >kg</label>
+                        <label><input type="radio" onchange="radioweight(this.value)" name="weightradio-unit"  id="weightradio-lbs" value="st-lbs"> st/lbs</label>
+                    </div>
+                    <div class="buttons">
+                        <input type="hidden" id="nextstep" name="nextstep" value="<perch:forms id="next_step_after_weight" />">
+                        <button class="back"><a href="/client/re-order" style="text-decoration: none;color: #000;" >Back</a></button>
+                        <button onclick="submitForm('weight')"   class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <script>
+
+
+            function radioweight(value) {
+
+                const weight = document.getElementById("weight");
+
+                document.getElementById("weightunit").value = value;
+                if (value === "kg") {
+                    weight.placeholder = "Kg";
+                    document.getElementById("weight2").type = "hidden";
+                } else {
+                    document.getElementById("weight2").type = "text";
+                    weight.placeholder = "st";
+
+                }
+
+
+            }
+
+
+        </script>
+    </perch:if>
+    <perch:if id="member_gender" value="Female">
+        <perch:if id="step" value="pregnancy-status">
+            <section class="how_old">
+                <div class="contanier">
+                    <div class="are_you">
+                        <div class="old_title">
+                            <h2>Are you pregnant or trying to conceive?</h2>
+                        </div>
+
+                        <div class="unde">
+                            <div class="button-group">
+                                <button id="yesBtn" onclick="setValuesreorderForm('pregnancy_status','yes')" class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                                <button id="noBtn" onclick="setValuesreorderForm('pregnancy_status','no')" class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                                <input type="hidden" id="nextstep" name="nextstep" value="side-effects">
+                                <input type="hidden" id="pregnancy_status" name="pregnancy_status" value="<perch:forms id="pregnancy_status" />">
+                            </div>
+                        </div>
+
+                        <div class="get_started">
+                            <div class="started_button">
+                                <div class="get_btn">
+                                    <button><a href="/client/questionnaire-re-order?step=weight">Back</a></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </perch:if>
+    </perch:if>
+    <perch:if id="step" value="side-effects">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Have you experienced any side effects whilst taking the medication? </h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesreorderForm('side_effects','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('side_effects','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="nextstep" name="nextstep" value="more_side_effects">
+                            <input type="hidden" id="side_effects" name="side_effects" value="">
+
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href="/client/questionnaire-re-order?step=<perch:forms id="side_effects_back_step" />">Back</a></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="more_side_effects" >
+
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="more_side_effects">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
+                    <textarea id="more_side_effects" required name="more_side_effects" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href="/client/questionnaire-re-order?step=side_effects">Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="additional-medication">
+                        <button type="submit"  onclick="submitForm('more_side_effects')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+
+    </perch:if>
+
+    <perch:if id="step" value="additional-medication">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Have you started taking any additional medication? </h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesreorderForm('additional-medication','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('additional-medication','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="nextstep" name="nextstep" value="list_additional_medication">
+                            <input type="hidden" id="additional-medication" name="additional-medication" value="">
+
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href="/client/questionnaire-re-order?step=side-effects">Back</a></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="list_additional_medication" >
+
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="list_additional_medication">Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.</label>
+                    <textarea id="list_additional_medication" required name="list_additional_medication" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href="/client/reorder-questionnaire?step=effects_with_wegovy">Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="rate_current_experience">
+                        <button type="submit"  onclick="submitForm('list_additional_medication')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+
+    </perch:if>
+
+    <perch:if id="step" value="rate_current_experience">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Are you happy with your monthly weight loss?</h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesreorderForm('rate_current_experience','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('rate_current_experience','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="nextstep" name="nextstep" value="chat_with_us">
+                            <input type="hidden" id="rate_current_experience" name="rate_current_experience" value="">
+
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href="/client/questionnaire-re-order?step=rate_current_experience">Back</a></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+    <perch:if id="step" value="no-happy" >
+
+        <section class="how_old ">
+            <div class="mixed">
+                <div class="bar">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                </div>
+                <form id="ethnicityForm">
+                    <label for="no_happy_reasons">Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.</label>
+                    <textarea id="no_happy_reasons" required name="no_happy_reasons" placeholder=""></textarea>
+                    <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
+                    <div class="buttons">
+                        <button type="button" class="back"><a style="text-decoration: none;
+                                    color: #000;" href="/client/questionnaire-re-order?step=rate_current_experience">Back</a></button>
+                        <input type="hidden" id="nextstep" name="nextstep" value="chat_with_us">
+                        <button type="submit"  onclick="submitForm('no_happy_reasons')"  class="next"><span style="text-decoration: none; color: #000;" >Next →</span></button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+
+    </perch:if>
+
+
+    <perch:if id="step" value="chat_with_us">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="are_you">
+                    <!--  <div class="progress_bar">
+                      <div class="nambar">
+                          <span>22%</span>
+                      </div>
+
+                  </div>-->
+                    <div class="old_title">
+                        <h2>Would you like to chat with someone?</h2>
+                    </div>
+
+
+                    <div class="unde">
+
+                        <div class="button-group">
+                            <button id="yesBtn" onclick="setValuesreorderForm('chat_with_us','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
+                            <button id="noBtn" onclick="setValuesreorderForm('chat_with_us','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
+                            <input type="hidden" id="nextstep" name="nextstep" value="cart">
+                            <input type="hidden" id="chat_with_us" name="chat_with_us" value="">
+
+
+                        </div>
+
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href="/client/questionnaire-re-order?step=rate_current_experience">Back</a></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </perch:if>
+
+</perch:form>
