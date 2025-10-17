@@ -1,59 +1,44 @@
     <!-- Footer -->
     <footer id="contact" class="bg-[#324ea0] w-full flex flex-col items-center justify-center">
       <div class="flex flex-col gap-[40px] md:gap-[50px] items-center justify-center pb-0 pt-[40px] md:pt-[60px] lg:pt-[70px] px-[20px] md:px-[40px] lg:px-[60px] w-full">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[32px] md:gap-[24px] items-start w-full lg:max-w-[1120px]">
-          <div class="flex flex-col gap-[16px] items-start">
-            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Company</p>
-            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-              <a href="#about" class="hover:text-[#afd136] transition-colors">About us</a>
-              <a href="#features" class="hover:text-[#afd136] transition-colors">Services</a>
-              <a href="#blog" class="hover:text-[#afd136] transition-colors">Blog</a>
-              <a href="#pricing" class="hover:text-[#afd136] transition-colors">Pricing</a>
-            </div>
-          </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[32px] md:gap-[24px] items-start w-full lg:max-w-[1120px]">
           <div class="flex flex-col gap-[16px] items-start">
             <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Treatments</p>
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-              <a href="#injections" class="hover:text-[#afd136] transition-colors">Wegovy</a>
-              <a href="#injections" class="hover:text-[#afd136] transition-colors">Mounjaro</a>
-              <a href="#injections" class="hover:text-[#afd136] transition-colors">Ozempic</a>
-              <a href="#features" class="hover:text-[#afd136] transition-colors">Blood Tests</a>
+              <a href="/medications/wegovy" class="hover:text-[#afd136] transition-colors">Wegovy</a>
+              <a href="/medications/mounjaro" class="hover:text-[#afd136] transition-colors">Mounjaro</a>
+              <a href="/medications/ozempic" class="hover:text-[#afd136] transition-colors">Ozempic</a>
+              <a href="/tests" class="hover:text-[#afd136] transition-colors">Blood Tests</a>
             </div>
           </div>
           <div class="flex flex-col gap-[16px] items-start">
-            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Quick Link</p>
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Support</p>
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-              <a href="#about" class="hover:text-[#afd136] transition-colors">Why Choose Us?</a>
-              <a href="#pricing" class="hover:text-[#afd136] transition-colors">Pricing Plan</a>
-              <a href="#blog" class="hover:text-[#afd136] transition-colors">News & Articles</a>
-              <a href="#faq" class="hover:text-[#afd136] transition-colors">FAQ's</a>
-              <a href="#pricing" class="hover:text-[#afd136] transition-colors">Appointment</a>
-              <a href="#testimonials" class="hover:text-[#afd136] transition-colors">Patients</a>
+              <a href="/contact-us" class="hover:text-[#afd136] transition-colors">Contact Us</a>
+              <a href="/faqs" class="hover:text-[#afd136] transition-colors">FAQs</a>
+              <a href="mailto:support@getweightloss.co.uk" class="hover:text-[#afd136] transition-colors">support@getweightloss.co.uk</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-[16px] items-start">
+            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Quick Links</p>
+            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+              <a href="/get-started" class="hover:text-[#afd136] transition-colors">Get Started</a>
+              <a href="/client" class="hover:text-[#afd136] transition-colors">Log in</a>
+              <a href="/sitemap" class="hover:text-[#afd136] transition-colors">Sitemap</a>
+              <a href="/blog" class="hover:text-[#afd136] transition-colors">Blog</a>
             </div>
           </div>
 
           <div class="flex flex-col gap-[16px] items-start">
             <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Legal</p>
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-              <a href="#terms" class="hover:text-[#afd136] transition-colors">Terms</a>
-              <a href="#privacy" class="hover:text-[#afd136] transition-colors">Privacy</a>
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">Contact</a>
-
+              <a href="/terms-and-conditions" class="hover:text-[#afd136] transition-colors">Terms &amp; conditions</a>
+              <a href="/refer-a-friend" class="hover:text-[#afd136] transition-colors">Refer a friend</a>
+              <a href="/privacy-notice" class="hover:text-[#afd136] transition-colors">Privacy notice</a>
+              <a href="/cookies-policy" class="hover:text-[#afd136] transition-colors">Cookies policy</a>
+              <a href="/make-a-complaint" class="hover:text-[#afd136] transition-colors">Make a complaint</a>
             </div>
           </div>
-                  <div class="flex flex-col gap-[16px] items-start">
-                      <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Email Us at:</p>
-                      <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-
-                      support@getweightloss.co.uk
-                        <!-- <a href="#contact" class="hover:text-[#afd136] transition-colors">Twitter</a>
-                        <a href="#contact" class="hover:text-[#afd136] transition-colors">LinkedIn</a>
-                        <a href="#contact" class="hover:text-[#afd136] transition-colors">Facebook</a>
-                        <a href="#contact" class="hover:text-[#afd136] transition-colors">GitHub</a>
-                        <a href="#contact" class="hover:text-[#afd136] transition-colors">AngelList</a>
-                        <a href="#contact" class="hover:text-[#afd136] transition-colors">Dribbble</a>-->
-                      </div>
-                    </div>
         </div>
         
         <!-- Disclaimer -->
