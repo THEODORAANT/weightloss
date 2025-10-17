@@ -154,12 +154,12 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
          echo '<div class="d-flex flex-wrap gap-3">
                <button id="stripe-button" onclick="window.location.href=\'/order/checkout?payment_method_types=card\';" class="stripe-button-new">
                    Pay with Card
-               </button>';
-              /* echo ' <button id="klarna-button" onclick="window.location.href=\'/order/checkout?payment_method_types=klarna\';" class="klarna-button btn btn-light border d-flex align-items-center gap-2" style="background-color: #ffb3c7;">
+               </button>
+               <button id="klarna-button" onclick="window.location.href=\'/order/checkout?payment_method_types=klarna\';" class="klarna-button btn btn-light border d-flex align-items-center gap-2" style="background-color: #ffb3c7;">
                    <img src="/asset/payment-methods/klarnaicon.png" alt="Klarna Logo" style="height: 24px;" />
                    Pay with Klarna
-               </button>';*/
-             echo '</div><style>.stripe-button-new {
+               </button>
+           </div><style>.stripe-button-new {
                    background-color: #6772e5; /* Stripe brand blue */
                    color: #fff;
                    border: none;
@@ -211,7 +211,7 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
                                     <div class="p-4">
         <img width="92" height="64" src="/asset/payment-methods/visa.png" alt="Visa" />
         <img width="92" height="64" src="/asset/payment-methods/mastercard.png" alt="Mastercard" />
-          <!-- <img width="92" height="64" src="/asset/payment-methods/klarna.png" alt="Mastercard" />-->
+         <img width="92" height="64" src="/asset/payment-methods/klarna.png" alt="Mastercard" />
 
       </div> </div> </div>
   <?php }?>

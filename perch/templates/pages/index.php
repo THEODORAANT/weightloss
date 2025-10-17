@@ -41,7 +41,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
               </a>
             </div>
           </div>
-          <div class="flex gap-[15px] items-start mt-[40px] lg:mt-[40px] xl:mt-0 xl:mb-[60px]">
+         <!--<div class="flex gap-[15px] items-start mt-[40px] lg:mt-[40px] xl:mt-0 xl:mb-[60px]">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="hover:opacity-70 transition-opacity">
               <img src="/new/images/Facebook.svg" alt="Facebook" class="w-[48px] h-auto" />
             </a>
@@ -54,7 +54,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:opacity-70 transition-opacity">
               <img src="/new/images/Linkedin.svg" alt="LinkedIn" class="w-[48px] h-auto" />
             </a>
-          </div>
+          </div>-->
         </div>
         
         <div class="relative flex h-[400px] md:h-[600px] lg:h-[750px] items-start lg:items-center justify-center w-full lg:w-1/2 px-[20px] lg:px-0 order-1 lg:order-2">
@@ -64,7 +64,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
           
           <div class="absolute bg-white flex flex-col gap-[20px] lg:gap-[25px] items-start bottom-[-40px] left-[20px] right-[20px] lg:left-[-80px] xl:left-[-120px] lg:right-auto lg:bottom-auto lg:top-[400px] xl:top-[480px] p-[24px] lg:p-[40px] rounded-[10px] shadow-[0px_100px_200px_0px_rgba(52,64,84,0.18)] max-w-[calc(100%-40px)] lg:max-w-none">
             <div class="flex flex-col justify-center leading-[0] text-[#0d0d0d]">
-              <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">From</p>
+              <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">Consultations From</p>
               <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£109</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
             </div>
                     <a href="/get-started" >
@@ -84,9 +84,11 @@ Our team of licensed UK clinicians will take the time to understand your health 
       <div class="flex flex-col gap-[40px] lg:gap-[50px] items-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
         <div class="flex flex-col gap-[10px] items-start justify-center w-full lg:max-w-[1120px]">
           <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Weight Loss Injections</p>
+            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Weight Loss Consultations and Support
+</p>
           </div>
-          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[48px] lg:text-[60px] tracking-[-0.64px] md:tracking-[-0.96px] lg:tracking-[-1.2px] leading-[40px] md:leading-[56px] lg:leading-[72px]">Self-administered injections to help your weight loss journey.</p>
+          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[48px] lg:text-[60px] tracking-[-0.64px] md:tracking-[-0.96px] lg:tracking-[-1.2px] leading-[40px] md:leading-[56px] lg:leading-[72px]">
+          Weight loss consultations and support from the comfort of your own home.</p>
           <p class="text-[16px] md:text-[18px] lg:text-[20px] text-[grey] leading-[24px] md:leading-[28px] lg:leading-[30px]">Here is what to expect from us.</p>
         </div>
         <div class="flex flex-col gap-[24px] md:gap-[32px] items-center justify-center w-full lg:max-w-[1120px]">
@@ -97,7 +99,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
                 <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Simple Applicator</p>
-                <p class="text-[16px] text-[grey] leading-[24px]">You will be provided with one single applicator for 4 weeks worth of injections.</p>
+                <p class="text-[16px] text-[grey] leading-[24px]"> Every consultation reviewed by qualified prescribers.</p>
               </div>
             </div>
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
@@ -106,7 +108,8 @@ Our team of licensed UK clinicians will take the time to understand your health 
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
                 <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Support</p>
-                <p class="text-[16px] text-[grey] leading-[24px]">We will always be on hand via email or scheduled call* to help you along the way.  *Scheduled calls may be requested via email.</p>
+                <p class="text-[16px] text-[grey] leading-[24px]">
+               We will always be on hand via email or scheduled call* to help you along the way.*Scheduled calls may be requested via email.</p>
               </div>
             </div>
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
@@ -174,10 +177,12 @@ Our team of licensed UK clinicians will take the time to understand your health 
         <div class="bg-white flex flex-col gap-[40px] lg:gap-[50px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-center w-full lg:max-w-[1120px]">
             <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Weight Loss Injections</p>
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services</p>
             </div>
             <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">GIP and GLP-1 Hormone Receptor Medications</p>
-            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">Effective solutions to manage your weight loss and Type-2 diabetes.</p>
+            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.
+
+*Blood tests are provided by our UKAS accredited service partner.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">
                <?php
