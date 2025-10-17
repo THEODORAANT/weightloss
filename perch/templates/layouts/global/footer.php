@@ -7,8 +7,6 @@
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
               <a href="#about" class="hover:text-[#afd136] transition-colors">About us</a>
               <a href="#features" class="hover:text-[#afd136] transition-colors">Services</a>
-              <a href="#about" class="hover:text-[#afd136] transition-colors">Team</a>
-              <a href="#about" class="hover:text-[#afd136] transition-colors">Project</a>
               <a href="#blog" class="hover:text-[#afd136] transition-colors">Blog</a>
               <a href="#pricing" class="hover:text-[#afd136] transition-colors">Pricing</a>
             </div>
@@ -33,28 +31,29 @@
               <a href="#testimonials" class="hover:text-[#afd136] transition-colors">Patients</a>
             </div>
           </div>
-          <div class="flex flex-col gap-[16px] items-start">
-            <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Social</p>
-            <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">Twitter</a>
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">LinkedIn</a>
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">Facebook</a>
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">GitHub</a>
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">AngelList</a>
-              <a href="#contact" class="hover:text-[#afd136] transition-colors">Dribbble</a>
-            </div>
-          </div>
+
           <div class="flex flex-col gap-[16px] items-start">
             <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Legal</p>
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
               <a href="#terms" class="hover:text-[#afd136] transition-colors">Terms</a>
               <a href="#privacy" class="hover:text-[#afd136] transition-colors">Privacy</a>
               <a href="#contact" class="hover:text-[#afd136] transition-colors">Contact</a>
-              <a href="#licenses" class="hover:text-[#afd136] transition-colors">Licenses</a>
-              <a href="#coming-soon" class="hover:text-[#afd136] transition-colors">Coming Soon</a>
-              <a href="#404" class="hover:text-[#afd136] transition-colors">404</a>
+
             </div>
           </div>
+                  <div class="flex flex-col gap-[16px] items-start">
+                      <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Email Us at:</p>
+                      <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
+
+                      support@getweightloss.co.uk
+                        <!-- <a href="#contact" class="hover:text-[#afd136] transition-colors">Twitter</a>
+                        <a href="#contact" class="hover:text-[#afd136] transition-colors">LinkedIn</a>
+                        <a href="#contact" class="hover:text-[#afd136] transition-colors">Facebook</a>
+                        <a href="#contact" class="hover:text-[#afd136] transition-colors">GitHub</a>
+                        <a href="#contact" class="hover:text-[#afd136] transition-colors">AngelList</a>
+                        <a href="#contact" class="hover:text-[#afd136] transition-colors">Dribbble</a>-->
+                      </div>
+                    </div>
         </div>
         
         <!-- Disclaimer -->

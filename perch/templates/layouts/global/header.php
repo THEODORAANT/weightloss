@@ -107,7 +107,7 @@
         <div class="hidden lg:flex items-center justify-center">
           <a href="/" class="flex flex-col h-[36px] items-center justify-center px-[12px] py-0">
             <p class="font-semibold leading-[20px] text-[#3328bf] text-[14px] whitespace-nowrap">Home</p>
-            <div class="w-[4px] h-[4px] bg-[#3328bf] rounded-full"></div>
+           <!--  <div class="w-[4px] h-[4px] bg-[#3328bf] rounded-full"></div>-->
           </a>
           <div class="relative group">
             <div class="flex gap-[10px] items-center justify-center px-[12px] py-[8px] cursor-pointer">

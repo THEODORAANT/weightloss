@@ -95,10 +95,10 @@ Our team of licensed UK clinicians will take the time to understand your health 
           <div class="flex flex-col md:flex-row gap-[24px] md:gap-[32px] items-stretch justify-center w-full">
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
               <div class="w-[96px] h-[96px] md:w-[112px] md:h-[112px] lg:w-[128px] lg:h-[128px]">
-                <img src="/new/images/icon-amplicator.svg" alt="Simple Applicator" class="w-full h-full" />
+                <img src="/new/assets/SimpleApplicator.svg" alt="Simple Applicator" class="w-full h-full" />
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
-                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Simple Applicator</p>
+                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Consulatation</p>
                 <p class="text-[16px] text-[grey] leading-[24px]"> Every consultation reviewed by qualified prescribers.</p>
               </div>
             </div>
@@ -179,9 +179,8 @@ Our team of licensed UK clinicians will take the time to understand your health 
             <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
               <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services</p>
             </div>
-            <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">GIP and GLP-1 Hormone Receptor Medications</p>
-            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.
-
+            <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.</p>
+            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">
 *Blood tests are provided by our UKAS accredited service partner.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">

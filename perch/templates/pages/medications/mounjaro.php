@@ -32,12 +32,12 @@
             </p>
           </div>
           <div class="flex flex-col sm:flex-row gap-[15px] items-start w-full sm:w-auto">
-            <a href="#pricing" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
+            <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
                 <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
               </div>
             </a>
-            <a href="#reorder" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
+            <a href="/order/re-order" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
                 <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Reorder</p>
               </div>
