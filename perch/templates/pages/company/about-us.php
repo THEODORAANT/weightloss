@@ -4,144 +4,44 @@
     ]);
 ?>
 
-<style>
-    .about-hero {
-        background: radial-gradient(120% 120% at 0% 0%, rgba(51, 40, 191, 0.14) 0%, rgba(51, 40, 191, 0) 65%),
-                    linear-gradient(135deg, #f6f8ff 0%, #ffffff 45%, #f6fbff 100%);
-    }
-
-    .about-pill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 999px;
-        padding: 0.5rem 1rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        background: rgba(51, 40, 191, 0.12);
-        color: #3328bf;
-    }
-
-    .about-values-card,
-    .about-story-card,
-    .about-leadership-card {
-        border-radius: 22px;
-        border: 1px solid #e5e7eb;
-        transition: all 0.2s ease-in-out;
-        background: #ffffff;
-    }
-
-    .about-values-card:hover,
-    .about-story-card:hover,
-    .about-leadership-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 35px -22px rgba(0, 0, 0, 0.25);
-        border-color: rgba(51, 40, 191, 0.22);
-    }
-
-    .about-stat {
-        border-radius: 18px;
-        background: rgba(51, 40, 191, 0.08);
-        color: #3328bf;
-        padding: 1.5rem 1rem;
-        text-align: center;
-    }
-
-    .about-stat h3 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 0.25rem;
-    }
-
-    .about-stat p {
-        margin: 0;
-        font-size: 0.85rem;
-        color: #332e75;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
-
-    .about-timeline::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 32px;
-        width: 2px;
-        background: rgba(51, 40, 191, 0.15);
-    }
-
-    .about-timeline-item {
-        position: relative;
-        padding-left: 70px;
-    }
-
-    .about-timeline-item::before {
-        content: "";
-        position: absolute;
-        left: 26px;
-        top: 12px;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: #3328bf;
-        box-shadow: 0 0 0 6px rgba(51, 40, 191, 0.18);
-    }
-
-    @media (max-width: 575.98px) {
-        .about-timeline::before {
-            left: 20px;
-        }
-
-        .about-timeline-item {
-            padding-left: 60px;
-        }
-
-        .about-timeline-item::before {
-            left: 14px;
-        }
-    }
-</style>
-
-<section class="about-hero py-5 py-lg-5">
-    <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-7">
-                <span class="about-pill">About GetWeightLoss</span>
-                <h1 class="display-5 fw-semibold mt-3 mb-3 text-dark">
-                    Pharmacist-led care that puts your health first
+<section class="bg-gradient-to-br from-indigo-50 via-white to-sky-50">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-24">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div class="space-y-6">
+                <span class="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-700">
+                    About GetWeightLoss
+                </span>
+                <h1 class="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+                    Clinician-led weight care designed around real people
                 </h1>
-                <p class="lead text-secondary mb-4">
-                    We combine evidence-based medication, compassionate coaching, and practical lifestyle support to help you lose weight safely and confidently. Every plan is overseen by UK-registered clinicians who understand the realities of everyday life.
+                <p class="text-lg leading-relaxed text-slate-600">
+                    We are a pharmacist-founded service that blends proven medication with clear guidance, coaching, and ongoing support. Every consultation is reviewed by UK-registered clinicians who keep your safety and long-term success at the centre of every decision.
                 </p>
-                <div class="row g-3">
-                    <div class="col-sm-4">
-                        <div class="about-stat h-100">
-                            <h3>15k+</h3>
-                            <p>Consultations</p>
-                        </div>
+                <div class="grid gap-4 sm:grid-cols-3">
+                    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <p class="text-3xl font-semibold text-indigo-600">15k+</p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Patient consultations</p>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="about-stat h-100">
-                            <h3>4.8★</h3>
-                            <p>Service rating</p>
-                        </div>
+                    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <p class="text-3xl font-semibold text-indigo-600">4.8★</p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Average service rating</p>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="about-stat h-100">
-                            <h3>24/7</h3>
-                            <p>Clinical oversight</p>
-                        </div>
+                    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <p class="text-3xl font-semibold text-indigo-600">24/7</p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Clinical oversight</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5">
-                <div class="about-story-card p-4 p-md-5 shadow-sm">
-                    <h2 class="h4 text-dark mb-3">Why we exist</h2>
-                    <p class="text-secondary mb-0">
-                        GetWeightLoss was founded by pharmacists who saw patients struggling to access trustworthy weight loss support. We bridge that gap with medically supervised treatment, clear guidance, and a human connection that keeps you motivated for the long term.
+            <div class="relative isolate overflow-hidden rounded-3xl bg-white p-8 shadow-xl ring-1 ring-indigo-100">
+                <div class="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-indigo-100 blur-3xl"></div>
+                <div class="absolute -bottom-16 -left-10 h-52 w-52 rounded-full bg-sky-100 blur-3xl"></div>
+                <div class="relative space-y-4">
+                    <h2 class="text-2xl font-semibold text-slate-900">Why we exist</h2>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        Access to trusted, evidence-based weight care can feel confusing. We created GetWeightLoss to remove that friction—pairing expert clinical review with plain-English advice so you can feel confident about every step you take.
+                    </p>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        From the moment you complete your online consultation you have direct access to pharmacists, prescribers, and a support team who genuinely understand what sustainable change looks like in the real world.
                     </p>
                 </div>
             </div>
@@ -149,101 +49,136 @@
     </div>
 </section>
 
-<section class="py-5 bg-white">
-    <div class="container">
-        <div class="text-center mb-5">
-            <span class="about-pill">Our approach</span>
-            <h2 class="h1 fw-semibold mt-3 mb-3 text-dark">Care that combines science with empathy</h2>
-            <p class="text-secondary mb-0">
-                Every programme is personalised to your medical history and goals. We monitor your progress, adjust treatment when needed, and provide the tools that make healthy changes stick.
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="max-w-3xl space-y-4 text-center mx-auto">
+            <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                Our promise
+            </span>
+            <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">Care that combines science with empathy</h2>
+            <p class="text-lg leading-relaxed text-slate-600">
+                Medication is only one part of the picture. Our multidisciplinary team support you with practical coaching, progress monitoring, and lifestyle guidance so healthy habits become second nature.
             </p>
         </div>
-        <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="about-values-card h-100 p-4 p-lg-5 shadow-sm">
-                    <h3 class="h5 text-dark">Clinical excellence</h3>
-                    <p class="text-secondary mb-0">
-                        Prescriptions are managed by GPhC-registered pharmacists and independent prescribers who ensure every medication is safe, appropriate, and supported by up-to-date evidence.
-                    </p>
-                </div>
+        <div class="mt-12 grid gap-6 lg:grid-cols-3">
+            <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <h3 class="text-xl font-semibold text-slate-900">Clinical excellence</h3>
+                <p class="text-base leading-relaxed text-slate-600">
+                    Every prescription is reviewed by GPhC-registered pharmacists and independent prescribers using the latest clinical guidance. We only recommend treatments that are right for your health history.
+                </p>
+            </article>
+            <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <h3 class="text-xl font-semibold text-slate-900">Personal guidance</h3>
+                <p class="text-base leading-relaxed text-slate-600">
+                    Your care plan comes with tailored check-ins, dosage support, and timely follow-ups. We translate the science into simple steps so you always know what to do next.
+                </p>
+            </article>
+            <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <h3 class="text-xl font-semibold text-slate-900">Responsible access</h3>
+                <p class="text-base leading-relaxed text-slate-600">
+                    We champion safe, sustainable progress. That means educating you on side effects, pairing treatment with nutrition and movement strategies, and celebrating every milestone along the way.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-900">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20 text-white">
+        <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div class="space-y-6">
+                <span class="inline-flex items-center justify-center rounded-full bg-indigo-500/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-100">
+                    How we support you
+                </span>
+                <h2 class="text-3xl font-semibold sm:text-4xl">A transparent journey from consultation to maintenance</h2>
+                <p class="text-lg leading-relaxed text-indigo-100">
+                    Every stage of treatment is mapped out with you. We stay in touch, adapt to your progress, and keep an expert eye on the details so you can focus on feeling better.
+                </p>
+                <ol class="space-y-4 text-left">
+                    <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">1</span>
+                        <div>
+                            <p class="text-lg font-semibold">Clinical assessment</p>
+                            <p class="text-sm text-indigo-100/80">Share your health history online and receive a personalised review from our pharmacist team within one working day.</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">2</span>
+                        <div>
+                            <p class="text-lg font-semibold">Tailored treatment plan</p>
+                            <p class="text-sm text-indigo-100/80">We outline medication options, dosing schedules, and lifestyle adjustments to fit your goals and everyday routine.</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">3</span>
+                        <div>
+                            <p class="text-lg font-semibold">Ongoing partnership</p>
+                            <p class="text-sm text-indigo-100/80">Regular check-ins, open messaging with our clinicians, and proactive adjustments help keep your progress steady and safe.</p>
+                        </div>
+                    </li>
+                </ol>
             </div>
-            <div class="col-lg-4">
-                <div class="about-values-card h-100 p-4 p-lg-5 shadow-sm">
-                    <h3 class="h5 text-dark">Personal guidance</h3>
-                    <p class="text-secondary mb-0">
-                        Your dedicated support team checks in regularly, offering practical advice on nutrition, movement, and mindset so you always know what to do next.
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="about-values-card h-100 p-4 p-lg-5 shadow-sm">
-                    <h3 class="h5 text-dark">Responsible access</h3>
-                    <p class="text-secondary mb-0">
-                        Medication is only one part of the solution. We help you build sustainable habits and understand how to use injections safely alongside lifestyle adjustments.
-                    </p>
-                </div>
+            <div class="relative isolate overflow-hidden rounded-3xl bg-indigo-500/10 p-8 shadow-lg ring-1 ring-indigo-400/30">
+                <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.3),_transparent_60%)]"></div>
+                <h3 class="text-2xl font-semibold">What patients appreciate most</h3>
+                <ul class="mt-6 space-y-4 text-left text-base text-indigo-100/90">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-sm font-semibold">&bull;</span>
+                        <span>Simple explanations that make complex medications feel approachable.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-sm font-semibold">&bull;</span>
+                        <span>Fast responses from a friendly team who recognise individual challenges.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-sm font-semibold">&bull;</span>
+                        <span>Guidance that keeps motivation high long after the first prescription.</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row g-4 align-items-center">
-            <div class="col-lg-6">
-                <div class="about-story-card p-4 p-lg-5 shadow-sm h-100">
-                    <span class="about-pill bg-white text-primary">What makes us different</span>
-                    <h2 class="h2 fw-semibold mt-3 mb-3 text-dark">Medication with meaning</h2>
-                    <p class="text-secondary mb-3">
-                        We only recommend clinically proven treatments such as Wegovy, Ozempic, and Mounjaro when they align with your medical profile. Every prescription includes education on dosage, side effects, and how to pair medication with behaviour change.
-                    </p>
-                    <p class="text-secondary mb-0">
-                        Our goal is not a quick fix. It is to help you transform your relationship with food, movement, and wellbeing so results last long after the injections stop.
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="bg-white rounded-4 border shadow-sm p-4 p-lg-5 position-relative">
-                    <h3 class="h5 text-dark">How we support you</h3>
-                    <ul class="list-unstyled text-secondary mb-0 mt-3">
-                        <li class="d-flex align-items-start gap-2 mb-2"><span class="text-primary fw-bold">&middot;</span> Online assessments with pharmacist review within one working day.</li>
-                        <li class="d-flex align-items-start gap-2 mb-2"><span class="text-primary fw-bold">&middot;</span> Easy access to your treatment plan, dosage schedule, and educational resources.</li>
-                        <li class="d-flex align-items-start gap-2 mb-2"><span class="text-primary fw-bold">&middot;</span> Direct messaging with our care team for advice on medication usage and lifestyle adjustments.</li>
-                        <li class="d-flex align-items-start gap-2"><span class="text-primary fw-bold">&middot;</span> Follow-up reviews to celebrate progress and adapt your plan whenever life changes.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="py-5">
-    <div class="container">
-        <div class="row g-5 align-items-start">
-            <div class="col-lg-5">
-                <span class="about-pill">Our story</span>
-                <h2 class="h1 fw-semibold mt-3 mb-3 text-dark">From community pharmacy to nationwide support</h2>
-                <p class="text-secondary mb-0">
-                    GetWeightLoss grew out of a community pharmacy that saw first-hand how confusing and inconsistent weight management care could be. Today we support patients across the UK with digital consultations, reliable delivery, and the reassurance that a real clinical team is in your corner.
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-start">
+            <div class="space-y-4">
+                <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                    Our story
+                </span>
+                <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">From community pharmacy roots to nationwide support</h2>
+                <p class="text-lg leading-relaxed text-slate-600">
+                    GetWeightLoss began with a single pharmacy determined to demystify weight loss medications. We now support patients all over the UK with digital consultations, responsive delivery, and the reassurance of a real clinical team behind every message.
                 </p>
             </div>
-            <div class="col-lg-7">
-                <div class="position-relative about-timeline ps-3 ps-sm-4">
-                    <div class="about-timeline-item mb-4">
-                        <h3 class="h5 text-dark mb-1">2020 &mdash; The idea</h3>
-                        <p class="text-secondary mb-0">Our pharmacists begin offering structured weight management consultations after recognising a growing need for evidence-based support.</p>
+            <div class="space-y-6">
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">2020</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Idea to impact</h3>
+                        <p class="text-base text-slate-600">Our pharmacists launch structured consultations after seeing patients struggle to access consistent, evidence-led support.</p>
                     </div>
-                    <div class="about-timeline-item mb-4">
-                        <h3 class="h5 text-dark mb-1">2021 &mdash; Building the platform</h3>
-                        <p class="text-secondary mb-0">We launch our digital assessment service to make access easier while maintaining strict clinical governance and oversight.</p>
+                </div>
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">2021</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Digital-first service</h3>
+                        <p class="text-base text-slate-600">We roll out online assessments, enabling faster, more convenient clinical reviews without compromising safety.</p>
                     </div>
-                    <div class="about-timeline-item mb-4">
-                        <h3 class="h5 text-dark mb-1">2023 &mdash; Expanding treatments</h3>
-                        <p class="text-secondary mb-0">New GLP-1 medications such as Wegovy and Mounjaro are introduced with full educational pathways to help patients use them safely.</p>
+                </div>
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">2023</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Expanded treatments</h3>
+                        <p class="text-base text-slate-600">We introduce GLP-1 options such as Wegovy, Ozempic, and Mounjaro, each supported by comprehensive education and monitoring.</p>
                     </div>
-                    <div class="about-timeline-item">
-                        <h3 class="h5 text-dark mb-1">Today &mdash; Your partner in progress</h3>
-                        <p class="text-secondary mb-0">We continue to invest in coaching, clinical talent, and technology that give every patient a personalised route to long-term success.</p>
+                </div>
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">Today</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Partners in progress</h3>
+                        <p class="text-base text-slate-600">We continue investing in coaching, clinical governance, and technology that empower people to feel healthy, confident, and supported.</p>
                     </div>
                 </div>
             </div>
@@ -251,47 +186,56 @@
     </div>
 </section>
 
-<section class="py-5 bg-white">
-    <div class="container">
-        <div class="text-center mb-5">
-            <span class="about-pill">Leadership</span>
-            <h2 class="h1 fw-semibold mt-3 mb-3 text-dark">Led by clinicians who care deeply</h2>
-            <p class="text-secondary mb-0">Our leadership team ensures every patient experience is safe, empathetic, and backed by the latest clinical guidance.</p>
+<section class="bg-slate-50">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="max-w-3xl mx-auto text-center space-y-4">
+            <span class="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                Leadership
+            </span>
+            <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">Led by clinicians who care deeply</h2>
+            <p class="text-lg leading-relaxed text-slate-600">
+                Our leadership team oversees every treatment pathway, making sure our patients receive safe, compassionate, and transparent support.
+            </p>
         </div>
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <div class="about-leadership-card p-4 p-lg-5 shadow-sm h-100">
-                    <h3 class="h5 text-dark mb-1">Imran Tailor</h3>
-                    <p class="text-primary fw-semibold mb-3">Superintendent Pharmacist &amp; Co-founder</p>
-                    <p class="text-secondary mb-0">
-                        Imran oversees our clinical governance and ensures every treatment pathway follows best practice. With over 15 years in pharmacy, he champions patient education and compassionate care.
+        <div class="mt-12 grid gap-6 lg:grid-cols-2">
+            <article class="flex h-full flex-col justify-between gap-6 rounded-3xl bg-white p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold text-slate-900">Imran Tailor</h3>
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Superintendent Pharmacist &amp; Co-founder</p>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        Imran leads our clinical governance and ensures every protocol meets stringent pharmacy standards. With over 15 years of experience, he is passionate about patient education and responsible access to modern treatments.
                     </p>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="about-leadership-card p-4 p-lg-5 shadow-sm h-100">
-                    <h3 class="h5 text-dark mb-1">Sadia Memon</h3>
-                    <p class="text-primary fw-semibold mb-3">Lead Clinical Pharmacist</p>
-                    <p class="text-secondary mb-0">
-                        Sadia works directly with patients to tailor medication plans, monitor outcomes, and coordinate with prescribers. Her focus is on empowering every person to understand their treatment and feel supported.
+            </article>
+            <article class="flex h-full flex-col justify-between gap-6 rounded-3xl bg-white p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold text-slate-900">Sadia Memon</h3>
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Lead Clinical Pharmacist</p>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        Sadia works directly with patients to tailor medication plans, monitor outcomes, and coordinate with prescribers. Her focus is on clear communication and giving each person the tools to maintain lasting change.
                     </p>
                 </div>
-            </div>
+            </article>
         </div>
     </div>
 </section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="about-cta text-white p-5 p-lg-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #3328bf 0%, #22308c 100%);">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-8">
-                    <h2 class="h2 fw-semibold mb-3">Ready to start your journey?</h2>
-                    <p class="mb-0">Complete our online consultation and receive tailored advice from our pharmacist-led team within one working day.</p>
-                </div>
-                <div class="col-lg-4 text-lg-end">
-                    <a class="btn btn-light btn-lg px-4" href="/get-started">Start your consultation</a>
-                </div>
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="grid gap-10 rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-600 px-8 py-10 text-white shadow-xl lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:px-12 lg:py-14">
+            <div class="space-y-4">
+                <h2 class="text-3xl font-semibold sm:text-4xl">Ready to start your journey?</h2>
+                <p class="text-lg leading-relaxed text-indigo-100">
+                    Complete our online consultation and receive tailored advice from our pharmacist-led team within one working day. We will guide you step-by-step so you always feel supported.
+                </p>
+            </div>
+            <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-end">
+                <a href="/get-started" class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-base font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50">
+                    Start your consultation
+                </a>
+                <a href="mailto:support@getweightloss.co.uk" class="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10">
+                    Speak to our team
+                </a>
             </div>
         </div>
     </div>
