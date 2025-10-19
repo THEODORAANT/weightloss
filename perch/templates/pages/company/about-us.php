@@ -1,188 +1,302 @@
-
-    <?php  // output the top of the page
+<?php  // output the top of the page
     perch_layout('global/header', [
         'page_title' => perch_page_title(true),
     ]);
+?>
 
-        /* main navigation
-        perch_pages_navigation([
-            'levels'   => 1,
-            'template' => 'main_nav.html',
-        ]);*/
+<style>
+    .about-hero {
+        background: radial-gradient(120% 120% at 0% 0%, rgba(51, 40, 191, 0.14) 0%, rgba(51, 40, 191, 0) 65%),
+                    linear-gradient(135deg, #f6f8ff 0%, #ffffff 45%, #f6fbff 100%);
+    }
 
-    ?>
-   <section class="sleep_weightloss stress_weight knowledge_div">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-6 sleep_1">
-          <div class="sleep_img boy2 knowledge_img">
-            <img src="asset/knowledge.jpg" alt="">
-          </div>
-        </div>
-        <div class="col-md-6 sleep_2">
-          <div class="sleep_content">
-            <p class="top_text">Weight Loss</p>
-            <h1 class="big_title lh-1 fw-bolder">The battle against obesity; weight loss injections and us.
-</h1>
-            <p>
-            </p>
-            <ul class="list-unstyled icon_style">
-                <li><i class="fa-solid fa-arrow-right"></i>Who are we?</li>
-                <li><i class="fa-solid fa-arrow-right"></i> Weight loss injections; Wegovy; Mounjaro & Ozempic</li>
-                <li><i class="fa-solid fa-arrow-right"></i> The battle against obesity</li>
-            </ul>
+    .about-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(51, 40, 191, 0.12);
+        color: #3328bf;
+    }
 
-          </div>
-        </div>
-      </div>
-    </div>
-   </section>
-    <!--////////////////////========== Tips section End =========////////////////////-->
+    .about-values-card,
+    .about-story-card,
+    .about-leadership-card {
+        border-radius: 22px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease-in-out;
+        background: #ffffff;
+    }
 
+    .about-values-card:hover,
+    .about-story-card:hover,
+    .about-leadership-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 35px -22px rgba(0, 0, 0, 0.25);
+        border-color: rgba(51, 40, 191, 0.22);
+    }
 
-    <!--////////////////////========== The many factors that shape obesity section start =========////////////////////-->
-   <section class="benefits_exercise balanced_diet">
-    <div class="people_who_content">
-      <div class="container">
-        <div class="row px-5 pt-3 pb-4 mb-2">
-          <div class="col-12 tips_title">
-            <h2 class="fw-bolder pt-5">Who are we?</h2>
-            <p >
-At GetWeightLoss, we are dedicated to helping you achieve your health and weight loss goals with professional, pharmacist-led care. As a trusted name in weight management, we specialize in providing safe, effective, and medically supported access to weight loss injections—designed to support your journey every step of the way.
-            </p>
-            <p>
-Our service is built around expert knowledge and genuine care. Led by qualified pharmacists and support members, we offer a personalised and clinically guided approach to weight loss. From your first online consultation to ongoing support, our team ensures that every aspect of your treatment is tailored to your needs, lifestyle, and health goals.
-            </p>
-            <p>We understand that losing weight isn't always easy—and it's not just about willpower. With the latest advancements in weight loss injections, including GLP-1 receptor agonists such as semaglutide and liraglutide, we provide evidence-based solutions that help regulate appetite and support long-term weight management.
-</p>
-<p>At GetWeightLoss, we are more than just a provider—we are your partner in progress. Whether you're just starting out or looking for extra support on your weight loss journey, our pharmacist-led team is here to empower you with professional advice, ongoing care, and the tools you need to succeed safely and confidently.
-</p>
+    .about-stat {
+        border-radius: 18px;
+        background: rgba(51, 40, 191, 0.08);
+        color: #3328bf;
+        padding: 1.5rem 1rem;
+        text-align: center;
+    }
 
-          </div>
-        </div>
-      </div>
+    .about-stat h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
 
-    </div>
-   </section>
+    .about-stat p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #332e75;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
 
+    .about-timeline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 32px;
+        width: 2px;
+        background: rgba(51, 40, 191, 0.15);
+    }
 
-                    <section class="effective">
-                        <div class="container">
-                            <div class="effective_content">
-                                <div class="effective_shortTitle">
-                                    <span style="text-transform: uppercase;" >Weight Loss Injections at GetWeightLoss
-</span>
-                                </div>
-                                <div class="effective_longTitle">
-                                    <h1>Some people are more genetically predisposed to gaining weight than others, meaning that no matter how much they try to adjust their diet or increase their physical activity, their bodies are wired to store fat more efficiently.</h1>
+    .about-timeline-item {
+        position: relative;
+        padding-left: 70px;
+    }
 
-                                </div>
-                                <div class="effective_longTitl">
-                                    <span>There are hundreds of genes which have been found to be attributed to obesity. Genetics can contribute to obesity in many ways, from altering appetite and satiety to determining how fat is stored around the body.</span>
-                                </div>
-                                <div class="responsiv" style="margin-top: 25px;" >
+    .about-timeline-item::before {
+        content: "";
+        position: absolute;
+        left: 26px;
+        top: 12px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #3328bf;
+        box-shadow: 0 0 0 6px rgba(51, 40, 191, 0.18);
+    }
 
+    @media (max-width: 575.98px) {
+        .about-timeline::before {
+            left: 20px;
+        }
 
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5>Ozempic (Semaglutide)</h5>
-        </div>
-        <span class="proven" >Ozempic is a once-weekly injection that mimics the natural GLP-1 hormone to help control appetite, slow digestion, and reduce cravings. While primarily used for managing type 2 diabetes, it has also been widely prescribed off-label for weight loss due to its impressive results. At GetWeightLoss, our pharmacist-led service ensures you're receiving appropriate support, monitoring, and education while using Ozempic.              </p>
-</span>
+        .about-timeline-item {
+            padding-left: 60px;
+        }
 
-            <span class="proven" >We work closely with you to maximise the benefits of this medication, helping you develop healthy habits alongside treatment. Ozempic is a trusted and effective choice for individuals looking to reduce weight with medical oversight and professional care.
-       </span>
+        .about-timeline-item::before {
+            left: 14px;
+        }
+    }
+</style>
 
-
-    </div>
-
-</div>
-
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5>Mounjaro (Tirzepatide)</h5>
-        </div>
-        <span class="proven" >
-Mounjaro is a groundbreaking weight loss injection that targets two key hormones—GLP-1 and GIP—to regulate appetite, improve blood sugar control, and enhance metabolic health.               </p>
-</span>
-
- <span class="proven" >Originally developed for type 2 diabetes, it has shown significant weight loss benefits in clinical studies. At GetWeightLoss, our pharmacists offer expert guidance to ensure Mounjaro is used safely and effectively as part of a tailored weight management plan. Ideal for those who have struggled with appetite control or weight-related health issues, Mounjaro offers a powerful and innovative option to support long-term, sustainable weight loss with professional support at every stage.
-</span>
-
-    </div>
-
-</div>
-
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5>Wegovy (Semaglutide 2.4mg)</h5>
-        </div>
-        <span class="proven" >
-Wegovy is the higher-dose version of semaglutide, specifically licensed for weight loss in people with a BMI of 30+ or 27+ with weight-related conditions. It works by mimicking the GLP-1 hormone, reducing hunger, increasing satiety, and supporting significant weight reduction. At GetWeightLoss, our pharmacists provide step-by-step support—from initiating treatment to managing any side effects and helping you stay on track.
-
-</span>
-<br/>
-<span class="proven" >Wegovy has been clinically proven to help patients lose substantial weight when combined with lifestyle changes. With our guidance, you can use Wegovy safely and effectively as part of a comprehensive, personalised weight loss programme.
-  </span>
-
-
-    </div>
-
-</div>
-
-
-
-
-
-
-                                  </div>
-                            </div>
+<section class="about-hero py-5 py-lg-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="about-pill">About GetWeightLoss</span>
+                <h1 class="display-5 fw-semibold mt-3 mb-3 text-dark">
+                    Pharmacist-led care that puts your health first
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    We combine evidence-based medication, compassionate coaching, and practical lifestyle support to help you lose weight safely and confidently. Every plan is overseen by UK-registered clinicians who understand the realities of everyday life.
+                </p>
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="about-stat h-100">
+                            <h3>15k+</h3>
+                            <p>Consultations</p>
                         </div>
-                    </section>
-
-    <section class="clinically">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="clinically_images">
-              <img src="/asset/clinically-15.webp" alt="" style="width: 100%;" >
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="about-stat h-100">
+                            <h3>4.8★</h3>
+                            <p>Service rating</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="about-stat h-100">
+                            <h3>24/7</h3>
+                            <p>Clinical oversight</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-12 col-md-6 col-lg-6">
-              <div class="clinically_content">
-                <div class="clinically_title">
-                  <h3>The Battle Against Obesity
-
-</h3>
+            <div class="col-lg-5">
+                <div class="about-story-card p-4 p-md-5 shadow-sm">
+                    <h2 class="h4 text-dark mb-3">Why we exist</h2>
+                    <p class="text-secondary mb-0">
+                        GetWeightLoss was founded by pharmacists who saw patients struggling to access trustworthy weight loss support. We bridge that gap with medically supervised treatment, clear guidance, and a human connection that keeps you motivated for the long term.
+                    </p>
                 </div>
-                <div class="clinically_text">
-                  <p>
-As a nation the U.K. is getting bigger with more of us tipping the scales into obesity. </p>
-                </div>
-                <div class="clinically_text_content">
-                  <p>
-Obesity in the UK is driven by a complex interplay of environmental, behavioural, and socioeconomic factors. A major contributor is the widespread availability and aggressive marketing of high-calorie, ultra-processed foods. In 2024, food companies increased advertising spend by £420 million ahead of new regulations, leading to a surge in sales of unhealthy snacks. Additionally, a study found that 60% of takeaway meals exceed the recommended 600-calorie limit for a single meal, with some containing over 3,000 calories.
-                  </p>
-                </div>
-        <p>Physical inactivity also plays a significant role. Many individuals have sedentary jobs and rely on cars for transportation, leading to reduced daily physical activity. This imbalance between calorie intake and expenditure contributes to weight gain.
-         <p>   Socioeconomic factors exacerbate the issue. Unhealthy food options are often more accessible and affordable, particularly in deprived areas, making it challenging for residents to maintain a healthy diet.</p>
-           <p> While genetics can influence susceptibility to obesity, the rapid rise in obesity rates is largely attributed to these environmental and lifestyle factors. Addressing obesity in the UK requires comprehensive strategies that promote healthier food environments, encourage physical activity, and consider the socioeconomic barriers individuals face.</p>
-          <p>  What we are trying to do is put you on the path, where success in weight loss through the support of weight loss injections also rebalances your view of food, encourages lifestyle changes through movement and exercise whilst helping you establish better nutritional choices. The posts we make will promote changes in these areas giving you the tools to better understand your weight and aid you in longer term weight loss.
-</p>
-              </div>
-          </div>
-
-
-
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="about-pill">Our approach</span>
+            <h2 class="h1 fw-semibold mt-3 mb-3 text-dark">Care that combines science with empathy</h2>
+            <p class="text-secondary mb-0">
+                Every programme is personalised to your medical history and goals. We monitor your progress, adjust treatment when needed, and provide the tools that make healthy changes stick.
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="about-values-card h-100 p-4 p-lg-5 shadow-sm">
+                    <h3 class="h5 text-dark">Clinical excellence</h3>
+                    <p class="text-secondary mb-0">
+                        Prescriptions are managed by GPhC-registered pharmacists and independent prescribers who ensure every medication is safe, appropriate, and supported by up-to-date evidence.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="about-values-card h-100 p-4 p-lg-5 shadow-sm">
+                    <h3 class="h5 text-dark">Personal guidance</h3>
+                    <p class="text-secondary mb-0">
+                        Your dedicated support team checks in regularly, offering practical advice on nutrition, movement, and mindset so you always know what to do next.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="about-values-card h-100 p-4 p-lg-5 shadow-sm">
+                    <h3 class="h5 text-dark">Responsible access</h3>
+                    <p class="text-secondary mb-0">
+                        Medication is only one part of the solution. We help you build sustainable habits and understand how to use injections safely alongside lifestyle adjustments.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <!--////////////////////========== The many factors that shape obesity section End =========////////////////////-->
-        <?php
-       // perch_content('Intro');
-      perch_layout('global/footer');?>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="about-story-card p-4 p-lg-5 shadow-sm h-100">
+                    <span class="about-pill bg-white text-primary">What makes us different</span>
+                    <h2 class="h2 fw-semibold mt-3 mb-3 text-dark">Medication with meaning</h2>
+                    <p class="text-secondary mb-3">
+                        We only recommend clinically proven treatments such as Wegovy, Ozempic, and Mounjaro when they align with your medical profile. Every prescription includes education on dosage, side effects, and how to pair medication with behaviour change.
+                    </p>
+                    <p class="text-secondary mb-0">
+                        Our goal is not a quick fix. It is to help you transform your relationship with food, movement, and wellbeing so results last long after the injections stop.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-white rounded-4 border shadow-sm p-4 p-lg-5 position-relative">
+                    <h3 class="h5 text-dark">How we support you</h3>
+                    <ul class="list-unstyled text-secondary mb-0 mt-3">
+                        <li class="d-flex align-items-start gap-2 mb-2"><span class="text-primary fw-bold">&middot;</span> Online assessments with pharmacist review within one working day.</li>
+                        <li class="d-flex align-items-start gap-2 mb-2"><span class="text-primary fw-bold">&middot;</span> Easy access to your treatment plan, dosage schedule, and educational resources.</li>
+                        <li class="d-flex align-items-start gap-2 mb-2"><span class="text-primary fw-bold">&middot;</span> Direct messaging with our care team for advice on medication usage and lifestyle adjustments.</li>
+                        <li class="d-flex align-items-start gap-2"><span class="text-primary fw-bold">&middot;</span> Follow-up reviews to celebrate progress and adapt your plan whenever life changes.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-5">
+                <span class="about-pill">Our story</span>
+                <h2 class="h1 fw-semibold mt-3 mb-3 text-dark">From community pharmacy to nationwide support</h2>
+                <p class="text-secondary mb-0">
+                    GetWeightLoss grew out of a community pharmacy that saw first-hand how confusing and inconsistent weight management care could be. Today we support patients across the UK with digital consultations, reliable delivery, and the reassurance that a real clinical team is in your corner.
+                </p>
+            </div>
+            <div class="col-lg-7">
+                <div class="position-relative about-timeline ps-3 ps-sm-4">
+                    <div class="about-timeline-item mb-4">
+                        <h3 class="h5 text-dark mb-1">2020 &mdash; The idea</h3>
+                        <p class="text-secondary mb-0">Our pharmacists begin offering structured weight management consultations after recognising a growing need for evidence-based support.</p>
+                    </div>
+                    <div class="about-timeline-item mb-4">
+                        <h3 class="h5 text-dark mb-1">2021 &mdash; Building the platform</h3>
+                        <p class="text-secondary mb-0">We launch our digital assessment service to make access easier while maintaining strict clinical governance and oversight.</p>
+                    </div>
+                    <div class="about-timeline-item mb-4">
+                        <h3 class="h5 text-dark mb-1">2023 &mdash; Expanding treatments</h3>
+                        <p class="text-secondary mb-0">New GLP-1 medications such as Wegovy and Mounjaro are introduced with full educational pathways to help patients use them safely.</p>
+                    </div>
+                    <div class="about-timeline-item">
+                        <h3 class="h5 text-dark mb-1">Today &mdash; Your partner in progress</h3>
+                        <p class="text-secondary mb-0">We continue to invest in coaching, clinical talent, and technology that give every patient a personalised route to long-term success.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="about-pill">Leadership</span>
+            <h2 class="h1 fw-semibold mt-3 mb-3 text-dark">Led by clinicians who care deeply</h2>
+            <p class="text-secondary mb-0">Our leadership team ensures every patient experience is safe, empathetic, and backed by the latest clinical guidance.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="about-leadership-card p-4 p-lg-5 shadow-sm h-100">
+                    <h3 class="h5 text-dark mb-1">Imran Tailor</h3>
+                    <p class="text-primary fw-semibold mb-3">Superintendent Pharmacist &amp; Co-founder</p>
+                    <p class="text-secondary mb-0">
+                        Imran oversees our clinical governance and ensures every treatment pathway follows best practice. With over 15 years in pharmacy, he champions patient education and compassionate care.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-leadership-card p-4 p-lg-5 shadow-sm h-100">
+                    <h3 class="h5 text-dark mb-1">Sadia Memon</h3>
+                    <p class="text-primary fw-semibold mb-3">Lead Clinical Pharmacist</p>
+                    <p class="text-secondary mb-0">
+                        Sadia works directly with patients to tailor medication plans, monitor outcomes, and coordinate with prescribers. Her focus is on empowering every person to understand their treatment and feel supported.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="about-cta text-white p-5 p-lg-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #3328bf 0%, #22308c 100%);">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h2 class="h2 fw-semibold mb-3">Ready to start your journey?</h2>
+                    <p class="mb-0">Complete our online consultation and receive tailored advice from our pharmacist-led team within one working day.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="btn btn-light btn-lg px-4" href="/get-started">Start your consultation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php
+    perch_layout('global/footer');
+?>
