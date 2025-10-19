@@ -64,8 +64,8 @@ Our team of licensed UK clinicians will take the time to understand your health 
           
           <div class="absolute bg-white flex flex-col gap-[20px] lg:gap-[25px] items-start bottom-[-40px] left-[20px] right-[20px] lg:left-[-80px] xl:left-[-120px] lg:right-auto lg:bottom-auto lg:top-[400px] xl:top-[480px] p-[24px] lg:p-[40px] rounded-[10px] shadow-[0px_100px_200px_0px_rgba(52,64,84,0.18)] max-w-[calc(100%-40px)] lg:max-w-none">
             <div class="flex flex-col justify-center leading-[0] text-[#0d0d0d]">
-              <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">Consultations From</p>
-              <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£109</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
+              <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">Treatments From</p>
+              <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£95</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
             </div>
                     <a href="/get-started" >
     <div class="flex gap-[4px] items-center justify-center px-0 py-[10px] rounded-[8px]">
@@ -98,7 +98,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
                 <img src="/new/assets/SimpleApplicator.svg" alt="Simple Applicator" class="w-full h-full" />
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
-                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Consulatation</p>
+                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Consultation</p>
                 <p class="text-[16px] text-[grey] leading-[24px]"> Every consultation reviewed by qualified prescribers.</p>
               </div>
             </div>

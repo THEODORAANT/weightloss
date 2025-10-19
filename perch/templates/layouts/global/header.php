@@ -111,21 +111,26 @@
           </a>
           <div class="relative group">
             <div class="flex gap-[10px] items-center justify-center px-[12px] py-[8px] cursor-pointer">
-              <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Weight Loss</p>
+              <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Treatments</p>
               <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 7.5L10 12.5L15 7.5" stroke="#616161" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
             <div class="absolute top-full left-0 mt-2 w-[260px] bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999]">
               <div class="py-2">
-                <a href="/medications/mounjaro" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Mounjaro</a>
+                 <!--<a href="/medications/mounjaro" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Mounjaro</a>
                 <a href="/medications/ozempic" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Ozempic</a>
                 <a href="/medications/wegovy" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Wegovy</a>
+            -->  <a href="https://getweightloss.co.uk/weightloss_treatments" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Weight Loss</a>
+
+               <a href="https://getweightloss.co.uk/order/addons" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors"> Blood Tests</a>
+               <!-- <a href="/knowledge/nutrition" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Nutrition</a>
+
                 <a href="/knowledge/review-answers" class="block px-4 py-2 text-[14px] text-[#616161] hover:bg-gray-50 hover:text-[#3328bf] transition-colors">Results</a>
-              </div>
+              --></div>
             </div>
           </div>
-          <div class="relative group">
+        <!--  <div class="relative group">
             <div class="flex gap-[10px] items-center justify-center px-[12px] py-[8px] cursor-pointer">
               <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Knowledge</p>
               <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +148,7 @@
           </div>
           <a href="/blog" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
             <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Health Hub</p>
-          </a>
+          </a>-->
           <a href="/about-us" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
             <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">About Us</p>
           </a>
