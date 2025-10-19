@@ -5,10 +5,7 @@
           <div class="flex flex-col gap-[16px] items-start">
             <p class="font-semibold leading-[28px] text-[#afd136] text-[18px] w-full">Treatments</p>
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
-              <a href="/medications/wegovy" class="hover:text-[#afd136] transition-colors">Wegovy</a>
-              <a href="/medications/mounjaro" class="hover:text-[#afd136] transition-colors">Mounjaro</a>
-              <a href="/medications/ozempic" class="hover:text-[#afd136] transition-colors">Ozempic</a>
-              <a href="/tests" class="hover:text-[#afd136] transition-colors">Blood Tests</a>
+              <a href="https://getweightloss.co.uk/weightloss_treatments" class="hover:text-[#afd136] transition-colors">Treatments</a>
             </div>
           </div>
           <div class="flex flex-col gap-[16px] items-start">
@@ -24,7 +21,6 @@
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
               <a href="/get-started" class="hover:text-[#afd136] transition-colors">Get Started</a>
               <a href="/client" class="hover:text-[#afd136] transition-colors">Log in</a>
-              <a href="/sitemap" class="hover:text-[#afd136] transition-colors">Sitemap</a>
               <a href="/blog" class="hover:text-[#afd136] transition-colors">Blog</a>
             </div>
           </div>
