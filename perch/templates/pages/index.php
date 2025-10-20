@@ -21,27 +21,28 @@
           <div class="flex flex-col gap-[24px] lg:gap-[32px] items-start w-full xl:mt-[100px]">
             <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
               <div class="flex flex-col justify-center w-full">
-                <p class="font-semibold text-[#0d0d0d] text-[36px] md:text-[52px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.04px] lg:tracking-[-1.44px] leading-[44px] md:leading-[60px] lg:leading-[90px]">Get expert weight-loss support today.</p>
+                <p class="font-semibold text-[#0d0d0d] text-[36px] md:text-[52px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.04px] lg:tracking-[-1.44px] leading-[44px] md:leading-[60px] lg:leading-[90px]">Get expert weight-loss support today. <?php //perch_content('hero_heading'); ?></p>
               </div>
               <div class="flex flex-col justify-center w-full lg:w-[457px]">
-                <p class="leading-[24px] text-[16px] text-[grey]">
-Our team of licensed UK clinicians will take the time to understand your health before recommending a plan that’s right for you. Through the consultation, they’ll assess which treatments are a safe and effective option for you.                  </p>
+                <p class="leading-[24px] text-[16px] text-[grey]">Our team of licensed UK clinicians will take the time to understand your health before recommending a plan that’s right for you. Through the consultation, they’ll assess which treatments are a safe and effective option for you. <?php //perch_content('hero_description'); ?></p>
               </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-[10px] sm:h-[64px] items-stretch sm:items-center p-[8px] rounded-[8px] w-full sm:w-auto">
               <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
                 <div class="flex gap-[10px] items-center justify-center overflow-clip px-[32px] lg:px-[48px] py-[16px] rounded-[inherit]">
-                  <p class="font-semibold leading-[28px] text-[18px] text-white whitespace-nowrap">Get started</p>
+                  <p class="font-semibold leading-[28px] text-[18px] text-white whitespace-nowrap">Get started <?php //perch_content('hero_primary_cta_text'); ?></p>
                 </div>
               </a>
               <a href="/order/re-order" class="border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
                 <div class="flex gap-[10px] items-center justify-center overflow-clip px-[22px] py-[16px] rounded-[inherit]">
-                  <p class="font-semibold leading-[28px] text-[#324ea0] text-[18px] whitespace-nowrap">Reorder</p>
+                  <p class="font-semibold leading-[28px] text-[#324ea0] text-[18px] whitespace-nowrap">Reorder <?php //perch_content('hero_secondary_cta_text'); ?></p>
                 </div>
               </a>
             </div>
           </div>
-         <!--<div class="flex gap-[15px] items-start mt-[40px] lg:mt-[40px] xl:mt-0 xl:mb-[60px]">
+        </div>
+
+        <!--<div class="flex gap-[15px] items-start mt-[40px] lg:mt-[40px] xl:mt-0 xl:mb-[60px]">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="hover:opacity-70 transition-opacity">
               <img src="/new/images/Facebook.svg" alt="Facebook" class="w-[48px] h-auto" />
             </a>
@@ -55,8 +56,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
               <img src="/new/images/Linkedin.svg" alt="LinkedIn" class="w-[48px] h-auto" />
             </a>
           </div>-->
-        </div>
-        
+
         <div class="relative flex h-[400px] md:h-[600px] lg:h-[750px] items-start lg:items-center justify-center w-full lg:w-1/2 px-[20px] lg:px-0 order-1 lg:order-2">
           <div class="h-full w-full lg:h-[750px] rounded-lg lg:rounded-none overflow-hidden flex items-start lg:items-center justify-center">
             <img src="/new/images/Hero Image.png" alt="Hero" class="w-full h-full object-cover object-[center_top]" />
@@ -64,12 +64,14 @@ Our team of licensed UK clinicians will take the time to understand your health 
           
           <div class="absolute bg-white flex flex-col gap-[20px] lg:gap-[25px] items-start bottom-[-40px] left-[20px] right-[20px] lg:left-[-80px] xl:left-[-120px] lg:right-auto lg:bottom-auto lg:top-[400px] xl:top-[480px] p-[24px] lg:p-[40px] rounded-[10px] shadow-[0px_100px_200px_0px_rgba(52,64,84,0.18)] max-w-[calc(100%-40px)] lg:max-w-none">
             <div class="flex flex-col justify-center leading-[0] text-[#0d0d0d]">
-              <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">Treatments From</p>
-              <p class="leading-[32px] lg:leading-[44px]"><span class="text-[24px] lg:text-[36px]">£95</span><span class="text-[16px] lg:text-[20px]"> / month</span></p>
+              <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">Treatments From <?php //perch_content('hero_price_heading'); ?></p>
+              <p class="leading-[32px] lg:leading-[44px]">
+                <span class="text-[24px] lg:text-[36px]">£95 <?php //perch_content('hero_price_amount'); ?></span><span class="text-[16px] lg:text-[20px]">/ month <?php //perch_content('hero_price_suffix'); ?></span>
+              </p>
             </div>
                     <a href="/get-started" >
     <div class="flex gap-[4px] items-center justify-center px-0 py-[10px] rounded-[8px]">
-              <p class="font-semibold leading-[24px] text-[16px] text-[grey] whitespace-nowrap">Get started</p>
+              <p class="font-semibold leading-[24px] text-[16px] text-[grey] whitespace-nowrap">Get started <?php //perch_content('hero_price_cta_text'); ?></p>
               <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.5 5L12.5 10L7.5 15" stroke="grey" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
@@ -83,13 +85,13 @@ Our team of licensed UK clinicians will take the time to understand your health 
     <div id="injections" class="bg-gradient-to-b from-[#ffffff] to-[#d4dfff] w-full flex flex-col items-center justify-center">
       <div class="flex flex-col gap-[40px] lg:gap-[50px] items-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
         <div class="flex flex-col gap-[10px] items-start justify-center w-full lg:max-w-[1120px]">
-          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Weight Loss Consultations and Support
-</p>
-          </div>
-          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[48px] lg:text-[60px] tracking-[-0.64px] md:tracking-[-0.96px] lg:tracking-[-1.2px] leading-[40px] md:leading-[56px] lg:leading-[72px]">
-          Weight loss consultations and support from the comfort of your own home.</p>
-          <p class="text-[16px] md:text-[18px] lg:text-[20px] text-[grey] leading-[24px] md:leading-[28px] lg:leading-[30px]">Here is what to expect from us.</p>
+            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Weight Loss Consultations and Support <?php //perch_content('services_badge_text'); ?>
+  </p>
+            </div>
+            <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[48px] lg:text-[60px] tracking-[-0.64px] md:tracking-[-0.96px] lg:tracking-[-1.2px] leading-[40px] md:leading-[56px] lg:leading-[72px]">
+            Weight loss consultations and support from the comfort of your own home. <?php //perch_content('services_heading'); ?></p>
+            <p class="text-[16px] md:text-[18px] lg:text-[20px] text-[grey] leading-[24px] md:leading-[28px] lg:leading-[30px]">Here is what to expect from us. <?php //perch_content('services_subheading'); ?></p>
         </div>
         <div class="flex flex-col gap-[24px] md:gap-[32px] items-center justify-center w-full lg:max-w-[1120px]">
           <div class="flex flex-col md:flex-row gap-[24px] md:gap-[32px] items-stretch justify-center w-full">
@@ -98,8 +100,8 @@ Our team of licensed UK clinicians will take the time to understand your health 
                 <img src="/new/assets/icon-online-consultation.png" alt="Simple Applicator" class="w-full h-full" />
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
-                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Consultation</p>
-                <p class="text-[16px] text-[grey] leading-[24px]"> Every consultation reviewed by qualified prescribers.</p>
+                  <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Consultation <?php //perch_content('services_card_one_title'); ?></p>
+                  <p class="text-[16px] text-[grey] leading-[24px]">Every consultation reviewed by qualified prescribers. <?php //perch_content('services_card_one_description'); ?></p>
               </div>
             </div>
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
@@ -107,9 +109,8 @@ Our team of licensed UK clinicians will take the time to understand your health 
                 <img src="/new/images/icon-support.svg" alt="Online Support" class="w-full h-full" />
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
-                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Support</p>
-                <p class="text-[16px] text-[grey] leading-[24px]">
-               We will always be on hand via email or scheduled call* to help you along the way.*Scheduled calls may be requested via email.</p>
+                  <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Support <?php //perch_content('services_card_two_title'); ?></p>
+                  <p class="text-[16px] text-[grey] leading-[24px]">We will always be on hand via email or scheduled call* to help you along the way.*Scheduled calls may be requested via email. <?php //perch_content('services_card_two_description'); ?></p>
               </div>
             </div>
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
@@ -117,8 +118,8 @@ Our team of licensed UK clinicians will take the time to understand your health 
                 <img src="/new/images/icon-blood-test.svg" alt="Optional Blood Tests" class="w-full h-full" />
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
-                <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Optional Blood Tests</p>
-                <p class="text-[16px] text-[grey] leading-[24px]">To help you better understand the changes you are going through we have partnered with a UKAS accredited Laboratory.</p>
+                  <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Optional Blood Tests <?php //perch_content('services_card_three_title'); ?></p>
+                  <p class="text-[16px] text-[grey] leading-[24px]">To help you better understand the changes you are going through we have partnered with a UKAS accredited Laboratory. <?php //perch_content('services_card_three_description'); ?></p>
               </div>
             </div>
           </div>
@@ -130,43 +131,43 @@ Our team of licensed UK clinicians will take the time to understand your health 
     <div id="process" class="bg-white w-full flex flex-col items-center justify-center">
       <div class="bg-white flex flex-col gap-[40px] lg:gap-[50px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
         <div class="flex flex-col gap-[4px] items-start justify-center w-full lg:max-w-[1120px]">
-          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">The Process</p>
-          </div>
-          <p class="font-medium leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px]">All you need to know about the coming months</p>
+            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">The Process <?php //perch_content('process_badge_text'); ?></p>
+            </div>
+            <p class="font-medium leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px]">All you need to know about the coming months <?php //perch_content('process_heading'); ?></p>
         </div>
         <div class="flex flex-col md:flex-row gap-[32px] md:gap-[40px] lg:gap-[74px] items-stretch w-full lg:max-w-[1120px]">
           <div class="flex flex-col gap-[24px] md:gap-[30px] items-start flex-1">
             <div class="border-2 border-[#3328bf] rounded-[16px] w-full md:w-auto">
               <div class="flex flex-col gap-[10px] items-center justify-center overflow-clip px-[20px] md:px-[29px] py-[14px] rounded-[inherit]">
-                <p style="font-family: Catamaran, sans-serif;" class="font-normal leading-[1.18] text-[#3328bf] text-[20px] md:text-[24px] whitespace-nowrap">Getting Started</p>
+                  <p style="font-family: Catamaran, sans-serif;" class="font-normal leading-[1.18] text-[#3328bf] text-[20px] md:text-[24px] whitespace-nowrap">Getting Started <?php //perch_content('process_stage_one_label'); ?></p>
               </div>
             </div>
             <div class="flex flex-col gap-[10px] items-start">
-              <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px]">Online Consultation</p>
-              <p class="leading-[24px] text-[16px] text-[grey] w-full">You will need a few minutes to complete our online consultation and sign-up. If you are eligible you will proceed to complete your order.</p>
+                <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px]">Online Consultation <?php //perch_content('process_stage_one_title'); ?></p>
+                <p class="leading-[24px] text-[16px] text-[grey] w-full">You will need a few minutes to complete our online consultation and sign-up. If you are eligible you will proceed to complete your order. <?php //perch_content('process_stage_one_description'); ?></p>
             </div>
           </div>
           <div class="flex flex-col gap-[24px] md:gap-[30px] items-start flex-1">
             <div class="border-2 border-[#3328bf] rounded-[16px] w-full md:w-auto">
               <div class="flex flex-col gap-[10px] items-center justify-center overflow-clip px-[20px] md:px-[26px] py-[14px] rounded-[inherit]">
-                <p style="font-family: Catamaran, sans-serif;" class="font-normal leading-[1.18] text-[#3328bf] text-[20px] md:text-[24px] whitespace-nowrap">First 6 months</p>
+                  <p style="font-family: Catamaran, sans-serif;" class="font-normal leading-[1.18] text-[#3328bf] text-[20px] md:text-[24px] whitespace-nowrap">First 6 months <?php //perch_content('process_stage_two_label'); ?></p>
               </div>
             </div>
             <div class="flex flex-col gap-[10px] items-start justify-center">
-              <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px]">Losing the first few pounds!</p>
-              <p class="leading-[24px] text-[16px] text-[grey] w-full">Your initial weight loss will spur you onto a continued push. Not losing weight? We will be on hand to help and guide you.</p>
+                <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px]">Losing the first few pounds! <?php //perch_content('process_stage_two_title'); ?></p>
+                <p class="leading-[24px] text-[16px] text-[grey] w-full">Your initial weight loss will spur you onto a continued push. Not losing weight? We will be on hand to help and guide you. <?php //perch_content('process_stage_two_description'); ?></p>
             </div>
           </div>
           <div class="flex flex-col gap-[24px] md:gap-[30px] items-start flex-1">
             <div class="border-2 border-[#3328bf] rounded-[16px] w-full md:w-auto">
               <div class="flex flex-col gap-[10px] items-center justify-center overflow-clip px-[20px] md:px-[27px] py-[14px] rounded-[inherit]">
-                <p style="font-family: Catamaran, sans-serif;" class="font-normal leading-[1.18] text-[#3328bf] text-[20px] md:text-[24px] whitespace-nowrap">Beyond 6 months</p>
+                  <p style="font-family: Catamaran, sans-serif;" class="font-normal leading-[1.18] text-[#3328bf] text-[20px] md:text-[24px] whitespace-nowrap">Beyond 6 months <?php //perch_content('process_stage_three_label'); ?></p>
               </div>
             </div>
             <div class="flex flex-col gap-[10px] items-start">
-              <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px]">A lifestyle change.</p>
-              <p class="leading-[24px] text-[16px] text-[grey] w-full">After the initial weight loss you will be encouraged to look more deeply at your nutrition and exercise to help you focus on continued weight loss and management.</p>
+                <p class="font-medium leading-[28px] md:leading-[32px] text-[#0d0d0d] text-[20px] md:text-[24px]">A lifestyle change. <?php //perch_content('process_stage_three_title'); ?></p>
+                <p class="leading-[24px] text-[16px] text-[grey] w-full">After the initial weight loss you will be encouraged to look more deeply at your nutrition and exercise to help you focus on continued weight loss and management. <?php //perch_content('process_stage_three_description'); ?></p>
             </div>
           </div>
         </div>
@@ -176,12 +177,12 @@ Our team of licensed UK clinicians will take the time to understand your health 
       <div id="pricing" class="bg-white w-full flex flex-col items-center justify-center">
         <div class="bg-white flex flex-col gap-[40px] lg:gap-[50px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-center w-full lg:max-w-[1120px]">
-            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services</p>
-            </div>
-            <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.</p>
-            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">
-*Blood tests are provided by our UKAS accredited service partner.</p>
+              <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+                <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services <?php //perch_content('pricing_badge_text'); ?></p>
+              </div>
+              <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*. <?php //perch_content('pricing_heading'); ?></p>
+              <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">
+*Blood tests are provided by our UKAS accredited service partner. <?php //perch_content('pricing_note'); ?></p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">
                <?php
@@ -204,11 +205,11 @@ Our team of licensed UK clinicians will take the time to understand your health 
       <!-- Testimonials Header -->
       <div class="bg-white w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pt-[60px] md:pt-[80px] lg:pt-[100px] pb-[40px] lg:pb-[50px]">
         <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start justify-center w-full lg:max-w-[1120px]">
-          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">More success stories</p>
-          </div>
-          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">People who already love us</p>
-          <p class="text-[16px] text-[grey] w-full max-w-[742px] leading-[24px]">With each client having different triggers and objectives for starting their weight loss journey, we share a few of the success stories here;</p>
+            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">More success stories <?php //perch_content('testimonials_badge_text'); ?></p>
+            </div>
+            <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">People who already love us <?php //perch_content('testimonials_heading'); ?></p>
+            <p class="text-[16px] text-[grey] w-full max-w-[742px] leading-[24px]">With each client having different triggers and objectives for starting their weight loss journey, we share a few of the success stories here; <?php //perch_content('testimonials_description'); ?></p>
         </div>
       </div>
       
@@ -248,36 +249,36 @@ Our team of licensed UK clinicians will take the time to understand your health 
     <!-- Features Section -->
     <div id="features" class="w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pb-[60px] md:pb-[80px] lg:pb-[100px]">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-[20px] w-full">
-        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
-          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Ongoing Support</p>
-          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">Always available via email/chat.</p>
-        </div>
-        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
-          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">You are in Control</p>
-          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">Each month you decide to continue or stop.</p>
-        </div>
-        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
-          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Additional Testing</p>
-          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">We can arrange blood tests, through our partners</p>
-        </div>
-        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
-          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Health Hub</p>
-          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">The health hub, an access point for news and tips.</p>
-        </div>
-        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
-          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Discreet Delivery</p>
-          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">No names, no logos.</p>
-        </div>
-        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
-          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Competitive Pricing</p>
-          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">We constantly monitor prices.</p>
-        </div>
+          <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Ongoing Support <?php //perch_content('feature_one_title'); ?></p>
+            <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">Always available via email/chat. <?php //perch_content('feature_one_description'); ?></p>
+          </div>
+          <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">You are in Control <?php //perch_content('feature_two_title'); ?></p>
+            <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">Each month you decide to continue or stop. <?php //perch_content('feature_two_description'); ?></p>
+          </div>
+          <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Additional Testing <?php //perch_content('feature_three_title'); ?></p>
+            <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">We can arrange blood tests, through our partners <?php //perch_content('feature_three_description'); ?></p>
+          </div>
+          <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Health Hub <?php //perch_content('feature_four_title'); ?></p>
+            <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">The health hub, an access point for news and tips. <?php //perch_content('feature_four_description'); ?></p>
+          </div>
+          <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Discreet Delivery <?php //perch_content('feature_five_title'); ?></p>
+            <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">No names, no logos. <?php //perch_content('feature_five_description'); ?></p>
+          </div>
+          <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Competitive Pricing <?php //perch_content('feature_six_title'); ?></p>
+            <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">We constantly monitor prices. <?php //perch_content('feature_six_description'); ?></p>
+          </div>
       </div>
     </div>
 
@@ -286,12 +287,12 @@ Our team of licensed UK clinicians will take the time to understand your health 
       <div class="bg-white flex flex-col lg:flex-row gap-[40px] lg:gap-[32px] items-start justify-center w-full lg:max-w-[1120px]">
         <div class="flex flex-col gap-[24px] lg:gap-0 lg:h-[588px] items-start justify-between w-full lg:w-[418px]">
           <div class="flex flex-col gap-[10px] items-start justify-center">
-            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">FAQs</p>
-            </div>
-            <p class="font-semibold leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] w-full lg:w-[368px]">Your questions answered</p>
+              <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+                <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">FAQs <?php //perch_content('faq_badge_text'); ?></p>
+              </div>
+              <p class="font-semibold leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] w-full lg:w-[368px]">Your questions answered <?php //perch_content('faq_heading'); ?></p>
 
-            <p class="font-medium leading-[26px] md:leading-[30px] text-[18px] md:text-[20px] text-[grey]">Couldn't not find what you were looking for? Write to us at help@getweightloss.co.uk.</p>
+              <p class="font-medium leading-[26px] md:leading-[30px] text-[18px] md:text-[20px] text-[grey]">Couldn't not find what you were looking for? Write to us at help@getweightloss.co.uk. <?php //perch_content('faq_description'); ?></p>
             <div class="flex flex-wrap gap-[6px] items-start">
             </div>
           </div>
@@ -315,10 +316,10 @@ Our team of licensed UK clinicians will take the time to understand your health 
     <div id="blog" class="w-full flex flex-col items-center justify-center">
       <div class="flex flex-col gap-[40px] lg:gap-[50px] items-center overflow-clip px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
         <div class="flex flex-col gap-[10px] items-start w-full lg:max-w-[1120px]">
-          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Health Hub & News</p>
-          </div>
-          <p class="font-medium leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px]">Weight loss: what you need to know</p>
+            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Health Hub & News <?php //perch_content('blog_badge_text'); ?></p>
+            </div>
+            <p class="font-medium leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px]">Weight loss: what you need to know <?php //perch_content('blog_heading'); ?></p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] md:gap-[28px] lg:gap-[32px] w-full lg:max-w-[1120px]">
           <?php
@@ -338,16 +339,16 @@ Our team of licensed UK clinicians will take the time to understand your health 
     <div class="w-full flex flex-col items-center justify-center">
       <div class="bg-white flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-0 w-full">
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[32px] lg:gap-0 px-0 pt-[30px] md:pt-[40px] lg:pt-[50px] pb-[60px] md:pb-[80px] lg:pb-[100px] w-full lg:max-w-[1120px]">
-          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-[544px]">Let's Find Your Perfect Plan Together</p>
+            <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-[544px]">Let's Find Your Perfect Plan Together <?php //perch_content('cta_heading'); ?></p>
           <div class="flex flex-col sm:flex-row gap-[10px] items-stretch sm:items-start w-full sm:w-auto">
             <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
-                <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
+                  <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started <?php //perch_content('cta_primary_button_text'); ?></p>
               </div>
             </a>
             <a href="#about" class="bg-[#fcfcfc] border border-[#d6d6d6] rounded-[8px] btn-glow">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
-                <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Learn More</p>
+                  <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Learn More <?php //perch_content('cta_secondary_button_text'); ?></p>
                 <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M7.5 5L12.5 10L7.5 15" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
