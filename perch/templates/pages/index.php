@@ -1,7 +1,7 @@
 
 <?php  // output the top of the page
     perch_layout('global/head');
-   perch_layout('global/header', [
+   perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
 
@@ -95,7 +95,7 @@ Our team of licensed UK clinicians will take the time to understand your health 
           <div class="flex flex-col md:flex-row gap-[24px] md:gap-[32px] items-stretch justify-center w-full">
             <div class="flex-1 border border-white flex flex-col gap-[20px] items-start justify-center p-[30px] md:p-[40px] lg:p-[50px] rounded-[20px]">
               <div class="w-[96px] h-[96px] md:w-[112px] md:h-[112px] lg:w-[128px] lg:h-[128px]">
-                <img src="/new/assets/SimpleApplicator.svg" alt="Simple Applicator" class="w-full h-full" />
+                <img src="/new/assets/icon-online-consultation.png" alt="Simple Applicator" class="w-full h-full" />
               </div>
               <div class="flex flex-col gap-[12px] items-start w-full">
                 <p class="font-medium text-[#0d0d0d] text-[20px] md:text-[22px] lg:text-[24px] leading-[28px] md:leading-[30px] lg:leading-[32px]">Online Consultation</p>
@@ -358,4 +358,4 @@ Our team of licensed UK clinicians will take the time to understand your health 
       </div>
     </div>
     <?php //perch_content('Intro');
-  perch_layout('global/footer');?>
+  perch_layout('global/new/footer');?>

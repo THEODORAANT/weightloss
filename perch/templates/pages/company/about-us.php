@@ -1,5 +1,5 @@
 <?php  // output the top of the page
-    perch_layout('global/header', [
+    perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
 ?>
@@ -18,13 +18,13 @@
                     We are a pharmacist-founded service that blends proven medication with clear guidance, coaching, and ongoing support. Every consultation is reviewed by UK-registered clinicians who keep your safety and long-term success at the centre of every decision.
                 </p>
                 <div class="grid gap-4 sm:grid-cols-3">
-                    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                   <!-- <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                         <p class="text-3xl font-semibold text-indigo-600">15k+</p>
                         <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Patient consultations</p>
-                    </div>
+                    </div>-->
                     <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-                        <p class="text-3xl font-semibold text-indigo-600">4.8★</p>
-                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Average service rating</p>
+                        <p class="text-3xl font-semibold text-indigo-600">4.4★</p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Trust Pilot Review</p>
                     </div>
                     <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
                         <p class="text-3xl font-semibold text-indigo-600">24/7</p>
@@ -69,8 +69,7 @@
             </article>
             <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
                 <h3 class="text-xl font-semibold text-slate-900">Personal guidance</h3>
-                <p class="text-base leading-relaxed text-slate-600">
-                    Your care plan comes with tailored check-ins, dosage support, and timely follow-ups. We translate the science into simple steps so you always know what to do next.
+                <p class="text-base leading-relaxed text-slate-600">We’re here to help you every step of the way. Our friendly team provides personal support by phone and email whenever you need assistance.
                 </p>
             </article>
             <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
@@ -91,22 +90,21 @@
                     How we support you
                 </span>
                 <h2 class="text-3xl font-semibold sm:text-4xl">A transparent journey from consultation to maintenance</h2>
-                <p class="text-lg leading-relaxed text-indigo-100">
-                    Every stage of treatment is mapped out with you. We stay in touch, adapt to your progress, and keep an expert eye on the details so you can focus on feeling better.
-                </p>
+
                 <ol class="space-y-4 text-left">
                     <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">1</span>
                         <div>
                             <p class="text-lg font-semibold">Clinical assessment</p>
-                            <p class="text-sm text-indigo-100/80">Share your health history online and receive a personalised review from our pharmacist team within one working day.</p>
+                            <p class="text-sm text-indigo-100/80">
+Share your health history and our prescribing pharmacists will ensure you receive the best advice given your personal history. </p>
                         </div>
                     </li>
                     <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">2</span>
                         <div>
-                            <p class="text-lg font-semibold">Tailored treatment plan</p>
-                            <p class="text-sm text-indigo-100/80">We outline medication options, dosing schedules, and lifestyle adjustments to fit your goals and everyday routine.</p>
+                            <p class="text-lg font-semibold">Your treatment plan</p>
+                            <p class="text-sm text-indigo-100/80"> we will provide you with the best plan for you. Not everyone is eligible and neither is it a one size fits all.</p>
                         </div>
                     </li>
                     <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
@@ -147,7 +145,7 @@
                 <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
                     Our story
                 </span>
-                <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">From community pharmacy roots to nationwide support</h2>
+                <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">From local pharmacy to nationwide supplier</h2>
                 <p class="text-lg leading-relaxed text-slate-600">
                     GetWeightLoss began with a single pharmacy determined to demystify weight loss medications. We now support patients all over the UK with digital consultations, responsive delivery, and the reassurance of a real clinical team behind every message.
                 </p>
@@ -242,5 +240,5 @@
 </section>
 
 <?php
-    perch_layout('global/footer');
+    perch_layout('global/new/footer');
 ?>

@@ -1,5 +1,5 @@
 <?php
-    perch_layout('global/header', [
+    perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
 ?>
@@ -159,7 +159,7 @@
                     <p class="mt-4 text-sm leading-relaxed text-slate-600">
                         Check delivery updates, track parcels, and review your recent order history.
                     </p>
-                    <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/account/orders">
+                    <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/client/orders">
                         View my orders
                         <span class="ml-2">&rarr;</span>
                     </a>
@@ -170,33 +170,14 @@
                     <p class="mt-4 text-sm leading-relaxed text-slate-600">
                         Update personal details, change payment methods, or manage subscriptions.
                     </p>
-                    <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/account">
+                    <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/client">
                         Manage my account
                         <span class="ml-2">&rarr;</span>
                     </a>
                 </div>
 
-                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-[#3328bf] hover:shadow-lg">
-                    <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Medication guidance</h3>
-                    <p class="mt-4 text-sm leading-relaxed text-slate-600">
-                        Review dosages, side effects, and clinical advice from our prescribing team.
-                    </p>
-                    <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/medications">
-                        Explore medications
-                        <span class="ml-2">&rarr;</span>
-                    </a>
-                </div>
 
-                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-[#3328bf] hover:shadow-lg">
-                    <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Programme resources</h3>
-                    <p class="mt-4 text-sm leading-relaxed text-slate-600">
-                        Recipes, coaching tips, and digital tools to keep your goals on track.
-                    </p>
-                    <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/resources">
-                        Browse resources
-                        <span class="ml-2">&rarr;</span>
-                    </a>
-                </div>
+
             </div>
         </div>
     </div>
@@ -247,5 +228,5 @@
 </section>
 
 <?php
-    perch_layout('global/footer');
+    perch_layout('global/new/footer');
 ?>
