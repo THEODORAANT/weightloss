@@ -424,12 +424,14 @@ class PerchAdminListing
 			
 			if ($this->get_value($col['display'], $row)) {
 
-				$class = $col['class'];
+                                $class = isset($col['class']) ? $col['class'] : '';
 
                 if (isset($col['value']) ){
                    $cell_value = $this->get_value($col['value'], $row);
                    $col['title']= $cell_value;
-                   $class = $this->get_value($col['class'], $row);
+                   if (isset($col['class'])) {
+                           $class = $this->get_value($col['class'], $row);
+                   }
                 }
 				if (isset($col['new-tab']) && $col['new-tab']) {
 					$class .= ' viewext';
