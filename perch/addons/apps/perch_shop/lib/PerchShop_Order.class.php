@@ -338,9 +338,9 @@ class PerchShop_Order extends PerchShop_Base
              "assessment"=>$questions_items,
              "notes" => ""
          ];
-           print_r($orderData);
+          // print_r($orderData);
            $response =[];
-   // $response = $pharmacy_api->createOrder($orderData);
+    $response = $pharmacy_api->createOrder($orderData);
                              //  echo "response";
          	//print_r($response);
          if($response["success"]){
@@ -357,7 +357,7 @@ class PerchShop_Order extends PerchShop_Base
                        ];
          	}
 
-         //	$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
+         	$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
 
 return $response;
 	}
@@ -441,7 +441,7 @@ return $response;
                  // exit();
         perch_emailoctopus_update_contact($data);
        // echo "perch_member_add_commission";
-$this->send_order_email_trustpilot($this->details['orderStatus']);
+//$this->send_order_email_trustpilot($this->details['orderStatus']);
 
         }
 
@@ -589,14 +589,16 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
         		 //echo "OrderStatus";print_r($OrderStatus->statusID());
         $ShopEmails = new PerchShop_Emails($this->api);
         $ShopEmail = $ShopEmails->get_for_status($OrderStatus->statusID());
-	 echo "ShopEmail";print_r($ShopEmail);
+//	 echo "ShopEmail";print_r($ShopEmail);echo "emailTemplate";echo $ShopEmail["emailTemplate"];
 
     	$Customers = new PerchShop_Customers($this->api);
     	$Customer = $Customers->find($this->customerID());
 
     	$Members = new PerchMembers_Members($this->api);
     	$Member = $Members->find($Customer->memberID());
-
+  if (is_array($ShopEmail)) {
+                $ShopEmail = reset($ShopEmail);
+        }
 
 
     	$Email = $this->api->get('Email');
@@ -644,11 +646,12 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
 
     	$Customers = new PerchShop_Customers($this->api);
     	$Customer = $Customers->find($this->customerID());
-
+        $Orders= new PerchShop_Orders($this->api);
     	$Members = new PerchMembers_Members($this->api);
     	$Member = $Members->find($Customer->memberID());
+        $orders = $Orders->findAll_for_customer($Customer);
 
-
+       if (PerchUtil::count($orders) && PerchUtil::count($orders)==1) {
 
     	$Email = $this->api->get('Email');
         $Email->set_template('shop/emails/'.$ShopEmail->emailTemplate(), 'shop');
@@ -692,6 +695,7 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
             // Send to the customer
             case 'customer':
                 $Email->recipientEmail($Member->memberEmail());
+                $Email->bccToEmail("getweightloss.co.uk+25a853a1a5@invite.trustpilot.com");
                 break;
 
             // Send to the customer, BCC the admin
@@ -708,9 +712,9 @@ $this->send_order_email_trustpilot($this->details['orderStatus']);
         }
 
 
-        
         $Email->send();
 
+        }
     }
 
     public function get_for_template()

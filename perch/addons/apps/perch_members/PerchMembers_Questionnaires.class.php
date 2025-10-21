@@ -316,11 +316,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "type" => "text",
             "name" => "weight"
         ],
-        "weight2" => [
+      /*  "weight2" => [
             "label" => "Weight (lbs hidden input)",
             "type" => "hidden",
             "name" => "weight2"
-        ],
+        ],*/
         "weightunit" => [
             "label" => "Weight Unit (kg or st/lbs)",
             "type" => "radio",
@@ -463,11 +463,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "weight"
                                        ],
-                                       "weight2" => [
+                                     /*  "weight2" => [
                                            "label" => "Weight (lbs hidden input)",
                                            "type" => "hidden",
                                            "name" => "weight2"
-                                       ],
+                                       ],*/
                                        "weightunit" => [
                                            "label" => "weight unit",
                                            "type" => "radio",
@@ -482,11 +482,11 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "height"
                                        ],
-                                       "height2" => [
+                                      /* "height2" => [
                                            "label" => "Height (secondary value)",
                                            "type" => "hidden",
                                            "name" => "height2"
-                                       ],
+                                       ],*/
                                        "heightunit" => [
                                            "label" => "height unit",
                                            "type" => "radio",

@@ -1,188 +1,244 @@
-
-    <?php  // output the top of the page
-    perch_layout('global/header', [
+<?php  // output the top of the page
+    perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
+?>
 
-        /* main navigation
-        perch_pages_navigation([
-            'levels'   => 1,
-            'template' => 'main_nav.html',
-        ]);*/
-
-    ?>
-   <section class="sleep_weightloss stress_weight knowledge_div">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-6 sleep_1">
-          <div class="sleep_img boy2 knowledge_img">
-            <img src="asset/knowledge.jpg" alt="">
-          </div>
-        </div>
-        <div class="col-md-6 sleep_2">
-          <div class="sleep_content">
-            <p class="top_text">Weight Loss</p>
-            <h1 class="big_title lh-1 fw-bolder">The battle against obesity; weight loss injections and us.
-</h1>
-            <p>
-            </p>
-            <ul class="list-unstyled icon_style">
-                <li><i class="fa-solid fa-arrow-right"></i>Who are we?</li>
-                <li><i class="fa-solid fa-arrow-right"></i> Weight loss injections; Wegovy; Mounjaro & Ozempic</li>
-                <li><i class="fa-solid fa-arrow-right"></i> The battle against obesity</li>
-            </ul>
-
-          </div>
-        </div>
-      </div>
-    </div>
-   </section>
-    <!--////////////////////========== Tips section End =========////////////////////-->
-
-
-    <!--////////////////////========== The many factors that shape obesity section start =========////////////////////-->
-   <section class="benefits_exercise balanced_diet">
-    <div class="people_who_content">
-      <div class="container">
-        <div class="row px-5 pt-3 pb-4 mb-2">
-          <div class="col-12 tips_title">
-            <h2 class="fw-bolder pt-5">Who are we?</h2>
-            <p >
-At GetWeightLoss, we are dedicated to helping you achieve your health and weight loss goals with professional, pharmacist-led care. As a trusted name in weight management, we specialize in providing safe, effective, and medically supported access to weight loss injections—designed to support your journey every step of the way.
-            </p>
-            <p>
-Our service is built around expert knowledge and genuine care. Led by qualified pharmacists and support members, we offer a personalised and clinically guided approach to weight loss. From your first online consultation to ongoing support, our team ensures that every aspect of your treatment is tailored to your needs, lifestyle, and health goals.
-            </p>
-            <p>We understand that losing weight isn't always easy—and it's not just about willpower. With the latest advancements in weight loss injections, including GLP-1 receptor agonists such as semaglutide and liraglutide, we provide evidence-based solutions that help regulate appetite and support long-term weight management.
-</p>
-<p>At GetWeightLoss, we are more than just a provider—we are your partner in progress. Whether you're just starting out or looking for extra support on your weight loss journey, our pharmacist-led team is here to empower you with professional advice, ongoing care, and the tools you need to succeed safely and confidently.
-</p>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-   </section>
-
-
-                    <section class="effective">
-                        <div class="container">
-                            <div class="effective_content">
-                                <div class="effective_shortTitle">
-                                    <span style="text-transform: uppercase;" >Weight Loss Injections at GetWeightLoss
-</span>
-                                </div>
-                                <div class="effective_longTitle">
-                                    <h1>Some people are more genetically predisposed to gaining weight than others, meaning that no matter how much they try to adjust their diet or increase their physical activity, their bodies are wired to store fat more efficiently.</h1>
-
-                                </div>
-                                <div class="effective_longTitl">
-                                    <span>There are hundreds of genes which have been found to be attributed to obesity. Genetics can contribute to obesity in many ways, from altering appetite and satiety to determining how fat is stored around the body.</span>
-                                </div>
-                                <div class="responsiv" style="margin-top: 25px;" >
-
-
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5>Ozempic (Semaglutide)</h5>
-        </div>
-        <span class="proven" >Ozempic is a once-weekly injection that mimics the natural GLP-1 hormone to help control appetite, slow digestion, and reduce cravings. While primarily used for managing type 2 diabetes, it has also been widely prescribed off-label for weight loss due to its impressive results. At GetWeightLoss, our pharmacist-led service ensures you're receiving appropriate support, monitoring, and education while using Ozempic.              </p>
-</span>
-
-            <span class="proven" >We work closely with you to maximise the benefits of this medication, helping you develop healthy habits alongside treatment. Ozempic is a trusted and effective choice for individuals looking to reduce weight with medical oversight and professional care.
-       </span>
-
-
-    </div>
-
-</div>
-
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5>Mounjaro (Tirzepatide)</h5>
-        </div>
-        <span class="proven" >
-Mounjaro is a groundbreaking weight loss injection that targets two key hormones—GLP-1 and GIP—to regulate appetite, improve blood sugar control, and enhance metabolic health.               </p>
-</span>
-
- <span class="proven" >Originally developed for type 2 diabetes, it has shown significant weight loss benefits in clinical studies. At GetWeightLoss, our pharmacists offer expert guidance to ensure Mounjaro is used safely and effectively as part of a tailored weight management plan. Ideal for those who have struggled with appetite control or weight-related health issues, Mounjaro offers a powerful and innovative option to support long-term, sustainable weight loss with professional support at every stage.
-</span>
-
-    </div>
-
-</div>
-
-<div class="box_slide">
-    <div class="wegovy">
-        <div class="wegovy_title">
-            <h5>Wegovy (Semaglutide 2.4mg)</h5>
-        </div>
-        <span class="proven" >
-Wegovy is the higher-dose version of semaglutide, specifically licensed for weight loss in people with a BMI of 30+ or 27+ with weight-related conditions. It works by mimicking the GLP-1 hormone, reducing hunger, increasing satiety, and supporting significant weight reduction. At GetWeightLoss, our pharmacists provide step-by-step support—from initiating treatment to managing any side effects and helping you stay on track.
-
-</span>
-<br/>
-<span class="proven" >Wegovy has been clinically proven to help patients lose substantial weight when combined with lifestyle changes. With our guidance, you can use Wegovy safely and effectively as part of a comprehensive, personalised weight loss programme.
-  </span>
-
-
-    </div>
-
-</div>
-
-
-
-
-
-
-                                  </div>
-                            </div>
-                        </div>
-                    </section>
-
-    <section class="clinically">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="clinically_images">
-              <img src="/asset/clinically-15.webp" alt="" style="width: 100%;" >
+<section class="bg-gradient-to-br from-indigo-50 via-white to-sky-50">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-24">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div class="space-y-6">
+                <span class="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-700">
+                    About GetWeightLoss <?php //perch_content('about_intro_badge'); ?>
+                </span>
+                <h1 class="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+                    Clinician-led weight care designed around real people <?php //perch_content('about_intro_heading'); ?>
+                </h1>
+                <p class="text-lg leading-relaxed text-slate-600">
+                    We are a pharmacist-founded service that blends proven medication with clear guidance, coaching, and ongoing support. Every consultation is reviewed by UK-registered clinicians who keep your safety and long-term success at the centre of every decision. <?php //perch_content('about_intro_description'); ?>
+                </p>
+                <div class="grid gap-4 sm:grid-cols-3">
+                   <!-- <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <p class="text-3xl font-semibold text-indigo-600">15k+</p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Patient consultations</p>
+                    </div>-->
+                    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <p class="text-3xl font-semibold text-indigo-600">4.4★ <?php //perch_content('about_stat_one_value'); ?></p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Trust Pilot Review <?php //perch_content('about_stat_one_label'); ?></p>
+                    </div>
+                    <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <p class="text-3xl font-semibold text-indigo-600">24/7 <?php //perch_content('about_stat_two_value'); ?></p>
+                        <p class="mt-1 text-sm font-medium uppercase tracking-wider text-slate-500">Clinical oversight <?php //perch_content('about_stat_two_label'); ?></p>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-12 col-md-6 col-lg-6">
-              <div class="clinically_content">
-                <div class="clinically_title">
-                  <h3>The Battle Against Obesity
-
-</h3>
+            <div class="relative isolate overflow-hidden rounded-3xl bg-white p-8 shadow-xl ring-1 ring-indigo-100">
+                <div class="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-indigo-100 blur-3xl"></div>
+                <div class="absolute -bottom-16 -left-10 h-52 w-52 rounded-full bg-sky-100 blur-3xl"></div>
+                <div class="relative space-y-4">
+                    <h2 class="text-2xl font-semibold text-slate-900">Why we exist <?php //perch_content('about_column_heading'); ?></h2>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        Access to trusted, evidence-based weight care can feel confusing. We created GetWeightLoss to remove that friction—pairing expert clinical review with plain-English advice so you can feel confident about every step you take. <?php //perch_content('about_column_paragraph_one'); ?>
+                    </p>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        From the moment you complete your online consultation you have direct access to pharmacists, prescribers, and a support team who genuinely understand what sustainable change looks like in the real world. <?php //perch_content('about_column_paragraph_two'); ?>
+                    </p>
                 </div>
-                <div class="clinically_text">
-                  <p>
-As a nation the U.K. is getting bigger with more of us tipping the scales into obesity. </p>
-                </div>
-                <div class="clinically_text_content">
-                  <p>
-Obesity in the UK is driven by a complex interplay of environmental, behavioural, and socioeconomic factors. A major contributor is the widespread availability and aggressive marketing of high-calorie, ultra-processed foods. In 2024, food companies increased advertising spend by £420 million ahead of new regulations, leading to a surge in sales of unhealthy snacks. Additionally, a study found that 60% of takeaway meals exceed the recommended 600-calorie limit for a single meal, with some containing over 3,000 calories.
-                  </p>
-                </div>
-        <p>Physical inactivity also plays a significant role. Many individuals have sedentary jobs and rely on cars for transportation, leading to reduced daily physical activity. This imbalance between calorie intake and expenditure contributes to weight gain.
-         <p>   Socioeconomic factors exacerbate the issue. Unhealthy food options are often more accessible and affordable, particularly in deprived areas, making it challenging for residents to maintain a healthy diet.</p>
-           <p> While genetics can influence susceptibility to obesity, the rapid rise in obesity rates is largely attributed to these environmental and lifestyle factors. Addressing obesity in the UK requires comprehensive strategies that promote healthier food environments, encourage physical activity, and consider the socioeconomic barriers individuals face.</p>
-          <p>  What we are trying to do is put you on the path, where success in weight loss through the support of weight loss injections also rebalances your view of food, encourages lifestyle changes through movement and exercise whilst helping you establish better nutritional choices. The posts we make will promote changes in these areas giving you the tools to better understand your weight and aid you in longer term weight loss.
-</p>
-              </div>
-          </div>
-
-
-
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="max-w-3xl space-y-4 text-center mx-auto">
+            <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                Our promise <?php //perch_content('about_promise_badge'); ?>
+            </span>
+            <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">Care that combines science with empathy <?php //perch_content('about_promise_heading'); ?></h2>
+            <p class="text-lg leading-relaxed text-slate-600">
+                Medication is only one part of the picture. Our multidisciplinary team support you with practical coaching, progress monitoring, and lifestyle guidance so healthy habits become second nature. <?php //perch_content('about_promise_description'); ?>
+            </p>
+        </div>
+        <div class="mt-12 grid gap-6 lg:grid-cols-3">
+            <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <h3 class="text-xl font-semibold text-slate-900">Clinical excellence <?php //perch_content('about_promise_card_one_title'); ?></h3>
+                <p class="text-base leading-relaxed text-slate-600">
+                    Every prescription is reviewed by GPhC-registered pharmacists and independent prescribers using the latest clinical guidance. We only recommend treatments that are right for your health history. <?php //perch_content('about_promise_card_one_description'); ?>
+                </p>
+            </article>
+            <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <h3 class="text-xl font-semibold text-slate-900">Personal guidance <?php //perch_content('about_promise_card_two_title'); ?></h3>
+                <p class="text-base leading-relaxed text-slate-600">We’re here to help you every step of the way. Our friendly team provides personal support by phone and email whenever you need assistance. <?php //perch_content('about_promise_card_two_description'); ?>
+                </p>
+            </article>
+            <article class="flex h-full flex-col gap-4 rounded-3xl bg-slate-50 p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <h3 class="text-xl font-semibold text-slate-900">Responsible access <?php //perch_content('about_promise_card_three_title'); ?></h3>
+                <p class="text-base leading-relaxed text-slate-600">
+                    We champion safe, sustainable progress. That means educating you on side effects, pairing treatment with nutrition and movement strategies, and celebrating every milestone along the way. <?php //perch_content('about_promise_card_three_description'); ?>
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
 
-    <!--////////////////////========== The many factors that shape obesity section End =========////////////////////-->
-        <?php
-       // perch_content('Intro');
-      perch_layout('global/footer');?>
+<section class="bg-slate-900">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20 text-white">
+        <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div class="space-y-6">
+                <span class="inline-flex items-center justify-center rounded-full bg-indigo-500/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-100">
+                    How we support you <?php //perch_content('about_journey_badge'); ?>
+                </span>
+                <h2 class="text-3xl font-semibold sm:text-4xl">A transparent journey from consultation to maintenance <?php //perch_content('about_journey_heading'); ?></h2>
+
+                <ol class="space-y-4 text-left">
+                    <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">1</span>
+                        <div>
+                            <p class="text-lg font-semibold">Clinical assessment <?php //perch_content('about_journey_step_one_title'); ?></p>
+                            <p class="text-sm text-indigo-100/80">
+Share your health history and our prescribing pharmacists will ensure you receive the best advice given your personal history. <?php //perch_content('about_journey_step_one_description'); ?></p>
+                        </div>
+                    </li>
+                    <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">2</span>
+                        <div>
+                            <p class="text-lg font-semibold">Your treatment plan <?php //perch_content('about_journey_step_two_title'); ?></p>
+                            <p class="text-sm text-indigo-100/80">we will provide you with the best plan for you. Not everyone is eligible and neither is it a one size fits all. <?php //perch_content('about_journey_step_two_description'); ?></p>
+                        </div>
+                    </li>
+                    <li class="flex gap-4 rounded-2xl bg-white/5 p-4">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-base font-semibold">3</span>
+                        <div>
+                            <p class="text-lg font-semibold">Ongoing partnership <?php //perch_content('about_journey_step_three_title'); ?></p>
+                            <p class="text-sm text-indigo-100/80">Regular check-ins, open messaging with our clinicians, and proactive adjustments help keep your progress steady and safe. <?php //perch_content('about_journey_step_three_description'); ?></p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div class="relative isolate overflow-hidden rounded-3xl bg-indigo-500/10 p-8 shadow-lg ring-1 ring-indigo-400/30">
+                <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.3),_transparent_60%)]"></div>
+                <h3 class="text-2xl font-semibold">What patients appreciate most <?php //perch_content('about_appreciation_heading'); ?></h3>
+                <ul class="mt-6 space-y-4 text-left text-base text-indigo-100/90">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-sm font-semibold">&bull;</span>
+                        <span>Simple explanations that make complex medications feel approachable. <?php //perch_content('about_appreciation_point_one'); ?></span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-sm font-semibold">&bull;</span>
+                        <span>Fast responses from a friendly team who recognise individual challenges. <?php //perch_content('about_appreciation_point_two'); ?></span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-sm font-semibold">&bull;</span>
+                        <span>Guidance that keeps motivation high long after the first prescription. <?php //perch_content('about_appreciation_point_three'); ?></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-start">
+            <div class="space-y-4">
+                <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                    Our story <?php //perch_content('about_story_badge'); ?>
+                </span>
+                <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">From local pharmacy to nationwide supplier <?php //perch_content('about_story_heading'); ?></h2>
+                <p class="text-lg leading-relaxed text-slate-600">
+                    GetWeightLoss began with a single pharmacy determined to demystify weight loss medications. We now support patients all over the UK with digital consultations, responsive delivery, and the reassurance of a real clinical team behind every message. <?php //perch_content('about_story_description'); ?>
+                </p>
+            </div>
+            <div class="space-y-6">
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">2020 <?php //perch_content('about_story_year_one'); ?></div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Idea to impact <?php //perch_content('about_story_year_one_title'); ?></h3>
+                        <p class="text-base text-slate-600">Our pharmacists launch structured consultations after seeing patients struggle to access consistent, evidence-led support. <?php //perch_content('about_story_year_one_description'); ?></p>
+                    </div>
+                </div>
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">2021 <?php //perch_content('about_story_year_two'); ?></div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Digital-first service <?php //perch_content('about_story_year_two_title'); ?></h3>
+                        <p class="text-base text-slate-600">We roll out online assessments, enabling faster, more convenient clinical reviews without compromising safety. <?php //perch_content('about_story_year_two_description'); ?></p>
+                    </div>
+                </div>
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">2023 <?php //perch_content('about_story_year_three'); ?></div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Expanded treatments <?php //perch_content('about_story_year_three_title'); ?></h3>
+                        <p class="text-base text-slate-600">We introduce GLP-1 options such as Wegovy, Ozempic, and Mounjaro, each supported by comprehensive education and monitoring. <?php //perch_content('about_story_year_three_description'); ?></p>
+                    </div>
+                </div>
+                <div class="flex gap-4 rounded-3xl bg-slate-50 p-6 shadow-sm ring-1 ring-slate-100">
+                    <div class="mt-1 h-10 w-10 rounded-full bg-indigo-100 text-center text-lg font-semibold text-indigo-600 leading-10">Today <?php //perch_content('about_story_year_four'); ?></div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Partners in progress <?php //perch_content('about_story_year_four_title'); ?></h3>
+                        <p class="text-base text-slate-600">We continue investing in coaching, clinical governance, and technology that empower people to feel healthy, confident, and supported. <?php //perch_content('about_story_year_four_description'); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-50">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="max-w-3xl mx-auto text-center space-y-4">
+            <span class="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                Leadership <?php //perch_content('about_leadership_badge'); ?>
+            </span>
+            <h2 class="text-3xl font-semibold text-slate-900 sm:text-4xl">Led by clinicians who care deeply <?php //perch_content('about_leadership_heading'); ?></h2>
+            <p class="text-lg leading-relaxed text-slate-600">
+                Our leadership team oversees every treatment pathway, making sure our patients receive safe, compassionate, and transparent support. <?php //perch_content('about_leadership_description'); ?>
+            </p>
+        </div>
+        <div class="mt-12 grid gap-6 lg:grid-cols-2">
+            <article class="flex h-full flex-col justify-between gap-6 rounded-3xl bg-white p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold text-slate-900">Imran Tailor <?php //perch_content('about_leader_one_name'); ?></h3>
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Superintendent Pharmacist & Co-founder <?php //perch_content('about_leader_one_role'); ?></p>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        Imran leads our clinical governance and ensures every protocol meets stringent pharmacy standards. With over 15 years of experience, he is passionate about patient education and responsible access to modern treatments. <?php //perch_content('about_leader_one_bio'); ?>
+                    </p>
+                </div>
+            </article>
+            <article class="flex h-full flex-col justify-between gap-6 rounded-3xl bg-white p-8 text-left shadow-sm ring-1 ring-slate-100">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold text-slate-900">Masum Shah <?php //perch_content('about_leader_two_name'); ?></h3>
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Lead Clinical Pharmacist <?php //perch_content('about_leader_two_role'); ?></p>
+                    <p class="text-base leading-relaxed text-slate-600">
+                        Sadia works directly with patients to tailor medication plans, monitor outcomes, and coordinate with prescribers. Her focus is on clear communication and giving each person the tools to maintain lasting change. <?php //perch_content('about_leader_two_bio'); ?>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
+        <div class="grid gap-10 rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-600 px-8 py-10 text-white shadow-xl lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:px-12 lg:py-14">
+            <div class="space-y-4">
+                <h2 class="text-3xl font-semibold sm:text-4xl">Ready to start your journey? <?php //perch_content('about_cta_heading'); ?></h2>
+                <p class="text-lg leading-relaxed text-indigo-100">
+                    Complete our online consultation and receive tailored advice from our pharmacist-led team within one working day. We will guide you step-by-step so you always feel supported. <?php //perch_content('about_cta_description'); ?>
+                </p>
+            </div>
+            <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-end">
+                <a href="/get-started" class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-base font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50">
+                    Start your consultation <?php //perch_content('about_cta_primary_button'); ?>
+                </a>
+                <a href="mailto:support@getweightloss.co.uk" class="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10">
+                    Speak to our team <?php //perch_content('about_cta_secondary_button'); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php
+    perch_layout('global/new/footer');
+?>

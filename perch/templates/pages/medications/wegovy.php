@@ -1,6 +1,7 @@
 
-    <?php  // output the top of the page
-    perch_layout('global/header', [
+<?php  // output the top of the page
+    perch_layout('global/head');
+   perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
 
@@ -13,684 +14,340 @@
     ?>
 
 
-
-
-
-
-
-
-
-
-    <!-- ===================================================================header section End================================================================================================  -->
-
-
-
-    <!-- =======================================================WEIGHT LOSS  section  Start============================================================================================= -->
-
-    <section class="weight-loss-section  " style="background-color: #000;" >
-        <div class="container-fluid">
-           <div class="mounjaro_content" style="color: #fff;" >
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <div class="min_img" style="background-color: #94ACB3;" >
-                        <img src="/asset/injection-11.jpg" alt="Happy Woman" class="img-fluid rounded">
-                    </div>
-                </div>
-                <div class="col-md-6 title ">
-                  <div class="works">
-                    <h6 class="text-uppercase" style=" color: #fff; font-weight: 500;" >MEDICATED WEIGHT LOSS</h6>
-                  <h2 class="fw-bold"><span style="font-size: 62px;" >Wegovy for Weight Loss</span>
-</h2>
-                  <p class="expert" >How it works: Reduces food intake</p>
-                  <p class="expert" >Expected Results: lose up to 15%* </p>
-                  <p style="color:#fff" class="price">From <span  style="color:#fff" class="new-price">&pound;109.00</span>
-</p>
-                  </div>
-                      <div class="min_img2 min_img3 " style="background-color: #94ACB3;" >
-                          <img src="/asset/injection-12.jpg" alt="Happy Woman" class="img-fluid rounded">
-                          <div class="custom_border"></div>
-                      </div>
-                      <a href="/get-started" class="btn btn-primary  " style="width: 330px; font-weight: 600;padding: 15px 0px;color: #000;  background-color: #B0D136;border: none;margin: 15px 0px;">Get started →</a>
-                    <a href="/order/re-order" class="btn btn-primary" style="width: 330px; font-weight: 600;padding: 15px 0px;color: #000;  background-color: rgb(255 160 77 / 88%);border: none;margin: 15px 0px;">Re Order →</a>
-
-                </div>
-              </div>
-           </div>
+    <!-- Hero Section -->
+    <div id="hero" class="w-full flex flex-col items-center justify-center bg-white">
+      <div class="bg-white flex flex-col lg:flex-row items-center justify-between w-full">
+        <div class="h-[400px] md:h-[550px] lg:h-[700px] w-full lg:w-[704px] order-2 lg:order-1">
+          <img src="/asset/injection-11.jpg" alt="Mounjaro Injection" class="w-full h-full object-cover" />
         </div>
-    </section>
-
-
-
-
-    <!-- =======================================================Effective weight  section  End============================================================================================= -->
-
-
-    <!-- =======================================================Effective weight  section  start============================================================================================= -->
-
-
-    <section class="effective_weight">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="weight_title">
-                    <h1>What does it
-                           </br>Do?</h1>
-            </div>
+        <div class="flex flex-col gap-[24px] lg:gap-[32px] items-start px-[20px] md:px-[40px] lg:pl-[15px] lg:pr-[160px] py-[40px] lg:py-0 w-full lg:w-[719px] order-1 lg:order-2">
+          <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
+            <h1 class="font-semibold text-[#0d0d0d] text-[36px] md:text-[56px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.12px] lg:tracking-[-1.44px] leading-[44px] md:leading-[68px] lg:leading-[90px]">Wegovy for Weight Loss</h1>
           </div>
-          <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="effective_content">
-              <p>
-Wegovy helps with weight loss by reducing hunger and calorie intake. This means that individuals using Wegovy may find it easier to stick to a lower-calorie diet without feeling as hungry.               </p>
-          <p>Significant weight loss, up to 15% of body weight, is possible with proper diet and exercise. However, side effects like nausea are common, so medical supervision is essential. Understanding these factors helps users make informed decisions about incorporating Wegovy into their weight loss journey.
-</p>
-            </div>
+          <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
+            <p class="font-semibold text-[#0d0d0d] text-[24px] md:text-[28px] lg:text-[32px] tracking-[-0.48px] md:tracking-[-0.56px] lg:tracking-[-0.64px] leading-[32px] md:leading-[36px] lg:leading-[40px]">
+              <span class="font-medium">From </span>
+              <span class="text-[#324ea0] text-[48px] md:text-[56px] lg:text-[64px] leading-[60px] md:leading-[70px] lg:leading-[90px]">£129.00</span>
+              <span class="font-medium"> / month</span>
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-[15px] items-start w-full sm:w-auto">
+            <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
+              <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
+                <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
+              </div>
+            </a>
+            <a href="/order/re-order" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
+              <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
+                <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Reorder</p>
+              </div>
+            </a>
           </div>
         </div>
       </div>
-    </section>
-
-
-    <!-- =======================================================WEIGHT LOSS  section  End============================================================================================= -->
-
-    <!-- =======================================================Clinically  section  start============================================================================================= -->
-
- <section class="research-section" style="background-color: #F5F5F5;padding-top: 40px;" >
-
-    <div class="container ">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-
-
-                <div class="research">
-
-<!--
-                    <span class="badge bg-dark">HEALTH CHALLENGE</span> -->
-                    <h1 class="mt-3">What am I injecting?</h1>
-                    <p class="text-muted">
-When using Wegovy for weight loss, you are injecting a medication called .Here's what it involves:      </p>
-
-                  <p><b>Active Ingredient:</b> Wegovy contains semaglutide, a GLP-1 receptor agonist that mimics a natural hormone to regulate appetite and food intake.</p>
-                   <p><b>Dosage Form:</b> It is a once-weekly injection, delivered via a pre-filled, single-use pen.</p>
-                  <p><b>Purpose:</b> The injection helps control hunger, leading to gradual and sustained weight loss when combined with a healthy lifestyle. </p>
-
-                </div>
-
-
-            </div>
-            <div class="col-md-6 research_image ">
-
-                <div class="research_img" style="height: auto;" >
-                    <img src="/asset/clinically-21.webp" class="img-fluid" alt="Research Report">
-
-
-                </div>
-
-
-            </div>
+      <div class="flex flex-col md:flex-row gap-[16px] md:gap-[23px] items-start md:items-center justify-between px-[20px] md:px-[40px] lg:px-0 pb-[40px] lg:pb-[50px] pt-[30px] lg:pt-[50px] w-full max-w-[1120px]">
+        <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
+          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Dual Action for Weight Loss</p>
         </div>
+        <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
+          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Significant Results</p>
+        </div>
+        <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
+          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Beyond Diet & Exercise</p>
+        </div>
+      </div>
     </div>
 
-</section>
-
-
-    <!-- =======================================================Clinically  section  End============================================================================================= -->
-
- <section class="research-section" style="background-color: #F5F5F5;padding-top: 40px;" >
-
-    <div class="container ">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-
-
-                <div class="research">
-
-<!--
-                    <span class="badge bg-dark">HEALTH CHALLENGE</span> -->
-                    <h1 class="mt-3">What are the potential side effects?</h1>
-                    <p class="text-muted">Wegovy may cause some side effects, though they aren't experienced by everyone. Potential side effects include:</p>
-
-
-   <p><b>Common Side Effects:  </b>Nausea, vomiting, diarrhoea, constipation, and stomach pain are frequent reactions, especially when starting treatment.</p>
-     <p><b>Other Risks: </b> Potential for pancreatitis, kidney issues, and gallbladder problems.</p>
-   <p><b>Allergic Reactions: </b>Rare but possible, including swelling or difficulty breathing. Always take under medical supervision.
-</p>
-
-
-                </div>
-
-
+    <!-- About Mounjaro Section -->
+    <div id="about" class="bg-gradient-to-b from-[#ffffff] to-[#d4dfff] w-full flex flex-col items-center justify-center">
+      <!-- What does it Do? -->
+      <div class="w-full flex flex-col items-center justify-center">
+        <div class="flex flex-col gap-[24px] lg:gap-[32px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full lg:max-w-[1120px]">
+          <div class="flex flex-col lg:flex-row gap-[40px] lg:gap-[60px] items-start w-full">
+            <h2 class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-auto whitespace-nowrap">What does it Do?</h2>
+            <div class="flex flex-col gap-[16px] w-full">
+                           <p class="font-normal leading-[24px] text-[16px] text-[grey]">
+            Wegovy helps with weight loss by reducing hunger and calorie intake. This means that individuals using Wegovy may find it easier to stick to a lower-calorie diet without feeling as hungry.               </p>
+               <p class="font-normal leading-[24px] text-[16px] text-[grey]">Significant weight loss, up to 15% of body weight, is possible with proper diet and exercise. However, side effects like nausea are common, so medical supervision is essential. Understanding these factors helps users make informed decisions about incorporating Wegovy into their weight loss journey.
+            </p>
             </div>
-            <div class="col-md-6 research_image ">
-
-                <div class="research_img" style="height: auto;" >
-                    <img src="/asset/Landing-9.jpg"  class="img-fluid" alt="Research Report">
-                </div>
-
-
-            </div>
+          </div>
         </div>
-    </div>
-
-</section>
-
-
-
-
-    <!-- =======================================================Meet the experts  start============================================================================================= -->
-<!--
-
- <section class="Your_expert_team">
-  <div class="expert_team">
-      <div class="container">
-          <div class="effective_content">
-              <div class="effective_longTitle">
-                  <h1>Meet the experts</h1>
-              </div>
-              <div class="effective_longTitl">
-                  <p>  Weight Loss Programme is developed by a team of specialists who understand the complex challenges of <br> weight management. Drawing on the latest in metabolic research, appetite regulation, and psychology, our experts bring bf
-                     together innovative treatments and personalised strategies designed for sustainable results.</p><br>
-                  <p>
-                    Our approach includes the use of Wegovy, a GLP-1 receptor agonist, which curbs cravings making it easier to stay on <br> track.1 Paired with guidance from healthcare professionals and lifestyle coaches, the programme adapts to your unique needs at every step.
-                  </p><br>
-              </div>
-              <button>Learn more about our experts <i class="fa-solid fa-arrow-right"></i> </button>
-          </div>
       </div>
-  </div>
 
-  <div class="responsive" style="margin-top: 25px;" >
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Dr Luke Pratsides</h5>
-              </div>
-              <span class="proven" >Head of Medical</span>
-              <p>MBBS MSc MRCGP MFCI</p>
-          </div>
+      <!-- What am I injecting? -->
+      <div class="w-full flex flex-col items-center justify-center">
+        <div class="flex flex-col lg:flex-row gap-[32px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full lg:max-w-[1120px]">
+          <div class="flex flex-col gap-[20px] lg:gap-[30px] items-start w-full lg:w-[544px]">
+            <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
+              <h2 class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">What am I injecting?</h2>
+              <div class="flex flex-col gap-[16px] w-full">
+                <p class="font-normal leading-[24px] text-[16px] text-[grey]"> When using Wegovy for weight loss, you are injecting a medication called .Here's what it involves: </p>
+                <p class="leading-[24px] text-[16px] text-[grey]"><span class="font-bold">Active Ingredient:</span>Wegovy contains semaglutide, a GLP-1 receptor agonist that mimics a natural hormone to regulate appetite and food intake.</p>
+                <p class="leading-[24px] text-[16px] text-[grey]"><span class="font-bold">Dosage Form:</span>It is a once-weekly injection, delivered via a pre-filled, single-use pen.</p>
 
-          <div class="imges">
-              <img src="asset/Dr Luke Pratsides.webp" alt="">
-          </div>
-      </div>
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Dr Bryony Henderson</h5>
+                <p class="leading-[24px] text-[16px] text-[grey]"><span class="font-bold">Purpose:</span>  The injection helps control hunger, leading to gradual and sustained weight loss when combined with a healthy lifestyle. </p>
+
               </div>
-              <span class="proven" >Medical Director</span>
-              <p>MBBS BSc MRCGP DFFP</p>
+            </div>
           </div>
-          <div class="imges">
-              <img src="asset/Dr Bryony Henderson.webp" alt="">
+          <div class="h-[300px] md:h-[400px] lg:h-[450px] w-full lg:w-[544px] rounded-[20px] overflow-hidden">
+            <img src="/asset/clinically-21.webp" alt="Mounjaro Injection" class="w-full h-full object-cover" />
           </div>
+        </div>
       </div>
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Sophie Kanani</h5>
+
+      <!-- What are the potential side effects? -->
+      <div class="w-full flex flex-col items-center justify-center">
+        <div class="flex flex-col lg:flex-row gap-[32px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full lg:max-w-[1120px]">
+          <div class="h-[300px] md:h-[400px] lg:h-[450px] w-full lg:w-[544px] rounded-[20px] overflow-hidden order-2 lg:order-1">
+            <img src="/asset/Landing-9.jpg" alt="Side Effects" class="w-full h-full object-cover" />
+          </div>
+          <div class="flex flex-col gap-[20px] lg:gap-[30px] items-start w-full lg:w-[544px] order-1 lg:order-2">
+            <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
+              <h2 class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">What are the potential side effects?</h2>
+              <div class="flex flex-col gap-[16px] w-full">
+                <p class="font-normal leading-[24px] text-[16px] text-[grey]">Wegovy may cause some side effects, though they aren't experienced by everyone. Potential side effects include:</p>
+
+                <p class="leading-[24px] text-[16px] text-[grey]"><span class="font-bold">Common Side Effects:</span>Nausea, vomiting, diarrhoea, constipation, and stomach pain are frequent reactions, especially when starting treatment.</p>
+
+                <p class="leading-[24px] text-[16px] text-[grey]"><span class="font-bold">Other Risks: </span>Potential for pancreatitis, kidney issues, and gallbladder problems.</p>
+
+                <p class="leading-[24px] text-[16px] text-[grey]"><span class="font-bold">Allergic Reactions:</span>Rare but possible, including swelling or difficulty breathing. Always take under medical supervision.
+
               </div>
-              <span class="proven" >Health Coaching Operations Manager</span>
-              <p>BSc (Hons) Dip</p>
+            </div>
           </div>
-          <div class="imges">
-              <img src="asset/Sophie.webp" alt="">
-          </div>
+        </div>
       </div>
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Jess Uffindell</h5>
-              </div>
-              <span class="proven" >Registered Nutritionist</span>
-              <p>BANT CNHC BSc (Hons)</p>
+
+      <!-- Features Section -->
+      <div id="features" class="w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pb-[60px] md:pb-[80px] lg:pb-[100px]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-[20px] w-full">
+          <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Ongoing Support</p>
+            <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">Always available via email/chat.</p>
           </div>
-          <div class="imges">
-              <img src="asset/Jess Uffindell.webp" alt="">
+          <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">You are in Control</p>
+            <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">Each month you decide to continue or stop.</p>
           </div>
-      </div>
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Mo Dekmak</h5>
-              </div>
-              <span class="proven" >Clinician</span>
-              <p>MPHARM PGDIP IPRESC</p>
+          <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Additional Testing</p>
+            <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">We can arrange blood tests, through our partners</p>
           </div>
-          <div class="imges">
-              <img src="asset/Mo Dekmak.webp" alt="">
+          <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Health Hub</p>
+            <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">The health hub, an access point for news and tips.</p>
           </div>
-      </div>
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Shivani Sharma-Savani</h5>
-              </div>
-              <span class="proven" >Prescribing Lead</span>
-              <p>MPharm PGCert PCert IP</p>
+          <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Discreet Delivery</p>
+            <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">No names, no logos.</p>
           </div>
-          <div class="imges">
-              <img src="asset/Shivani Sharma-Savani.webp" alt="">
+          <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Competitive Pricing</p>
+            <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">We constantly monitor prices.</p>
           </div>
-      </div>
-      <div class="wegovy">
-          <div class="wegovy_text">
-              <div class="wegovy_title">
-                  <h5>Faye Townsend</h5>
-              </div>
-              <span class="proven" >Senior Health Coach</span>
-              <p>AfN BSc BDA PGDIP BPS</p>
-          </div>
-          <div class="imges">
-              <img src="asset/Faye Townsend.webp" alt="">
-          </div>
+        </div>
       </div>
     </div>
-</section>
- -->
 
 
 
+      <!-- Pricing Table -->
+      <div id="pricing" class="bg-white w-full flex flex-col items-center justify-center">
+        <div class="bg-white flex flex-col gap-[40px] lg:gap-[50px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
+          <div class="flex flex-col gap-[16px] lg:gap-[20px] items-center w-full lg:max-w-[1120px]">
+            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services</p>
+            </div>
+            <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">GIP and GLP-1 Hormone Receptor Medications</p>
+            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.
 
-    <!-- =======================================================Meet the experts  End============================================================================================= -->
-
-
-
-    <section class="effective">
-      <div class="container">
-          <div class="effective_content">
-              <div class="effective_shortTitle">
-                  <span style="text-transform: uppercase;" >Weight Loss Injections</span>
-              </div>
-              <div class="effective_longTitle">
-                                                <h1>GIP and GLP-1 Hormone Receptor Medications</h1>
-                                            </div>
-                                            <div class="effective_longTitl">
-                                                <span>Effective solutions to manage your weight loss and Type-2 diabetes.</span>
-                                            </div>
-              <div class="responsiv" style="margin-top: 25px;" >
-
-                                    <?php
-                                               perch_collection('MedicationProgrammes', [
-
-                                                   'count'      => 6,
-                                               ]);
-                                           ?>
-
-
-
-
-
-
-                </div>
+*Blood tests are provided by our UKAS accredited service partner.</p>
           </div>
-      </div>
-  </section>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">
+               <?php
+                                                         perch_collection('MedicationProgrammes', [
+
+                                                             'count'      => 6,
+                                                         ]);
+                                                     ?>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- ======================================================= UK licensed experts  start============================================================================================= -->
-
-
-
- <section class="UK_licensed">
-
-
-
-
-
-  <div class="responsiv" >
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/download uuuu.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Ongoing clinical support</h5>
-              </div>
-              <div class="slide_content">
-                  <p>Access expert clinicians and medical advice.</p>
-              </div>
-          </div>
-      </div>
-
-
-
-
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/ecol.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Pause or cancel any time</h5>
-              </div>
-              <div class="slide_content">
-                  <p>You're always in control of your treatment.</p>
-              </div>
-          </div>
-      </div>
-
-
-
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/Capsule.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Innovative treatments</h5>
-              </div>
-              <div class="slide_content">
-                  <p>Advanced, clinically-proven medications.</p>
-              </div>
-          </div>
-      </div>
-
-
-
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="asset/star_1.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Rated excellent on Trustpilot</h5>
-              </div>
-              <div class="slide_content">
-                  <p>4.6* from over 20,000 people like you.</p>
-              </div>
-          </div>
-      </div>
-
-
-
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/shild.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Trusted</h5>
-              </div>
-              <div class="slide_content">
-                  <p>Regulated by the Care Quality Commission.</p>
-              </div>
-          </div>
-      </div>
-
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/japan.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>UK licensed</h5>
-              </div>
-              <div class="slide_content">
-                  <p>Medications and clinicians.</p>
-              </div>
-          </div>
-      </div>
-
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/sqar.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Free, discreet delivery</h5>
-              </div>
-              <div class="slide_content">
-                  <p>No names, no logos, no delivery fee.</p>
-              </div>
-          </div>
-      </div>
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/sqar.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Free, discreet delivery</h5>
-              </div>
-              <div class="slide_content">
-                  <p>No names, no logos, no delivery fee.</p>
-              </div>
-          </div>
-      </div>
-      <div class="licensed_content">
-          <div class="card_slide">
-              <div class="slide_imge">
-                  <img src="/asset/sqar.svg" alt="">
-              </div>
-              <div class="slide_title">
-                  <h5>Free, discreet delivery</h5>
-              </div>
-              <div class="slide_content">
-                  <p>No names, no logos, no delivery fee.</p>
-              </div>
-          </div>
-      </div>
-
-
-  </div>
-</section>
-
-        <!-- =======================================================  UK licensed experts  End============================================================================================= -->
-
-
-
-        <!-- =======================================================  OTHER SOLUTIONS experts  start ============================================================================================= -->
-
-
- <!-- =======================================================  OTHER SOLUTIONS experts  End============================================================================================= -->
-
- <!-- =======================================================  Personalised experts  sart ============================================================================================= -->
-
-
- <!-- <section class="research-section  py-5">
-  <div class="container">
-      <div class="row align-items-center">
-          <div class="col-md-6">
-              <div class="research">
-                  <h1 class="mt-3">Personalised health coaching</h1>
-                  <p class="text-muted">
-
-                    Health coaching is the backbone of lasting change in our programme. Alongside Mounjaro, our health coaches are here to support you in building sustainable habits in <a href="">nutrition, exercise, sleep,</a> <a href="">and mindset.</a>
-
-                  </p>
-
-
-                  <p class="text-muted" >
-
-                  </p>
-                  <button class="btn btn-dark large_device ">Learn more about our experts <i class="fa-solid fa-arrow-right"></i> </button>
-              </div>
-          </div>
-          <div class="col-md-6 research_image ">
-
-              <div class="research_img">
-                  <img src="asset/mobaiaaa.webp" class="img-fluid" alt="Research Report">
-              </div>
-
-              <button class="btn btn-dark Read_full ">Learn more about coaching <i class="fa-solid fa-arrow-right"></i> </button>
 
           </div>
+        </div>
       </div>
-  </div>
-</section> -->
+    </div>
 
-
-
-
- <!-- =======================================================  Personalised experts  End============================================================================================= -->
-
- <!-- =======================================================  Obesity  section start============================================================================================= -->
-
-
-
-
-
-
-
-
-
- <!-- =======================================================  Obesity   section End============================================================================================= -->
-
- <!-- =======================================================  REAL PEOPLE, REAL IMPACT   section start============================================================================================= -->
-
-
- <section class="More_success" style="margin-top: 50px;" >
-  <div class="containrt">
-      <div class="effective_shortTitle">
-          <span style="text-transform: uppercase;" >Read some of our success stories</span>
-      </div>
-      <div class="effective_longTitle">
-          <h1>More success stories</h1>
-      </div>
-
-      <button class="btn btn-dark Read_full " style="background-color: transparent;color: #000; margin: 30px 0px; " > <a href="results-reviews.html" style="text-decoration: none;color: #000;" >Results drive results<i class="fa-solid fa-arrow-right"></i></a> </button>
-
-      <div class="row">
-       <?php
-                        perch_collection('SuccessStories', [
-
-                            'count'      => 3,
-                        ]);
-         ?>
-
-
-      </div>
-
-
-  </div>
-</section>
-
-
-
- <!-- =======================================================  REAL PEOPLE, REAL IMPACT   section End============================================================================================= -->
-
-
- <!-- =======================================================  Your questions answered   section start  ============================================================================================= -->
-
-
-
-
- <section class="custom" style="background-color: #f9f9fA;" >
-
-  <div class="container">
-
-      <div class="custom_text">
-          <b>fine</b>
-          <h4>Your questions answered</h4>
-      </div>
-
-
-
-
-
-  <ul class="accordion-list">
-   <?php
-           perch_collection('FAQS', [
-
-
-                    'count'      => 7,
-                ]);
-      ?>
-
-
-    </ul>
-  </div>
-</section>
- <!-- =======================================================  Your questions answered   section End ============================================================================================= -->
-
- <!-- =======================================================  Knowledge   section start  ============================================================================================= -->
-
-
-
- <section class="KNOWLEDGe">
-  <div class="containrt">
-      <div class="knowledge_text">
-          <div class="effective_shortTitle">
-              <span style="color: #fff; text-transform: uppercase;" >Health Hub & News</span>
+    <!-- Testimonials Section -->
+    <div id="testimonials" class="bg-white w-full flex flex-col items-center justify-center">
+      <!-- Testimonials Header -->
+      <div class="bg-white w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pt-[60px] md:pt-[80px] lg:pt-[100px] pb-[40px] lg:pb-[50px]">
+        <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start justify-center w-full lg:max-w-[1120px]">
+          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">More success stories</p>
           </div>
-          <div class="effective_longTitle">
-              <h1>Weight loss: what you need to know</h1>
-          </div>
+          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">People who already love us</p>
+          <p class="text-[16px] text-[grey] w-full max-w-[742px] leading-[24px]">With each client having different triggers and objectives for starting their weight loss journey, we share a few of the success stories here;</p>
+        </div>
       </div>
-            <div class="responsive">
-                   <?php
-                        perch_blog_custom(array(
-                            'template' => 'weight_post_in_list.html',
-                            'count'=>7
-                        ));
+
+      <!-- Testimonials Cards -->
+      <div class="bg-white w-full flex flex-col items-center justify-center pb-[60px] md:pb-[80px] lg:pb-[100px]">
+        <!-- Mobile/Tablet Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[24px] w-full lg:hidden px-[20px] md:px-[40px]">
+           <?php
+                          perch_collection('SuccessStories', [
+
+                              'count'      => 3,
+                          ]);
+                      ?>
+
+
+
+        </div>
+
+        <!-- Desktop Carousel -->
+        <div class="relative w-full overflow-hidden hidden lg:block">
+          <div id="testimonialCarousel" class="testimonial-carousel flex gap-[32px]">
+             <?php
+                            perch_collection('SuccessStories', [
+
+                                'count'      => 4,
+                            ]);
                         ?>
 
 
 
-          </div>
-     </div>
-</section>
 
- <!-- =======================================================  Knowledge   section End ============================================================================================= -->
-
-    <!--============================================================ References  section start ============================================== -->
-
-<!--
-
-    <section class="references">
-      <div class="references_content">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-12 ">
-              <div class="references_title">
-                <h1>References</h1>
-              </div>
-              <p>
-                1 Based on tirzepatide 15mg over 72 weeks. Jastreboff, A. M., Aronne, L. J., Ahmad, N. N., Wharton, S., Connery, L., Alves, B., Kiyosue, A., Zhang, S., Liu, B., <br> Bunck, M. C., Stefanski, A., & the SURMOUNT-1 Investigators. Tirzepatide once weekly for the treatment of obesity. The New England Journal of Medicine (2022)
-              </p>
-              <p>
-                2 Aronne, L. J., Sattar, N., Horn, D. B., Bays, H. E., Wharton, S., Lin, W. Y., Ahmad, N. N., Zhang, S., Liao, R., Bunck, M. C., Jouravskaya, I., Murphy, M. A., & <br> SURMOUNT-4 Investigators (2024). Continued Treatment With Tirzepatide for Maintenance of Weight Reduction in Adults With Obesity: The SURMOUNT-4 <br> Randomized Clinical Trial. JAMA, 331(1), 38–48. <a href="">https://doi.org/10.1001/jama.2023.24945</a>
-              </p>
-              <p>
-                3 National Institute for Health and Care Excellence (NICE). (2024). Tirzepatide for managing overweight and obesity [ID6179]. Retrieved December 6, 2024, from <br> <a href="">https://www.nice.org.uk/guidance/ta6179</a>
-              </p>
-              <p>
-                4 Medicines and Healthcare products Regulatory Agency (MHRA). (2023, November 8). MHRA authorises diabetes drug Mounjaro (tirzepatide) for weight <br> management and weight loss. Retrieved December 6, 2024, from <a href="">https://www.gov.uk/government/news/mhra-authorises-diabetes-drug-mounjaro-tirzepatide-for-weight-management-and-weight-loss</a>
-              </p>
-              <p>
-              </p>
-            </div>
           </div>
         </div>
       </div>
-  </section>
- -->
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pb-[60px] md:pb-[80px] lg:pb-[100px]">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-[20px] w-full">
+        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Ongoing Support</p>
+          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">Always available via email/chat.</p>
+        </div>
+        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">You are in Control</p>
+          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">Each month you decide to continue or stop.</p>
+        </div>
+        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Additional Testing</p>
+          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">We can arrange blood tests, through our partners</p>
+        </div>
+        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Health Hub</p>
+          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">The health hub, an access point for news and tips.</p>
+        </div>
+        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Discreet Delivery</p>
+          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">No names, no logos.</p>
+        </div>
+        <div class="border border-[#d6d6d6] flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+          <p class="font-semibold leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[18px] md:text-[20px]">Competitive Pricing</p>
+          <p class="leading-[26px] md:leading-[30px] text-[#0d0d0d] text-[16px] md:text-[20px]">We constantly monitor prices.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div id="faq" class="bg-white w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px]">
+      <div class="bg-white flex flex-col lg:flex-row gap-[40px] lg:gap-[32px] items-start justify-center w-full lg:max-w-[1120px]">
+        <div class="flex flex-col gap-[24px] lg:gap-0 lg:h-[588px] items-start justify-between w-full lg:w-[418px]">
+          <div class="flex flex-col gap-[10px] items-start justify-center">
+            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">FAQs</p>
+            </div>
+            <p class="font-semibold leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] w-full lg:w-[368px]">Your questions answered</p>
+
+            <p class="font-medium leading-[26px] md:leading-[30px] text-[18px] md:text-[20px] text-[grey]">Couldn't not find what you were looking for? Write to us at help@getweightloss.co.uk.</p>
+            <div class="flex flex-wrap gap-[6px] items-start">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-[#dbdbdb] flex flex-col items-start pb-[20px] pt-[30px] md:pt-[40px] px-0 rounded-[10px] w-full lg:w-[670px]">
+           <?php
+                        perch_collection('FAQS', [
 
 
-
-  <!--============================================================ References  section end ============================================== -->
-
-
-
+                            'count'      => 7,
+                        ]);
+                    ?>
 
 
+        </div>
+      </div>
+    </div>
 
- <!--======================================================== footer section start================================================================= -->
+    <!-- Blog Section -->
+    <div id="blog" class="w-full flex flex-col items-center justify-center">
+      <div class="flex flex-col gap-[40px] lg:gap-[50px] items-center overflow-clip px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
+        <div class="flex flex-col gap-[10px] items-start w-full lg:max-w-[1120px]">
+          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Health Hub & News</p>
+          </div>
+          <p class="font-medium leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px]">Weight loss: what you need to know</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] md:gap-[28px] lg:gap-[32px] w-full lg:max-w-[1120px]">
+          <?php
+            perch_blog_custom(array(
+              'filter'     => 'postDateTime',
+              'template'   => 'weight_post_in_list.html',
+              'sort'       => 'postDateTime',
+              'sort-order' => 'DESC',
+              'count'      => '3'
+            ));
+          ?>
+        </div>
+      </div>
+    </div>
 
-
-      <?php
-
-      perch_layout('global/footer');?>
+    <!-- CTA Section -->
+    <div class="w-full flex flex-col items-center justify-center">
+      <div class="bg-white flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-0 w-full">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[32px] lg:gap-0 px-0 pt-[30px] md:pt-[40px] lg:pt-[50px] pb-[60px] md:pb-[80px] lg:pb-[100px] w-full lg:max-w-[1120px]">
+          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-[544px]">Let's Find Your Perfect Plan Together</p>
+          <div class="flex flex-col sm:flex-row gap-[10px] items-stretch sm:items-start w-full sm:w-auto">
+            <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+              <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
+                <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
+              </div>
+            </a>
+            <a href="#about" class="bg-[#fcfcfc] border border-[#d6d6d6] rounded-[8px] btn-glow">
+              <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
+                <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Learn More</p>
+                <svg class="w-[20px] h-[20px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.5 5L12.5 10L7.5 15" stroke="#0d0d0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php //perch_content('Intro');
+  perch_layout('global/new/footer');?>
