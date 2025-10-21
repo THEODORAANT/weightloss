@@ -151,7 +151,9 @@ class PerchTemplate
 		}
 
 		$template	="";
-        if ($this->template)$template	= str_replace(PERCH_PATH, '', $this->template);
+        if ($this->template !== null && $this->template !== false) {
+			$template = str_replace(PERCH_PATH, '', (string) $this->template);
+        }
 
 		$contents	= $this->load();
 
