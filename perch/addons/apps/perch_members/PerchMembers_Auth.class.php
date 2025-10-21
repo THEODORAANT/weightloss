@@ -207,13 +207,14 @@ class PerchMembers_Auth extends PerchAPI_Factory
  
 
 
-		if (isset($_COOKIE[PERCH_MEMBERS_COOKIE]) && $_COOKIE[PERCH_MEMBERS_COOKIE]!='') {
-			$old_session = $_COOKIE[PERCH_MEMBERS_COOKIE];
-		}
+                $old_session = false;
+                if (isset($_COOKIE[PERCH_MEMBERS_COOKIE]) && $_COOKIE[PERCH_MEMBERS_COOKIE]!='') {
+                        $old_session = $_COOKIE[PERCH_MEMBERS_COOKIE];
+                }
 
-		$this->_generate_session($Member->get_details());
+                $this->_generate_session($Member->get_details());
 
-		if ($old_session) {
+                if ($old_session) {
 			$sql = 'DELETE FROM '.PERCH_DB_PREFIX.'members_sessions WHERE sessionID='.$this->db->pdb($old_session);
 			$this->db->execute($sql);
 		}
