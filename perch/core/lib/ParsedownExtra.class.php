@@ -2012,8 +2012,8 @@ class ParsedownExtra extends Parsedown
         $DOMDocument = new DOMDocument;
 
         # http://stackoverflow.com/q/11309194/200145
-        $elementMarkup = mb_convert_encoding($elementMarkup, 'HTML-ENTITIES', 'UTF-8');
-
+   // deprecated  $elementMarkup = mb_convert_encoding($elementMarkup, 'HTML-ENTITIES', 'UTF-8');
+   $elementMarkup =htmlspecialchars_decode(iconv('UTF-8', 'ISO-8859-1', htmlentities($elementMarkup, ENT_COMPAT, 'UTF-8')), ENT_QUOTES);
         # http://stackoverflow.com/q/4879946/200145
         $DOMDocument->loadHTML($elementMarkup);
         $DOMDocument->removeChild($DOMDocument->doctype);

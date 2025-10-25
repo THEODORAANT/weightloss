@@ -122,11 +122,7 @@ class PerchBase
 
     public function id()
     {
-      if (is_array($this->details) && array_key_exists($this->pk,$this->details)) {
         return $this->details[$this->pk];
-        }else{
-        return null;
-        }
     }
 
     public function update($data)

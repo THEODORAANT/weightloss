@@ -216,7 +216,7 @@
           ✓ UK-regulated • GMC/GPhC registered
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
-        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a professional consultation. Our UK clinicians will assess if prescription treatments are right for you.Prices from as low as £95 per prescription plus postage and packaging.</p>
+        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">   <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a confidential consultation from one of our UK-registered clinicians. They’ll assess your health needs and determine if a prescription treatment is suitable for you.</p></p>
         <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
           <a href="https://www.getweightloss.co.uk/get-started" class="btn-lime inline-flex items-center justify-center rounded-2xl px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 transition-all">
             <span>Start free assessment</span>
@@ -280,6 +280,10 @@
               </div>
             </li>
           </ul>
+            <div class="mt-6 space-y-2 text-xs sm:text-sm italic opacity-75">
+                      <p>*If appropriate, a private prescription can be issued, and medication dispensed by our partner pharmacy.</p>
+                      <p>*Consultation fees apply; treatment costs may vary depending on what’s prescribed.</p>
+                    </div>
         </div>
       </div>
     </div>
@@ -303,7 +307,7 @@
         <div class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <p class="text-xs font-bold tracking-wide" style="color: var(--blue)">STEP 3</p>
           <h3 class="mt-3 text-lg sm:text-xl font-semibold">Prescription Delivery</h3>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">On being eligible and completing the process, you will receive a Royal Mail tracking ID with your package arriving 2 days later. You are ready to start your journey.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">If your clinician decides a prescription is appropriate, it will be dispensed by our partner pharmacy and sent via tracked Royal Mail delivery (usually within 2 working days). You’ll receive your tracking details once your prescription has been processed.</p>
         </div>
       </div>
     </div>
@@ -313,29 +317,35 @@
   <section id="treatments" style="background-color: var(--grey)">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore the treatments</h2>
-      <p class="mt-4 text-base sm:text-lg leading-relaxed">There are numerous weight-loss medications available to be used in conjunction with a reduced calorie diet and exercise, all of which are only available if deemed appropriate by a prescriber.</p>      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+      <p class="mt-4 text-base sm:text-lg leading-relaxed">A range of prescription-only medicines may be considered to support weight management alongside a reduced-calorie diet and regular physical activity.
+                                                           These medicines are only supplied if a UK-registered prescriber determines they are clinically appropriate for you following a detailed consultation.</p>      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Mounjaro® (tirzepatide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
-            <li>Prescription-only medicine administered as a once-weekly injection.</li>
+            <li>A prescription-only medicine administered as a once-weekly injection.</li>
             <li>Contains tirzepatide, which acts on GIP and GLP-1 receptors.</li>
-            <li>Provided only if a clinician decides it's suitable for you after reviewing your health information.</li>
-            <li>Commonly reported side effects include nausea, vomiting, diarrhoea and decreased appetite. Always read the patient information leaflet.</li>
+            <li>May be prescribed only if a clinician decides it is suitable for you based on your medical history and current health.</li>
+            <li>Commonly reported side effects include nausea, vomiting, diarrhoea, and decreased appetite.</li>
+            <li>Always read the patient information leaflet carefully before use.</li>
           </ul>
         </article>
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Wegovy® (semaglutide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
-            <li>Prescription-only medicine administered as a once-weekly injection.</li>
+            <li>A prescription-only medicine administered as a once-weekly injection.</li>
             <li>Contains semaglutide, a GLP-1 receptor agonist.</li>
-            <li>Provided only if a clinician decides it's suitable for you after reviewing your health information.</li>
-            <li>Commonly reported side effects include nausea, vomiting, diarrhoea and constipation. Always read the patient information leaflet.</li>
+            <li>May be prescribed only if a clinician decides it is suitable for you based on your medical history and current health.</li>
+            <li>Commonly reported side effects include nausea, vomiting, diarrhoea, and constipation.</li>
+            <li>Always read the patient information leaflet carefully before use.</li>
           </ul>
         </article>
       </div>
       <div class="mt-6 rounded-2xl p-4 sm:p-5 text-sm sm:text-base" style="background-color: #afd13622; border: 1px solid var(--lime)">
         <p class="font-semibold">Important:</p>
-        <p class="mt-2 leading-relaxed">We do not supply medicines without a valid prescription. Availability of any medicine may be affected by supply constraints. If treatment is not suitable, we will explain alternative options.</p>
+        <p class="mt-2 leading-relaxed">   <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
+        <li>Medicines are only supplied following a valid prescription from a qualified prescriber.</li>
+                                         <li>Availability may vary depending on stock and supply.</li>
+                                         <li>If a treatment is not suitable, your clinician will discuss alternative evidence-based options with you. </li></ul></p>
       </div>
     </div>
   </section>
@@ -369,33 +379,42 @@
   <!-- FAQs -->
   <section id="faqs" style="background-color: var(--grey)">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Frequently asked questions</h2>
+      <div class="space-y-2">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">FAQs</h2>
+        <p class="text-sm sm:text-base leading-relaxed opacity-80">Frequently Asked Questions</p>
+      </div>
       <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Is this a prescription service?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">This is a consultation service. A prescription may be offered only if a clinician decides it's appropriate and safe for you.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">This is a clinical consultation service. A prescription may be issued only if a UK-registered prescriber decides it is appropriate and safe for you after reviewing your medical information.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">How quickly will I receive a decision?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">After you submit the questionnaire, a prescriber reviews your information. If any details are missing, we'll contact you for clarification.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">After you submit your questionnaire, a prescriber reviews your details. If any information is missing or needs clarification, you’ll be contacted before a decision is made. Timeframes may vary depending on individual circumstances.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">What will it cost?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80"> If a prescription is issued, medication and follow-up costs are shown before you choose to proceed.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">You’ll be shown all fees clearly before choosing to proceed. If a prescription is issued, the total cost — including medication and any follow-up — will be displayed transparently. No payment is taken until you confirm you wish to continue.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Can you guarantee weight loss?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">No. Everyone responds differently. Medicines are one part of a wider plan including diet, activity, and ongoing support.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">No. Weight management outcomes vary from person to person. Prescription medicines are just one part of a broader plan, which should include a healthy diet, regular activity, and lifestyle support.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Are there side effects?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Like all medicines, side effects are possible. Common effects include gastrointestinal symptoms. You'll receive safety information and links to official leaflets.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">All medicines can cause side effects. Commonly reported effects with weight-management medicines include gastrointestinal symptoms such as nausea, vomiting, or diarrhoea. You’ll receive detailed safety information and links to the official patient information leaflet before starting any treatment.</p>
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Do you work with my GP?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">With your consent, we can share relevant information with your GP to support joined-up care.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.   <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
+                                                                                                                                                                                                                                <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
+                                                                                                                                                                                                                                <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
+                                                                                                                                                                                                                                <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
+                                                                                                                                                                                                                                <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
+                                                                                                                                                                                                                              </ol></p>
         </details>
       </div>
+
     </div>
   </section>
 

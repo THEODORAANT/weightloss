@@ -21,7 +21,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="uat" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,7 +42,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -54,11 +54,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
+      <recent name="$PROJECT_DIR$/perch" />
+      <recent name="$PROJECT_DIR$/perch/templates/pages/landing" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members" />
-      <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -106,22 +106,6 @@
       <workItem from="1759335583029" duration="4974000" />
       <workItem from="1759743479952" duration="7339000" />
       <workItem from="1759826825876" duration="10949000" />
-    </task>
-    <task id="LOCAL-00035" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757669233278</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1757669233278</updated>
-    </task>
-    <task id="LOCAL-00036" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757669329719</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1757669329719</updated>
     </task>
     <task id="LOCAL-00037" summary="weightloss">
       <option name="closed" value="true" />
@@ -485,21 +469,37 @@
     </task>
     <task id="LOCAL-00082" summary="weightloss">
       <option name="closed" value="true" />
-      <created>1760530077233</created>
+      <created>1760621834057</created>
       <option name="number" value="00082" />
       <option name="presentableId" value="LOCAL-00082" />
       <option name="project" value="LOCAL" />
-      <updated>1760530077233</updated>
+      <updated>1760621834058</updated>
     </task>
     <task id="LOCAL-00083" summary="weightloss">
       <option name="closed" value="true" />
-      <created>1760706845457</created>
+      <created>1760622441569</created>
       <option name="number" value="00083" />
       <option name="presentableId" value="LOCAL-00083" />
       <option name="project" value="LOCAL" />
-      <updated>1760706845457</updated>
+      <updated>1760622441569</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761034275938</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1761034275939</updated>
+    </task>
+    <task id="LOCAL-00085" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761120354990</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1761120354990</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -574,6 +574,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="uat" />
     <MESSAGE value="weightloss" />
     <option name="LAST_COMMIT_MESSAGE" value="weightloss" />
   </component>

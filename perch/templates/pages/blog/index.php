@@ -1,6 +1,6 @@
 
     <?php  // output the top of the page
-    perch_layout('global/header', [
+    perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
 
@@ -48,4 +48,4 @@ perch_blog_custom(array(
 
       <?php
 
-      perch_layout('global/footer');?>
+      perch_layout('global/new/footer');?>

@@ -16,7 +16,7 @@
         'active'   => false,
         'title'    => 'Extended',
         'link'     => '/core/settings/diagnostics/?extended',
-        'icon'     => 'core/gear',
+        'png_icon'     => 'core/gear',
     ]);
     $Smartbar->add_item([
         'active'   => false,

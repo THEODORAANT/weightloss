@@ -49,6 +49,14 @@
 
                     ],
             ]);
+          $Smartbar->add_item([
+                        'title'    => 'Enable MultiLingual Website',
+                        'link'     => '/core/apps/content/multilingual/',
+                        'priv'     => 'content.pages.multilingual',
+                        'icon'     => 'core/o-grid',
+                        'position' => 'end',
+                    ]);
+
 
         $Smartbar->add_item([
             'title'    => 'Reorder Pages',

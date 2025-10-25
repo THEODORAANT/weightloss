@@ -192,7 +192,7 @@ class PerchScheduledTasks extends PerchFactory
 				  `taskMessage` varchar(255) DEFAULT NULL,
 				  PRIMARY KEY (`taskID`),
 				  KEY `idx_app` (`taskApp`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 		return $sql;
     }
 

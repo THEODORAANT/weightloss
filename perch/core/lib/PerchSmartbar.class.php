@@ -155,7 +155,9 @@ class PerchSmartbar
 
 		if ($item['icon'] && $item['icon-position'] == 'start') {
 			$content .= PerchUI::icon($item['icon'], $item['icon-size'], $title).' ';
-		}
+		}else if (array_key_exists('png_icon',$item) && $item['png_icon'] && $item['icon-position'] == 'start') {
+             $content .= PerchUI::png_icon($item['png_icon'], $item['icon-size'], $title).' ';
+       }
 
 		if ($item['translate']) {
 			$content .= $this->HTML->wrap('span', $this->Lang->get($item['title']));

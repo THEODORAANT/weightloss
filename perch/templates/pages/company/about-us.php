@@ -183,7 +183,7 @@ Share your health history and our prescribing pharmacists will ensure you receiv
         </div>
     </div>
 </section>
-
+<!--
 <section class="bg-slate-50">
     <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
         <div class="max-w-3xl mx-auto text-center space-y-4">
@@ -207,7 +207,7 @@ Share your health history and our prescribing pharmacists will ensure you receiv
             </article>
             <article class="flex h-full flex-col justify-between gap-6 rounded-3xl bg-white p-8 text-left shadow-sm ring-1 ring-slate-100">
                 <div class="space-y-3">
-                    <h3 class="text-xl font-semibold text-slate-900">Sadia Memon <?php //perch_content('about_leader_two_name'); ?></h3>
+                    <h3 class="text-xl font-semibold text-slate-900">Masum Shah <?php //perch_content('about_leader_two_name'); ?></h3>
                     <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Lead Clinical Pharmacist <?php //perch_content('about_leader_two_role'); ?></p>
                     <p class="text-base leading-relaxed text-slate-600">
                         Sadia works directly with patients to tailor medication plans, monitor outcomes, and coordinate with prescribers. Her focus is on clear communication and giving each person the tools to maintain lasting change. <?php //perch_content('about_leader_two_bio'); ?>
@@ -217,7 +217,7 @@ Share your health history and our prescribing pharmacists will ensure you receiv
         </div>
     </div>
 </section>
-
+-->
 <section class="bg-white">
     <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
         <div class="grid gap-10 rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-600 px-8 py-10 text-white shadow-xl lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:px-12 lg:py-14">

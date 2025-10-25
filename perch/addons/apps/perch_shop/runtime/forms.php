@@ -1,7 +1,14 @@
 <?php
 	function perch_shop_form_handler($SubmittedForm)
     {
-    	if ($SubmittedForm->validate() && $SubmittedForm->validate_recaptcha()) {
+        $form_is_valid = $SubmittedForm->validate();
+
+        $recaptcha_is_valid = true;
+        if (is_callable([$SubmittedForm, 'validate_recaptcha'])) {
+            $recaptcha_is_valid = $SubmittedForm->validate_recaptcha();
+        }
+
+        if ($form_is_valid && $recaptcha_is_valid) {
 
     		$API  = new PerchAPI(1.0, 'perch_shop');
     		$ShopRuntime = PerchShop_Runtime::fetch();

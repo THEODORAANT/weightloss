@@ -159,7 +159,7 @@
           <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[8px]">
             <p class="font-semibold leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Log in</p>
           </a>
-          <a href="/contact-us" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+          <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
             <div class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[inherit]">
               <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
             </div>
@@ -171,7 +171,7 @@
           <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[10px] py-[8px] rounded-[8px]">
             <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Log in</p>
           </a>
-          <a href="/contact-us" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+          <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
             <div class="flex gap-[4px] items-center justify-center overflow-clip px-[10px] py-[8px] rounded-[inherit]">
               <p class="font-semibold leading-[20px] text-[#fcfcfc] text-[14px] whitespace-nowrap">Get Started</p>
             </div>
@@ -203,15 +203,19 @@
             <p class="font-semibold text-[16px] text-[#3328bf]">Home</p>
           </a>
           <div class="py-[16px] border-b border-gray-200">
-            <p class="font-semibold text-[16px] text-[#0d0d0d] mb-[12px]">Weight Loss</p>
+            <p class="font-semibold text-[16px] text-[#0d0d0d] mb-[12px]">Treatments</p>
             <div class="flex flex-col gap-[8px] pl-[16px]">
-              <a href="/medications/mounjaro" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Mounjaro</a>
+            <a href="https://getweightloss.co.uk/weightloss_treatments" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Weight Loss</a>
+
+                           <a href="https://getweightloss.co.uk/order/addons" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]"> Blood Tests</a>
+
+              <!--  <a href="/medications/mounjaro" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Mounjaro</a>
               <a href="/medications/ozempic" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Ozempic</a>
               <a href="/medications/wegovy" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Wegovy</a>
-              <a href="/knowledge/review-answers" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Results</a>
+              <a href="/knowledge/review-answers" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Results</a>-->
             </div>
           </div>
-          <div class="py-[16px] border-b border-gray-200">
+        <!--  <div class="py-[16px] border-b border-gray-200">
             <p class="font-semibold text-[16px] text-[#0d0d0d] mb-[12px]">Knowledge</p>
             <div class="flex flex-col gap-[8px] pl-[16px]">
               <a href="/knowledge/nutrition" class="mobile-menu-link text-[14px] text-[#616161] py-[8px]">Nutrition</a>
@@ -222,13 +226,13 @@
           </div>
           <a href="/blog" class="mobile-menu-link py-[16px] border-b border-gray-200">
             <p class="font-semibold text-[16px] text-[#616161]">Health Hub</p>
-          </a>
+          </a>-->
           <a href="/about-us" class="mobile-menu-link py-[16px] border-b border-gray-200">
             <p class="font-semibold text-[16px] text-[#616161]">About Us</p>
           </a>
           <div class="flex flex-col gap-[12px] pt-[24px]">
             <a href="/client" class="mobile-menu-link text-[14px] text-[#3328bf] font-semibold">Log in</a>
-            <a href="/contact-us" class="mobile-menu-link text-[14px] text-white font-semibold bg-[#3328bf] rounded-[8px] text-center py-[10px]">Get Started</a>
+            <a href="/get-started" class="mobile-menu-link text-[14px] text-white font-semibold bg-[#3328bf] rounded-[8px] text-center py-[10px]">Get Started</a>
           </div>
         </nav>
       </div>

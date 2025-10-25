@@ -11,7 +11,17 @@
     $Regions = new PerchContent_Regions;
     $Page  = false;
     $collections = false;
-    
+       $Languages    = new PerchContent_Languages;
+          $tags = $Languages->find_all();
+
+
+    $lang = false;
+    if (isset($_GET['lang']) && $_GET['lang'] != '') {
+        $filter = 'lang';
+        $lang = trim($_GET['lang']);
+
+    }
+
     // Find the page
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $id = (int) $_GET['id'];
@@ -43,7 +53,7 @@
 	if ($Page->pagePath()=='*') {
         $regions = $Regions->get_shared($Paging);
     }else{
-        $regions = $Regions->get_for_page($Page->id(), $include_shared=false, $new_only=false, $template=false, $Paging);
+        $regions = $Regions->get_for_page($Page->id(), $include_shared=false, $new_only=false, $template=false, $Paging, $lang);
     }
 
 
@@ -56,3 +66,4 @@
             PerchUtil::redirect($page);
         }
     }
+

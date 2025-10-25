@@ -1,21 +1,16 @@
 <?php
 
-
-$sql = "CREATE TABLE IF NOT EXISTS `__PREFIX__user_log` (
- `logID` int(10) unsigned NOT NULL AUTO_INCREMENT,
- `appID` char(32) NOT NULL DEFAULT 'content',
- `itemFK` char(32) NOT NULL DEFAULT 'itemRowID',
- `itemRowID` int(10) unsigned NOT NULL DEFAULT 0,
- `userID` int(10) unsigned NOT NULL DEFAULT 0,
- `logTime` datetime DEFAULT NULL,
- `logCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- PRIMARY KEY (`logID`),
- UNIQUE KEY `idx_uni` (`appID`,`itemFK`,`itemRowID`,`userID`),
- KEY `idx_user` (`userID`),
- KEY `idx_fk` (`itemFK`,`itemRowID`)
+$sql = "CREATE TABLE IF NOT EXISTS `__PREFIX__content_languages` (
+ `languageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `lang` char(32) NOT NULL DEFAULT 'en',
+ `name` char(32) NOT NULL DEFAULT 'English',
+ `active` tinyint(1) unsigned NOT NULL DEFAULT '1',
+ `languageCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (`languageID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;  ";
 
 
+    $sql .= "ALTER TABLE `__PREFIX__content_regions` ADD `language` char(255)  NOT NULL  DEFAULT '*'  AFTER `regionEditRoles`;";
 
 
 

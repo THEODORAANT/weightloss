@@ -387,7 +387,41 @@ class PerchContent_Region extends PerchBase
         
         return false;
     }
+  /**
+     * Duplicate all content items to create a new revision
+     *
+     * @return void
+     * @author Drew McLellan
+     */
+    public function duplicate_region($region_data,$copy_resources=true)
+    {
+    $old_rev = (int) $this->regionLatestRev();
+            $new_rev = 1;
 
+      $data = $region_data;
+            $data['regionLatestRev'] = $new_rev;
+
+            // if this is a new region
+            if ($new_rev==1) {
+                $data['regionRev'] = $new_rev;
+            }
+        $Regions = new PerchContent_Regions();
+      $Region = $Regions->create($data);
+
+        $Items = new PerchContent_Items();
+        $Items->create_new_revision($Region->id(), $old_rev, $new_rev, $copy_resources);
+
+
+
+       // $this->update($data);
+
+       // $Items->delete_old_revisions($this->id(), $this->history_items);
+
+      //  $Perch = Perch::fetch();
+       // $Perch->event('region.create_revision', $this);
+
+        return $Region;
+    }
     
     /**
      * Duplicate all content items to create a new revision

@@ -67,7 +67,7 @@ class PerchContent_CollectionIndex extends PerchBase
 
         $sql .= " PRIMARY KEY (`itemID`),
               KEY `idx_id` (`_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         PerchUtil::debug($sql);
 

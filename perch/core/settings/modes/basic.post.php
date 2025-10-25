@@ -15,7 +15,7 @@
         'active' => true,
         'title'  => 'Settings',
         'link'   => '/core/settings/',
-        'icon'   => 'core/gear',
+        'png_icon'   => 'core/gear',
     ]);
 
     echo $Smartbar->render();

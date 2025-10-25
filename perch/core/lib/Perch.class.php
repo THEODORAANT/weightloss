@@ -4,7 +4,7 @@ class Perch
 {
     static protected $instance;
 
-    public $version = '4.9';
+    public $version = '5.0';
 
     public $admin           = false;
     private $page           = false;
@@ -120,7 +120,6 @@ class Perch
         $template  = $parts[2];
         $timestamp = (isset($parts[3]) ? $parts[3] : false);
 
-
         if ($appIDs) {
             $appIDs = explode(' ', $appIDs);
             if (is_array($appIDs)) {
@@ -129,7 +128,6 @@ class Perch
                         $API = new PerchAPI(1.0, $appID);
                         $SubmittedForm = $API->get('SubmittedForm');
                         $SubmittedForm->populate($formID, $template, $post, $files, $timestamp);
-
                         call_user_func($appID.'_form_handler', $SubmittedForm);
                     } else {
                         PerchUtil::debug($appID.' form handler not found.', 'error');
@@ -143,8 +141,6 @@ class Perch
     {
         if (!isset($this->form_errors[$formID])) $this->form_errors[$formID]=array();
         $this->form_errors[$formID][$fieldID] = $type;
-       // echo "log error";
-        //print_r($this->form_errors);
     }
 
     public function get_form_errors($formID)
@@ -233,6 +229,7 @@ class Perch
             if (isset($this->event_listeners[$event]) && count($this->event_listeners[$event])) {
                 foreach($this->event_listeners[$event] as $callback) {
                     if (is_callable($callback)) {
+
                         call_user_func($callback, $Event);
                     }
                 }
@@ -241,6 +238,7 @@ class Perch
             if (isset($this->event_listeners['*']) && count($this->event_listeners['*'])) {
                 foreach($this->event_listeners['*'] as $callback) {
                     if (is_callable($callback)) {
+
                         call_user_func($callback, $Event);
                     }
                 }
