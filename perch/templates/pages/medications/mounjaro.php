@@ -128,11 +128,11 @@
           <p class="font-normal leading-[24px] text-[16px] text-[grey]">Dual Action for Weight Loss</p>
         </div>
         <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
-          <img src="/new/images/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
           <p class="font-normal leading-[24px] text-[16px] text-[grey]">Weekly Application</p>
         </div>
         <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
-          <img src="/new/images/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
+          <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
           <p class="font-normal leading-[24px] text-[16px] text-[grey]">No Subscriptions</p>
         </div>
       </div>
@@ -169,7 +169,7 @@
             </div>
           </div>
           <div class="h-[300px] md:h-[400px] lg:h-[450px] w-full lg:w-[544px] rounded-[20px] overflow-hidden">
-            <img src="/new/images/images/mounjaro/mounjaro-img-1.png" alt="Mounjaro Injection" class="w-full h-full object-cover" />
+            <img src="/new/images/mounjaro/mounjaro-img-1.png" alt="Mounjaro Injection" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
@@ -178,7 +178,7 @@
       <div class="w-full flex flex-col items-center justify-center">
         <div class="flex flex-col lg:flex-row gap-[32px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full lg:max-w-[1120px]">
           <div class="h-[300px] md:h-[400px] lg:h-[450px] w-full lg:w-[544px] rounded-[20px] overflow-hidden order-2 lg:order-1">
-            <img src="/new/images/images/mounjaro/mounjaro-img-2.png" alt="Side Effects" class="w-full h-full object-cover" />
+            <img src="/new/images/mounjaro/mounjaro-img-2.png" alt="Side Effects" class="w-full h-full object-cover" />
           </div>
           <div class="flex flex-col gap-[20px] lg:gap-[30px] items-start w-full lg:w-[544px] order-1 lg:order-2">
             <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
@@ -199,22 +199,22 @@
       <div id="features" class="w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pb-[60px] md:pb-[80px] lg:pb-[100px]">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-[20px] w-full">
           <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-            <img src="/new/images/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
             <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Ongoing Support</p>
             <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">Always available via email/chat.</p>
           </div>
           <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-            <img src="/new/images/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
             <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">You are in Control</p>
             <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">Each month you decide to continue or stop.</p>
           </div>
           <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-            <img src="/new/images/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
             <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Additional Testing</p>
             <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">We can arrange blood tests, through our partners</p>
           </div>
           <div class="bg-white/40 border border-white/50 flex flex-col gap-[12px] items-start justify-start p-[24px] rounded-[20px]">
-            <img src="/new/images/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
+            <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[40px] h-[40px]" />
             <p class="font-semibold leading-[30px] text-[#0d0d0d] text-[20px]">Health Hub</p>
             <p class="font-normal leading-[30px] text-[#0d0d0d] text-[20px]">The health hub, an access point for news and tips.</p>
           </div>
@@ -234,18 +234,16 @@
 
 
 
-
-      <!-- Pricing Table -->
+   <!-- Pricing Table -->
       <div id="pricing" class="bg-white w-full flex flex-col items-center justify-center">
         <div class="bg-white flex flex-col gap-[40px] lg:gap-[50px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-center w-full lg:max-w-[1120px]">
-            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services</p>
-            </div>
-            <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">GIP and GLP-1 Hormone Receptor Medications</p>
-            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.
-
-*Blood tests are provided by our UKAS accredited service partner.</p>
+              <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+                <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services <?php //perch_content('pricing_badge_text'); ?></p>
+              </div>
+              <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*. <?php //perch_content('pricing_heading'); ?></p>
+              <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">
+*Blood tests are provided by our UKAS accredited service partner. <?php //perch_content('pricing_note'); ?></p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">
                <?php
@@ -263,51 +261,53 @@
       </div>
     </div>
 
-    <!-- Testimonials Section -->
-    <div id="testimonials" class="bg-white w-full flex flex-col items-center justify-center">
-      <!-- Testimonials Header -->
-      <div class="bg-white w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pt-[60px] md:pt-[80px] lg:pt-[100px] pb-[40px] lg:pb-[50px]">
-        <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start justify-center w-full lg:max-w-[1120px]">
-          <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-            <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">More success stories</p>
-          </div>
-          <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">People who already love us</p>
-          <p class="text-[16px] text-[grey] w-full max-w-[742px] leading-[24px]">With each client having different triggers and objectives for starting their weight loss journey, we share a few of the success stories here;</p>
-        </div>
-      </div>
 
-      <!-- Testimonials Cards -->
-      <div class="bg-white w-full flex flex-col items-center justify-center pb-[60px] md:pb-[80px] lg:pb-[100px]">
-        <!-- Mobile/Tablet Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[24px] w-full lg:hidden px-[20px] md:px-[40px]">
-           <?php
-                          perch_collection('SuccessStories', [
+     <!-- Testimonials Section -->
+       <div id="testimonials" class="bg-white w-full flex flex-col items-center justify-center">
+         <!-- Testimonials Header -->
+         <div class="bg-white w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pt-[60px] md:pt-[80px] lg:pt-[100px] pb-[40px] lg:pb-[50px]">
+           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start justify-center w-full lg:max-w-[1120px]">
+               <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+                 <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">More success stories <?php //perch_content('testimonials_badge_text'); ?></p>
+               </div>
+               <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">People who already love us <?php //perch_content('testimonials_heading'); ?></p>
+               <p class="text-[16px] text-[grey] w-full max-w-[742px] leading-[24px]">With each client having different triggers and objectives for starting their weight loss journey, we share a few of the success stories here; <?php //perch_content('testimonials_description'); ?></p>
+           </div>
+         </div>
 
-                              'count'      => 3,
-                          ]);
-                      ?>
+         <!-- Testimonials Cards -->
+         <div class="bg-white w-full flex flex-col items-center justify-center pb-[60px] md:pb-[80px] lg:pb-[100px]">
+           <!-- Mobile/Tablet Grid -->
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[24px] w-full lg:hidden px-[20px] md:px-[40px]">
+              <?php
+                             perch_collection('SuccessStories', [
 
-
-
-        </div>
-
-        <!-- Desktop Carousel -->
-        <div class="relative w-full overflow-hidden hidden lg:block">
-          <div id="testimonialCarousel" class="testimonial-carousel flex gap-[32px]">
-             <?php
-                            perch_collection('SuccessStories', [
-
-                                'count'      => 4,
-                            ]);
-                        ?>
+                                 'count'      => 3,
+                             ]);
+                         ?>
 
 
 
+           </div>
 
-          </div>
-        </div>
-      </div>
-    </div>
+           <!-- Desktop Carousel -->
+           <div class="relative w-full overflow-hidden hidden lg:block">
+             <div id="testimonialCarousel" class="testimonial-carousel flex gap-[32px]">
+                <?php
+                               perch_collection('SuccessStories', [
+
+                                   'count'      => 4,
+                               ]);
+                           ?>
+
+
+
+
+             </div>
+           </div>
+         </div>
+       </div>
+
 
     <!-- Features Section -->
     <div id="features" class="w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] pb-[60px] md:pb-[80px] lg:pb-[100px]">
@@ -345,17 +345,17 @@
       </div>
     </div>
 
-    <!-- FAQ Section -->
+ <!-- FAQ Section -->
     <div id="faq" class="bg-white w-full flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px]">
       <div class="bg-white flex flex-col lg:flex-row gap-[40px] lg:gap-[32px] items-start justify-center w-full lg:max-w-[1120px]">
         <div class="flex flex-col gap-[24px] lg:gap-0 lg:h-[588px] items-start justify-between w-full lg:w-[418px]">
           <div class="flex flex-col gap-[10px] items-start justify-center">
-            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">FAQs</p>
-            </div>
-            <p class="font-semibold leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] w-full lg:w-[368px]">Your questions answered</p>
+              <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+                <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">FAQs <?php //perch_content('faq_badge_text'); ?></p>
+              </div>
+              <p class="font-semibold leading-[40px] md:leading-[50px] lg:leading-[60px] text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] w-full lg:w-[368px]">Your questions answered <?php //perch_content('faq_heading'); ?></p>
 
-            <p class="font-medium leading-[26px] md:leading-[30px] text-[18px] md:text-[20px] text-[grey]">Couldn't not find what you were looking for? Write to us at help@getweightloss.co.uk.</p>
+              <p class="font-medium leading-[26px] md:leading-[30px] text-[18px] md:text-[20px] text-[grey]">Couldn't not find what you were looking for? Write to us at help@getweightloss.co.uk. <?php //perch_content('faq_description'); ?></p>
             <div class="flex flex-wrap gap-[6px] items-start">
             </div>
           </div>
@@ -374,6 +374,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- Blog Section -->
     <div id="blog" class="w-full flex flex-col items-center justify-center">
