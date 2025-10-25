@@ -26,6 +26,12 @@
                 'priv'   => 'content.pages.manage_urls',
                 'icon'   => 'core/o-signs',
             ]); 
+         $Smartbar->add_item([
+                'title'  => 'Translate Page',
+                'link'   => '/core/apps/content/page/translate/?id='.$Page->id(),
+                'priv'   => 'content.pages.translate',
+                'icon'   => 'core/lang',
+            ]);
 
             $Smartbar->add_item([
                 'title'         => 'View Page',

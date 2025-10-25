@@ -39,13 +39,13 @@
       `tagSlug` VARCHAR(255) NOT NULL DEFAULT '',
       `tagCount` int(10) unsigned NOT NULL DEFAULT '0',
       PRIMARY KEY (`tagID`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
     CREATE TABLE IF NOT EXISTS `__PREFIX__resources_to_tags` (
       `resourceID` int(10) NOT NULL DEFAULT '0',
       `tagID` int(10) NOT NULL DEFAULT '0',
       PRIMARY KEY (`resourceID`,`tagID`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
     ";
 
@@ -88,7 +88,7 @@
       KEY `idx_resource` (`resourceID`),
       KEY `idx_fk` (`itemFK`,`itemRowID`),
       UNIQUE KEY `idx_uni` (`appID`,`itemFK`,`itemRowID`,`resourceID`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
     INSERT INTO `__PREFIX__user_privileges` (`privKey`, `privTitle`, `privOrder`)
@@ -111,7 +111,7 @@
       `catDynamicFields` text NOT NULL,
       PRIMARY KEY (`catID`),
       KEY `idx_set` (`setID`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
     CREATE TABLE IF NOT EXISTS `__PREFIX__category_sets` (
@@ -122,7 +122,7 @@
       `setCatTemplate` char(255) NOT NULL DEFAULT 'category.html',
       `setDynamicFields` text,
       PRIMARY KEY (`setID`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
     INSERT INTO `__PREFIX__user_privileges` (`privKey`, `privTitle`, `privOrder`)

@@ -23,7 +23,7 @@
             <div class="flex flex-col gap-[12px] items-start leading-[24px] text-[14px] md:text-[16px] text-white w-full">
               <a href="/get-started" class="hover:text-[#afd136] transition-colors">Get Started</a>
               <a href="/client" class="hover:text-[#afd136] transition-colors">Log in</a>
-              <a href="/blog" class="hover:text-[#afd136] transition-colors">Blog</a>
+              <!--<a href="/blog" class="hover:text-[#afd136] transition-colors">Blog</a>-->
             </div>
           </div>
 

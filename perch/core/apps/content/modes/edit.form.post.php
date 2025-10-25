@@ -264,7 +264,7 @@ document.getElementById('btnGenerateAI').addEventListener('click', function(e){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({prompt: prompt})
     }).then(function(r){return r.json();}).then(function(data){
-        var textarea = document.querySelector('textarea');
+        var textarea = document.querySelector('#content-edit textarea');
         if(textarea) textarea.value = data.content;
     });
 });

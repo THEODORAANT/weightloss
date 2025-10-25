@@ -1,12 +1,17 @@
 <?php
-    include(__DIR__ . '/../../../config/config.php');
 class PerchContent_AI
 {
     private $api_key;
 
-    public function __construct()
+    public function __construct($api_key = null)
     {
-         $this->api_key = OPENAI_API_KEY;
+        if ($api_key !== null) {
+            $this->api_key = $api_key;
+        } elseif (defined('OPENAI_API_KEY')) {
+            $this->api_key = OPENAI_API_KEY;
+        } else {
+            $this->api_key = '';
+        }
     }
 
     public function generate($prompt)

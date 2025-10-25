@@ -1,4 +1,4 @@
-<?php
+<?php echo "delerer";
     include(__DIR__ . '/../../../../inc/pre_config.php');
     include(__DIR__ . '/../../../../../config/config.php');
     include(PERCH_CORE . '/inc/loader.php');

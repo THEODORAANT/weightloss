@@ -19,9 +19,9 @@
         $postvars = ['email'];
         $data     = $Form->receive($postvars);
 
-		if (PERCH_DEBUG) {
+	/*	if (PERCH_DEBUG) {
             $Email->SMTPDebug = 2;
-        }
+        }*/
         
         $Email->recipientEmail($data['email']);
         $Email->senderName(PERCH_EMAIL_FROM_NAME);

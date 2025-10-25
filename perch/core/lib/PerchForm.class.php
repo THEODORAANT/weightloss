@@ -189,6 +189,7 @@ class PerchForm
 	{
 		$this->error	= true;
 		$r				= true;
+		
 
 		//check required
 		foreach($this->required as $key => $value) {
@@ -199,6 +200,7 @@ class PerchForm
 				// check in FILES
 				if (!isset($_FILES[$key]) && !isset($_POST[$key.'_populated'])) {
 					$r	= false;
+
 				}
 			}
 		}
@@ -209,9 +211,11 @@ class PerchForm
 			if (isset($_POST[$key]) && !$_POST[$key]==''){
 				if (!$this->is_valid($key, $value)) {
 				 	$r	= false;
+
 				}
 			}
 		}
+
 
 
 		if ($r) $this->error = false;
@@ -775,7 +779,7 @@ class PerchForm
 
         $d          = [];
         $d['hour']  = date('H', strtotime($value));
-        $d['minute']= date('i', strtotime($value));
+        $d['minute']= date('M', strtotime($value));
 
         // Hours
         $hours  = [];

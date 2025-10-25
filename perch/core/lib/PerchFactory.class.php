@@ -300,7 +300,6 @@ class PerchFactory
             if (false && class_exists('SplFixedArray')) {
                 $out = new SplFixedArray($row_count);
                 for($i=0; $i<$row_count; $i++) {
-
                     $r = new $this->singular_classname($rows[$i]);
                     if (is_object($r) && $this->api) $r->api($this->api);
                     $out[$i] = $r;
@@ -310,7 +309,6 @@ class PerchFactory
                 foreach($rows as $row) {
                     $r = new $this->singular_classname($row);
                     if (is_object($r) && $this->api) $r->api($this->api);
-
                     $out[] = $r;
                 }
             }
@@ -627,8 +625,9 @@ class PerchFactory
                     $sql .= ' LIMIT '.$limit;
                 }
             }
-            $rows    = $this->db->get_rows($sql);
 
+
+            $rows    = $this->db->get_rows($sql);
             if ($Paging->enabled()) {
                 $Paging->set_total($this->db->get_count($Paging->total_count_sql()));
             }
@@ -829,7 +828,6 @@ class PerchFactory
 
             $where_clause =' idx.itemKey='.$this->db->pdb($this->pk).' ';
 
-
             // Categories
             if (isset($opts['category']) && !$this->bypass_categories) {
                 $cats = $opts['category'];
@@ -853,10 +851,7 @@ class PerchFactory
                     }                   
 
                     $sql .= $this->_get_filter_sub_sql('_category', $pos, false, $match, true, $where_clause);
-
                     $sql .= $this->_get_filter_sub_sql('_category', $neg, true, $match, true, $where_clause);
-
-
                 }
 
             }
@@ -888,7 +883,6 @@ class PerchFactory
                 }
 
             }
-
 
             // Runtime restrictions
             if (!$Perch->admin && count($this->runtime_restrictions)) {
@@ -1402,7 +1396,6 @@ class PerchFactory
 
             }
             $cat_sql .= '(' . implode(' OR ', $where). ')';
-
 
             if ($match=='all') {
                 $cat_sql .= ' GROUP BY idx.itemID HAVING COUNT(idx.itemID)='.count($items).' ';

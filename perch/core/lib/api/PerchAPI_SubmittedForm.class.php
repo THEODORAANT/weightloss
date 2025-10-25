@@ -58,69 +58,43 @@ class PerchAPI_SubmittedForm
         $Perch = Perch::fetch();
         $Perch->log_form_error($this->formID, $field, $type);
     }
+    private function validate_recaptcha($token)
+    {
 
- public function validate_recaptcha()
-        {
-           // echo "validate_recaptcha";
-                      if (!defined('PERCH_reCAPTCHA_SECRET_KEY')) {
-                            return false;
-                        }
+          if (!defined('PERCH_reCAPTCHA_SECRET_KEY')) {
+                return false;
+            }
+             $url="https://www.google.com/recaptcha/api/siteverify";
+             $data = [];
+             $data['secret']     = PERCH_reCAPTCHA_SECRET_KEY;
+             $data['response']    =$token;
 
-         $valid = true;
-
-              //  echo "submit"; print_r($_POST);
-                                        if (isset($_POST["g-recaptcha-response"]) ) {
-                 $valid = false;
-                                              if ($_POST["g-recaptcha-response"]=='') {
-                                                $valid = false;
-                                                //$Perch->log_form_error($this->formID, $Tag->id(), 'required');
-                                           }else{
-                                          //  $valid =$this->validate_recaptcha($_POST["g-recaptcha-response"]);
-                                     $token=$_POST["g-recaptcha-response"];
-                 $url="https://www.google.com/recaptcha/api/siteverify";
-                 $data = [];
-                 $data['secret']     = PERCH_reCAPTCHA_SECRET_KEY;
-                 $data['response']    =$token;
-
-                 $content = http_build_query($data);
-                 $ch 	= curl_init();
-     			curl_setopt($ch, CURLOPT_URL, $url);
-     			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-     			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-     			curl_setopt($ch, CURLOPT_POST, true);
-     			curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
-                 curl_setopt($ch, CURLOPT_VERBOSE, true);
-     			$result = curl_exec($ch);
+             $content = http_build_query($data);
+             $ch 	= curl_init();
+ 			curl_setopt($ch, CURLOPT_URL, $url);
+ 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+ 			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+ 			curl_setopt($ch, CURLOPT_POST, true);
+ 			curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
+             curl_setopt($ch, CURLOPT_VERBOSE, true);
+ 			$result = curl_exec($ch);
 
 
-     			PerchUtil::debug($result);
-     			$http_status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+ 			PerchUtil::debug($result);
+ 			$http_status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-     			if ($http_status!=200) {
-     			    $result = false;
-     			    PerchUtil::debug('Not HTTP 200: '.$http_status);
-     			}
-     			curl_close($ch);
-     			$response=json_decode($result);
+ 			if ($http_status!=200) {
+ 			    $result = false;
+ 			    PerchUtil::debug('Not HTTP 200: '.$http_status);
+ 			}
+ 			curl_close($ch);
+ 			$response=json_decode($result);
 
-     			//print_r($response);
-     			$result = $response->success;
+ 			//print_r($response);
+ 			$result = $response->success;
 
-
-                                            if( $result){
-                                              $valid = true;
-
-                                             }
-
-                                           }
-
-                                        }
-
-
-
-        return  $valid;
-
-        }
+ 			return $result;
+    }
 
     public function validate()
     {
@@ -172,7 +146,24 @@ class PerchAPI_SubmittedForm
 			            }
 			        }
 
+                     if($Tag->type()=="submit"){
 
+                        if (isset($_POST["g-recaptcha-response"]) ) {
+
+                              if ($_POST["g-recaptcha-response"]=='') {
+                                $valid = false;
+                                $Perch->log_form_error($this->formID, $Tag->id(), 'required');
+                           }else{
+                            $valid =$this->validate_recaptcha($_POST["g-recaptcha-response"]);
+                            if( $valid==false){
+                              $valid = false;
+                              $Perch->log_form_error($this->formID, $Tag->id(), 'invalid');
+                             }
+
+                           }
+
+                        }
+			        }
 
 
 			        // Format

@@ -25,7 +25,7 @@
 			  KEY `idx_item` (`itemID`),
 			  KEY `idx_keyval` (`indexKey`,`indexValue`),
 			  KEY `idx_regrev` (`regionID`,`itemRev`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 		CREATE TABLE IF NOT EXISTS `__PREFIX__resources` (
 		  `resourceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -40,7 +40,7 @@
 		  KEY `idx_app` (`resourceApp`),
 		  KEY `idx_key` (`resourceKey`),
 		  KEY `idx_type` (`resourceType`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 		
 		ALTER TABLE `__PREFIX__content_items` ADD INDEX `idx_regrev` USING BTREE (itemID, regionID, itemRev);
@@ -58,7 +58,7 @@
 		  `groupTitle` varchar(255) NOT NULL DEFAULT '',
 		  `groupSlug` varchar(255) NOT NULL DEFAULT '',
 		  PRIMARY KEY (`groupID`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 		CREATE TABLE IF NOT EXISTS `__PREFIX__navigation_pages` (
 		  `navpageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -71,7 +71,7 @@
 		  PRIMARY KEY (`navpageID`),
 		  KEY `idx_group` (`groupID`),
 		  KEY `idx_page_group` (`pageID`,`groupID`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 
 		ALTER TABLE `__PREFIX__user_privileges` ADD UNIQUE INDEX `idx_key` (`privKey`);
@@ -114,7 +114,7 @@
 		  `roleID` int(10) unsigned NOT NULL,
 		  `privID` int(10) unsigned NOT NULL,
 		  PRIMARY KEY (`roleID`,`privID`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 	";
 

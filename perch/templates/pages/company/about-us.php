@@ -183,7 +183,7 @@ Share your health history and our prescribing pharmacists will ensure you receiv
         </div>
     </div>
 </section>
-
+<!--
 <section class="bg-slate-50">
     <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
         <div class="max-w-3xl mx-auto text-center space-y-4">
@@ -217,7 +217,7 @@ Share your health history and our prescribing pharmacists will ensure you receiv
         </div>
     </div>
 </section>
-
+-->
 <section class="bg-white">
     <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
         <div class="grid gap-10 rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-600 px-8 py-10 text-white shadow-xl lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:px-12 lg:py-14">

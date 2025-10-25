@@ -134,15 +134,3 @@
 
         echo $s;
     }
-
-       function perch_log_mongo($data)
-        { //echo "perch_log_mongo";
-        //print_r($data);
-        $userId = $data["userId"];
-        $questionnaireId = 1;
-        $step = $data["step"];
-        $answer = $data["answer"];
-
-        $logger = new PerchMongoDB();
-        $logger->logAnswer($userId, $questionnaireId, $step, $answer);
-        }

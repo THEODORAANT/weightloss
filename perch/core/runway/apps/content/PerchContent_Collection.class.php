@@ -353,7 +353,7 @@ class PerchContent_Collection extends PerchBase
 
 	    
 	    /**
-	     * Duplicate all content items to create a new revision
+	     *  Duplicate all content items to create a new revision
 	     *
 	     * @return void
 	     * @author Drew McLellan

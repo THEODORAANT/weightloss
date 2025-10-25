@@ -10,7 +10,7 @@
         KEY `idx_resource` (`resourceID`),
         KEY `idx_fk` (`itemFK`,`itemRowID`),
         UNIQUE KEY `idx_uni` (`appID`,`itemFK`,`itemRowID`,`resourceID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       ALTER TABLE `__PREFIX__content_regions` ADD `regionUpdated` TIMESTAMP  NOT NULL  DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP  AFTER `regionEditRoles`;
 
@@ -34,7 +34,7 @@
         PRIMARY KEY (`countID`),
         KEY `idx_cat` (`catID`),
         KEY `idx_cat_type` (`countType`,`catID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       ALTER TABLE `__PREFIX__categories` CHANGE `catDisplayPath` `catDisplayPath` CHAR(255) NOT NULL DEFAULT '';
 
@@ -53,7 +53,7 @@
         `passwordLastUsed` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
         PRIMARY KEY (`passwordID`),
         KEY `idx_user` (`userID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       ALTER TABLE `__PREFIX__users` ADD `userLastFailedLogin` DATETIME  NULL  AFTER `userPasswordTokenExpires`;
 
@@ -81,7 +81,7 @@
         PRIMARY KEY (`collectionID`),
         KEY `idx_key` (`collectionKey`),
         KEY `idx_appmenu` (`collectionInAppMenu`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__collection_revisions` (
         `itemID` int(10) unsigned NOT NULL,
@@ -93,7 +93,7 @@
         `itemCreatedBy` char(32) NOT NULL DEFAULT '',
         PRIMARY KEY (`itemID`),
         KEY `idx_order` (`itemOrder`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__collection_items` (
         `itemRowID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -110,7 +110,7 @@
         KEY `idx_collection` (`collectionID`),
         KEY `idx_regrev` (`itemID`,`collectionID`,`itemRev`),
         FULLTEXT KEY `idx_search` (`itemSearch`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__collection_index` (
         `indexID` int(10) NOT NULL AUTO_INCREMENT,
@@ -126,7 +126,7 @@
         KEY `idx_item` (`itemID`),
         KEY `idx_keyval` (`indexKey`,`indexValue`),
         KEY `idx_colrev` (`collectionID`,`itemRev`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__page_routes` (
         `routeID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -136,7 +136,7 @@
         `routeOrder` int(10) unsigned NOT NULL,
         PRIMARY KEY (`routeID`),
         KEY `idx_page` (`pageID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__backup_runs` (
         `runID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -148,14 +148,14 @@
         `runDbFile` char(255) NOT NULL,
         PRIMARY KEY (`runID`),
         KEY `idx_plan` (`planID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__backup_resources` (
         `planID` int(10) unsigned NOT NULL,
         `resourceID` int(10) unsigned NOT NULL,
         `runID` int(10) unsigned NOT NULL,
         PRIMARY KEY (`planID`,`resourceID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__backup_plans` (
         `planID` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -170,7 +170,7 @@
         `planFrequency` int(10) unsigned NOT NULL DEFAULT '24',
         `planBucket` char(16) NOT NULL DEFAULT '',
         PRIMARY KEY (`planID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       INSERT INTO `__PREFIX__user_privileges` (`privKey`, `privTitle`, `privOrder`)
       VALUES ('content.regions.revert','Roll back regions',3);
@@ -183,7 +183,7 @@
         `routeOrder` int(10) unsigned NOT NULL,
         PRIMARY KEY (`routeID`),
         KEY `idx_page` (`pageID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       ALTER TABLE `__PREFIX__collections` ADD INDEX `idx_appmenu` (`collectionInAppMenu`);
 
@@ -197,14 +197,14 @@
         `runDbFile` char(255) NOT NULL,
         PRIMARY KEY (`runID`),
         KEY `idx_plan` (`planID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__backup_resources` (
         `planID` int(10) unsigned NOT NULL,
         `resourceID` int(10) unsigned NOT NULL,
         `runID` int(10) unsigned NOT NULL,
         PRIMARY KEY (`planID`,`resourceID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       CREATE TABLE IF NOT EXISTS `__PREFIX__backup_plans` (
         `planID` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -219,7 +219,7 @@
         `planFrequency` int(10) unsigned NOT NULL DEFAULT '24',
         `planBucket` char(16) NOT NULL DEFAULT '',
         PRIMARY KEY (`planID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
     ALTER TABLE `__PREFIX__collection_revisions` ADD `itemSearchable` TINYINT(1)  UNSIGNED  NOT NULL  DEFAULT '1'  AFTER `itemCreatedBy`;
 
@@ -270,7 +270,7 @@
               KEY `idx_resource` (`resourceID`),
               KEY `idx_fk` (`itemFK`,`itemRowID`),
               UNIQUE KEY `idx_uni` (`appID`,`itemFK`,`itemRowID`,`resourceID`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
       $DB->execute($query);
   }
 

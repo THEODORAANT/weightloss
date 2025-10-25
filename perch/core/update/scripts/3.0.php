@@ -13,7 +13,7 @@
         `userID` int(10) unsigned NOT NULL DEFAULT '0',
         `itemInternal` tinyint(1) unsigned NOT NULL DEFAULT '0',
         PRIMARY KEY (`itemID`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
     ";
 
@@ -33,7 +33,7 @@
           PRIMARY KEY (`lockID`),
           KEY `idx_key` (`contentKey`),
           KEY `idx_ku` (`contentKey`,`userID`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
         CREATE TABLE IF NOT EXISTS `__PREFIX__user_role_buckets` (
           `urbID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -46,7 +46,7 @@
           `roleDefault` tinyint(1) unsigned NOT NULL DEFAULT '1',
           PRIMARY KEY (`urbID`),
           KEY `idx_rolebucket` (`roleID`,`bucket`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
       ";
 

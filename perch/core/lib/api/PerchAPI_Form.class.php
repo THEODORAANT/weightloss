@@ -118,8 +118,6 @@ class PerchAPI_Form extends PerchForm
         if (isset($_POST['add_another']) && $_POST['add_another']!='') {
             $this->submitted_with_add_another = true;
         }
-
-
         return $this->posted() && $this->validate();
     }
 

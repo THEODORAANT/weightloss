@@ -1,7 +1,5 @@
 <?php
-error_reporting(E_ERROR | E_PARSE);
-//echo session_status();
-//echo PHP_SESSION_NONE;
+
 class PerchSession
 {
 	public static function commence()
@@ -10,7 +8,7 @@ class PerchSession
 			define('PERCH_PARANOID', false);
 		}
 
-	    if (   (session_status() === PHP_SESSION_NONE)  && !isset($_SESSION['ready'])) {
+	    if (!isset($_SESSION['ready'])) {
 
 	    	$path          = '/';
 			$domain        = null;
@@ -28,32 +26,6 @@ class PerchSession
 
 	        session_start();
 	        $_SESSION['ready'] = true;
-
-	       /* $domain = $_SERVER['HTTP_HOST'];
-
-            // Remove 'www.' if it's part of the domain
-            $domain = preg_replace('/^www\./', '', $domain);
-            if($domain=="nlclinicHarlow.co.uk"){
-               setcookie('branch', 'harlow', time() + (30 * 24 * 60 * 60), "/"); // Cookie will expire in 30 days
-                $branch = 'harlow';
-            } elseif($domain=="nlclinicsouthampton.com"){
-              setcookie('branch', 'sa', time() + (30 * 24 * 60 * 60), "/"); // Cookie will expire in 30 days
-                $branch = 'sa';
-            }elseif($domain=="nlclinicisleofwight.co.uk"){
-              setcookie('branch', 'iow', time() + (30 * 24 * 60 * 60), "/"); // Cookie will expire in 30 days
-              $branch = 'iow';
-            }else{
-
-             if (isset($_GET['branch'])) {
-                  setcookie('branch', $_GET['branch'], time() + (30 * 24 * 60 * 60), "/"); // Cookie will expire in 30 days
-                  if (isset($_GET['branch']) && isset($_COOKIE['branch']) ){
-                  if ($_GET['branch']!=$_COOKIE['branch']){
-                  //header("Location: " . $_SERVER['PHP_SELF']);
-                  exit();
-                  }
-                  }
-                }
-            }*/
 	        self::extend_session();
 	    }
 	}

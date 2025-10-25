@@ -38,7 +38,12 @@
                 'priv'   => 'content.pages.manage_urls',
                 'icon'   => 'core/o-signs',
             ]); 
-
+       $Smartbar->add_item([
+                'title'  => 'Translate Page',
+                'link'   => '/core/apps/content/page/translate/?id='.$Page->id(),
+                'priv'   => 'content.pages.translate',
+                'icon'   => 'core/lang',
+            ]);
 
 			$Smartbar->add_item([
 				'title'    => 'View Page',
@@ -57,7 +62,37 @@
 				'position' => 'end',
 				]);	 			
 		}
-	   
+
+        $tag_options = [];
+        if (PerchUtil::count($tags)) {
+            foreach($tags as $Language) {
+           // print_r($Language);
+                $tag_options[] = [
+                    'value' => $Language->lang(),
+                    'title' => $Language->name(),
+                ];
+            }
+        }
+
+        $Smartbar->add_item([
+            'id'      => 'cf',
+            'title'   => 'By Language',
+            'icon'    => 'core/lang',
+            'active'  => PerchRequest::get('lang'),
+            'type'    => 'filter',
+            'arg'     => 'lang',
+            //'persist' => ['view'],
+            'options' => $tag_options,
+            'actions' => [
+                        [
+                            'title'  => 'Clear',
+                            'remove' => ['lang', 'show-filter'],
+                            'icon'   => 'core/cancel',
+                        ]
+                    ],
+        ]);
+
+
 
 		echo $Smartbar->render();
 
