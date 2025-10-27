@@ -21,7 +21,7 @@
         </div>
         <div class="flex flex-col gap-[24px] lg:gap-[32px] items-start px-[20px] md:px-[40px] lg:pl-[15px] lg:pr-[160px] py-[40px] lg:py-0 w-full lg:w-[719px] order-1 lg:order-2">
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
-            <h1 class="font-semibold text-[#0d0d0d] text-[36px] md:text-[56px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.12px] lg:tracking-[-1.44px] leading-[44px] md:leading-[68px] lg:leading-[90px]">Mounjaro: Transforming Weight Loss Success</h1>
+            <h1 class="font-semibold text-[#0d0d0d] text-[36px] md:text-[56px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.12px] lg:tracking-[-1.44px] leading-[44px] md:leading-[68px] lg:leading-[90px]">Mounjaro: All you need to know</h1>
           </div>
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full max-w-[500px]">
             <?php perch_shop_product_variants('mounjaro-mounjaro', [

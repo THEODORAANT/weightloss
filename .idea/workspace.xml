@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/medication_variant_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/client/reorder-questionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/client/reorder-questionnaire.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/getStarted/questionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/getStarted/questionnaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/global/new/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/global/new/header.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,22 +110,6 @@
       <workItem from="1759335583029" duration="4974000" />
       <workItem from="1759743479952" duration="7339000" />
       <workItem from="1759826825876" duration="10949000" />
-    </task>
-    <task id="LOCAL-00039" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757767652580</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1757767652580</updated>
-    </task>
-    <task id="LOCAL-00040" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757767770820</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1757767770820</updated>
     </task>
     <task id="LOCAL-00041" summary="weightloss">
       <option name="closed" value="true" />
@@ -505,7 +487,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761407558666</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761558204543</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1761558204544</updated>
+    </task>
+    <task id="LOCAL-00089" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761565056482</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1761565056483</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

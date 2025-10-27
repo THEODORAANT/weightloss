@@ -99,7 +99,7 @@
     <!-- Navbar -->
     <nav id="mainNav" class="bg-white w-full h-[100px] flex items-center justify-center sticky top-0 z-[1000] transition-all duration-300">
       <div class="flex items-center justify-between px-[20px] lg:px-[60px] py-[28px] w-full">
-        <a href="/" class="logo-container transition-all duration-300" style="width: 150px;">
+        <a href="/" class="logo-container transition-all duration-300">
           <img src="/asset/logo-final.png" alt="GetWeightLoss" class="h-auto w-full object-contain" />
         </a>
         

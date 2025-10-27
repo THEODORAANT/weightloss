@@ -14,22 +14,25 @@
     ?>
 
 
-    <!-- Hero Section -->
+  <!-- Hero Section -->
     <div id="hero" class="w-full flex flex-col items-center justify-center bg-white">
       <div class="bg-white flex flex-col lg:flex-row items-center justify-between w-full">
         <div class="h-[400px] md:h-[550px] lg:h-[700px] w-full lg:w-[704px] order-2 lg:order-1">
-          <img src="/asset/injection-11.jpg" alt="Mounjaro Injection" class="w-full h-full object-cover" />
+          <img src="/new/images/mounjaro/mounjaro-hero-img.png" alt="Mounjaro Injection" class="w-full h-full object-cover" />
         </div>
         <div class="flex flex-col gap-[24px] lg:gap-[32px] items-start px-[20px] md:px-[40px] lg:pl-[15px] lg:pr-[160px] py-[40px] lg:py-0 w-full lg:w-[719px] order-1 lg:order-2">
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
             <h1 class="font-semibold text-[#0d0d0d] text-[36px] md:text-[56px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.12px] lg:tracking-[-1.44px] leading-[44px] md:leading-[68px] lg:leading-[90px]">Wegovy for Weight Loss</h1>
           </div>
-          <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
-            <p class="font-semibold text-[#0d0d0d] text-[24px] md:text-[28px] lg:text-[32px] tracking-[-0.48px] md:tracking-[-0.56px] lg:tracking-[-0.64px] leading-[32px] md:leading-[36px] lg:leading-[40px]">
-              <span class="font-medium">From </span>
-              <span class="text-[#324ea0] text-[48px] md:text-[56px] lg:text-[64px] leading-[60px] md:leading-[70px] lg:leading-[90px]">£129.00</span>
-              <span class="font-medium"> / month</span>
-            </p>
+          <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full max-w-[500px]">
+            <?php perch_shop_product_variants('wegovy-skuwegovy', [
+                                             'template' => 'products/medication_variant_list.html',
+            ]); ?>
+    <!-- Price Display -->
+            <div class="flex items-baseline gap-[8px]">
+              <span class="font-bold text-[#afd136] text-[48px] md:text-[56px] leading-[1] tracking-tight" id="displayPrice">£179.99</span>
+              <span class="font-medium text-[#616161] text-[16px]">for 1 pen (4 doses)</span>
+            </div>
           </div>
           <div class="flex flex-col sm:flex-row gap-[15px] items-start w-full sm:w-auto">
             <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
@@ -37,7 +40,7 @@
                 <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
               </div>
             </a>
-            <a href="/order/re-order" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
+            <a href="/client" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
                 <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Reorder</p>
               </div>
@@ -52,14 +55,15 @@
         </div>
         <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
           <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
-          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Significant Results</p>
+          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Weekly Application</p>
         </div>
         <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
           <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
-          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Beyond Diet & Exercise</p>
+          <p class="font-normal leading-[24px] text-[16px] text-[grey]">No Subscriptions</p>
         </div>
       </div>
     </div>
+
 
     <!-- About Mounjaro Section -->
     <div id="about" class="bg-gradient-to-b from-[#ffffff] to-[#d4dfff] w-full flex flex-col items-center justify-center">
@@ -163,17 +167,17 @@
 
 
 
-      <!-- Pricing Table -->
+
+   <!-- Pricing Table -->
       <div id="pricing" class="bg-white w-full flex flex-col items-center justify-center">
         <div class="bg-white flex flex-col gap-[40px] lg:gap-[50px] items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-[60px] md:py-[80px] lg:py-[100px] w-full">
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-center w-full lg:max-w-[1120px]">
-            <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
-              <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services</p>
-            </div>
-            <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">GIP and GLP-1 Hormone Receptor Medications</p>
-            <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*.
-
-*Blood tests are provided by our UKAS accredited service partner.</p>
+              <div class="bg-[#afd136] flex gap-[10px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px]">
+                <p class="font-semibold leading-[24px] md:leading-[30px] text-[18px] md:text-[20px] text-white whitespace-nowrap">Get Weight Loss Online Services <?php //perch_content('pricing_badge_text'); ?></p>
+              </div>
+              <p class="font-medium text-[#0d0d0d] text-[28px] md:text-[36px] lg:text-[48px] text-center tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.96px] leading-[36px] md:leading-[48px] lg:leading-[60px] px-[10px]">We offer various services ranging from online consultations for weight, nutrition and blood tests*. <?php //perch_content('pricing_heading'); ?></p>
+              <p class="text-[16px] text-[grey] text-center w-full max-w-[742px] leading-[24px] px-[10px]">
+*Blood tests are provided by our UKAS accredited service partner. <?php //perch_content('pricing_note'); ?></p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[32px] items-stretch w-full lg:max-w-[1120px]">
                <?php
@@ -190,6 +194,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- Testimonials Section -->
     <div id="testimonials" class="bg-white w-full flex flex-col items-center justify-center">
