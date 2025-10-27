@@ -1,63 +1,215 @@
 <perch:before>
-	<div class="flex flex-col gap-[12px] w-full">
-		<div class="flex items-center gap-[8px]">
-			<label class="font-semibold text-[#0d0d0d] text-[16px]">Dosage</label>
-			<div class="w-[20px] h-[20px] bg-[#3328bf] rounded-full flex items-center justify-center cursor-help" title="Select your dosage based on your treatment plan">
-				<span class="text-white text-[12px] font-bold">?</span>
-			</div>
-		</div>
-
-
-		<div class="relative">
-			<!--<button id="dosageButton" class="w-full bg-white border-2 border-[#3328bf] rounded-[10px] px-[16px] py-[12px] flex items-center justify-between cursor-pointer hover:bg-[#f8f9ff] transition-colors">
-				<div class="flex flex-col items-start">
-					<span class="font-semibold text-[#3328bf] text-[16px]" id="selectedDosageText">Starting dose 2.5mg</span>
-					<span class="text-[#616161] text-[14px]" id="selectedWeeksText">Weeks 1-4</span>
-				</div>
-				<svg class="w-[20px] h-[20px] transition-transform" id="dropdownArrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M5 7.5L10 12.5L15 7.5" stroke="#3328bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-				</svg>
-			</button>-->
-
-			<!-- Dropdown Menu -->
-			<div id="dosageDropdown" class="hidden absolute top-full left-0 right-0 mt-[8px] bg-white border border-[#d6d6d6] rounded-[10px] shadow-lg z-[100] max-h-[400px] overflow-y-auto">
-
-
-
-
+    <div class="flex flex-col gap-[12px] w-full">
+        <div class="flex items-center gap-[8px]">
+            <label id="dosageLabel" class="font-semibold text-[#0d0d0d] text-[16px]">Dosage</label>
+            <div class="w-[20px] h-[20px] bg-[#3328bf] rounded-full flex items-center justify-center cursor-help" title="Select your dosage based on your treatment plan">
+                <span class="text-white text-[12px] font-bold" aria-hidden="true">?</span>
+            </div>
+        </div>
+        <div class="relative">
+            <button id="dosageButton" type="button" class="w-full bg-white border-2 border-[#3328bf] rounded-[10px] px-[16px] py-[12px] flex items-center justify-between cursor-pointer hover:bg-[#f8f9ff] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3328bf]" aria-haspopup="listbox" aria-expanded="false" aria-controls="dosageDropdown" aria-labelledby="dosageLabel selectedDosageText">
+                <div class="flex flex-col items-start">
+                    <span class="font-semibold text-[#3328bf] text-[16px]" id="selectedDosageText"></span>
+                    <span class="text-[#616161] text-[14px] hidden" id="selectedWeeksText"></span>
+                </div>
+                <svg class="w-[20px] h-[20px] transition-transform" id="dropdownArrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="#3328bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div id="dosageDropdown" class="hidden absolute top-full left-0 right-0 mt-[8px] bg-white border border-[#d6d6d6] rounded-[10px] shadow-lg z-[100] max-h-[400px] overflow-y-auto" role="listbox" aria-labelledby="dosageLabel">
 </perch:before>
 
-
-
-
-		<div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="2.5mg" data-weeks="Weeks 1-4" data-price="179.99">
-			<div class="flex items-center justify-between">
-				<div class="flex flex-col">
-					<span class="font-semibold text-[#0d0d0d] text-[14px]">Starting dose 2.5mg	<a href="/shop/products/<perch:shop id="slug" type="slug" />/">
-		<perch:shop id="productVariantDesc"  />
-<perch:shop id="sku" label="SKU" required="true" order="1" />
-
-						</a><perch:if not-exists="has_variants">
-			<perch:form id="add_to_cart" app="perch_shop" action="/shop/cart">
-				<perch:input id="product" type="hidden" value="<perch:shop id="productID" env-autofill="false" />" />
-				<perch:input type="submit" value="Add to cart" />
-			</perch:form>
-		</perch:if></span>
-					<span class="text-[#616161] text-[13px]">hererWeeks 1-4</span>
-				</div>
-				<span class="font-semibold text-[#3328bf] text-[16px]">£		<perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="m" min="0" step="any" /></span>
-			</div>
-		</div>
-
-
-
-
-
-
+<div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors<perch:if exists="perch_item_first"> selected</perch:if>" data-dosage="<perch:if exists="variant_label"><perch:shop id="variant_label" encode="entities" /><perch:else /><perch:shop id="productVariantDesc" encode="entities" /></perch:if>" data-weeks="<perch:if exists="variant_weeks"><perch:shop id="variant_weeks" encode="entities" /><perch:else /><perch:if exists="variant_subtitle"><perch:shop id="variant_subtitle" encode="entities" /></perch:if></perch:if>" data-price="<perch:if exists="sale_price"><perch:shop id="sale_price" type="shop_currency_value" /><perch:else /><perch:shop id="price" type="shop_currency_value" /></perch:if>" data-sku="<perch:shop id="sku" encode="entities" />" role="option" tabindex="0" aria-selected="<perch:if exists="perch_item_first">true<perch:else />false</perch:if>">
+    <div class="flex items-center justify-between">
+        <div class="flex flex-col">
+            <span class="font-semibold text-[#0d0d0d] text-[14px]"><perch:if exists="variant_label"><perch:shop id="variant_label" /><perch:else /><perch:shop id="productVariantDesc" /></perch:if></span>
+            <perch:if exists="variant_weeks">
+                <span class="text-[#616161] text-[13px]"><perch:shop id="variant_weeks" /></span>
+            <perch:else />
+                <perch:if exists="variant_subtitle">
+                    <span class="text-[#616161] text-[13px]"><perch:shop id="variant_subtitle" /></span>
+                </perch:if>
+            </perch:if>
+        </div>
+        <span class="font-semibold text-[#3328bf] text-[16px]"><perch:if exists="sale_price"><perch:shop id="sale_price" type="shop_currency_value" /><perch:else /><perch:shop id="price" type="shop_currency_value" /></perch:if></span>
+    </div>
+</div>
 
 <perch:after>
-	</div>
-	</div>
+            </div>
+        </div>
+        <input type="hidden" id="selectedVariantSku" value="" />
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var button = document.getElementById('dosageButton');
+            var dropdown = document.getElementById('dosageDropdown');
+            if (!button || !dropdown) {
+                return;
+            }
+            var selectedDosageText = document.getElementById('selectedDosageText');
+            var selectedWeeksText = document.getElementById('selectedWeeksText');
+            var arrow = document.getElementById('dropdownArrow');
+            var displayPrice = document.getElementById('displayPrice');
+            var skuInput = document.getElementById('selectedVariantSku');
 
-	</div>
+            var options = Array.prototype.slice.call(dropdown.querySelectorAll('.dosage-option'));
+            if (!options.length) {
+                return;
+            }
+
+            function focusOptionByIndex(index) {
+                if (!options.length) {
+                    return;
+                }
+                if (index < 0) {
+                    index = options.length - 1;
+                }
+                if (index >= options.length) {
+                    index = 0;
+                }
+                var optionToFocus = options[index];
+                if (optionToFocus) {
+                    optionToFocus.focus();
+                }
+            }
+
+            function updateSelection(option) {
+                options.forEach(function (opt) {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('bg-[#f8f9ff]');
+                    opt.setAttribute('aria-selected', 'false');
+                });
+                option.classList.add('selected');
+                option.classList.add('bg-[#f8f9ff]');
+                option.setAttribute('aria-selected', 'true');
+
+                var dosage = option.getAttribute('data-dosage') || '';
+                var weeks = option.getAttribute('data-weeks') || '';
+                var price = option.getAttribute('data-price') || '';
+                var sku = option.getAttribute('data-sku') || '';
+
+                if (selectedDosageText) {
+                    selectedDosageText.textContent = dosage;
+                }
+                if (selectedWeeksText) {
+                    selectedWeeksText.textContent = weeks;
+                    selectedWeeksText.classList.toggle('hidden', weeks === '');
+                }
+                if (displayPrice && price) {
+                    displayPrice.textContent = price;
+                }
+                if (skuInput) {
+                    skuInput.value = sku;
+                }
+
+                if (button) {
+                    button.dataset.selectedSku = sku;
+                    button.dataset.selectedPrice = price;
+                }
+
+                var eventDetail = {
+                    dosage: dosage,
+                    weeks: weeks,
+                    price: price,
+                    sku: sku
+                };
+                var changeEvent = typeof window.CustomEvent === 'function'
+                    ? new CustomEvent('dosage:change', { detail: eventDetail })
+                    : (function () {
+                        var legacyEvent = document.createEvent('CustomEvent');
+                        legacyEvent.initCustomEvent('dosage:change', true, true, eventDetail);
+                        return legacyEvent;
+                    })();
+                document.dispatchEvent(changeEvent);
+
+                dropdown.classList.add('hidden');
+                button.setAttribute('aria-expanded', 'false');
+                if (arrow) {
+                    arrow.classList.remove('rotate-180');
+                }
+            }
+
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                var expanded = button.getAttribute('aria-expanded') === 'true';
+                button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+                dropdown.classList.toggle('hidden', expanded);
+                if (arrow) {
+                    arrow.classList.toggle('rotate-180', !expanded);
+                }
+                if (!expanded) {
+                    var selected = dropdown.querySelector('.dosage-option.selected');
+                    var index = options.indexOf(selected);
+                    focusOptionByIndex(index >= 0 ? index : 0);
+                }
+            });
+
+            button.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    button.click();
+                }
+                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    var expanded = button.getAttribute('aria-expanded') === 'true';
+                    if (!expanded) {
+                        button.click();
+                    }
+                    var selected = dropdown.querySelector('.dosage-option.selected');
+                    var currentIndex = options.indexOf(selected);
+                    var nextIndex = event.key === 'ArrowDown' ? currentIndex + 1 : currentIndex - 1;
+                    focusOptionByIndex(nextIndex);
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+                    dropdown.classList.add('hidden');
+                    button.setAttribute('aria-expanded', 'false');
+                    if (arrow) {
+                        arrow.classList.remove('rotate-180');
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    dropdown.classList.add('hidden');
+                    button.setAttribute('aria-expanded', 'false');
+                    if (arrow) {
+                        arrow.classList.remove('rotate-180');
+                    }
+                    button.focus();
+                }
+            });
+
+            options.forEach(function (option) {
+                option.addEventListener('click', function () {
+                    updateSelection(option);
+                });
+                option.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        updateSelection(option);
+                    }
+                    if (event.key === 'ArrowDown') {
+                        event.preventDefault();
+                        var nextIndex = options.indexOf(option) + 1;
+                        focusOptionByIndex(nextIndex);
+                    }
+                    if (event.key === 'ArrowUp') {
+                        event.preventDefault();
+                        var prevIndex = options.indexOf(option) - 1;
+                        focusOptionByIndex(prevIndex);
+                    }
+                });
+            });
+
+            var initial = dropdown.querySelector('.dosage-option.selected') || options[0];
+            if (initial) {
+                updateSelection(initial);
+            }
+        });
+    </script>
 </perch:after>
