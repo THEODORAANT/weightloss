@@ -24,7 +24,11 @@
           </div>
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full max-w-[500px]">
             <!-- Dosage Selector -->
-            <div class="flex flex-col gap-[12px] w-full">
+
+            <?php perch_shop_product_variants('mounjaro-mounjaro', [
+                      'template' => 'products/medication_variant_list.html',
+                  ]); ?>
+           <!--  <div class="flex flex-col gap-[12px] w-full">
               <div class="flex items-center gap-[8px]">
                 <label class="font-semibold text-[#0d0d0d] text-[16px]">Dosage</label>
                 <div class="w-[20px] h-[20px] bg-[#3328bf] rounded-full flex items-center justify-center cursor-help" title="Select your dosage based on your treatment plan">
@@ -40,9 +44,9 @@
                   <svg class="w-[20px] h-[20px] transition-transform" id="dropdownArrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 7.5L10 12.5L15 7.5" stroke="#3328bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                </button>
+                </button>-->
 
-                <!-- Dropdown Menu -->
+                <!-- Dropdown Menu
                 <div id="dosageDropdown" class="hidden absolute top-full left-0 right-0 mt-[8px] bg-white border border-[#d6d6d6] rounded-[10px] shadow-lg z-[100] max-h-[400px] overflow-y-auto">
                   <div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="2.5mg" data-weeks="Weeks 1-4" data-price="179.99">
                     <div class="flex items-center justify-between">
@@ -98,7 +102,7 @@
                       <span class="font-semibold text-[#3328bf] text-[16px]">£309.99</span>
                     </div>
                   </div>
-                </div>
+                </div>-->
               </div>
             </div>
 
