@@ -13,7 +13,8 @@
 
     ?>
 
-   <div id="hero" class="w-full flex flex-col items-center justify-center bg-white">
+    <!-- Hero Section -->
+    <div id="hero" class="w-full flex flex-col items-center justify-center bg-white">
       <div class="bg-white flex flex-col lg:flex-row items-center justify-between w-full">
         <div class="h-[400px] md:h-[550px] lg:h-[700px] w-full lg:w-[704px] order-2 lg:order-1">
           <img src="/new/images/mounjaro/mounjaro-hero-img.png" alt="Mounjaro Injection" class="w-full h-full object-cover" />
@@ -23,102 +24,22 @@
             <h1 class="font-semibold text-[#0d0d0d] text-[36px] md:text-[56px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.12px] lg:tracking-[-1.44px] leading-[44px] md:leading-[68px] lg:leading-[90px]">Mounjaro: Transforming Weight Loss Success</h1>
           </div>
           <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full max-w-[500px]">
-            <!-- Dosage Selector -->
-
             <?php perch_shop_product_variants('mounjaro-mounjaro', [
-                      'template' => 'products/medication_variant_list.html',
-                  ]); ?>
-           <!--  <div class="flex flex-col gap-[12px] w-full">
-              <div class="flex items-center gap-[8px]">
-                <label class="font-semibold text-[#0d0d0d] text-[16px]">Dosage</label>
-                <div class="w-[20px] h-[20px] bg-[#3328bf] rounded-full flex items-center justify-center cursor-help" title="Select your dosage based on your treatment plan">
-                  <span class="text-white text-[12px] font-bold">?</span>
-                </div>
-              </div>
-              <div class="relative">
-                <button id="dosageButton" class="w-full bg-white border-2 border-[#3328bf] rounded-[10px] px-[16px] py-[12px] flex items-center justify-between cursor-pointer hover:bg-[#f8f9ff] transition-colors">
-                  <div class="flex flex-col items-start">
-                    <span class="font-semibold text-[#3328bf] text-[16px]" id="selectedDosageText">Starting dose 2.5mg</span>
-                    <span class="text-[#616161] text-[14px]" id="selectedWeeksText">Weeks 1-4</span>
-                  </div>
-                  <svg class="w-[20px] h-[20px] transition-transform" id="dropdownArrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 7.5L10 12.5L15 7.5" stroke="#3328bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>-->
-
-                <!-- Dropdown Menu
-                <div id="dosageDropdown" class="hidden absolute top-full left-0 right-0 mt-[8px] bg-white border border-[#d6d6d6] rounded-[10px] shadow-lg z-[100] max-h-[400px] overflow-y-auto">
-                  <div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="2.5mg" data-weeks="Weeks 1-4" data-price="179.99">
-                    <div class="flex items-center justify-between">
-                      <div class="flex flex-col">
-                        <span class="font-semibold text-[#0d0d0d] text-[14px]">Starting dose 2.5mg</span>
-                        <span class="text-[#616161] text-[13px]">Weeks 1-4</span>
-                      </div>
-                      <span class="font-semibold text-[#3328bf] text-[16px]">£179.99</span>
-                    </div>
-                  </div>
-                  <div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="5mg" data-weeks="Weeks 5-8" data-price="199.99">
-                    <div class="flex items-center justify-between">
-                      <div class="flex flex-col">
-                        <span class="font-semibold text-[#0d0d0d] text-[14px]">Step up dose 5mg</span>
-                        <span class="text-[#616161] text-[13px]">Weeks 5-8</span>
-                      </div>
-                      <span class="font-semibold text-[#3328bf] text-[16px]">£199.99</span>
-                    </div>
-                  </div>
-                  <div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="7.5mg" data-weeks="Weeks 9-12" data-price="249.99">
-                    <div class="flex items-center justify-between">
-                      <div class="flex flex-col">
-                        <span class="font-semibold text-[#0d0d0d] text-[14px]">Step up dose 7.5mg</span>
-                        <span class="text-[#616161] text-[13px]">Weeks 9-12</span>
-                      </div>
-                      <span class="font-semibold text-[#3328bf] text-[16px]">£249.99</span>
-                    </div>
-                  </div>
-                  <div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="10mg" data-weeks="Weeks 13-16" data-price="279.99">
-                    <div class="flex items-center justify-between">
-                      <div class="flex flex-col">
-                        <span class="font-semibold text-[#0d0d0d] text-[14px]">Step up dose 10mg</span>
-                        <span class="text-[#616161] text-[13px]">Weeks 13-16</span>
-                      </div>
-                      <span class="font-semibold text-[#3328bf] text-[16px]">£279.99</span>
-                    </div>
-                  </div>
-                  <div class="dosage-option border-b border-[#e5e5e5] px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="12.5mg" data-weeks="Weeks 17-20" data-price="299.99">
-                    <div class="flex items-center justify-between">
-                      <div class="flex flex-col">
-                        <span class="font-semibold text-[#0d0d0d] text-[14px]">Step up dose 12.5mg</span>
-                        <span class="text-[#616161] text-[13px]">Weeks 17-20</span>
-                      </div>
-                      <span class="font-semibold text-[#3328bf] text-[16px]">£299.99</span>
-                    </div>
-                  </div>
-                  <div class="dosage-option px-[16px] py-[12px] cursor-pointer hover:bg-[#f8f9ff] transition-colors" data-dosage="15mg" data-weeks="Week 21+" data-price="309.99">
-                    <div class="flex items-center justify-between">
-                      <div class="flex flex-col">
-                        <span class="font-semibold text-[#0d0d0d] text-[14px]">Maintenance dose 15mg</span>
-                        <span class="text-[#616161] text-[13px]">Week 21+</span>
-                      </div>
-                      <span class="font-semibold text-[#3328bf] text-[16px]">£309.99</span>
-                    </div>
-                  </div>
-                </div>-->
-              </div>
-            </div>
-
-            <!-- Price Display -->
+                                             'template' => 'products/medication_variant_list.html',
+            ]); ?>
+    <!-- Price Display -->
             <div class="flex items-baseline gap-[8px]">
               <span class="font-bold text-[#afd136] text-[48px] md:text-[56px] leading-[1] tracking-tight" id="displayPrice">£179.99</span>
               <span class="font-medium text-[#616161] text-[16px]">for 1 pen (4 doses)</span>
             </div>
           </div>
           <div class="flex flex-col sm:flex-row gap-[15px] items-start w-full sm:w-auto">
-            <a href="#pricing" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
+            <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow w-full sm:w-auto">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
                 <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
               </div>
             </a>
-            <a href="#reorder" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
+            <a href="/client" class="bg-[#afd136] border border-[#afd136] rounded-[8px] btn-glow w-full sm:w-auto">
               <div class="flex gap-[6px] items-center justify-center overflow-clip px-[16px] py-[10px] rounded-[inherit]">
                 <p class="font-semibold leading-[24px] text-[#0d0d0d] text-[16px] whitespace-nowrap">Reorder</p>
               </div>
@@ -141,6 +62,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- About Mounjaro Section -->
     <div id="about" class="bg-gradient-to-b from-[#ffffff] to-[#d4dfff] w-full flex flex-col items-center justify-center">
