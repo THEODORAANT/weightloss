@@ -1925,6 +1925,11 @@
             document.addEventListener('DOMContentLoaded', function () {
                 var medicationRadios = document.querySelectorAll('input[name="other_medications"]');
                 var allergyRadios = document.querySelectorAll('input[name="allergies"]');
+                window.validateMedicationAllergyStep = function () {
+                    return true;
+                };
+                var medicationRadios = document.querySelectorAll('input[name="other_medications"]');
+                var allergyRadios = document.querySelectorAll('input[name="allergies"]');
                 var nextButton = document.getElementById('nextButton');
                 var nextStepField = document.getElementById('nextstep');
                 var medicationDetailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
@@ -1997,13 +2002,25 @@
                         allergyDetailsError.style.display = requiresAllergyDetails && !allergyDetailsFilled ? '' : 'none';
                     }
 
+                    var canContinue = medicationAnswered && allergyAnswered && medicationDetailsFilled && allergyDetailsFilled;
+
                     if (nextButton) {
-                        nextButton.disabled = !(medicationAnswered && allergyAnswered && medicationDetailsFilled && allergyDetailsFilled);
+                        nextButton.disabled = !canContinue;
                     }
 
                     if (nextStepField) {
                         nextStepField.value = 'gp_informed';
                     }
+
+                    return {
+                        canContinue: canContinue,
+                        medicationAnswered: medicationAnswered,
+                        allergyAnswered: allergyAnswered,
+                        requiresMedicationDetails: requiresMedicationDetails,
+                        requiresAllergyDetails: requiresAllergyDetails,
+                        medicationDetailsFilled: medicationDetailsFilled,
+                        allergyDetailsFilled: allergyDetailsFilled
+                    };
                 };
 
                 toArray(medicationRadios).forEach(function (radio) {
@@ -2021,6 +2038,24 @@
                 if (allergyDetailsField) {
                     allergyDetailsField.addEventListener('input', updateState);
                 }
+
+                window.validateMedicationAllergyStep = function () {
+                    var state = updateState();
+
+                    if (!state.canContinue) {
+                        if (!state.medicationAnswered && medicationRadios.length) {
+                            medicationRadios[0].focus();
+                        } else if (state.requiresMedicationDetails && !state.medicationDetailsFilled && medicationDetailsField) {
+                            medicationDetailsField.focus();
+                        } else if (!state.allergyAnswered && allergyRadios.length) {
+                            allergyRadios[0].focus();
+                        } else if (state.requiresAllergyDetails && !state.allergyDetailsFilled && allergyDetailsField) {
+                            allergyDetailsField.focus();
+                        }
+                    }
+
+                    return state.canContinue;
+                };
 
                 updateState();
             });
@@ -2173,13 +2208,13 @@
                    </div>-->
                     <h2>Please enter your GP's details</h2>
                     <div class="weight-inputs">
-                        <input type="text" id="GP_name" name="GP_name" placeholder="GP’s name" style="width: 100%;" value="<perch:forms id='GP_name' encode='true' />" required>
+                        <input type="text" id="GP_name"  name="GP_name" placeholder="GP’s name" style="width: 100%;" >
                     </div>
                     <div class="weight-inputs mt-3">
-                        <textarea id="GP_address" name="GP_address" placeholder="GP’s address" style="width: 100%; min-height: 100px;" required><perch:forms id="GP_address" encode="true" /></textarea>
+                        <textarea id="GP_address" name="GP_address" placeholder="GP’s address" style="width: 100%; min-height: 100px;"></textarea>
                     </div>
                     <div class="weight-inputs mt-3">
-                        <input type="text" id="GP_email_address" name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" value="<perch:forms id='GP_email_address' encode='true' />" required>
+                        <input type="text" id="GP_email_address"  name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" >
 
                         <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
 

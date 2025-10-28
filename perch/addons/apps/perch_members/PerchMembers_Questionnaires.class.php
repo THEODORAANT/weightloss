@@ -436,8 +436,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "Black (African/Caribbean)" => "Black (African/Caribbean)",
                                                "mixed" => "Mixed ethnicities",
                                                "other" => "Other ethnic group",
-                                               "white" => "White",
-                                               "PreferNotToSay" => "Prefer not to say"
+                                               "white" => "White"
                                            ]
                                        ],
                                        "ethnicity-more" => [
@@ -679,7 +678,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "options" => [
                                                "yes" => "Yes, I have allergies",
                                                "no" => "No allergies",
-                                               "PreferNotToSay" => "Prefer not to say"
+                                               "prefer_not_to_say" => "Prefer not to say"
                                            ]
                                        ],
                                        "allergy_details" => [
@@ -1378,22 +1377,8 @@ function getNextStepforFirstOrder(array $data): string {
               $errors[] = 'Please tell us if you want your GP to be informed.';
           }
 
-          if (($data['gp_informed'] ?? '') === 'yes') {
-              $gpName = trim((string)($data['GP_name'] ?? ''));
-              $gpAddress = trim((string)($data['GP_address'] ?? ''));
-              $gpEmail = trim((string)($data['GP_email_address'] ?? ''));
-
-              if ($gpName === '') {
-                  $errors[] = 'Please enter your GP’s name.';
-              }
-
-              if ($gpAddress === '') {
-                  $errors[] = 'Please enter your GP’s address.';
-              }
-
-              if ($gpEmail === '') {
-                  $errors[] = 'Please enter your GP’s email address.';
-              }
+          if (($data['gp_informed'] ?? '') === 'yes' && empty($data['GP_email_address'])) {
+              $errors[] = 'Please enter your GP’s email address.';
           }
       }else{
          $errors[] = 'No permitted age!';
