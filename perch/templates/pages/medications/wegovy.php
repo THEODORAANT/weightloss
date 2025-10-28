@@ -51,7 +51,7 @@
       <div class="flex flex-col md:flex-row gap-[16px] md:gap-[23px] items-start md:items-center justify-between px-[20px] md:px-[40px] lg:px-0 pb-[40px] lg:pb-[50px] pt-[30px] lg:pt-[50px] w-full max-w-[1120px]">
         <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
           <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
-          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Dual Action for Weight Loss</p>
+          <p class="font-normal leading-[24px] text-[16px] text-[grey]">Single Action for Weight Loss</p>
         </div>
         <div class="flex gap-[16px] md:gap-[20px] items-center w-full md:w-auto">
           <img src="/new/images/common/gwl-bullet.svg" alt="bullet" class="w-[32px] h-[32px] md:w-[36px] md:h-[36px] flex-shrink-0" />
