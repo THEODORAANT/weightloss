@@ -2173,18 +2173,18 @@
                    </div>-->
                     <h2>Please enter your GP's details</h2>
                     <div class="weight-inputs">
-                        <input type="text" id="GP_name"  name="GP_name" placeholder="GP’s name" style="width: 100%;" >
+                        <input type="text" id="GP_name" name="GP_name" placeholder="GP’s name" style="width: 100%;" value="<perch:forms id='GP_name' encode='true' />" required>
                     </div>
                     <div class="weight-inputs mt-3">
-                        <textarea id="GP_address" name="GP_address" placeholder="GP’s address" style="width: 100%; min-height: 100px;"></textarea>
+                        <textarea id="GP_address" name="GP_address" placeholder="GP’s address" style="width: 100%; min-height: 100px;" required><perch:forms id="GP_address" encode="true" /></textarea>
                     </div>
                     <div class="weight-inputs mt-3">
-                        <input type="text" id="GP_email_address"  name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" >
+                        <input type="text" id="GP_email_address" name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" value="<perch:forms id='GP_email_address' encode='true' />" required>
 
                         <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
 
                     </div>
-
+                    <p id="gp-details-error" class="error-message" style="display:none;"></p>
 
                     <div class="buttons skip ">
                         <button class="back skip_button "><a href="/get-started/questionnaire?step=access_special_offers" style="text-decoration: none;color: #000;" >Skip</a></button>
@@ -2194,13 +2194,65 @@
                     <div class="buttons">
                         <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
 
-                        <button onclick="submitForm('GP_email_address')" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                        <button type="button" onclick="submitGpDetails()" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
                 </div>
 
             </div>
 
         </section>
+
+        <script>
+            (function () {
+                if (window.submitGpDetails) {
+                    return;
+                }
+
+                window.submitGpDetails = function () {
+                    var form = document.getElementById('form1_questionnaire');
+                    if (!form) {
+                        return;
+                    }
+
+                    var fields = [
+                        {
+                            element: form.querySelector('input[name="GP_name"]'),
+                            message: 'Please enter your GP\u2019s name.'
+                        },
+                        {
+                            element: form.querySelector('textarea[name="GP_address"]'),
+                            message: 'Please enter your GP\u2019s address.'
+                        },
+                        {
+                            element: form.querySelector('input[name="GP_email_address"]'),
+                            message: 'Please enter your GP\u2019s email address.'
+                        }
+                    ];
+
+                    var errors = [];
+                    fields.forEach(function (field) {
+                        if (!field.element || field.element.value.trim() === '') {
+                            errors.push(field.message);
+                        }
+                    });
+
+                    var errorContainer = document.getElementById('gp-details-error');
+                    if (errorContainer) {
+                        if (errors.length) {
+                            errorContainer.innerHTML = errors.join('<br>');
+                            errorContainer.style.display = 'block';
+                        } else {
+                            errorContainer.innerHTML = '';
+                            errorContainer.style.display = 'none';
+                        }
+                    }
+
+                    if (!errors.length) {
+                        form.submit();
+                    }
+                };
+            })();
+        </script>
 
     </perch:if>
     <perch:if id="step" value="access_special_offers">
