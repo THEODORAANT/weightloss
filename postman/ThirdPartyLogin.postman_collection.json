@@ -1,0 +1,473 @@
+{
+  "info": {
+    "name": "Third-Party Login Flows",
+    "_postman_id": "d7c6c1e2-889a-4d85-b2e9-6dfb818a5c8a",
+    "description": "Sample OAuth 2.0 requests for Sign in with Apple and Google Sign-In flows, covering authorization redirects, token exchanges, and token verification steps.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Sign in with Apple",
+      "description": "Authorize users with Apple ID, exchange authorization codes, and fetch the JSON Web Key Set for token validation.",
+      "item": [
+        {
+          "name": "Authorization Request",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://appleid.apple.com/auth/authorize?response_type=code%20id_token&client_id={{appleClientId}}&redirect_uri={{appleRedirectUri}}&scope={{appleScope}}&response_mode=form_post&state={{appleState}}&nonce={{appleNonce}}",
+              "protocol": "https",
+              "host": [
+                "appleid",
+                "apple",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code id_token"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{appleClientId}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{appleRedirectUri}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "{{appleScope}}"
+                },
+                {
+                  "key": "response_mode",
+                  "value": "form_post"
+                },
+                {
+                  "key": "state",
+                  "value": "{{appleState}}"
+                },
+                {
+                  "key": "nonce",
+                  "value": "{{appleNonce}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange Code for Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "{{appleClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{appleClientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{appleAuthorizationCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{appleRedirectUri}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://appleid.apple.com/auth/token",
+              "protocol": "https",
+              "host": [
+                "appleid",
+                "apple",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "{{appleClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{appleClientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{appleRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://appleid.apple.com/auth/token",
+              "protocol": "https",
+              "host": [
+                "appleid",
+                "apple",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Apple JWKS",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://appleid.apple.com/auth/keys",
+              "protocol": "https",
+              "host": [
+                "appleid",
+                "apple",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "keys"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Google Sign-In",
+      "description": "Perform OAuth 2.0 authorization, token exchange, and user info retrieval with Google.",
+      "item": [
+        {
+          "name": "Authorization Request",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://accounts.google.com/o/oauth2/v2/auth?client_id={{googleClientId}}&redirect_uri={{googleRedirectUri}}&response_type=code&scope={{googleScope}}&access_type=offline&include_granted_scopes=true&state={{googleState}}&prompt=consent",
+              "protocol": "https",
+              "host": [
+                "accounts",
+                "google",
+                "com"
+              ],
+              "path": [
+                "o",
+                "oauth2",
+                "v2",
+                "auth"
+              ],
+              "query": [
+                {
+                  "key": "client_id",
+                  "value": "{{googleClientId}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{googleRedirectUri}}"
+                },
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "scope",
+                  "value": "{{googleScope}}"
+                },
+                {
+                  "key": "access_type",
+                  "value": "offline"
+                },
+                {
+                  "key": "include_granted_scopes",
+                  "value": "true"
+                },
+                {
+                  "key": "state",
+                  "value": "{{googleState}}"
+                },
+                {
+                  "key": "prompt",
+                  "value": "consent"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange Code for Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "{{googleClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{googleClientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{googleAuthorizationCode}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{googleRedirectUri}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://oauth2.googleapis.com/token",
+              "protocol": "https",
+              "host": [
+                "oauth2",
+                "googleapis",
+                "com"
+              ],
+              "path": [
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Tokens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "{{googleClientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{googleClientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{googleRefreshToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://oauth2.googleapis.com/token",
+              "protocol": "https",
+              "host": [
+                "oauth2",
+                "googleapis",
+                "com"
+              ],
+              "path": [
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{googleAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://openidconnect.googleapis.com/v1/userinfo",
+              "protocol": "https",
+              "host": [
+                "openidconnect",
+                "googleapis",
+                "com"
+              ],
+              "path": [
+                "v1",
+                "userinfo"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "appleClientId",
+      "value": "com.example.web",
+      "type": "string"
+    },
+    {
+      "key": "appleRedirectUri",
+      "value": "https://example.com/auth/apple/callback",
+      "type": "string"
+    },
+    {
+      "key": "appleScope",
+      "value": "name email",
+      "type": "string"
+    },
+    {
+      "key": "appleState",
+      "value": "state-token",
+      "type": "string"
+    },
+    {
+      "key": "appleNonce",
+      "value": "nonce-value",
+      "type": "string"
+    },
+    {
+      "key": "appleAuthorizationCode",
+      "value": "replace-with-code",
+      "type": "string"
+    },
+    {
+      "key": "appleClientSecret",
+      "value": "replace-with-client-secret",
+      "type": "string"
+    },
+    {
+      "key": "appleRefreshToken",
+      "value": "replace-with-refresh-token",
+      "type": "string"
+    },
+    {
+      "key": "googleClientId",
+      "value": "1234567890-abcdefg.apps.googleusercontent.com",
+      "type": "string"
+    },
+    {
+      "key": "googleRedirectUri",
+      "value": "https://example.com/auth/google/callback",
+      "type": "string"
+    },
+    {
+      "key": "googleScope",
+      "value": "openid email profile",
+      "type": "string"
+    },
+    {
+      "key": "googleState",
+      "value": "state-token",
+      "type": "string"
+    },
+    {
+      "key": "googleAuthorizationCode",
+      "value": "replace-with-code",
+      "type": "string"
+    },
+    {
+      "key": "googleClientSecret",
+      "value": "replace-with-client-secret",
+      "type": "string"
+    },
+    {
+      "key": "googleRefreshToken",
+      "value": "replace-with-refresh-token",
+      "type": "string"
+    },
+    {
+      "key": "googleAccessToken",
+      "value": "replace-with-access-token",
+      "type": "string"
+    }
+  ]
+}
