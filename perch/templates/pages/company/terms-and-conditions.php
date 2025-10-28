@@ -82,12 +82,12 @@
 
  <p>2.1.2 The Prescriber/Pharmacy services including consultations and distribution are performed by Imran Tailor (details in clause 2.4.2) .
 </p>
- <p>2.2 How to contact us. For general queries, you can contact us by contacting the Get Weight Loss customer service team at 01983 655131 or by writing to us at support@getweightloss.co.uk.</p>
+ <p>2.2 How to contact us. For general queries, you can contact us by contacting the Get Weight Loss customer service team at 0330 043 6462 or by writing to us at support@getweightloss.co.uk.</p>
   <p>2.3 How we may contact you. If we have to contact you, we will do so by telephone or by writing to you at the email address or postal address you provide to us during the registration/ordering process (see clause 4 below).</p>
 
   <p>2.4 Professional standards. The relevant aspects of the Services are provided by qualified independent prescribing pharmacists who are registered with the General Pharmaceutical Council in the UK. All of our pharmacists comply with the requirements of their respective professional bodies, the standards set by the healthcare regulators we are registered with.</p>
 
-  <p>2.4.1. The person with overall clinical responsibility for the Services is Imran Tailor. Imran is a UK registered General Practitioner. He oversees our team of independent prescribing pharmacists who assist and manage patients. You can write to Imran Tailor at:
+  <p>2.4.1. The person with overall clinical responsibility for the Services is Imran Tailor. He oversees our team of independent prescribing pharmacists who assist and manage patients. You can write to Imran Tailor at:
 
 support@GetWeightLoss.co.uk</p>
 
