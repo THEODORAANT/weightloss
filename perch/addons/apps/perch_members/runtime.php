@@ -910,3 +910,70 @@ function perch_member_form($template="registration.html", $return=false)
 
         }
     }
+
+function perch_members_injection_logs_repository()
+{
+    static $repository = null;
+
+    if ($repository === null) {
+        $repository = new PerchMembers_InjectionLogsRepository();
+    }
+
+    return $repository;
+}
+
+function perch_members_injection_logs_count($memberID, $startDate = null, $endDate = null)
+{
+    return perch_members_injection_logs_repository()->countForMember($memberID, $startDate, $endDate);
+}
+
+function perch_members_injection_logs_page($memberID, $limit, $offset, $startDate = null, $endDate = null)
+{
+    return perch_members_injection_logs_repository()->fetchPageForMember($memberID, $limit, $offset, $startDate, $endDate);
+}
+
+function perch_members_injection_logs_find($memberID, $logID)
+{
+    return perch_members_injection_logs_repository()->findForMember($memberID, $logID);
+}
+
+function perch_members_injection_logs_create($memberID, array $data)
+{
+    return perch_members_injection_logs_repository()->createLog($memberID, $data);
+}
+
+function perch_members_injection_logs_delete($logID)
+{
+    return perch_members_injection_logs_repository()->deleteById($logID);
+}
+
+function perch_members_injection_logs_latest($memberID)
+{
+    return perch_members_injection_logs_repository()->fetchLatestForMember($memberID);
+}
+
+function perch_members_injection_logs_history($memberID)
+{
+    return perch_members_injection_logs_repository()->fetchChronologicalForMember($memberID);
+}
+
+function perch_members_weight_goals_repository()
+{
+    static $repository = null;
+
+    if ($repository === null) {
+        $repository = new PerchMembers_WeightGoalsRepository();
+    }
+
+    return $repository;
+}
+
+function perch_members_weight_goal_find($memberID)
+{
+    return perch_members_weight_goals_repository()->findForMember($memberID);
+}
+
+function perch_members_weight_goal_upsert($memberID, array $data)
+{
+    return perch_members_weight_goals_repository()->upsertGoal($memberID, $data);
+}
