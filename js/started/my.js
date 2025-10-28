@@ -97,7 +97,7 @@ function setValuesreorderForm(id,value) {
             document.getElementById("nextstep").value="cart";
         }else{
 
-            document.getElementById("nextstep").value="contact";
+            document.getElementById("nextstep").value="cart";
         }
     }
 
