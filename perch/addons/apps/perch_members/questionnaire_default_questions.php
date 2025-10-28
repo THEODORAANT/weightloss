@@ -140,6 +140,7 @@ return [
                 'Mixed' => 'Mixed ethnicities',
                 'Other' => 'Other ethnic group',
                 'White' => 'White',
+                'Prefer not to say' => 'Prefer not to say',
             ],
             'step' => '18to74',
             'dependencies' => [
