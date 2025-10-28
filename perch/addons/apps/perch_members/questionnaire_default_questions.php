@@ -474,21 +474,18 @@ return [
             'name' => 'wegovy_side_effects',
             'step' => 'wegovy_side_effects',
         ],
-        'medication_allergies' => [
-            'label' => 'Do you currently take any other medication or have any allergies?',
-            'type' => 'checkbox',
-            'name' => 'medication_allergies[]',
+        'other_medications' => [
+            'label' => 'Do you currently take any other medication or supplements?',
+            'type' => 'radio',
+            'name' => 'other_medications',
             'options' => [
-                'levothyroxine' => 'I’m on levothyroxine',
-                'warfarin' => 'I’m on warfarin',
-                'other' => 'Other / I take more than one prescription medication',
-                'no-medication' => 'I don’t take any medication',
-                'allergies' => 'I have allergies',
+                'yes' => 'I take other medication or supplements.',
+                'no' => 'I do not take other medication or supplements.',
             ],
             'step' => 'medication_allergies',
             'dependencies' => [
                 [
-                    'values' => ['other'],
+                    'values' => ['yes'],
                     'question' => 'other_medication_details',
                     'step' => 'medication_allergies',
                 ],
@@ -498,6 +495,30 @@ return [
             'label' => 'Please provide details of the other medication you take, including the name, dose, and how often you take this.',
             'type' => 'textarea',
             'name' => 'other_medication_details',
+            'step' => 'medication_allergies',
+        ],
+        'allergies' => [
+            'label' => 'Do you have any allergies including to medication, food, environmental or anything else?',
+            'type' => 'radio',
+            'name' => 'allergies',
+            'options' => [
+                'yes' => 'Yes, I have allergies',
+                'no' => 'No allergies',
+                'prefer_not_to_say' => 'Prefer not to say',
+            ],
+            'step' => 'medication_allergies',
+            'dependencies' => [
+                [
+                    'values' => ['yes'],
+                    'question' => 'allergy_details',
+                    'step' => 'medication_allergies',
+                ],
+            ],
+        ],
+        'allergy_details' => [
+            'label' => 'Please provide detail on your allergy, severity and how it is controlled.',
+            'type' => 'textarea',
+            'name' => 'allergy_details',
             'step' => 'medication_allergies',
         ],
         'gp_informed' => [
@@ -512,10 +533,32 @@ return [
             'dependencies' => [
                 [
                     'values' => ['yes'],
+                    'question' => 'GP_name',
+                    'step' => 'gp_address',
+                ],
+                [
+                    'values' => ['yes'],
+                    'question' => 'GP_address',
+                    'step' => 'gp_address',
+                ],
+                [
+                    'values' => ['yes'],
                     'question' => 'GP_email_address',
                     'step' => 'gp_address',
                 ],
             ],
+        ],
+        'GP_name' => [
+            'label' => "Please enter your GP's name",
+            'type' => 'text',
+            'name' => 'GP_name',
+            'step' => 'gp_address',
+        ],
+        'GP_address' => [
+            'label' => "Please enter your GP's address",
+            'type' => 'textarea',
+            'name' => 'GP_address',
+            'step' => 'gp_address',
         ],
         'GP_email_address' => [
             'label' => 'Please enter your GP\'s email address',

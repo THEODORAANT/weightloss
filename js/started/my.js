@@ -49,6 +49,14 @@ function validateEl(elemntName) {
     return true;
 }
 function submitForm(elemntName) {
+    if (elemntName === "other_medications") {
+        if (typeof window.validateMedicationAllergyStep === "function") {
+            var medicationStepValid = window.validateMedicationAllergyStep();
+            if (!medicationStepValid) {
+                return;
+            }
+        }
+    }
     if(validateEl(elemntName)) {
         //alert("submitForm");
         if (document.getElementById("nextstep").value == "") {

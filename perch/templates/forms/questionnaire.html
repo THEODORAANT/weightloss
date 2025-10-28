@@ -1847,39 +1847,22 @@
                                     <p class="Percent_text">95%</p><span class="bar_line"></span>
                                 </div>-->
                                 <h5>
-                                    Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.
-                                </h5>
-
-
-                                <h5>
                                     It’s really important that we know about any medication you're taking so that we can make sure there are no interactions with your weight loss plan.
+                                </h5>
+                                <h5 class="mt-4">
+                                    Do you currently take any other medication or supplements?
                                 </h5>
                             </div>
                             <!--////////////========chekbox section start=======/////////////-->
                             <div class="box_group mt-2">
                                 <div class="box_list" id="fullBox">
-                                    <input type="checkbox" name="medication_allergies[]" value="levothyroxine" class="check1" onclick="changeColor()">
-                                    <span class="box_text">I’m on levothyroxine</span>
+                                    <input type="radio" name="other_medications" value="yes" class="check1" <perch:if id="other_medications" value="yes">checked="checked"</perch:if>>
+                                    <span class="box_text">I take other medication or supplements.</span>
                                 </div>
                                 <div class="box_list mt-2" id="fullBox2">
-                                    <input type="checkbox" name="medication_allergies[]" value="warfarin"  class="check1" onclick="changeColor2()">
-                                    <span class="box_text">I’m on warfarin</span>
+                                    <input type="radio" name="other_medications" value="no" class="check1" <perch:if id="other_medications" value="no">checked="checked"</perch:if>>
+                                    <span class="box_text">I do not take other medication or supplements.</span>
                                 </div>
-                                <div class="box_list mt-2" id="fullBox3">
-                                    <input type="checkbox" name="medication_allergies[]" value="other"   class="check1" onclick="changeColor3()">
-                                    <span class="box_text">Other / I take more than one prescription medication</span>
-                                </div>
-                                <div class="box_list mt-2" id="fullBox4">
-                                    <input type="checkbox" name="medication_allergies[]"  value="no-medication"   class="check1" onclick="changeColor4()">
-                                    <span class="box_text">I don’t take any medication</span>
-                                </div>
-                                <div class="box_list mt-2" id="fullBox5">
-                                    <input type="checkbox" name="medication_allergies[]"  value="allergies" class="check1" onclick="changeColor5()">
-                                    <span class="box_text">I have allergies</span>
-                                </div>
-
-
-
 
 
                             </div>
@@ -1891,7 +1874,34 @@
                                 <p id="otherMedicationDetailsError" class="error-message">Please provide an answer before continuing.</p>
                             </div>
 
-                            <!--////////////========Button section Start=======/////////////-->
+                            <div class="mt-4">
+                                <h5>Do you have any allergies including to medication, food, environmental or anything else?</h5>
+                            </div>
+
+                            <div class="box_group mt-2">
+                                <div class="box_list" id="allergyBoxYes">
+                                    <input type="radio" name="allergies" value="yes" class="check1" <perch:if id="allergies" value="yes">checked="checked"</perch:if>>
+                                    <span class="box_text">Yes, I have allergies</span>
+                                </div>
+                                <div class="box_list mt-2" id="allergyBoxNo">
+                                    <input type="radio" name="allergies" value="no" class="check1" <perch:if id="allergies" value="no">checked="checked"</perch:if>>
+                                    <span class="box_text">No allergies</span>
+                                </div>
+                                <div class="box_list mt-2" id="allergyBoxPreferNot">
+                                    <input type="radio" name="allergies" value="prefer_not_to_say" class="check1" <perch:if id="allergies" value="prefer_not_to_say">checked="checked"</perch:if>>
+                                    <span class="box_text">Prefer not to say</span>
+                                </div>
+
+
+                            </div>
+
+                            <div class="mt-4" id="allergyDetailsWrapper" style="display:none;">
+                                <label for="allergy_details">Please provide detail on your allergy, severity and how it is controlled.</label>
+                                <textarea id="allergy_details" name="allergy_details" placeholder="Allergy – severity – how it is controlled"></textarea>
+                                <p id="allergyDetailsError" class="error-message">Please provide an answer before continuing.</p>
+                            </div>
+
+<!--////////////========Button section Start=======/////////////-->
                             <div class="bottom_btn mt-5">
                                 <input type="hidden" id="nextstep" name="nextstep" value="gp_informed">
 
@@ -1899,7 +1909,7 @@
                                 <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
                                <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
-                                <button id="nextButton" class="btn_next" onclick="submitForm('medication_allergies')" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                                <button id="nextButton" class="btn_next" onclick="submitForm('other_medications')" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
                             </div>
                             <!--////////////========Button section END=======/////////////-->
 
@@ -1910,14 +1920,21 @@
         </section>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var checkboxes = document.querySelectorAll('input[name="medication_allergies[]"]');
+                window.validateMedicationAllergyStep = function () {
+                    return true;
+                };
+                var medicationRadios = document.querySelectorAll('input[name="other_medications"]');
+                var allergyRadios = document.querySelectorAll('input[name="allergies"]');
                 var nextButton = document.getElementById('nextButton');
                 var nextStepField = document.getElementById('nextstep');
-                var detailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
-                var detailsField = document.getElementById('other_medication_details');
-                var detailsError = document.getElementById('otherMedicationDetailsError');
+                var medicationDetailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
+                var medicationDetailsField = document.getElementById('other_medication_details');
+                var medicationDetailsError = document.getElementById('otherMedicationDetailsError');
+                var allergyDetailsWrapper = document.getElementById('allergyDetailsWrapper');
+                var allergyDetailsField = document.getElementById('allergy_details');
+                var allergyDetailsError = document.getElementById('allergyDetailsError');
 
-                if (!checkboxes.length || !nextStepField) {
+                if ((!medicationRadios.length && !allergyRadios.length) || !nextStepField) {
                     return;
                 }
 
@@ -1925,50 +1942,115 @@
                     return Array.prototype.slice.call(nodeList);
                 };
 
-                var updateState = function () {
-                    var selectedValues = toArray(checkboxes)
-                        .filter(function (checkbox) {
-                            return checkbox.checked;
-                        })
-                        .map(function (checkbox) {
-                            return checkbox.value;
-                        });
+                var getSelectedValue = function (inputs) {
+                    var selected = toArray(inputs).filter(function (input) {
+                        return input.checked;
+                    });
 
-                    var hasSelection = selectedValues.length > 0;
-                    var requiresDetails = selectedValues.indexOf('other') !== -1;
-                    var detailsFilled = true;
-
-                    if (detailsWrapper) {
-                        detailsWrapper.style.display = requiresDetails ? '' : 'none';
+                    if (!selected.length) {
+                        return '';
                     }
 
-                    if (detailsField) {
-                        detailsField.required = requiresDetails;
-                        if (requiresDetails) {
-                            detailsFilled = detailsField.value.trim() !== '';
+                    return selected[0].value;
+                };
+
+                var updateState = function () {
+                    var selectedMedication = getSelectedValue(medicationRadios);
+                    var selectedAllergies = getSelectedValue(allergyRadios);
+
+                    var medicationAnswered = selectedMedication !== '';
+                    var allergyAnswered = selectedAllergies !== '';
+
+                    var requiresMedicationDetails = selectedMedication === 'yes';
+                    var requiresAllergyDetails = selectedAllergies === 'yes';
+
+                    var medicationDetailsFilled = true;
+                    var allergyDetailsFilled = true;
+
+                    if (medicationDetailsWrapper) {
+                        medicationDetailsWrapper.style.display = requiresMedicationDetails ? '' : 'none';
+                    }
+
+                    if (medicationDetailsField) {
+                        medicationDetailsField.required = requiresMedicationDetails;
+                        if (requiresMedicationDetails) {
+                            medicationDetailsFilled = medicationDetailsField.value.trim() !== '';
                         }
                     }
 
-                    if (detailsError) {
-                        detailsError.style.display = requiresDetails && !detailsFilled ? '' : 'none';
+                    if (medicationDetailsError) {
+                        medicationDetailsError.style.display = requiresMedicationDetails && !medicationDetailsFilled ? '' : 'none';
                     }
 
+                    if (allergyDetailsWrapper) {
+                        allergyDetailsWrapper.style.display = requiresAllergyDetails ? '' : 'none';
+                    }
+
+                    if (allergyDetailsField) {
+                        allergyDetailsField.required = requiresAllergyDetails;
+                        if (requiresAllergyDetails) {
+                            allergyDetailsFilled = allergyDetailsField.value.trim() !== '';
+                        }
+                    }
+
+                    if (allergyDetailsError) {
+                        allergyDetailsError.style.display = requiresAllergyDetails && !allergyDetailsFilled ? '' : 'none';
+                    }
+
+                    var canContinue = medicationAnswered && allergyAnswered && medicationDetailsFilled && allergyDetailsFilled;
+
                     if (nextButton) {
-                        nextButton.disabled = !(hasSelection && detailsFilled);
+                        nextButton.disabled = !canContinue;
                     }
 
                     if (nextStepField) {
                         nextStepField.value = 'gp_informed';
                     }
+
+                    return {
+                        canContinue: canContinue,
+                        medicationAnswered: medicationAnswered,
+                        allergyAnswered: allergyAnswered,
+                        requiresMedicationDetails: requiresMedicationDetails,
+                        requiresAllergyDetails: requiresAllergyDetails,
+                        medicationDetailsFilled: medicationDetailsFilled,
+                        allergyDetailsFilled: allergyDetailsFilled
+                    };
                 };
 
-                toArray(checkboxes).forEach(function (checkbox) {
-                    checkbox.addEventListener('change', updateState);
+                toArray(medicationRadios).forEach(function (radio) {
+                    radio.addEventListener('change', updateState);
                 });
 
-                if (detailsField) {
-                    detailsField.addEventListener('input', updateState);
+                toArray(allergyRadios).forEach(function (radio) {
+                    radio.addEventListener('change', updateState);
+                });
+
+                if (medicationDetailsField) {
+                    medicationDetailsField.addEventListener('input', updateState);
                 }
+
+                if (allergyDetailsField) {
+                    allergyDetailsField.addEventListener('input', updateState);
+                }
+
+                window.validateMedicationAllergyStep = function () {
+                    var state = updateState();
+
+                    if (!state.canContinue) {
+                        if (!state.medicationAnswered && medicationRadios.length) {
+                            medicationRadios[0].focus();
+                        } else if (state.requiresMedicationDetails && !state.medicationDetailsFilled && medicationDetailsField) {
+                            medicationDetailsField.focus();
+                        } else if (!state.allergyAnswered && allergyRadios.length) {
+                            allergyRadios[0].focus();
+                        } else if (state.requiresAllergyDetails && !state.allergyDetailsFilled && allergyDetailsField) {
+                            allergyDetailsField.focus();
+                        }
+                    }
+
+                    return state.canContinue;
+                };
 
                 updateState();
             });
@@ -2119,8 +2201,14 @@
                        </div>
 
                    </div>-->
-                    <h2>Please enter your GP's email address</h2>
+                    <h2>Please enter your GP's details</h2>
                     <div class="weight-inputs">
+                        <input type="text" id="GP_name"  name="GP_name" placeholder="GP’s name" style="width: 100%;" >
+                    </div>
+                    <div class="weight-inputs mt-3">
+                        <textarea id="GP_address" name="GP_address" placeholder="GP’s address" style="width: 100%; min-height: 100px;"></textarea>
+                    </div>
+                    <div class="weight-inputs mt-3">
                         <input type="text" id="GP_email_address"  name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" >
 
                         <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
