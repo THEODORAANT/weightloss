@@ -5,7 +5,7 @@ class PerchMembers_InjectionLogsRepository
     private $db;
     private $table;
 
-    public function __construct($db = null, $table = null)
+    public function __construct($db = null, $table = "injection_logs")
     {
         if ($db === null) {
             $this->db = PerchDB::fetch();
@@ -82,7 +82,7 @@ class PerchMembers_InjectionLogsRepository
         $sql = 'INSERT INTO ' . $this->table
             . ' (' . implode(',', $columns) . ')'
             . ' VALUES (' . implode(',', $values) . ')';
-
+echo $sql;
         $insertId = $this->db->execute($sql);
 
         if ($insertId === false) {
@@ -171,11 +171,12 @@ class PerchMembers_InjectionLogsRepository
             return $table;
         }
 
-        return PERCH_DB_PREFIX . ltrim($table, '_');
+      //  return PERCH_DB_PREFIX . ltrim($table, '_');
+         return "getweightloss_measurements.".PERCH_DB_PREFIX . $table;
     }
 
     private function defaultTableName()
     {
-        return PERCH_DB_PREFIX . 'getweightloss_injection_logs';
+        return PERCH_DB_PREFIX . 'injection_logs';
     }
 }

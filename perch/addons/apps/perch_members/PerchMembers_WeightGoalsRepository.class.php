@@ -5,7 +5,7 @@ class PerchMembers_WeightGoalsRepository
     private $db;
     private $table;
 
-    public function __construct($db = null, $table = null)
+    public function __construct($db = null, $table = "weight_goals")
     {
         if ($db === null) {
             $this->db = PerchDB::fetch();
@@ -122,11 +122,12 @@ class PerchMembers_WeightGoalsRepository
             return $table;
         }
 
-        return PERCH_DB_PREFIX . ltrim($table, '_');
+       // return PERCH_DB_PREFIX . ltrim($table, '_');
+         return "getweightloss_measurements.".PERCH_DB_PREFIX . $table;
     }
 
     private function defaultTableName()
     {
-        return PERCH_DB_PREFIX . 'getweightloss_weight_goals';
+        return PERCH_DB_PREFIX . 'weight_goals';
     }
 }
