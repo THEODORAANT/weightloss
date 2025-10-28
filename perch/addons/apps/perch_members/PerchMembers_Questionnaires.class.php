@@ -437,7 +437,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "mixed" => "Mixed ethnicities",
                                                "other" => "Other ethnic group",
                                                "white" => "White",
-                                               "prefer-not-to-say" => "Prefer not to say"
+                                               "PreferNotToSay" => "Prefer not to say"
                                            ]
                                        ],
                                        "ethnicity-more" => [
@@ -679,7 +679,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "options" => [
                                                "yes" => "Yes, I have allergies",
                                                "no" => "No allergies",
-                                               "prefer_not_to_say" => "Prefer not to say"
+                                               "PreferNotToSay" => "Prefer not to say"
                                            ]
                                        ],
                                        "allergy_details" => [

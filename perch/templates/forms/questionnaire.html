@@ -226,7 +226,7 @@
                             <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="White" value="White" <perch:if id="ethnicity" value="White"> checked="checked" </perch:if>>
                             <label for="White" id="Whitelabel">White</label>
 
-                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="PreferNotToSay" value="Prefer not to say" <perch:if id="ethnicity" value="Prefer not to say"> checked="checked" </perch:if>>
+                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="PreferNotToSay" value="PreferNotToSay" <perch:if id="ethnicity" value="PreferNotToSay"> checked="checked" </perch:if>>
                             <label for="PreferNotToSay" id="PreferNotToSaylabel">Prefer not to say</label>
 
                             <input type="hidden" id="nextstep" name="nextstep" value="">
@@ -275,7 +275,7 @@
         </section>
 
     </perch:if>
-    <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White" match="within" >
+    <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White,PreferNotToSay" match="within" >
 
         <section class="how_old">
             <div class="contanier">
@@ -1891,7 +1891,7 @@
                                     <span class="box_text">No allergies</span>
                                 </div>
                                 <div class="box_list mt-2" id="allergyBoxPreferNot">
-                                    <input type="radio" name="allergies" value="prefer_not_to_say" class="check1" <perch:if id="allergies" value="prefer_not_to_say">checked="checked"</perch:if>>
+                                    <input type="radio" name="allergies" value="PreferNotToSay" class="check1" <perch:if id="allergies" value="prefer_not_to_say">checked="checked"</perch:if>>
                                     <span class="box_text">Prefer not to say</span>
                                 </div>
 

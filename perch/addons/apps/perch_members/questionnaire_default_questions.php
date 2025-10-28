@@ -140,7 +140,7 @@ return [
                 'Mixed' => 'Mixed ethnicities',
                 'Other' => 'Other ethnic group',
                 'White' => 'White',
-                'Prefer not to say' => 'Prefer not to say',
+                'PreferNotToSay' => 'Prefer not to say',
             ],
             'step' => '18to74',
             'dependencies' => [
@@ -505,7 +505,7 @@ return [
             'options' => [
                 'yes' => 'Yes, I have allergies',
                 'no' => 'No allergies',
-                'prefer_not_to_say' => 'Prefer not to say',
+                'PreferNotToSay' => 'Prefer not to say',
             ],
             'step' => 'medication_allergies',
             'dependencies' => [

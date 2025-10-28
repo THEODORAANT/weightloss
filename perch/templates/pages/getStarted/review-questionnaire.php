@@ -53,7 +53,7 @@ $otherMedicationOptions = [
 $allergyOptions = [
     'yes' => 'Yes, I have allergies',
     'no' => 'No allergies',
-    'prefer_not_to_say' => 'Prefer not to say',
+    'PreferNotToSay' => 'Prefer not to say',
 ];
 
 $medicationSlugs = [];
