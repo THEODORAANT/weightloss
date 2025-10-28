@@ -436,7 +436,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "Black (African/Caribbean)" => "Black (African/Caribbean)",
                                                "mixed" => "Mixed ethnicities",
                                                "other" => "Other ethnic group",
-                                               "white" => "White"
+                                               "white" => "White",
+                                               "prefer-not-to-say" => "Prefer not to say"
                                            ]
                                        ],
                                        "ethnicity-more" => [
