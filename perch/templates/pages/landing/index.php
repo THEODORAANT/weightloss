@@ -134,6 +134,11 @@
       transform: rotate(45deg);
     }
 
+    /* Hide +/- icon for treatment price buttons */
+    .treatment-price-button::after {
+      display: none;
+    }
+
     /* Better mobile padding */
     @media (max-width: 640px) {
       .mobile-padding {
@@ -213,7 +218,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-20 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style="background-color: #e3f2d3; color: #5a7c2e;">
-          ✓ UK-regulated • GMC/GPhC registered
+          ✓ UK-regulated • GPhC registered
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
         <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">   <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a confidential consultation from one of our UK-registered clinicians. They’ll assess your health needs and determine if a prescription treatment is suitable for you.</p></p>
@@ -328,6 +333,42 @@
             <li>Commonly reported side effects include nausea, vomiting, diarrhoea, and decreased appetite.</li>
             <li>Always read the patient information leaflet carefully before use.</li>
           </ul>
+          <div class="mt-5 pt-5" style="border-top: 1px solid var(--grey)">
+            <div class="flex flex-col sm:flex-row gap-3">
+              <details class="treatment-pricing flex-1">
+                <summary class="treatment-price-button btn-lime inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md hover:shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 transition-all cursor-pointer list-none w-full">
+                  <span>View Treatment Prices</span>
+                </summary>
+              </details>
+              <a href="/medications/mounjaro" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-medium border-2 hover:bg-gray-50 transition-all flex-1" style="border-color: #d1d5db; color: var(--blue)">Learn more</a>
+            </div>
+            <div class="treatment-pricing-content hidden mt-4 space-y-2 text-sm sm:text-base">
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>2.5mg</span>
+                <span class="font-semibold">£139</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>5mg</span>
+                <span class="font-semibold">£159</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>7.5mg</span>
+                <span class="font-semibold">£209</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>10mg</span>
+                <span class="font-semibold">£239</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>12.5mg</span>
+                <span class="font-semibold">£259</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>15mg</span>
+                <span class="font-semibold">£279</span>
+              </div>
+            </div>
+          </div>
         </article>
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Wegovy® (semaglutide)</h3>
@@ -338,6 +379,38 @@
             <li>Commonly reported side effects include nausea, vomiting, diarrhoea, and constipation.</li>
             <li>Always read the patient information leaflet carefully before use.</li>
           </ul>
+          <div class="mt-5 pt-5" style="border-top: 1px solid var(--grey)">
+            <div class="flex flex-col sm:flex-row gap-3">
+              <details class="treatment-pricing flex-1">
+                <summary class="treatment-price-button btn-lime inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold shadow-md hover:shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 transition-all cursor-pointer list-none w-full">
+                  <span>View Treatment Prices</span>
+                </summary>
+              </details>
+              <a href="/medications/wegovy" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-medium border-2 hover:bg-gray-50 transition-all flex-1" style="border-color: #d1d5db; color: var(--blue)">Learn more</a>
+            </div>
+            <div class="treatment-pricing-content hidden mt-4 space-y-2 text-sm sm:text-base">
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>0.25mg</span>
+                <span class="font-semibold">£95</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>0.50mg</span>
+                <span class="font-semibold">£95</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>1mg</span>
+                <span class="font-semibold">£95</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>1.7mg</span>
+                <span class="font-semibold">£149</span>
+              </div>
+              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                <span>2.4mg</span>
+                <span class="font-semibold">£199</span>
+              </div>
+            </div>
+          </div>
         </article>
       </div>
       <div class="mt-6 rounded-2xl p-4 sm:p-5 text-sm sm:text-base" style="background-color: #afd13622; border: 1px solid var(--lime)">
@@ -464,6 +537,32 @@
         menu.classList.remove('active');
         hamburger.classList.remove('active');
       }
+    });
+
+    // Sync treatment pricing accordions
+    document.addEventListener('DOMContentLoaded', function() {
+      const pricingDetails = document.querySelectorAll('.treatment-pricing');
+      const pricingContents = document.querySelectorAll('.treatment-pricing-content');
+
+      pricingDetails.forEach(details => {
+        details.addEventListener('toggle', function() {
+          const isOpen = this.open;
+
+          // Sync all details elements
+          pricingDetails.forEach(otherDetails => {
+            otherDetails.open = isOpen;
+          });
+
+          // Show/hide all pricing content
+          pricingContents.forEach(content => {
+            if (isOpen) {
+              content.classList.remove('hidden');
+            } else {
+              content.classList.add('hidden');
+            }
+          });
+        });
+      });
     });
   </script>
 </body>
