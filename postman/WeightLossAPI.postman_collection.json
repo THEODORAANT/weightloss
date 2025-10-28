@@ -1,0 +1,188 @@
+{
+  "info": {
+    "name": "WeightLoss API",
+    "_postman_id": "a9966f2c-7b23-4cf6-8897-8f8338d95716",
+    "description": "Collection for interacting with the WeightLoss API endpoints covering injection logs, weight goals, and injection schedules.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Injection Logs",
+      "description": "Manage semaglutide/tirzepatide injection history.",
+      "item": [
+        {
+          "name": "List Injection Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/injection-logs?start_date={{startDate}}&end_date={{endDate}}&page={{page}}&limit={{limit}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Injection Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"injection_date\": \"2025-10-20T10:30:00Z\",\n  \"dose_mg\": 2.5,\n  \"medication_type\": \"semaglutide\",\n  \"notes\": \"Optional\"\n}"
+            },
+            "url": "{{baseUrl}}/injection-logs"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Injection Log",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/injection-logs/{{logId}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Weight Goals",
+      "description": "Create and view weight goals and progress.",
+      "item": [
+        {
+          "name": "Get Weight Goal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/weight-goals"
+          },
+          "response": []
+        },
+        {
+          "name": "Upsert Weight Goal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal_weight\": 70.0,\n  \"unit\": \"kg\",\n  \"target_date\": \"2025-12-31T00:00:00Z\"\n}"
+            },
+            "url": "{{baseUrl}}/weight-goals"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Weight Goal Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/weight-goals/progress"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Injection Schedule",
+      "description": "Optional helper endpoint for derived injection scheduling metrics.",
+      "item": [
+        {
+          "name": "Get Injection Schedule",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/injection-schedule"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "startDate",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "endDate",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "page",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "limit",
+      "value": "30",
+      "type": "string"
+    },
+    {
+      "key": "logId",
+      "value": "123",
+      "type": "string"
+    }
+  ]
+}
