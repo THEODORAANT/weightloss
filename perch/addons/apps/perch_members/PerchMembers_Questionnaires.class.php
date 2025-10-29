@@ -962,73 +962,203 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         return $this->return_instances($this->db->get_rows($sql));
     }
 
-function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs') {
-    $filePath = "/var/www/html/{$logDir}/{$userId}_raw_log.json";
+function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): array {
+    $result = [
+        'entries'  => [],
+        'metadata' => [],
+        'error'    => null,
+    ];
+
+    $sanitisedUserId = trim($userId);
+    if ($sanitisedUserId === '') {
+        $result['error'] = 'A valid user ID is required to view the answer history.';
+        return $result;
+    }
+
+    $sanitisedUserId = basename(str_replace('\\', '/', $sanitisedUserId));
+    $sanitisedUserId = str_replace(array("\"", "'"), '', $sanitisedUserId);
+
+    $logDir = trim($logDir);
+    if ($logDir === '') {
+        $logDir = 'logs';
+    }
+
+    if ($logDir[0] === '/' || preg_match('/^[A-Za-z]:[\\\\\/]/', $logDir)) {
+        $basePath = PerchUtil::file_path($logDir);
+    } else {
+        $logDir = trim($logDir, '/\\');
+        $siteRoot = defined('PERCH_SITEPATH') ? PERCH_SITEPATH : null;
+        if ($siteRoot === null && defined('PERCH_PATH')) {
+            $siteRoot = realpath(PERCH_PATH . '/../');
+        }
+        if (!is_string($siteRoot) || $siteRoot === '') {
+            $siteRoot = getcwd();
+        }
+
+        $basePath = PerchUtil::file_path(rtrim($siteRoot, '/\\') . '/' . $logDir);
+    }
+
+    $filePath = PerchUtil::file_path($basePath . DIRECTORY_SEPARATOR . $sanitisedUserId . '_raw_log.json');
 
     if (!file_exists($filePath)) {
-        echo "<p style='color:red;'>❌ Log file not found for user ID: {$userId}</p>";
-        return;
+        $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
+        return $result;
     }
 
-    $data = json_decode(file_get_contents($filePath), true);
-
-    if (!$data || !isset($data['log'])) {
-        echo "<p style='color:red;'>⚠️ Log file is invalid or missing log entries.</p>";
-        return;
+    $json = file_get_contents($filePath);
+    if ($json === false) {
+        $result['error'] = sprintf('Unable to read the answer history file for user ID "%s".', $sanitisedUserId);
+        return $result;
     }
 
-    $logEntries = $data['log'];
-
-    if (is_array($logEntries)) {
-        foreach ($logEntries as $index => &$entry) {
-            if (!is_array($entry)) {
-                $entry = ['_value' => $entry, '_sequence' => $index];
-                continue;
-            }
-
-            $entry['_sequence'] = $index;
-        }
-        unset($entry);
-
-        usort($logEntries, function ($a, $b) {
-            $timeA = isset($a['time']) ? strtotime((string)$a['time']) : false;
-            $timeB = isset($b['time']) ? strtotime((string)$b['time']) : false;
-
-            if ($timeA !== false && $timeB !== false && $timeA !== $timeB) {
-                return $timeA <=> $timeB;
-            }
-
-            if ($timeA !== false && $timeB === false) {
-                return -1;
-            }
-
-            if ($timeA === false && $timeB !== false) {
-                return 1;
-            }
-
-            $seqA = $a['_sequence'] ?? 0;
-            $seqB = $b['_sequence'] ?? 0;
-
-            return $seqA <=> $seqB;
-        });
-
-        foreach ($logEntries as &$entry) {
-            if (!is_array($entry)) {
-                continue;
-            }
-
-            if (array_key_exists('_sequence', $entry)) {
-                unset($entry['_sequence']);
-            }
-
-            if (array_key_exists('_value', $entry)) {
-                $entry = $entry['_value'];
+    $data = json_decode($json, true);
+    if (!is_array($data)) {
+        $message = 'JSON error';
+        if (function_exists('json_last_error') && json_last_error() !== JSON_ERROR_NONE) {
+            if (function_exists('json_last_error_msg')) {
+                $message = json_last_error_msg();
+            } else {
+                $message = 'code ' . json_last_error();
             }
         }
-        unset($entry);
+        $result['error'] = sprintf('The answer history file for user ID "%s" could not be parsed: %s', $sanitisedUserId, $message);
+        return $result;
     }
 
-    return $logEntries;
+    if (isset($data['metadata']) && is_array($data['metadata'])) {
+        $result['metadata'] = $data['metadata'];
+    }
+
+    $logEntries = $data['log'] ?? [];
+    if (!is_array($logEntries)) {
+        $result['error'] = sprintf('The answer history for user ID "%s" does not contain any log entries.', $sanitisedUserId);
+        return $result;
+    }
+
+    $normalise = function ($value) {
+        if (function_exists('perch_members_normalise_answer_log_value')) {
+            return perch_members_normalise_answer_log_value($value);
+        }
+
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_array($value)) {
+            $flattened = [];
+            array_walk_recursive($value, function ($item) use (&$flattened) {
+                if (is_scalar($item) || $item === null) {
+                    $flattened[] = (string)$item;
+                }
+            });
+
+            if (empty($flattened)) {
+                return '';
+            }
+
+            return trim(implode(', ', $flattened));
+        }
+
+        if (is_object($value) && method_exists($value, '__toString')) {
+            $value = (string)$value;
+        }
+
+        if (is_scalar($value)) {
+            return trim((string)$value);
+        }
+
+        $encoded = json_encode($value);
+
+        return $encoded === false ? '' : trim($encoded);
+    };
+
+    foreach ($logEntries as $index => &$entry) {
+        if (!is_array($entry)) {
+            $entry = ['_value' => $entry, '_sequence' => $index];
+            continue;
+        }
+
+        $entry['_sequence'] = $index;
+
+        if (!isset($entry['question']) || !is_string($entry['question'])) {
+            $entry['question'] = '';
+        }
+
+        if (!array_key_exists('answer', $entry) || !(is_scalar($entry['answer']) || $entry['answer'] === null)) {
+            $entry['answer'] = $normalise($entry['answer'] ?? null);
+        }
+
+        if (!isset($entry['time']) || !is_string($entry['time'])) {
+            $entry['time'] = '';
+        }
+
+        if (!isset($entry['action']) || !is_string($entry['action'])) {
+            $entry['action'] = '';
+        }
+
+        if (!isset($entry['previous_answer']) || !(is_scalar($entry['previous_answer']) || $entry['previous_answer'] === null)) {
+            $entry['previous_answer'] = $normalise($entry['previous_answer'] ?? null);
+        }
+
+        if (!isset($entry['changed'])) {
+            $entry['changed'] = false;
+        } else {
+            $entry['changed'] = (bool)$entry['changed'];
+        }
+    }
+    unset($entry);
+
+    usort($logEntries, function ($a, $b) {
+        $timeA = isset($a['time']) ? strtotime((string)$a['time']) : false;
+        $timeB = isset($b['time']) ? strtotime((string)$b['time']) : false;
+
+        if ($timeA !== false && $timeB !== false && $timeA !== $timeB) {
+            return $timeA <=> $timeB;
+        }
+
+        if ($timeA !== false && $timeB === false) {
+            return -1;
+        }
+
+        if ($timeA === false && $timeB !== false) {
+            return 1;
+        }
+
+        $seqA = $a['_sequence'] ?? 0;
+        $seqB = $b['_sequence'] ?? 0;
+
+        return $seqA <=> $seqB;
+    });
+
+    foreach ($logEntries as &$entry) {
+        if (!is_array($entry)) {
+            continue;
+        }
+
+        if (array_key_exists('_sequence', $entry)) {
+            unset($entry['_sequence']);
+        }
+
+        if (array_key_exists('_value', $entry)) {
+            $entry = $entry['_value'];
+            continue;
+        }
+
+        $entry['question'] = trim((string)$entry['question']);
+        $entry['answer'] = $normalise($entry['answer'] ?? null);
+        $entry['previous_answer'] = $normalise($entry['previous_answer'] ?? null);
+        $entry['time'] = trim((string)$entry['time']);
+        $entry['action'] = trim((string)$entry['action']);
+    }
+    unset($entry);
+
+    $result['entries'] = $logEntries;
+
+    return $result;
 }
 function getNextStepforFirstOrder(array $data): string {
     // Priority-based conditional routing
