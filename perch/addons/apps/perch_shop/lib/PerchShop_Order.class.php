@@ -241,6 +241,7 @@ class PerchShop_Order extends PerchShop_Base
 
                 $questionnaireID = null;
                 $dynamicFields  = PerchUtil::json_safe_decode($this->orderDynamicFields(), true);
+                $questionnaire_notes = '';
 
                 if (is_array($dynamicFields)) {
                     if (isset($dynamicFields['questionnaires']) && is_array($dynamicFields['questionnaires'])) {
@@ -249,6 +250,10 @@ class PerchShop_Order extends PerchShop_Base
                         }
                     } elseif (!empty($dynamicFields['questionnaire_qid'])) {
                         $questionnaireID = (int)$dynamicFields['questionnaire_qid'];
+                    }
+
+                    if (!empty($dynamicFields['questionnaire_notes'])) {
+                        $questionnaire_notes = trim((string) $dynamicFields['questionnaire_notes']);
                     }
                 }
 
@@ -305,6 +310,13 @@ class PerchShop_Order extends PerchShop_Base
                     }
                 }
 
+        if ($questionnaire_notes !== '') {
+            $questions_items[] = [
+                "question" => "Admin notes",
+                "answer" => $questionnaire_notes,
+            ];
+        }
+
 //echo "questions_items";
 	//print_r($questions_items);
         /*echo "order_items";
@@ -336,7 +348,7 @@ class PerchShop_Order extends PerchShop_Base
                  "country" => $ShippingAddr->get_country_name()
              ],
              "assessment"=>$questions_items,
-             "notes" => ""
+             "notes" => $questionnaire_notes
          ];
           // print_r($orderData);
            $response =[];
