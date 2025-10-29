@@ -33,6 +33,32 @@
             }
         }
 
+        $answer_indicates_allergies = static function ($answerText) {
+            $normalized = strtolower(trim((string) $answerText));
+
+            return $normalized !== '' && strpos($normalized, 'yes') === 0;
+        };
+
+        $should_skip_question = static function ($slug, $answers_by_slug) use ($answer_indicates_allergies) {
+            if ($slug === 'allergy_details') {
+                if (!isset($answers_by_slug['allergies'])) {
+                    return true;
+                }
+
+                $allergy_answer = $answers_by_slug['allergies']->answer_text();
+
+                if ($allergy_answer === null || $allergy_answer === '') {
+                    $allergy_answer = $answers_by_slug['allergies']->answer();
+                }
+
+                if (!$answer_indicates_allergies($allergy_answer)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
         echo '<h2>'.PerchUtil::html($section['title']).'</h2>';
 
         if (!PerchUtil::count($answers_by_slug)) {
@@ -55,6 +81,10 @@
         foreach ($questions as $slug => $label) {
 
             if (!isset($answers_by_slug[$slug])) {
+                continue;
+            }
+
+            if ($should_skip_question($slug, $answers_by_slug)) {
                 continue;
             }
 
