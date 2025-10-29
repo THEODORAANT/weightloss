@@ -206,6 +206,8 @@
           </div>
           <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px]">People who already love us</p>
           <p class="text-[16px] text-[grey] w-full max-w-[742px] leading-[24px]">With each client having different triggers and objectives for starting their weight loss journey, we share a few of the success stories here;</p>
+             <p class="text-[14px] text-[grey] w-full max-w-[742px] leading-[20px] mt-[8px] italic">Disclaimer: Individual results vary. Any medication is prescribed only after a UK clinician's assessment and may not be suitable for everyone. </p>
+
         </div>
       </div>
 

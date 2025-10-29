@@ -82,7 +82,7 @@ class PerchMembers_InjectionLogsRepository
         $sql = 'INSERT INTO ' . $this->table
             . ' (' . implode(',', $columns) . ')'
             . ' VALUES (' . implode(',', $values) . ')';
-echo $sql;
+
         $insertId = $this->db->execute($sql);
 
         if ($insertId === false) {
