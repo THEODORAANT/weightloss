@@ -181,6 +181,13 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
 
             foreach ($_SESSION['questionnaire'] as $key => $value) {
                 if (array_key_exists($key, $questions)) {
+                    if ($key === 'allergy_details') {
+                        $allergiesAnswer = $_SESSION['questionnaire']['allergies'] ?? '';
+                        if ($allergiesAnswer !== 'yes') {
+                            continue;
+                        }
+                    }
+
                     $changelink = "/get-started/questionnaire?step=" . $steps[$key];
             ?>
             <div class="plan">
