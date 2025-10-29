@@ -715,7 +715,7 @@
 
                     </div>
                     <div class="under">
-                        <input type="radio" name="diabetes" required onclick="submitForm('diabetes')"  <perch:if id="diabetes" value="yes-medication"> checked </perch:if>   value="yes-medication" id="yes-medication" checked="checked">
+                        <input type="radio" name="diabetes" required onclick="submitForm('diabetes')"  <perch:if id="diabetes" value="yes-medication"> checked </perch:if>   value="yes-medication" id="yes-medication">
                         <label for="yes-medication" id="have">I have diabetes and take medication for it</label>
 
 
@@ -1506,7 +1506,7 @@
                     `;
 
                     options.forEach(function (option, optionIndex) {
-                        const isChecked = hasExistingValue ? config.dose === option.value : optionIndex === 0;
+                        const isChecked = hasExistingValue && config.dose === option.value;
                         const requiredAttr = optionIndex === 0 ? ' required' : '';
                         const inputId = `dose-${slug}-${option.value}`;
                         fieldHtml += `
@@ -1890,12 +1890,6 @@
                                     <input type="radio" name="allergies" value="no" class="check1" <perch:if id="allergies" value="no">checked="checked"</perch:if>>
                                     <span class="box_text">No allergies</span>
                                 </div>
-                                <div class="box_list mt-2" id="allergyBoxPreferNot">
-                                    <input type="radio" name="allergies" value="PreferNotToSay" class="check1" <perch:if id="allergies" value="prefer_not_to_say">checked="checked"</perch:if>>
-                                    <span class="box_text">Prefer not to say</span>
-                                </div>
-
-
                             </div>
 
                             <div class="mt-4" id="allergyDetailsWrapper" style="display:none;">
