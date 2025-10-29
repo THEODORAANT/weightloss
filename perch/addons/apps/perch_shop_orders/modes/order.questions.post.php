@@ -11,6 +11,10 @@
 
     include('_order_smartbar.php');
 
+    if ($message) {
+        echo $message;
+    }
+
     echo '<div class="inner">';
 
     $questions_rendered = false;
@@ -118,5 +122,12 @@
     if (!$questions_rendered) {
         echo '<p>'.$Lang->get('No questionnaire responses were recorded for this order.').'</p>';
     }
+
+    echo '<div class="questionnaire-notes">';
+    echo $Form->form_start(false, 'questionnaire-notes-form');
+    echo $Form->textarea_field('questionnaire_notes', 'Questionnaire notes', $questionnaire_notes, 'input-simple', false);
+    echo $Form->submit_field('btnSubmit', 'Save notes');
+    echo $Form->form_end();
+    echo '</div>';
 
     echo '</div>';
