@@ -71,6 +71,43 @@
     </footer>
   </div>
 
+  <?php
+    $gaConfig = function_exists('perch_content_custom')
+      ? perch_content_custom('Google Analytics', [
+          'template' => 'google_analytics_ga4.html',
+          'skip-template' => true,
+          'count' => 1,
+        ])
+      : [];
+
+    $gaMeasurementId = '';
+
+    if (is_array($gaConfig) && !empty($gaConfig)) {
+      $firstConfig = $gaConfig[0];
+      if (is_array($firstConfig) && !empty($firstConfig['measurement_id'])) {
+        $gaMeasurementId = trim($firstConfig['measurement_id']);
+      }
+    }
+
+    if ($gaMeasurementId === '') {
+      $gaMeasurementId = getenv('GA_MEASUREMENT_ID')
+        ?: getenv('GOOGLE_ANALYTICS_ID')
+        ?: getenv('GOOGLE_ANALYTICS_MEASUREMENT_ID')
+        ?: '';
+    }
+
+    if ($gaMeasurementId !== ''):
+  ?>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($gaMeasurementId, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', <?= json_encode($gaMeasurementId); ?>, { 'anonymize_ip': true });
+    </script>
+  <?php endif; ?>
+
  <script>
     // Navbar scroll effect
     const mainNav = document.getElementById('mainNav');
