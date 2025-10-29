@@ -818,9 +818,8 @@
                         const optionValue = option.value;
                         const optionLabel = option.label;
                         const normalizedOptionValue = normalizeValue(optionValue);
-                        const isChecked = normalizedStoredValue !== ''
-                            ? normalizedStoredValue === normalizedOptionValue
-                            : optionIndex === 0;
+                        const isChecked = normalizedStoredValue !== '' &&
+                            normalizedStoredValue === normalizedOptionValue;
                         const requiredAttr = optionIndex === 0 ? ' required' : '';
                         const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
@@ -1772,9 +1771,8 @@
                         const optionValue = option.value;
                         const optionLabel = option.label;
                         const normalizedOptionValue = normalizeValue(optionValue);
-                        const isChecked = normalizedStoredValue !== ''
-                            ? normalizedStoredValue === normalizedOptionValue
-                            : optionIndex === 0;
+                        const isChecked = normalizedStoredValue !== '' &&
+                            normalizedStoredValue === normalizedOptionValue;
                         const requiredAttr = optionIndex === 0 ? ' required' : '';
                         const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
