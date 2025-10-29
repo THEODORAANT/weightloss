@@ -292,6 +292,9 @@ class PerchShop_Order extends PerchShop_Base
              //   print_r($questionnaire);
 
                 if (PerchUtil::count($questionnaire)) {
+                    $question_entries = [];
+                    $answers_by_slug = [];
+
                     foreach ($questionnaire as $questiondet) {
                         $question_slug = $questiondet['question_slug'] ?? null;
 
@@ -299,13 +302,45 @@ class PerchShop_Order extends PerchShop_Base
                             continue;
                         }
 
-                        if (isset($questiondet["question_text"]) && isset($questiondet["answer_text"])) {
-                            if ($questiondet["question_text"] != "" && $questiondet["answer_text"] != "") {
-                                $questions_items[] = [
-                                    "question" => $questiondet["question_text"],
-                                    "answer" => $questiondet["answer_text"],
-                                ];
+                        if (!isset($questiondet["question_text"], $questiondet["answer_text"])) {
+                            continue;
+                        }
+
+                        $question_text = (string)$questiondet["question_text"];
+                        $answer_text = (string)$questiondet["answer_text"];
+
+                        if ($question_text === '' || $answer_text === '') {
+                            continue;
+                        }
+
+                        $answers_by_slug[$question_slug] = $answer_text;
+                        $question_entries[] = [
+                            'slug' => $question_slug,
+                            'question' => $question_text,
+                            'answer' => $answer_text,
+                        ];
+                    }
+
+                    if (!empty($question_entries)) {
+                        $answer_indicates_allergies = static function ($answerText) {
+                            $normalized = strtolower(trim((string)$answerText));
+
+                            return $normalized !== '' && strpos($normalized, 'yes') === 0;
+                        };
+
+                        foreach ($question_entries as $entry) {
+                            if ($entry['slug'] === 'allergy_details') {
+                                $allergy_answer = $answers_by_slug['allergies'] ?? null;
+
+                                if ($allergy_answer === null || !$answer_indicates_allergies($allergy_answer)) {
+                                    continue;
+                                }
                             }
+
+                            $questions_items[] = [
+                                "question" => $entry['question'],
+                                "answer" => $entry['answer'],
+                            ];
                         }
                     }
                 }

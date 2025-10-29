@@ -207,22 +207,27 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                  <tbody>
              <?php
 
-             $questions=$Questionnaires->get_questions();
-             $should_skip_question = function($slug, $answers_by_slug) {
-                 if ($slug === 'allergy_details') {
-                     if (!isset($answers_by_slug['allergies'])) {
-                         return false;
-                     }
+            $questions=$Questionnaires->get_questions();
+            $answer_indicates_allergies = static function ($answerText) {
+                $normalized = strtolower(trim((string)$answerText));
 
-                     $allergy_answer = trim((string)$answers_by_slug['allergies']->answer_text());
+                return $normalized !== '' && strpos($normalized, 'yes') === 0;
+            };
+            $should_skip_question = static function($slug, $answers_by_slug) use ($answer_indicates_allergies) {
+                if ($slug === 'allergy_details') {
+                    if (!isset($answers_by_slug['allergies'])) {
+                        return false;
+                    }
 
-                     if ($allergy_answer === '' || strcasecmp($allergy_answer, 'No allergies') === 0) {
-                         return true;
-                     }
-                 }
+                    $allergy_answer = $answers_by_slug['allergies']->answer_text();
 
-                 return false;
-             };
+                    if (!$answer_indicates_allergies($allergy_answer)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
              $bmi_edit_controls_needed = false;
 
                 if (PerchUtil::count($questionnaire)) {
