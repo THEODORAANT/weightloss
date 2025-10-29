@@ -542,7 +542,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            ]
                                        ],
                                        "more_pancreatitis" => [
-                                           "label" => "Please tell us more about your health condition and how you manage it.",
+                                           "label" => "Tell me about your gastric surgery procedure.",
                                            "type" => "text",
                                            "name" => "more_pancreatitis"
                                        ],
@@ -759,7 +759,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "diabetes"=>"Have you been diagnosed with diabetes?",
     "conditions"=>"Do any of the following statements apply to you?",
     "bariatricoperation"=>"Was your bariatric operation in the last 6 months? ",
-    "more_pancreatitis"=>"Please tell us more about your mental health condition and how you manage it",
+    "more_pancreatitis"=>"Tell me about your gastric surgery procedure.",
     "thyroidoperation"=>"Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
     "more_conditions"=>"Please tell us more about your mental health condition and how you manage it",
     "conditions2"=>"Do any of the following statements apply to you?",

@@ -208,6 +208,21 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
              <?php
 
              $questions=$Questionnaires->get_questions();
+             $should_skip_question = function($slug, $answers_by_slug) {
+                 if ($slug === 'allergy_details') {
+                     if (!isset($answers_by_slug['allergies'])) {
+                         return false;
+                     }
+
+                     $allergy_answer = trim((string)$answers_by_slug['allergies']->answer_text());
+
+                     if ($allergy_answer === '' || strcasecmp($allergy_answer, 'No allergies') === 0) {
+                         return true;
+                     }
+                 }
+
+                 return false;
+             };
              $bmi_edit_controls_needed = false;
 
                 if (PerchUtil::count($questionnaire)) {
@@ -224,6 +239,9 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                         $historyPrinted = false;
                         foreach ($questions as $slug => $question_label) {
                             if (!isset($answers_by_slug[$slug])) {
+                                continue;
+                            }
+                            if ($should_skip_question($slug, $answers_by_slug)) {
                                 continue;
                             }
                             $Questionnaire = $answers_by_slug[$slug];
@@ -289,6 +307,9 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                         $historyPrinted = false;
                         foreach ($questions as $slug => $question_label) {
                             if (!isset($answers_by_slug[$slug])) {
+                                continue;
+                            }
+                            if ($should_skip_question($slug, $answers_by_slug)) {
                                 continue;
                             }
                             $Questionnaire = $answers_by_slug[$slug];
