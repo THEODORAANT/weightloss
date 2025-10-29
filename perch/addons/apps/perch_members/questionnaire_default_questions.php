@@ -305,7 +305,7 @@ return [
             ],
         ],
         'more_pancreatitis' => [
-            'label' => 'Please tell us more about your health condition and how you manage it.',
+            'label' => 'Tell me about your gastric surgery procedure.',
             'type' => 'textarea',
             'name' => 'more_pancreatitis',
             'step' => 'more_pancreatitis',
