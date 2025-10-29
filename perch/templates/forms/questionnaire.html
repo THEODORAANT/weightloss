@@ -1628,8 +1628,7 @@
                             const optionLabel = option.label;
                             const normalizedOptionValue = normalizeValue(optionValue);
                             const isChecked = normalizedStoredValue !== ''
-                                ? normalizedStoredValue === normalizedOptionValue
-                                : optionIndex === 0;
+                                && normalizedStoredValue === normalizedOptionValue;
                             const requiredAttr = optionIndex === 0 ? ' required' : '';
                             const inputId = `recently-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
