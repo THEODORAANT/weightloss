@@ -47,189 +47,235 @@
     }
 
     if ($Form->submitted()) {
-   	        
+
         $post = $_POST;
-        $existing_tagIDs = $Form->find_items('tag-', true);
 
-        $postvars = array('memberEmail', 'memberStatus');
-		
-    	//$data = $Form->receive($postvars);
+        if (isset($post['send_note_to_pharmacy']) && $post['send_note_to_pharmacy'] !== '') {
+            if (!is_object($Member)) {
+                $message = $HTML->failure_message('The note could not be sent because the member record could not be found.');
+            } else {
+                $noteID = (int)$post['send_note_to_pharmacy'];
+                $Note = $Notes->find($noteID);
 
-        $data = $Form->get_posted_content($Template, $Members, $Member, false);
+                if (!$Note) {
+                    $message = $HTML->failure_message('The selected note could not be found.');
+                } else {
+                    $memberEmail = trim((string)$Member->memberEmail());
 
-        // PerchUtil::debug($data);
+                    if ($memberEmail === '') {
+                        $message = $HTML->failure_message('The note could not be sent because the member does not have an email address.');
+                    } else {
+                        $pharmacy_api = new PerchMembers_PharmacyApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
+                        $apiResponse = $pharmacy_api->sendCustomerNote($memberEmail, (string)$Note->note(), false);
 
-    	$result = false;
+                        if ($apiResponse['success']) {
+                            $message = $HTML->success_message('The note has been sent to the pharmacy.');
+                        } else {
+                            $errorMessage = 'The note could not be sent to the pharmacy.';
 
+                            if (isset($apiResponse['message']) && $apiResponse['message']) {
+                                $errorMessage .= ' '.$apiResponse['message'];
+                            } elseif (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['message'])) {
+                                $errorMessage .= ' '.$apiResponse['data']['message'];
+                            }
 
-    	if (is_object($Member)) {
-    	    $Member->update($data);
-            $result = true;
-    	}else{
+                            $message = $HTML->failure_message($errorMessage);
 
-            $data['memberCreated'] = date('Y-m-d H:i:s');
-
-            // Password
-            if (isset($post['memberPassword']) && $post['memberPassword']!='') {
-                $clear_pwd = trim($post['memberPassword']);
-                $Hasher = PerchUtil::get_password_hasher();
-                $data['memberPassword'] = $Hasher->HashPassword($clear_pwd);            
-            }
-
-
-            if (!$Members->check_email($data['memberEmail'])) {
-                $message = $HTML->failure_message('A member with that email address already exists.');
-            }else{
-
-                //$data['memberProperties'] = '';
-
-                $Member = $Members->create($data);
-                if ($Member) {
-
-                    $member = array(
-                        'memberAuthID'=>$Member->id()
-                    );
-
-                    $Member->update($member);
-
-                    if (isset($post['send_email']) && $post['send_email']=='1') {
-                        $Member->send_welcome_email();
-                    }
-
-                    $result = true;
-                    PerchUtil::redirect($API->app_path() .'/edit/?id='.$Member->id().'&created=1');
-                }else{
-                    $message = $HTML->failure_message('Sorry, that member could not be updated.');
-                }
-            }
-    	    
-    	}
-
-
-        // Tags
-        if ($result) {
-            if (is_object($Member) && isset($post['questionnaire_bmi']) && is_array($post['questionnaire_bmi'])) {
-                foreach ($post['questionnaire_bmi'] as $questionnaireID => $bmiValue) {
-                    $questionnaireID = (int) $questionnaireID;
-                    if ($questionnaireID <= 0) {
-                        continue;
-                    }
-
-                    $bmiValue = trim((string) $bmiValue);
-
-                    $QuestionnaireEntry = $Questionnaires->find($questionnaireID);
-                    if (!$QuestionnaireEntry) {
-                        continue;
-                    }
-
-                    if ((int) $QuestionnaireEntry->member_id() !== (int) $Member->id()) {
-                        continue;
-                    }
-
-                    $entryDetails = $QuestionnaireEntry->to_array();
-
-                    $currentValue = trim((string) $QuestionnaireEntry->answer_text());
-                    if ($currentValue === '' && is_array($entryDetails) && isset($entryDetails['answer'])) {
-                        $currentValue = trim((string) $entryDetails['answer']);
-                    }
-
-                    $newValue = $bmiValue;
-
-                    if ($currentValue !== '' && strpos($currentValue, ',') !== false && strpos($newValue, ',') === false) {
-                        $suffix = trim((string) substr($currentValue, strpos($currentValue, ',') + 1));
-                        if ($suffix !== '') {
-                            $newValue .= ', '.$suffix;
+                            if (isset($apiResponse['data']) && !is_string($apiResponse['data'])) {
+                                PerchUtil::debug($apiResponse['data'], 'error');
+                            }
                         }
                     }
-
-                    if ($currentValue === $newValue) {
-                        continue;
-                    }
-
-                    $updateData = [
-                        'answer_text' => $newValue,
-                    ];
-
-                    if (is_array($entryDetails) && array_key_exists('answer', $entryDetails)) {
-                        $updateData['answer'] = $newValue;
-                    }
-
-                    $QuestionnaireEntry->update($updateData);
                 }
             }
 
-            // existing tags
-            $Tags->remove_from_member($Member->id(), $existing_tagIDs);
-            
-            // new tag
-            if (isset($post['new-tag']) && $post['new-tag']!='') {
-                $tagset = $Tags->parse_string($post['new-tag']);
-                if (PerchUtil::count($tagset)) {
+            if (is_object($Member)) {
+                $details = $Member->to_array();
+            }
+        } else {
+            $existing_tagIDs = $Form->find_items('tag-', true);
 
-                    if (isset($post['new-expire']) && $post['new-expire']!='') {
-                        $tag_expiry = $Form->get_date('new-expires', $post);
-                        if (!$tag_expiry) $tag_expiry=false;
+            $postvars = array('memberEmail', 'memberStatus');
+
+            //$data = $Form->receive($postvars);
+
+            $data = $Form->get_posted_content($Template, $Members, $Member, false);
+
+            // PerchUtil::debug($data);
+
+            $result = false;
+
+
+            if (is_object($Member)) {
+                $Member->update($data);
+                $result = true;
+            }else{
+
+                $data['memberCreated'] = date('Y-m-d H:i:s');
+
+                // Password
+                if (isset($post['memberPassword']) && $post['memberPassword']!='') {
+                    $clear_pwd = trim($post['memberPassword']);
+                    $Hasher = PerchUtil::get_password_hasher();
+                    $data['memberPassword'] = $Hasher->HashPassword($clear_pwd);
+                }
+
+
+                if (!$Members->check_email($data['memberEmail'])) {
+                    $message = $HTML->failure_message('A member with that email address already exists.');
+                }else{
+
+                    //$data['memberProperties'] = '';
+
+                    $Member = $Members->create($data);
+                    if ($Member) {
+
+                        $member = array(
+                            'memberAuthID'=>$Member->id()
+                        );
+
+                        $Member->update($member);
+
+                        if (isset($post['send_email']) && $post['send_email']=='1') {
+                            $Member->send_welcome_email();
+                        }
+
+                        $result = true;
+                        PerchUtil::redirect($API->app_path() .'/edit/?id='.$Member->id().'&created=1');
                     }else{
-                        $tag_expiry = false;
-                    }
-
-                    foreach($tagset as $tag) {
-                        $Tag = $Tags->find_or_create($tag['tag'], $tag['tagDisplay']);
-                        $Tag->add_to_member($Member->id(), $tag_expiry);
+                        $message = $HTML->failure_message('Sorry, that member could not be updated.');
                     }
                 }
+
             }
 
-             // new note
-           if (isset($post['new-note']) && $post['new-note']!='') {
-                            $noteset = $Notes->parse_string($post['new-note']);
-                             $User = $Users->find($CurrentUser->id());
 
-                            if (PerchUtil::count($noteset)) {
-                                foreach($noteset as $note) {
-                                    $Note = $Notes->find_or_create($note['note']);
-                                    $Note->add_to_member($Member->id(),$User->userUsername());
-                                }
+            // Tags
+            if ($result) {
+                if (is_object($Member) && isset($post['questionnaire_bmi']) && is_array($post['questionnaire_bmi'])) {
+                    foreach ($post['questionnaire_bmi'] as $questionnaireID => $bmiValue) {
+                        $questionnaireID = (int) $questionnaireID;
+                        if ($questionnaireID <= 0) {
+                            continue;
+                        }
+
+                        $bmiValue = trim((string) $bmiValue);
+
+                        $QuestionnaireEntry = $Questionnaires->find($questionnaireID);
+                        if (!$QuestionnaireEntry) {
+                            continue;
+                        }
+
+                        if ((int) $QuestionnaireEntry->member_id() !== (int) $Member->id()) {
+                            continue;
+                        }
+
+                        $entryDetails = $QuestionnaireEntry->to_array();
+
+                        $currentValue = trim((string) $QuestionnaireEntry->answer_text());
+                        if ($currentValue === '' && is_array($entryDetails) && isset($entryDetails['answer'])) {
+                            $currentValue = trim((string) $entryDetails['answer']);
+                        }
+
+                        $newValue = $bmiValue;
+
+                        if ($currentValue !== '' && strpos($currentValue, ',') !== false && strpos($newValue, ',') === false) {
+                            $suffix = trim((string) substr($currentValue, strpos($currentValue, ',') + 1));
+                            if ($suffix !== '') {
+                                $newValue .= ', '.$suffix;
                             }
-             }
-              // new notification
-                         if (isset($post['new-notification-title']) && $post['new-notification-title']!='' && isset($post['new-notification-message']) && $post['new-notification-message']!='') {
-                             $data = [
-                                 'memberID' => $Member->id(),
-                                 'notificationTitle' => $post['new-notification-title'],
-                                 'notificationMessage' => $post['new-notification-message'],
-                                 'notificationDate' => date('Y-m-d H:i:s'),
-                                 'notificationRead' => 0
-                             ];
-                             $Notifications->create($data);
-                         }
-            // echo "document";
-            // print_r($_FILES);
-          if (isset($_FILES['new-document']) && $_FILES['new-document']!='' &&  $_FILES['new-document']['size']!=0) {
+                        }
 
-                $Document = $Documents->upload($_FILES['new-document'],$Member->id());
+                        if ($currentValue === $newValue) {
+                            continue;
+                        }
+
+                        $updateData = [
+                            'answer_text' => $newValue,
+                        ];
+
+                        if (is_array($entryDetails) && array_key_exists('answer', $entryDetails)) {
+                            $updateData['answer'] = $newValue;
+                        }
+
+                        $QuestionnaireEntry->update($updateData);
+                    }
+                }
+
+                // existing tags
+                $Tags->remove_from_member($Member->id(), $existing_tagIDs);
+
+                // new tag
+                if (isset($post['new-tag']) && $post['new-tag']!='') {
+                    $tagset = $Tags->parse_string($post['new-tag']);
+                    if (PerchUtil::count($tagset)) {
+
+                        if (isset($post['new-expire']) && $post['new-expire']!='') {
+                            $tag_expiry = $Form->get_date('new-expires', $post);
+                            if (!$tag_expiry) $tag_expiry=false;
+                        }else{
+                            $tag_expiry = false;
+                        }
+
+                        foreach($tagset as $tag) {
+                            $Tag = $Tags->find_or_create($tag['tag'], $tag['tagDisplay']);
+                            $Tag->add_to_member($Member->id(), $tag_expiry);
+                        }
+                    }
+                }
+
+                 // new note
+               if (isset($post['new-note']) && $post['new-note']!='') {
+                                $noteset = $Notes->parse_string($post['new-note']);
+                                 $User = $Users->find($CurrentUser->id());
+
+                                if (PerchUtil::count($noteset)) {
+                                    foreach($noteset as $note) {
+                                        $Note = $Notes->find_or_create($note['note']);
+                                        $Note->add_to_member($Member->id(),$User->userUsername());
+                                    }
+                                }
+                 }
+                  // new notification
+                             if (isset($post['new-notification-title']) && $post['new-notification-title']!='' && isset($post['new-notification-message']) && $post['new-notification-message']!='') {
+                                 $data = [
+                                     'memberID' => $Member->id(),
+                                     'notificationTitle' => $post['new-notification-title'],
+                                     'notificationMessage' => $post['new-notification-message'],
+                                     'notificationDate' => date('Y-m-d H:i:s'),
+                                     'notificationRead' => 0
+                                 ];
+                                 $Notifications->create($data);
+                             }
+                // echo "document";
+                // print_r($_FILES);
+              if (isset($_FILES['new-document']) && $_FILES['new-document']!='' &&  $_FILES['new-document']['size']!=0) {
+
+                    $Document = $Documents->upload($_FILES['new-document'],$Member->id());
+
+                }
+
+                if (isset($post['send_email']) && $post['send_email']=='1') {
+                    $Member->send_welcome_email();
+                }
 
             }
 
-            if (isset($post['send_email']) && $post['send_email']=='1') {
-                $Member->send_welcome_email();
+            if ($result) {
+
+               $message = $HTML->success_message('The member has been successfully updated. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>');
+            }else{
+                if (!$message) $message = $HTML->failure_message('Sorry, that member could not be updated, or no changes were made.');
+            }
+
+            if (is_object($Member)) {
+                $details = $Member->to_array();
+            }else{
+                $details = array();
             }
 
         }
-   	
-        if ($result) {
 
-           $message = $HTML->success_message('The member has been successfully updated. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>');
-        }else{
-            if (!$message) $message = $HTML->failure_message('Sorry, that member could not be updated, or no changes were made.');
-        }
-        
-        if (is_object($Member)) {
-            $details = $Member->to_array();
-        }else{
-            $details = array();
-        }
-        
     }
     
     if (isset($_GET['created']) && !$message) {

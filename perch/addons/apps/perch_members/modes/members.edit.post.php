@@ -355,6 +355,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               <th>Note</th>
                               <th>Date</th>
                                 <th>Added by</th>
+                                <th class="action">Action</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -366,12 +367,17 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                                   echo '<td>'.PerchUtil::html($Note->note()).'</td>';
                                   echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d b Y', strtotime($Note->noteDate())) : '-').'</td>';
                                     echo '<td>'.PerchUtil::html($Note->addedBy()).'</td>';
+                                    echo '<td class="action">';
+                                    if (is_object($Member)) {
+                                        echo '<button type="submit" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
+                                    }
+                                    echo '</td>';
                               echo '</tr>';
                           }
                       }
 
                       echo '<tr>';
-                          echo '<td colspan="3" class="action">'.$Form->label('new-note', PerchLang::get('New'));
+                          echo '<td colspan="4" class="action">'.$Form->label('new-note', PerchLang::get('New'));
                           echo $Form->text('new-note', false).'</td>';
 
                       echo '</tr>';
