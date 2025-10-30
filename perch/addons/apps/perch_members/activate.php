@@ -43,6 +43,18 @@
            PRIMARY KEY (`memberID`,`noteID`)
            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+        CREATE TABLE `__PREFIX__members_note_pharmacy_statuses` (
+          `statusID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `memberID` int(10) unsigned NOT NULL,
+          `noteID` int(10) unsigned NOT NULL,
+          `status` varchar(64) NOT NULL DEFAULT 'Sent',
+          `message` text DEFAULT NULL,
+          `sentAt` datetime NOT NULL,
+          PRIMARY KEY (`statusID`),
+          UNIQUE KEY `member_note` (`memberID`,`noteID`),
+          KEY `note_lookup` (`noteID`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
         CREATE TABLE `__PREFIX__members_sessions` (
           `sessionID` char(40) NOT NULL DEFAULT '',
           `sessionExpires` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',

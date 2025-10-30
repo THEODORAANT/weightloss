@@ -347,6 +347,12 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
 
     <?php echo $HTML->heading2('Notes'); ?>
 
+<?php
+    if (!isset($note_pharmacy_statuses) || !is_array($note_pharmacy_statuses)) {
+        $note_pharmacy_statuses = [];
+    }
+?>
+
            <div class="form-inner">
                   <table class="notes">
                       <thead>
@@ -355,6 +361,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               <th>Note</th>
                               <th>Date</th>
                                 <th>Added by</th>
+                                <th>Pharmacy status</th>
                                 <th class="action">Action</th>
                           </tr>
                       </thead>
@@ -362,13 +369,56 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                   <?php
                       if (PerchUtil::count($notes)) {
                           foreach($notes as $Note) {
+                              $noteID = (int) $Note->id();
+                              $pharmacyStatus = isset($note_pharmacy_statuses[$noteID]) ? $note_pharmacy_statuses[$noteID] : false;
+                              $statusLabel = '';
+                              $statusClassSuffix = 'sent';
+                              $statusMessage = '';
+                              $statusSentAt = '';
+
+                              if ($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus) {
+                                  $statusLabel = trim((string) $pharmacyStatus->status());
+                                  if ($statusLabel === '') {
+                                      $statusLabel = 'Sent';
+                                  }
+
+                                  $statusClassSuffix = strtolower(preg_replace('/[^a-z0-9]+/', '-', $statusLabel));
+                                  $statusClassSuffix = trim($statusClassSuffix, '-');
+                                  if ($statusClassSuffix === '') {
+                                      $statusClassSuffix = 'sent';
+                                  }
+
+                                  $statusMessage = trim((string) $pharmacyStatus->message());
+
+                                  $sentAt = $pharmacyStatus->sentAt();
+                                  if ($sentAt) {
+                                      $timestamp = strtotime($sentAt);
+                                      if ($timestamp) {
+                                          $statusSentAt = date('d M Y H:i', $timestamp);
+                                      }
+                                  }
+                              }
+
                               echo '<tr>';
 
                                   echo '<td>'.PerchUtil::html($Note->note()).'</td>';
                                   echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d M Y', strtotime($Note->noteDate())) : '-').'</td>';
                                     echo '<td>'.PerchUtil::html($Note->addedBy()).'</td>';
+                                    echo '<td>';
+                                    if ($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus) {
+                                        echo '<span class="pharmacy-status pharmacy-status-'.$statusClassSuffix.'">Status: '.PerchUtil::html($statusLabel).'</span>';
+                                        if ($statusSentAt !== '') {
+                                            echo '<div class="meta">Sent '.PerchUtil::html($statusSentAt).'</div>';
+                                        }
+                                        if ($statusMessage !== '') {
+                                            echo '<div class="meta">'.PerchUtil::html($statusMessage).'</div>';
+                                        }
+                                    } else {
+                                        echo '-';
+                                    }
+                                    echo '</td>';
                                     echo '<td class="action">';
-                                    if (is_object($Member)) {
+                                    if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
                                         echo '<button type="submit" style="background-color:#199d19" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
                                     }
                                     echo '</td>';
@@ -377,7 +427,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                       }
 
                       echo '<tr>';
-                          echo '<td colspan="4" class="action">'.$Form->label('new-note', PerchLang::get('New'));
+                          echo '<td colspan="5" class="action">'.$Form->label('new-note', PerchLang::get('New'));
                           echo $Form->text('new-note', false).'</td>';
 
                       echo '</tr>';
