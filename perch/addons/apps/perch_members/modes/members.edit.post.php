@@ -58,7 +58,7 @@
                     echo '<tr>';
                         echo '<td class="action">'.$Form->checkbox('tag-'.$Tag->id(), '1', '1').'</td>';
                         echo '<td>'.PerchUtil::html($Tag->tag()).'</td>';
-                        echo '<td>'.PerchUtil::html($Tag->tagExpires() ? date('d b Y', strtotime($Tag->tagExpires())) : '-').'</td>';
+                        echo '<td>'.PerchUtil::html($Tag->tagExpires() ? date('d M Y', strtotime($Tag->tagExpires())) : '-').'</td>';
                     echo '</tr>';
                 }
             }
@@ -369,7 +369,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                                     echo '<td>'.PerchUtil::html($Note->addedBy()).'</td>';
                                     echo '<td class="action">';
                                     if (is_object($Member)) {
-                                        echo '<button type="submit" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
+                                        echo '<button type="submit" style="background-color:#199d19" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
                                     }
                                     echo '</td>';
                               echo '</tr>';
