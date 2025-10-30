@@ -123,17 +123,73 @@
         echo $Form->form_end();
 ?>
 <script>
-document.getElementById('btnGenerateAI').addEventListener('click', function(e){
-    e.preventDefault();
-    var prompt = window.prompt('Enter prompt for AI content');
-    if(!prompt) return;
-    fetch('<?php echo PERCH_LOGINPATH; ?>/addons/apps/perch_blog/ai/generate.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({prompt: prompt})
-    }).then(function(r){return r.json();}).then(function(data){
-        var textarea = document.querySelector('#blog-edit textarea');
-        if(textarea) textarea.value = data.content;
+document.addEventListener('DOMContentLoaded', function () {
+    var aiButton = document.getElementById('btnGenerateAI');
+    if (!aiButton) {
+        return;
+    }
+
+    var requestAIContent = function (prompt, callback) {
+        if (!prompt) {
+            return;
+        }
+
+        var url = '<?php echo PerchUtil::html(PERCH_LOGINPATH, true); ?>/addons/apps/perch_blog/ai/generate.php';
+        var payload = JSON.stringify({prompt: prompt});
+
+        if (window.fetch) {
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: payload
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    callback(data);
+                })
+                .catch(function () {
+                    callback(null);
+                });
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            callback(JSON.parse(xhr.responseText));
+                        } catch (e) {
+                            callback(null);
+                        }
+                    } else {
+                        callback(null);
+                    }
+                }
+            };
+            xhr.send(payload);
+        }
+    };
+
+    aiButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        var prompt = window.prompt('Enter prompt for AI content');
+        if (!prompt) {
+            return;
+        }
+
+        requestAIContent(prompt, function (data) {
+            if (!data || !data.content) {
+                return;
+            }
+
+            var textarea = document.querySelector('#blog-edit textarea');
+            if (textarea) {
+                textarea.value = data.content;
+            }
+        });
     });
 });
 </script>
