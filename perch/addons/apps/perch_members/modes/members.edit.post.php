@@ -365,7 +365,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               echo '<tr>';
 
                                   echo '<td>'.PerchUtil::html($Note->note()).'</td>';
-                                  echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d b Y', strtotime($Note->noteDate())) : '-').'</td>';
+                                  echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d M Y', strtotime($Note->noteDate())) : '-').'</td>';
                                     echo '<td>'.PerchUtil::html($Note->addedBy()).'</td>';
                                     echo '<td class="action">';
                                     if (is_object($Member)) {

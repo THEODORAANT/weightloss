@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_InjectionLogsRepository.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_InjectionLogsRepository.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/forms/questionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/forms/questionnaire.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/members.edit.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/members.edit.post.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -59,8 +55,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
+      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
       <recent name="$PROJECT_DIR$/perch/templates/forms" />
@@ -111,22 +107,6 @@
       <workItem from="1759335583029" duration="4974000" />
       <workItem from="1759743479952" duration="7339000" />
       <workItem from="1759826825876" duration="10949000" />
-    </task>
-    <task id="LOCAL-00041" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757930856789</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1757930856789</updated>
-    </task>
-    <task id="LOCAL-00042" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757944791393</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1757944791393</updated>
     </task>
     <task id="LOCAL-00043" summary="weightloss">
       <option name="closed" value="true" />
@@ -504,7 +484,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761659295608</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761730191001</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1761730191001</updated>
+    </task>
+    <task id="LOCAL-00091" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761819211541</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1761819211542</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
