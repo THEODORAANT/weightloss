@@ -5,6 +5,7 @@
     
     $Tags = new PerchMembers_Tags($API);
     $Notes = new PerchMembers_Notes($API);
+    $NotePharmacyStatuses = new PerchMembers_NotePharmacyStatuses($API);
     $Documents = new PerchMembers_Documents($API);
      $Notifications = new PerchMembers_Notifications($API);
     $Questionnaires = new PerchMembers_Questionnaires($API);
@@ -70,6 +71,18 @@
 
                         if ($apiResponse['success']) {
                             $message = $HTML->success_message('The note has been sent to the pharmacy.');
+
+                            $statusValue = 'Sent';
+                            if (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['status']) && $apiResponse['data']['status'] !== '') {
+                                $statusValue = (string) $apiResponse['data']['status'];
+                            }
+
+                            $statusMessage = null;
+                            if (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['message']) && $apiResponse['data']['message'] !== '') {
+                                $statusMessage = (string) $apiResponse['data']['message'];
+                            }
+
+                            $NotePharmacyStatuses->record_sent_status((int) $Member->id(), (int) $Note->id(), $statusValue, $statusMessage);
                         } else {
                             $errorMessage = 'The note could not be sent to the pharmacy.';
 
@@ -285,6 +298,7 @@
     if (is_object($Member)) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
+          $note_pharmacy_statuses = $NotePharmacyStatuses->get_indexed_for_member($Member->id());
         $documents = $Documents->get_for_member($Member->id());
           $questionnaire =  $Questionnaires->get_for_member($Member->id());
                   $notifications = $Notifications->get_for_member($Member->id());
@@ -293,6 +307,7 @@
     }else{
         $tags = false;
          $notes = false;
+        $note_pharmacy_statuses = [];
         $documents = false;
         $questionnaire =false;
          $notifications = false;
