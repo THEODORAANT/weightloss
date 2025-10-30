@@ -5,6 +5,21 @@ class PerchMembers_Note extends PerchAPI_Base
     protected $table  = 'members_notes';
     protected $pk     = 'noteID';
 
+    public function note_text()
+    {
+        $note = (string) $this->note();
+
+        if (strpos($note, ' ') !== false) {
+            return $note;
+        }
+
+        if (strpos($note, '-') !== false) {
+            $note = str_replace('-', ' ', $note);
+        }
+
+        return trim($note);
+    }
+
     public function add_to_member($memberID,$user)
     {
         $sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'members_member_notes WHERE noteID='.$this->db->pdb($this->id()).' AND memberID='.$this->db->pdb($memberID);

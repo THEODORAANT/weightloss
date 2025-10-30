@@ -67,7 +67,7 @@
                         $message = $HTML->failure_message('The note could not be sent because the member does not have an email address.');
                     } else {
                         $pharmacy_api = new PerchMembers_PharmacyApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
-                        $apiResponse = $pharmacy_api->sendCustomerNote($memberEmail, (string)$Note->note(), false);
+                        $apiResponse = $pharmacy_api->sendCustomerNote($memberEmail, (string) $Note->note_text(), false);
 
                         if ($apiResponse['success']) {
                             $message = $HTML->success_message('The note has been sent to the pharmacy.');
@@ -243,9 +243,14 @@
                                  $User = $Users->find($CurrentUser->id());
 
                                 if (PerchUtil::count($noteset)) {
-                                    foreach($noteset as $note) {
+                                    foreach ($noteset as $note) {
                                         $Note = $Notes->find_or_create($note['note']);
-                                        $Note->add_to_member($Member->id(),$User->userUsername());
+
+                                        if (!$Note instanceof PerchMembers_Note) {
+                                            continue;
+                                        }
+
+                                        $Note->add_to_member($Member->id(), $User->userUsername());
                                     }
                                 }
                  }
