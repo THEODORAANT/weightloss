@@ -1792,8 +1792,17 @@ function getNextStepforFirstOrder(array $data): string {
 
       // Convert weight to kilograms if needed
       if ($weightUnit === 'st-lbs') {
-          if ($weightNumeric === null || $weight2Numeric === null) {
+          if ($weightNumeric === null) {
               return "Invalid weight value.";
+          }
+
+          if ($weight2Numeric === null) {
+              $weight2Trimmed = is_string($weight2) ? trim($weight2) : $weight2;
+              if ($weight2Trimmed === '' || $weight2Trimmed === null) {
+                  $weight2Numeric = 0.0;
+              } else {
+                  return "Invalid weight value.";
+              }
           }
 
           $totalPounds = ($weightNumeric * 14) + $weight2Numeric;
@@ -1823,8 +1832,17 @@ function getNextStepforFirstOrder(array $data): string {
 
           $heightM = $height1Numeric * 0.0254;
       } elseif ($heightUnit === 'ft-in') {
-          if ($height1Numeric === null || $height2Numeric === null) {
+          if ($height1Numeric === null) {
               return "Invalid height value.";
+          }
+
+          if ($height2Numeric === null) {
+              $height2Trimmed = is_string($height2) ? trim($height2) : $height2;
+              if ($height2Trimmed === '' || $height2Trimmed === null) {
+                  $height2Numeric = 0.0;
+              } else {
+                  return "Invalid height value.";
+              }
           }
 
           $totalInches = ($height1Numeric * 12) + $height2Numeric;
