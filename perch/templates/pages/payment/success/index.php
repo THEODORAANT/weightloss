@@ -119,7 +119,7 @@ if (!$order_complete) {
     <?php if ($order_complete) {
     perch_shop_empty_cart();
     ?>
-        <h2 class="text-center fw-bolder">Complete your consultation. <br/>Upload your identification document and video here.<br/>
+        <h2 class="text-center fw-bolder">Complete your consultation. <br/>Upload your identification documents and videos here.<br/>
         </h2>
         <h4>Please review the information document before uploading your video</h4>
  <?php }else { ?>
@@ -302,45 +302,75 @@ perch_member_form('upload-proof.html');
   </div>
 -->
   <script>
-    // Preview Image
-    //document.getElementById("image")
-      document.getElementsByName("image")[0].addEventListener("change", function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = document.getElementById("imgPreview");
-          img.src = e.target.result;
-          img.style.display = "block";
-        };
-        reader.readAsDataURL(file);
-      }
+    function createImagePreview(file, container) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.width = 320;
+        img.height = 240;
+        img.className = 'me-3 mb-3';
+        img.alt = 'Image Preview';
+        container.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function createVideoPreview(file, container) {
+      const url = URL.createObjectURL(file);
+      const video = document.createElement('video');
+      video.width = 320;
+      video.height = 240;
+      video.controls = true;
+      video.className = 'me-3 mb-3';
+      video.src = url;
+      video.onloadeddata = function () {
+        URL.revokeObjectURL(url);
+      };
+      container.appendChild(video);
+    }
+
+    document.querySelectorAll('.document-image-input').forEach(function (input) {
+      input.addEventListener('change', function () {
+        const wrapper = this.closest('.plan');
+        const container = wrapper ? wrapper.querySelector('.image-preview-container') : null;
+        if (!container) {
+          return;
+        }
+        container.innerHTML = '';
+        Array.from(this.files || []).forEach(function (file) {
+          if (file && file.type && file.type.startsWith('image/')) {
+            createImagePreview(file, container);
+          }
+        });
+      });
     });
 
-    // Preview Video
-   // document.getElementById("video")
-    document.getElementsByName("video")[0].addEventListener("change", function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const video = document.getElementById("videoPreview");
-          video.src = e.target.result;
-          video.style.display = "block";
-        };
-        reader.readAsDataURL(file);
-      }
+    document.querySelectorAll('.document-video-input').forEach(function (input) {
+      input.addEventListener('change', function () {
+        const wrapper = this.closest('.plan');
+        const container = wrapper ? wrapper.querySelector('.video-preview-container') : null;
+        if (!container) {
+          return;
+        }
+        container.innerHTML = '';
+        Array.from(this.files || []).forEach(function (file) {
+          if (file && file.type && file.type.startsWith('video/')) {
+            createVideoPreview(file, container);
+          }
+        });
+      });
     });
 
-    // Show loading on form submit
-
-
- document.getElementsByName("upload")[0].addEventListener("click", function () {
- console.log("upload");
-  document.getElementById("loading").style.display = "block";
-         document.getElementsByName("upload")[0].value = "...";
-
-   });
+    document.querySelectorAll('input[name="upload"]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const loading = document.getElementById('loading');
+        if (loading) {
+          loading.style.display = 'block';
+        }
+        this.value = '...';
+      });
+    });
   </script>
 
   <?php

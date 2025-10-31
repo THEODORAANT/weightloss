@@ -114,33 +114,84 @@ class PerchMembers_Member extends PerchAPI_Base
         return true;
 
     }
-    	public function upload_member_file($SubmittedForm,$memberID=false){
+        public function upload_member_file($SubmittedForm,$memberID=false){
 
-    	 $data = $SubmittedForm->files;
-    	 $fielddata=$SubmittedForm->data;
+         $data = $SubmittedForm->files;
+         $fielddata=$SubmittedForm->data;
 
-    	       $API  = new PerchAPI(1.0, 'perch_members');
+               $API  = new PerchAPI(1.0, 'perch_members');
                     $Session = PerchMembers_Session::fetch();
                      if (!$memberID && $Session->logged_in) {
                     $memberID=$Session->get('memberID');
                     }
 
-    	$Documents = new PerchMembers_Documents();
-    	  if (isset($data['image'])){
-    	        $Document = $Documents->upload($data['image'], $memberID,$fielddata['documentType']);
+        $Documents = new PerchMembers_Documents();
+        $documentType = isset($fielddata['documentType']) ? $fielddata['documentType'] : 'documents';
+        $uploadPerformed = false;
 
-    	  }
-    	    if (isset($data['video'])){
+          if (isset($data['image'])){
+                $files = $this->normalise_files_array($data['image']);
+                foreach ($files as $file) {
+                    if (isset($file['error']) && $file['error'] !== UPLOAD_ERR_OK) {
+                        continue;
+                    }
+                    $Documents->upload($file, $memberID,$documentType);
+                    $uploadPerformed = true;
+                }
 
-      $Document = $Documents->upload($data['video'], $memberID,$fielddata['documentType']);
+          }
+            if (isset($data['video'])){
+
+                $files = $this->normalise_files_array($data['video']);
+                foreach ($files as $file) {
+                    if (isset($file['error']) && $file['error'] !== UPLOAD_ERR_OK) {
+                        continue;
+                    }
+                    $Documents->upload($file, $memberID,$documentType);
+                    $uploadPerformed = true;
+                }
       }
        //  $data["email"]= "support@getweightloss.co.uk";//"reshat1987@gmail.com";
        //  $data["ReviewLink"]="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/edit/?id=".$Session->get('memberID');
 
     //  perch_emailoctopus_update_contact($data);
+        if ($uploadPerformed) {
       $this->sendtoadmin_docs_email( $memberID,"george@nlclinicisleofwight.co.uk");
        $this->sendtoadmin_docs_email( $memberID,"reshat1987@gmail.com");
-    	}
+        }
+        }
+
+        private function normalise_files_array($fileInput)
+        {
+            $files = array();
+
+            if (!is_array($fileInput) || !isset($fileInput['name'])) {
+                return $files;
+            }
+
+            if (is_array($fileInput['name'])) {
+                $count = count($fileInput['name']);
+                for ($i = 0; $i < $count; $i++) {
+                    if (!isset($fileInput['name'][$i]) || $fileInput['name'][$i] == '') {
+                        continue;
+                    }
+
+                    $files[] = array(
+                        'name' => $fileInput['name'][$i],
+                        'type' => isset($fileInput['type'][$i]) ? $fileInput['type'][$i] : null,
+                        'tmp_name' => isset($fileInput['tmp_name'][$i]) ? $fileInput['tmp_name'][$i] : null,
+                        'error' => isset($fileInput['error'][$i]) ? $fileInput['error'][$i] : null,
+                        'size' => isset($fileInput['size'][$i]) ? $fileInput['size'][$i] : null,
+                    );
+                }
+            } else {
+                if ($fileInput['name'] != '') {
+                    $files[] = $fileInput;
+                }
+            }
+
+            return $files;
+        }
 
     public function change_password($SubmittedForm)
     {
