@@ -185,9 +185,14 @@ if (perch_member_logged_in()) {
 //perch_shop_orders();
 //perch_shop_empty_cart();
 $docs=perch_member_documents();
+$hasIdDocuments = false;
 if($docs){
 echo '<div class="documents-grid">';
 foreach ($docs as $x => $y) {
+
+    if($y["type"]=="id-documents") {
+        $hasIdDocuments = true;
+    }
 
     $documentTypeLabel = '';
     if($y["type"]=="id-documents"){ $documentTypeLabel = "ID and video documents";}
@@ -240,7 +245,9 @@ echo '</div>';
         <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
    </div>
 <?php
-}else{
+}
+
+if(!$docs || !$hasIdDocuments){
 ?>
     <div class="card-shadow form-card mb-5">
         <?php perch_member_form('upload.html'); ?>
