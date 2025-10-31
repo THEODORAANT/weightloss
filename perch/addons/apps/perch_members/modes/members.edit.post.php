@@ -350,6 +350,15 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
 <?php
     if (!isset($note_pharmacy_statuses) || !is_array($note_pharmacy_statuses)) {
         $note_pharmacy_statuses = [];
+
+        if (isset($API) && is_object($API) && isset($Member) && is_object($Member)) {
+            $NotePharmacyStatuses = new PerchMembers_NotePharmacyStatuses($API);
+            $note_pharmacy_statuses = $NotePharmacyStatuses->get_indexed_for_member($Member->id());
+
+            if (!is_array($note_pharmacy_statuses)) {
+                $note_pharmacy_statuses = [];
+            }
+        }
     }
 ?>
 
