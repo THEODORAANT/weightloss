@@ -352,7 +352,6 @@
     if (is_object($Member)) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
-          $note_pharmacy_statuses = $NotePharmacyStatuses->get_indexed_for_member($Member->id());
         $documents = $Documents->get_for_member($Member->id());
           $questionnaire =  $Questionnaires->get_for_member($Member->id());
                   $notifications = $Notifications->get_for_member($Member->id());
@@ -361,7 +360,6 @@
     }else{
         $tags = false;
          $notes = false;
-        $note_pharmacy_statuses = [];
         $documents = false;
         $questionnaire =false;
          $notifications = false;
