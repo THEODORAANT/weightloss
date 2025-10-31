@@ -29,44 +29,46 @@ if (!$order_complete) {
       ]);
 ?>
   <style>
-
-
         .subheader {
           background-color: #fff;
-          border-bottom: 1px solid #ddd;
+          border-bottom: 1px solid #e5e5e5;
         }
 
         .welcome-msg {
           padding: 12px 20px;
           font-size: 16px;
           color: #333;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid #f1f1f1;
         }
 
         .tabs {
           display: flex;
-          padding: 0 20px;
-          background-color: #f9f9f9;
+          flex-wrap: wrap;
+          gap: 6px;
+          padding: 12px 20px 0;
+          background-color: #f7f9fc;
         }
 
         .tab {
-          padding: 12px 16px;
-          margin-right: 10px;
+          padding: 10px 16px;
+          border-radius: 6px 6px 0 0;
           text-decoration: none;
-          color: #555;
+          color: #4a4a4a;
+          border: 1px solid transparent;
           border-bottom: 3px solid transparent;
           transition: all 0.2s ease;
           font-weight: 500;
         }
 
         .tab:hover {
-          color: #000;
-          border-color: #007bff;
+          color: #0a0a0a;
+          border-color: #d6e4ff;
+          background-color: #eef4ff;
         }
 
         .tab.active {
-          color: #007bff;
-          border-color: #007bff;
+          color: #0b4db3;
+          border-color: #0b4db3;
           background-color: #fff;
         }
       </style>
@@ -114,111 +116,56 @@ if (!$order_complete) {
 
    </div>
 <?php  } ?>
-  <section class="shippin_section">
-    <div class="container all_content mt-4">
+  <section class="success-section py-5">
+    <div class="container all_content">
     <?php if ($order_complete) {
     perch_shop_empty_cart();
     ?>
-        <h2 class="text-center fw-bolder">Complete your consultation. <br/>Upload your identification documents and videos here.<br/>
-        </h2>
-        <h4>Please review the information document before uploading your video</h4>
+        <div class="page-heading text-center mb-5">
+            <h1 class="fw-bolder mb-3">Complete your consultation</h1>
+            <p class="lead mb-0">Upload your identification documents and videos below to finalise your order. Review the quick guide before submitting to ensure everything is captured correctly.</p>
+        </div>
  <?php }else { ?>
-         <h2 class="text-center fw-bolder">	Your Documents</h2>
+        <div class="page-heading text-center mb-5">
+            <h1 class="fw-bolder mb-3">Your documents</h1>
+            <p class="lead mb-0">Upload any missing files and check the progress of your verification documents.</p>
+        </div>
 
    <?php } ?>
-        <div class="plans mt-4">
-  <div class="plan"  data-save="8">
-           <img id="loading" src="/asset/loading.gif" style="display: none;" alt="Loading..." width="100">
+        <div class="upload-helper card-shadow mb-5">
+            <div class="helper-header">
+                <div>
+                    <h2 class="helper-title">Need a hand recording your video?</h2>
+                    <p class="helper-text">Follow the short video guide or download the instructions to get everything right the first time.</p>
+                </div>
+                <button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>
+            </div>
+            <div class="helper-content">
+                <div class="video-wrapper" oncontextmenu="return false;">
+                    <video id="myVideo" preload="metadata" controls playsinline>
+                        <source src="/instructions.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <ul class="helper-steps">
+                    <li><strong>Step 1:</strong> Find a quiet, well lit space where we can clearly see your face.</li>
+                    <li><strong>Step 2:</strong> Hold your photo ID next to your face and clearly read the statement shown on screen.</li>
+                    <li><strong>Step 3:</strong> Upload the video and a clear photo of your ID using the cards below.</li>
+                </ul>
+            </div>
+        </div>
 
-    <!-- Tooltip element -->
-    <div class="tooltip-info" onclick="openPopup()">
-     <p > How to record your video: </p>
-
-<style>
-  .video-container {
-    position: relative;
-    width: 320px;
-    height: 240px;
-    background: #000;
-  }
-
-  video {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .controls {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-    box-sizing: border-box;
-  }
-
-  .controls button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .controls input[type=range] {
-    flex: 1;
-    margin: 0 5px;
-  }
-</style>
-
-<div class="video-container" oncontextmenu="return false;">
-  <video id="myVideo" preload="metadata">
-    <source src="/instructions.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  <div class="controls">
-    <button id="playPause">Play</button>
-    <input type="range" id="seekBar" value="0" step="0.1">
-    <button id="muteUnmute">Mute</button>
-  </div>
-</div>
-
-<script>
-  const video = document.getElementById('myVideo');
-  const playPause = document.getElementById('playPause');
-  const muteUnmute = document.getElementById('muteUnmute');
-  const seekBar = document.getElementById('seekBar');
-
-
-
-
-</script>
-
-    <!--   <img width="20px;" height="20px;" src="/asset/info.png" />
-        <span class="tooltiptext">Click to view image</span>-->
+    <div id="guideModal" class="modal" role="dialog" aria-modal="true">
+        <button class="close" type="button" aria-label="Close" onclick="closePopup()">&times;</button>
+        <div class="modal-dialog" onclick="event.stopPropagation()">
+            <iframe class="modal-content" id="pdfFrame" src="/instructions.mp4" title="Video instructions"></iframe>
+        </div>
     </div>
 
-    <!-- Modal/popup -->
-    <div id="imageModal" class="modal" onclick="closePopup()">
-        <span class="close">&times;</span>
-            <iframe class="modal-content" id="pdfFrame" src="/instructions.mp4"></iframe>
-
-          <!--  <img class="modal-content" id="popupImage" src="your-image.jpg" alt="Popup Image">-->
+    <div id="uploadLoading" class="text-center mb-4" hidden>
+        <img src="/asset/loading.gif" alt="Loading..." width="80" height="80">
+        <p class="small text-muted mt-2">Uploading your files… please keep this page open.</p>
     </div>
-
-    <script>
-        function openPopup() {
-            document.getElementById("imageModal").style.display = "block";
-        }
-
-        function closePopup() {
-            document.getElementById("imageModal").style.display = "none";
-        }
-    </script>
-    </div>
-
 
 <?php
 function isImageFile($filename) {
@@ -238,60 +185,81 @@ if (perch_member_logged_in()) {
 //perch_shop_orders();
 //perch_shop_empty_cart();
 $docs=perch_member_documents();
+$hasIdDocuments = false;
 if($docs){
-//print_r($docs);
+echo '<div class="documents-grid">';
 foreach ($docs as $x => $y) {
+
+    if($y["type"]=="id-documents") {
+        $hasIdDocuments = true;
+    }
+
+    $documentTypeLabel = '';
+    if($y["type"]=="id-documents"){ $documentTypeLabel = "ID and video documents";}
+    else if($y["type"]=="order-proof"){ $documentTypeLabel = "Proof of Purchase"; }
 
  ?>
 
-   <div class="plan"  data-save="8">
-         <div>
-
-         <p class="price-section"><h5>Document Type:</h5> <span style="background-color: #0083cc;color: #fff;padding: 5px 10px; border-radius: 5px; font-size: 14px;">
-      <?php  if($y["type"]=="id-documents"){ echo "ID and video documents";}else if($y["type"]=="order-proof"){echo "Proof of Purchase";} ?></span></p>
-
-         <?php if($y["status"]=="rerequest") {
-          echo '<p>You requested to upload ne documents:</p>';
-          if (isImageFile($y["name"])) {
-         perch_member_form('upload-image.html');
-         }else if (isVideoFile($y["name"])) {
-          perch_member_form('upload-video.html');
-         }
-
-         } ?>
-         <p class="price-section"><h5>Document Status:</h5> <span style="background-color: #00ccbd;color: #fff;padding: 5px 10px; border-radius: 5px; font-size: 14px;"><?php  echo strtoupper($y["status"]); ?></span></p>
+   <div class="document-card card-shadow" data-save="8">
+         <div class="document-card__header">
+            <div>
+                <span class="document-badge">Document type</span>
+                <p class="document-title"><?php echo $documentTypeLabel; ?></p>
             </div>
-             <div class="price-section">
-             <span class="old-price"></span>
-              <span class="price fw-bold">
-<?php if (isImageFile($y["name"]) && $y["status"]!="rerequest") { ?>
- <img width="320" height="240"   src="https://<?php echo $_SERVER['HTTP_HOST'];?>/perch/addons/apps/perch_members/documents/<?php echo $y['name']; ?>" alt="Image Preview">
-<?php
-}else if (isVideoFile($y["name"]) && $y["status"]!="rerequest") {
-$fileUrl="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/documents/".$y['name'];
-          echo '<video width="320" height="240" controls>
-                  <source src="' . htmlspecialchars($fileUrl) . '" type="video/' . pathinfo($y["name"], PATHINFO_EXTENSION) . '">
-                  Your browser does not support the video tag.
-                </video>';
-      } ?>
-      </span>
-                </div>
+            <span class="status-badge status-badge--<?php echo strtolower($y["status"]); ?>"><?php  echo strtoupper($y["status"]); ?></span>
+         </div>
+
+         <?php if($y["status"]=="rerequest") { ?>
+            <div class="document-card__body">
+                <p class="mb-3">We still need a replacement file for this document. Upload it below.</p>
+                <?php
+                if (isImageFile($y["name"])) {
+                    perch_member_form('upload-image.html');
+                } else if (isVideoFile($y["name"])) {
+                    perch_member_form('upload-video.html');
+                }
+                ?>
+            </div>
+         <?php } ?>
+
+         <?php if ($y["status"]!="rerequest") { ?>
+             <div class="document-card__preview">
+                <?php if (isImageFile($y["name"])) { ?>
+                    <img class="preview-media" src="https://<?php echo $_SERVER['HTTP_HOST'];?>/perch/addons/apps/perch_members/documents/<?php echo $y['name']; ?>" alt="Image Preview">
+                <?php } else if (isVideoFile($y["name"])) {
+                    $fileUrl="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/documents/".$y['name'];
+                    echo '<video class="preview-media" controls>
+                            <source src="' . htmlspecialchars($fileUrl) . '" type="video/' . pathinfo($y["name"], PATHINFO_EXTENSION) . '">
+                            Your browser does not support the video tag.
+                          </video>';
+                } ?>
+             </div>
+         <?php } ?>
     </div>
 
 <?php
- }?>
+ }
+echo '</div>';
+  ?>
   <div class="bottom_btn mt-5">
-        <button class="btn btn-primary next_btn mt-4 mb-3 next-btn"><a href="/client">Next <i class="fa-solid fa-arrow-right"></i></button>
+        <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
    </div>
 <?php
-}else{
-perch_member_form('upload.html');
-
 }
-perch_member_form('upload-proof.html');
-  ?>
 
-</div>    </div>       </section>
+if(!$docs || !$hasIdDocuments){
+?>
+    <div class="card-shadow form-card mb-5">
+        <?php perch_member_form('upload.html'); ?>
+    </div>
+<?php
+}
+?>
+    <div class="card-shadow form-card">
+        <?php perch_member_form('upload-proof.html'); ?>
+    </div>
+    </div>
+  </section>
 
   <!-- Loading GIF
   <img id="loading" src="loading.gif" style="display: none;" alt="Loading..." width="100">
@@ -332,7 +300,7 @@ perch_member_form('upload-proof.html');
 
     document.querySelectorAll('.document-image-input').forEach(function (input) {
       input.addEventListener('change', function () {
-        const wrapper = this.closest('.plan');
+        const wrapper = this.closest('.document-card') || this.closest('.plan');
         const container = wrapper ? wrapper.querySelector('.image-preview-container') : null;
         if (!container) {
           return;
@@ -348,7 +316,7 @@ perch_member_form('upload-proof.html');
 
     document.querySelectorAll('.document-video-input').forEach(function (input) {
       input.addEventListener('change', function () {
-        const wrapper = this.closest('.plan');
+        const wrapper = this.closest('.document-card') || this.closest('.plan');
         const container = wrapper ? wrapper.querySelector('.video-preview-container') : null;
         if (!container) {
           return;
@@ -364,51 +332,225 @@ perch_member_form('upload-proof.html');
 
     document.querySelectorAll('input[name="upload"]').forEach(function (button) {
       button.addEventListener('click', function () {
-        const loading = document.getElementById('loading');
+        const loading = document.getElementById('uploadLoading');
         if (loading) {
-          loading.style.display = 'block';
+          loading.hidden = false;
         }
-        this.value = '...';
+        this.value = 'Uploading…';
       });
     });
+
+    const guideModal = document.getElementById('guideModal');
+
+    function openPopup() {
+      if (guideModal) {
+        guideModal.style.display = 'block';
+      }
+    }
+
+    function closePopup() {
+      if (guideModal) {
+        guideModal.style.display = 'none';
+      }
+    }
+
+    if (guideModal) {
+      guideModal.addEventListener('click', function (event) {
+        if (event.target === guideModal) {
+          closePopup();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closePopup();
+      }
+    });
+
+    window.openPopup = openPopup;
+    window.closePopup = closePopup;
   </script>
 
   <?php
-}
+ }
 ?>
 </main>
 
   <style>
-        /* Tooltip styling */
-       .tooltip-info {
-           /*  position: relative; */
-            align: center;
+        .success-section {
+            background-color: #f6f8fb;
+        }
+
+        .card-shadow {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 18px 45px -25px rgba(15, 33, 61, 0.35);
+            padding: 32px;
+        }
+
+        .plan {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px -20px rgba(15, 33, 61, 0.4);
+            padding: 24px;
+            border: 1px solid rgba(15, 33, 61, 0.06);
+        }
+
+        .form-card form {
+            margin-bottom: 0;
+        }
+
+        .form-card .plan {
+            box-shadow: none;
+            border: 1px dashed #d3d9e6;
+            margin-bottom: 24px;
+        }
+
+        .form-card .plan:last-child {
+            margin-bottom: 0;
+        }
+
+        .upload-helper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .helper-header {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .helper-title {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .helper-text {
+            margin-bottom: 0;
+            color: #4d5b75;
+        }
+
+        .helper-button {
+            align-self: flex-start;
+        }
+
+        .helper-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 460px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .helper-steps {
+            margin: 0;
+            padding-left: 20px;
+            color: #32415b;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .document-card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .document-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .document-badge {
             display: inline-block;
-            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6c7a92;
         }
 
-        .tooltip-info .tooltiptext {
-            visibility: hidden;
-            width: 140px;
-
-            text-align: center;
-            padding: 5px 8px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
+        .document-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 0;
         }
 
-       /* .tooltip-info:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: #fff;
+            background-color: #4d5b75;
         }
-*/
-        /* Popup modal styling */
+
+        .status-badge--approved {
+            background-color: #00a884;
+        }
+
+        .status-badge--pending {
+            background-color: #f0a500;
+        }
+
+        .status-badge--rerequest {
+            background-color: #d9423b;
+        }
+
+        .document-card__body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .document-card__preview {
+            border: 1px dashed #d3d9e6;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            background-color: #f9fbff;
+        }
+
+        .preview-media {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .bottom_btn .btn {
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -421,12 +563,17 @@ perch_member_form('upload-proof.html');
             background-color: rgba(0,0,0,0.6);
         }
 
+        .modal-dialog {
+            margin: 5% auto;
+            width: min(900px, 90%);
+            max-width: 100%;
+        }
+
         .modal-content {
-            margin: 10% auto;
             display: block;
-             width: 900px;
-             max-width: 1000px;
-             height: 900px;
+            width: 100%;
+            height: min(700px, 90vh);
+            border-radius: 12px;
         }
 
         .close {
@@ -437,8 +584,38 @@ perch_member_form('upload-proof.html');
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        @media (min-width: 768px) {
+            .helper-content {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .helper-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .card-shadow {
+                padding: 24px;
+            }
+
+            .document-card__header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .bottom_btn .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
     <?php
   perch_layout('getStarted/footer');?>
-
