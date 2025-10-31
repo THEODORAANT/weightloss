@@ -56,6 +56,10 @@
                 $message = $HTML->failure_message('The note could not be sent because the member record could not be found.');
             } else {
                 $noteID = (int)$post['send_note_to_pharmacy'];
+                $should_escalate = false;
+                if (isset($post['note_escalate']) && is_array($post['note_escalate']) && isset($post['note_escalate'][$noteID])) {
+                    $should_escalate = $post['note_escalate'][$noteID] === '1';
+                }
                 $Note = $Notes->find($noteID);
 
                 if (!$Note) {
@@ -80,6 +84,51 @@
                             $statusMessage = null;
                             if (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['message']) && $apiResponse['data']['message'] !== '') {
                                 $statusMessage = (string) $apiResponse['data']['message'];
+                            }
+
+                            if ($should_escalate) {
+                                $properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+                                if (!is_array($properties)) {
+                                    $properties = [];
+                                }
+
+                                $memberFirstName = isset($properties['first_name']) ? trim((string) $properties['first_name']) : '';
+                                $memberLastName  = isset($properties['last_name']) ? trim((string) $properties['last_name']) : '';
+                                $noteAddedBy     = trim((string) $Note->addedBy());
+                                $noteDateValue   = $Note->noteDate();
+                                $noteDate        = $noteDateValue ? date('d M Y H:i', strtotime($noteDateValue)) : date('d M Y H:i');
+                                $memberLink      = PerchUtil::url_to_ssl_if_needed('http://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/edit/?id='.(int) $Member->id());
+
+                                $emailData = [
+                                    'first_name'         => $memberFirstName,
+                                    'last_name'          => $memberLastName,
+                                    'memberEmail'        => $memberEmail,
+                                    'note'               => (string) $Note->note_text(),
+                                    'note_added_by'      => $noteAddedBy,
+                                    'note_date'          => $noteDate,
+                                    'note_id'            => $noteID,
+                                    'member_admin_link'  => $memberLink,
+                                ];
+
+                                $EscalationEmail = $API->get('Email');
+                                $EscalationEmail->set_template('members/emails/note_escalation_notification.html');
+                                $EscalationEmail->set_bulk($emailData);
+                                $EscalationEmail->subject('Clinical review escalation - '.$memberEmail);
+                                $EscalationEmail->senderName(PERCH_EMAIL_FROM_NAME);
+                                $EscalationEmail->senderEmail(PERCH_EMAIL_FROM);
+                                $EscalationEmail->recipientEmail('management@thestgroup.co.uk');
+                                $EscalationEmail->ccToEmail('support@getweightloss.co.uk');
+
+                                if (!$EscalationEmail->send()) {
+                                    PerchUtil::debug('Failed to send clinical escalation email for note '.$noteID.': '.$EscalationEmail->errors, 'error');
+                                }
+
+                                $escalationMessage = 'Escalated for clinical review';
+                                if ($statusMessage !== null && $statusMessage !== '') {
+                                    $statusMessage .= ' '.$escalationMessage;
+                                } else {
+                                    $statusMessage = $escalationMessage;
+                                }
                             }
 
                             $NotePharmacyStatuses->record_sent_status((int) $Member->id(), (int) $Note->id(), $statusValue, $statusMessage);
