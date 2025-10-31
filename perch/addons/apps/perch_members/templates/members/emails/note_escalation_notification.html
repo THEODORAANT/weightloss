@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clinical review escalation</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #111827;
+        }
+        .wrapper {
+            width: 100%;
+            padding: 24px 0 64px;
+        }
+        .container {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            padding: 20px 28px;
+            background: #f3f4f6;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .content {
+            padding: 24px 28px 32px;
+            line-height: 1.55;
+        }
+        .content p {
+            margin: 0 0 16px;
+        }
+        .content ul {
+            margin: 0 0 16px 20px;
+            padding: 0;
+        }
+        .note-box {
+            margin: 16px 0;
+            padding: 16px;
+            background: #f9fafb;
+            border-left: 4px solid #38bdf8;
+            white-space: pre-wrap;
+        }
+        .footer {
+            padding: 20px 28px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        a {
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>Clinical review escalation</h1>
+            </div>
+            <div class="content">
+                <p>Hello,</p>
+                <p>A team member flagged the following patient note for clinical review:</p>
+                <ul>
+                    <li><strong>Member:</strong> <perch:email id="first_name" /> <perch:email id="last_name" /> (<perch:email id="memberEmail" />)</li>
+                    <li><strong>Note ID:</strong> <perch:email id="note_id" /></li>
+                    <li><strong>Added by:</strong> <perch:email id="note_added_by" /></li>
+                    <li><strong>Note date:</strong> <perch:email id="note_date" /></li>
+                </ul>
+                <div class="note-box">
+                    <perch:email id="note" encode="true" />
+                </div>
+                <p>You can review the full consultation details here:</p>
+                <p><a href="<perch:email id=\"member_admin_link\" encode=\"true\" />"><perch:email id="member_admin_link" encode="true" /></a></p>
+                <p>Thank you,<br />GetWeightLoss Clinical Team</p>
+            </div>
+            <div class="footer">
+                <p>This message was sent automatically when a note was escalated for clinical review.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

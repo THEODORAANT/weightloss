@@ -370,7 +370,8 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               <th>Note</th>
                               <th>Date</th>
                                 <th>Added by</th>
-                                <th>Pharmacy status</th>
+                              <th>Pharmacy status</th>
+                              <th>Escalate clinical review</th>
                                 <th class="action">Action</th>
                           </tr>
                       </thead>
@@ -428,6 +429,13 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                                     echo '</td>';
                                     echo '<td class="action">';
                                     if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
+                                        echo '<label><input type="checkbox" name="note_escalate['.(int)$Note->id().']" value="1" /> Escalate clinical review</label>';
+                                    } else {
+                                        echo '-';
+                                    }
+                                    echo '</td>';
+                                    echo '<td class="action">';
+                                    if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
                                         echo '<button type="submit" style="background-color:#199d19" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
                                     }
                                     echo '</td>';
@@ -436,7 +444,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                       }
 
                       echo '<tr>';
-                          echo '<td colspan="5" class="action">'.$Form->label('new-note', PerchLang::get('New'));
+                          echo '<td colspan="6" class="action">'.$Form->label('new-note', PerchLang::get('New'));
                           echo $Form->text('new-note', false).'</td>';
 
                       echo '</tr>';
