@@ -348,16 +348,11 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
     <?php echo $HTML->heading2('Notes'); ?>
 
 <?php
-    if (!isset($note_pharmacy_statuses) || !is_array($note_pharmacy_statuses)) {
-        $note_pharmacy_statuses = [];
-
-        if (isset($API) && is_object($API) && isset($Member) && is_object($Member)) {
+    if (!isset($NotePharmacyStatuses) || !($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses)) {
+        if (isset($API) && is_object($API)) {
             $NotePharmacyStatuses = new PerchMembers_NotePharmacyStatuses($API);
-            $note_pharmacy_statuses = $NotePharmacyStatuses->get_indexed_for_member($Member->id());
-
-            if (!is_array($note_pharmacy_statuses)) {
-                $note_pharmacy_statuses = [];
-            }
+        } else {
+            $NotePharmacyStatuses = null;
         }
     }
 ?>
@@ -380,7 +375,10 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                       if (PerchUtil::count($notes)) {
                           foreach($notes as $Note) {
                               $noteID = (int) $Note->id();
-                              $pharmacyStatus = isset($note_pharmacy_statuses[$noteID]) ? $note_pharmacy_statuses[$noteID] : false;
+                              $pharmacyStatus = false;
+                              if ($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses && isset($Member) && is_object($Member)) {
+                                  $pharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), $noteID);
+                              }
                               $statusLabel = '';
                               $statusClassSuffix = 'sent';
                               $statusMessage = '';
