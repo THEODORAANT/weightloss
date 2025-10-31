@@ -160,6 +160,40 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
     </div>
 
      <?php
+        if ($is_customer) {
+            echo $HTML->heading2('Customer addresses');
+            echo '<div class="form-inner">';
+
+            echo '<h3>Billing address</h3>';
+            foreach ($address_field_keys as $field_key) {
+                $label = isset($address_field_labels[$field_key]) ? $address_field_labels[$field_key] : ucfirst($field_key);
+                $value = isset($billing_address_details[$field_key]) ? $billing_address_details[$field_key] : '';
+
+                if ($field_key === 'instructions') {
+                    echo $Form->textarea_field('billing_'.$field_key, $label, $value, 'input-simple', false);
+                } else {
+                    echo $Form->text_field('billing_'.$field_key, $label, $value, 'l');
+                }
+            }
+
+            echo '<h3>Shipping address</h3>';
+            foreach ($address_field_keys as $field_key) {
+                $label = isset($address_field_labels[$field_key]) ? $address_field_labels[$field_key] : ucfirst($field_key);
+                $value = isset($shipping_address_details[$field_key]) ? $shipping_address_details[$field_key] : '';
+
+                if ($field_key === 'instructions') {
+                    echo $Form->textarea_field('shipping_'.$field_key, $label, $value, 'input-simple', false);
+                } else {
+                    echo $Form->text_field('shipping_'.$field_key, $label, $value, 'l');
+                }
+            }
+
+            echo '</div>';
+        }
+
+     ?>
+
+     <?php
        //Questionnaire
              echo $HTML->heading2('Orders');
              if( $Customer){

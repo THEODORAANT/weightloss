@@ -9,19 +9,78 @@
     $Documents = new PerchMembers_Documents($API);
      $Notifications = new PerchMembers_Notifications($API);
     $Questionnaires = new PerchMembers_Questionnaires($API);
-	$Orders   = new PerchShop_Orders($API);
-	$Customers = new PerchShop_Customers($API);
+        $Orders   = new PerchShop_Orders($API);
+        $Customers = new PerchShop_Customers($API);
+        $Addresses = new PerchShop_Addresses($API);
 
     $HTML = $API->get('HTML');
 
+    $address_field_keys = [
+        'first_name',
+        'last_name',
+        'company',
+        'address_1',
+        'address_2',
+        'city',
+        'county',
+        'postcode',
+        'country',
+        'phone',
+        'instructions',
+    ];
+
+    $address_field_labels = [
+        'first_name'   => 'First name',
+        'last_name'    => 'Last name',
+        'company'      => 'Company',
+        'address_1'    => 'Address line 1',
+        'address_2'    => 'Address line 2',
+        'city'         => 'City',
+        'county'       => 'County/State',
+        'postcode'     => 'Postcode',
+        'country'      => 'Country',
+        'phone'        => 'Phone',
+        'instructions' => 'Delivery instructions',
+    ];
+
+    $billing_address_details = array_fill_keys($address_field_keys, '');
+    $shipping_address_details = array_fill_keys($address_field_keys, '');
+    $is_customer = false;
+    $customer_id = null;
+
     if (isset($_GET['id']) && $_GET['id']!='') {
-        $memberID = (int) $_GET['id'];    
+        $memberID = (int) $_GET['id'];
         $Member = $Members->find($memberID);
        $Customer = $Customers->find_by_memberID($memberID);
 
         $details = $Member->to_array();
-    
+
         $heading1 = 'Editing a Member';
+
+        if ($Customer instanceof PerchShop_Customer) {
+            $is_customer = true;
+            $customer_id = (int)$Customer->id();
+
+            $BillingAddress = $Addresses->find_for_customer($customer_id, 'default');
+            if ($BillingAddress instanceof PerchShop_Address) {
+                foreach ($address_field_keys as $field_key) {
+                    $value = $BillingAddress->get($field_key);
+                    if ($value !== false) {
+                        $billing_address_details[$field_key] = $value;
+                    }
+                }
+            }
+
+            $ShippingAddress = $Addresses->find_for_customer($customer_id, 'shipping');
+            if ($ShippingAddress instanceof PerchShop_Address) {
+                foreach ($address_field_keys as $field_key) {
+                    $value = $ShippingAddress->get($field_key);
+                    if ($value !== false) {
+                        $shipping_address_details[$field_key] = $value;
+                    }
+                }
+            }
+        }
 
     }else{
         $Member = false;
@@ -213,6 +272,98 @@
 
 
             // Tags
+            if ($result && $is_customer && $Customer instanceof PerchShop_Customer) {
+                $customer_id = (int)$Customer->id();
+
+                $BillingAddress = $Addresses->find_for_customer($customer_id, 'default');
+                $ShippingAddress = $Addresses->find_for_customer($customer_id, 'shipping');
+
+                $billing_post_data = [];
+                $shipping_post_data = [];
+
+                foreach ($address_field_keys as $field_key) {
+                    $billing_key = 'billing_' . $field_key;
+                    if (array_key_exists($billing_key, $post)) {
+                        $billing_post_data[$field_key] = trim((string)$post[$billing_key]);
+                    }
+
+                    $shipping_key = 'shipping_' . $field_key;
+                    if (array_key_exists($shipping_key, $post)) {
+                        $shipping_post_data[$field_key] = trim((string)$post[$shipping_key]);
+                    }
+                }
+
+                if (PerchUtil::count($billing_post_data)) {
+                    $billing_post_data['customer'] = $customer_id;
+
+                    $has_billing_values = false;
+                    foreach ($billing_post_data as $key => $value) {
+                        if ($key === 'customer') {
+                            continue;
+                        }
+
+                        if ($value !== '') {
+                            $has_billing_values = true;
+                            break;
+                        }
+                    }
+
+                    if ($BillingAddress instanceof PerchShop_Address) {
+                        $BillingAddress->update([
+                            'addressDynamicFields' => PerchUtil::json_safe_encode($billing_post_data),
+                        ]);
+                    } elseif ($has_billing_values) {
+                        $create_data = [
+                            'customerID' => $customer_id,
+                            'addressSlug' => 'default',
+                            'addressTitle' => 'default',
+                            'addressDynamicFields' => PerchUtil::json_safe_encode($billing_post_data),
+                        ];
+
+                        if (isset($billing_post_data['country']) && $billing_post_data['country'] !== '' && is_numeric($billing_post_data['country'])) {
+                            $create_data['countryID'] = $billing_post_data['country'];
+                        }
+
+                        $Addresses->create($create_data);
+                    }
+                }
+
+                if (PerchUtil::count($shipping_post_data)) {
+                    $shipping_post_data['customer'] = $customer_id;
+
+                    $has_shipping_values = false;
+                    foreach ($shipping_post_data as $key => $value) {
+                        if ($key === 'customer') {
+                            continue;
+                        }
+
+                        if ($value !== '') {
+                            $has_shipping_values = true;
+                            break;
+                        }
+                    }
+
+                    if ($ShippingAddress instanceof PerchShop_Address) {
+                        $ShippingAddress->update([
+                            'addressDynamicFields' => PerchUtil::json_safe_encode($shipping_post_data),
+                        ]);
+                    } elseif ($has_shipping_values) {
+                        $create_data = [
+                            'customerID' => $customer_id,
+                            'addressSlug' => 'shipping',
+                            'addressTitle' => 'shipping',
+                            'addressDynamicFields' => PerchUtil::json_safe_encode($shipping_post_data),
+                        ];
+
+                        if (isset($shipping_post_data['country']) && $shipping_post_data['country'] !== '' && is_numeric($shipping_post_data['country'])) {
+                            $create_data['countryID'] = $shipping_post_data['country'];
+                        }
+
+                        $Addresses->create($create_data);
+                    }
+                }
+            }
+
             if ($result) {
                 if (is_object($Member) && isset($post['questionnaire_bmi']) && is_array($post['questionnaire_bmi'])) {
                     foreach ($post['questionnaire_bmi'] as $questionnaireID => $bmiValue) {
@@ -346,7 +497,34 @@
     }
     
     if (isset($_GET['created']) && !$message) {
-        $message = $HTML->success_message('The member has been successfully created. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>'); 
+        $message = $HTML->success_message('The member has been successfully created. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>');
+    }
+
+    if ($is_customer && $Customer instanceof PerchShop_Customer) {
+        $customer_id = (int)$Customer->id();
+
+        $billing_address_details = array_fill_keys($address_field_keys, '');
+        $shipping_address_details = array_fill_keys($address_field_keys, '');
+
+        $BillingAddress = $Addresses->find_for_customer($customer_id, 'default');
+        if ($BillingAddress instanceof PerchShop_Address) {
+            foreach ($address_field_keys as $field_key) {
+                $value = $BillingAddress->get($field_key);
+                if ($value !== false) {
+                    $billing_address_details[$field_key] = $value;
+                }
+            }
+        }
+
+        $ShippingAddress = $Addresses->find_for_customer($customer_id, 'shipping');
+        if ($ShippingAddress instanceof PerchShop_Address) {
+            foreach ($address_field_keys as $field_key) {
+                $value = $ShippingAddress->get($field_key);
+                if ($value !== false) {
+                    $shipping_address_details[$field_key] = $value;
+                }
+            }
+        }
     }
 
     if (is_object($Member)) {
