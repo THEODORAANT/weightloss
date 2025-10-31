@@ -45,6 +45,7 @@
             <p>GetWeightLoss, the website and consultations are owned and operated by MI Health Ltd, a company registered in the United Kingdom under company number 13008704. The business operates under a General Pharmaceutical Council registered premises number 9011648. You are able to verify the pharmacy's registration and our superintendent pharmacist, Imran Tailor SI pharmacist with GPhC 2216145.</p>
             <p>Medical disclaimer: The information on this site provides general guidance only and does not replace a consultation with a qualified healthcare professional. We do not guarantee prescriptions or outcomes.</p>
             <p>Mounjaro® is a registered trademark of Eli Lilly and Company. Wegovy® is a registered trademark of Novo Nordisk A/S. We are not affiliated with these manufacturers.</p>
+            <p>Longcroft House, 2-8 Victoria Avenue, London, EC2M 4NS,  Tel: 0330 043 6462 </p>
           </div>
         </div>
         
@@ -70,8 +71,6 @@
       </div>
     </footer>
   </div>
-
-  <!-- Google tag (gtag.js) -->
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPHS5SQJ5B"></script>
 <script>
