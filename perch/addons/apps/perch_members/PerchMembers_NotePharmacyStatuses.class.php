@@ -53,13 +53,17 @@ class PerchMembers_NotePharmacyStatuses extends PerchAPI_Factory
         $noteID   = (int) $noteID;
 
         if ($memberID <= 0 || $noteID <= 0) {
+
             return false;
         }
 
         $this->ensure_table();
 
-        $sql = 'SELECT * FROM '.PERCH_DB_PREFIX.$this->table.' WHERE memberID='.$this->db->pdb($memberID).' AND noteID='.$this->db->pdb($noteID).' LIMIT 1';
+        $sql = 'SELECT * FROM '.$this->table.' WHERE memberID='.$this->db->pdb($memberID).' AND noteID='.$this->db->pdb($noteID).' LIMIT 1';
+
         $row = $this->db->get_row($sql);
+
+
 
         if ($row) {
             return $this->return_instance($row);

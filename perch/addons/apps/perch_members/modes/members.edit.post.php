@@ -379,6 +379,7 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               if ($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses && isset($Member) && is_object($Member)) {
                                   $pharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), $noteID);
                               }
+                           //  echo "statu"; print_r($pharmacyStatus);
                               $statusLabel = '';
                               $statusClassSuffix = 'sent';
                               $statusMessage = '';
