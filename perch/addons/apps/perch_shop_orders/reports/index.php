@@ -183,7 +183,7 @@ $total_conversions = array_sum(array_map(function ($row) {
             color: #64748b;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" integrity="sha384-hXJytT28L4JfD0cyZllp0LiejpW30cHV2Z2wGbGNq0j7k3vMwBSvHL6t0nRyjM9A" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <h1>Orders &amp; Conversion Report</h1>
