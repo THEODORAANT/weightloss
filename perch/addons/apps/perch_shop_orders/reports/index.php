@@ -7,6 +7,37 @@ $DB  = PerchDB::fetch();
 $orders_table    = PERCH_DB_PREFIX . 'shop_orders';
 $customers_table = PERCH_DB_PREFIX . 'shop_customers';
 
+$Currencies = new PerchShop_Currencies($API);
+$Currency   = $Currencies->get_default();
+
+$format_currency = function ($amount) use ($Currency) {
+    $amount = (float)$amount;
+
+    if ($Currency instanceof PerchShop_Currency) {
+        return $Currency->format_display($amount);
+    }
+
+    return number_format($amount, 2);
+};
+
+$currency_symbol_before       = '';
+$currency_symbol_after        = '';
+$currency_decimals            = 2;
+$currency_decimal_separator   = '.';
+$currency_thousands_separator = ',';
+
+if ($Currency instanceof PerchShop_Currency) {
+    if ($Currency->currencySymbolPosition() === 'before') {
+        $currency_symbol_before = $Currency->currencySymbol();
+    } else {
+        $currency_symbol_after = $Currency->currencySymbol();
+    }
+
+    $currency_decimals = (int)$Currency->currencyDecimals();
+    $currency_decimal_separator = $Currency->currencyDecimalSeparator();
+    $currency_thousands_separator = $Currency->currencyThousandsSeparator();
+}
+
 $notDeletedCondition = function ($column) {
     $column = trim($column);
     return sprintf('%1$s IS NULL OR %1$s = "" OR %1$s = "0000-00-00 00:00:00"', $column);
@@ -28,6 +59,23 @@ foreach ($monthly_orders_chart as $row) {
     $monthly_orders_map[$row['period']] = (int)$row['total_orders'];
 }
 
+$monthly_profits_sql = sprintf(
+    'SELECT DATE_FORMAT(orderCreated, "%%Y-%%m") AS period, '
+    . 'SUM((COALESCE(CAST(orderTotal AS DECIMAL(18,2)), 0) - COALESCE(CAST(orderTotalRefunded AS DECIMAL(18,2)), 0))) AS total_profit'
+    . ' FROM %1$s'
+    . ' WHERE (%2$s)'
+    . ' GROUP BY period'
+    . ' ORDER BY period DESC',
+    $orders_table,
+    $notDeletedCondition('orderDeleted')
+);
+$monthly_profits = $DB->get_rows($monthly_profits_sql) ?: [];
+$monthly_profits_chart = array_reverse($monthly_profits);
+$monthly_profits_map = [];
+foreach ($monthly_profits_chart as $row) {
+    $monthly_profits_map[$row['period']] = (float)$row['total_profit'];
+}
+
 $yearly_orders_sql = sprintf(
     'SELECT DATE_FORMAT(orderCreated, "%%Y") AS period, COUNT(*) AS total_orders'
     . ' FROM %1$s'
@@ -38,6 +86,18 @@ $yearly_orders_sql = sprintf(
     $notDeletedCondition('orderDeleted')
 );
 $yearly_orders = $DB->get_rows($yearly_orders_sql) ?: [];
+
+$yearly_profits_sql = sprintf(
+    'SELECT DATE_FORMAT(orderCreated, "%%Y") AS period, '
+    . 'SUM((COALESCE(CAST(orderTotal AS DECIMAL(18,2)), 0) - COALESCE(CAST(orderTotalRefunded AS DECIMAL(18,2)), 0))) AS total_profit'
+    . ' FROM %1$s'
+    . ' WHERE (%2$s)'
+    . ' GROUP BY period'
+    . ' ORDER BY period DESC',
+    $orders_table,
+    $notDeletedCondition('orderDeleted')
+);
+$yearly_profits = $DB->get_rows($yearly_profits_sql) ?: [];
 
 $monthly_conversions_sql = sprintf(
     'SELECT DATE_FORMAT(customerCreated, "%%Y-%%m") AS period, COUNT(*) AS total_conversions'
@@ -62,14 +122,21 @@ foreach (array_keys($monthly_orders_map) as $period) {
 foreach (array_keys($monthly_conversions_map) as $period) {
     $monthly_chart_labels_map[$period] = true;
 }
+foreach (array_keys($monthly_profits_map) as $period) {
+    $monthly_chart_labels_map[$period] = true;
+}
 $monthly_chart_labels = array_keys($monthly_chart_labels_map);
 sort($monthly_chart_labels);
 
 $monthly_orders_values = [];
 $monthly_conversions_values = [];
+$monthly_profits_values = [];
 foreach ($monthly_chart_labels as $period) {
     $monthly_orders_values[] = $monthly_orders_map[$period] ?? 0;
     $monthly_conversions_values[] = $monthly_conversions_map[$period] ?? 0;
+    $monthly_profits_values[] = isset($monthly_profits_map[$period])
+        ? round((float)$monthly_profits_map[$period], 2)
+        : 0;
 }
 
 $yearly_conversions_sql = sprintf(
@@ -86,6 +153,10 @@ $yearly_conversions = $DB->get_rows($yearly_conversions_sql) ?: [];
 $orders_total = array_sum(array_map(function ($row) {
     return (int)$row['total_orders'];
 }, $yearly_orders));
+
+$profits_total = array_sum(array_map(function ($row) {
+    return (float)$row['total_profit'];
+}, $yearly_profits));
 
 $total_conversions = array_sum(array_map(function ($row) {
     return (int)$row['total_conversions'];
@@ -196,14 +267,18 @@ $total_conversions = array_sum(array_map(function ($row) {
             <h3>Members Converted to Customers</h3>
             <p><?= number_format($total_conversions) ?></p>
         </div>
+        <div class="summary-card">
+            <h3>Total Net Profit</h3>
+            <p><?= htmlspecialchars($format_currency($profits_total), ENT_QUOTES, 'UTF-8') ?></p>
+        </div>
     </div>
 
     <div class="chart-card">
-        <h2>Monthly Orders &amp; Conversions Trend</h2>
+        <h2>Monthly Orders, Conversions &amp; Net Profit Trend</h2>
         <?php if (!empty($monthly_chart_labels)): ?>
             <canvas id="monthly-trends" height="280"></canvas>
         <?php else: ?>
-            <div class="empty">No monthly order or conversion data available to chart.</div>
+            <div class="empty">No monthly order, conversion, or profit data available to chart.</div>
         <?php endif; ?>
     </div>
 
@@ -300,6 +375,52 @@ $total_conversions = array_sum(array_map(function ($row) {
                 <div class="empty">No conversions recorded.</div>
             <?php endif; ?>
         </section>
+        <section>
+            <h2>Net Profit by Month</h2>
+            <?php if (!empty($monthly_profits)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Net Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($monthly_profits as $row): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['period'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($format_currency((float)($row['total_profit'] ?? 0)), ENT_QUOTES, 'UTF-8') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <div class="empty">No profit data available.</div>
+            <?php endif; ?>
+        </section>
+        <section>
+            <h2>Net Profit by Year</h2>
+            <?php if (!empty($yearly_profits)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Net Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($yearly_profits as $row): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['period'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($format_currency((float)($row['total_profit'] ?? 0)), ENT_QUOTES, 'UTF-8') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <div class="empty">No profit data available.</div>
+            <?php endif; ?>
+        </section>
     </div>
 </body>
 <script>
@@ -310,6 +431,46 @@ $total_conversions = array_sum(array_map(function ($row) {
     const labels = <?= json_encode($monthly_chart_labels) ?>;
     const ordersData = <?= json_encode($monthly_orders_values) ?>;
     const conversionsData = <?= json_encode($monthly_conversions_values) ?>;
+    const profitsData = <?= json_encode($monthly_profits_values) ?>;
+    const currencyFormatting = <?= json_encode([
+        'before' => $currency_symbol_before,
+        'after' => $currency_symbol_after,
+        'decimals' => $currency_decimals,
+        'decimalSeparator' => $currency_decimal_separator,
+        'thousandsSeparator' => $currency_thousands_separator,
+    ]) ?>;
+
+    const formatCurrency = (value) => {
+        if (!currencyFormatting) {
+            return Number(value ?? 0).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+        }
+
+        const {
+            before = '',
+            after = '',
+            decimals = 2,
+            decimalSeparator = '.',
+            thousandsSeparator = ',',
+        } = currencyFormatting;
+
+        const number = Number(value ?? 0);
+        if (!Number.isFinite(number)) {
+            return `${before}${after}`.trim();
+        }
+
+        const fixed = number.toFixed(decimals);
+        const [integerPart, decimalPart = ''] = fixed.split('.');
+        const integerWithSep = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator || ',');
+
+        if (decimals === 0) {
+            return `${before}${integerWithSep}${after}`;
+        }
+
+        return `${before}${integerWithSep}${decimalSeparator || '.'}${decimalPart}${after}`;
+    };
 
     if (!labels.length) {
         return;
@@ -328,6 +489,7 @@ $total_conversions = array_sum(array_map(function ($row) {
                     tension: 0.3,
                     borderWidth: 2,
                     fill: true,
+                    yAxisID: 'y',
                 },
                 {
                     label: 'Conversions',
@@ -337,6 +499,17 @@ $total_conversions = array_sum(array_map(function ($row) {
                     tension: 0.3,
                     borderWidth: 2,
                     fill: true,
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Net Profit',
+                    data: profitsData,
+                    borderColor: '#7c3aed',
+                    backgroundColor: 'rgba(124, 58, 237, 0.15)',
+                    tension: 0.3,
+                    borderWidth: 2,
+                    fill: true,
+                    yAxisID: 'yProfit',
                 },
             ],
         },
@@ -352,10 +525,29 @@ $total_conversions = array_sum(array_map(function ($row) {
                     beginAtZero: true,
                     ticks: {
                         precision: 0,
+                        callback(value) {
+                            return Number(value ?? 0).toLocaleString();
+                        },
                     },
                     title: {
                         display: true,
-                        text: 'Count',
+                        text: 'Orders & Conversions',
+                    },
+                },
+                yProfit: {
+                    position: 'right',
+                    beginAtZero: true,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        callback(value) {
+                            return formatCurrency(value);
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: 'Net Profit',
                     },
                 },
                 x: {
@@ -374,6 +566,16 @@ $total_conversions = array_sum(array_map(function ($row) {
                     callbacks: {
                         title(context) {
                             return context[0]?.label ?? '';
+                        },
+                        label(context) {
+                            const datasetLabel = context.dataset?.label ?? '';
+                            const value = context.raw ?? 0;
+
+                            if (datasetLabel === 'Net Profit') {
+                                return `${datasetLabel}: ${formatCurrency(value)}`;
+                            }
+
+                            return `${datasetLabel}: ${Number(value ?? 0).toLocaleString()}`;
                         },
                     },
                 },
