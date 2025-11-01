@@ -15,7 +15,8 @@
                                                 'perch_shop_orders/customers/edit',
                                                 'perch_shop_orders/customers/delete',
                                                 ],
-				'label'=>'Customers'],
-  ['page'=>'perch_shop_orders/packages', 'label'=>'Packages'],
+                                'label'=>'Customers'],
+                ['page'=>'perch_shop_orders/packages', 'label'=>'Packages'],
+                ['page'=>'perch_shop_orders/reports', 'label'=>'Reports'],
 
-	], $CurrentUser);
+        ], $CurrentUser);

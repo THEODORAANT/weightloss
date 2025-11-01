@@ -51,6 +51,10 @@ This keeps the package's billing cycle up to date.
 
 In the admin interface, under the Orders section, use the **Package Report** link to view upcoming payments. The report lists each package along with its customer ID, status, and next billing date.
 
+## Orders & Conversion Report
+
+Under **Orders → Reports** administrators can review order volume and customer conversions at a glance. The page summarises the total orders recorded together with the number of members who have become customers, and breaks both metrics down by month and by year for trend analysis.
+
 ## Admin Package Module
 
  In the admin interface, under the Orders section, use the **Package Admin** link to add new packages and review existing ones. The page shows each client's billing type, payment status, next billing date, and highlights pending packages. Each package expands to list its items, including product and variant details, quantity, and payment status.
