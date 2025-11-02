@@ -157,7 +157,7 @@ if (!$order_complete) {
     <div id="guideModal" class="modal" role="dialog" aria-modal="true">
         <button class="close" type="button" aria-label="Close" onclick="closePopup()">&times;</button>
         <div class="modal-dialog" onclick="event.stopPropagation()">
-            <iframe class="modal-content" id="pdfFrame" src="/instructions.mp4" title="Video instructions"></iframe>
+            <iframe class="modal-content" id="pdfFrame" src="" data-src="/instructions.mp4" title="Video instructions"></iframe>
         </div>
     </div>
 
@@ -349,9 +349,16 @@ if(!$docs || !$hasIdDocuments){
     }
 
     const guideModal = document.getElementById('guideModal');
+    const guideFrame = document.getElementById('pdfFrame');
 
     function openPopup() {
       if (guideModal) {
+        if (guideFrame && !guideFrame.src) {
+          const source = guideFrame.getAttribute('data-src');
+          if (source) {
+            guideFrame.src = source;
+          }
+        }
         guideModal.style.display = 'block';
       }
     }
@@ -359,6 +366,9 @@ if(!$docs || !$hasIdDocuments){
     function closePopup() {
       if (guideModal) {
         guideModal.style.display = 'none';
+      }
+      if (guideFrame && guideFrame.src) {
+        guideFrame.src = '';
       }
     }
 
