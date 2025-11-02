@@ -17,11 +17,11 @@ setcookie('questionnaire', '', time()-3600, '/');
 setcookie('questionnaire_reorder', '', time()-3600, '/');
 setcookie('draft_package_item', '', time()-3600, '/');
 
-$order_complete = perch_shop_order_successful();
+$has_successful_payment = perch_shop_order_successful();
+$order_complete = $has_successful_payment;
 
 if (!$order_complete) {
     $order_complete = perch_shop_active_order_has_status('pending');
-
 }
 
      perch_layout('product/header', [
@@ -138,21 +138,35 @@ if (!$order_complete) {
                     <h2 class="helper-title">Need a hand recording your video?</h2>
                     <p class="helper-text">Follow the short video guide or download the instructions to get everything right the first time.</p>
                 </div>
-                <button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>
+                <?php if ($has_successful_payment) { ?>
+                    <button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>
+                <?php } ?>
             </div>
-            <div class="helper-content">
-                <div class="video-wrapper" oncontextmenu="return false;">
-                    <video id="myVideo" preload="metadata" controls playsinline>
-                        <source src="/instructions.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+            <?php if ($has_successful_payment) { ?>
+                <div class="helper-content">
+                    <div class="video-wrapper" oncontextmenu="return false;">
+                        <video id="myVideo" preload="metadata" controls playsinline controlsList="nodownload">
+                            <source src="/instructions.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <ul class="helper-steps">
+                        <li><strong>Step 1:</strong> Find a quiet, well lit space where we can clearly see your face.</li>
+                        <li><strong>Step 2:</strong> Hold your photo ID next to your face and clearly read the statement shown on screen.</li>
+                        <li><strong>Step 3:</strong> Upload the video and a clear photo of your ID using the cards below.</li>
+                    </ul>
                 </div>
-                <ul class="helper-steps">
-                    <li><strong>Step 1:</strong> Find a quiet, well lit space where we can clearly see your face.</li>
-                    <li><strong>Step 2:</strong> Hold your photo ID next to your face and clearly read the statement shown on screen.</li>
-                    <li><strong>Step 3:</strong> Upload the video and a clear photo of your ID using the cards below.</li>
-                </ul>
-            </div>
+            <?php } else { ?>
+                <div class="helper-content helper-content--locked" aria-live="polite">
+                    <div class="locked-video" aria-hidden="true">
+                        <span class="locked-icon" aria-hidden="true">🔒</span>
+                    </div>
+                    <div class="locked-message">
+                        <h3 class="locked-title">Video guide available after payment</h3>
+                        <p class="locked-text mb-0">Complete your payment to unlock the step-by-step walkthrough and make recording your verification video effortless.</p>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
 
     <div id="guideModal" class="modal" role="dialog" aria-modal="true">
@@ -443,6 +457,47 @@ if(!$docs || !$hasIdDocuments){
             gap: 24px;
         }
 
+        .helper-content--locked {
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            border: 1px dashed #d3d9e6;
+            border-radius: 12px;
+            padding: 24px;
+            background: #f8fafc;
+        }
+
+        .locked-video {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d8e1f8 0%, #f0f4ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #3c4b6e;
+        }
+
+        .locked-icon {
+            line-height: 1;
+        }
+
+        .locked-title {
+            margin: 0 0 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #23314f;
+        }
+
+        .locked-text {
+            color: #4d5b75;
+        }
+
+        .locked-message {
+            max-width: 420px;
+        }
+
         .video-wrapper {
             width: 100%;
             max-width: 460px;
@@ -594,6 +649,10 @@ if(!$docs || !$hasIdDocuments){
                 align-items: center;
             }
 
+            .helper-content--locked {
+                justify-content: flex-start;
+            }
+
             .helper-header {
                 flex-direction: row;
                 justify-content: space-between;
@@ -604,6 +663,17 @@ if(!$docs || !$hasIdDocuments){
         @media (max-width: 767px) {
             .card-shadow {
                 padding: 24px;
+            }
+
+            .helper-content--locked {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .locked-video {
+                width: 90px;
+                height: 90px;
+                font-size: 36px;
             }
 
             .document-card__header {
