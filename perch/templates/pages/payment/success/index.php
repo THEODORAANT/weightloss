@@ -21,7 +21,6 @@ $order_complete = perch_shop_order_successful();
 
 if (!$order_complete) {
     $order_complete = perch_shop_active_order_has_status('pending');
-
 }
 
      perch_layout('product/header', [
@@ -142,7 +141,7 @@ if (!$order_complete) {
             </div>
             <div class="helper-content">
                 <div class="video-wrapper" oncontextmenu="return false;">
-                    <video id="myVideo" preload="metadata" controls playsinline>
+                    <video id="helperVideo" preload="none" controls playsinline controlsList="nodownload">
                         <source src="/instructions.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -339,6 +338,15 @@ if(!$docs || !$hasIdDocuments){
         this.value = 'Uploading…';
       });
     });
+
+    const helperVideo = document.getElementById('helperVideo');
+    if (helperVideo) {
+      helperVideo.autoplay = false;
+      helperVideo.pause();
+      helperVideo.addEventListener('loadeddata', function () {
+        helperVideo.currentTime = 0;
+      });
+    }
 
     const guideModal = document.getElementById('guideModal');
 
