@@ -7,6 +7,15 @@ $DB  = PerchDB::fetch();
 $orders_table    = PERCH_DB_PREFIX . 'shop_orders';
 $customers_table = PERCH_DB_PREFIX . 'shop_customers';
 
+$OrderStatuses = new PerchShop_OrderStatuses($API);
+$paid_statuses = $OrderStatuses->get_status_and_above('paid');
+
+if (count($paid_statuses)) {
+    $order_status_condition = 'orderStatus IN (' . $DB->implode_for_sql_in($paid_statuses) . ')';
+} else {
+    $order_status_condition = 'orderStatus = ' . $DB->pdb('paid');
+}
+
 $Currencies = new PerchShop_Currencies($API);
 $Currency   = $Currencies->get_default();
 
@@ -46,11 +55,12 @@ $notDeletedCondition = function ($column) {
 $monthly_orders_sql = sprintf(
     'SELECT DATE_FORMAT(orderCreated, "%%Y-%%m") AS period, COUNT(*) AS total_orders'
     . ' FROM %1$s'
-    . ' WHERE (%2$s)'
+    . ' WHERE (%3$s) AND (%2$s)'
     . ' GROUP BY period'
     . ' ORDER BY period DESC',
     $orders_table,
-    $notDeletedCondition('orderDeleted')
+    $notDeletedCondition('orderDeleted'),
+    $order_status_condition
 );
 $monthly_orders = $DB->get_rows($monthly_orders_sql) ?: [];
 $monthly_orders_chart = array_reverse($monthly_orders);
@@ -63,11 +73,12 @@ $monthly_profits_sql = sprintf(
     'SELECT DATE_FORMAT(orderCreated, "%%Y-%%m") AS period, '
     . 'SUM((COALESCE(CAST(orderTotal AS DECIMAL(18,2)), 0) - COALESCE(CAST(orderTotalRefunded AS DECIMAL(18,2)), 0))) AS total_profit'
     . ' FROM %1$s'
-    . ' WHERE (%2$s)'
+    . ' WHERE (%3$s) AND (%2$s)'
     . ' GROUP BY period'
     . ' ORDER BY period DESC',
     $orders_table,
-    $notDeletedCondition('orderDeleted')
+    $notDeletedCondition('orderDeleted'),
+    $order_status_condition
 );
 $monthly_profits = $DB->get_rows($monthly_profits_sql) ?: [];
 $monthly_profits_chart = array_reverse($monthly_profits);
@@ -79,11 +90,12 @@ foreach ($monthly_profits_chart as $row) {
 $yearly_orders_sql = sprintf(
     'SELECT DATE_FORMAT(orderCreated, "%%Y") AS period, COUNT(*) AS total_orders'
     . ' FROM %1$s'
-    . ' WHERE (%2$s)'
+    . ' WHERE (%3$s) AND (%2$s)'
     . ' GROUP BY period'
     . ' ORDER BY period DESC',
     $orders_table,
-    $notDeletedCondition('orderDeleted')
+    $notDeletedCondition('orderDeleted'),
+    $order_status_condition
 );
 $yearly_orders = $DB->get_rows($yearly_orders_sql) ?: [];
 
@@ -91,11 +103,12 @@ $yearly_profits_sql = sprintf(
     'SELECT DATE_FORMAT(orderCreated, "%%Y") AS period, '
     . 'SUM((COALESCE(CAST(orderTotal AS DECIMAL(18,2)), 0) - COALESCE(CAST(orderTotalRefunded AS DECIMAL(18,2)), 0))) AS total_profit'
     . ' FROM %1$s'
-    . ' WHERE (%2$s)'
+    . ' WHERE (%3$s) AND (%2$s)'
     . ' GROUP BY period'
     . ' ORDER BY period DESC',
     $orders_table,
-    $notDeletedCondition('orderDeleted')
+    $notDeletedCondition('orderDeleted'),
+    $order_status_condition
 );
 $yearly_profits = $DB->get_rows($yearly_profits_sql) ?: [];
 
