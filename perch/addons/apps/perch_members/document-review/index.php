@@ -11,10 +11,19 @@
     $Perch->add_css($API->app_path().'/assets/css/members.css');
 
     include('../modes/_subnav.php');
-    include('../modes/members.document_approvals.pre.php');
+    $view = PerchRequest::get('view');
+    if ($view === 'orders') {
+        include('../modes/members.document_orders.pre.php');
+    } else {
+        include('../modes/members.document_approvals.pre.php');
+    }
 
     include(PERCH_CORE . '/inc/top.php');
 
-    include('../modes/members.document_approvals.post.php');
+    if ($view === 'orders') {
+        include('../modes/members.document_orders.post.php');
+    } else {
+        include('../modes/members.document_approvals.post.php');
+    }
 
     include(PERCH_CORE . '/inc/btm.php');

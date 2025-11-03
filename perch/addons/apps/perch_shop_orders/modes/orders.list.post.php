@@ -67,7 +67,7 @@ echo $HTML->title_panel([
                       },
             'sort'      => 'customerName',
         ]);
-         $Listing->add_col([
+        $Listing->add_col([
                     'title'     => 'Approved Documents',
                     'value'     => function($Customer) use($Tags) {
                     if($Customer->memberID()!=null){
@@ -113,6 +113,22 @@ echo $HTML->title_panel([
                     }
 
                 ]);
+        $Listing->add_col([
+            'title' => $Lang->get('Assigned to'),
+            'value' => function ($Order) use ($user_labels_by_id, $Lang) {
+                $fields = PerchUtil::json_safe_decode($Order->orderDynamicFields(), true);
+                if (is_array($fields) && isset($fields['document_reviewer_id']) && $fields['document_reviewer_id'] !== '') {
+                    $user_id = (int)$fields['document_reviewer_id'];
+                    if (isset($user_labels_by_id[$user_id])) {
+                        return PerchUtil::html($user_labels_by_id[$user_id]);
+                    }
+
+                    return '#'.$user_id;
+                }
+
+                return PerchUtil::html($Lang->get('Unassigned'));
+            },
+        ]);
          $Listing->add_col([
                  'title'     => 'Customer',
                  'value'     => 'customerName',

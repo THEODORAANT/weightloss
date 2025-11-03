@@ -1,7 +1,10 @@
 <?php
 
+    include_once(__DIR__.'/_document_assignment_helpers.php');
+
     $Members = new PerchMembers_Members($API);
     $MemberDocuments = new PerchMembers_Documents($API);
+    $Orders = new PerchShop_Orders($API);
     $Users = new PerchUsers();
 
     $HTML = $API->get('HTML');
@@ -9,6 +12,9 @@
 
     $AssignmentForm = $API->get('Form');
     $AssignmentForm->set_name('assign_documents');
+
+    $document_review_view = 'members';
+    $document_review_heading = $Lang->get('Members awaiting document approval');
 
     $message = false;
 
@@ -43,6 +49,10 @@
                     $Member->update(['memberProperties' => PerchUtil::json_safe_encode($properties)]);
                     $updated = true;
                 }
+
+                if (perch_members_update_order_document_assignments($memberID, null, $Orders)) {
+                    $updated = true;
+                }
                 continue;
             }
 
@@ -56,6 +66,10 @@
             if (!isset($properties['document_reviewer_id']) || (int)$properties['document_reviewer_id'] !== $userID) {
                 $properties['document_reviewer_id'] = $userID;
                 $Member->update(['memberProperties' => PerchUtil::json_safe_encode($properties)]);
+                $updated = true;
+            }
+
+            if (perch_members_update_order_document_assignments($memberID, $userID, $Orders)) {
                 $updated = true;
             }
         }

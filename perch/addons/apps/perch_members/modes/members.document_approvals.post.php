@@ -1,25 +1,18 @@
 <?php
 
+    if (!isset($document_review_heading)) {
+        $document_review_heading = $Lang->get('Members awaiting document approval');
+    }
+
     echo $HTML->title_panel([
-        'heading' => $Lang->get('Members awaiting document approval'),
+        'heading' => $document_review_heading,
     ], $CurrentUser);
 
     if ($message) {
         echo $message;
     }
 
-    $Smartbar = new PerchSmartbar($CurrentUser, $HTML, $Lang);
-    $Smartbar->add_item([
-        'active' => true,
-        'title'  => $Lang->get('Pending documents'),
-        'link'   => $API->app_nav().'/document-review/',
-    ]);
-    $Smartbar->add_item([
-        'title' => $Lang->get('View members'),
-        'link'  => $API->app_nav().'/?status=pending',
-    ]);
-
-    echo $Smartbar->render();
+    include(__DIR__.'/_document_review_smartbar.php');
 
     if (PerchUtil::count($members)) {
         echo $AssignmentForm->form_start(false, 'membersclass');
