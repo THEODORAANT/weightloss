@@ -5,6 +5,7 @@
         $Form       = $API->get('Form');
         $message    = false;
         $smartbar_selection = 'questions';
+        $questionnaire_notes = '';
 
         if (!class_exists('PerchMembers_Questionnaires')) {
             include_once(PERCH_PATH.'/addons/apps/perch_members/PerchMembers_Questionnaires.class.php');
@@ -30,6 +31,36 @@
                 }
 
                 $Customer = $Customers->find($Order->customerID());
+
+                $dynamic_fields = PerchUtil::json_safe_decode($Order->orderDynamicFields(), true);
+                if (!is_array($dynamic_fields)) {
+                    $dynamic_fields = [];
+                }
+
+                if (isset($dynamic_fields['questionnaire_notes'])) {
+                    $questionnaire_notes = (string) $dynamic_fields['questionnaire_notes'];
+                }
+
+                if ($Form->submitted()) {
+                    $postvars = ['questionnaire_notes'];
+                    $data = $Form->receive($postvars);
+
+                    $note = isset($data['questionnaire_notes']) ? trim((string) $data['questionnaire_notes']) : '';
+
+                    $dynamic_fields['questionnaire_notes'] = $note;
+
+                    $updated = $Order->update([
+                        'orderDynamicFields' => PerchUtil::json_safe_encode($dynamic_fields),
+                    ]);
+
+                    if ($updated) {
+                        $message = $HTML->success_message('Questionnaire notes have been saved.');
+                    } else {
+                        $message = $HTML->failure_message('Sorry, the notes could not be saved.');
+                    }
+
+                    $questionnaire_notes = $note;
+                }
 
                 $questionnaire_sections = [
                     [

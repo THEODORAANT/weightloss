@@ -1,86 +1,180 @@
 <?php
-    # include the API
     include('../../../../core/inc/api.php');
 
     $API  = new PerchAPI(1.0, 'perch_members');
-    $HTML   = $API->get('HTML');
-    $Lang   = $API->get('Lang');
-    $Paging = $API->get('Paging');
-$userId=$_GET["userId"];
-$logDir = 'logs';
-if(isset($_GET["type"]) && $_GET["type"]=="re-order"){
- $logDir = 'logs/reorder';
-}
+    $HTML = $API->get('HTML');
+    $Lang = $API->get('Lang');
+
+    $userId = isset($_GET['userId']) ? (string)$_GET['userId'] : '';
+    $logDir = 'logs';
+    if (isset($_GET['type']) && $_GET['type'] === 're-order') {
+        $logDir = 'logs/reorder';
+    }
+
     $Questionnaires = new PerchMembers_Questionnaires($API);
-$logEntries= $Questionnaires->displayUserAnswerHistoryUI($userId,$logDir) ;
-// Group entries by question
-$grouped = [];
+    $logResult      = $Questionnaires->displayUserAnswerHistoryUI($userId, $logDir);
 
-foreach ($logEntries as $entry) {
-    $q = $entry['question'];
-    $grouped[$q][] = $entry;
-}
-    # Set the page title
+    $logEntries   = $logResult['entries'];
+    $errorMessage = $logResult['error'];
+    $metadata     = $logResult['metadata'];
+
+    $grouped = [];
+    if (is_array($logEntries)) {
+        foreach ($logEntries as $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            $questionKey = $entry['question'] ?? '';
+            if ($questionKey === '') {
+                continue;
+            }
+
+            if (!isset($grouped[$questionKey])) {
+                $grouped[$questionKey] = [];
+            }
+
+            $grouped[$questionKey][] = $entry;
+        }
+    }
+
     $Perch->page_title = $Lang->get('History Log');
-    echo '<h2>📋 Answer History for <code>';
-    echo $userId;
-    echo'</code></h2>
 
-    <input type="text" id="searchInput" placeholder="Search questions or answers..." style="width: 100%; padding: 8px; margin-bottom: 12px;">
+    include(PERCH_CORE . '/inc/top.php');
+?>
 
-    <table border="1" width="100%" style="border-collapse: collapse;">
+<h2>📋 <?php echo PerchUtil::html($Lang->get('Answer History for')); ?> <code><?php echo PerchUtil::html($userId); ?></code></h2>
+
+<?php if (!empty($metadata) && is_array($metadata)): ?>
+    <div class="info">📄 <?php echo PerchUtil::html($Lang->get('Log created:')); ?>
+        <?php echo PerchUtil::html($metadata['registered'] ?? ''); ?>,
+        <?php echo PerchUtil::html($Lang->get('IP:')); ?>
+        <?php echo PerchUtil::html($metadata['ip_address'] ?? ''); ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($errorMessage): ?>
+    <div class="notification notification-warning">⚠️ <?php echo PerchUtil::html($errorMessage); ?></div>
+<?php elseif (empty($logEntries)): ?>
+    <p><?php echo PerchUtil::html($Lang->get('No answers have been recorded for this user yet.')); ?></p>
+<?php else: ?>
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="<?php echo PerchUtil::html($Lang->get('Search questions or answers…')); ?>"
+        style="width: 100%; padding: 8px; margin-bottom: 12px;"
+    >
+
+    <table class="listing" width="100%" style="border-collapse: collapse;">
         <thead>
             <tr>
-                <th onclick="sortTable(0)">Question 🔼</th>
-                <th onclick="sortTable(1)">Answer 🔽</th>
-                <th onclick="sortTable(2)">Time 🕒</th>
+                <th onclick="sortTable(0)"><?php echo PerchUtil::html($Lang->get('Question')); ?> 🔼</th>
+                <th onclick="sortTable(1)"><?php echo PerchUtil::html($Lang->get('Answer')); ?> 🔽</th>
+                <th onclick="sortTable(2)"><?php echo PerchUtil::html($Lang->get('Time')); ?> 🕒</th>
             </tr>
         </thead>
         <tbody id="historyTable">
-';
+        <?php foreach ($logEntries as $entry):
+            if (!is_array($entry)) {
+                continue;
+            }
 
-    foreach ($logEntries as $entry) {
-        $q = $entry['question'];
-        $a = $entry['answer'];
-        $t = $entry['time'];
-        $style = (count($grouped[$q]) >= 2) ? " style='background-color: #ffe6e6;'" : "";
+            $question       = (string)($entry['question'] ?? '');
+            $answerValue    = $entry['answer'] ?? '';
+            $timeValue      = (string)($entry['time'] ?? '');
+            $questionCount  = isset($grouped[$question]) ? count($grouped[$question]) : 0;
+            $rowHighlight   = ($questionCount >= 2 || !empty($entry['changed']))
+                ? ' style="background-color: #ffe6e6;"'
+                : '';
+            $badgeHtml      = ($questionCount >= 2 || !empty($entry['changed']))
+                ? " <span class=\"badge\">" . PerchUtil::html($Lang->get('Changed')) . '</span>'
+                : '';
 
-$badge = (count($grouped[$q]) >= 2)
-    ? "<span style='background: red; color: white; padding: 2px 6px; border-radius: 6px; font-size: 0.8em;'>Changed</span>"
-    : "";
-        echo "<tr{$style}>";
+            if ($answerValue === null) {
+                $answerValue = '';
+            } elseif (is_array($answerValue)) {
+                $answerValue = implode(', ', $answerValue);
+            } elseif (is_bool($answerValue)) {
+                $answerValue = $answerValue ? $Lang->get('Yes') : $Lang->get('No');
+            }
 
-        echo "<td>{$q} {$badge}</td><td>{$a}</td><td>{$t}</td></tr>";
-    }
+            $previousValue = $entry['previous_answer'] ?? '';
+            if (is_array($previousValue)) {
+                $previousValue = implode(', ', $previousValue);
+            }
 
-    echo '</tbody>
+            $questionCell = PerchUtil::html($question) . $badgeHtml;
+            $answerCell   = PerchUtil::html((string)$answerValue);
+            $timeCell     = PerchUtil::html($timeValue !== '' ? $timeValue : '-');
+
+            $previousInfo = '';
+            if ($previousValue !== '' && $previousValue !== null && $previousValue !== $answerValue) {
+                $previousInfo = '<br><small>'
+                    . PerchUtil::html($Lang->get('Previous:'))
+                    . ' '
+                    . PerchUtil::html((string)$previousValue)
+                    . '</small>';
+            }
+        ?>
+            <tr<?php echo $rowHighlight; ?>>
+                <td><?php echo $questionCell; ?></td>
+                <td><?php echo $answerCell, $previousInfo; ?></td>
+                <td><?php echo $timeCell; ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
     </table>
 
+    <style>
+        .badge {
+            background: #d9534f;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            margin-left: 4px;
+        }
+
+        .notification {
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .notification-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+    </style>
+
     <script>
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("keyup", function () {
-        const filter = searchInput.value.toLowerCase();
-        const rows = document.querySelectorAll("#historyTable tr");
+        const searchInput = document.getElementById('searchInput');
+        const historyTable = document.getElementById('historyTable');
 
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(filter) ? "" : "none";
-        });
-    });
+        if (searchInput && historyTable) {
+            searchInput.addEventListener('keyup', () => {
+                const filter = searchInput.value.toLowerCase();
+                historyTable.querySelectorAll('tr').forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                });
+            });
+        }
 
-    function sortTable(colIndex) {
-        const table = document.getElementById("historyTable");
-        const rows = Array.from(table.rows);
+        function sortTable(colIndex) {
+            if (!historyTable) return;
 
-        const sorted = rows.sort((a, b) => {
-            const valA = a.cells[colIndex].innerText.toLowerCase();
-            const valB = b.cells[colIndex].innerText.toLowerCase();
-            return valA.localeCompare(valB);
-        });
+            const rows = Array.from(historyTable.rows);
+            rows.sort((a, b) => {
+                const valA = a.cells[colIndex].innerText.toLowerCase();
+                const valB = b.cells[colIndex].innerText.toLowerCase();
+                return valA.localeCompare(valB);
+            });
 
-        rows.forEach(row => table.appendChild(row));
-    }
-    </script>';
+            rows.forEach(row => historyTable.appendChild(row));
+        }
+    </script>
+<?php endif; ?>
 
-    # Bottom layout
-    include(PERCH_CORE . '/inc/btm.php');
+<?php include(PERCH_CORE . '/inc/btm.php'); ?>

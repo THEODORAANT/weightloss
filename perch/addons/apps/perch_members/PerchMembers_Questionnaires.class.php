@@ -302,11 +302,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "recently-dose-wegovy"=>"recently_wegovy",
     "continue-dose-wegovy"=>"continue_with_wegovy",
     "effects_with_wegovy"=>"effects_with_wegovy",
-    "medication_allergies"=>"medication_allergies",
+    "other_medications"=>"medication_allergies",
+    "allergies"=>"medication_allergies",
     "other_medication_details"=>"medication_allergies",
+    "allergy_details"=>"medication_allergies",
     "other_medical_conditions"=>"list_any",
     "wegovy_side_effects"=>"wegovy_side_effects",
     "gp_informed"=>"gp_informed",
+    "GP_name"=>"gp_address",
+    "GP_address"=>"gp_address",
     "GP_email_address"=>"gp_address",
     "special_offers_email"=>"access_special_offers"
     ];
@@ -432,7 +436,8 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "Black (African/Caribbean)" => "Black (African/Caribbean)",
                                                "mixed" => "Mixed ethnicities",
                                                "other" => "Other ethnic group",
-                                               "white" => "White"
+                                               "white" => "White",
+                                               "PreferNotToSay" => "Prefer not to say"
                                            ]
                                        ],
                                        "ethnicity-more" => [
@@ -537,7 +542,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            ]
                                        ],
                                        "more_pancreatitis" => [
-                                           "label" => "Please tell us more about your health condition and how you manage it.",
+                                           "label" => "Tell me about your gastric surgery procedure.",
                                            "type" => "text",
                                            "name" => "more_pancreatitis"
                                        ],
@@ -653,22 +658,34 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "type" => "text",
                                            "name" => "wegovy_side_effects"
                                        ],
-                                       "medication_allergies" => [
-                                           "label" => "Do you currently take any other medication or have any allergies?",
-                                           "type" => "checkbox",
-                                           "name" => "medication_allergies[]",
+                                       "other_medications" => [
+                                           "label" => "Do you currently take any other medication or supplements?",
+                                           "type" => "radio",
+                                           "name" => "other_medications",
                                            "options" => [
-                                               "levothyroxine" => "I’m on levothyroxine",
-                                               "warfarin" => "I’m on warfarin",
-                                               "other" => "Other / I take more than one prescription medication",
-                                               "no-medication" => "I don’t take any medication",
-                                               "allergies" => "I have allergies"
+                                               "yes" => "I take other medication or supplements.",
+                                               "no" => "I do not take other medication or supplements."
                                            ]
                                        ],
                                        "other_medication_details" => [
                                            "label" => "Please provide details of the other medication you take, including the name, dose, and how often you take this.",
                                            "type" => "textarea",
                                            "name" => "other_medication_details"
+                                       ],
+                                       "allergies" => [
+                                           "label" => "Do you have any allergies including to medication, food, environmental or anything else?",
+                                           "type" => "radio",
+                                           "name" => "allergies",
+                                           "options" => [
+                                               "yes" => "Yes, I have allergies",
+                                               "no" => "No allergies",
+                                               "PreferNotToSay" => "Prefer not to say"
+                                           ]
+                                       ],
+                                       "allergy_details" => [
+                                           "label" => "Please provide detail on your allergy, severity and how it is controlled.",
+                                           "type" => "textarea",
+                                           "name" => "allergy_details"
                                        ],
                                        "other_medical_conditions" => [
                                            "label" => "Please list any other medical conditions you have.",
@@ -683,6 +700,18 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                                "yes" => "Yes",
                                                "no" => "No"
                                            ]
+                                       ],
+                                       "GP_name" => [
+                                           "label" => "Please enter your GP's name",
+                                           "type" => "text",
+                                           "name" => "GP_name",
+                                           "step" => "gp_address"
+                                       ],
+                                       "GP_address" => [
+                                           "label" => "Please enter your GP's address",
+                                           "type" => "textarea",
+                                           "name" => "GP_address",
+                                           "step" => "gp_address"
                                        ],
                                        "GP_email_address" => [
                                            "label" => "Please enter your GP's email address",
@@ -730,7 +759,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "diabetes"=>"Have you been diagnosed with diabetes?",
     "conditions"=>"Do any of the following statements apply to you?",
     "bariatricoperation"=>"Was your bariatric operation in the last 6 months? ",
-    "more_pancreatitis"=>"Please tell us more about your mental health condition and how you manage it",
+    "more_pancreatitis"=>"Tell me about your gastric surgery procedure.",
     "thyroidoperation"=>"Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
     "more_conditions"=>"Please tell us more about your mental health condition and how you manage it",
     "conditions2"=>"Do any of the following statements apply to you?",
@@ -741,11 +770,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "recently-dose-wegovy"=>"What dose of the weight loss medication were you prescribed most recently?",
     "continue-dose-wegovy"=>"If you want to continue with the weight loss medication, what dose would you like to continue with?",
     "effects_with_wegovy"=>"Have you experienced any side effects with the weight loss medication?",
-    "medication_allergies"=>"Do you currently take any other medication or have any allergies?",
+    "other_medications"=>"Do you currently take any other medication or supplements?",
     "other_medication_details"=>"Please provide details of the other medication you take, including the name, dose, and how often you take this.",
+    "allergies"=>"Do you have any allergies including to medication, food, environmental or anything else?",
+    "allergy_details"=>"Please provide detail on your allergy, severity and how it is controlled.",
     "other_medical_conditions"=>"Please list any other medical conditions you have. ",
     "wegovy_side_effects"=>"Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed"=>"Would you like your GP to be informed of this consultation?",
+    "GP_name"=>"Please enter your GP's name",
+    "GP_address"=>"Please enter your GP's address",
     "GP_email_address"=>"Please enter your GP's email address",
     "special_offers_email"=>"Get access to special offers",
     "multiple_answers"=>"Have client alter answers?",
@@ -929,73 +962,203 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
         return $this->return_instances($this->db->get_rows($sql));
     }
 
-function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs') {
-    $filePath = "/var/www/html/{$logDir}/{$userId}_raw_log.json";
+function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): array {
+    $result = [
+        'entries'  => [],
+        'metadata' => [],
+        'error'    => null,
+    ];
+
+    $sanitisedUserId = trim($userId);
+    if ($sanitisedUserId === '') {
+        $result['error'] = 'A valid user ID is required to view the answer history.';
+        return $result;
+    }
+
+    $sanitisedUserId = basename(str_replace('\\', '/', $sanitisedUserId));
+    $sanitisedUserId = str_replace(array("\"", "'"), '', $sanitisedUserId);
+
+    $logDir = trim($logDir);
+    if ($logDir === '') {
+        $logDir = 'logs';
+    }
+
+    if ($logDir[0] === '/' || preg_match('/^[A-Za-z]:[\\\\\/]/', $logDir)) {
+        $basePath = PerchUtil::file_path($logDir);
+    } else {
+        $logDir = trim($logDir, '/\\');
+        $siteRoot = defined('PERCH_SITEPATH') ? PERCH_SITEPATH : null;
+        if ($siteRoot === null && defined('PERCH_PATH')) {
+            $siteRoot = realpath(PERCH_PATH . '/../');
+        }
+        if (!is_string($siteRoot) || $siteRoot === '') {
+            $siteRoot = getcwd();
+        }
+
+        $basePath = PerchUtil::file_path(rtrim($siteRoot, '/\\') . '/' . $logDir);
+    }
+
+    $filePath = PerchUtil::file_path($basePath . DIRECTORY_SEPARATOR . $sanitisedUserId . '_raw_log.json');
 
     if (!file_exists($filePath)) {
-        echo "<p style='color:red;'>❌ Log file not found for user ID: {$userId}</p>";
-        return;
+        $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
+        return $result;
     }
 
-    $data = json_decode(file_get_contents($filePath), true);
-
-    if (!$data || !isset($data['log'])) {
-        echo "<p style='color:red;'>⚠️ Log file is invalid or missing log entries.</p>";
-        return;
+    $json = file_get_contents($filePath);
+    if ($json === false) {
+        $result['error'] = sprintf('Unable to read the answer history file for user ID "%s".', $sanitisedUserId);
+        return $result;
     }
 
-    $logEntries = $data['log'];
-
-    if (is_array($logEntries)) {
-        foreach ($logEntries as $index => &$entry) {
-            if (!is_array($entry)) {
-                $entry = ['_value' => $entry, '_sequence' => $index];
-                continue;
-            }
-
-            $entry['_sequence'] = $index;
-        }
-        unset($entry);
-
-        usort($logEntries, function ($a, $b) {
-            $timeA = isset($a['time']) ? strtotime((string)$a['time']) : false;
-            $timeB = isset($b['time']) ? strtotime((string)$b['time']) : false;
-
-            if ($timeA !== false && $timeB !== false && $timeA !== $timeB) {
-                return $timeA <=> $timeB;
-            }
-
-            if ($timeA !== false && $timeB === false) {
-                return -1;
-            }
-
-            if ($timeA === false && $timeB !== false) {
-                return 1;
-            }
-
-            $seqA = $a['_sequence'] ?? 0;
-            $seqB = $b['_sequence'] ?? 0;
-
-            return $seqA <=> $seqB;
-        });
-
-        foreach ($logEntries as &$entry) {
-            if (!is_array($entry)) {
-                continue;
-            }
-
-            if (array_key_exists('_sequence', $entry)) {
-                unset($entry['_sequence']);
-            }
-
-            if (array_key_exists('_value', $entry)) {
-                $entry = $entry['_value'];
+    $data = json_decode($json, true);
+    if (!is_array($data)) {
+        $message = 'JSON error';
+        if (function_exists('json_last_error') && json_last_error() !== JSON_ERROR_NONE) {
+            if (function_exists('json_last_error_msg')) {
+                $message = json_last_error_msg();
+            } else {
+                $message = 'code ' . json_last_error();
             }
         }
-        unset($entry);
+        $result['error'] = sprintf('The answer history file for user ID "%s" could not be parsed: %s', $sanitisedUserId, $message);
+        return $result;
     }
 
-    return $logEntries;
+    if (isset($data['metadata']) && is_array($data['metadata'])) {
+        $result['metadata'] = $data['metadata'];
+    }
+
+    $logEntries = $data['log'] ?? [];
+    if (!is_array($logEntries)) {
+        $result['error'] = sprintf('The answer history for user ID "%s" does not contain any log entries.', $sanitisedUserId);
+        return $result;
+    }
+
+    $normalise = function ($value) {
+        if (function_exists('perch_members_normalise_answer_log_value')) {
+            return perch_members_normalise_answer_log_value($value);
+        }
+
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_array($value)) {
+            $flattened = [];
+            array_walk_recursive($value, function ($item) use (&$flattened) {
+                if (is_scalar($item) || $item === null) {
+                    $flattened[] = (string)$item;
+                }
+            });
+
+            if (empty($flattened)) {
+                return '';
+            }
+
+            return trim(implode(', ', $flattened));
+        }
+
+        if (is_object($value) && method_exists($value, '__toString')) {
+            $value = (string)$value;
+        }
+
+        if (is_scalar($value)) {
+            return trim((string)$value);
+        }
+
+        $encoded = json_encode($value);
+
+        return $encoded === false ? '' : trim($encoded);
+    };
+
+    foreach ($logEntries as $index => &$entry) {
+        if (!is_array($entry)) {
+            $entry = ['_value' => $entry, '_sequence' => $index];
+            continue;
+        }
+
+        $entry['_sequence'] = $index;
+
+        if (!isset($entry['question']) || !is_string($entry['question'])) {
+            $entry['question'] = '';
+        }
+
+        if (!array_key_exists('answer', $entry) || !(is_scalar($entry['answer']) || $entry['answer'] === null)) {
+            $entry['answer'] = $normalise($entry['answer'] ?? null);
+        }
+
+        if (!isset($entry['time']) || !is_string($entry['time'])) {
+            $entry['time'] = '';
+        }
+
+        if (!isset($entry['action']) || !is_string($entry['action'])) {
+            $entry['action'] = '';
+        }
+
+        if (!isset($entry['previous_answer']) || !(is_scalar($entry['previous_answer']) || $entry['previous_answer'] === null)) {
+            $entry['previous_answer'] = $normalise($entry['previous_answer'] ?? null);
+        }
+
+        if (!isset($entry['changed'])) {
+            $entry['changed'] = false;
+        } else {
+            $entry['changed'] = (bool)$entry['changed'];
+        }
+    }
+    unset($entry);
+
+    usort($logEntries, function ($a, $b) {
+        $timeA = isset($a['time']) ? strtotime((string)$a['time']) : false;
+        $timeB = isset($b['time']) ? strtotime((string)$b['time']) : false;
+
+        if ($timeA !== false && $timeB !== false && $timeA !== $timeB) {
+            return $timeA <=> $timeB;
+        }
+
+        if ($timeA !== false && $timeB === false) {
+            return -1;
+        }
+
+        if ($timeA === false && $timeB !== false) {
+            return 1;
+        }
+
+        $seqA = $a['_sequence'] ?? 0;
+        $seqB = $b['_sequence'] ?? 0;
+
+        return $seqA <=> $seqB;
+    });
+
+    foreach ($logEntries as &$entry) {
+        if (!is_array($entry)) {
+            continue;
+        }
+
+        if (array_key_exists('_sequence', $entry)) {
+            unset($entry['_sequence']);
+        }
+
+        if (array_key_exists('_value', $entry)) {
+            $entry = $entry['_value'];
+            continue;
+        }
+
+        $entry['question'] = trim((string)$entry['question']);
+        $entry['answer'] = $normalise($entry['answer'] ?? null);
+        $entry['previous_answer'] = $normalise($entry['previous_answer'] ?? null);
+        $entry['time'] = trim((string)$entry['time']);
+        $entry['action'] = trim((string)$entry['action']);
+    }
+    unset($entry);
+
+    $result['entries'] = $logEntries;
+
+    return $result;
 }
 function getNextStepforFirstOrder(array $data): string {
     // Priority-based conditional routing
@@ -1032,15 +1195,27 @@ function getNextStepforFirstOrder(array $data): string {
         return $data['more_side_effects'] === 'yes' ? 'wegovy_side_effects' : 'medication_allergies';
     }
 
-    if (isset($data['medication_allergies'])) {
-        $values = $data['medication_allergies'];
-        if (!is_array($values)) {
-            $values = [$values];
+    if (isset($data['other_medications']) || isset($data['allergies'])) {
+        $otherMedications = $data['other_medications'] ?? '';
+        if ($otherMedications === '') {
+            return 'medication_allergies';
         }
 
-        if (in_array('other', $values, true)) {
+        if ($otherMedications === 'yes') {
             $details = trim((string)($data['other_medication_details'] ?? ''));
             if ($details === '') {
+                return 'medication_allergies';
+            }
+        }
+
+        $allergies = $data['allergies'] ?? '';
+        if ($allergies === '') {
+            return 'medication_allergies';
+        }
+
+        if ($allergies === 'yes') {
+            $allergyDetails = trim((string)($data['allergy_details'] ?? ''));
+            if ($allergyDetails === '') {
                 return 'medication_allergies';
             }
         }
@@ -1080,9 +1255,13 @@ function getNextStepforFirstOrder(array $data): string {
            }
 
        }
-       if($step=="medication_allergies"){
-           $values = is_array($value) ? $value : [$value];
-           if (in_array('other', $values, true)) {
+       if($step=="other_medications"){
+           if($value=="yes"){
+               return true;
+           }
+       }
+       if($step=="allergies"){
+           if($value=="yes"){
                return true;
            }
        }
@@ -1302,19 +1481,25 @@ function getNextStepforFirstOrder(array $data): string {
               }
           }
 
-          // Medication allergies check
-          if (empty($data['medication_allergies']) || !is_array($data['medication_allergies'])) {
-              $errors[] = 'Please tell us about any medications or allergies.';
-          }
-
-          $medicationAllergies = is_array($data['medication_allergies'] ?? null)
-              ? $data['medication_allergies']
-              : [];
-
-          if (in_array('other', $medicationAllergies, true)) {
+          // Other medications question
+          $otherMedications = (string)($data['other_medications'] ?? '');
+          if ($otherMedications === '') {
+              $errors[] = 'Please tell us if you take other medication or supplements.';
+          } elseif ($otherMedications === 'yes') {
               $otherMedicationDetails = trim((string)($data['other_medication_details'] ?? ''));
               if ($otherMedicationDetails === '') {
                   $errors[] = 'Please provide details of the other medication you take, including the name, dose, and how often you take this.';
+              }
+          }
+
+          // Allergies question
+          $allergies = (string)($data['allergies'] ?? '');
+          if ($allergies === '') {
+              $errors[] = 'Please tell us if you have any allergies.';
+          } elseif ($allergies === 'yes') {
+              $allergyDetails = trim((string)($data['allergy_details'] ?? ''));
+              if ($allergyDetails === '') {
+                  $errors[] = 'Please provide details about your allergies.';
               }
           }
 
@@ -1323,8 +1508,22 @@ function getNextStepforFirstOrder(array $data): string {
               $errors[] = 'Please tell us if you want your GP to be informed.';
           }
 
-          if ($data['gp_informed'] === 'yes' && empty($data['GP_email_address'])) {
-              $errors[] = 'Please enter your GP’s email address.';
+          if (($data['gp_informed'] ?? '') === 'yes') {
+              $gpName = trim((string)($data['GP_name'] ?? ''));
+              $gpAddress = trim((string)($data['GP_address'] ?? ''));
+              $gpEmail = trim((string)($data['GP_email_address'] ?? ''));
+
+              if ($gpName === '') {
+                  $errors[] = 'Please enter your GP’s name.';
+              }
+
+              if ($gpAddress === '') {
+                  $errors[] = 'Please enter your GP’s address.';
+              }
+
+              if ($gpEmail === '') {
+                  $errors[] = 'Please enter your GP’s email address.';
+              }
           }
       }else{
          $errors[] = 'No permitted age!';
@@ -1593,8 +1792,17 @@ function getNextStepforFirstOrder(array $data): string {
 
       // Convert weight to kilograms if needed
       if ($weightUnit === 'st-lbs') {
-          if ($weightNumeric === null || $weight2Numeric === null) {
+          if ($weightNumeric === null) {
               return "Invalid weight value.";
+          }
+
+          if ($weight2Numeric === null) {
+              $weight2Trimmed = is_string($weight2) ? trim($weight2) : $weight2;
+              if ($weight2Trimmed === '' || $weight2Trimmed === null) {
+                  $weight2Numeric = 0.0;
+              } else {
+                  return "Invalid weight value.";
+              }
           }
 
           $totalPounds = ($weightNumeric * 14) + $weight2Numeric;
@@ -1624,8 +1832,17 @@ function getNextStepforFirstOrder(array $data): string {
 
           $heightM = $height1Numeric * 0.0254;
       } elseif ($heightUnit === 'ft-in') {
-          if ($height1Numeric === null || $height2Numeric === null) {
+          if ($height1Numeric === null) {
               return "Invalid height value.";
+          }
+
+          if ($height2Numeric === null) {
+              $height2Trimmed = is_string($height2) ? trim($height2) : $height2;
+              if ($height2Trimmed === '' || $height2Trimmed === null) {
+                  $height2Numeric = 0.0;
+              } else {
+                  return "Invalid height value.";
+              }
           }
 
           $totalInches = ($height1Numeric * 12) + $height2Numeric;

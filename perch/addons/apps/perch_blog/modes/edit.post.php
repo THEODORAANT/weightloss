@@ -123,19 +123,142 @@
         echo $Form->form_end();
 ?>
 <script>
-document.getElementById('btnGenerateAI').addEventListener('click', function(e){
-    e.preventDefault();
-    var prompt = window.prompt('Enter prompt for AI content');
-    if(!prompt) return;
-    fetch('<?php echo PERCH_LOGINPATH; ?>/addons/apps/perch_blog/ai/generate.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({prompt: prompt})
-    }).then(function(r){return r.json();}).then(function(data){
-        var textarea = document.querySelector('#blog-edit textarea');
-        if(textarea) textarea.value = data.content;
-    });
-});
+(function () {
+    var initialise = function () {
+        var aiButton = document.getElementById('btnGenerateAI');
+        if (!aiButton || !window.JSON || typeof JSON.stringify !== 'function' || typeof JSON.parse !== 'function') {
+            return;
+        }
+
+        var requestAIContent = function (prompt, callback) {
+            if (!prompt || typeof callback !== 'function') {
+                return;
+            }
+
+            var url = '<?php echo PerchUtil::html(PERCH_LOGINPATH, true); ?>/addons/apps/perch_blog/ai/generate.php';
+            var payload;
+
+            try {
+                payload = JSON.stringify({prompt: prompt});
+            } catch (error) {
+                callback(null);
+                return;
+            }
+
+            var handleResponse = function (data) {
+                try {
+                    callback(data);
+                } catch (error) {
+                    // Swallow callback errors so the admin UI keeps working
+                }
+            };
+
+            if (window.fetch) {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: payload
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(handleResponse)
+                    .catch(function () {
+                        handleResponse(null);
+                    });
+            } else if (window.XMLHttpRequest) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', url, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            try {
+                                handleResponse(JSON.parse(xhr.responseText));
+                            } catch (error) {
+                                handleResponse(null);
+                            }
+                        } else {
+                            handleResponse(null);
+                        }
+                    }
+                };
+                xhr.send(payload);
+            }
+        };
+
+        aiButton.onclick = function (event) {
+            event = event || window.event;
+            if (event && typeof event.preventDefault === 'function') {
+                event.preventDefault();
+            } else if (event) {
+                event.returnValue = false;
+            }
+
+            var prompt = window.prompt('Enter prompt for AI content');
+            if (!prompt) {
+                return false;
+            }
+
+            requestAIContent(prompt, function (data) {
+                if (!data || !data.content) {
+                    return;
+                }
+
+                var form = document.getElementById('blog-edit');
+                var textarea = null;
+
+                if (form) {
+                    if (form.querySelector) {
+                        textarea = form.querySelector('textarea');
+                    } else {
+                        var candidates = form.getElementsByTagName('textarea');
+                        if (candidates && candidates.length) {
+                            textarea = candidates[0];
+                        }
+                    }
+                }
+
+                if (!textarea && document.getElementsByTagName) {
+                    var textareas = document.getElementsByTagName('textarea');
+                    if (textareas && textareas.length) {
+                        textarea = textareas[0];
+                    }
+                }
+
+                if (textarea) {
+                    textarea.value = data.content;
+                }
+            });
+
+            return false;
+        };
+    };
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        initialise();
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', initialise);
+    } else if (document.attachEvent) {
+        document.attachEvent('onreadystatechange', function () {
+            if (document.readyState === 'complete') {
+                initialise();
+            }
+        });
+    } else {
+        var existingOnload = window.onload;
+        window.onload = function () {
+            if (typeof existingOnload === 'function') {
+                try {
+                    existingOnload();
+                } catch (error) {
+                    // Ignore errors from previous handlers
+                }
+            }
+            initialise();
+        };
+    }
+})();
 </script>
 <?php
         /* ---- /FORM ---- */

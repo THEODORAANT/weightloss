@@ -15,7 +15,7 @@ $questions = [
     "diabetes" => "Have you been diagnosed with diabetes?",
     "conditions" => "Do any of the following statements apply to you?",
     "bariatricoperation" => "Was your bariatric operation in the last 6 months?",
-    "more_pancreatitis" => "Please tell us more about your mental health condition and how you manage it",
+    "more_pancreatitis" => "Tell me about your gastric surgery procedure.",
     "thyroidoperation" => "Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
     "more_conditions" => "Please tell us more about your mental health condition and how you manage it",
     "conditions2" => "Do any of the following statements apply to you?",
@@ -26,11 +26,15 @@ $questions = [
     "recently-dose-wegovy" => "What dose of the weight loss medication were you prescribed most recently?",
     "continue-dose-wegovy" => "If you want to continue with the weight loss medication, what dose would you like to continue with?",
     "effects_with_wegovy" => "Have you experienced any side effects with the weight loss medication?",
-    "medication_allergies" => "Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.",
+    "other_medications" => "Do you currently take any other medication or supplements?",
     "other_medication_details" => "Please provide details of the other medication you take, including the name, dose, and how often you take this.",
+    "allergies" => "Do you have any allergies including to medication, food, environmental or anything else?",
+    "allergy_details" => "Please provide detail on your allergy, severity and how it is controlled.",
     "other_medical_conditions" => "Please list any other medical conditions you have.",
     "wegovy_side_effects" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved",
     "gp_informed" => "Would you like your GP to be informed of this consultation?",
+    "GP_name" => "Please enter your GP's name",
+    "GP_address" => "Please enter your GP's address",
     "GP_email_address" => "Please enter your GP's email address",
     "special_offers_email" => "Get access to special offers"
 ];
@@ -39,6 +43,17 @@ $doseOptions = [
     'less4' => 'Less than 4 weeks ago',
     '4to6' => '4-6 weeks ago',
     'over6' => 'More than 6 weeks ago',
+];
+
+$otherMedicationOptions = [
+    'yes' => 'I take other medication or supplements.',
+    'no' => 'I do not take other medication or supplements.',
+];
+
+$allergyOptions = [
+    'yes' => 'Yes, I have allergies',
+    'no' => 'No allergies',
+    'PreferNotToSay' => 'Prefer not to say',
 ];
 
 $medicationSlugs = [];
@@ -82,11 +97,15 @@ $steps = [
     "recently-dose-wegovy" => "recently_wegovy",
     "continue-dose-wegovy" => "continue_with_wegovy",
     "effects_with_wegovy" => "effects_with_wegovy",
-    "medication_allergies" => "medication_allergies",
+    "other_medications" => "medication_allergies",
+    "allergies" => "medication_allergies",
     "other_medication_details" => "medication_allergies",
+    "allergy_details" => "medication_allergies",
     "other_medical_conditions" => "list_any",
     "wegovy_side_effects" => "wegovy_side_effects",
     "gp_informed" => "gp_informed",
+    "GP_name" => "gp_address",
+    "GP_address" => "gp_address",
     "GP_email_address" => "gp_address",
     "special_offers_email" => "access_special_offers"
 ];
@@ -162,6 +181,13 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
 
             foreach ($_SESSION['questionnaire'] as $key => $value) {
                 if (array_key_exists($key, $questions)) {
+                    if ($key === 'allergy_details') {
+                        $allergiesAnswer = $_SESSION['questionnaire']['allergies'] ?? '';
+                        if ($allergiesAnswer !== 'yes') {
+                            continue;
+                        }
+                    }
+
                     $changelink = "/get-started/questionnaire?step=" . $steps[$key];
             ?>
             <div class="plan">
@@ -203,8 +229,18 @@ $_SESSION['questionnaire']["reviewed"] = "InProcess";
                             echo renderMeasurement($value, "heightunit", "height2", $_SESSION['questionnaire']);
                         } else {
                             $displayValue = $value;
-                            if ($key === "other_medication_details" && trim((string)$displayValue) === '') {
-                                $displayValue = 'No medication being taken.';
+                            if ($key === "other_medications") {
+                                $displayValue = $otherMedicationOptions[$value] ?? $value;
+                            } elseif ($key === "allergies") {
+                                $displayValue = $allergyOptions[$value] ?? $value;
+                            } elseif ($key === "other_medication_details") {
+                                if (trim((string)$displayValue) === '') {
+                                    $displayValue = 'Not applicable.';
+                                }
+                            } elseif ($key === "allergy_details") {
+                                if (trim((string)$displayValue) === '') {
+                                    $displayValue = 'Not applicable.';
+                                }
                             }
 
                             echo htmlspecialchars((string)$displayValue);

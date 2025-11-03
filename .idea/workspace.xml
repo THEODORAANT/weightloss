@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/global/new/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/global/new/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" afterDir="false" />
-    </list>
+    <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="main" />
+    <option name="BRANCH" value="origin/codex/check-video-settings-for-payment-success-ildc4o" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -24,7 +19,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="uat" />
+        <entry key="$PROJECT_DIR$" value="mainmerge" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -41,30 +36,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss/weightloss/perch/addons/apps&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
-      <recent name="$PROJECT_DIR$/perch/templates/pages/medications" />
-      <recent name="$PROJECT_DIR$/perch/templates/pages/landing" />
-      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib" />
+      <recent name="$PROJECT_DIR$/perch" />
+      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/modes" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
     </key>
   </component>
@@ -110,62 +104,10 @@
       <workItem from="1759335583029" duration="4974000" />
       <workItem from="1759743479952" duration="7339000" />
       <workItem from="1759826825876" duration="10949000" />
-    </task>
-    <task id="LOCAL-00041" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757930856789</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1757930856789</updated>
-    </task>
-    <task id="LOCAL-00042" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1757944791393</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1757944791393</updated>
-    </task>
-    <task id="LOCAL-00043" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758015002438</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1758015002438</updated>
-    </task>
-    <task id="LOCAL-00044" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758031469148</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1758031469148</updated>
-    </task>
-    <task id="LOCAL-00045" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758099431263</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1758099431263</updated>
-    </task>
-    <task id="LOCAL-00046" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758100362957</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1758100362957</updated>
-    </task>
-    <task id="LOCAL-00047" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758104941441</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1758104941441</updated>
+      <workItem from="1762069869609" duration="1345000" />
+      <workItem from="1762071564113" duration="4643000" />
+      <workItem from="1762172803162" duration="117000" />
+      <workItem from="1762172940490" duration="1112000" />
     </task>
     <task id="LOCAL-00048" summary="weightloss">
       <option name="closed" value="true" />
@@ -473,37 +415,93 @@
     </task>
     <task id="LOCAL-00086" summary="weightloss">
       <option name="closed" value="true" />
-      <created>1761405694700</created>
+      <created>1761640039312</created>
       <option name="number" value="00086" />
       <option name="presentableId" value="LOCAL-00086" />
       <option name="project" value="LOCAL" />
-      <updated>1761405694700</updated>
+      <updated>1761640039312</updated>
     </task>
     <task id="LOCAL-00087" summary="weightloss">
       <option name="closed" value="true" />
-      <created>1761407558666</created>
+      <created>1761642819006</created>
       <option name="number" value="00087" />
       <option name="presentableId" value="LOCAL-00087" />
       <option name="project" value="LOCAL" />
-      <updated>1761407558666</updated>
+      <updated>1761642819006</updated>
     </task>
     <task id="LOCAL-00088" summary="weightloss">
       <option name="closed" value="true" />
-      <created>1761558204543</created>
+      <created>1761659092142</created>
       <option name="number" value="00088" />
       <option name="presentableId" value="LOCAL-00088" />
       <option name="project" value="LOCAL" />
-      <updated>1761558204544</updated>
+      <updated>1761659092142</updated>
     </task>
     <task id="LOCAL-00089" summary="weightloss">
       <option name="closed" value="true" />
-      <created>1761565056482</created>
+      <created>1761659295608</created>
       <option name="number" value="00089" />
       <option name="presentableId" value="LOCAL-00089" />
       <option name="project" value="LOCAL" />
-      <updated>1761565056483</updated>
+      <updated>1761659295608</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761730191001</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1761730191001</updated>
+    </task>
+    <task id="LOCAL-00091" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761819211541</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1761819211542</updated>
+    </task>
+    <task id="LOCAL-00092" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761821865393</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1761821865393</updated>
+    </task>
+    <task id="LOCAL-00093" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761821942546</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1761821942546</updated>
+    </task>
+    <task id="LOCAL-00094" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1761904467308</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1761904467308</updated>
+    </task>
+    <task id="LOCAL-00095" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1762172100912</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1762172100914</updated>
+    </task>
+    <task id="LOCAL-00096" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1762179478986</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1762179478987</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

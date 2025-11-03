@@ -51,6 +51,10 @@ This keeps the package's billing cycle up to date.
 
 In the admin interface, under the Orders section, use the **Package Report** link to view upcoming payments. The report lists each package along with its customer ID, status, and next billing date.
 
+## Orders & Conversion Report
+
+Under **Orders → Reports** administrators can review order volume and customer conversions at a glance. The page summarises the total orders recorded together with the number of members who have become customers, and breaks both metrics down by month and by year for trend analysis.
+
 ## Admin Package Module
 
  In the admin interface, under the Orders section, use the **Package Admin** link to add new packages and review existing ones. The page shows each client's billing type, payment status, next billing date, and highlights pending packages. Each package expands to list its items, including product and variant details, quantity, and payment status.
@@ -65,6 +69,15 @@ Unread notifications display a red dot indicator and are marked as read when the
 
 To create a new notification in code, call `perch_member_add_notification($memberID, $title, $message)`.
 Administrators can also add notifications for a member from the member edit screen in the control panel.
+
+## Member Support Chat
+
+The self-hosted chat system lets members talk directly with the support team inside the client portal and Perch admin area.
+
+- Run the SQL in `sql/create_chat_tables.sql` (replace `__PREFIX__` with your database prefix) to create the chat tables before deploying.
+- Logged-in members can open `/client/chat` to view the conversation history, send new messages, and receive responses in real time.
+- The client navigation shows a red dot when a staff reply is waiting to be read.
+- Staff users can access **Members → Chat** in the Perch admin to review all conversations, reply, and close or reopen threads. The menu badge highlights how many chats are waiting for a staff response.
 
 ## Product API
 

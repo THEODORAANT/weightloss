@@ -58,7 +58,7 @@
                     echo '<tr>';
                         echo '<td class="action">'.$Form->checkbox('tag-'.$Tag->id(), '1', '1').'</td>';
                         echo '<td>'.PerchUtil::html($Tag->tag()).'</td>';
-                        echo '<td>'.PerchUtil::html($Tag->tagExpires() ? date('d b Y', strtotime($Tag->tagExpires())) : '-').'</td>';
+                        echo '<td>'.PerchUtil::html($Tag->tagExpires() ? date('d M Y', strtotime($Tag->tagExpires())) : '-').'</td>';
                     echo '</tr>';
                 }
             }
@@ -160,6 +160,28 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
     </div>
 
      <?php
+        if ($is_customer) {
+            echo $HTML->heading2('Customer addresses');
+            echo '<div class="form-inner">';
+
+            echo '<h3>Shipping address</h3>';
+            foreach ($address_field_keys as $field_key) {
+                $label = isset($address_field_labels[$field_key]) ? $address_field_labels[$field_key] : ucfirst($field_key);
+                $value = isset($shipping_address_details[$field_key]) ? $shipping_address_details[$field_key] : '';
+
+                if ($field_key === 'instructions') {
+                    echo $Form->textarea_field('shipping_'.$field_key, $label, $value, 'input-simple', false);
+                } else {
+                    echo $Form->text_field('shipping_'.$field_key, $label, $value, 'l');
+                }
+            }
+
+            echo '</div>';
+        }
+
+     ?>
+
+     <?php
        //Questionnaire
              echo $HTML->heading2('Orders');
              if( $Customer){
@@ -207,7 +229,27 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                  <tbody>
              <?php
 
-             $questions=$Questionnaires->get_questions();
+            $questions=$Questionnaires->get_questions();
+            $answer_indicates_allergies = static function ($answerText) {
+                $normalized = strtolower(trim((string)$answerText));
+
+                return $normalized !== '' && strpos($normalized, 'yes') === 0;
+            };
+            $should_skip_question = static function($slug, $answers_by_slug) use ($answer_indicates_allergies) {
+                if ($slug === 'allergy_details') {
+                    if (!isset($answers_by_slug['allergies'])) {
+                        return false;
+                    }
+
+                    $allergy_answer = $answers_by_slug['allergies']->answer_text();
+
+                    if (!$answer_indicates_allergies($allergy_answer)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
              $bmi_edit_controls_needed = false;
 
                 if (PerchUtil::count($questionnaire)) {
@@ -224,6 +266,9 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                         $historyPrinted = false;
                         foreach ($questions as $slug => $question_label) {
                             if (!isset($answers_by_slug[$slug])) {
+                                continue;
+                            }
+                            if ($should_skip_question($slug, $answers_by_slug)) {
                                 continue;
                             }
                             $Questionnaire = $answers_by_slug[$slug];
@@ -291,6 +336,9 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                             if (!isset($answers_by_slug[$slug])) {
                                 continue;
                             }
+                            if ($should_skip_question($slug, $answers_by_slug)) {
+                                continue;
+                            }
                             $Questionnaire = $answers_by_slug[$slug];
                             if (!$historyPrinted) {
                                 echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="https://getweightloss.co.uk/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Questionnaire->uuid().'&type=re-order">History</a></td></tr>';
@@ -321,6 +369,16 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
 
     <?php echo $HTML->heading2('Notes'); ?>
 
+<?php
+    if (!isset($NotePharmacyStatuses) || !($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses)) {
+        if (isset($API) && is_object($API)) {
+            $NotePharmacyStatuses = new PerchMembers_NotePharmacyStatuses($API);
+        } else {
+            $NotePharmacyStatuses = null;
+        }
+    }
+?>
+
            <div class="form-inner">
                   <table class="notes">
                       <thead>
@@ -329,23 +387,85 @@ echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class
                               <th>Note</th>
                               <th>Date</th>
                                 <th>Added by</th>
+                              <th>Pharmacy status</th>
+                              <th>Escalate clinical review</th>
+                                <th class="action">Action</th>
                           </tr>
                       </thead>
                       <tbody>
                   <?php
                       if (PerchUtil::count($notes)) {
                           foreach($notes as $Note) {
+                              $noteID = (int) $Note->id();
+                              $pharmacyStatus = false;
+                              if ($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses && isset($Member) && is_object($Member)) {
+                                  $pharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), $noteID);
+                              }
+                           //  echo "statu"; print_r($pharmacyStatus);
+                              $statusLabel = '';
+                              $statusClassSuffix = 'sent';
+                              $statusMessage = '';
+                              $statusSentAt = '';
+
+                              if ($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus) {
+                                  $statusLabel = trim((string) $pharmacyStatus->status());
+                                  if ($statusLabel === '') {
+                                      $statusLabel = 'Sent';
+                                  }
+
+                                  $statusClassSuffix = strtolower(preg_replace('/[^a-z0-9]+/', '-', $statusLabel));
+                                  $statusClassSuffix = trim($statusClassSuffix, '-');
+                                  if ($statusClassSuffix === '') {
+                                      $statusClassSuffix = 'sent';
+                                  }
+
+                                  $statusMessage = trim((string) $pharmacyStatus->message());
+
+                                  $sentAt = $pharmacyStatus->sentAt();
+                                  if ($sentAt) {
+                                      $timestamp = strtotime($sentAt);
+                                      if ($timestamp) {
+                                          $statusSentAt = date('d M Y H:i', $timestamp);
+                                      }
+                                  }
+                              }
+
                               echo '<tr>';
 
-                                  echo '<td>'.PerchUtil::html($Note->note()).'</td>';
-                                  echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d b Y', strtotime($Note->noteDate())) : '-').'</td>';
+                                  echo '<td>'.PerchUtil::html($Note->note_text()).'</td>';
+                                  echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d M Y', strtotime($Note->noteDate())) : '-').'</td>';
                                     echo '<td>'.PerchUtil::html($Note->addedBy()).'</td>';
+                                    echo '<td>';
+                                    if ($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus) {
+                                        echo '<span class="pharmacy-status pharmacy-status-'.$statusClassSuffix.'">Status: '.PerchUtil::html($statusLabel).'</span>';
+                                        if ($statusSentAt !== '') {
+                                            echo '<div class="meta">Sent '.PerchUtil::html($statusSentAt).'</div>';
+                                        }
+                                        if ($statusMessage !== '') {
+                                            echo '<div class="meta">'.PerchUtil::html($statusMessage).'</div>';
+                                        }
+                                    } else {
+                                        echo '-';
+                                    }
+                                    echo '</td>';
+                                    echo '<td class="action">';
+                                    if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
+                                        echo '<label><input type="checkbox" name="note_escalate['.(int)$Note->id().']" value="1" /> Escalate clinical review</label>';
+                                    } else {
+                                        echo '-';
+                                    }
+                                    echo '</td>';
+                                    echo '<td class="action">';
+                                    if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
+                                        echo '<button type="submit" style="background-color:#199d19" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
+                                    }
+                                    echo '</td>';
                               echo '</tr>';
                           }
                       }
 
                       echo '<tr>';
-                          echo '<td colspan="3" class="action">'.$Form->label('new-note', PerchLang::get('New'));
+                          echo '<td colspan="6" class="action">'.$Form->label('new-note', PerchLang::get('New'));
                           echo $Form->text('new-note', false).'</td>';
 
                       echo '</tr>';

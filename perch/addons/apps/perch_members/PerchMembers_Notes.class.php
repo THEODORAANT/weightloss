@@ -12,12 +12,24 @@ class PerchMembers_Notes extends PerchAPI_Factory
 	public function find_or_create($note, $display=false)
 	{
 
-		$data = array();
-		$data['note'] = $note;
-		//$data['noteDisplay'] = $display;
+        $note = trim((string) $note);
 
-		return $this->create($data);
-	}
+        if ($note === '') {
+                return false;
+        }
+
+        $Existing = $this->get_one_by('note', $note);
+
+        if ($Existing) {
+                return $Existing;
+        }
+
+        $data = array();
+        $data['note'] = $note;
+        //$data['noteDisplay'] = $display;
+
+        return $this->create($data);
+        }
 
     public function find_by_note($note)
     {
@@ -60,17 +72,26 @@ class PerchMembers_Notes extends PerchAPI_Factory
      */
     public function parse_string($str)
     {
-    	$notes = explode(',', $str);
-    	$out = array();
-    	if (PerchUtil::count($notes)) {
-    		foreach($notes as $note) {
-    			$out[] = array(
-    				'note'=>PerchUtil::urlify(trim($note))
-    			);
-    		}
-    	}
+        $notes = explode(',', (string) $str);
+        $out = array();
 
-    	return $out;
+        if (!PerchUtil::count($notes)) {
+                return $out;
+        }
+
+        foreach ($notes as $note) {
+                $note = trim($note);
+
+                if ($note === '') {
+                        continue;
+                }
+
+                $out[] = array(
+                        'note' => $note,
+                );
+        }
+
+        return $out;
     }
 
 }

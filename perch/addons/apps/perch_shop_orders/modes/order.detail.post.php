@@ -371,6 +371,15 @@ $output.=  $HTML->heading2('Customer');
                 $output.=  '<td>'.$Currency->format_display($Item->itemTotal()*$Item->itemQty()).'</td>';
             $output.=  '</tr>';
         }
+                $orders_pharmacy=$Order->getPharmacyOrderbyOrderid($Order->id());
+                $pharmacy_status_details = null;
+                if (PerchUtil::count($orders_pharmacy)) {
+                    $first_pharmacy_order = reset($orders_pharmacy);
+                    if (is_array($first_pharmacy_order) && isset($first_pharmacy_order['pharmacy_orderID'])) {
+                        $pharmacy_status_details = $Order->getOrderPharmacyDetails($first_pharmacy_order['pharmacy_orderID']);
+                    }
+                }
+
                $output.=  '<tr >';
 
                     $output.=  '<td colspan="7" class="text-right">';
@@ -382,9 +391,23 @@ $output.=  $HTML->heading2('Customer');
                             'form'  => $form_button,
                         ], $CurrentUser);*/
 
+                if (PerchUtil::count($orders_pharmacy)) {
+                    $status_text = 'Status: Sent';
+                    $status_class_suffix = 'sent';
+                    if (is_array($pharmacy_status_details) && isset($pharmacy_status_details['status']) && $pharmacy_status_details['status'] !== '') {
+                        $status_value = $pharmacy_status_details['status'];
+                        $status_text = 'Status: '.$HTML->encode($status_value);
+                        $status_class_suffix = strtolower(preg_replace('/[^a-z0-9]+/', '-', $status_value));
+                        $status_class_suffix = trim($status_class_suffix, '-');
+                        if ($status_class_suffix === '') {
+                            $status_class_suffix = 'sent';
+                        }
+                    }
+                    $output.=  '<span class="pharmacy-status pharmacy-status-'.$status_class_suffix.'">'.$status_text.'</span>';
+                } else {
       $output.=  '<a style="background-color:#199d19"  href="/perch/addons/apps/perch_shop_orders/sendToPharmacy?id='.$Order->id().'" name="sendtopahramcy" id="sendtopahramcy"  class="button button-icon icon-left" title="Send to Pharmacy"><div> <svg role="img" width="14" height="14" class="icon icon-cross"> <use xlink:href="/perch/core/assets/svg/ext.svg#cross"></use> </svg><span>Send to Pharmacy</span></div></a>';
+                }
                 $output.=  '</td></tr>';
-                $orders_pharmacy=$Order->getPharmacyOrderbyOrderid($Order->id());
 
                  if (PerchUtil::count($orders_pharmacy)) {
                        $output.=  '<tr >';
@@ -413,7 +436,10 @@ $output.=  $HTML->heading2('Customer');
                                                                                                                   if($count==1) {
 
 
-                                                                                                                   $pharmacydetails_pharmacy=$Order->getOrderPharmacyDetails($order["pharmacy_orderID"]);
+                                                                                                                   $pharmacydetails_pharmacy=$pharmacy_status_details;
+                                                                                                                   if (!is_array($pharmacydetails_pharmacy)) {
+                                                                                                                       $pharmacydetails_pharmacy=$Order->getOrderPharmacyDetails($order["pharmacy_orderID"]);
+                                                                                                                   }
                                                                                                                    if(isset( $pharmacydetails_pharmacy["status"])){
                                                                                                                    $output.=  '<tr>';
                                                                                                                     $output.=  '<td >Status: '. $pharmacydetails_pharmacy["status"].'</td>';

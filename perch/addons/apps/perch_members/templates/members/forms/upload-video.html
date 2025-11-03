@@ -4,15 +4,13 @@
     <div class="plan"  data-save="8">
         <div>
             <h5>  <perch:label for="video">Video Document:</perch:label><br></h5>
-            <p>        <perch:input type="hidden" name="documentType" id="documentType" value="id-documents"  />           <perch:input type="file" name="video" id="video" accept="video/*" required /><br><br>
+            <p>        <perch:input type="hidden" name="documentType" id="documentType" value="id-documents"  />           <perch:input type="file" name="video[]" id="video" accept="video/*" required multiple="multiple" class="document-video-input" /><br><br>
                 <br><br>
             </p>
         </div>
        <div class="price-section">
                     <span class="price fw-bold">
-                        <div class="preview">
-
-    <video width="320" height="240"  id="videoPreview" style="display: none;" controls></video>
+                        <div class="preview video-preview-container">
   </div></span>
                 </div>
     </div>

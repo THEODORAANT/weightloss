@@ -195,7 +195,7 @@ class PerchShop_Orders extends PerchShop_Factory
 
 		return $this->return_instances($rows);
 	}
-public function get_by_properties($details,$Paging=false){
+        public function get_by_properties($details,$Paging=false){
 //echo "get_by_properties";
 //print_r($details);
 $sort_val = null;
@@ -258,8 +258,68 @@ $sql= $selectsql. $fromsql.$wheresql;
 
                 return $this->return_instances($results);
 }
-	public function get_admin_listing($status=array('paid'), $Paging=false)
-	{
+
+        public function get_with_pending_documents($Paging=false)
+        {
+                $select = ($Paging && $Paging->enabled()) ? $Paging->select_sql() : 'SELECT';
+
+                $orders_table    = $this->table;
+                $customers_table = PERCH_DB_PREFIX.'shop_customers';
+                $documents_table = PERCH_DB_PREFIX.'members_documents';
+                $pending         = $this->db->pdb('pending');
+
+                $sql = $select.' DISTINCT o.*
+                        FROM '.$orders_table.' o
+                        JOIN '.$customers_table.' c ON o.customerID = c.customerID
+                        JOIN '.$documents_table.' d ON d.memberID = c.memberID
+                        WHERE (d.documentStatus IS NULL OR d.documentStatus='.$pending.')
+                          AND COALESCE(d.documentDeleted, \'0\') != \'1\'
+                          AND o.orderDeleted IS NULL
+                          AND o.orderStatus IN ("paid")
+                        ORDER BY o.orderCreated DESC';
+
+                if ($Paging && $Paging->enabled()) {
+                        $sql .= ' '.$Paging->limit_sql();
+                }
+
+                $rows = $this->db->get_rows($sql);
+
+                if ($Paging && $Paging->enabled()) {
+                        $Paging->set_total($this->db->get_count($Paging->total_count_sql()));
+                }
+
+                return $this->return_instances($rows);
+        }
+
+        public function get_pending_document_orders_for_member($memberID)
+        {
+                $memberID = (int)$memberID;
+                if ($memberID < 1) {
+                        return [];
+                }
+
+                $orders_table    = $this->table;
+                $customers_table = PERCH_DB_PREFIX.'shop_customers';
+                $documents_table = PERCH_DB_PREFIX.'members_documents';
+                $pending         = $this->db->pdb('pending');
+
+                $sql = 'SELECT DISTINCT o.*
+                        FROM '.$orders_table.' o
+                        JOIN '.$customers_table.' c ON o.customerID = c.customerID
+                        JOIN '.$documents_table.' d ON d.memberID = c.memberID
+                        WHERE c.memberID='.$this->db->pdb($memberID).'
+                          AND (d.documentStatus IS NULL OR d.documentStatus='.$pending.')
+                          AND COALESCE(d.documentDeleted, \'0\') != \'1\'
+                          AND o.orderDeleted IS NULL
+                          AND o.orderStatus IN ("paid")
+                        ORDER BY o.orderCreated DESC';
+
+                $rows = $this->db->get_rows($sql);
+
+                return $this->return_instances($rows);
+        }
+        public function get_admin_listing($status=array('paid'), $Paging=false)
+        {
 		$sort_val = null;
         $sort_dir = null;
 

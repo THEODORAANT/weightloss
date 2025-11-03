@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,7 +43,7 @@
       background: white;
       border-bottom: 1px solid var(--grey);
       padding: 1rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .mobile-menu.active {
@@ -164,6 +165,7 @@
     }
   </style>
 </head>
+
 <body class="min-h-screen bg-white text-[color:var(--blue)]">
   <!-- Header -->
   <header class="sticky top-0 z-50 backdrop-blur-lg border-b shadow-sm" style="background-color: #ffffffF5; border-color: #e5e7eb">
@@ -221,12 +223,14 @@
           ✓ UK-regulated • GPhC registered
         </div>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
-        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">   <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a confidential consultation from one of our UK-registered clinicians. They’ll assess your health needs and determine if a prescription treatment is suitable for you.</p></p>
+        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">
+        <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a confidential consultation from one of our UK-registered clinicians. They’ll assess your health needs and determine if a prescription treatment is suitable for you.</p>
+        </p>
         <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
           <a href="https://www.getweightloss.co.uk/get-started" class="btn-lime inline-flex items-center justify-center rounded-2xl px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 transition-all">
             <span>Start free assessment</span>
             <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
             </svg>
           </a>
           <a href="#how" class="inline-flex items-center justify-center rounded-2xl px-8 py-4 text-lg font-medium border-2 hover:bg-gray-50 transition-all" style="border-color: #d1d5db; color: var(--blue)">Learn more</a>
@@ -234,19 +238,19 @@
         <div class="mt-6 flex flex-wrap items-center gap-6 text-sm opacity-75">
           <div class="flex items-center gap-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
             <span>No hidden fees</span>
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
             <span>Takes 5 minutes</span>
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
             <span>Confidential</span>
           </div>
@@ -257,7 +261,7 @@
           <div class="flex items-center gap-3 mb-6">
             <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--lime)">
               <svg class="w-6 h-6" style="color: var(--purple)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <h3 class="text-xl sm:text-2xl font-bold">Why choose us?</h3>
@@ -285,10 +289,10 @@
               </div>
             </li>
           </ul>
-            <div class="mt-6 space-y-2 text-xs sm:text-sm italic opacity-75">
-                      <p>*If appropriate, a private prescription can be issued, and medication dispensed by our partner pharmacy.</p>
-                      <p>*Consultation fees apply; treatment costs may vary depending on what’s prescribed.</p>
-                    </div>
+          <div class="mt-6 space-y-2 text-xs sm:text-sm italic opacity-75">
+            <p>*If appropriate, your clinician will prescribe your medication for dispensing by our pharmacy team</p>
+            <p>*Consultation fees apply; treatment costs may vary depending on what’s prescribed.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -312,7 +316,7 @@
         <div class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <p class="text-xs font-bold tracking-wide" style="color: var(--blue)">STEP 3</p>
           <h3 class="mt-3 text-lg sm:text-xl font-semibold">Prescription Delivery</h3>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">If your clinician decides a prescription is appropriate, it will be dispensed by our partner pharmacy and sent via tracked Royal Mail delivery (usually within 2 working days). You’ll receive your tracking details once your prescription has been processed.</p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">If your clinician decides a prescription is appropriate, it will be dispensed by our pharmacy and sent via tracked Royal Mail delivery (usually within 2 working days). You’ll receive your tracking details once your prescription has been processed.</p>
         </div>
       </div>
     </div>
@@ -323,7 +327,8 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-semibold">Explore the treatments</h2>
       <p class="mt-4 text-base sm:text-lg leading-relaxed">A range of prescription-only medicines may be considered to support weight management alongside a reduced-calorie diet and regular physical activity.
-                                                           These medicines are only supplied if a UK-registered prescriber determines they are clinically appropriate for you following a detailed consultation.</p>      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+        These medicines are only supplied if a UK-registered prescriber determines they are clinically appropriate for you following a detailed consultation.</p>
+      <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
         <article class="rounded-3xl p-5 sm:p-6 shadow-sm" style="border: 1px solid var(--grey); background-color: var(--white)">
           <h3 class="text-xl sm:text-2xl font-semibold">Mounjaro® (tirzepatide)</h3>
           <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
@@ -361,11 +366,11 @@
               </div>
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>12.5mg</span>
-                <span class="font-semibold">£259</span>
+                <span class="font-semibold">£249</span>
               </div>
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>15mg</span>
-                <span class="font-semibold">£279</span>
+                <span class="font-semibold">£269</span>
               </div>
             </div>
           </div>
@@ -415,10 +420,13 @@
       </div>
       <div class="mt-6 rounded-2xl p-4 sm:p-5 text-sm sm:text-base" style="background-color: #afd13622; border: 1px solid var(--lime)">
         <p class="font-semibold">Important:</p>
-        <p class="mt-2 leading-relaxed">   <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
-        <li>Medicines are only supplied following a valid prescription from a qualified prescriber.</li>
-                                         <li>Availability may vary depending on stock and supply.</li>
-                                         <li>If a treatment is not suitable, your clinician will discuss alternative evidence-based options with you. </li></ul></p>
+        <p class="mt-2 leading-relaxed">
+        <ul class="mt-4 list-disc pl-5 text-sm sm:text-base space-y-2.5 leading-relaxed opacity-80">
+          <li>Medicines are only supplied following a valid prescription from a qualified prescriber.</li>
+          <li>Availability may vary depending on stock and supply.</li>
+          <li>If a treatment is not suitable, your clinician will discuss alternative evidence-based options with you. </li>
+        </ul>
+        </p>
       </div>
     </div>
   </section>
@@ -479,12 +487,14 @@
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Do you work with my GP?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.   <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
-                                                                                                                                                                                                                                <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
-                                                                                                                                                                                                                                <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
-                                                                                                                                                                                                                                <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
-                                                                                                                                                                                                                                <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
-                                                                                                                                                                                                                              </ol></p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.
+          <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
+            <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
+            <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
+            <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
+            <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
+          </ol>
+          </p>
         </details>
       </div>
 
@@ -505,19 +515,7 @@
   </section>
 
   <!-- Footer -->
-  <footer style="background-color: var(--blue); color: var(--white)">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-10 text-sm sm:text-base">
-      <p class="opacity-90 font-medium">© 2025 Get Weight Loss. All rights reserved.</p>
-      <p class="mt-4 opacity-80 leading-relaxed">GetweightLoss, the website and consultations are owned and operated by MI Health Ltd, a company registered in the United Kingdom under company number 13008704. The business operates under a General Pharmaceutical Council registered premises number 9011648. You are able to verify the pharmacy's registration and our superintendent pharmacist, Imran Tailor SI pharmacist with GPhC 2216145.</p>
-      <p class="mt-4 opacity-80 leading-relaxed">Medical disclaimer: The information on this site provides general guidance only and does not replace a consultation with a qualified healthcare professional. We do not guarantee prescriptions or outcomes.</p>
-      <p class="mt-4 opacity-80 leading-relaxed">Mounjaro® is a registered trademark of Eli Lilly and Company. Wegovy® is a registered trademark of Novo Nordisk A/S. We are not affiliated with these manufacturers.</p>
-      <div class="mt-6 flex flex-wrap gap-4 sm:gap-6">
-        <a href="https://getweightloss.co.uk/privacy-notice" class="underline hover:opacity-75 transition" style="color: var(--white)">Privacy</a>
-        <a href="https://getweightloss.co.uk/terms-and-conditions" class="underline hover:opacity-75 transition" style="color: var(--white)">Terms</a>
-        <a href="https://getweightloss.co.uk/make-a-complaint" class="underline hover:opacity-75 transition" style="color: var(--white)">Complaints</a>
-      </div>
-    </div>
-  </footer>
+  <?php perch_layout('global/new/footer'); ?>
 
   <script>
     function toggleMenu() {
@@ -566,4 +564,5 @@
     });
   </script>
 </body>
+
 </html>

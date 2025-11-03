@@ -21,6 +21,7 @@ class PerchEmail
     private $replyToName     = '';
     
     private $bcc_list        = [];
+    private $cc_list         = [];
     
     private $template_data;
     
@@ -192,6 +193,15 @@ class PerchEmail
         $this->bcc_list[] = $str;
     }
 
+    public function ccToEmail($str=null)
+    {
+        if ($str === null) {
+            return $this->cc_list;
+        }
+
+        $this->cc_list[] = $str;
+    }
+
     public function set($key, $str=null)
     {
         if ($str === null) {
@@ -271,6 +281,13 @@ class PerchEmail
                     $mail->addBCC($bcc);
                 }
                 $LogMessage->bcc = $this->bcc_list;
+            }
+
+            if (PerchUtil::count($this->cc_list)) {
+                foreach($this->cc_list as $cc) {
+                    $mail->addCC($cc);
+                }
+                $LogMessage->cc = $this->cc_list;
             }
 
             $mail->SetFrom($this->senderEmail(), $this->senderName());

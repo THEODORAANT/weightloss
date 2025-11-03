@@ -226,6 +226,9 @@
                             <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="White" value="White" <perch:if id="ethnicity" value="White"> checked="checked" </perch:if>>
                             <label for="White" id="Whitelabel">White</label>
 
+                            <input type="radio" name="ethnicity" onclick="submitForm('ethnicity')" id="PreferNotToSay" value="PreferNotToSay" <perch:if id="ethnicity" value="PreferNotToSay"> checked="checked" </perch:if>>
+                            <label for="PreferNotToSay" id="PreferNotToSaylabel">Prefer not to say</label>
+
                             <input type="hidden" id="nextstep" name="nextstep" value="">
 
                         </div>
@@ -272,7 +275,7 @@
         </section>
 
     </perch:if>
-    <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White" match="within" >
+    <perch:if id="step" value="ethnicity,asian,Black (African/Caribbean),White,PreferNotToSay" match="within" >
 
         <section class="how_old">
             <div class="contanier">
@@ -712,7 +715,7 @@
 
                     </div>
                     <div class="under">
-                        <input type="radio" name="diabetes" required onclick="submitForm('diabetes')"  <perch:if id="diabetes" value="yes-medication"> checked </perch:if>   value="yes-medication" id="yes-medication" checked="checked">
+                        <input type="radio" name="diabetes" required onclick="submitForm('diabetes')"  <perch:if id="diabetes" value="yes-medication"> checked </perch:if>   value="yes-medication" id="yes-medication">
                         <label for="yes-medication" id="have">I have diabetes and take medication for it</label>
 
 
@@ -815,9 +818,8 @@
                         const optionValue = option.value;
                         const optionLabel = option.label;
                         const normalizedOptionValue = normalizeValue(optionValue);
-                        const isChecked = normalizedStoredValue !== ''
-                            ? normalizedStoredValue === normalizedOptionValue
-                            : optionIndex === 0;
+                        const isChecked = normalizedStoredValue !== '' &&
+                            normalizedStoredValue === normalizedOptionValue;
                         const requiredAttr = optionIndex === 0 ? ' required' : '';
                         const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
@@ -1018,7 +1020,7 @@
                     </div>-->
                 </div>
                 <form id="ethnicityForm">
-                    <label for="more_pancreatitis">Please tell us more about your health condition and how you manage it.</label>
+                    <label for="more_pancreatitis">Tell me about your gastric surgery procedure.</label>
                     <textarea id="more_pancreatitis" required name="more_pancreatitis" placeholder=""></textarea>
                     <p id="error-message" class="error-message">Please provide an answer before continuing.</p>
                     <div class="buttons">
@@ -1503,7 +1505,7 @@
                     `;
 
                     options.forEach(function (option, optionIndex) {
-                        const isChecked = hasExistingValue ? config.dose === option.value : optionIndex === 0;
+                        const isChecked = hasExistingValue && config.dose === option.value;
                         const requiredAttr = optionIndex === 0 ? ' required' : '';
                         const inputId = `dose-${slug}-${option.value}`;
                         fieldHtml += `
@@ -1626,8 +1628,7 @@
                             const optionLabel = option.label;
                             const normalizedOptionValue = normalizeValue(optionValue);
                             const isChecked = normalizedStoredValue !== ''
-                                ? normalizedStoredValue === normalizedOptionValue
-                                : optionIndex === 0;
+                                && normalizedStoredValue === normalizedOptionValue;
                             const requiredAttr = optionIndex === 0 ? ' required' : '';
                             const inputId = `recently-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
@@ -1769,9 +1770,8 @@
                         const optionValue = option.value;
                         const optionLabel = option.label;
                         const normalizedOptionValue = normalizeValue(optionValue);
-                        const isChecked = normalizedStoredValue !== ''
-                            ? normalizedStoredValue === normalizedOptionValue
-                            : optionIndex === 0;
+                        const isChecked = normalizedStoredValue !== '' &&
+                            normalizedStoredValue === normalizedOptionValue;
                         const requiredAttr = optionIndex === 0 ? ' required' : '';
                         const inputId = `continue-dose-${slug}-${toIdSuffix(optionValue, optionIndex)}`;
 
@@ -1847,39 +1847,22 @@
                                     <p class="Percent_text">95%</p><span class="bar_line"></span>
                                 </div>-->
                                 <h5>
-                                    Do you currently take any other medication or have any allergies? This includes prescribed medication, over-the-counter medication, and supplements. Select all that apply to you.
-                                </h5>
-
-
-                                <h5>
                                     It’s really important that we know about any medication you're taking so that we can make sure there are no interactions with your weight loss plan.
+                                </h5>
+                                <h5 class="mt-4">
+                                    Do you currently take any other medication or supplements?
                                 </h5>
                             </div>
                             <!--////////////========chekbox section start=======/////////////-->
                             <div class="box_group mt-2">
                                 <div class="box_list" id="fullBox">
-                                    <input type="checkbox" name="medication_allergies[]" value="levothyroxine" class="check1" onclick="changeColor()">
-                                    <span class="box_text">I’m on levothyroxine</span>
+                                    <input type="radio" name="other_medications" value="yes" class="check1" <perch:if id="other_medications" value="yes">checked="checked"</perch:if>>
+                                    <span class="box_text">I take other medication or supplements.</span>
                                 </div>
                                 <div class="box_list mt-2" id="fullBox2">
-                                    <input type="checkbox" name="medication_allergies[]" value="warfarin"  class="check1" onclick="changeColor2()">
-                                    <span class="box_text">I’m on warfarin</span>
+                                    <input type="radio" name="other_medications" value="no" class="check1" <perch:if id="other_medications" value="no">checked="checked"</perch:if>>
+                                    <span class="box_text">I do not take other medication or supplements.</span>
                                 </div>
-                                <div class="box_list mt-2" id="fullBox3">
-                                    <input type="checkbox" name="medication_allergies[]" value="other"   class="check1" onclick="changeColor3()">
-                                    <span class="box_text">Other / I take more than one prescription medication</span>
-                                </div>
-                                <div class="box_list mt-2" id="fullBox4">
-                                    <input type="checkbox" name="medication_allergies[]"  value="no-medication"   class="check1" onclick="changeColor4()">
-                                    <span class="box_text">I don’t take any medication</span>
-                                </div>
-                                <div class="box_list mt-2" id="fullBox5">
-                                    <input type="checkbox" name="medication_allergies[]"  value="allergies" class="check1" onclick="changeColor5()">
-                                    <span class="box_text">I have allergies</span>
-                                </div>
-
-
-
 
 
                             </div>
@@ -1891,7 +1874,28 @@
                                 <p id="otherMedicationDetailsError" class="error-message">Please provide an answer before continuing.</p>
                             </div>
 
-                            <!--////////////========Button section Start=======/////////////-->
+                            <div class="mt-4">
+                                <h5>Do you have any allergies including to medication, food, environmental or anything else?</h5>
+                            </div>
+
+                            <div class="box_group mt-2">
+                                <div class="box_list" id="allergyBoxYes">
+                                    <input type="radio" name="allergies" value="yes" class="check1" <perch:if id="allergies" value="yes">checked="checked"</perch:if>>
+                                    <span class="box_text">Yes, I have allergies</span>
+                                </div>
+                                <div class="box_list mt-2" id="allergyBoxNo">
+                                    <input type="radio" name="allergies" value="no" class="check1" <perch:if id="allergies" value="no">checked="checked"</perch:if>>
+                                    <span class="box_text">No allergies</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4" id="allergyDetailsWrapper" style="display:none;">
+                                <label for="allergy_details">Please provide detail on your allergy, severity and how it is controlled.</label>
+                                <textarea id="allergy_details" name="allergy_details" placeholder="Allergy – severity – how it is controlled"></textarea>
+                                <p id="allergyDetailsError" class="error-message">Please provide an answer before continuing.</p>
+                            </div>
+
+<!--////////////========Button section Start=======/////////////-->
                             <div class="bottom_btn mt-5">
                                 <input type="hidden" id="nextstep" name="nextstep" value="gp_informed">
 
@@ -1899,7 +1903,7 @@
                                 <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
                                <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
-                                <button id="nextButton" class="btn_next" onclick="submitForm('medication_allergies')" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                                <button id="nextButton" class="btn_next" onclick="submitForm('other_medications')" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
                             </div>
                             <!--////////////========Button section END=======/////////////-->
 
@@ -1910,14 +1914,18 @@
         </section>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var checkboxes = document.querySelectorAll('input[name="medication_allergies[]"]');
+                var medicationRadios = document.querySelectorAll('input[name="other_medications"]');
+                var allergyRadios = document.querySelectorAll('input[name="allergies"]');
                 var nextButton = document.getElementById('nextButton');
                 var nextStepField = document.getElementById('nextstep');
-                var detailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
-                var detailsField = document.getElementById('other_medication_details');
-                var detailsError = document.getElementById('otherMedicationDetailsError');
+                var medicationDetailsWrapper = document.getElementById('otherMedicationDetailsWrapper');
+                var medicationDetailsField = document.getElementById('other_medication_details');
+                var medicationDetailsError = document.getElementById('otherMedicationDetailsError');
+                var allergyDetailsWrapper = document.getElementById('allergyDetailsWrapper');
+                var allergyDetailsField = document.getElementById('allergy_details');
+                var allergyDetailsError = document.getElementById('allergyDetailsError');
 
-                if (!checkboxes.length || !nextStepField) {
+                if ((!medicationRadios.length && !allergyRadios.length) || !nextStepField) {
                     return;
                 }
 
@@ -1925,36 +1933,63 @@
                     return Array.prototype.slice.call(nodeList);
                 };
 
-                var updateState = function () {
-                    var selectedValues = toArray(checkboxes)
-                        .filter(function (checkbox) {
-                            return checkbox.checked;
-                        })
-                        .map(function (checkbox) {
-                            return checkbox.value;
-                        });
+                var getSelectedValue = function (inputs) {
+                    var selected = toArray(inputs).filter(function (input) {
+                        return input.checked;
+                    });
 
-                    var hasSelection = selectedValues.length > 0;
-                    var requiresDetails = selectedValues.indexOf('other') !== -1;
-                    var detailsFilled = true;
-
-                    if (detailsWrapper) {
-                        detailsWrapper.style.display = requiresDetails ? '' : 'none';
+                    if (!selected.length) {
+                        return '';
                     }
 
-                    if (detailsField) {
-                        detailsField.required = requiresDetails;
-                        if (requiresDetails) {
-                            detailsFilled = detailsField.value.trim() !== '';
+                    return selected[0].value;
+                };
+
+                var updateState = function () {
+                    var selectedMedication = getSelectedValue(medicationRadios);
+                    var selectedAllergies = getSelectedValue(allergyRadios);
+
+                    var medicationAnswered = selectedMedication !== '';
+                    var allergyAnswered = selectedAllergies !== '';
+
+                    var requiresMedicationDetails = selectedMedication === 'yes';
+                    var requiresAllergyDetails = selectedAllergies === 'yes';
+
+                    var medicationDetailsFilled = true;
+                    var allergyDetailsFilled = true;
+
+                    if (medicationDetailsWrapper) {
+                        medicationDetailsWrapper.style.display = requiresMedicationDetails ? '' : 'none';
+                    }
+
+                    if (medicationDetailsField) {
+                        medicationDetailsField.required = requiresMedicationDetails;
+                        if (requiresMedicationDetails) {
+                            medicationDetailsFilled = medicationDetailsField.value.trim() !== '';
                         }
                     }
 
-                    if (detailsError) {
-                        detailsError.style.display = requiresDetails && !detailsFilled ? '' : 'none';
+                    if (medicationDetailsError) {
+                        medicationDetailsError.style.display = requiresMedicationDetails && !medicationDetailsFilled ? '' : 'none';
+                    }
+
+                    if (allergyDetailsWrapper) {
+                        allergyDetailsWrapper.style.display = requiresAllergyDetails ? '' : 'none';
+                    }
+
+                    if (allergyDetailsField) {
+                        allergyDetailsField.required = requiresAllergyDetails;
+                        if (requiresAllergyDetails) {
+                            allergyDetailsFilled = allergyDetailsField.value.trim() !== '';
+                        }
+                    }
+
+                    if (allergyDetailsError) {
+                        allergyDetailsError.style.display = requiresAllergyDetails && !allergyDetailsFilled ? '' : 'none';
                     }
 
                     if (nextButton) {
-                        nextButton.disabled = !(hasSelection && detailsFilled);
+                        nextButton.disabled = !(medicationAnswered && allergyAnswered && medicationDetailsFilled && allergyDetailsFilled);
                     }
 
                     if (nextStepField) {
@@ -1962,12 +1997,20 @@
                     }
                 };
 
-                toArray(checkboxes).forEach(function (checkbox) {
-                    checkbox.addEventListener('change', updateState);
+                toArray(medicationRadios).forEach(function (radio) {
+                    radio.addEventListener('change', updateState);
                 });
 
-                if (detailsField) {
-                    detailsField.addEventListener('input', updateState);
+                toArray(allergyRadios).forEach(function (radio) {
+                    radio.addEventListener('change', updateState);
+                });
+
+                if (medicationDetailsField) {
+                    medicationDetailsField.addEventListener('input', updateState);
+                }
+
+                if (allergyDetailsField) {
+                    allergyDetailsField.addEventListener('input', updateState);
                 }
 
                 updateState();
@@ -2119,14 +2162,20 @@
                        </div>
 
                    </div>-->
-                    <h2>Please enter your GP's email address</h2>
+                    <h2>Please enter your GP's details</h2>
                     <div class="weight-inputs">
-                        <input type="text" id="GP_email_address"  name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" >
+                        <input type="text" id="GP_name" name="GP_name" placeholder="GP’s name" style="width: 100%;" value="<perch:forms id='GP_name' encode='true' />" required>
+                    </div>
+                    <div class="weight-inputs mt-3">
+                        <textarea id="GP_address" name="GP_address" placeholder="GP’s address" style="width: 100%; min-height: 100px;" required><perch:forms id="GP_address" encode="true" /></textarea>
+                    </div>
+                    <div class="weight-inputs mt-3">
+                        <input type="text" id="GP_email_address" name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" value="<perch:forms id='GP_email_address' encode='true' />" required>
 
                         <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
 
                     </div>
-
+                    <p id="gp-details-error" class="error-message" style="display:none;"></p>
 
                     <div class="buttons skip ">
                         <button class="back skip_button "><a href="/get-started/questionnaire?step=access_special_offers" style="text-decoration: none;color: #000;" >Skip</a></button>
@@ -2136,13 +2185,65 @@
                     <div class="buttons">
                         <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
 
-                        <button onclick="submitForm('GP_email_address')" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                        <button type="button" onclick="submitGpDetails()" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
                 </div>
 
             </div>
 
         </section>
+
+        <script>
+            (function () {
+                if (window.submitGpDetails) {
+                    return;
+                }
+
+                window.submitGpDetails = function () {
+                    var form = document.getElementById('form1_questionnaire');
+                    if (!form) {
+                        return;
+                    }
+
+                    var fields = [
+                        {
+                            element: form.querySelector('input[name="GP_name"]'),
+                            message: 'Please enter your GP\u2019s name.'
+                        },
+                        {
+                            element: form.querySelector('textarea[name="GP_address"]'),
+                            message: 'Please enter your GP\u2019s address.'
+                        },
+                        {
+                            element: form.querySelector('input[name="GP_email_address"]'),
+                            message: 'Please enter your GP\u2019s email address.'
+                        }
+                    ];
+
+                    var errors = [];
+                    fields.forEach(function (field) {
+                        if (!field.element || field.element.value.trim() === '') {
+                            errors.push(field.message);
+                        }
+                    });
+
+                    var errorContainer = document.getElementById('gp-details-error');
+                    if (errorContainer) {
+                        if (errors.length) {
+                            errorContainer.innerHTML = errors.join('<br>');
+                            errorContainer.style.display = 'block';
+                        } else {
+                            errorContainer.innerHTML = '';
+                            errorContainer.style.display = 'none';
+                        }
+                    }
+
+                    if (!errors.length) {
+                        form.submit();
+                    }
+                };
+            })();
+        </script>
 
     </perch:if>
     <perch:if id="step" value="access_special_offers">

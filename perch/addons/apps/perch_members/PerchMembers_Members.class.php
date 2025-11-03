@@ -100,12 +100,40 @@ class PerchMembers_Members extends PerchAPI_Factory
 
 		return $results;
 	}
-	public function get_by_status($status='nan',$sort=false, $Paging=false)
-	{
-		return $this->get_by('memberStatus', $status, $sort,$Paging);
-	}
+        public function get_by_status($status='nan',$sort=false, $Paging=false)
+        {
+                return $this->get_by('memberStatus', $status, $sort,$Paging);
+        }
 
-	public function get_by_email($email='nan', $Paging=false)
+        public function get_with_pending_documents($Paging=false)
+        {
+                $select = ($Paging && $Paging->enabled()) ? $Paging->select_sql() : 'SELECT';
+
+                $members_table   = $this->table;
+                $documents_table = PERCH_DB_PREFIX.'members_documents';
+                $pending         = $this->db->pdb('pending');
+
+                $sql = $select.' DISTINCT m.*
+                        FROM '.$members_table.' m
+                        JOIN '.$documents_table.' d ON d.memberID = m.memberID
+                        WHERE (d.documentStatus IS NULL OR d.documentStatus='.$pending.')
+                          AND COALESCE(d.documentDeleted, \'0\') != \'1\'
+                        ORDER BY m.memberCreated DESC';
+
+                if ($Paging && $Paging->enabled()) {
+                        $sql .= ' '.$Paging->limit_sql();
+                }
+
+                $rows = $this->db->get_rows($sql);
+
+                if ($Paging && $Paging->enabled()) {
+                        $Paging->set_total($this->db->get_count($Paging->total_count_sql()));
+                }
+
+                return $this->return_instances($rows);
+        }
+
+        public function get_by_email($email='nan', $Paging=false)
     {
         return $this->get_by('memberEmail', $email, $Paging);
     }
