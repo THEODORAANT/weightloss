@@ -147,9 +147,10 @@ if (!$order_complete) {
                     </video>
                 </div>
                 <ul class="helper-steps">
-                    <li><strong>Step 1:</strong> Find a quiet, well lit space where we can clearly see your face.</li>
-                    <li><strong>Step 2:</strong> Hold your photo ID next to your face and clearly read the statement shown on screen.</li>
-                    <li><strong>Step 3:</strong> Upload the video and a clear photo of your ID using the cards below.</li>
+                    <li><strong>Step 1:</strong> Find a quiet, well lit space with your scales close by.</li>
+                    <li><strong>Step 2:</strong> Place your mobile/tablet at a distance so that when you step away we can see you head-to-toe.</li>
+                    <li><strong>Step 3:</strong> Whilst your device is recording, pick it up and step on the scales. Point the camera the display showing your weight. Stop recording.</li>
+                    <li><strong>Step 4:</strong> If the video shows you head-to-toe; clearly shows you stepping onto the scales and the weight, then upload.</li>
                 </ul>
             </div>
         </div>
@@ -240,22 +241,24 @@ foreach ($docs as $x => $y) {
  }
 echo '</div>';
   ?>
-  <div class="bottom_btn mt-5">
-        <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
-   </div>
 <?php
 }
 
-if(!$docs || !$hasIdDocuments){
-?>
-    <div class="card-shadow form-card mb-5">
-        <?php perch_member_form('upload.html'); ?>
+    <?php
+    $showUploadForm = !$docs || !$hasIdDocuments;
+    ?>
+    <div class="upload-grid">
+        <?php if ($showUploadForm) { ?>
+            <div class="card-shadow upload-card">
+                <?php perch_member_form('upload.html'); ?>
+            </div>
+        <?php } ?>
+        <div class="card-shadow upload-card">
+            <?php perch_member_form('upload-proof.html'); ?>
+        </div>
     </div>
-<?php
-}
-?>
-    <div class="card-shadow form-card">
-        <?php perch_member_form('upload-proof.html'); ?>
+    <div class="upload-next text-center">
+        <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     </div>
   </section>
@@ -559,14 +562,62 @@ if(!$docs || !$hasIdDocuments){
             border-radius: 8px;
         }
 
-        .bottom_btn .btn {
-            padding: 12px 24px;
-            border-radius: 999px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
+        .upload-grid {
+            display: grid;
+            gap: 24px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .upload-card {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .upload-card form {
+            width: 100%;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .upload-form__fields {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .upload-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+
+        .upload-box .preview {
+            flex-grow: 1;
+        }
+
+        .upload-helper-text {
+            margin-bottom: 0;
+            color: #4d5b75;
+            font-size: 0.9rem;
+        }
+
+        .upload-submit {
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        .upload-next {
+            margin-top: 12px;
         }
 
         .modal {
@@ -629,9 +680,8 @@ if(!$docs || !$hasIdDocuments){
                 align-items: flex-start;
             }
 
-            .bottom_btn .btn {
-                width: 100%;
-                justify-content: center;
+            .upload-grid {
+                margin-top: 16px;
             }
         }
     </style>
