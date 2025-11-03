@@ -1,11 +1,10 @@
-<div class="plan">
+<div class="order-item">
     <div>
-        <h5>Medication </h5>
-        <p><perch:shop id="title" />-<perch:shop id="productVariantDesc" /></p>
+        <span class="order-item__label">Medication</span>
+        <span class="order-item__value"><perch:shop id="title" /> <perch:if exists="productVariantDesc">– <perch:shop id="productVariantDesc" /></perch:if></span>
     </div>
-    <div>
-        <h5>Medication Price</h5>
-        <p><perch:shop id="itemPrice" /> <perch:shop id="orderCurrency" /></p>
+    <div class="text-end">
+        <span class="order-item__label">Price</span>
+        <span class="order-item__value"><perch:shop id="itemPrice" /> <perch:shop id="orderCurrency" /></span>
     </div>
 </div>
-
