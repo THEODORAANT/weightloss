@@ -1,19 +1,10 @@
 
-<perch:form id="upload" method="post" app="perch_members" enctype="multipart/form-data" class="d-flex flex-column gap-4 mb-5">
-    <div class="plan"  data-save="8">
-        <div>
-            <h5>  <perch:label for="image">If you have previously used a weight loss pen, please upload your last order receipt or proof of purchase.
-
-                <p>Please note that if you have started your weight loss journey with us this is not necessary.</p></perch:label><br></h5>
-            <p>   <perch:input type="hidden" name="documentType" id="documentType" value="order-proof"  />    <perch:input type="file" name="image[]" id="image" accept="image/*" required multiple="multiple" class="document-image-input" />            <perch:input type="submit" value="Upload" name="upload"   class="btn btn-primary " />
-                <br><br>
-            </p>
-        </div>
-        <div class="price-section">
-
-        </div>
+<perch:form id="upload" method="post" app="perch_members" enctype="multipart/form-data" class="upload-form">
+    <div class="plan upload-box" data-save="8">
+        <h5><perch:label for="order-proof">If you have previously used a weight loss pen, please upload your last order receipt or proof of purchase.</perch:label></h5>
+        <p class="upload-helper-text">Please note that if you have started your weight loss journey with us this is not necessary.</p>
+        <perch:input type="hidden" name="documentType" id="documentType" value="order-proof" />
+        <perch:input type="file" name="image[]" id="order-proof" accept="image/*" required multiple="multiple" class="document-image-input" />
     </div>
-
-
-
+    <perch:input type="submit" value="Upload" name="upload" class="btn btn-primary next_btn next-btn upload-submit" />
 </perch:form>
