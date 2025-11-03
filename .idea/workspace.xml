@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_NotePharmacyStatuses.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_NotePharmacyStatuses.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/members.edit.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/members.edit.post.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="upstream/codex/update-questionnaire-for-medication-and-allergies-jyj42e" />
+    <option name="BRANCH" value="origin/codex/check-video-settings-for-payment-success-ildc4o" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -44,7 +42,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/weightloss/perch/addons/apps",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -108,6 +106,8 @@
       <workItem from="1759335583029" duration="4974000" />
       <workItem from="1759743479952" duration="7339000" />
       <workItem from="1759826825876" duration="10949000" />
+      <workItem from="1762069869609" duration="1345000" />
+      <workItem from="1762071564113" duration="3922000" />
     </task>
     <task id="LOCAL-00046" summary="weightloss">
       <option name="closed" value="true" />

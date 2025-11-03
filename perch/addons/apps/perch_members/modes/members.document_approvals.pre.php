@@ -60,7 +60,7 @@
             }
         }
 
-        $redirect_target = $API->app_nav().'/document-review/?updated=' . ($updated ? '1' : '0');
+        $redirect_target ='/perch'. $API->app_nav().'/document-review/?updated=' . ($updated ? '1' : '0');
         PerchUtil::redirect($redirect_target);
     }
 

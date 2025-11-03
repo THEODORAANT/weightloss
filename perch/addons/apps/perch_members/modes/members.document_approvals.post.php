@@ -56,7 +56,7 @@
 
                 return $out;
             },
-            'edit_link' => 'edit',
+            'edit_link' => PERCH_LOGINPATH.'/addons/apps/perch_members/edit/?id='.$Member->id(),
         ]);
 
         $document_base_path = PERCH_LOGINPATH.'/addons/apps/perch_members/documents/';
