@@ -79,5 +79,18 @@
     "Search": "Search",
     "Documents": "Documents",
     "Download CSV": "Download CSV",
-    "Notes": "Notes"
+    "Notes": "Notes",
+    "Document approvals": "Document approvals",
+    "Members awaiting document approval": "Members awaiting document approval",
+    "Pending documents": "Pending documents",
+    "View members": "View members",
+    "Latest upload": "Latest upload",
+    "Assigned to": "Assigned to",
+    "Unassigned": "Unassigned",
+    "No members currently awaiting approval.": "No members currently awaiting approval.",
+    "Assignments updated": "Assignments updated",
+    "No changes to save": "No changes to save",
+    "No documents": "No documents",
+    "Unknown": "Unknown",
+    "Save assignments": "Save assignments"
 }
