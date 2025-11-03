@@ -244,7 +244,7 @@ echo '</div>';
 <?php
 }
 
-    <?php
+
     $showUploadForm = !$docs || !$hasIdDocuments;
     ?>
     <div class="upload-grid">
