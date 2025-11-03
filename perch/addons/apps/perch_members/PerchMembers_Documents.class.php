@@ -73,7 +73,7 @@ class PerchMembers_Documents extends PerchAPI_Factory
         return true;
     }
 
-	public function get_for_member($memberID)
+    public function get_for_member($memberID)
     {
         $sql = 'SELECT d.*
                 FROM  '.PERCH_DB_PREFIX.'members_documents d
@@ -83,10 +83,55 @@ class PerchMembers_Documents extends PerchAPI_Factory
         return $this->return_instances($this->db->get_rows($sql));
     }
 
-	public function upload($file,$memberID,$documentType='documents')
-	{
+        public function get_pending_for_members($memberIDs)
+    {
+        if (!PerchUtil::count($memberIDs)) {
+            return [];
+        }
 
-      	$target_dir = __DIR__."/documents/";
+        $ids = array_map('intval', $memberIDs);
+        $id_list = $this->db->implode_for_sql_in($ids, true);
+        $pending = $this->db->pdb('pending');
+
+        $sql = 'SELECT d.*
+                FROM  '.PERCH_DB_PREFIX.'members_documents d
+                WHERE d.memberID IN ('.$id_list.')
+                  AND (d.documentStatus IS NULL OR d.documentStatus='.$pending.')
+                  AND COALESCE(d.documentDeleted, \'0\') != \'1\'
+                ORDER BY d.memberID, d.documenUploadDate DESC';
+
+        $rows = $this->db->get_rows($sql);
+
+        if (!PerchUtil::count($rows)) {
+            return [];
+        }
+
+        $documents = $this->return_instances($rows);
+        $grouped = [];
+
+        foreach ($documents as $Document) {
+            $grouped[$Document->memberID()][] = $Document;
+        }
+
+        return $grouped;
+    }
+
+        public function count_by_status($status='pending')
+    {
+        $status_sql = $this->db->pdb($status);
+
+        $sql = 'SELECT COUNT(*)
+                FROM '.$this->table.'
+                WHERE (documentStatus IS NULL OR documentStatus='.$status_sql.')
+                  AND COALESCE(documentDeleted, \'0\') != \'1\'';
+
+        return (int)$this->db->get_value($sql);
+    }
+
+        public function upload($file,$memberID,$documentType='documents')
+        {
+
+        $target_dir = __DIR__."/documents/";
       	$filef =  $file['name'];
       	$path = pathinfo($filef);
       	$filename = $path['filename'];
