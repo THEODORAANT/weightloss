@@ -137,7 +137,7 @@ if (!$order_complete) {
                     <h2 class="helper-title">Need a hand recording your video?</h2>
                     <p class="helper-text">Follow the short video guide or download the instructions to get everything right the first time.</p>
                 </div>
-                <button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>
+                <!--<button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>-->
             </div>
             <div class="helper-content">
                 <div class="video-wrapper" oncontextmenu="return false;">

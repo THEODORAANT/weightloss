@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,15 +107,7 @@
       <workItem from="1762069869609" duration="1345000" />
       <workItem from="1762071564113" duration="4643000" />
       <workItem from="1762172803162" duration="117000" />
-      <workItem from="1762172940490" duration="626000" />
-    </task>
-    <task id="LOCAL-00047" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758104941441</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1758104941441</updated>
+      <workItem from="1762172940490" duration="1112000" />
     </task>
     <task id="LOCAL-00048" summary="weightloss">
       <option name="closed" value="true" />
@@ -503,7 +493,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762172100914</updated>
     </task>
-    <option name="localTasksCounter" value="96" />
+    <task id="LOCAL-00096" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1762179478986</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1762179478987</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
