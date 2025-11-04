@@ -101,12 +101,22 @@
        $documents_tab="";
         $affiliate_tab="";
         $notifications_tab="";
+        $chat_tab="";
+        $chat_unread=false;
         $unread_count=0;
         $member_notifications = perch_member_notifications();
         if ($member_notifications) {
             foreach ($member_notifications as $n) {
                 if (!$n['read']) $unread_count++;
             }
+        }
+        try {
+            $chatRepo = new PerchMembers_ChatRepository();
+            if ($chatRepo->tables_ready()) {
+                $chat_unread = $chatRepo->member_has_unread(perch_member_get('memberID'));
+            }
+        } catch (Throwable $chatException) {
+            $chat_unread = false;
         }
   if($lastPart=="client"){
   $profile_tab="active";
@@ -121,6 +131,8 @@
            $affiliate_tab="active";
            }else if($lastPart=="notifications" ){
             $notifications_tab="active";
+           }else if($lastPart=="chat" ){
+            $chat_tab="active";
            }
       ?>
      <div class="tabs">
@@ -129,6 +141,7 @@
 
        <a href="/client/orders" class="tab <?php echo $orders_tab; ?>">Orders</a>
        <a href="/client/notifications" class="tab <?php echo $notifications_tab; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a>
+       <a href="/client/chat" class="tab <?php echo $chat_tab; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a>
        <a href="/client/affiliate-dashboard" class="tab <?php echo $affiliate_tab; ?>">Affiliate</a>
        <a href="/order/re-order" class="tab <?php echo $reorder_tab; ?>">Order</a>
        <a href="/client/logout" class="tab ">Logout</a>
