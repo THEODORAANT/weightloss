@@ -49,7 +49,7 @@ class PerchMembers_ChatRepository
         }
 
         $now = date('Y-m-d H:i:s');
-        $this->db->insert($this->threads_table, [
+        $id = (int)$this->db->insert($this->threads_table, [
             'memberID' => $memberID,
             'status' => 'open',
             'last_message_at' => null,
@@ -57,7 +57,6 @@ class PerchMembers_ChatRepository
             'updated_at' => $now,
         ]);
 
-        $id = (int)$this->db->insert_id();
         if (!$id) {
             return null;
         }
@@ -171,7 +170,7 @@ class PerchMembers_ChatRepository
         }
 
         $now = date('Y-m-d H:i:s');
-        $this->db->insert($this->messages_table, [
+        $message_id = (int)$this->db->insert($this->messages_table, [
             'threadID' => $thread['id'],
             'sender_type' => 'member',
             'sender_memberID' => $memberID,
@@ -185,7 +184,7 @@ class PerchMembers_ChatRepository
             'status' => 'open',
         ]);
 
-        return $this->db->insert_id();
+        return $message_id ?: null;
     }
 
     public function add_staff_message($threadID, $staffUserID, $body)
@@ -217,14 +216,14 @@ class PerchMembers_ChatRepository
             'body' => $body,
             'created_at' => $now,
         ];
-        $this->db->insert($this->messages_table, $data);
+        $message_id = (int)$this->db->insert($this->messages_table, $data);
 
         $this->touch_thread($threadID, 'staff', [
             'last_staff_activity' => $now,
             'last_staff_read_at' => $now,
         ]);
 
-        return $this->db->insert_id();
+        return $message_id ?: null;
     }
 
     public function mark_thread_read_by_member($threadID)
