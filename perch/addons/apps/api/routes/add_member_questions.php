@@ -45,7 +45,20 @@
      if ($orderID !== null && isset($data['questionnaire']['order_id'])) {
          unset($data['questionnaire']['order_id']);
      }
+
+     foreach (['log', 'log_metadata', 'grouped_log'] as $logKey) {
+         if (isset($data[$logKey])) {
+             $data['questionnaire'][$logKey] = $data[$logKey];
+         }
+     }
+
      $id= perch_member_add_questionnaire_api($memberid,$data['questionnaire'],$data['type'],$orderID);
+     if ($id === false) {
+         http_response_code(500);
+         echo json_encode(["success" => false, "error" => "Unable to save questionnaire responses"]);
+         exit;
+     }
+
       echo json_encode(["success" => true,"questionnaireID"=>$id]);
        }
   // }
