@@ -70,12 +70,25 @@ foreach ($threads as $item) {
     ];
 }
 
-echo $HTML->listing_table([
-    'columns' => [
-        'member' => $Lang->get('Member'),
-        'last_message' => $Lang->get('Last message'),
-        'updated' => $Lang->get('Updated'),
-        'status' => $Lang->get('Status'),
-    ],
-    'rows' => $rows,
-]);
+echo '<table class="d">';
+echo '<thead>';
+echo '<tr>';
+echo '<th>' . $HTML->encode($Lang->get('Member')) . '</th>';
+echo '<th>' . $HTML->encode($Lang->get('Last message')) . '</th>';
+echo '<th>' . $HTML->encode($Lang->get('Updated')) . '</th>';
+echo '<th>' . $HTML->encode($Lang->get('Status')) . '</th>';
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+
+foreach ($rows as $row) {
+    echo '<tr>';
+    echo '<td>' . $row['member'] . '</td>';
+    echo '<td>' . $row['last_message'] . '</td>';
+    echo '<td>' . $HTML->encode($row['updated']) . '</td>';
+    echo '<td>' . $row['status'] . '</td>';
+    echo '</tr>';
+}
+
+echo '</tbody>';
+echo '</table>';
