@@ -1231,7 +1231,7 @@ public function get_package_future_items($opts){
 
 	public function update_customer_from_form($SubmittedForm)
 	{
-		$Session = PerchMembers_Session::fetch();		
+		$Session = PerchMembers_Session::fetch();
 
 		if ($Session->logged_in) {
 
@@ -1246,6 +1246,51 @@ public function get_package_future_items($opts){
 			$this->set_location_from_address($this->billingAddress);
 		}
 
+	}
+
+	public function update_shipping_address_for_api($Customer, array $shippingData, $countryID)
+	{
+		if (!$Customer instanceof PerchShop_Customer) {
+			return false;
+		}
+
+		$countryID = (int) $countryID;
+		if ($countryID <= 0) {
+			return false;
+		}
+
+		$Addresses = new PerchShop_Addresses($this->api);
+		$ShippingAddress = $Addresses->find_for_customer((int) $Customer->id(), 'shipping');
+
+		$storageData = $shippingData;
+		$storageData['country'] = $countryID;
+		$storageData['customer'] = (int) $Customer->id();
+
+		$addressPayload = [
+			'addressDynamicFields' => PerchUtil::json_safe_encode($storageData),
+			'countryID' => $countryID,
+			'customerID' => (int) $Customer->id(),
+		];
+
+		if ($ShippingAddress instanceof PerchShop_Address) {
+			if (!$ShippingAddress->update($addressPayload)) {
+				return false;
+			}
+
+			return $ShippingAddress;
+		}
+
+		$createPayload = $addressPayload;
+		$createPayload['addressTitle'] = 'shipping';
+		$createPayload['addressSlug'] = 'shipping';
+
+		$ShippingAddress = $Addresses->create($createPayload);
+
+		if (!$ShippingAddress instanceof PerchShop_Address) {
+			return false;
+		}
+
+		return $ShippingAddress;
 	}
 
 	public function get_customer_details()
