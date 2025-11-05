@@ -5,6 +5,8 @@ class PerchMembers_ChatRepository
     private $threads_table;
     private $messages_table;
     private $tables_ready = null;
+    private $closures_table;
+    private $closures_table_ready = null;
     private $API;
     private $Members;
 
@@ -13,6 +15,7 @@ class PerchMembers_ChatRepository
         $this->db = $db ?: PerchDB::fetch();
         $this->threads_table = PERCH_DB_PREFIX . 'chat_threads';
         $this->messages_table = PERCH_DB_PREFIX . 'chat_messages';
+        $this->closures_table = PERCH_DB_PREFIX . 'chat_thread_closures';
         $this->API = $API instanceof PerchAPI ? $API : new PerchAPI(1.0, 'perch_members');
     }
 
@@ -27,6 +30,18 @@ class PerchMembers_ChatRepository
 
         $this->tables_ready = ($threads !== false && $threads !== null) && ($messages !== false && $messages !== null);
         return $this->tables_ready;
+    }
+
+    private function closures_table_ready()
+    {
+        if ($this->closures_table_ready !== null) {
+            return $this->closures_table_ready;
+        }
+
+        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
+        $this->closures_table_ready = ($table !== false && $table !== null);
+
+        return $this->closures_table_ready;
     }
 
     public function get_or_create_thread_for_member($memberID)
@@ -332,9 +347,15 @@ class PerchMembers_ChatRepository
         }
 
         $status = $status === 'closed' ? 'closed' : 'open';
-        return $this->db->update($this->threads_table, [
+        $result = $this->db->update($this->threads_table, [
             'status' => $status,
         ], 'id', (int)$threadID);
+
+        if ($result && $status === 'closed') {
+            $this->record_thread_closure($threadID);
+        }
+
+        return $result;
     }
 
     public function get_last_message($threadID)
@@ -348,6 +369,29 @@ class PerchMembers_ChatRepository
         );
     }
 
+    public function get_last_closed_message_id($threadID)
+    {
+        if (!$this->tables_ready()) {
+            return 0;
+        }
+
+        if (!$this->closures_table_ready()) {
+            return 0;
+        }
+
+        $row = $this->db->get_row(
+            'SELECT last_message_id FROM ' . $this->closures_table
+            . ' WHERE threadID = ' . $this->db->pdb((int)$threadID)
+            . ' ORDER BY id DESC LIMIT 1'
+        );
+
+        if (!$row || !isset($row['last_message_id'])) {
+            return 0;
+        }
+
+        return (int)$row['last_message_id'];
+    }
+
     private function touch_thread($threadID, $last_from, $extra = [])
     {
         $update = array_merge([
@@ -357,6 +401,27 @@ class PerchMembers_ChatRepository
         ], $extra);
 
         $this->db->update($this->threads_table, $update, 'id', (int)$threadID);
+    }
+
+    private function record_thread_closure($threadID)
+    {
+        if (!$this->closures_table_ready()) {
+            return;
+        }
+
+        $threadID = (int)$threadID;
+        if ($threadID < 1) {
+            return;
+        }
+
+        $last_message = $this->get_last_message($threadID);
+        $last_message_id = $last_message ? (int)$last_message['id'] : 0;
+
+        $this->db->insert($this->closures_table, [
+            'threadID' => $threadID,
+            'last_message_id' => $last_message_id > 0 ? $last_message_id : null,
+            'closed_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 
     private function enrich_thread($thread)

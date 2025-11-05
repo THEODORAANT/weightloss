@@ -22,6 +22,7 @@ if (!$ChatRepo->tables_ready()) {
 }
 
 $thread = $ChatRepo->get_or_create_thread_for_member($memberID);
+$lastClosedMessageID = $thread ? $ChatRepo->get_last_closed_message_id($thread['id']) : 0;
 
 $respond_with_json = function (array $payload) {
     header('Content-Type: application/json');
@@ -31,7 +32,11 @@ $respond_with_json = function (array $payload) {
 
 if (isset($_GET['fetch']) && $_GET['fetch'] === 'messages') {
     $after = isset($_GET['after']) ? (int)$_GET['after'] : null;
-    $messages = $thread ? $ChatRepo->get_messages($thread['id'], ['after_id' => $after]) : [];
+    $effectiveAfter = $lastClosedMessageID;
+    if ($after !== null) {
+        $effectiveAfter = max($after, $lastClosedMessageID);
+    }
+    $messages = $thread ? $ChatRepo->get_messages($thread['id'], ['after_id' => $effectiveAfter]) : [];
     if ($thread) {
         $ChatRepo->mark_thread_read_by_member($thread['id']);
     }
@@ -43,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($body !== '') {
         $messageID = $ChatRepo->add_member_message($memberID, $body);
         if ($messageID && $thread) {
-            $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $messageID - 1]);
+            $afterID = max($messageID - 1, $lastClosedMessageID);
+            $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $afterID]);
             $ChatRepo->mark_thread_read_by_member($thread['id']);
             if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
                 $respond_with_json(['messages' => format_messages($messages, $memberID)]);
@@ -58,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     PerchUtil::redirect('/client/chat');
 }
 
-$messages = $thread ? $ChatRepo->get_messages($thread['id']) : [];
+$messages = $thread ? $ChatRepo->get_messages($thread['id'], ['after_id' => $lastClosedMessageID]) : [];
 if ($thread) {
     $ChatRepo->mark_thread_read_by_member($thread['id']);
 }
@@ -116,14 +122,12 @@ function format_messages(array $messages, int $memberID)
           <?php if ($thread && $thread['status'] === 'closed'): ?>
             <div class="alert alert-info mb-0">This conversation has been closed. Start a new message to reopen it.</div>
           <?php endif; ?>
-          <form id="chatForm" method="post" class="mt-3">
-            <div class="mb-3">
-              <label for="chatMessage" class="form-label">Message</label>
-              <textarea class="form-control" id="chatMessage" name="message" rows="3" placeholder="Type your message"></textarea>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
+          <form id="chatForm" method="post" class="mt-3 chat-form">
+            <label for="chatMessage" class="form-label fw-semibold">Message</label>
+            <textarea class="form-control chat-textarea" id="chatMessage" name="message" rows="4" placeholder="Type your message here..."></textarea>
+            <div class="chat-form-meta d-flex flex-column flex-md-row align-items-md-center gap-2 mt-3">
               <small class="text-muted">Support replies will appear instantly.</small>
-              <button type="submit" class="btn btn-primary">Send</button>
+              <button type="submit" class="btn btn-primary w-100">Send message</button>
             </div>
           </form>
         </div>
@@ -162,6 +166,35 @@ function format_messages(array $messages, int $memberID)
 .chat-message-body {
   white-space: pre-wrap;
   font-size: 0.95rem;
+}
+.chat-form {
+  background: #f8f9fb;
+  border-radius: 12px;
+  padding: 16px;
+}
+.chat-textarea {
+  resize: vertical;
+  min-height: 120px;
+  background: #ffffff;
+}
+.chat-form-meta {
+  text-align: center;
+}
+.chat-form-meta small {
+  flex: 1;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .chat-form-meta {
+    text-align: left;
+  }
+  .chat-form-meta small {
+    text-align: left;
+  }
+  .chat-form-meta .btn {
+    max-width: 220px;
+  }
 }
 </style>
 
