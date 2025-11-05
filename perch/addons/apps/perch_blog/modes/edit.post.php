@@ -106,22 +106,22 @@
                 if ($CurrentUser->has_priv('perch_blog.post.publish')) $opts[] = array('label'=>$Lang->get('Published'), 'value'=>'Published');
                 echo $Form->select_field('postStatus', 'Status', $opts, isset($details['postStatus'])?$details['postStatus']:'Draft');
 
-                $ai_button = '<button type="button" id="btnGenerateAI" class="button button-simple">'.PerchUtil::html($Lang->get('Generate with AI')).'</button>';
-                echo $Form->submit_field('btnSubmit', 'Save', $API->app_path(), 'button', $ai_button);
+                // AI content generation button removed.
+                echo $Form->submit_field('btnSubmit', 'Save', $API->app_path());
 
             } else {
 
                 echo $Form->hidden('authorID', $Author->id());
                 echo $Form->hidden('postStatus', 'Draft');
-                $ai_button = '<button type="button" id="btnGenerateAI" class="button button-simple">'.PerchUtil::html($Lang->get('Generate with AI')).'</button>';
-                echo $Form->submit_field('btnSubmit', 'Create draft', $API->app_path(), 'button', $ai_button);
+                // AI content generation button removed.
+                echo $Form->submit_field('btnSubmit', 'Create draft', $API->app_path());
             }
 
 
             
 
         echo $Form->form_end();
-?>
+/*
 <script>
 (function () {
     var initialise = function () {
@@ -260,7 +260,7 @@
     }
 })();
 </script>
-<?php
+*/
         /* ---- /FORM ---- */
 
     } // if edit_mode
