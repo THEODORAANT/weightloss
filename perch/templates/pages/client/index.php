@@ -18,8 +18,8 @@ perch_layout('client/header', [
       <?php } ?>
     </div>
 
-    <div class="row g-4 justify-content-center">
-      <div class="col-xl-7 col-lg-8">
+    <div class="client-columns">
+      <div>
         <div class="client-card">
           <?php if ($isLoggedIn) { ?>
             <div class="client-card__section">
@@ -37,7 +37,7 @@ perch_layout('client/header', [
         </div>
       </div>
 
-      <div class="col-xl-5 col-lg-8">
+      <div>
         <aside class="client-sidecard">
           <?php if ($isLoggedIn) { ?>
             <h2 class="client-sidecard__title">Delivery &amp; billing addresses</h2>

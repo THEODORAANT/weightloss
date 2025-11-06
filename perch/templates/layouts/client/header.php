@@ -25,10 +25,12 @@
         <!--//////////////////==============Header section section START=========///////////////-->
         <header class="client-topbar">
             <div class="client-topbar__inner">
+                <!--
                 <a class="client-back" href="/home">
                     <span class="client-back__icon" aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
                     <span class="client-back__label">Back</span>
                 </a>
+                -->
                 <a class="client-brand" href="/client">
                     <img src="/asset/logo-final.png" alt="GetWeightLoss" />
                 </a>
@@ -84,10 +86,33 @@
         }
 
         .client-brand img {
-          height: 88px;
+          height: 110px;
           width: auto;
           display: block;
           filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.15));
+        }
+
+        .client-columns {
+          display: grid;
+          gap: 32px;
+        }
+
+        .client-columns > * {
+          min-width: 0;
+        }
+
+        .client-columns__primary,
+        .client-columns__secondary {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        @media (min-width: 992px) {
+          .client-columns {
+            grid-template-columns: 1.35fr 1fr;
+            align-items: stretch;
+          }
         }
 
         .client-nav {
