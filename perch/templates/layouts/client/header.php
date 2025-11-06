@@ -23,73 +23,361 @@
     <!-- ==================================================================coding Start====================================================================================================== -->
 
         <!--//////////////////==============Header section section START=========///////////////-->
-        <div class="getweightloss_header">
-            <div class="main_code px-5">
-                <div class="back_btn">
-                    <a href="/home"><i class="fa-solid fa-angle-left text-light"></i> Back</a>
-                </div>
-                <div class="getweightloss_logo">
-                    <img style="height: 300px; width: 300px;" src="/asset/logo-final.png" alt="logo">
-                </div>
+        <header class="client-topbar">
+            <div class="client-topbar__inner">
+                <a class="client-back" href="/home">
+                    <span class="client-back__icon" aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+                    <span class="client-back__label">Back</span>
+                </a>
+                <a class="client-brand" href="/client">
+                    <img src="/asset/logo-final.png" alt="GetWeightLoss" />
+                </a>
             </div>
-        </div>
+        </header>
         <!--//////////////////==============Header section section END=========///////////////-->
    <style>
 
 
-        .subheader {
-          background-color: #fff;
-          border-bottom: 1px solid #ddd;
+        .client-topbar {
+          background: linear-gradient(90deg, #201c78 0%, #4133d4 100%);
+          padding: 14px 0;
+          box-shadow: 0 6px 16px rgba(29, 33, 67, 0.25);
+          position: sticky;
+          top: 0;
+          z-index: 1030;
         }
 
-        .welcome-msg {
-          padding: 12px 20px;
-          font-size: 16px;
-          color: #333;
-          border-bottom: 1px solid #eee;
-        }
-
-        .tabs {
+        .client-topbar__inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px;
           display: flex;
-          padding: 0 20px;
-          background-color: #f9f9f9;
+          justify-content: space-between;
+          align-items: center;
+          gap: 24px;
         }
 
-        .tab {
-          padding: 12px 16px;
-          margin-right: 10px;
+        .client-back {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          color: #f0f4ff;
           text-decoration: none;
-          color: #555;
-          border-bottom: 3px solid transparent;
-          transition: all 0.2s ease;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .client-back__icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.16);
+        }
+
+        .client-back:hover {
+          color: #ffffff;
+          transform: translateX(-2px);
+        }
+
+        .client-brand img {
+          height: 88px;
+          width: auto;
+          display: block;
+          filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.15));
+        }
+
+        .client-nav {
+          background-color: #ffffff;
+          border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+          box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+        }
+
+        .client-nav__inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 18px 24px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 18px;
+        }
+
+        .client-greeting {
+          font-size: 1rem;
+          color: #1f2937;
           font-weight: 500;
         }
 
-        .tab:hover {
-          color: #000;
-          border-color: #007bff;
+        .client-tabs {
+          list-style: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin: 0;
+          padding: 0;
         }
 
-        .tab.active {
-          color: #007bff;
-          border-color: #007bff;
-          background-color: #fff;
+        .client-tab-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 18px;
+          border-radius: 999px;
+          text-decoration: none;
+          color: #374151;
+          font-weight: 500;
+          background-color: rgba(67, 56, 202, 0.06);
+          border: 1px solid transparent;
+          transition: all 0.2s ease;
         }
+
+        .client-tab-link:hover {
+          color: #1f2937;
+          background-color: rgba(67, 56, 202, 0.15);
+          border-color: rgba(79, 70, 229, 0.25);
+          box-shadow: 0 6px 12px rgba(37, 99, 235, 0.12);
+        }
+
+        .client-tab-link.is-active {
+          background: linear-gradient(90deg, #4338ca 0%, #6366f1 100%);
+          color: #ffffff;
+          border-color: transparent;
+          box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25);
+        }
+
         .unread-dot {
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          background: #dc3545;
+          display: inline-flex;
+          width: 9px;
+          height: 9px;
           border-radius: 50%;
-          margin-left: 4px;
+          background: #ef4444;
+        }
+
+        .client-page {
+          background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+          padding: 64px 0 80px;
+        }
+
+        .client-hero {
+          max-width: 720px;
+          margin: 0 auto 48px;
+          text-align: center;
+        }
+
+        .client-hero h1 {
+          font-size: clamp(2rem, 3vw + 1.2rem, 2.75rem);
+          font-weight: 700;
+          color: #111827;
+          margin-bottom: 16px;
+        }
+
+        .client-hero p {
+          margin: 0 auto;
+          color: #4b5563;
+          font-size: 1.05rem;
+          line-height: 1.7;
+        }
+
+        .client-card,
+        .client-sidecard,
+        .client-panel {
+          background: #ffffff;
+          border-radius: 24px;
+          box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
+          border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .client-card {
+          padding: 32px 34px;
+        }
+
+        .client-sidecard,
+        .client-panel {
+          padding: 28px 30px;
+        }
+
+        .client-panel__body {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .client-card__title {
+          font-size: 1.35rem;
+          font-weight: 600;
+          color: #111827;
+          margin-bottom: 12px;
+        }
+
+        .client-card__intro {
+          color: #4b5563;
+          margin-bottom: 28px;
+          line-height: 1.6;
+        }
+
+        .client-card__section + .client-card__section {
+          margin-top: 32px;
+          padding-top: 28px;
+          border-top: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .client-sidecard__title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #1f2937;
+          margin-bottom: 10px;
+        }
+
+        .client-sidecard__intro {
+          color: #4b5563;
+          margin-bottom: 18px;
+          line-height: 1.6;
+        }
+
+        .client-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .client-list__item {
+          padding: 18px 20px;
+          border-radius: 18px;
+          background: rgba(99, 102, 241, 0.08);
+          border: 1px solid rgba(99, 102, 241, 0.14);
+        }
+
+        .client-list__title {
+          font-weight: 600;
+          color: #312e81;
+          margin-bottom: 8px;
+        }
+
+        .client-list__body {
+          margin: 0;
+          color: #4338ca;
+          line-height: 1.5;
+        }
+
+        .client-table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          border-radius: 18px;
+          overflow: hidden;
+          box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+        }
+
+        .client-table thead {
+          background: linear-gradient(90deg, #4338ca 0%, #6366f1 100%);
+          color: #ffffff;
+        }
+
+        .client-table th,
+        .client-table td {
+          padding: 16px 18px;
+          border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+          text-align: left;
+          font-size: 0.95rem;
+        }
+
+        .client-table tbody tr:nth-child(2n) {
+          background: #f8fafc;
+        }
+
+        .client-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 14px;
+          border-radius: 999px;
+          background: rgba(79, 70, 229, 0.12);
+          color: #4338ca;
+          font-weight: 500;
+        }
+
+        .client-empty {
+          text-align: center;
+          padding: 48px 30px;
+          background: rgba(99, 102, 241, 0.06);
+          border-radius: 24px;
+          border: 1px dashed rgba(99, 102, 241, 0.3);
+          color: #4b5563;
+        }
+
+        .client-empty h3 {
+          font-weight: 600;
+          color: #1f2937;
+          margin-bottom: 12px;
+        }
+
+        .client-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .client-actions .btn,
+        .client-actions button,
+        .client-actions a {
+          border-radius: 999px;
+          font-weight: 600;
+          letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 992px) {
+          .client-card,
+          .client-sidecard,
+          .client-panel {
+            padding: 26px 24px;
+            border-radius: 20px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .client-topbar__inner {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .client-brand img {
+            height: 66px;
+          }
+
+          .client-nav__inner {
+            padding: 16px;
+          }
+
+          .client-greeting {
+            width: 100%;
+          }
+
+          .client-tabs {
+            width: 100%;
+          }
+
+          .client-tab-link {
+            flex: 1 1 calc(50% - 10px);
+            justify-content: center;
+          }
         }
       </style>
          <?php if (perch_member_logged_in()) { ?>
-   <div class="subheader">
+   <nav class="client-nav">
 
-     <div class="welcome-msg">
-       Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
-     </div>
+     <div class="client-nav__inner">
+       <div class="client-greeting">
+         Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
+       </div>
     <?php $currentUrl =  $_SERVER['REQUEST_URI'];
 
      $parts = explode('/', $currentUrl);
@@ -135,18 +423,19 @@
             $chat_tab="active";
            }
       ?>
-     <div class="tabs">
-       <a href="/client" class="tab <?php echo $profile_tab; ?>">Profile</a>
-                     <a href="/payment/success" class="tab <?php echo $documents_tab; ?>">Documents</a>
+     <ul class="client-tabs">
+       <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
+                     <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
 
-       <a href="/client/orders" class="tab <?php echo $orders_tab; ?>">Orders</a>
-       <a href="/client/notifications" class="tab <?php echo $notifications_tab; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a>
-       <a href="/client/chat" class="tab <?php echo $chat_tab; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a>
-       <a href="/client/affiliate-dashboard" class="tab <?php echo $affiliate_tab; ?>">Affiliate</a>
-       <a href="/order/re-order" class="tab <?php echo $reorder_tab; ?>">Order</a>
-       <a href="/client/logout" class="tab ">Logout</a>
-     </div>
+       <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
+       <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
+       <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
+       <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
+       <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Order</a></li>
+       <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
+     </ul>
 
 
    </div>
+   </nav>
 <?php  } ?>
