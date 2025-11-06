@@ -23,112 +23,61 @@
     <!-- ==================================================================coding Start====================================================================================================== -->
 
         <!--//////////////////==============Header section section START=========///////////////-->
-        <header class="client-topbar">
-            <div class="client-topbar__inner">
+        <div class="getweightloss_header">
+            <div class="main_code px-5">
                 <!--
-                <a class="client-back" href="/home">
-                    <span class="client-back__icon" aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
-                    <span class="client-back__label">Back</span>
-                </a>
+                <div class="back_btn">
+                    <a href="/home"><i class="fa-solid fa-angle-left text-light"></i> Back</a>
+                </div>
                 -->
-                <a class="client-brand" href="/client">
-                    <span class="client-brand__glow" aria-hidden="true"></span>
-                    <img src="/asset/logo-final.png" alt="GetWeightLoss" />
-                </a>
+                <div class="getweightloss_logo">
+                    <a href="/client" class="getweightloss_logo-link">
+                        <img src="/asset/logo-final.png" alt="GetWeightLoss" />
+                    </a>
+                </div>
             </div>
-        </header>
+        </div>
         <!--//////////////////==============Header section section END=========///////////////-->
    <style>
 
 
-        .client-topbar {
-          background: linear-gradient(135deg, #f6fbff 0%, #ffffff 55%, #f0f6ff 100%);
+        .getweightloss_header {
+          background: linear-gradient(90deg, #081c3b 0%, #11315a 50%, #081c3b 100%);
           padding: 18px 0;
-          border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-          box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
           position: sticky;
           top: 0;
           z-index: 1030;
         }
 
-        .client-topbar__inner {
-          max-width: 1240px;
-          margin: 0 auto;
-          padding: 0 32px;
+        .getweightloss_header .main_code {
           display: flex;
-          justify-content: center;
           align-items: center;
+          justify-content: flex-start;
+          gap: 24px;
         }
 
-        .client-back {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          color: #f0f4ff;
-          text-decoration: none;
-          font-weight: 600;
-          letter-spacing: 0.02em;
-          transition: transform 0.2s ease, color 0.2s ease;
-        }
-
-        .client-back__icon {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.16);
-        }
-
-        .client-back:hover {
-          color: #ffffff;
-          transform: translateX(-2px);
-        }
-
-        .client-brand {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 14px 26px;
-          border-radius: 28px;
-          background: radial-gradient(circle at top left, rgba(91, 224, 126, 0.16), transparent 60%),
-            radial-gradient(circle at top right, rgba(53, 107, 255, 0.14), transparent 65%),
-            #ffffff;
-          box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
-          overflow: hidden;
-        }
-
-        .client-brand__glow {
-          position: absolute;
-          inset: -40% -35% auto -35%;
-          height: 80%;
-          background: linear-gradient(90deg, rgba(91, 224, 126, 0.32), rgba(53, 107, 255, 0.28));
-          filter: blur(42px);
-          opacity: 0.9;
-          pointer-events: none;
-        }
-
-        .client-brand img {
-          position: relative;
-          height: 108px;
+        .getweightloss_logo img {
+          max-height: 110px;
           width: auto;
           display: block;
         }
 
+        .getweightloss_logo-link {
+          display: inline-flex;
+          align-items: center;
+        }
+
         @media (max-width: 575.98px) {
-          .client-topbar__inner {
-            padding: 0 20px;
+          .getweightloss_header {
+            padding: 14px 0;
           }
 
-          .client-brand {
-            padding: 12px 22px;
-            border-radius: 24px;
+          .getweightloss_header .main_code {
+            justify-content: center;
           }
 
-          .client-brand img {
-            height: 88px;
+          .getweightloss_logo img {
+            max-height: 84px;
           }
         }
 
@@ -419,15 +368,6 @@
         }
 
         @media (max-width: 768px) {
-          .client-topbar__inner {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-
-          .client-brand img {
-            height: 66px;
-          }
-
           .client-nav__inner {
             padding: 16px;
           }
