@@ -131,6 +131,23 @@
           gap: 18px;
         }
 
+        .client-nav__brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .client-nav__logo {
+          display: inline-flex;
+          align-items: center;
+        }
+
+        .client-nav__logo img {
+          height: 54px;
+          width: auto;
+          display: block;
+        }
+
         .client-greeting {
           font-size: 1rem;
           color: #1f2937;
@@ -365,6 +382,10 @@
             padding: 26px 24px;
             border-radius: 20px;
           }
+
+          .client-nav__logo img {
+            height: 48px;
+          }
         }
 
         @media (max-width: 768px) {
@@ -372,8 +393,20 @@
             padding: 16px;
           }
 
-          .client-greeting {
+          .client-nav__brand {
             width: 100%;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
+          }
+
+          .client-nav__logo img {
+            height: 42px;
+          }
+
+          .client-greeting {
+            width: auto;
           }
 
           .client-tabs {
@@ -390,8 +423,13 @@
    <nav class="client-nav">
 
      <div class="client-nav__inner">
-       <div class="client-greeting">
-         Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
+       <div class="client-nav__brand">
+         <a class="client-nav__logo" href="/client" aria-label="GetWeightLoss home">
+           <img src="/asset/logo-final.png" alt="GetWeightLoss" />
+         </a>
+         <div class="client-greeting">
+           Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
+         </div>
        </div>
     <?php $currentUrl =  $_SERVER['REQUEST_URI'];
 
