@@ -23,115 +23,29 @@ if (!$order_complete) {
     $order_complete = perch_shop_active_order_has_status('pending');
 }
 
-     perch_layout('product/header', [
-          'page_title' => perch_page_title(true),
-      ]);
+    perch_layout('client/header', [
+        'page_title' => perch_page_title(true),
+    ]);
 ?>
-  <style>
-        .subheader {
-          background-color: #fff;
-          border-bottom: 1px solid #e5e5e5;
-        }
-
-        .welcome-msg {
-          padding: 12px 20px;
-          font-size: 16px;
-          color: #333;
-          border-bottom: 1px solid #f1f1f1;
-        }
-
-        .tabs {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          padding: 12px 20px 0;
-          background-color: #f7f9fc;
-        }
-
-        .tab {
-          padding: 10px 16px;
-          border-radius: 6px 6px 0 0;
-          text-decoration: none;
-          color: #4a4a4a;
-          border: 1px solid transparent;
-          border-bottom: 3px solid transparent;
-          transition: all 0.2s ease;
-          font-weight: 500;
-        }
-
-        .tab:hover {
-          color: #0a0a0a;
-          border-color: #d6e4ff;
-          background-color: #eef4ff;
-        }
-
-        .tab.active {
-          color: #0b4db3;
-          border-color: #0b4db3;
-          background-color: #fff;
-        }
-      </style>
-         <?php if (perch_member_logged_in()) { ?>
-   <div class="subheader">
-
-     <div class="welcome-msg">
-       Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
-     </div>
-    <?php $currentUrl =  $_SERVER['REQUEST_URI'];
-
-     $parts = explode('/', $currentUrl);
-     $lastPart = end($parts);
-     $spilit_parts=explode("?", $lastPart);
-
-    //  echo  $lastPart;
-    $profile_tab="";
-        $orders_tab="";
-        $reorder_tab="";
-         $documents_tab="";
-          $affiliate_tab="";
-    if($lastPart=="client"){
-    $profile_tab="active";
-    }else if( $lastPart=="orders" ){
-     $orders_tab="active";
-    }else if( $lastPart=="re-order"){
-        $reorder_tab="active";
-       }else if($lastPart=="success" ){
-             $documents_tab="active";
-             }else if($lastPart=="affiliate-dashboard" ){
-
-             $affiliate_tab="active";
-             }
+<main class="client-documents-main">
+  <section class="client-documents py-5">
+    <div class="container client-documents__container">
+      <div class="client-documents__intro text-center mb-5">
+        <?php if ($order_complete) {
+            perch_shop_empty_cart();
         ?>
-       <div class="tabs">
-         <a href="/client" class="tab <?php echo $profile_tab; ?>">Profile</a>
-                       <a href="/payment/success" class="tab <?php echo $documents_tab; ?>">Documents</a>
+          <span class="client-documents__eyebrow">Payment complete</span>
+          <h1 class="client-documents__heading fw-bolder mb-3">Complete your consultation</h1>
+          <p class="client-documents__lead mb-0">Upload your identification documents and videos below to finalise your order. Review the quick guide before submitting to ensure everything is captured correctly.</p>
+        <?php } else { ?>
+          <span class="client-documents__eyebrow">Documents</span>
+          <h1 class="client-documents__heading fw-bolder mb-3">Your documents</h1>
+          <p class="client-documents__lead mb-0">Upload any missing files and check the progress of your verification documents.</p>
+        <?php } ?>
+      </div>
 
-         <a href="/client/orders" class="tab <?php echo $orders_tab; ?>">Orders</a>
-         <a href="/client/affiliate-dashboard" class="tab <?php echo $affiliate_tab; ?>">Affiliate</a>
-         <a href="/order/re-order" class="tab <?php echo $reorder_tab; ?>">Order</a>
-         <a href="/client/logout" class="tab ">Logout</a>
-       </div>
-
-
-   </div>
-<?php  } ?>
-  <section class="success-section py-5">
-    <div class="container all_content">
-    <?php if ($order_complete) {
-    perch_shop_empty_cart();
-    ?>
-        <div class="page-heading text-center mb-5">
-            <h1 class="fw-bolder mb-3">Complete your consultation</h1>
-            <p class="lead mb-0">Upload your identification documents and videos below to finalise your order. Review the quick guide before submitting to ensure everything is captured correctly.</p>
-        </div>
- <?php }else { ?>
-        <div class="page-heading text-center mb-5">
-            <h1 class="fw-bolder mb-3">Your documents</h1>
-            <p class="lead mb-0">Upload any missing files and check the progress of your verification documents.</p>
-        </div>
-
-   <?php } ?>
-        <div class="upload-helper card-shadow mb-5">
+      <div class="client-documents__content">
+        <div class="upload-helper card-shadow client-documents__helper">
             <div class="helper-header">
                 <div>
                     <h2 class="helper-title">Need a hand recording your video?</h2>
@@ -155,17 +69,17 @@ if (!$order_complete) {
             </div>
         </div>
 
-    <div id="guideModal" class="modal" role="dialog" aria-modal="true">
-        <button class="close" type="button" aria-label="Close" onclick="closePopup()">&times;</button>
-        <div class="modal-dialog" onclick="event.stopPropagation()">
-            <iframe class="modal-content" id="pdfFrame" src="" data-src="/instructions.mp4" title="Video instructions"></iframe>
+        <div id="guideModal" class="modal" role="dialog" aria-modal="true">
+            <button class="close" type="button" aria-label="Close" onclick="closePopup()">&times;</button>
+            <div class="modal-dialog" onclick="event.stopPropagation()">
+                <iframe class="modal-content" id="pdfFrame" src="" data-src="/instructions.mp4" title="Video instructions"></iframe>
+            </div>
         </div>
-    </div>
 
-    <div id="uploadLoading" class="text-center mb-4" hidden>
-        <img src="/asset/loading.gif" alt="Loading..." width="80" height="80">
-        <p class="small text-muted mt-2">Uploading your files… please keep this page open.</p>
-    </div>
+        <div id="uploadLoading" class="text-center mb-4" hidden>
+            <img src="/asset/loading.gif" alt="Loading..." width="80" height="80">
+            <p class="small text-muted mt-2">Uploading your files… please keep this page open.</p>
+        </div>
 
 <?php
 function isImageFile($filename) {
@@ -187,7 +101,7 @@ if (perch_member_logged_in()) {
 $docs=perch_member_documents();
 $hasIdDocuments = false;
 if($docs){
-echo '<div class="documents-grid">';
+echo '<div class="documents-grid client-documents__documents">';
 foreach ($docs as $x => $y) {
 
     if($y["type"]=="id-documents") {
@@ -260,7 +174,7 @@ echo '</div>';
 
     $showUploadForm = !$docs || !$hasIdDocuments;
     ?>
-    <div class="upload-grid">
+    <div class="upload-grid client-documents__uploads">
         <?php if ($showUploadForm) { ?>
             <div class="card-shadow upload-card">
                 <?php perch_member_form('upload.html'); ?>
@@ -270,9 +184,10 @@ echo '</div>';
             <?php perch_member_form('upload-proof.html'); ?>
         </div>
     </div>
-    <div class="upload-next text-center">
+    <div class="upload-next client-documents__next text-center">
         <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
     </div>
+      </div>
     </div>
   </section>
 
@@ -412,8 +327,72 @@ echo '</div>';
 </main>
 
   <style>
-        .success-section {
+        .client-documents-main {
             background-color: #f6f8fb;
+            min-height: 100vh;
+        }
+
+        .client-documents__container {
+            max-width: 1100px;
+        }
+
+        .client-documents__intro {
+            max-width: 720px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .client-documents__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.12);
+            color: #4338ca;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .client-documents__heading {
+            color: #172346;
+            font-size: clamp(1.9rem, 1.2vw + 1.8rem, 2.85rem);
+        }
+
+        .client-documents__lead {
+            color: #4d5b75;
+            font-size: 1rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .client-documents__content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .client-documents__helper {
+            margin-bottom: 0;
+        }
+
+        .client-documents__documents {
+            margin-bottom: 8px;
+        }
+
+        .client-documents__uploads {
+            margin-top: 8px;
+        }
+
+        .client-documents__next .btn {
+            border-radius: 999px;
+            padding: 0.75rem 1.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .card-shadow {
@@ -684,6 +663,18 @@ echo '</div>';
         }
 
         @media (max-width: 767px) {
+            .client-documents__intro {
+                margin-bottom: 2.25rem;
+            }
+
+            .client-documents__content {
+                gap: 24px;
+            }
+
+            .client-documents__next .btn {
+                width: 100%;
+            }
+
             .card-shadow {
                 padding: 24px;
             }
