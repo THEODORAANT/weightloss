@@ -137,7 +137,7 @@ if (!$order_complete) {
                     <h2 class="helper-title">Need a hand recording your video?</h2>
                     <p class="helper-text">Follow the short video guide or download the instructions to get everything right the first time.</p>
                 </div>
-                <!--<button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>-->
+                <button class="btn btn-outline-primary helper-button" type="button" onclick="openPopup()">Open full guide</button>
             </div>
             <div class="helper-content">
                 <div class="video-wrapper" oncontextmenu="return false;">
@@ -202,14 +202,20 @@ foreach ($docs as $x => $y) {
 
    <div class="document-card card-shadow" data-save="8">
          <div class="document-card__header">
+            <?php
+                $documentTitle = htmlspecialchars($documentTypeLabel, ENT_QUOTES, 'UTF-8');
+                $rawStatus = isset($y["status"]) ? (string)$y["status"] : '';
+                $statusClass = strtolower(preg_replace('/[^a-z0-9\-]+/i', '-', $rawStatus));
+                $statusLabel = htmlspecialchars(strtoupper($rawStatus), ENT_QUOTES, 'UTF-8');
+            ?>
             <div>
                 <span class="document-badge">Document type</span>
-                <p class="document-title"><?php echo $documentTypeLabel; ?></p>
+                <p class="document-title"><?php echo $documentTitle; ?></p>
             </div>
-            <span class="status-badge status-badge--<?php echo strtolower($y["status"]); ?>"><?php  echo strtoupper($y["status"]); ?></span>
-         </div>
+            <span class="status-badge status-badge--<?php echo $statusClass; ?>"><?php echo $statusLabel; ?></span>
+        </div>
 
-         <?php if($y["status"]=="rerequest") { ?>
+        <?php if($y["status"]=="rerequest") { ?>
             <div class="document-card__body">
                 <p class="mb-3">We still need a replacement file for this document. Upload it below.</p>
                 <?php
@@ -225,11 +231,18 @@ foreach ($docs as $x => $y) {
          <?php if ($y["status"]!="rerequest") { ?>
              <div class="document-card__preview">
                 <?php if (isImageFile($y["name"])) { ?>
-                    <img class="preview-media" src="https://<?php echo $_SERVER['HTTP_HOST'];?>/perch/addons/apps/perch_members/documents/<?php echo $y['name']; ?>" alt="Image Preview">
+                    <?php
+                        $safeHost = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_QUOTES, 'UTF-8');
+                        $encodedName = rawurlencode($y['name']);
+                    ?>
+                    <img class="preview-media" src="https://<?php echo $safeHost; ?>/perch/addons/apps/perch_members/documents/<?php echo $encodedName; ?>" alt="Image Preview">
                 <?php } else if (isVideoFile($y["name"])) {
-                    $fileUrl="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/documents/".$y['name'];
+                    $fileUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/perch/addons/apps/perch_members/documents/' . rawurlencode($y['name']);
+                    $fileExtension = pathinfo($y["name"], PATHINFO_EXTENSION);
+                    $safeUrl = htmlspecialchars($fileUrl, ENT_QUOTES, 'UTF-8');
+                    $safeExtension = htmlspecialchars($fileExtension, ENT_QUOTES, 'UTF-8');
                     echo '<video class="preview-media" controls>
-                            <source src="' . htmlspecialchars($fileUrl) . '" type="video/' . pathinfo($y["name"], PATHINFO_EXTENSION) . '">
+                            <source src="' . $safeUrl . '" type="video/' . $safeExtension . '">
                             Your browser does not support the video tag.
                           </video>';
                 } ?>
