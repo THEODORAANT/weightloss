@@ -32,6 +32,7 @@
                 </a>
                 -->
                 <a class="client-brand" href="/client">
+                    <span class="client-brand__glow" aria-hidden="true"></span>
                     <img src="/asset/logo-final.png" alt="GetWeightLoss" />
                 </a>
             </div>
@@ -41,22 +42,22 @@
 
 
         .client-topbar {
-          background: linear-gradient(90deg, #201c78 0%, #4133d4 100%);
-          padding: 14px 0;
-          box-shadow: 0 6px 16px rgba(29, 33, 67, 0.25);
+          background: linear-gradient(135deg, #f6fbff 0%, #ffffff 55%, #f0f6ff 100%);
+          padding: 18px 0;
+          border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+          box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
           position: sticky;
           top: 0;
           z-index: 1030;
         }
 
         .client-topbar__inner {
-          max-width: 1200px;
+          max-width: 1240px;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 32px;
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
-          gap: 24px;
         }
 
         .client-back {
@@ -85,11 +86,50 @@
           transform: translateX(-2px);
         }
 
+        .client-brand {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 14px 26px;
+          border-radius: 28px;
+          background: radial-gradient(circle at top left, rgba(91, 224, 126, 0.16), transparent 60%),
+            radial-gradient(circle at top right, rgba(53, 107, 255, 0.14), transparent 65%),
+            #ffffff;
+          box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+          overflow: hidden;
+        }
+
+        .client-brand__glow {
+          position: absolute;
+          inset: -40% -35% auto -35%;
+          height: 80%;
+          background: linear-gradient(90deg, rgba(91, 224, 126, 0.32), rgba(53, 107, 255, 0.28));
+          filter: blur(42px);
+          opacity: 0.9;
+          pointer-events: none;
+        }
+
         .client-brand img {
-          height: 110px;
+          position: relative;
+          height: 108px;
           width: auto;
           display: block;
-          filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.15));
+        }
+
+        @media (max-width: 575.98px) {
+          .client-topbar__inner {
+            padding: 0 20px;
+          }
+
+          .client-brand {
+            padding: 12px 22px;
+            border-radius: 24px;
+          }
+
+          .client-brand img {
+            height: 88px;
+          }
         }
 
         .client-columns {
@@ -112,6 +152,16 @@
           .client-columns {
             grid-template-columns: 1.35fr 1fr;
             align-items: stretch;
+          }
+        }
+
+        .client-columns--support {
+          gap: 36px;
+        }
+
+        @media (min-width: 1200px) {
+          .client-columns--support {
+            grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
           }
         }
 
