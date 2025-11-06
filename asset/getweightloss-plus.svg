@@ -1,0 +1,12 @@
+<svg width="640" height="220" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">GetWeightLoss+</title>
+  <desc id="desc">Brand mark for GetWeightLoss featuring green Get, blue WeightLoss and a blue plus symbol.</desc>
+  <rect width="640" height="220" fill="none" />
+  <text x="24" y="130" font-family="'Poppins', 'Segoe UI', 'Arial Black', sans-serif" font-weight="700" font-size="120" fill="#7ad21f">Get</text>
+  <text x="220" y="150" font-family="'Poppins', 'Segoe UI', 'Arial', sans-serif" font-weight="600" font-size="96" fill="#1e5bd6">WeightLoss</text>
+  <g transform="translate(540 55)">
+    <circle cx="50" cy="70" r="52" fill="#1e5bd6" />
+    <rect x="42" y="34" width="16" height="72" rx="8" fill="#ffffff" />
+    <rect x="18" y="58" width="72" height="16" rx="8" fill="#ffffff" />
+  </g>
+</svg>

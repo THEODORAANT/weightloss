@@ -31,8 +31,8 @@
                 </div>
                 -->
                 <div class="getweightloss_logo">
-                    <a href="/client" class="getweightloss_logo-link">
-                        <img src="/asset/logo-final.png" alt="GetWeightLoss" />
+                    <a href="/client" class="getweightloss_logo-link" aria-label="GetWeightLoss home">
+                        <img src="/asset/getweightloss-plus.svg" alt="GetWeightLoss" />
                     </a>
                 </div>
             </div>
@@ -135,17 +135,6 @@
           display: inline-flex;
           align-items: center;
           gap: 16px;
-        }
-
-        .client-nav__logo {
-          display: inline-flex;
-          align-items: center;
-        }
-
-        .client-nav__logo img {
-          height: 54px;
-          width: auto;
-          display: block;
         }
 
         .client-greeting {
@@ -383,9 +372,6 @@
             border-radius: 20px;
           }
 
-          .client-nav__logo img {
-            height: 48px;
-          }
         }
 
         @media (max-width: 768px) {
@@ -400,11 +386,6 @@
             text-align: center;
             gap: 12px;
           }
-
-          .client-nav__logo img {
-            height: 42px;
-          }
-
           .client-greeting {
             width: auto;
           }
@@ -424,9 +405,6 @@
 
      <div class="client-nav__inner">
        <div class="client-nav__brand">
-         <a class="client-nav__logo" href="/client" aria-label="GetWeightLoss home">
-           <img src="/asset/logo-final.png" alt="GetWeightLoss" />
-         </a>
          <div class="client-greeting">
            Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
          </div>
