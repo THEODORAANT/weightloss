@@ -3,25 +3,13 @@ if (!perch_member_logged_in()) {
     PerchUtil::redirect('/client');
 }
 
-perch_layout('client/header', [
-    'page_title' => 'Chat',
-]);
-
 $Session = PerchMembers_Session::fetch();
 $memberID = (int)$Session->get('memberID');
 $memberEmail = perch_member_get('email');
 
 $ChatRepo = new PerchMembers_ChatRepository();
-
-if (!$ChatRepo->tables_ready()) {
-    echo '<div class="container mt-5"><div class="alert alert-warning">'
-        . 'Chat is not available yet. Please run the SQL in <code>sql/create_chat_tables.sql</code> to create the chat tables.'
-        . '</div></div>';
-    perch_layout('getStarted/footer');
-    return;
-}
-
-$thread = $ChatRepo->get_or_create_thread_for_member($memberID);
+$tables_ready = $ChatRepo->tables_ready();
+$thread = null;
 
 $respond_with_json = function (array $payload) {
     header('Content-Type: application/json');
@@ -29,24 +17,33 @@ $respond_with_json = function (array $payload) {
     exit;
 };
 
+if ($tables_ready) {
+    $thread = $ChatRepo->get_or_create_thread_for_member($memberID);
+}
+
 if (isset($_GET['fetch']) && $_GET['fetch'] === 'messages') {
-    $after = isset($_GET['after']) ? (int)$_GET['after'] : null;
-    $messages = $thread ? $ChatRepo->get_messages($thread['id'], ['after_id' => $after]) : [];
-    if ($thread) {
-        $ChatRepo->mark_thread_read_by_member($thread['id']);
+    if (!$tables_ready || !$thread) {
+        $respond_with_json(['messages' => []]);
     }
+
+    $after = isset($_GET['after']) ? (int)$_GET['after'] : null;
+    $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $after]);
+    $ChatRepo->mark_thread_read_by_member($thread['id']);
+
     $respond_with_json(['messages' => format_messages($messages, $memberID)]);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $body = trim((string)($_POST['message'] ?? ''));
-    if ($body !== '') {
-        $messageID = $ChatRepo->add_member_message($memberID, $body);
-        if ($messageID && $thread) {
-            $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $messageID - 1]);
-            $ChatRepo->mark_thread_read_by_member($thread['id']);
-            if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
-                $respond_with_json(['messages' => format_messages($messages, $memberID)]);
+    if ($tables_ready && $thread) {
+        $body = trim((string)($_POST['message'] ?? ''));
+        if ($body !== '') {
+            $messageID = $ChatRepo->add_member_message($memberID, $body);
+            if ($messageID) {
+                $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $messageID - 1]);
+                $ChatRepo->mark_thread_read_by_member($thread['id']);
+                if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
+                    $respond_with_json(['messages' => format_messages($messages, $memberID)]);
+                }
             }
         }
     }
@@ -56,6 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     PerchUtil::redirect('/client/chat');
+}
+
+perch_layout('client/header', [
+    'page_title' => 'Chat',
+]);
+
+if (!$tables_ready) {
+    echo '<div class="container mt-5"><div class="alert alert-warning">'
+        . 'Chat is not available yet. Please run the SQL in <code>sql/create_chat_tables.sql</code> to create the chat tables.'
+        . '</div></div>';
+    perch_layout('getStarted/footer');
+    return;
 }
 
 $messages = $thread ? $ChatRepo->get_messages($thread['id']) : [];
