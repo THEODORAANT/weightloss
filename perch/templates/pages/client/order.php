@@ -253,7 +253,7 @@ if (perch_member_logged_in()) {
                                     <div class="client-order__empty bg-transparent shadow-none border-0 p-0 text-start">
                                         <h3 class="h6 fw-semibold">Tracking updates are on their way</h3>
                                         <p class="mb-3">We're waiting on the courier to provide tracking details. Check back soon or contact us if you need help.</p>
-                                        <a class="btn btn-outline-primary btn-sm" href="mailto:help@getweightlossdirect.com">Contact support</a>
+                                        <a class="btn btn-outline-primary btn-sm" href="mailto:support@getweightloss.co.uk">Contact support</a>
                                     </div>
                                 <?php } ?>
                             </div>
@@ -263,7 +263,7 @@ if (perch_member_logged_in()) {
                             <h3>Need a hand?</h3>
                             <p>If anything looks incorrect or you have questions about your treatment plan, we're here to assist.</p>
                             <div class="client-order__actions">
-                                <a class="btn btn-primary" href="mailto:help@getweightlossdirect.com">Email our support team</a>
+                                <a class="btn btn-primary" href="mailto:support@getweightloss.co.uk">Email our support team</a>
                                 <a class="btn btn-outline-secondary" href="/client/orders">Back to all orders</a>
                             </div>
                         </div>
