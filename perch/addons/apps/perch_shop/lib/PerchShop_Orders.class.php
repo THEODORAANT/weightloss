@@ -214,27 +214,48 @@ $sort_val = null;
                 $wheresql = ' WHERE o.customerID=c.customerID
                                 AND o.orderDeleted IS NULL
                                 AND o.orderStatus IN ("paid")';
-                	if($details["sendtopharmacy"]!=""){
-                	if($details["sendtopharmacy"]=="yes"){
-                	 // $selectsql .= ' ,p.* ';
-                	    $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
-                	     $wheresql .= '	AND p.orderID =o.orderID AND p.pharmacy_orderID!=""';
-                	}elseif($details["sendtopharmacy"]=="no"){
-                                    	 // $selectsql .= ' ,p.* ';
-                                    	    $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
-                                    	     $wheresql .= '	AND p.orderID =o.orderID AND p.pharmacy_orderID=""';
-                                    	}
-                	}
-if($details["pendingdocs"]!=""){
-                	if($details["pendingdocs"]=="yes"){
-                	 // $selectsql .= ' ,p.* ';
-                	    $fromsql .=  ','.PERCH_DB_PREFIX.'members_documents d ';
-                	     $wheresql .= '	AND d.memberID =c.memberID AND d.documentStatus!="accepted"';
-                	}elseif($details["pendingdocs"]=="no"){
-                                    	   $fromsql .=  ','.PERCH_DB_PREFIX.'members_documents d ';
-                                                        	     $wheresql .= '	AND d.memberID =c.memberID AND d.documentStatus="accepted"';
-                                    	}
-                	}
+
+        if (isset($details['name']) && $details['name'] !== '') {
+            $name = '%'.$details['name'].'%';
+            $wheresql .= '     AND (customerFirstName LIKE '.$this->db->pdb($name)
+                        .' OR customerLastName LIKE '.$this->db->pdb($name)
+                        .' OR CONCAT(customerFirstName, " ", customerLastName) LIKE '.$this->db->pdb($name).')';
+        }
+
+        if (isset($details['email']) && $details['email'] !== '') {
+            $email = '%'.$details['email'].'%';
+            $wheresql .= '     AND customerEmail LIKE '.$this->db->pdb($email);
+        }
+
+        if (isset($details['fromdate']) && $details['fromdate'] !== '') {
+            $from = $details['fromdate'].' 00:00:00';
+            $wheresql .= '     AND o.orderCreated >= '.$this->db->pdb($from);
+        }
+
+        if (isset($details['todate']) && $details['todate'] !== '') {
+            $to = $details['todate'].' 23:59:59';
+            $wheresql .= '     AND o.orderCreated <= '.$this->db->pdb($to);
+        }
+
+        if (isset($details['sendtopharmacy']) && $details['sendtopharmacy'] !== '') {
+            if ($details['sendtopharmacy'] == 'yes') {
+                $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
+                $wheresql .= '     AND p.orderID =o.orderID AND p.pharmacy_orderID!=""';
+            } elseif ($details['sendtopharmacy'] == 'no') {
+                $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
+                $wheresql .= '     AND p.orderID =o.orderID AND p.pharmacy_orderID=""';
+            }
+        }
+
+        if (isset($details['pendingdocs']) && $details['pendingdocs'] !== '') {
+            if ($details['pendingdocs'] == 'yes') {
+                $fromsql .=  ','.PERCH_DB_PREFIX.'members_documents d ';
+                $wheresql .= '     AND d.memberID =c.memberID AND d.documentStatus!="accepted"';
+            } elseif ($details['pendingdocs'] == 'no') {
+                $fromsql .=  ','.PERCH_DB_PREFIX.'members_documents d ';
+                $wheresql .= '     AND d.memberID =c.memberID AND d.documentStatus="accepted"';
+            }
+        }
 $sql= $selectsql. $fromsql.$wheresql;
 
 
