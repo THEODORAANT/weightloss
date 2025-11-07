@@ -58,6 +58,9 @@ $sort="^orderCreated";
 
                     $details=$data["orderDynamicFields"];
                 $details =json_decode($details, TRUE);
+                if (!is_array($details)) {
+                    $details = [];
+                }
 $orders = $Orders->get_by_properties($details, $Paging, $default_statuses);
 
 
