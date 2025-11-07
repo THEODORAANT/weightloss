@@ -38,10 +38,36 @@ class PerchMembers_ChatRepository
             return $this->closures_table_ready;
         }
 
-        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
-        $this->closures_table_ready = ($table !== false && $table !== null);
+        if ($this->ensure_closures_table_exists()) {
+            $this->closures_table_ready = true;
+            return true;
+        }
 
-        return $this->closures_table_ready;
+        $this->closures_table_ready = false;
+        return false;
+    }
+
+    private function ensure_closures_table_exists()
+    {
+        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
+        if ($table !== false && $table !== null) {
+            return true;
+        }
+
+        $sql = 'CREATE TABLE IF NOT EXISTS `' . $this->closures_table . '` (
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
+            `threadID` int unsigned NOT NULL,
+            `last_message_id` int unsigned DEFAULT NULL,
+            `closed_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            KEY `thread_closed_at` (`threadID`, `closed_at`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
+
+        $this->db->execute($sql);
+
+        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
+
+        return ($table !== false && $table !== null);
     }
 
     public function get_or_create_thread_for_member($memberID)
