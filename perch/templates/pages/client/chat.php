@@ -97,8 +97,8 @@ function format_messages(array $messages, int $memberID)
       <p class="lead mb-0">Have a question about your treatment or account? Send us a message and our clinicians will get back to you soon.</p>
     </div>
 
-    <div class="row g-4 justify-content-center">
-      <div class="col-xl-8 col-lg-9">
+    <div class="client-columns client-columns--support">
+      <div class="client-columns__primary">
         <div class="chat-panel">
           <div class="chat-panel__header">
             <div class="chat-panel__title">
@@ -148,7 +148,7 @@ function format_messages(array $messages, int $memberID)
         </div>
       </div>
 
-      <div class="col-xl-4 col-lg-9">
+      <div class="client-columns__secondary">
         <aside class="support-card">
           <h3>Helpful tips</h3>
           <ul>

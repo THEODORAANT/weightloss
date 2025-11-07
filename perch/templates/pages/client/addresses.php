@@ -1,89 +1,79 @@
+<?php
+perch_layout('client/header', [
+    'page_title' => perch_page_title(true),
+]);
+?>
 
-    <?php  // output the top of the page
-    perch_layout('client/header', [
-        'page_title' => perch_page_title(true),
-    ]);
-
-        /* main navigation
-        perch_pages_navigation([
-            'levels'   => 1,
-            'template' => 'main_nav.html',
-        ]);*/
-
-    ?>
-
-        <section class="main_order_summary">
-            <div class="container mt-5">
-                <div class="row">
-                    <!-- Left Section -->
-                    <div class="col-md-7">
-
-
-                        <div class="main_page">
-                            <!-- Create an Account Section -->
-
-
-
-                            <div class="login_sec">
-
-                            </div>
-       <?php      perch_shop_edit_address_form(perch_get('addressID'));  ?>
-
-                        </div>
-
-                    </div>
-  </div>
+<section class="client-page">
+  <div class="container all_content">
+    <div class="client-hero">
+      <h1>Edit your address</h1>
+      <p>Keep your delivery details accurate so your treatments arrive without delay. Update the fields below and save your changes.</p>
     </div>
-      </section>
+
+    <div class="row justify-content-center">
+      <div class="col-xl-7 col-lg-9">
+        <div class="client-card">
+          <div class="client-card__section">
+            <h2 class="client-card__title">Address details</h2>
+            <p class="client-card__intro">Adjust your billing or shipping address information. We use these details for deliveries and important account updates.</p>
+            <?php perch_shop_edit_address_form(perch_get('addressID')); ?>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
     const addressInput = document.getElementById('form1_address_1');
-    //console.log("addressInput");console.log(addressInput);
     const suggestionsBox = document.getElementById('suggestions');
     const resultDisplay = document.getElementById('selectedResult');
 
-    let debounceTimer;
+    if (addressInput && suggestionsBox) {
+        let debounceTimer;
 
-    addressInput.addEventListener('input', () => {
-        clearTimeout(debounceTimer);
-        const query = addressInput.value.trim();
-        if (query.length < 3) {
-            suggestionsBox.innerHTML = '';
-            return;
-        }
+        addressInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            const query = addressInput.value.trim();
+            if (query.length < 3) {
+                suggestionsBox.innerHTML = '';
+                return;
+            }
 
-        debounceTimer = setTimeout(() => {
-            fetch('lookup-postcode', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'query=' + encodeURIComponent(query)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    suggestionsBox.innerHTML = '';
-                    if (data.length === 0) return;
+            debounceTimer = setTimeout(() => {
+                fetch('lookup-postcode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'query=' + encodeURIComponent(query)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionsBox.innerHTML = '';
+                        if (!Array.isArray(data) || data.length === 0) return;
 
-                    data.forEach(item => {
-                        const div = document.createElement('div');
-                          div.classList.add('form-control');
-
-                        div.textContent = item;
-                        div.onclick = () => {
-                            addressInput.value = item;
-                            suggestionsBox.innerHTML = '';
-                            resultDisplay.textContent = "Selected: " + item;
-                        };
-                        suggestionsBox.appendChild(div);
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.classList.add('form-control');
+                            div.textContent = item;
+                            div.onclick = () => {
+                                addressInput.value = item;
+                                suggestionsBox.innerHTML = '';
+                                if (resultDisplay) {
+                                    resultDisplay.textContent = 'Selected: ' + item;
+                                }
+                            };
+                            suggestionsBox.appendChild(div);
+                        });
                     });
-                });
-        }, 300); // debounce to avoid excessive requests
-    });
+            }, 300);
+        });
 
-    document.addEventListener('click', (e) => {
-        if (!suggestionsBox.contains(e.target) && e.target !== addressInput) {
-            suggestionsBox.innerHTML = '';
-        }
-    });
+        document.addEventListener('click', (e) => {
+            if (!suggestionsBox.contains(e.target) && e.target !== addressInput) {
+                suggestionsBox.innerHTML = '';
+            }
+        });
+    }
 </script>
-          <?php
-        perch_layout('getStarted/footer');?>
+<?php perch_layout('getStarted/footer'); ?>

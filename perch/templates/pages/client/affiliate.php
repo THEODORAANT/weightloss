@@ -1,210 +1,126 @@
 <?php
-// Output the top of the page
 perch_layout('client/header', [
     'page_title' => perch_page_title(true),
 ]);
+
+if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_payout'])) {
+    perch_member_requestPayout();
+}
 ?>
 
-<section class="main_order_summary">
-    <div class="container mt-5">
-        <div class="row">
-            <!-- Left Section -->
-            <div class="col-md-7">
-                <div class="main_page">
-                    <!-- Create an Account Section -->
-                    <div class="login_sec"></div>
-
-                    <?php
-                    if (perch_member_logged_in()) {
-                        if (!perch_member_get('affID')) {
-                            echo "<a href='/client' class='btn btn-primary w-100'>Become an Affiliate</a><span id='tooltip' class='tooltip'>Copied!</span>";
-                        } else {
-                            $affiliateLink = "https://" . $_SERVER['HTTP_HOST'] . "/?ref=" . perch_member_get('affID');
-                            $credit = perch_member_credit(); // Added missing credit definition
-                            $payouts = perch_member_aff_payouts();
-                    ?>
-
-                    <div class="affiliate-box">
-                        <div class="affiliate-title">Your Affiliate Link</div>
-                        <div class="affiliate-link-container">
-                            <a id="affiliateLink" class="affiliate-link" href="<?php echo $affiliateLink; ?>" target="_blank">
-                                <?php echo $affiliateLink; ?>
-                            </a>
-                            <button class="copy-button" onclick="copyAffiliateLink()">Copy</button>
-                        </div>
-                    </div>
-
-                    <?php
-                            // Handle payout request
-                            if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['request_payout'])) {
-
-                                $result = perch_member_requestPayout();
-                               // echo $result["status"];
-
-                              //  print_r($result);
-                            }
-
-                            /*echo "<p> Referral ID: <b><span>" . perch_member_get('affID') . "</span></b></p>";*/
-                    ?>
-
-                    <div class="affiliate-box">
-                        <div class="affiliate-title"> <h2>Your Payouts</h2></div>
-                        <div class="affiliate-link-container">
-
-                    <p><strong>Available Credit:</strong> £<?= number_format($credit, 2) ?></p>
-<?php if($credit!=0){?>
-                    <form method="post">
-                        <button style="margin-left: 49px;" type="submit" class="copy-button" name="request_payout">Request Payout</button>
-                    </form>
-<?php } ?>
-                    </div>
-                    </div>
-                    <table class='commission-table' border="1" cellpadding="6">
-                        <thead>
-                            <tr><th>Date</th><th>Amount</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($payouts): foreach ($payouts as $p): ?>
-                            <tr>
-                                <td><?= date("Y-m-d", strtotime($p['requested_at'])) ?></td>
-                                <td>£<?= number_format($p['amount'], 2) ?></td>
-                                <td><?= ucfirst($p['status']) ?></td>
-                            </tr>
-                            <?php endforeach; else: ?>
-                            <tr><td colspan="3">No payouts yet.</td></tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-
-                    <?php
-                            /*
-                            $commissions = perch_member_commissions();
-                            if ($commissions) {
-                                echo "<h2>Your Commissions</h2>";
-                                echo "<table class='commission-table'>";
-                                echo "<tr><th>Member ID</th><th>Tier</th><th>Amount</th><th>Date</th></tr>";
-                                foreach ($commissions as $c) {
-                                    echo "<tr>
-                                            <td>{$c['member_id']}</td>
-                                            <td>{$c['tier']}</td>
-                                            <td>£" . number_format($c['amount'], 2) . "</td>
-                                            <td>{$c['created_at']}</td>
-                                          </tr>";
-                                }
-                                echo "</table>";
-                            } else {
-                                echo "<h2>No Commissions</h2>";
-                            }
-                            */
-                        }
-                    } // END perch_member_logged_in()
-                    ?>
-                </div>
-            </div>
-        </div>
+<section class="client-page">
+  <div class="container all_content">
+    <div class="client-hero">
+      <h1>Affiliate dashboard</h1>
+      <p>Share Get Weight Loss with your community and earn commission on every successful referral. Track your link and payouts below.</p>
     </div>
-</section>
 
-<style>
-    .affiliate-box {
-        max-width: 600px;
-        margin: 50px auto;
-        background-color: #f9f9f9;
-        border: 2px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        font-family: Arial, sans-serif;
-    }
-    .affiliate-title {
-        font-size: 1.4rem;
-        margin-bottom: 10px;
-        font-weight: bold;
-        color: #333;
-    }
-    .affiliate-link-container {
-        display: flex;
-        align-items: center;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        overflow: hidden;
-    }
-    .affiliate-link {
-        flex-grow: 1;
-        word-break: break-all;
-        color: #0066cc;
-        text-decoration: none;
-    }
-    .copy-button {
-        margin-left: 10px;
-        padding: 8px 12px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .copy-button:hover {
-        background-color: #45a049;
-    }
-    .tooltip {
-        visibility: hidden;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        border-radius: 4px;
-        padding: 4px 8px;
-        position: absolute;
-        z-index: 1;
-        top: -35px;
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 0;
-        transition: opacity 0.3s;
-        font-size: 12px;
-    }
-    .tooltip.show {
-        visibility: visible;
-        opacity: 1;
-    }
-    .commission-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-family: Arial, sans-serif;
-        font-size: 16px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-    .commission-table th, .commission-table td {
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-    .commission-table th {
-        background-color: #f4f4f4;
-        color: #333;
-        font-weight: bold;
-    }
-    .commission-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    .commission-table tr:hover {
-        background-color: #f1f1f1;
-    }
-    h2 {
-        font-family: Arial, sans-serif;
-        color: #333;
-    }
-</style>
+    <div class="row justify-content-center g-4">
+      <div class="col-xl-8 col-lg-10">
+        <div class="client-card">
+          <?php if (!perch_member_logged_in()) { ?>
+            <div class="client-card__section text-center">
+              <h2 class="client-card__title">Log in to access affiliate tools</h2>
+              <p class="client-card__intro">Sign in to generate your referral link and monitor your commission payouts.</p>
+              <div class="client-actions justify-content-center">
+                <a class="btn btn-primary px-4" href="/client">Go to client login</a>
+              </div>
+            </div>
+          <?php } else if (!perch_member_get('affID')) { ?>
+            <div class="client-card__section text-center">
+              <h2 class="client-card__title">Become an affiliate</h2>
+              <p class="client-card__intro">Activate your affiliate account to receive a personalised referral link and start earning commission for every successful sign-up.</p>
+              <a href="/client" class="btn btn-primary px-4">Activate affiliate account</a>
+            </div>
+          <?php } else { ?>
+            <?php
+              $affiliateLink = 'https://' . $_SERVER['HTTP_HOST'] . '/?ref=' . perch_member_get('affID');
+              $credit = perch_member_credit();
+              $payouts = perch_member_aff_payouts();
+            ?>
+            <div class="client-card__section">
+              <h2 class="client-card__title">Your referral link</h2>
+              <p class="client-card__intro">Share this link with friends or clients. When they complete their consultation, we&apos;ll attribute the commission to you.</p>
+              <div class="client-panel p-3">
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+                  <a id="affiliateLink" class="text-decoration-none fw-semibold" href="<?php echo $affiliateLink; ?>" target="_blank" rel="noopener">
+                    <?php echo $affiliateLink; ?>
+                  </a>
+                  <button class="btn btn-outline-primary px-4" type="button" onclick="copyAffiliateLink()">Copy link</button>
+                </div>
+                <span id="tooltip" class="d-inline-block mt-2 text-success" style="display:none;">Link copied!</span>
+              </div>
+            </div>
+
+            <div class="client-card__section">
+              <h2 class="client-card__title">Payout overview</h2>
+              <p class="client-card__intro">Your available balance and previous payout requests are summarised below.</p>
+              <div class="client-panel__body">
+                <div class="client-panel p-3">
+                  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+                    <div>
+                      <span class="text-uppercase text-muted small">Available credit</span>
+                      <div class="display-6 fw-semibold mb-0">£<?php echo number_format($credit, 2); ?></div>
+                    </div>
+                    <?php if ($credit > 0) { ?>
+                      <form method="post" class="client-actions">
+                        <button type="submit" class="btn btn-primary px-4" name="request_payout">Request payout</button>
+                      </form>
+                    <?php } ?>
+                  </div>
+                </div>
+
+                <div class="client-panel p-3">
+                  <h3 class="client-sidecard__title mb-3">Payout history</h3>
+                  <div class="table-responsive">
+                    <table class="client-table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">Amount</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php if ($payouts) { ?>
+                          <?php foreach ($payouts as $p) { ?>
+                            <tr>
+                              <td><?php echo date('Y-m-d', strtotime($p['requested_at'])); ?></td>
+                              <td>£<?php echo number_format($p['amount'], 2); ?></td>
+                              <td><?php echo ucfirst($p['status']); ?></td>
+                            </tr>
+                          <?php } ?>
+                        <?php } else { ?>
+                          <tr>
+                            <td colspan="3">No payouts yet. Your history will appear here once requests are processed.</td>
+                          </tr>
+                        <?php } ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
 function copyAffiliateLink() {
-    const link = document.getElementById("affiliateLink").href;
-    navigator.clipboard.writeText(link).then(() => {
-        alert("Affiliate link copied to clipboard!");
+    const link = document.getElementById('affiliateLink');
+    if (!link) return;
+
+    const tooltip = document.getElementById('tooltip');
+    navigator.clipboard.writeText(link.textContent.trim()).then(() => {
+        if (tooltip) {
+            tooltip.style.display = 'inline-block';
+            setTimeout(() => {
+                tooltip.style.display = 'none';
+            }, 2000);
+        }
     });
 }
 </script>
