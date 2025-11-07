@@ -36,7 +36,6 @@ $shippingFields = [
 ];
 
 $shippingData = [];
-
 foreach ($shippingFields as $field) {
     $inputKey = 'shipping_' . $field;
     if (array_key_exists($inputKey, $data)) {
@@ -92,6 +91,7 @@ if ($countryID <= 0) {
     echo json_encode(["error" => "shipping_country must be a positive numeric country ID"]);
     exit;
 }
+$shippingData['country'] = (string) $countryID;
 
 $API = new PerchAPI(1.0, 'perch_shop');
 $Customers = new PerchShop_Customers($API);
@@ -111,6 +111,8 @@ if (!$ShippingAddress instanceof PerchShop_Address) {
     echo json_encode(["error" => "Unable to store shipping address"]);
     exit;
 }
+
+$ShopRuntime->update_member_shipping_profile((int) $payload['user_id'], $shippingData);
 
 $responseAddress = [];
 foreach ($shippingData as $field => $value) {
