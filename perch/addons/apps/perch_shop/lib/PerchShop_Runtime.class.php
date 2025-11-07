@@ -357,34 +357,45 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 		return $Addresses->find_for_customer_by_id($Customer->id(), $id);
 	}
 
-	public function edit_address_from_form($SubmittedForm)
-	{
-		$Customer = $this->get_customer();
-		if (!$Customer) return false;
+        public function edit_address_from_form($SubmittedForm)
+        {
+                $Customer = $this->get_customer();
+                if (!$Customer) return false;
 
-		$Addresses = new PerchShop_Addresses($this->api);
-		$Address   = false;
+                $Addresses = new PerchShop_Addresses($this->api);
+                $Address   = false;
 
-		if (isset($SubmittedForm->data['addressID']) && $SubmittedForm->data['addressID'] > 0) {
-			$id = (int)$SubmittedForm->data['addressID'];
-			$Address = $Addresses->find_for_customer_by_id($Customer->id(), $id);
-		}
+                $normalised_shipping = $this->normalise_shipping_data($SubmittedForm->data);
 
-		if ($Address) {
-			PerchUtil::debug($SubmittedForm->data);
-			$Address->intelliupdate($SubmittedForm->data);
-		}else{
-			$data = $SubmittedForm->data;
-			if (isset($data['address_1']) && $data['address_1']!='') {
-				$data['customer'] = $Customer->id();
-				$data['title'] = substr($SubmittedForm->data['address_1'], 0, 24);
-				$Addresses->intellicreate($data);
-			}
+                foreach($normalised_shipping as $field=>$value) {
+                        $SubmittedForm->data[$field] = $value;
+                }
 
-		}
+                if (isset($SubmittedForm->data['addressID']) && $SubmittedForm->data['addressID'] > 0) {
+                        $id = (int)$SubmittedForm->data['addressID'];
+                        $Address = $Addresses->find_for_customer_by_id($Customer->id(), $id);
+                }
 
-		$this->set_location_from_address('default');
-	}
+                if ($Address instanceof PerchShop_Address) {
+                        PerchUtil::debug($SubmittedForm->data);
+                        $Address->intelliupdate($SubmittedForm->data);
+                        $Address = $Addresses->find_for_customer_by_id($Customer->id(), $Address->id());
+                }else{
+                        $data = $SubmittedForm->data;
+                        if (isset($data['address_1']) && $data['address_1']!='') {
+                                $data['customer'] = $Customer->id();
+                                $data['title'] = substr($data['address_1'], 0, 24);
+                                $Address = $Addresses->intellicreate($data);
+                        }
+
+                }
+
+                if ($Address instanceof PerchShop_Address && $Address->addressSlug() === 'shipping') {
+                        $this->update_member_shipping_profile_from_address($Address, $Customer->memberID());
+                }
+
+                $this->set_location_from_address('default');
+        }
 
 
 	public function set_cart_properties_from_form($SubmittedForm)
@@ -1229,11 +1240,11 @@ public function get_package_future_items($opts){
 
 	}
 
-	public function update_customer_from_form($SubmittedForm)
-	{
-		$Session = PerchMembers_Session::fetch();
+        public function update_customer_from_form($SubmittedForm)
+        {
+                $Session = PerchMembers_Session::fetch();
 
-		if ($Session->logged_in) {
+                if ($Session->logged_in) {
 
 			$MembersForm = $SubmittedForm->duplicate(['first_name', 'last_name', 'email', 'token'], ['token']);
 			$MembersForm->redispatch('perch_members');
@@ -1246,13 +1257,144 @@ public function get_package_future_items($opts){
 			$this->set_location_from_address($this->billingAddress);
 		}
 
-	}
+        }
 
-	public function update_shipping_address_for_api($Customer, array $shippingData, $countryID)
-	{
-		if (!$Customer instanceof PerchShop_Customer) {
-			return false;
-		}
+        private function get_shipping_field_names()
+        {
+                return ['first_name', 'last_name', 'company', 'address_1', 'address_2', 'postcode', 'city', 'county', 'country', 'phone', 'instructions'];
+        }
+
+        private function normalise_shipping_value($value)
+        {
+                if (is_string($value)) {
+                        return trim($value);
+                }
+
+                if (is_null($value)) {
+                        return '';
+                }
+
+                if (is_scalar($value)) {
+                        return (string)$value;
+                }
+
+                return null;
+        }
+
+        private function normalise_shipping_data($data)
+        {
+                if (!is_array($data)) {
+                        return [];
+                }
+
+                $fields = $this->get_shipping_field_names();
+                $out    = [];
+
+                foreach($fields as $field) {
+                        if (!array_key_exists($field, $data)) {
+                                continue;
+                        }
+
+                        if ($field === 'country') {
+                                $value = $data[$field];
+
+                                if (is_string($value)) {
+                                        $value = trim($value);
+                                } elseif (is_null($value)) {
+                                        $value = '';
+                                } elseif (is_scalar($value)) {
+                                        $value = (string)$value;
+                                } else {
+                                        continue;
+                                }
+
+                                if ($value === '' || !is_numeric($value)) {
+                                        continue;
+                                }
+
+                                $countryID = (int)$value;
+                                if ($countryID <= 0) {
+                                        continue;
+                                }
+
+                                $out[$field] = (string)$countryID;
+                                continue;
+                        }
+
+                        $value = $this->normalise_shipping_value($data[$field]);
+                        if ($value === null) {
+                                continue;
+                        }
+
+                        $out[$field] = $value;
+                }
+
+                return $out;
+        }
+
+        private function extract_shipping_data_from_address(PerchShop_Address $Address)
+        {
+                $dynamic_fields = PerchUtil::json_safe_decode($Address->addressDynamicFields(), true);
+
+                if (!is_array($dynamic_fields)) {
+                        $dynamic_fields = [];
+                }
+
+                if (!isset($dynamic_fields['country']) || $dynamic_fields['country'] === '') {
+                        $dynamic_fields['country'] = $Address->countryID();
+                }
+
+                return $this->normalise_shipping_data($dynamic_fields);
+        }
+
+        public function update_member_shipping_profile($memberID, array $shippingData)
+        {
+                $memberID = (int)$memberID;
+                if ($memberID <= 0) {
+                        return false;
+                }
+
+                $normalised = $this->normalise_shipping_data($shippingData);
+
+                if (!PerchUtil::count($normalised)) {
+                        return false;
+                }
+
+                $required = ['first_name', 'last_name', 'address_1', 'postcode', 'country'];
+
+                foreach($required as $field) {
+                        if (!isset($normalised[$field]) || $normalised[$field] === '') {
+                                return false;
+                        }
+                }
+
+                $profileData = [];
+
+                foreach($normalised as $field=>$value) {
+                        $profileData['shipping_'.$field] = $value;
+                }
+
+                if (!PerchUtil::count($profileData)) {
+                        return false;
+                }
+
+                perch_member_api_update_profile($memberID, $profileData);
+
+                return true;
+        }
+
+        public function update_member_shipping_profile_from_address(PerchShop_Address $Address, $memberID)
+        {
+                $shippingData = $this->extract_shipping_data_from_address($Address);
+
+                return $this->update_member_shipping_profile($memberID, $shippingData);
+        }
+
+        public function update_shipping_address_for_api($Customer, array $shippingData, $countryID)
+        {
+                if (!$Customer instanceof PerchShop_Customer) {
+                        return false;
+                }
 
 		$countryID = (int) $countryID;
 		if ($countryID <= 0) {

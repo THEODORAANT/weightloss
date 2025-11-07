@@ -427,11 +427,27 @@ return $response;
         $Customers = new PerchShop_Customers($this->api);
         $Customer = $Customers->find($this->customerID());
 //echo "66";
-		// Update stock levels
-		$is_reorder=false;
-		if (PerchUtil::count($products)) {
-			foreach($products as $Product) {
-				if ($Product->itemQty()) {
+        if ($Customer && $Customer->memberID()) {
+                $Addresses = new PerchShop_Addresses($this->api);
+                $ShippingAddress = null;
+
+                if ($this->orderShippingAddress()) {
+                        $ShippingAddress = $Addresses->find((int)$this->orderShippingAddress());
+                } else {
+                        $ShippingAddress = $Addresses->find_for_customer($Customer->id(), 'shipping');
+                }
+
+                if ($ShippingAddress instanceof PerchShop_Address) {
+                        $Runtime = PerchShop_Runtime::fetch();
+                        $Runtime->update_member_shipping_profile_from_address($ShippingAddress, $Customer->memberID());
+                }
+        }
+
+                // Update stock levels
+                $is_reorder=false;
+                if (PerchUtil::count($products)) {
+                        foreach($products as $Product) {
+                                if ($Product->itemQty()) {
 
 					$adjustment = 0 - ((int)$Product->itemQty());
 					$Product->update_stock_level($adjustment);	
