@@ -27,7 +27,7 @@ if (isset($_GET['fetch']) && $_GET['fetch'] === 'messages') {
     }
 
     $after = isset($_GET['after']) ? (int)$_GET['after'] : null;
-    $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $after]);
+    $messages = $ChatRepo->get_member_visible_messages($thread['id'], ['after_id' => $after]);
     $ChatRepo->mark_thread_read_by_member($thread['id']);
 
     $respond_with_json(['messages' => format_messages($messages, $memberID)]);
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($body !== '') {
             $messageID = $ChatRepo->add_member_message($memberID, $body);
             if ($messageID) {
-                $messages = $ChatRepo->get_messages($thread['id'], ['after_id' => $messageID - 1]);
+                $messages = $ChatRepo->get_member_visible_messages($thread['id'], ['after_id' => $messageID - 1]);
                 $ChatRepo->mark_thread_read_by_member($thread['id']);
                 if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
                     $respond_with_json(['messages' => format_messages($messages, $memberID)]);
@@ -67,7 +67,7 @@ if (!$tables_ready) {
     return;
 }
 
-$messages = $thread ? $ChatRepo->get_messages($thread['id']) : [];
+$messages = $thread ? $ChatRepo->get_member_visible_messages($thread['id']) : [];
 if ($thread) {
     $ChatRepo->mark_thread_read_by_member($thread['id']);
 }

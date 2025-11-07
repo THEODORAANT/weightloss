@@ -163,6 +163,29 @@ class PerchMembers_ChatRepository
         return $this->db->get_rows($sql) ?: [];
     }
 
+    public function get_member_visible_messages($threadID, $opts = [])
+    {
+        if (!$this->tables_ready()) {
+            return [];
+        }
+
+        $threadID = (int)$threadID;
+        if ($threadID < 1) {
+            return [];
+        }
+
+        $after_id = isset($opts['after_id']) ? (int)$opts['after_id'] : 0;
+        $last_closed_id = $this->get_last_closed_message_id($threadID);
+
+        if ($last_closed_id > $after_id) {
+            $after_id = $last_closed_id;
+        }
+
+        $opts['after_id'] = $after_id;
+
+        return $this->get_messages($threadID, $opts);
+    }
+
     public function add_member_message($memberID, $body)
     {
         if (!$this->tables_ready()) {
