@@ -1,68 +1,144 @@
 <perch:before>
 
 </perch:before>
-<div class="product d-flex active" data-product="<perch:shop id="slug" type="slug" />">
-
-
-
-<div class="product_text">
-
-    <h3><perch:shop id="title" type="text" /></h3>
-
-    <p class="d-inline-block"><del>		<perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" />
-    </del> </p> <span><strong>		<perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" />
-</strong></span>
-    <p>Select your next dose:<br/>
-
-    </p>
-        <perch:form id="cart<perch:shop id="productID" env-autofill="false" />" action="/order/cart" app="perch_shop">
-
-            <perch:input class="form-control mb-4 dose_dropdown" type="select" id="product<perch:shop id="productID" env-autofill="false" />" name="dose"
-                         options="<perch:shop id="_variant_opts" type="hidden" />" />
-
-            <perch:cartitems>
-                <perch:input id="qty:<perch:cartitem id="identifier" />" value="<perch:cartitem id="quantity" />" type="number" min="0" />
-            </perch:cartitems>
-
-
-        <perch:input class="btn btn-primary next_btn mt-4 mb-3 next-btn" id="submitbtn<perch:shop id="productID" env-autofill="false" />"  type="submit" value="Add to Basket" />
-        </perch:form>
-
+<div class="order-card card-shadow" data-product="<perch:shop id="slug" type="slug" />">
+  <div class="order-card__header">
+    <h3 class="order-card__title"><perch:shop id="title" type="text" /></h3>
+    <div class="order-card__price">
+      <perch:if exists="sale_price">
+        <span class="order-card__price-old"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></span>
+        <span class="order-card__price-current"><perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" /></span>
+      <perch:else />
+        <span class="order-card__price-current"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></span>
+      </perch:if>
+    </div>
+  </div>
+  <p class="order-card__description">Select your next dose to keep your plan on schedule.</p>
+  <perch:form id="cart<perch:shop id="productID" env-autofill="false" />" action="/order/cart" app="perch_shop" class="order-card__form">
+    <div class="order-card__field">
+      <label class="order-card__label" for="product<perch:shop id="productID" env-autofill="false" />">Choose dosage</label>
+      <perch:input class="form-select order-card__select" type="select" id="product<perch:shop id="productID" env-autofill="false" />" name="dose" options="<perch:shop id="_variant_opts" type="hidden" />" />
+    </div>
+    <perch:cartitems>
+      <perch:input id="qty:<perch:cartitem id="identifier" />" value="<perch:cartitem id="quantity" />" type="number" min="0" class="visually-hidden" />
+    </perch:cartitems>
+    <perch:input class="btn btn-primary order-card__submit" id="submitbtn<perch:shop id="productID" env-autofill="false" />" type="submit" value="Add to basket" />
+  </perch:form>
 </div>
-</div>
-
 
 <perch:after>
-
 </perch:after>
 <style>
-/* Style for the select element */
-.dose_dropdown {
-width: 100%; /* Ensures it takes up full container width */
-padding: 10px; /* Adds padding inside the select box */
-font-size: 16px; /* Adjusts font size */
-border: 2px solid #ccc; /* Adds a light border */
-border-radius: 5px; /* Rounds the corners */
-background-color: #f8f9fa; /* Light background color */
-transition: all 0.3s ease; /* Smooth transition effect */
-}
+  .order-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
 
-/* Hover effect for select element */
-.dose_dropdown:hover {
-border-color: #007bff; /* Changes border color when hovered */
-background-color: #e9ecef; /* Slightly darker background */
-}
+  .order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 56px rgba(8, 28, 59, 0.12);
+  }
 
-/* Style for the options inside the select element */
-.dose_dropdown option {
-font-size: 16px; /* Ensures option text has same font size */
-padding: 10px; /* Adds space inside options */
-background-color: #fff; /* Ensures background color of options is white */
-}
+  .order-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-/* Style for when the select dropdown is open */
-.dose_dropdown:focus {
-border-color: #007bff; /* Adds a blue border on focus */
-outline: none; /* Removes the default focus outline */
-}
+  .order-card__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #081c3b;
+  }
+
+  .order-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .order-card__price-old {
+    font-size: 0.95rem;
+    color: #7c889d;
+    text-decoration: line-through;
+  }
+
+  .order-card__price-current {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #11315a;
+  }
+
+  .order-card__description {
+    margin: 20px 0;
+    color: #4d5b75;
+    font-size: 0.98rem;
+  }
+
+  .order-card__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .order-card__field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .order-card__label {
+    font-weight: 600;
+    color: #1f2a44;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .order-card__select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(17, 49, 90, 0.2);
+    border-radius: 12px;
+    background-color: #f8fbff;
+    color: #1f2a44;
+    font-weight: 500;
+  }
+
+  .order-card__select:focus {
+    border-color: #11315a;
+    box-shadow: 0 0 0 4px rgba(17, 49, 90, 0.12);
+    outline: none;
+  }
+
+  .order-card__submit {
+    align-self: flex-start;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    box-shadow: 0 12px 30px rgba(17, 49, 90, 0.2);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  @media (max-width: 575px) {
+    .order-card__submit {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
 </style>
