@@ -482,8 +482,10 @@ function format_messages(array $messages, int $memberID)
       })
         .then(response => response.json())
         .then(data => {
-          if (data && Array.isArray(data.messages)) {
-            appendMessages(data.messages);
+          if (data && typeof data === 'object') {
+            if (Array.isArray(data.messages)) {
+              appendMessages(data.messages);
+            }
             textarea.value = '';
           }
         })
