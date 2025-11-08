@@ -208,9 +208,7 @@ echo '</div>';
       reader.onload = function (e) {
         const img = document.createElement('img');
         img.src = e.target.result;
-        img.width = 320;
-        img.height = 240;
-        img.className = 'me-3 mb-3';
+        img.className = 'preview-media-item';
         img.alt = 'Image Preview';
         container.appendChild(img);
       };
@@ -220,10 +218,8 @@ echo '</div>';
     function createVideoPreview(file, container) {
       const url = URL.createObjectURL(file);
       const video = document.createElement('video');
-      video.width = 320;
-      video.height = 240;
       video.controls = true;
-      video.className = 'me-3 mb-3';
+      video.className = 'preview-media-item';
       video.src = url;
       video.onloadeddata = function () {
         URL.revokeObjectURL(url);
@@ -598,6 +594,32 @@ echo '</div>';
 
         .upload-box .preview {
             flex-grow: 1;
+            border: 1px dashed #d3d9e6;
+            border-radius: 12px;
+            background-color: #f9fbff;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .preview-media-item {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .preview-media-item:not(video) {
+            width: 100%;
+        }
+
+        video.preview-media-item {
+            width: 100%;
+            height: auto;
         }
 
         .upload-helper-text {
