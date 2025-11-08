@@ -6,11 +6,11 @@
             <p>
                 <perch:input type="hidden" id="documentType" name="documentType" value="id-documents"  />
                 <div class="upload-input-group" data-file-input-group>
-                    <perch:input type="file" name="image[]" id="image" accept="image/*" required multiple="multiple" class="document-image-input upload-input-control" />
+                    <perch:input type="file" name="image[]" id="image" accept="image/*,application/pdf" required multiple="multiple" class="document-image-input upload-input-control" />
                     <button type="button" class="btn btn-outline-primary upload-file-trigger" data-file-trigger>
-                        Select images
+                        Select files
                     </button>
-                    <span class="upload-file-summary" data-file-summary data-empty-text="No images selected">No images selected</span>
+                    <span class="upload-file-summary" data-file-summary data-empty-text="No files selected">No files selected</span>
                 </div>
                 <br><br>
             </p>

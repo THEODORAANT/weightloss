@@ -94,6 +94,12 @@ function isVideoFile($filename) {
     return in_array($ext, $videoExtensions);
 }
 
+function isDocumentFile($filename) {
+    $documentExtensions = ['pdf'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    return in_array($ext, $documentExtensions);
+}
+
   // your 'success' and 'failure' URLs
 if (perch_member_logged_in()) {
 //perch_shop_orders();
@@ -133,10 +139,12 @@ foreach ($docs as $x => $y) {
             <div class="document-card__body">
                 <p class="mb-3">We still need a replacement file for this document. Upload it below.</p>
                 <?php
-                if (isImageFile($y["name"])) {
-                    perch_member_form('upload-image.html');
+                if ($y["type"] === 'order-proof') {
+                    perch_member_form('upload-proof.html');
                 } else if (isVideoFile($y["name"])) {
                     perch_member_form('upload-video.html');
+                } else {
+                    perch_member_form('upload-image.html');
                 }
                 ?>
             </div>
@@ -159,6 +167,10 @@ foreach ($docs as $x => $y) {
                             <source src="' . $safeUrl . '" type="video/' . $safeExtension . '">
                             Your browser does not support the video tag.
                           </video>';
+                } else if (isDocumentFile($y["name"])) {
+                    $fileUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/perch/addons/apps/perch_members/documents/' . rawurlencode($y['name']);
+                    $safeUrl = htmlspecialchars($fileUrl, ENT_QUOTES, 'UTF-8');
+                    echo '<a class="preview-document" href="' . $safeUrl . '" target="_blank" rel="noopener">View PDF document</a>';
                 } ?>
              </div>
          <?php } ?>
@@ -655,6 +667,29 @@ echo '</div>';
         .preview-media {
             max-width: 100%;
             border-radius: 8px;
+        }
+
+        .preview-document {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #4338ca;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .preview-document::before {
+            content: 'PDF';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background-color: rgba(99, 102, 241, 0.12);
+            color: #4338ca;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
         }
 
         .upload-grid {
