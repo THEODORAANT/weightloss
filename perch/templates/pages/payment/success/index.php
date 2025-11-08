@@ -114,9 +114,18 @@ foreach ($docs as $x => $y) {
         $hasIdDocuments = true;
     }
 
-    $documentTypeLabel = '';
-    if($y["type"]=="id-documents"){ $documentTypeLabel = "ID and video documents";}
-    else if($y["type"]=="order-proof"){ $documentTypeLabel = "Proof of Purchase"; }
+    $documentTypeLabels = [
+        'id-documents'      => 'ID and video documents',
+        'order-proof'       => 'Proof of purchase',
+        'proof-of-purchase' => 'Proof of purchase',
+    ];
+
+    $documentType = isset($y['type']) ? (string)$y['type'] : '';
+    if (array_key_exists($documentType, $documentTypeLabels)) {
+        $documentTypeLabel = $documentTypeLabels[$documentType];
+    } else {
+        $documentTypeLabel = ucwords(str_replace(['-', '_'], ' ', $documentType));
+    }
 
  ?>
 
