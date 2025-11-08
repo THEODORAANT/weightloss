@@ -259,14 +259,59 @@ echo '</div>';
       });
     });
 
-    document.querySelectorAll('input[name="upload"]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        const loading = document.getElementById('uploadLoading');
-        if (loading) {
-          loading.hidden = false;
+    const uploadLoading = document.getElementById('uploadLoading');
+
+    document.querySelectorAll('.upload-form').forEach(function (form) {
+      const submitButton = form.querySelector('input[name="upload"]');
+
+      if (!submitButton) {
+        return;
+      }
+
+      const originalLabel = submitButton.value;
+
+      function resetButton() {
+        submitButton.disabled = false;
+        submitButton.value = originalLabel;
+        if (uploadLoading) {
+          uploadLoading.hidden = true;
         }
-        this.value = 'Uploading…';
+      }
+
+      form.addEventListener('submit', function (event) {
+        const hasFiles = Array.from(
+          form.querySelectorAll('input[type="file"]')
+        ).some(function (input) {
+          return input.files && input.files.length > 0;
+        });
+
+        if (!hasFiles) {
+          resetButton();
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.value = 'Uploading…';
+        if (uploadLoading) {
+          uploadLoading.hidden = false;
+        }
+
+        window.setTimeout(function () {
+          if (event.defaultPrevented) {
+            resetButton();
+          }
+        }, 0);
       });
+
+      form.addEventListener(
+        'invalid',
+        function () {
+          resetButton();
+        },
+        true
+      );
+
+      form.addEventListener('reset', resetButton);
     });
 
     const helperVideo = document.getElementById('helperVideo');
