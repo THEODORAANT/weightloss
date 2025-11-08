@@ -227,6 +227,60 @@ echo '</div>';
       container.appendChild(video);
     }
 
+    function updateFileSummary(input, summary) {
+      if (!summary) {
+        return;
+      }
+
+      const emptyText = summary.getAttribute('data-empty-text') || 'No files selected';
+      const files = input && input.files ? Array.from(input.files) : [];
+
+      if (files.length === 0) {
+        summary.textContent = emptyText;
+        summary.classList.remove('upload-file-summary--has-files');
+        return;
+      }
+
+      if (files.length === 1) {
+        summary.textContent = files[0].name;
+      } else {
+        summary.textContent = files.length + ' files selected';
+      }
+
+      summary.classList.add('upload-file-summary--has-files');
+    }
+
+    function initializeFileGroups(context) {
+      (context || document)
+        .querySelectorAll('[data-file-input-group]')
+        .forEach(function (group) {
+          const input = group.querySelector('input[type="file"]');
+          const trigger = group.querySelector('[data-file-trigger]');
+          const summary = group.querySelector('[data-file-summary]');
+
+          if (!input || !trigger) {
+            return;
+          }
+
+          if (group.dataset.fileGroupInitialized !== 'true') {
+            trigger.addEventListener('click', function (event) {
+              event.preventDefault();
+              input.click();
+            });
+
+            input.addEventListener('change', function () {
+              updateFileSummary(input, summary);
+            });
+
+            group.dataset.fileGroupInitialized = 'true';
+          }
+
+          updateFileSummary(input, summary);
+        });
+    }
+
+    initializeFileGroups(document);
+
     document.querySelectorAll('.document-image-input').forEach(function (input) {
       input.addEventListener('change', function () {
         const wrapper = this.closest('.document-card') || this.closest('.plan');
@@ -311,7 +365,12 @@ echo '</div>';
         true
       );
 
-      form.addEventListener('reset', resetButton);
+      form.addEventListener('reset', function () {
+        resetButton();
+        window.setTimeout(function () {
+          initializeFileGroups(form);
+        }, 0);
+      });
     });
 
     const helperVideo = document.getElementById('helperVideo');
@@ -635,6 +694,42 @@ echo '</div>';
             flex-direction: column;
             gap: 12px;
             height: 100%;
+        }
+
+        .upload-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .upload-input-control {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .upload-file-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-file-summary {
+            font-size: 0.875rem;
+            color: #4d5b75;
+        }
+
+        .upload-file-summary--has-files {
+            color: #1f2937;
+            font-weight: 600;
         }
 
         .upload-box .preview {
