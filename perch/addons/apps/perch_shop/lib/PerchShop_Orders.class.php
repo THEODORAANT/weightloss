@@ -195,7 +195,7 @@ class PerchShop_Orders extends PerchShop_Factory
 
 		return $this->return_instances($rows);
 	}
-        public function get_by_properties($details,$Paging=false){
+        public function get_by_properties($details, $Paging=false, $status_filter=null){
 //echo "get_by_properties";
 //print_r($details);
 $sort_val = null;
@@ -211,9 +211,24 @@ $sort_val = null;
 
         $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
          $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
+
+                if ($status_filter === null) {
+                        $status_filter = ['paid'];
+                } elseif (!is_array($status_filter)) {
+                        $status_filter = [$status_filter];
+                }
+
+                $status_filter = array_values(array_filter($status_filter, function($status) {
+                        return $status !== '';
+                }));
+
+                if (!PerchUtil::count($status_filter)) {
+                        $status_filter = ['paid'];
+                }
+
                 $wheresql = ' WHERE o.customerID=c.customerID
                                 AND o.orderDeleted IS NULL
-                                AND o.orderStatus IN ("paid")';
+                                AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status_filter).')';
 
         if (isset($details['name']) && $details['name'] !== '') {
             $name = '%'.$details['name'].'%';
