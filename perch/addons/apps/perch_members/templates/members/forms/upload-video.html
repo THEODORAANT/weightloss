@@ -4,7 +4,16 @@
     <div class="plan"  data-save="8">
         <div>
             <h5>  <perch:label for="video">Video Document:</perch:label><br></h5>
-            <p>        <perch:input type="hidden" name="documentType" id="documentType" value="id-documents"  />           <perch:input type="file" name="video[]" id="video" accept="video/*" required multiple="multiple" class="document-video-input" /><br><br>
+            <p>
+                <perch:input type="hidden" name="documentType" id="documentType" value="id-documents"  />
+                <div class="upload-input-group" data-file-input-group>
+                    <perch:input type="file" name="video[]" id="video" accept="video/*" required multiple="multiple" class="document-video-input upload-input-control" />
+                    <button type="button" class="btn btn-outline-primary upload-file-trigger" data-file-trigger>
+                        Select videos
+                    </button>
+                    <span class="upload-file-summary" data-file-summary data-empty-text="No videos selected">No videos selected</span>
+                </div>
+                <br><br>
                 <br><br>
             </p>
         </div>
