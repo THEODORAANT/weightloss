@@ -52,6 +52,22 @@ $notDeletedCondition = function ($column) {
     return sprintf('%1$s IS NULL OR %1$s = "" OR %1$s = "0000-00-00 00:00:00"', $column);
 };
 
+$daily_orders_limit = 30;
+
+$daily_orders_sql = sprintf(
+    'SELECT DATE(orderCreated) AS period, COUNT(*) AS total_orders'
+    . ' FROM %1$s'
+    . ' WHERE (%3$s) AND (%2$s)'
+    . ' GROUP BY period'
+    . ' ORDER BY period DESC'
+    . ' LIMIT %4$d',
+    $orders_table,
+    $notDeletedCondition('orderDeleted'),
+    $order_status_condition,
+    (int)$daily_orders_limit
+);
+$daily_orders = $DB->get_rows($daily_orders_sql) ?: [];
+
 $monthly_orders_sql = sprintf(
     'SELECT DATE_FORMAT(orderCreated, "%%Y-%%m") AS period, COUNT(*) AS total_orders'
     . ' FROM %1$s'
@@ -296,6 +312,29 @@ $total_conversions = array_sum(array_map(function ($row) {
     </div>
 
     <div class="grid">
+        <section>
+            <h2>Orders by Day (Last <?= (int)$daily_orders_limit ?> Days)</h2>
+            <?php if (!empty($daily_orders)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Total Orders</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($daily_orders as $row): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['period'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= number_format((int)$row['total_orders']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <div class="empty">No daily order records available.</div>
+            <?php endif; ?>
+        </section>
         <section>
             <h2>Orders by Month</h2>
             <?php if (!empty($monthly_orders)): ?>
