@@ -94,6 +94,12 @@ function isVideoFile($filename) {
     return in_array($ext, $videoExtensions);
 }
 
+function isDocumentFile($filename) {
+    $documentExtensions = ['pdf'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    return in_array($ext, $documentExtensions);
+}
+
   // your 'success' and 'failure' URLs
 if (perch_member_logged_in()) {
 //perch_shop_orders();
@@ -133,10 +139,12 @@ foreach ($docs as $x => $y) {
             <div class="document-card__body">
                 <p class="mb-3">We still need a replacement file for this document. Upload it below.</p>
                 <?php
-                if (isImageFile($y["name"])) {
-                    perch_member_form('upload-image.html');
+                if ($y["type"] === 'order-proof') {
+                    perch_member_form('upload-proof.html');
                 } else if (isVideoFile($y["name"])) {
                     perch_member_form('upload-video.html');
+                } else {
+                    perch_member_form('upload-image.html');
                 }
                 ?>
             </div>
@@ -159,6 +167,10 @@ foreach ($docs as $x => $y) {
                             <source src="' . $safeUrl . '" type="video/' . $safeExtension . '">
                             Your browser does not support the video tag.
                           </video>';
+                } else if (isDocumentFile($y["name"])) {
+                    $fileUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/perch/addons/apps/perch_members/documents/' . rawurlencode($y['name']);
+                    $safeUrl = htmlspecialchars($fileUrl, ENT_QUOTES, 'UTF-8');
+                    echo '<a class="preview-document" href="' . $safeUrl . '" target="_blank" rel="noopener">View PDF document</a>';
                 } ?>
              </div>
          <?php } ?>
@@ -226,6 +238,60 @@ echo '</div>';
       };
       container.appendChild(video);
     }
+
+    function updateFileSummary(input, summary) {
+      if (!summary) {
+        return;
+      }
+
+      const emptyText = summary.getAttribute('data-empty-text') || 'No files selected';
+      const files = input && input.files ? Array.from(input.files) : [];
+
+      if (files.length === 0) {
+        summary.textContent = emptyText;
+        summary.classList.remove('upload-file-summary--has-files');
+        return;
+      }
+
+      if (files.length === 1) {
+        summary.textContent = files[0].name;
+      } else {
+        summary.textContent = files.length + ' files selected';
+      }
+
+      summary.classList.add('upload-file-summary--has-files');
+    }
+
+    function initializeFileGroups(context) {
+      (context || document)
+        .querySelectorAll('[data-file-input-group]')
+        .forEach(function (group) {
+          const input = group.querySelector('input[type="file"]');
+          const trigger = group.querySelector('[data-file-trigger]');
+          const summary = group.querySelector('[data-file-summary]');
+
+          if (!input || !trigger) {
+            return;
+          }
+
+          if (group.dataset.fileGroupInitialized !== 'true') {
+            trigger.addEventListener('click', function (event) {
+              event.preventDefault();
+              input.click();
+            });
+
+            input.addEventListener('change', function () {
+              updateFileSummary(input, summary);
+            });
+
+            group.dataset.fileGroupInitialized = 'true';
+          }
+
+          updateFileSummary(input, summary);
+        });
+    }
+
+    initializeFileGroups(document);
 
     document.querySelectorAll('.document-image-input').forEach(function (input) {
       input.addEventListener('change', function () {
@@ -311,7 +377,12 @@ echo '</div>';
         true
       );
 
-      form.addEventListener('reset', resetButton);
+      form.addEventListener('reset', function () {
+        resetButton();
+        window.setTimeout(function () {
+          initializeFileGroups(form);
+        }, 0);
+      });
     });
 
     const helperVideo = document.getElementById('helperVideo');
@@ -598,6 +669,29 @@ echo '</div>';
             border-radius: 8px;
         }
 
+        .preview-document {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #4338ca;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .preview-document::before {
+            content: 'PDF';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background-color: rgba(99, 102, 241, 0.12);
+            color: #4338ca;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+        }
+
         .upload-grid {
             display: grid;
             gap: 24px;
@@ -635,6 +729,42 @@ echo '</div>';
             flex-direction: column;
             gap: 12px;
             height: 100%;
+        }
+
+        .upload-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .upload-input-control {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .upload-file-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-file-summary {
+            font-size: 0.875rem;
+            color: #4d5b75;
+        }
+
+        .upload-file-summary--has-files {
+            color: #1f2937;
+            font-weight: 600;
         }
 
         .upload-box .preview {
