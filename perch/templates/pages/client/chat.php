@@ -18,7 +18,7 @@ $respond_with_json = function (array $payload) {
 };
 
 if ($tables_ready) {
-    $thread = $ChatRepo->get_or_create_thread_for_member($memberID);
+    $thread = $ChatRepo->get_thread_for_member($memberID);
 }
 
 if (isset($_GET['fetch']) && $_GET['fetch'] === 'messages') {
@@ -34,15 +34,18 @@ if (isset($_GET['fetch']) && $_GET['fetch'] === 'messages') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($tables_ready && $thread) {
+    if ($tables_ready) {
         $body = trim((string)($_POST['message'] ?? ''));
         if ($body !== '') {
             $messageID = $ChatRepo->add_member_message($memberID, $body);
             if ($messageID) {
-                $messages = $ChatRepo->get_member_visible_messages($thread['id'], ['after_id' => $messageID - 1]);
-                $ChatRepo->mark_thread_read_by_member($thread['id']);
-                if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
-                    $respond_with_json(['messages' => format_messages($messages, $memberID)]);
+                $thread = $ChatRepo->get_thread_for_member($memberID);
+                if ($thread) {
+                    $messages = $ChatRepo->get_member_visible_messages($thread['id'], ['after_id' => $messageID - 1]);
+                    $ChatRepo->mark_thread_read_by_member($thread['id']);
+                    if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest') {
+                        $respond_with_json(['messages' => format_messages($messages, $memberID)]);
+                    }
                 }
             }
         }
