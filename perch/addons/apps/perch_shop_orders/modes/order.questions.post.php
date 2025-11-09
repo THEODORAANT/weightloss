@@ -15,6 +15,10 @@
         echo $message;
     }
 
+    if ($manual_question_message) {
+        echo $manual_question_message;
+    }
+
     echo '<div class="inner">';
 
     $questions_rendered = false;
@@ -31,6 +35,31 @@
                     $answers_by_slug[$slug] = $Answer;
                 }
             }
+        }
+
+        $missing_questions = [];
+        if (is_array($questions) && count($questions)) {
+            foreach ($questions as $slug => $label) {
+                if (!isset($answers_by_slug[$slug])) {
+                    $missing_questions[$slug] = $label;
+                }
+            }
+        }
+
+        $manual_form_html = '';
+        if (PerchUtil::count($missing_questions)) {
+            ob_start();
+            echo '<div class="manual-question">';
+            echo '<h3>'.$Lang->get('Manually add an answer').'</h3>';
+            echo '<p>'.$Lang->get('Use this form to record an answer for any question that is missing from this questionnaire.').'</p>';
+            echo $ManualQuestionForm->form_start(false, 'manual-question-form-'.$section['type']);
+            echo '<input type="hidden" name="question_type" value="'.PerchUtil::html($section['type']).'">';
+            echo $ManualQuestionForm->select_field('question_slug', 'Question', $missing_questions);
+            echo $ManualQuestionForm->textarea_field('manual_answer_text', 'Answer', '', 'input-simple');
+            echo $ManualQuestionForm->submit_field('btnAddManual', 'Add answer');
+            echo $ManualQuestionForm->form_end();
+            echo '</div>';
+            $manual_form_html = ob_get_clean();
         }
 
         $answer_indicates_allergies = static function ($answerText) {
@@ -63,6 +92,7 @@
 
         if (!PerchUtil::count($answers_by_slug)) {
             echo '<p>'.$Lang->get('No responses recorded for this questionnaire.').'</p>';
+            echo $manual_form_html;
             continue;
         }
 
@@ -147,6 +177,8 @@
         echo '</tbody>';
         echo '</table>';
         echo '</div>';
+
+        echo $manual_form_html;
     }
 
     if (!$questions_rendered) {

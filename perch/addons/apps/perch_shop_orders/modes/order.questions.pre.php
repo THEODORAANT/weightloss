@@ -3,7 +3,13 @@
         $Orders     = new PerchShop_Orders($API);
         $Customers  = new PerchShop_Customers($API);
         $Form       = $API->get('Form');
+        $ManualQuestionForm = $API->get('Form');
+        $ManualQuestionForm->set_name('manual_question');
+        $ManualQuestionForm->require_field('question_type', 'Please select a questionnaire.');
+        $ManualQuestionForm->require_field('question_slug', 'Please select a question.');
+        $ManualQuestionForm->require_field('manual_answer_text', 'Please enter an answer.');
         $message    = false;
+        $manual_question_message = false;
         $smartbar_selection = 'questions';
         $questionnaire_notes = '';
 
@@ -62,20 +68,145 @@
                     $questionnaire_notes = $note;
                 }
 
-                $questionnaire_sections = [
-                    [
-                        'type'      => 'first-order',
-                        'title'     => $Lang->get('First-order questionnaire'),
-                        'questions' => $Questionnaires->get_questions('first-order'),
-                        'answers'   => $Questionnaires->get_for_order($order_id, 'first-order'),
-                    ],
-                    [
-                        'type'      => 're-order',
-                        'title'     => $Lang->get('Re-order questionnaire'),
-                        'questions' => $Questionnaires->get_questions('re-order'),
-                        'answers'   => $Questionnaires->get_for_order($order_id, 're-order'),
-                    ],
-                ];
+                $buildQuestionnaireSections = function () use ($Questionnaires, $order_id, $Lang) {
+                    return [
+                        [
+                            'type'      => 'first-order',
+                            'title'     => $Lang->get('First-order questionnaire'),
+                            'questions' => $Questionnaires->get_questions('first-order'),
+                            'answers'   => $Questionnaires->get_for_order($order_id, 'first-order'),
+                        ],
+                        [
+                            'type'      => 're-order',
+                            'title'     => $Lang->get('Re-order questionnaire'),
+                            'questions' => $Questionnaires->get_questions('re-order'),
+                            'answers'   => $Questionnaires->get_for_order($order_id, 're-order'),
+                        ],
+                    ];
+                };
+
+                $questionnaire_sections = $buildQuestionnaireSections();
+
+                if ($ManualQuestionForm->submitted()) {
+                    $postvars = ['question_type', 'question_slug', 'manual_answer_text'];
+                    $manual_data = $ManualQuestionForm->receive($postvars);
+
+                    $question_type = isset($manual_data['question_type']) ? trim((string) $manual_data['question_type']) : '';
+                    $question_slug = isset($manual_data['question_slug']) ? trim((string) $manual_data['question_slug']) : '';
+                    $answer_text   = isset($manual_data['manual_answer_text']) ? trim((string) $manual_data['manual_answer_text']) : '';
+
+                    $section_lookup = [];
+                    foreach ($questionnaire_sections as $section) {
+                        $section_lookup[$section['type']] = $section;
+                    }
+
+                    if ($question_type === '' || !isset($section_lookup[$question_type])) {
+                        $ManualQuestionForm->error = true;
+                        $ManualQuestionForm->messages['question_type'] = 'Please select a valid questionnaire.';
+                        $manual_question_message = $HTML->failure_message('Please select a valid questionnaire.');
+                    } elseif ($question_slug === '') {
+                        $ManualQuestionForm->error = true;
+                        $ManualQuestionForm->messages['question_slug'] = 'Please select a valid question.';
+                        $manual_question_message = $HTML->failure_message('Please select a valid question.');
+                    } else {
+                        $available_questions = $section_lookup[$question_type]['questions'];
+
+                        if (!is_array($available_questions) || !isset($available_questions[$question_slug])) {
+                            $ManualQuestionForm->error = true;
+                            $ManualQuestionForm->messages['question_slug'] = 'Please select a valid question.';
+                            $manual_question_message = $HTML->failure_message('Please select a valid question.');
+                        } else {
+                            $existing_answers = $section_lookup[$question_type]['answers'];
+                            $existing_slugs = [];
+                            $existing_uuid = '';
+
+                            if (PerchUtil::count($existing_answers)) {
+                                foreach ($existing_answers as $ExistingAnswer) {
+                                    $slug = $ExistingAnswer->question_slug();
+                                    if ($slug !== null && $slug !== '') {
+                                        $existing_slugs[$slug] = true;
+                                    }
+
+                                    if ($existing_uuid === '') {
+                                        $candidate_uuid = trim((string) $ExistingAnswer->uuid());
+                                        if ($candidate_uuid !== '') {
+                                            $existing_uuid = $candidate_uuid;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (isset($existing_slugs[$question_slug])) {
+                                $ManualQuestionForm->error = true;
+                                $ManualQuestionForm->messages['question_slug'] = 'This question already has an answer.';
+                                $manual_question_message = $HTML->failure_message('This question already has an answer for this order.');
+                            } elseif ($answer_text === '') {
+                                $ManualQuestionForm->error = true;
+                                $ManualQuestionForm->messages['manual_answer_text'] = 'Please enter an answer.';
+                                $manual_question_message = $HTML->failure_message('Please enter an answer.');
+                            } else {
+                                $uuid = $existing_uuid;
+
+                                if ($uuid === '' && isset($dynamic_fields['uuid']) && is_string($dynamic_fields['uuid'])) {
+                                    $uuid_candidate = trim((string) $dynamic_fields['uuid']);
+                                    if ($uuid_candidate !== '') {
+                                        $uuid = $uuid_candidate;
+                                    }
+                                }
+
+                                if ($uuid === '') {
+                                    $uuid = 'manual-'.$order_id;
+                                }
+
+                                $question_order = null;
+                                if (method_exists($Questionnaires, 'question_order_column_is_available') && $Questionnaires->question_order_column_is_available()) {
+                                    if (method_exists($Questionnaires, 'get_question_order_for_slug')) {
+                                        $question_order = $Questionnaires->get_question_order_for_slug($question_type, $question_slug);
+                                    }
+                                }
+
+                                $member_id = null;
+                                if ($Customer && $Customer->memberID()) {
+                                    $member_id = (int) $Customer->memberID();
+                                    if ($member_id <= 0) {
+                                        $member_id = null;
+                                    }
+                                }
+
+                                $insert_data = [
+                                    'type'           => $question_type,
+                                    'question_slug'  => $question_slug,
+                                    'question_text'  => $available_questions[$question_slug],
+                                    'answer'         => $answer_text,
+                                    'answer_text'    => $answer_text,
+                                    'member_id'      => $member_id,
+                                    'order_id'       => $order_id,
+                                    'version'        => 'v1',
+                                    'uuid'           => $uuid,
+                                    'created_at'     => date('Y-m-d H:i:s'),
+                                ];
+
+                                if ($question_order !== null) {
+                                    $insert_data['question_order'] = (int) $question_order;
+                                }
+
+                                $ManualQuestionForm->error = false;
+                                $manual_question_message = false;
+
+                                $CreatedAnswer = $Questionnaires->create($insert_data);
+
+                                if ($CreatedAnswer) {
+                                    $ManualQuestionForm->clear();
+                                    $manual_question_message = $HTML->success_message('The answer has been added to this order.');
+                                    $questionnaire_sections = $buildQuestionnaireSections();
+                                } else {
+                                    $ManualQuestionForm->error = true;
+                                    $manual_question_message = $HTML->failure_message('Sorry, the answer could not be saved.');
+                                }
+                            }
+                        }
+                    }
+                }
 
         }else{
             PerchUtil::redirect($API->app_path());
