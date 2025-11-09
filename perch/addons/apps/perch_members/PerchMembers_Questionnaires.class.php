@@ -180,6 +180,26 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             return self::$questionOrderColumnAvailable;
         }
 
+        public function question_order_column_is_available(): bool
+        {
+            return $this->questionOrderColumnAvailable();
+        }
+
+        public function get_question_order_for_slug(string $type, string $slug): ?int
+        {
+            if (!$this->questionOrderColumnAvailable()) {
+                return null;
+            }
+
+            [$orderMap] = $this->buildQuestionOrderMap($type);
+
+            if (isset($orderMap[$slug])) {
+                return (int) $orderMap[$slug];
+            }
+
+            return null;
+        }
+
         protected function backfillQuestionOrderValues(): void
         {
             if (self::$questionOrderBackfilled || !self::$questionOrderColumnAvailable) {
