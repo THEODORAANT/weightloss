@@ -121,6 +121,8 @@
           background-color: #ffffff;
           border-bottom: 1px solid rgba(15, 23, 42, 0.08);
           box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+          position: relative;
+          z-index: 2000; /* keep tabs above sticky header on touch devices */
         }
 
         .client-nav__inner {
