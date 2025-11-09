@@ -81,9 +81,7 @@ class PerchMembers_ChatRepository
             return null;
         }
 
-        $thread = $this->db->get_row(
-            'SELECT * FROM ' . $this->threads_table . ' WHERE memberID = ' . $this->db->pdb($memberID) . ' LIMIT 1'
-        );
+        $thread = $this->get_thread_for_member($memberID);
 
         if ($thread) {
             return $thread;
@@ -120,6 +118,22 @@ class PerchMembers_ChatRepository
 
         return $this->db->get_row(
             'SELECT * FROM ' . $this->threads_table . ' WHERE id = ' . $this->db->pdb($threadID) . ' LIMIT 1'
+        );
+    }
+
+    public function get_thread_for_member($memberID)
+    {
+        if (!$this->tables_ready()) {
+            return null;
+        }
+
+        $memberID = (int)$memberID;
+        if ($memberID < 1) {
+            return null;
+        }
+
+        return $this->db->get_row(
+            'SELECT * FROM ' . $this->threads_table . ' WHERE memberID = ' . $this->db->pdb($memberID) . ' LIMIT 1'
         );
     }
 
@@ -328,7 +342,7 @@ class PerchMembers_ChatRepository
             return false;
         }
 
-        $thread = $this->get_or_create_thread_for_member($memberID);
+        $thread = $this->get_thread_for_member($memberID);
         if (!$thread) {
             return false;
         }
