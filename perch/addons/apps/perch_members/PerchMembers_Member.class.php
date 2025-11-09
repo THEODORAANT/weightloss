@@ -159,6 +159,8 @@ class PerchMembers_Member extends PerchAPI_Base
       $this->sendtoadmin_docs_email( $memberID,"george@nlclinicisleofwight.co.uk");
        $this->sendtoadmin_docs_email( $memberID,"reshat1987@gmail.com");
         }
+
+        return $uploadPerformed;
         }
 
         private function normalise_files_array($fileInput)

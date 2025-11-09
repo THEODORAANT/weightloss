@@ -4,7 +4,13 @@
         <h5><perch:label for="order-proof">If you have previously used a weight loss pen, please upload your last order receipt or proof of purchase.</perch:label></h5>
         <p class="upload-helper-text">Please note that if you have started your weight loss journey with us this is not necessary.</p>
         <perch:input type="hidden" name="documentType" id="documentType" value="order-proof" />
-        <perch:input type="file" name="image[]" id="order-proof" accept="image/*" required multiple="multiple" class="document-image-input" />
+        <div class="upload-input-group" data-file-input-group>
+            <perch:input type="file" name="image[]" id="order-proof" accept="image/*,application/pdf" required multiple="multiple" class="document-image-input upload-input-control" />
+            <button type="button" class="btn btn-outline-primary upload-file-trigger" data-file-trigger>
+                Select files
+            </button>
+            <span class="upload-file-summary" data-file-summary data-empty-text="No files selected">No files selected</span>
+        </div>
     </div>
     <perch:input type="submit" value="Upload" name="upload" class="btn btn-primary next_btn next-btn upload-submit" />
 </perch:form>

@@ -23,115 +23,29 @@ if (!$order_complete) {
     $order_complete = perch_shop_active_order_has_status('pending');
 }
 
-     perch_layout('product/header', [
-          'page_title' => perch_page_title(true),
-      ]);
+    perch_layout('client/header', [
+        'page_title' => perch_page_title(true),
+    ]);
 ?>
-  <style>
-        .subheader {
-          background-color: #fff;
-          border-bottom: 1px solid #e5e5e5;
-        }
-
-        .welcome-msg {
-          padding: 12px 20px;
-          font-size: 16px;
-          color: #333;
-          border-bottom: 1px solid #f1f1f1;
-        }
-
-        .tabs {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          padding: 12px 20px 0;
-          background-color: #f7f9fc;
-        }
-
-        .tab {
-          padding: 10px 16px;
-          border-radius: 6px 6px 0 0;
-          text-decoration: none;
-          color: #4a4a4a;
-          border: 1px solid transparent;
-          border-bottom: 3px solid transparent;
-          transition: all 0.2s ease;
-          font-weight: 500;
-        }
-
-        .tab:hover {
-          color: #0a0a0a;
-          border-color: #d6e4ff;
-          background-color: #eef4ff;
-        }
-
-        .tab.active {
-          color: #0b4db3;
-          border-color: #0b4db3;
-          background-color: #fff;
-        }
-      </style>
-         <?php if (perch_member_logged_in()) { ?>
-   <div class="subheader">
-
-     <div class="welcome-msg">
-       Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
-     </div>
-    <?php $currentUrl =  $_SERVER['REQUEST_URI'];
-
-     $parts = explode('/', $currentUrl);
-     $lastPart = end($parts);
-     $spilit_parts=explode("?", $lastPart);
-
-    //  echo  $lastPart;
-    $profile_tab="";
-        $orders_tab="";
-        $reorder_tab="";
-         $documents_tab="";
-          $affiliate_tab="";
-    if($lastPart=="client"){
-    $profile_tab="active";
-    }else if( $lastPart=="orders" ){
-     $orders_tab="active";
-    }else if( $lastPart=="re-order"){
-        $reorder_tab="active";
-       }else if($lastPart=="success" ){
-             $documents_tab="active";
-             }else if($lastPart=="affiliate-dashboard" ){
-
-             $affiliate_tab="active";
-             }
+<main class="client-documents-main">
+  <section class="client-documents py-5">
+    <div class="container client-documents__container">
+      <div class="client-documents__intro text-center mb-5">
+        <?php if ($order_complete) {
+            perch_shop_empty_cart();
         ?>
-       <div class="tabs">
-         <a href="/client" class="tab <?php echo $profile_tab; ?>">Profile</a>
-                       <a href="/payment/success" class="tab <?php echo $documents_tab; ?>">Documents</a>
+          <span class="client-documents__eyebrow">Payment complete</span>
+          <h1 class="client-documents__heading fw-bolder mb-3">Complete your consultation</h1>
+          <p class="client-documents__lead mb-0">Upload your identification documents and videos below to finalise your order. Review the quick guide before submitting to ensure everything is captured correctly.</p>
+        <?php } else { ?>
+          <span class="client-documents__eyebrow">Documents</span>
+          <h1 class="client-documents__heading fw-bolder mb-3">Your documents</h1>
+          <p class="client-documents__lead mb-0">Upload any missing files and check the progress of your verification documents.</p>
+        <?php } ?>
+      </div>
 
-         <a href="/client/orders" class="tab <?php echo $orders_tab; ?>">Orders</a>
-         <a href="/client/affiliate-dashboard" class="tab <?php echo $affiliate_tab; ?>">Affiliate</a>
-         <a href="/order/re-order" class="tab <?php echo $reorder_tab; ?>">Order</a>
-         <a href="/client/logout" class="tab ">Logout</a>
-       </div>
-
-
-   </div>
-<?php  } ?>
-  <section class="success-section py-5">
-    <div class="container all_content">
-    <?php if ($order_complete) {
-    perch_shop_empty_cart();
-    ?>
-        <div class="page-heading text-center mb-5">
-            <h1 class="fw-bolder mb-3">Complete your consultation</h1>
-            <p class="lead mb-0">Upload your identification documents and videos below to finalise your order. Review the quick guide before submitting to ensure everything is captured correctly.</p>
-        </div>
- <?php }else { ?>
-        <div class="page-heading text-center mb-5">
-            <h1 class="fw-bolder mb-3">Your documents</h1>
-            <p class="lead mb-0">Upload any missing files and check the progress of your verification documents.</p>
-        </div>
-
-   <?php } ?>
-        <div class="upload-helper card-shadow mb-5">
+      <div class="client-documents__content">
+        <div class="upload-helper card-shadow client-documents__helper">
             <div class="helper-header">
                 <div>
                     <h2 class="helper-title">Need a hand recording your video?</h2>
@@ -147,25 +61,25 @@ if (!$order_complete) {
                     </video>
                 </div>
                 <ul class="helper-steps">
-                    <li><strong>Step 1:</strong> Find a quiet, well lit space with your scales close by.</li>
-                    <li><strong>Step 2:</strong> Place your mobile/tablet at a distance so that when you step away we can see you head-to-toe.</li>
-                    <li><strong>Step 3:</strong> Whilst your device is recording, pick it up and step on the scales. Point the camera the display showing your weight. Stop recording.</li>
-                    <li><strong>Step 4:</strong> If the video shows you head-to-toe; clearly shows you stepping onto the scales and the weight, then upload.</li>
+                    <li><strong>Step 1:</strong>Find a quiet, well lit space with your scales close by.</li>
+                    <li><strong>Step 2:</strong>Place your mobile/tablet at a distance so that when you step away we can see you head-to-toe.</li>
+                    <li><strong>Step 3:</strong>Whilst your device is recording, pick it up and step on the scales.Point the camera at the display showing your weight. Stop recording.</li>
+                    <li><strong>Step 4:</strong>If the video shows you head-to-toe; clearly shows you stepping onto the scales and the weight, then upload.</li>
                 </ul>
             </div>
         </div>
 
-    <div id="guideModal" class="modal" role="dialog" aria-modal="true">
-        <button class="close" type="button" aria-label="Close" onclick="closePopup()">&times;</button>
-        <div class="modal-dialog" onclick="event.stopPropagation()">
-            <iframe class="modal-content" id="pdfFrame" src="" data-src="/instructions.mp4" title="Video instructions"></iframe>
+        <div id="guideModal" class="modal" role="dialog" aria-modal="true">
+            <button class="close" type="button" aria-label="Close" onclick="closePopup()">&times;</button>
+            <div class="modal-dialog" onclick="event.stopPropagation()">
+                <iframe class="modal-content" id="pdfFrame" src="" data-src="/instructions.mp4" title="Video instructions"></iframe>
+            </div>
         </div>
-    </div>
 
-    <div id="uploadLoading" class="text-center mb-4" hidden>
-        <img src="/asset/loading.gif" alt="Loading..." width="80" height="80">
-        <p class="small text-muted mt-2">Uploading your files… please keep this page open.</p>
-    </div>
+        <div id="uploadLoading" class="text-center mb-4" hidden>
+            <img src="/asset/loading.gif" alt="Loading..." width="80" height="80">
+            <p class="small text-muted mt-2">Uploading your files… please keep this page open.</p>
+        </div>
 
 <?php
 function isImageFile($filename) {
@@ -180,6 +94,12 @@ function isVideoFile($filename) {
     return in_array($ext, $videoExtensions);
 }
 
+function isDocumentFile($filename) {
+    $documentExtensions = ['pdf'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    return in_array($ext, $documentExtensions);
+}
+
   // your 'success' and 'failure' URLs
 if (perch_member_logged_in()) {
 //perch_shop_orders();
@@ -187,36 +107,53 @@ if (perch_member_logged_in()) {
 $docs=perch_member_documents();
 $hasIdDocuments = false;
 if($docs){
-echo '<div class="documents-grid">';
+echo '<div class="documents-grid client-documents__documents">';
 foreach ($docs as $x => $y) {
 
     if($y["type"]=="id-documents") {
         $hasIdDocuments = true;
     }
 
-    $documentTypeLabel = '';
-    if($y["type"]=="id-documents"){ $documentTypeLabel = "ID and video documents";}
-    else if($y["type"]=="order-proof"){ $documentTypeLabel = "Proof of Purchase"; }
+    $documentTypeLabels = [
+        'id-documents'      => 'ID and video documents',
+        'order-proof'       => 'Proof of purchase',
+        'proof-of-purchase' => 'Proof of purchase',
+    ];
+
+    $documentType = isset($y['type']) ? (string)$y['type'] : '';
+    if (array_key_exists($documentType, $documentTypeLabels)) {
+        $documentTypeLabel = $documentTypeLabels[$documentType];
+    } else {
+        $documentTypeLabel = ucwords(str_replace(['-', '_'], ' ', $documentType));
+    }
 
  ?>
 
    <div class="document-card card-shadow" data-save="8">
          <div class="document-card__header">
+            <?php
+                $documentTitle = htmlspecialchars($documentTypeLabel, ENT_QUOTES, 'UTF-8');
+                $rawStatus = isset($y["status"]) ? (string)$y["status"] : '';
+                $statusClass = strtolower(preg_replace('/[^a-z0-9\-]+/i', '-', $rawStatus));
+                $statusLabel = htmlspecialchars(strtoupper($rawStatus), ENT_QUOTES, 'UTF-8');
+            ?>
             <div>
                 <span class="document-badge">Document type</span>
-                <p class="document-title"><?php echo $documentTypeLabel; ?></p>
+                <p class="document-title"><?php echo $documentTitle; ?></p>
             </div>
-            <span class="status-badge status-badge--<?php echo strtolower($y["status"]); ?>"><?php  echo strtoupper($y["status"]); ?></span>
-         </div>
+            <span class="status-badge status-badge--<?php echo $statusClass; ?>"><?php echo $statusLabel; ?></span>
+        </div>
 
-         <?php if($y["status"]=="rerequest") { ?>
+        <?php if($y["status"]=="rerequest") { ?>
             <div class="document-card__body">
                 <p class="mb-3">We still need a replacement file for this document. Upload it below.</p>
                 <?php
-                if (isImageFile($y["name"])) {
-                    perch_member_form('upload-image.html');
+                if ($y["type"] === 'order-proof') {
+                    perch_member_form('upload-proof.html');
                 } else if (isVideoFile($y["name"])) {
                     perch_member_form('upload-video.html');
+                } else {
+                    perch_member_form('upload-image.html');
                 }
                 ?>
             </div>
@@ -225,13 +162,24 @@ foreach ($docs as $x => $y) {
          <?php if ($y["status"]!="rerequest") { ?>
              <div class="document-card__preview">
                 <?php if (isImageFile($y["name"])) { ?>
-                    <img class="preview-media" src="https://<?php echo $_SERVER['HTTP_HOST'];?>/perch/addons/apps/perch_members/documents/<?php echo $y['name']; ?>" alt="Image Preview">
+                    <?php
+                        $safeHost = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_QUOTES, 'UTF-8');
+                        $encodedName = rawurlencode($y['name']);
+                    ?>
+                    <img class="preview-media" src="https://<?php echo $safeHost; ?>/perch/addons/apps/perch_members/documents/<?php echo $encodedName; ?>" alt="Image Preview">
                 <?php } else if (isVideoFile($y["name"])) {
-                    $fileUrl="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/documents/".$y['name'];
+                    $fileUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/perch/addons/apps/perch_members/documents/' . rawurlencode($y['name']);
+                    $fileExtension = pathinfo($y["name"], PATHINFO_EXTENSION);
+                    $safeUrl = htmlspecialchars($fileUrl, ENT_QUOTES, 'UTF-8');
+                    $safeExtension = htmlspecialchars($fileExtension, ENT_QUOTES, 'UTF-8');
                     echo '<video class="preview-media" controls>
-                            <source src="' . htmlspecialchars($fileUrl) . '" type="video/' . pathinfo($y["name"], PATHINFO_EXTENSION) . '">
+                            <source src="' . $safeUrl . '" type="video/' . $safeExtension . '">
                             Your browser does not support the video tag.
                           </video>';
+                } else if (isDocumentFile($y["name"])) {
+                    $fileUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/perch/addons/apps/perch_members/documents/' . rawurlencode($y['name']);
+                    $safeUrl = htmlspecialchars($fileUrl, ENT_QUOTES, 'UTF-8');
+                    echo '<a class="preview-document" href="' . $safeUrl . '" target="_blank" rel="noopener">View PDF document</a>';
                 } ?>
              </div>
          <?php } ?>
@@ -241,13 +189,16 @@ foreach ($docs as $x => $y) {
  }
 echo '</div>';
   ?>
+ <!-- <div class="bottom_btn mt-5">
+        <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
+   </div>-->
 <?php
 }
 
 
     $showUploadForm = !$docs || !$hasIdDocuments;
     ?>
-    <div class="upload-grid">
+    <div class="upload-grid client-documents__uploads">
         <?php if ($showUploadForm) { ?>
             <div class="card-shadow upload-card">
                 <?php perch_member_form('upload.html'); ?>
@@ -257,9 +208,10 @@ echo '</div>';
             <?php perch_member_form('upload-proof.html'); ?>
         </div>
     </div>
-    <div class="upload-next text-center">
+ <!--   <div class="upload-next client-documents__next text-center">
         <a class="btn btn-primary next_btn mt-4 mb-3 next-btn" href="/client">Next <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
+    </div>-->
+      </div>
     </div>
   </section>
 
@@ -277,9 +229,7 @@ echo '</div>';
       reader.onload = function (e) {
         const img = document.createElement('img');
         img.src = e.target.result;
-        img.width = 320;
-        img.height = 240;
-        img.className = 'me-3 mb-3';
+        img.className = 'preview-media-item';
         img.alt = 'Image Preview';
         container.appendChild(img);
       };
@@ -289,16 +239,68 @@ echo '</div>';
     function createVideoPreview(file, container) {
       const url = URL.createObjectURL(file);
       const video = document.createElement('video');
-      video.width = 320;
-      video.height = 240;
       video.controls = true;
-      video.className = 'me-3 mb-3';
+      video.className = 'preview-media-item';
       video.src = url;
       video.onloadeddata = function () {
         URL.revokeObjectURL(url);
       };
       container.appendChild(video);
     }
+
+    function updateFileSummary(input, summary) {
+      if (!summary) {
+        return;
+      }
+
+      const emptyText = summary.getAttribute('data-empty-text') || 'No files selected';
+      const files = input && input.files ? Array.from(input.files) : [];
+
+      if (files.length === 0) {
+        summary.textContent = emptyText;
+        summary.classList.remove('upload-file-summary--has-files');
+        return;
+      }
+
+      if (files.length === 1) {
+        summary.textContent = files[0].name;
+      } else {
+        summary.textContent = files.length + ' files selected';
+      }
+
+      summary.classList.add('upload-file-summary--has-files');
+    }
+
+    function initializeFileGroups(context) {
+      (context || document)
+        .querySelectorAll('[data-file-input-group]')
+        .forEach(function (group) {
+          const input = group.querySelector('input[type="file"]');
+          const trigger = group.querySelector('[data-file-trigger]');
+          const summary = group.querySelector('[data-file-summary]');
+
+          if (!input || !trigger) {
+            return;
+          }
+
+          if (group.dataset.fileGroupInitialized !== 'true') {
+            trigger.addEventListener('click', function (event) {
+              event.preventDefault();
+              input.click();
+            });
+
+            input.addEventListener('change', function () {
+              updateFileSummary(input, summary);
+            });
+
+            group.dataset.fileGroupInitialized = 'true';
+          }
+
+          updateFileSummary(input, summary);
+        });
+    }
+
+    initializeFileGroups(document);
 
     document.querySelectorAll('.document-image-input').forEach(function (input) {
       input.addEventListener('change', function () {
@@ -332,13 +334,63 @@ echo '</div>';
       });
     });
 
-    document.querySelectorAll('input[name="upload"]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        const loading = document.getElementById('uploadLoading');
-        if (loading) {
-          loading.hidden = false;
+    const uploadLoading = document.getElementById('uploadLoading');
+
+    document.querySelectorAll('.upload-form').forEach(function (form) {
+      const submitButton = form.querySelector('input[name="upload"]');
+
+      if (!submitButton) {
+        return;
+      }
+
+      const originalLabel = submitButton.value;
+
+      function resetButton() {
+        submitButton.disabled = false;
+        submitButton.value = originalLabel;
+        if (uploadLoading) {
+          uploadLoading.hidden = true;
         }
-        this.value = 'Uploading…';
+      }
+
+      form.addEventListener('submit', function (event) {
+        const hasFiles = Array.from(
+          form.querySelectorAll('input[type="file"]')
+        ).some(function (input) {
+          return input.files && input.files.length > 0;
+        });
+
+        if (!hasFiles) {
+          resetButton();
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.value = 'Uploading…';
+        if (uploadLoading) {
+          uploadLoading.hidden = false;
+        }
+
+        window.setTimeout(function () {
+          if (event.defaultPrevented) {
+            resetButton();
+          }
+        }, 0);
+      });
+
+      form.addEventListener(
+        'invalid',
+        function () {
+          resetButton();
+        },
+        true
+      );
+
+      form.addEventListener('reset', function () {
+        resetButton();
+        window.setTimeout(function () {
+          initializeFileGroups(form);
+        }, 0);
       });
     });
 
@@ -399,8 +451,72 @@ echo '</div>';
 </main>
 
   <style>
-        .success-section {
+        .client-documents-main {
             background-color: #f6f8fb;
+            min-height: 100vh;
+        }
+
+        .client-documents__container {
+            max-width: 1100px;
+        }
+
+        .client-documents__intro {
+            max-width: 720px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .client-documents__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.12);
+            color: #4338ca;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .client-documents__heading {
+            color: #172346;
+            font-size: clamp(1.9rem, 1.2vw + 1.8rem, 2.85rem);
+        }
+
+        .client-documents__lead {
+            color: #4d5b75;
+            font-size: 1rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .client-documents__content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .client-documents__helper {
+            margin-bottom: 0;
+        }
+
+        .client-documents__documents {
+            margin-bottom: 8px;
+        }
+
+        .client-documents__uploads {
+            margin-top: 8px;
+        }
+
+        .client-documents__next .btn {
+            border-radius: 999px;
+            padding: 0.75rem 1.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .card-shadow {
@@ -562,6 +678,29 @@ echo '</div>';
             border-radius: 8px;
         }
 
+        .preview-document {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #4338ca;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .preview-document::before {
+            content: 'PDF';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background-color: rgba(99, 102, 241, 0.12);
+            color: #4338ca;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+        }
+
         .upload-grid {
             display: grid;
             gap: 24px;
@@ -601,8 +740,70 @@ echo '</div>';
             height: 100%;
         }
 
+        .upload-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .upload-input-control {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .upload-file-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-file-summary {
+            font-size: 0.875rem;
+            color: #4d5b75;
+        }
+
+        .upload-file-summary--has-files {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
         .upload-box .preview {
             flex-grow: 1;
+            border: 1px dashed #d3d9e6;
+            border-radius: 12px;
+            background-color: #f9fbff;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .preview-media-item {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .preview-media-item:not(video) {
+            width: 100%;
+        }
+
+        video.preview-media-item {
+            width: 100%;
+            height: auto;
         }
 
         .upload-helper-text {
@@ -671,6 +872,18 @@ echo '</div>';
         }
 
         @media (max-width: 767px) {
+            .client-documents__intro {
+                margin-bottom: 2.25rem;
+            }
+
+            .client-documents__content {
+                gap: 24px;
+            }
+
+            .client-documents__next .btn {
+                width: 100%;
+            }
+
             .card-shadow {
                 padding: 24px;
             }
@@ -680,8 +893,9 @@ echo '</div>';
                 align-items: flex-start;
             }
 
-            .upload-grid {
-                margin-top: 16px;
+            .bottom_btn .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>

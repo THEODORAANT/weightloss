@@ -23,11 +23,90 @@ class PerchMembers_Documents extends PerchAPI_Factory
            return $this->db->get_row($sql);
        }
 
- 	public function update_document_status($documentID,$status)
+        public function update_document_status($documentID,$status)
        {
+       $Document = $this->find((int)$documentID);
+       if (!$Document) {
+           return false;
+       }
+
+       $previousStatus = $Document->documentStatus();
+
        $updatedata['documentStatus']=$status;
        $r = $this->db->update($this->table, $updatedata, $this->pk, $documentID );
+
+       if ($r && $status === 'rerequest' && $previousStatus !== 'rerequest') {
+           $this->send_document_rerequest_email($Document);
+       }
+
        return $r;
+       }
+
+       protected function send_document_rerequest_email(PerchMembers_Document $Document)
+       {
+       if (!$this->api) {
+           return;
+       }
+
+       $Members = new PerchMembers_Members($this->api);
+       $Member  = $Members->find((int)$Document->memberID());
+
+       if (!$Member) {
+           return;
+       }
+
+       $memberEmail = trim((string)$Member->memberEmail());
+       if ($memberEmail === '' || !PerchUtil::is_valid_email($memberEmail)) {
+           return;
+       }
+
+       $properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+       if (!is_array($properties)) {
+           $properties = [];
+       }
+
+       $firstName = isset($properties['first_name']) ? trim((string)$properties['first_name']) : '';
+       $lastName  = isset($properties['last_name']) ? trim((string)$properties['last_name']) : '';
+
+       $loginPage = '';
+       $Settings = $this->api->get('Settings');
+       if ($Settings) {
+           $loginSetting = $Settings->get('perch_members_login_page');
+           if ($loginSetting) {
+               $loginPage = str_replace('{returnURL}', '', (string)$loginSetting->val());
+           }
+       }
+
+       $uploadDate = $Document->documenUploadDate();
+       $formattedUploadDate = '';
+       if ($uploadDate) {
+           $timestamp = strtotime($uploadDate);
+           if ($timestamp) {
+               $formattedUploadDate = date('d M Y', $timestamp);
+           }
+       }
+
+       $emailData = [
+           'first_name'            => $firstName,
+           'last_name'             => $lastName,
+           'memberEmail'           => $memberEmail,
+           'document_name'         => $Document->documentName(),
+           'document_type'         => $Document->documentType(),
+           'document_upload_date'  => $formattedUploadDate,
+           'login_page'            => $loginPage,
+       ];
+
+       $Email = $this->api->get('Email');
+       $Email->set_template('members/emails/document_rerequest_notification.html');
+       $Email->set_bulk($emailData);
+       $Email->subject('Action required: document needs updating');
+       $Email->senderName(PERCH_EMAIL_FROM_NAME);
+       $Email->senderEmail(PERCH_EMAIL_FROM);
+       $Email->recipientEmail($memberEmail);
+
+       if (!$Email->send()) {
+           PerchUtil::debug('Failed to send document re-request email for member '.$Member->id().': '.$Email->errors, 'error');
+       }
        }
     public function delete_passed_files(){
         $sql = 'SELECT d.*

@@ -38,10 +38,36 @@ class PerchMembers_ChatRepository
             return $this->closures_table_ready;
         }
 
-        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
-        $this->closures_table_ready = ($table !== false && $table !== null);
+        if ($this->ensure_closures_table_exists()) {
+            $this->closures_table_ready = true;
+            return true;
+        }
 
-        return $this->closures_table_ready;
+        $this->closures_table_ready = false;
+        return false;
+    }
+
+    private function ensure_closures_table_exists()
+    {
+        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
+        if ($table !== false && $table !== null) {
+            return true;
+        }
+
+        $sql = 'CREATE TABLE IF NOT EXISTS `' . $this->closures_table . '` (
+            `id` int unsigned NOT NULL AUTO_INCREMENT,
+            `threadID` int unsigned NOT NULL,
+            `last_message_id` int unsigned DEFAULT NULL,
+            `closed_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            KEY `thread_closed_at` (`threadID`, `closed_at`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
+
+        $this->db->execute($sql);
+
+        $table = $this->db->get_value('SHOW TABLES LIKE ' . $this->db->pdb($this->closures_table));
+
+        return ($table !== false && $table !== null);
     }
 
     public function get_or_create_thread_for_member($memberID)
@@ -55,9 +81,7 @@ class PerchMembers_ChatRepository
             return null;
         }
 
-        $thread = $this->db->get_row(
-            'SELECT * FROM ' . $this->threads_table . ' WHERE memberID = ' . $this->db->pdb($memberID) . ' LIMIT 1'
-        );
+        $thread = $this->get_thread_for_member($memberID);
 
         if ($thread) {
             return $thread;
@@ -94,6 +118,22 @@ class PerchMembers_ChatRepository
 
         return $this->db->get_row(
             'SELECT * FROM ' . $this->threads_table . ' WHERE id = ' . $this->db->pdb($threadID) . ' LIMIT 1'
+        );
+    }
+
+    public function get_thread_for_member($memberID)
+    {
+        if (!$this->tables_ready()) {
+            return null;
+        }
+
+        $memberID = (int)$memberID;
+        if ($memberID < 1) {
+            return null;
+        }
+
+        return $this->db->get_row(
+            'SELECT * FROM ' . $this->threads_table . ' WHERE memberID = ' . $this->db->pdb($memberID) . ' LIMIT 1'
         );
     }
 
@@ -161,6 +201,29 @@ class PerchMembers_ChatRepository
         }
 
         return $this->db->get_rows($sql) ?: [];
+    }
+
+    public function get_member_visible_messages($threadID, $opts = [])
+    {
+        if (!$this->tables_ready()) {
+            return [];
+        }
+
+        $threadID = (int)$threadID;
+        if ($threadID < 1) {
+            return [];
+        }
+
+        $after_id = isset($opts['after_id']) ? (int)$opts['after_id'] : 0;
+        $last_closed_id = $this->get_last_closed_message_id($threadID);
+
+        if ($last_closed_id > $after_id) {
+            $after_id = $last_closed_id;
+        }
+
+        $opts['after_id'] = $after_id;
+
+        return $this->get_messages($threadID, $opts);
     }
 
     public function add_member_message($memberID, $body)
@@ -279,7 +342,7 @@ class PerchMembers_ChatRepository
             return false;
         }
 
-        $thread = $this->get_or_create_thread_for_member($memberID);
+        $thread = $this->get_thread_for_member($memberID);
         if (!$thread) {
             return false;
         }

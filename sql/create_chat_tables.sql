@@ -39,6 +39,5 @@ CREATE TABLE IF NOT EXISTS `__PREFIX__chat_thread_closures` (
   `last_message_id` int unsigned DEFAULT NULL,
   `closed_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `thread_closed_at` (`threadID`,`closed_at`),
-  CONSTRAINT `__PREFIX__chat_thread_closures_thread_fk` FOREIGN KEY (`threadID`) REFERENCES `__PREFIX__chat_threads` (`id`) ON DELETE CASCADE
+  KEY `thread_closed_at` (`threadID`,`closed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

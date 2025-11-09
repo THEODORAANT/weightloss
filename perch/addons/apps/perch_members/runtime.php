@@ -29,10 +29,12 @@
     }
 
 
-	function perch_members_form_handler($SubmittedForm)
+        function perch_members_form_handler($SubmittedForm)
     {
 
-    	if ($SubmittedForm->validate() || $SubmittedForm->formID=="upload") {
+        $uploadSuccessful = false;
+
+        if ($SubmittedForm->validate() || $SubmittedForm->formID=="upload") {
 
     		$API  = new PerchAPI(1.0, 'perch_members');
 
@@ -69,7 +71,7 @@
                     $Members = new PerchMembers_Members($API);
                     $Members->reset_member_password($SubmittedForm);
                     break;
-   case 'upload':
+                case 'upload':
 
                        $Session = PerchMembers_Session::fetch();
 
@@ -78,7 +80,7 @@
                                             $Members = new PerchMembers_Members($API);
                                             if (is_object($Members)) $Member = $Members->find($Session->get('memberID'));
                                             if (is_object($Member)) {
-                                                $Member->upload_member_file($SubmittedForm);
+                                                $uploadSuccessful = $Member->upload_member_file($SubmittedForm);
 
                                             }
                                         }else{
@@ -102,20 +104,33 @@
             if (!$SubmittedForm->redispatched) {
                 $Tag = $SubmittedForm->get_form_attributes();
                 PerchUtil::mark('here mem');
-                if (is_object($Tag) && $Tag->next()) {
-                    $Perch = Perch::fetch();
-                    if (!$Perch->get_form_errors($SubmittedForm->formID)) {
-                        PerchUtil::redirect($Tag->next());    
-                    }else{
-                        PerchUtil::debug($Perch->get_form_errors($SubmittedForm->formID), 'error');
+                $Perch = Perch::fetch();
+                $formErrors = $Perch->get_form_errors($SubmittedForm->formID);
+
+                if ($uploadSuccessful && !$formErrors) {
+                    $redirectTarget = $_SERVER['REQUEST_URI'];
+
+                    if (is_object($Tag) && $Tag->next()) {
+                        $redirectTarget = $Tag->next();
                     }
-                }    
+
+                    $SubmittedForm->clear_from_post_env();
+                    PerchUtil::redirect($redirectTarget);
+                }
+
+                if (is_object($Tag) && $Tag->next()) {
+                    if (!$formErrors) {
+                        PerchUtil::redirect($Tag->next());
+                    }else{
+                        PerchUtil::debug($formErrors, 'error');
+                    }
+                }
             }else{
 
             }
-            
 
-    	}
+
+        }
 
         $Perch = Perch::fetch();
         PerchUtil::debug($Perch->get_form_errors($SubmittedForm->formID));

@@ -1956,7 +1956,7 @@ $Members = new PerchMembers_Members;
   if (!isset($memberdetails['weight2'])) { $memberdetails['weight2'] = 0; }
   // --- END defensive defaults normalization ---
  $insert_query ="";
-   // print_r($data);
+  // print_r($data);
      if( isset($data)){
      $weight2=0;
      $height2=0;
@@ -2046,9 +2046,55 @@ $Members = new PerchMembers_Members;
             $out['memberProperties'] = PerchUtil::json_safe_encode($props);
             $Member->update($out);
         }
-                //insert_status
-            $insert_status ="INSERT INTO ".PERCH_DB_PREFIX."questionnaire_member_status (`questionnaire_id`,memberID,`status`) VALUES ('v1',".$memberID.",'pending'); ";
-         $new_id =$this->db->execute($insert_status);
+        $rawLogEntries = [];
+        $rawLogMetadata = [];
+        if (isset($data['log']) && is_array($data['log'])) {
+            $rawLogEntries = $data['log'];
+        }
+
+        if (isset($data['log_metadata']) && is_array($data['log_metadata'])) {
+            $rawLogMetadata = $data['log_metadata'];
+        }
+
+        $questionnaireUUID = isset($data['uuid']) && is_string($data['uuid'])
+            ? trim($data['uuid'])
+            : '';
+
+        $logSummary = null;
+        if (!empty($rawLogEntries) && function_exists('perch_members_summarise_answer_log')) {
+            $logSummary = perch_members_summarise_answer_log($rawLogEntries);
+        }
+
+        $logUrl = $this->buildQuestionnaireLogUrl($questionnaireUUID, $type);
+
+        if (!empty($rawLogEntries)) {
+            $hasChanges = is_array($logSummary) && !empty($logSummary['has_changes']);
+
+            if ($hasChanges && $logUrl !== null) {
+                $data['multiple_answers'] = 'Yes-' . $logUrl;
+            } elseif (!$hasChanges && !isset($data['multiple_answers'])) {
+                $data['multiple_answers'] = 'No';
+            }
+        }
+
+        unset($data['log'], $data['log_metadata'], $data['grouped_log']);
+
+        //insert_status
+        $this->db->execute('START TRANSACTION');
+        $new_id = $this->db->insert(
+            PERCH_DB_PREFIX.'questionnaire_member_status',
+            [
+                'questionnaire_id' => 'v1',
+                'memberID' => $memberID,
+                'status' => 'pending',
+            ]
+        );
+
+        if ($new_id === false) {
+            $this->db->execute('ROLLBACK');
+            return false;
+        }
+
       $data['bmi']=$result;
       $sessionKey = $new_id ?: ($memberID . ':' . $type);
       $sessionQuestionOrderMap = [];
@@ -2243,7 +2289,6 @@ if(isset($data["uuid"])){
                 $qdata['member_id']=$memberID;
                   $qdata['order_id']=$orderID;
                 $qdata['version']="v1";
-                 $qdata['qid']= $new_id;
           if ($key === 'medications') {
               $medicationsRowIndex = count($rowsToInsert);
               $medicationsOriginalAnswer = $qdata['answer_text'];
@@ -2345,42 +2390,157 @@ if(isset($data["uuid"])){
           }
       }*/
 
+      $insertSucceeded = true;
+
       foreach ($rowsToInsert as $qdata) {
-          $columns = implode(", ", array_keys($qdata));
+          $qdata['qid'] = $new_id;
 
-          $db = $this->db;
+          $result = $this->db->insert(PERCH_DB_PREFIX.'questionnaire', $qdata);
 
-          $escaped_values = array_map(function ($value) use ($db) {
-              if (is_string($value)) {
-                  $value = PerchUtil::safe_stripslashes($value);
-              }
-
-              return $db->pdb($value);
-          }, array_values($qdata));
-
-          $values = implode(', ', $escaped_values);
-
-          $insert_query .="INSERT INTO ".PERCH_DB_PREFIX."questionnaire (".$columns.") VALUES (".$values."); ";
-
+          if ($result === false) {
+              $insertSucceeded = false;
+              break;
+          }
       }
 
-     // }
+      if ($insertSucceeded) {
+          $logsPersisted = $this->persistQuestionnaireLogs(
+              $questionnaireUUID !== '' ? $questionnaireUUID : $memberID . ':' . $type,
+              $memberID,
+              $type,
+              $rawLogEntries,
+              $rawLogMetadata,
+              $logSummary
+          );
 
-//echo  $insert_query;
-//exit();
-//die();
-try{
+          if ($logsPersisted) {
+              $this->db->execute('COMMIT');
+              return $new_id;
+          }
+      }
 
-    	$this->db->execute($insert_query);
+        $this->db->execute('ROLLBACK');
+        return false;
+    }
+}
 
-
-return $new_id ;
-}catch (Exception $e) {
-          echo $e->getMessage();
-         }
-
-        // $this->db->insert(PERCH_DB_PREFIX.'questionnaire', $data);
+    private function buildQuestionnaireLogUrl($uuid, $type)
+    {
+        if (!is_string($uuid) || $uuid === '') {
+            return null;
         }
-     }
 
-     }
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if ($host === '') {
+            return null;
+        }
+
+        $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+        $scheme = $isSecure ? 'https' : 'http';
+        $url = sprintf('%s://%s/perch/addons/apps/perch_members/questionnaire_logs/?userId=%s', $scheme, $host, rawurlencode($uuid));
+
+        if ($type !== 'first-order') {
+            $url .= '&type=re-order';
+        }
+
+        return $url;
+    }
+
+    private function persistQuestionnaireLogs($uuid, $memberID, $type, array $rawLogEntries, array $metadata, $logSummary)
+    {
+        if (empty($rawLogEntries)) {
+            return true;
+        }
+
+        $logDirectory = $this->resolveQuestionnaireLogDirectory($type);
+        if ($logDirectory === null) {
+            PerchUtil::debug('Unable to resolve questionnaire log directory.', 'error');
+            return false;
+        }
+
+        if (!$this->ensureDirectoryExists($logDirectory)) {
+            PerchUtil::debug('Unable to create questionnaire log directory: ' . $logDirectory, 'error');
+            return false;
+        }
+
+        $metadata = array_merge(
+            [
+                'user_id' => $uuid,
+                'member_id' => $memberID,
+                'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+                'saved_at' => date('Y-m-d H:i:s'),
+            ],
+            $metadata
+        );
+
+        $rawPayload = [
+            'metadata' => $metadata,
+            'log' => $rawLogEntries,
+        ];
+
+        $rawPath = PerchUtil::file_path($logDirectory . DIRECTORY_SEPARATOR . $uuid . '_raw_log.json');
+        if (@file_put_contents($rawPath, json_encode($rawPayload, JSON_PRETTY_PRINT)) === false) {
+            PerchUtil::debug('Unable to write questionnaire raw log file: ' . $rawPath, 'error');
+            return false;
+        }
+
+        if (!is_array($logSummary) || !array_key_exists('grouped', $logSummary)) {
+            if (function_exists('perch_members_summarise_answer_log')) {
+                $logSummary = perch_members_summarise_answer_log($rawLogEntries);
+            } else {
+                $logSummary = ['grouped' => []];
+            }
+        }
+
+        $groupedPayload = [
+            'metadata' => $metadata,
+            'grouped_log' => $logSummary['grouped'] ?? [],
+        ];
+
+        $groupedPath = PerchUtil::file_path($logDirectory . DIRECTORY_SEPARATOR . $uuid . '_grouped_log.json');
+        if (@file_put_contents($groupedPath, json_encode($groupedPayload, JSON_PRETTY_PRINT)) === false) {
+            @unlink($rawPath);
+            PerchUtil::debug('Unable to write questionnaire grouped log file: ' . $groupedPath, 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    private function resolveQuestionnaireLogDirectory($type)
+    {
+        $basePath = $_SERVER['DOCUMENT_ROOT'] ?? '';
+
+        if ($basePath === '' && defined('PERCH_SITEPATH')) {
+            $basePath = PERCH_SITEPATH;
+        }
+
+        if ($basePath === '' && defined('PERCH_PATH')) {
+            $basePath = realpath(PERCH_PATH . '/../');
+        }
+
+        if ($basePath === '') {
+            $basePath = getcwd();
+        }
+
+        if (!is_string($basePath) || $basePath === '') {
+            return null;
+        }
+
+        $basePath = rtrim($basePath, '/\\') . '/logs';
+        if ($type !== 'first-order') {
+            $basePath .= '/reorder';
+        }
+
+        return PerchUtil::file_path($basePath);
+    }
+
+    private function ensureDirectoryExists($directory)
+    {
+        if (is_dir($directory)) {
+            return true;
+        }
+
+        return @mkdir($directory, 0755, true) || is_dir($directory);
+    }
+}

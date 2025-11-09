@@ -1,157 +1,148 @@
 <?php if (!perch_member_logged_in() ){ header("Location: /client");}
 else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Location: /get-started"); }
 
-    // output the top of the page
-    perch_layout('getStarted/header', [
+    perch_layout('client/header', [
         'page_title' => perch_page_title(true),
     ]);
-    ?>
-      <style>
+?>
+<?php
+    $last_pen_brand = null;
+    $last_pen_dose = null;
 
+    $last_pen_details = perch_shop_last_pen_details();
 
-            .subheader {
-              background-color: #fff;
-              border-bottom: 1px solid #ddd;
-            }
+    if (is_array($last_pen_details)) {
+        $last_pen_brand = $last_pen_details['brand'] ?? null;
+        $last_pen_dose  = $last_pen_details['dose'] ?? null;
+    }
+?>
+<main class="client-documents-main client-orders-main">
+  <section class="client-documents py-5">
+    <div class="container client-documents__container">
+      <div class="client-documents__intro text-center mb-5">
+        <span class="client-documents__eyebrow">Order</span>
+        <h1 class="client-documents__heading fw-bolder mb-3">Order your next dose</h1>
+        <p class="client-documents__lead mb-0">Keep your treatment on track by selecting the medication you need to replenish. Choose your dosage and add it straight to your basket.</p>
+      </div>
 
-            .welcome-msg {
-              padding: 12px 20px;
-              font-size: 16px;
-              color: #333;
-              border-bottom: 1px solid #eee;
-            }
+      <div class="client-documents__content client-orders__content">
+        <?php if ($last_pen_brand || $last_pen_dose) { ?>
+          <div class="order-reminder card-shadow">
+            <div class="order-reminder__eyebrow">Previous prescription</div>
+            <p class="order-reminder__text mb-0">
+              <?php
+                  $parts = [];
+                  if ($last_pen_brand) {
+                      $parts[] = PerchUtil::html($last_pen_brand);
+                  }
+                  if ($last_pen_dose) {
+                      $parts[] = PerchUtil::html($last_pen_dose);
+                  }
+                  echo 'Your last pen was ' . implode(' – ', $parts) . '.';
+              ?>
+            </p>
+          </div>
+        <?php } ?>
 
-            .tabs {
-              display: flex;
-              padding: 0 20px;
-              background-color: #f9f9f9;
-            }
-
-            .tab {
-              padding: 12px 16px;
-              margin-right: 10px;
-              text-decoration: none;
-              color: #555;
-              border-bottom: 3px solid transparent;
-              transition: all 0.2s ease;
-              font-weight: 500;
-            }
-
-            .tab:hover {
-              color: #000;
-              border-color: #007bff;
-            }
-
-            .tab.active {
-              color: #007bff;
-              border-color: #007bff;
-              background-color: #fff;
-            }
-            .last-pen-reminder {
-              margin: 0 auto 1.5rem;
-              text-align: center;
-              color: #555;
-              max-width: 480px;
-            }
-          </style>
-             <?php if (perch_member_logged_in()) { ?>
-  <div class="subheader">
-
-     <div class="welcome-msg">
-       Hello, <strong><?php echo perch_member_get('first_name'); ?></strong>
-     </div>
-    <?php $currentUrl =  $_SERVER['REQUEST_URI'];
-
-     $parts = explode('/', $currentUrl);
-     $lastPart = end($parts);
-     // echo  $lastPart;
-      $profile_tab="";
-      $orders_tab="";
-      $reorder_tab="";
-       $documents_tab="";
-        $affiliate_tab="";
-  if($lastPart=="client"){
-  $profile_tab="active";
-  }else if( $lastPart=="orders" ){
-   $orders_tab="active";
-  }else if( $lastPart=="re-order"){
-      $reorder_tab="active";
-     }else if($lastPart=="success" ){
-           $documents_tab="active";
-           }else if($lastPart=="affiliate-dashboard" ){
-
-           $affiliate_tab="active";
-           }
-      ?>
-     <div class="tabs">
-       <a href="/client" class="tab <?php echo $profile_tab; ?>">Profile</a>
-                     <a href="/payment/success" class="tab <?php echo $documents_tab; ?>">Documents</a>
-
-       <a href="/client/orders" class="tab <?php echo $orders_tab; ?>">Orders</a>
-       <a href="/client/affiliate-dashboard" class="tab <?php echo $affiliate_tab; ?>">Affiliate</a>
-       <a href="/order/re-order" class="tab <?php echo $reorder_tab; ?>">Order</a>
-       <a href="/client/logout" class="tab ">Logout</a>
-     </div>
-
-
-   </div>
-   <?php  } ?>
-
-    <?php
-        $last_pen_brand = null;
-        $last_pen_dose = null;
-
-        $last_pen_details = perch_shop_last_pen_details();
-
-        if (is_array($last_pen_details)) {
-            $last_pen_brand = $last_pen_details['brand'] ?? null;
-            $last_pen_dose  = $last_pen_details['dose'] ?? null;
-        }
-    ?>
-
-        <div class="main_product">
-            <div id="product-selection">
-               <h2 class="text-center fw-bolder">Order your next dose </h2>
-               <?php if ($last_pen_brand || $last_pen_dose) { ?>
-               <p class="last-pen-reminder">
-                 <?php
-                     $parts = [];
-                     if ($last_pen_brand) {
-                         $parts[] = PerchUtil::html($last_pen_brand);
-                     }
-                     if ($last_pen_dose) {
-                         $parts[] = PerchUtil::html($last_pen_dose);
-                     }
-                     echo 'Your last pen was ' . implode(' – ', $parts) . '.';
-                 ?>
-               </p>
-               <?php } ?>
-    <?php
-
-perch_shop_empty_cart();
+        <div class="order-grid">
+          <?php
+            perch_shop_empty_cart();
             perch_shop_products(['category' => 'products/weight-loss','template'=>'products/list_for_reorder']);
+          ?>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-            ?>
+<style>
+    .client-orders-main {
+        background-color: #f4f7fb;
+        min-height: 100vh;
+    }
 
+    .client-orders__content {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
 
+    .card-shadow {
+        box-shadow: 0 20px 50px rgba(8, 28, 59, 0.08);
+        border-radius: 20px;
+        background-color: #ffffff;
+        padding: 32px;
+        border: 1px solid rgba(9, 44, 95, 0.08);
+    }
 
+    .order-reminder {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 
+    .order-reminder__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #4d5b75;
+        background-color: rgba(77, 91, 117, 0.12);
+        border-radius: 999px;
+    }
 
-            </div></div>
+    .order-reminder__text {
+        color: #1f2a44;
+        font-size: 1rem;
+    }
 
-    <?php
-//perch_shop_product('mounjaro-mounjaro');
+    .order-grid {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
 
-           // perch_shop_products([    'template' => 'cart/cart-sum.html','category' => 'products/weight-loss']);
-//perch_shop_product('wegovy-skuwegovy');
+    .client-documents__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 18px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #4d5b75;
+        background: rgba(77, 91, 117, 0.12);
+        border-radius: 999px;
+    }
 
-            ?>
+    .client-documents__heading {
+        color: #081c3b;
+        font-size: clamp(2rem, 2.8vw, 2.75rem);
+        line-height: 1.2;
+    }
 
+    .client-documents__lead {
+        max-width: 680px;
+        margin: 0 auto;
+        color: #51627d;
+        font-size: 1.05rem;
+    }
 
+    @media (max-width: 767px) {
+        .card-shadow {
+            padding: 24px;
+        }
 
-
-
-
-
-        <?php
-      perch_layout('getStarted/footer');?>
+        .order-grid {
+            gap: 18px;
+        }
+    }
+</style>
+<?php
+  perch_layout('getStarted/footer');?>

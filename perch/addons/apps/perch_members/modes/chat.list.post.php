@@ -5,20 +5,21 @@ echo $HTML->title_panel([
     'heading' => $heading,
 ]);
 
+
 $smartbar = new PerchSmartbar($CurrentUser, $HTML, $Lang);
 $smartbar->add_item([
     'title' => $Lang->get('Open'),
-    'link'  => $API->app_path() . '/chat/?status=open',
+    'link'  => '/'.$API->app_path() .'/chat/?status=open',
     'active' => ($status === 'open'),
 ]);
 $smartbar->add_item([
     'title' => $Lang->get('Closed'),
-    'link'  => $API->app_path() . '/chat/?status=closed',
+    'link'  =>  '/'.$API->app_path() .'/chat/?status=closed',
     'active' => ($status === 'closed'),
 ]);
 $smartbar->add_item([
     'title' => $Lang->get('All'),
-    'link'  => $API->app_path() . '/chat/?status=all',
+    'link'  =>  '/'.$API->app_path() .'/chat/?status=all',
     'active' => ($status === 'all'),
 ]);
 

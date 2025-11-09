@@ -127,6 +127,36 @@
       ]
     },
     {
+      "name": "Member Shipping",
+      "description": "Manage the authenticated member's shipping details.",
+      "item": [
+        {
+          "name": "Update Shipping Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipping_first_name\": \"Ada\",\n  \"shipping_last_name\": \"Lovelace\",\n  \"shipping_company\": \"Analytical Engines Ltd\",\n  \"shipping_address_1\": \"123 Algorithm Ave\",\n  \"shipping_address_2\": \"Suite 42\",\n  \"shipping_postcode\": \"12345\",\n  \"shipping_city\": \"Computoria\",\n  \"shipping_county\": \"Logicshire\",\n  \"shipping_country\": 223,\n  \"shipping_phone\": \"+1-555-555-1234\",\n  \"shipping_instructions\": \"Leave at the lab entrance\"\n}"
+            },
+            "url": "{{baseUrl}}/update-shipping-address"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Injection Schedule",
       "description": "Optional helper endpoint for derived injection scheduling metrics.",
       "item": [

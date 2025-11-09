@@ -1,119 +1,63 @@
- <?php    /* if (!perch_member_logged_in()) {
-  header("Location: /order"); // Redirect to the selected URL
-                        exit();
- }*/
- ?>
+<?php
+$isLoggedIn = perch_member_logged_in();
 
-    <?php  // output the top of the page
-    perch_layout('client/header', [
-        'page_title' => perch_page_title(true),
-    ]);
+perch_layout('client/header', [
+    'page_title' => perch_page_title(true),
+]);
+?>
 
-        /* main navigation
-        perch_pages_navigation([
-            'levels'   => 1,
-            'template' => 'main_nav.html',
-        ]);*/
+<section class="client-page">
+  <div class="container all_content">
+    <div class="client-hero">
+      <?php if ($isLoggedIn) { ?>
+        <h1>Manage your account</h1>
+        <p>Update your profile details, keep your addresses current and review everything related to your treatment in one place.</p>
+      <?php } else { ?>
+        <h1>Welcome back to Get Weight Loss</h1>
+        <p>Create an account to begin your consultation or log in to pick up where you left off. Your information is securely saved.</p>
+      <?php } ?>
+    </div>
 
-    ?>
-
-        <section class="main_order_summary">
-            <div class="container mt-5">
-                <div class="row">
-                    <!-- Left Section -->
-                    <div class="col-md-7">
-
-                             <?php     if (!perch_member_logged_in()) { ?> <h2 class="fw-bold">Register</h2><?php } ?>
-
-                        <div class="main_page">
-                            <!-- Create an Account Section -->
-
-                               <?php     if (!perch_member_logged_in()) { ?>
-                            <div class="section-header">
-                             <span class="section-number">1</span>
-                                <h4>Create an account</h4>
-                            </div>
-                            <div class="login_sec">
-
-                            </div>
-
-
-                               <?php
-
-
-
-                                                                // New customer sign up form
-                                                                                            perch_shop_registration_form( ['template' => 'checkout/customer_create_wl.html']);
-
-
-
-                                                                }else{
-                                                                echo '       <div class="section-header">
-                                                                                                      <h4>Profile</h4>
-                                                                                                  </div>
-                                                                                                  <div class="login_sec">
-
-                                                                                                  </div>';
-                                                                perch_member_form('profile.html');
-                                                                }
-
-                                                                   ?>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Right Section -->
-                    <div class="col-md-5">
-                        <div class="your_order">
-                        <?php        if (!perch_member_logged_in()) { ?>
-                            <h4>Login</h4>
-                            <div class="order-summary p-3 border rounded">
-                             <h3 class="text-left mb-4 fw-bolder">Log in to your account</h3>
-                                            <p class="text-left sign_up_btn">
-                                                Please log in to your account to complete your order.
-                                            </p>
-
-
-
-
-     <?php
-
-                                                                // New customer sign up form
-
-                                                              perch_shop_login_form();
-
-
-                                                                }else{?>
-
-                                                                                            <div class="order-summary p-3 border rounded">
-                                                                                             <h3 class="text-left mb-4 fw-bolder">Shipping and Billing adresess</h3>
-                                                                                             <?php
-
-                                                                                               perch_shop_customer_addresses();
-                                                                                              /* if (!perch_shop_addresses_set()) {
-                                                                                                   perch_shop_order_address_form();
-                                                                                                 }*/
-
-
-
-                                                                }
-
-                                                                   ?>
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="client-columns">
+      <div>
+        <div class="client-card">
+          <?php if ($isLoggedIn) { ?>
+            <div class="client-card__section">
+              <h2 class="client-card__title">Profile details</h2>
+              <p class="client-card__intro">Keep your personal details up to date so our clinicians can tailor their care and communications to you.</p>
+              <?php perch_member_form('profile.html'); ?>
             </div>
+          <?php } else { ?>
+            <div class="client-card__section">
+              <h2 class="client-card__title">Create an account</h2>
+              <p class="client-card__intro">Set up your profile in a couple of minutes so you can complete your consultation, upload documents and receive tailored treatment plans.</p>
+              <?php perch_shop_registration_form(['template' => 'checkout/customer_create_wl.html']); ?>
+            </div>
+          <?php } ?>
+        </div>
+      </div>
 
-        </section>
+      <div>
+        <aside class="client-sidecard">
+          <?php if ($isLoggedIn) { ?>
+            <h2 class="client-sidecard__title">Delivery &amp; billing addresses</h2>
+            <p class="client-sidecard__intro">Review the addresses saved on your account and keep them current before your next order ships.</p>
+            <div class="client-panel__body">
+              <?php perch_shop_customer_addresses(); ?>
+            </div>
+          <?php } else { ?>
+            <h2 class="client-sidecard__title">Already registered?</h2>
+            <p class="client-sidecard__intro">Sign in to continue your consultation, review your past orders and message our support team.</p>
+            <?php perch_shop_login_form(); ?>
+          <?php } ?>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
 <?php /*
-
 <script>
     const addressInput = document.getElementById('form1_shipping_postcode');
-    //console.log("addressInput");console.log(addressInput);
     const suggestionsBox = document.getElementById('suggestions');
     const resultDisplay = document.getElementById('selectedResult');
 
@@ -141,7 +85,7 @@
                     data.forEach(item => {
                         const div = document.createElement('div');
                         div.textContent = item;
-                          div.classList.add('form-control');
+                        div.classList.add('form-control');
                         div.onclick = () => {
                             addressInput.value = item;
                             suggestionsBox.innerHTML = '';
@@ -150,7 +94,7 @@
                         suggestionsBox.appendChild(div);
                     });
                 });
-        }, 300); // debounce to avoid excessive requests
+        }, 300);
     });
 
     document.addEventListener('click', (e) => {
@@ -160,5 +104,4 @@
     });
 </script>
 */?>
-    <?php
-  perch_layout('getStarted/footer');?>
+<?php perch_layout('getStarted/footer'); ?>
