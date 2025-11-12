@@ -256,11 +256,25 @@ class PerchMembers_ChatRepository
             'created_at' => $now,
         ]);
 
+        if (!$message_id) {
+            return null;
+        }
+
         $this->touch_thread($thread['id'], 'member', [
             'last_member_activity' => $now,
             'last_member_read_at' => $now,
             'status' => 'open',
         ]);
+
+        try {
+            $this->notify_staff_of_unread_member_message($thread, [
+                'id' => $message_id,
+                'body' => $body,
+                'created_at' => $now,
+            ]);
+        } catch (Throwable $e) {
+            PerchUtil::debug('Unable to send chat notification email: ' . $e->getMessage(), 'error');
+        }
 
         return $message_id ?: null;
     }
@@ -452,6 +466,78 @@ class PerchMembers_ChatRepository
         }
 
         return (int)$row['last_message_id'];
+    }
+
+    private function notify_staff_of_unread_member_message($thread, array $message)
+    {
+        if (!$thread || empty($thread['id'])) {
+            return;
+        }
+
+        if (!$this->staff_has_unread($thread['id'])) {
+            return;
+        }
+
+        $member = $this->get_member_factory()->find((int)$thread['memberID']);
+        $member_data = $member ? $member->to_array() : [];
+
+        $member_name_parts = [];
+        if (!empty($member_data['first_name'])) {
+            $member_name_parts[] = $member_data['first_name'];
+        }
+        if (!empty($member_data['last_name'])) {
+            $member_name_parts[] = $member_data['last_name'];
+        }
+
+        $member_name = trim(implode(' ', $member_name_parts));
+        if ($member_name === '') {
+            if (!empty($member_data['memberEmail'])) {
+                $member_name = $member_data['memberEmail'];
+            } else {
+                $member_name = 'Member #' . (int)$thread['memberID'];
+            }
+        }
+
+        $thread_path = rtrim(PERCH_LOGINPATH, '/') . '/addons/apps/perch_members/chat/thread.php?id=' . (int)$thread['id'];
+        $thread_url = $thread_path;
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $thread_url = PerchUtil::url_to_ssl_if_needed($thread_path);
+        }
+
+        $message_body = isset($message['body']) ? (string)$message['body'] : '';
+        $message_created_at = isset($message['created_at']) ? $message['created_at'] : date('Y-m-d H:i:s');
+        $message_created_at_display = $message_created_at;
+        $timestamp = strtotime($message_created_at);
+        if ($timestamp) {
+            $message_created_at_display = date('j M Y H:i', $timestamp);
+        }
+
+        $emailData = [
+            'member_name' => $member_name,
+            'member_id' => (int)$thread['memberID'],
+            'message_body' => $message_body,
+            'message_excerpt' => PerchUtil::excerpt_char($message_body, 160),
+            'message_created_at' => $message_created_at,
+            'message_created_at_display' => $message_created_at_display,
+            'message_id' => isset($message['id']) ? (int)$message['id'] : null,
+            'thread_id' => (int)$thread['id'],
+            'thread_url' => $thread_url,
+        ];
+
+        if (!empty($member_data['memberEmail'])) {
+            $emailData['member_email'] = $member_data['memberEmail'];
+        }
+
+        $Email = $this->API->get('Email');
+        $Email->set_template('members/emails/chat-new-member-message.html');
+        $Email->set_bulk($member_data);
+        $Email->set_bulk($emailData);
+        $Email->subject('New chat message from ' . $member_name);
+        $Email->senderName(PERCH_EMAIL_FROM_NAME);
+        $Email->senderEmail(PERCH_EMAIL_FROM);
+        $Email->recipientEmail('support@weightloss.co.uk');
+
+        $Email->send();
     }
 
     private function touch_thread($threadID, $last_from, $extra = [])

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>New member chat message</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #111827;
+        }
+        .wrapper {
+            width: 100%;
+            padding: 24px 0 64px;
+        }
+        .container {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            padding: 20px 28px;
+            background: #f3f4f6;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .content {
+            padding: 24px 28px 32px;
+            line-height: 1.55;
+        }
+        .content p {
+            margin: 0 0 16px;
+        }
+        .details-list {
+            margin: 0 0 16px;
+            padding: 0;
+            list-style: none;
+        }
+        .details-list li {
+            margin: 0 0 8px;
+        }
+        .message-box {
+            margin: 16px 0 24px;
+            padding: 16px;
+            background: #f9fafb;
+            border-left: 4px solid #2563eb;
+            white-space: pre-wrap;
+        }
+        .footer {
+            padding: 20px 28px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        a {
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>New member chat message</h1>
+            </div>
+            <div class="content">
+                <p>Hello,</p>
+                <p><strong><perch:email id="member_name" encode="true" /></strong> sent a new message in their support chat.</p>
+                <ul class="details-list">
+                    <li><strong>Member ID:</strong> <perch:email id="member_id" /></li>
+                    <perch:if exists="member_email">
+                        <li><strong>Email:</strong> <perch:email id="member_email" encode="true" /></li>
+                    </perch:if>
+                    <perch:if exists="message_id">
+                        <li><strong>Message ID:</strong> <perch:email id="message_id" /></li>
+                    </perch:if>
+                    <li><strong>Received:</strong> <perch:email id="message_created_at_display" encode="true" /></li>
+                </ul>
+                <p><strong>Preview:</strong> <perch:email id="message_excerpt" encode="true" /></p>
+                <div class="message-box">
+                    <perch:email id="message_body" encode="true" />
+                </div>
+                <p>You can reply directly from the admin area:</p>
+                <p><a href="<perch:email id=\"thread_url\" encode=\"true\" />">Open chat thread</a></p>
+                <p>Thank you,<br />WeightLoss Support</p>
+            </div>
+            <div class="footer">
+                <p>This automated alert is sent for each unread member chat message.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
