@@ -3,30 +3,102 @@
     include('../../../../core/inc/api.php');
 
     $API  = new PerchAPI(1.0, 'perch_members');
-// Get raw POST data
-$rawData = file_get_contents("php://input");
-$data = json_decode($rawData, true);
+    $Documents = new PerchMembers_Documents($API);
 
-if ($data && isset($data['selectId']) && isset($data['selectedValue'])) {
-    $id = htmlspecialchars($data['selectId']);
-    $value = htmlspecialchars($data['selectedValue']);
-        $Documents = new PerchMembers_Documents($API);
-$target_dir ="/perch/addons/apps/perch_members/documents/";
-/*
-$filePath = $target_dir.'/'.$Document->documentName();
+    $rawData = file_get_contents('php://input');
+    $data = json_decode($rawData, true);
 
-if (file_exists($filePath)) {
-    if (unlink($filePath)) {
-        echo "File deleted successfully.";
-    } else {
-        echo "Error deleting the file.";
+    header('Content-Type: application/json');
+
+    $response = [
+        'success' => false,
+        'message' => 'Invalid input.',
+    ];
+
+    http_response_code(400);
+
+    if (is_array($data)) {
+        $action = isset($data['action']) ? (string) $data['action'] : 'update-status';
+
+        switch ($action) {
+            case 'delete-document':
+                $documentId = null;
+                if (isset($data['documentId'])) {
+                    $documentId = (int) $data['documentId'];
+                } elseif (isset($data['selectId'])) {
+                    $documentId = (int) $data['selectId'];
+                }
+
+                if ($documentId && $documentId > 0) {
+                    $result = $Documents->delete_document($documentId);
+                    $response = array_merge([
+                        'action' => 'delete-document',
+                        'documentId' => $documentId,
+                    ], $result);
+
+                    if (!empty($result['success'])) {
+                        http_response_code(200);
+                    }
+                } else {
+                    $response['message'] = 'A valid document ID is required.';
+                }
+                break;
+
+            case 'update-status':
+            case '':
+                $documentId = null;
+                if (isset($data['documentId'])) {
+                    $documentId = (int) $data['documentId'];
+                } elseif (isset($data['selectId'])) {
+                    $documentId = (int) $data['selectId'];
+                }
+
+                $status = null;
+                if (isset($data['status'])) {
+                    $status = (string) $data['status'];
+                } elseif (isset($data['selectedValue'])) {
+                    $status = (string) $data['selectedValue'];
+                }
+
+                $allowed_statuses = ['pending', 'accepted', 'declined', 'rerequest'];
+
+                if (!$documentId || $documentId <= 0) {
+                    $response['message'] = 'A valid document ID is required.';
+                    break;
+                }
+
+                if (!in_array($status, $allowed_statuses, true)) {
+                    $response['message'] = 'A valid document status is required.';
+                    break;
+                }
+
+                $updated = $Documents->update_document_status($documentId, $status);
+
+                if ($updated) {
+                    $response = [
+                        'success' => true,
+                        'message' => 'Document status updated.',
+                        'action' => 'update-status',
+                        'documentId' => $documentId,
+                        'status' => $status,
+                    ];
+                    http_response_code(200);
+                } else {
+                    $response = [
+                        'success' => false,
+                        'message' => 'Unable to update the document status.',
+                        'action' => 'update-status',
+                        'documentId' => $documentId,
+                        'status' => $status,
+                    ];
+                }
+                break;
+
+            default:
+                $response['message'] = 'Unsupported action.';
+                break;
+        }
     }
-} else {
-    echo "File does not exist.";
-}*/
-   $r= $Documents->update_document_status($data['selectId'],$data['selectedValue']);
-    echo "Received from {$id}: {$value}:{$r}";
-} else {
-    echo "Invalid input.";
-}
+
+    echo json_encode($response);
 ?>

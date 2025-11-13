@@ -88,60 +88,55 @@
                     <th>Document Name</th>
                       <th>Document Type</th>
                     <th>Upload Date</th>
-                     <th>Archived</th>
-                     <th>Status</th>
+                    <th>Archived</th>
+                    <th>Status</th>
+                    <th class="actions">Actions</th>
                 </tr>
             </thead>
             <tbody>
         <?php
             if (PerchUtil::count($documents)) {
-            	$target_dir ="/perch/addons/apps/perch_members/documents/";
+                $target_dir = '/perch/addons/apps/perch_members/documents/';
 
+                foreach ($documents as $Document) {
+                    $document_id = (int) $Document->documentID();
+                    $document_name = (string) $Document->documentName();
+                    $document_type = (string) $Document->documentType();
+                    $document_status = (string) $Document->documentStatus();
+                    $document_row_id = 'document-row-'.$document_id;
+                    $document_href = $target_dir.rawurlencode($document_name);
+                    $document_name_attr = htmlspecialchars($document_name, ENT_QUOTES, 'UTF-8');
 
-                foreach($documents as $Document) {
-                    echo '<tr>';
-                        echo '<td class="action">'.PerchUtil::html($Document->documentID()).'</td>';
-
-                        echo '<td><a target="_blank" href="'.$target_dir.$Document->documentName().'">'.PerchUtil::html($Document->documentName()).'</a></td>';
-                     echo '<td class="action">'.PerchUtil::html($Document->documentType()).'</td>';
-
+                    echo '<tr id="'.PerchUtil::html($document_row_id).'" data-document-id="'.$document_id.'">';
+                        echo '<td class="action">'.PerchUtil::html($document_id).'</td>';
+                        echo '<td><a target="_blank" rel="noopener" href="'.PerchUtil::html($document_href).'">'.PerchUtil::html($document_name).'</a></td>';
+                        echo '<td class="action">'.PerchUtil::html($document_type).'</td>';
                         echo '<td>'.PerchUtil::html($Document->documenUploadDate() ? date('d M Y', strtotime($Document->documenUploadDate())) : '-').'</td>';
                         echo '<td>'.PerchUtil::html($Document->documentDeleted() ? 'Archived' : 'Available').'</td>';
 
-                          echo '<td>';
+                        echo '<td>';
+                            echo '<span class="document-status-control">';
+                                echo '<select id="document-status-'.$document_id.'" name="docstatus" data-document-id="'.$document_id.'">';
+                                $status_options = array(
+                                    'pending'   => 'Pending',
+                                    'accepted'  => 'Accepted',
+                                    'declined'  => 'Declined',
+                                    'rerequest' => 'Rerequest',
+                                );
+                                foreach ($status_options as $value => $label) {
+                                    $selected = ($document_status === $value) ? ' selected="selected"' : '';
+                                    echo '<option value="'.PerchUtil::html($value).'"'.$selected.'>'.PerchUtil::html($label).'</option>';
+                                }
+                                echo '</select>';
+                                echo '<span class="document-status-result" id="document-result-'.$document_id.'"></span>';
+                            echo '</span>';
+                        echo '</td>';
 
-                         echo '<span>';
-                         echo '<select id="'.PerchUtil::html($Document->documentID()).'" name="docstatus">';
-                       if($Document->documentStatus()=="pending"){
-                        echo '<option selected="selected" value="pending">Pending</option>';
-                         }else{
-                          echo '<option  value="pending">Pending</option>';
-                         }
-                          if($Document->documentStatus()=="accepted"){
-                                 echo '<option  selected="selected" value="accepted">Accepted</option>';
-                          }else{
-                                echo '<option value="accepted">Accepted</option>';
-                           }
-                             if($Document->documentStatus()=="declined"){
-
-                         echo '<option  selected="selected" value="declined">Declined</option>';
-                          }else{
-                         echo '<option value="declined">Declined</option>';
-                           }
-                                if($Document->documentStatus()=="rerequest"){
-                        echo '<option selected="selected" value="rerequest">Rerequest</option>';
-                        }else{
-                           echo '<option  value="rerequest">Rerequest</option>';
-                          }
-                        echo '</select>';
-                       /*  echo "<select id='".PerchUtil::html($Document->documentID())."' name='docstatus' >
-                         <option "; if($Document->documentStatus()=="pending"){echo " selected ";} echo"value='pending'>Pending</option><option value='accepted'>Accepted</option><option value='declined'>Declined</option><option value='rerequest'>Rerequest</option></select>";
-echo '<span id="result-select'.PerchUtil::html($Document->documentID()).'" class="result"></span>';*/
-
-                    echo '</td></tr>';
-
-
-
+                        echo '<td class="action">';
+                            echo '<button type="button" class="button button-small action-delete-document" data-document-id="'.$document_id.'" data-document-name="'.$document_name_attr.'">Delete</button>';
+                            echo '<span class="document-delete-result" id="document-delete-result-'.$document_id.'"></span>';
+                        echo '</td>';
+                    echo '</tr>';
                 }
 
             }

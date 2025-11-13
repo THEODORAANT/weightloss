@@ -1,7 +1,7 @@
 <?php
     # include the API
     include('../../../../core/inc/api.php');
-    
+
     $API  = new PerchAPI(1.0, 'perch_members');
     $HTML   = $API->get('HTML');
     $Lang   = $API->get('Lang');
@@ -13,44 +13,129 @@
     # Do anything you want to do before output is started
     include('../modes/_subnav.php');
     include('../modes/members.edit.pre.php');
-    
-    
+
+
     # Top layout
     include(PERCH_CORE . '/inc/top.php');
 
-    
+
     # Display your page
     include('../modes/members.edit.post.php');
-echo "<script>
-        document.querySelectorAll('select[name=docstatus]').forEach(select => {
-          select.addEventListener('change', function () {
-            const dataToSend = {
-              selectId: this.id,
-              selectedValue: this.value
-            };
 
-            fetch('handler.php', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(dataToSend)
-            })
-            .then(response => response.text())
-            .then(data => {
-              console.log('Server response:', data);
-              const resultDiv = document.getElementById('result-' + dataToSend.selectId);
-              if (resultDiv) {
-                resultDiv.textContent = 'saved!';
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
-          });
+echo <<<'JS'
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const setStatusMessage = function (elementId, message, isError) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      element.textContent = message;
+
+      if (isError) {
+        element.classList.add('error');
+      } else {
+        element.classList.remove('error');
+      }
+
+      if (message) {
+        window.setTimeout(function () {
+          element.textContent = '';
+          element.classList.remove('error');
+        }, 4000);
+      }
+    };
+
+    const sendRequest = function (payload) {
+      return fetch('handler.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload)
+      }).then(function (response) {
+        return response.json().catch(function () {
+          return {};
+        }).then(function (data) {
+          if (!response.ok || !data.success) {
+            const error = new Error(data.message || 'Request failed.');
+            error.data = data;
+            error.status = response.status;
+            throw error;
+          }
+          return data;
         });
-      </script>";
-    
+      });
+    };
+
+    document.querySelectorAll('select[name="docstatus"]').forEach(function (select) {
+      select.addEventListener('change', function () {
+        const documentId = this.dataset.documentId;
+        const status = this.value;
+
+        if (!documentId) {
+          return;
+        }
+
+        sendRequest({
+          action: 'update-status',
+          documentId: parseInt(documentId, 10),
+          status: status
+        })
+          .then(function (data) {
+            const message = data.message || 'Saved';
+            setStatusMessage('document-result-' + documentId, message, false);
+          })
+          .catch(function (error) {
+            console.error('Error updating document status:', error);
+            const message = error.data && error.data.message ? error.data.message : 'Unable to update document status.';
+            setStatusMessage('document-result-' + documentId, message, true);
+          });
+      });
+    });
+
+    document.querySelectorAll('.action-delete-document').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const documentId = this.dataset.documentId;
+        const documentName = this.dataset.documentName || '';
+
+        if (!documentId) {
+          return;
+        }
+
+        const confirmMessage = documentName
+          ? 'Are you sure you want to delete "' + documentName + '"?'
+          : 'Are you sure you want to delete this document?';
+
+        if (!window.confirm(confirmMessage)) {
+          return;
+        }
+
+        sendRequest({
+          action: 'delete-document',
+          documentId: parseInt(documentId, 10)
+        })
+          .then(function (data) {
+            if (data.message && data.message !== 'Document deleted.') {
+              window.alert(data.message);
+            }
+
+            const row = document.querySelector('tr[data-document-id="' + documentId + '"]');
+            if (row) {
+              row.remove();
+            }
+          })
+          .catch(function (error) {
+            console.error('Error deleting document:', error);
+            const message = error.data && error.data.message ? error.data.message : 'Unable to delete document.';
+            setStatusMessage('document-delete-result-' + documentId, message, true);
+          });
+      });
+    });
+  });
+</script>
+JS;
+
     # Bottom layout
     include(PERCH_CORE . '/inc/btm.php');
 ?>
