@@ -42,6 +42,47 @@ class PerchMembers_Documents extends PerchAPI_Factory
        return $r;
        }
 
+        public function delete_document($documentID)
+        {
+       $Document = $this->find((int)$documentID);
+
+       if (!$Document) {
+           return [
+               'success' => false,
+               'message' => 'Document not found.',
+           ];
+       }
+
+       $file_name = trim((string) $Document->documentName());
+       $file_deleted = true;
+
+       if ($file_name !== '') {
+           $file_path = PerchUtil::file_path(__DIR__.'/documents/'.$file_name);
+
+           if ($file_path && file_exists($file_path) && is_file($file_path)) {
+               if (!@unlink($file_path)) {
+                   $file_deleted = false;
+               }
+           }
+       }
+
+       if ($Document->delete()) {
+           $message = $file_deleted
+               ? 'Document deleted.'
+               : 'Document deleted but the file could not be removed from the server.';
+
+           return [
+               'success' => true,
+               'message' => $message,
+           ];
+       }
+
+       return [
+           'success' => false,
+           'message' => 'Unable to delete document.',
+       ];
+        }
+
        protected function send_document_rerequest_email(PerchMembers_Document $Document)
        {
        if (!$this->api) {
