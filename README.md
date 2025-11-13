@@ -47,6 +47,24 @@ php advance_next_billing.php <packageID>
 
 This keeps the package's billing cycle up to date.
 
+## Updating an Order Item's Product
+
+Use `scripts/update_order_item_product.php` to switch an order item's product
+and adjust its pricing details. Run the script from the project root so it can
+load the Perch runtime:
+
+```
+php scripts/update_order_item_product.php \
+  --order-id=123 \
+  --item-id=456 \
+  --product-id=789 \
+  --price=12.99
+```
+
+Replace the option values with the relevant IDs and unit price. You can supply
+additional flags such as `--qty`, `--discount`, or `--dry-run`; run the script
+with `--help` to see every available option and their descriptions.
+
 ## Package Report
 
 In the admin interface, under the Orders section, use the **Package Report** link to view upcoming payments. The report lists each package along with its customer ID, status, and next billing date.
