@@ -7,6 +7,7 @@ require_once __DIR__ . '/../perch/runtime.php';
 $options = getopt('', [
     'date::',
     'days::',
+    'test-date::',
     'order-id::',
     'customer-id::',
     'dry-run',
@@ -18,6 +19,7 @@ if (isset($options['help'])) {
     echo "       --dry-run        Output the actions without sending notifications." . PHP_EOL;
     echo "       --date           Process orders created on the specified date (YYYY-MM-DD)." . PHP_EOL;
     echo "       --days           Process orders created N days ago (default: 21)." . PHP_EOL;
+    echo "       --test-date      Dry-run orders created on the specified date (YYYY-MM-DD)." . PHP_EOL;
     echo "       --order-id       Limit the run to a specific order ID." . PHP_EOL;
     echo "       --customer-id    Limit the run to a specific customer ID." . PHP_EOL;
     exit(0);
@@ -27,13 +29,29 @@ $dryRun = array_key_exists('dry-run', $options);
 
 $dateOption = $options['date'] ?? null;
 $daysOption = $options['days'] ?? null;
+$testDateOption = $options['test-date'] ?? null;
 
 if ($dateOption !== null && $daysOption !== null) {
     fwrite(STDERR, "Please specify either --date or --days, not both." . PHP_EOL);
     exit(1);
 }
 
-if ($dateOption !== null) {
+if ($testDateOption !== null && ($dateOption !== null || $daysOption !== null)) {
+    fwrite(STDERR, "--test-date can't be combined with --date or --days." . PHP_EOL);
+    exit(1);
+}
+
+$testMode = false;
+
+if ($testDateOption !== null) {
+    $targetDate = DateTimeImmutable::createFromFormat('Y-m-d', $testDateOption);
+    if (!$targetDate) {
+        fwrite(STDERR, "Invalid test date supplied. Use YYYY-MM-DD." . PHP_EOL);
+        exit(1);
+    }
+    $dryRun = true;
+    $testMode = true;
+} elseif ($dateOption !== null) {
     $targetDate = DateTimeImmutable::createFromFormat('Y-m-d', $dateOption);
     if (!$targetDate) {
         fwrite(STDERR, "Invalid date supplied. Use YYYY-MM-DD." . PHP_EOL);
@@ -51,6 +69,10 @@ if ($dateOption !== null) {
 $startOfDay = $targetDate->setTime(0, 0, 0)->format('Y-m-d H:i:s');
 $endOfDay = $targetDate->setTime(23, 59, 59)->format('Y-m-d H:i:s');
 $targetDateString = $targetDate->format('Y-m-d');
+
+if ($testMode) {
+    echo 'Test mode: dry-run for orders created on ' . $targetDateString . '.' . PHP_EOL;
+}
 
 $API = new PerchAPI(1.0, 'perch_shop');
 $DB = PerchDB::fetch();
