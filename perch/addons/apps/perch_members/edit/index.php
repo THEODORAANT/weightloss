@@ -94,6 +94,47 @@ echo <<<'JS'
       });
     });
 
+    const reminderHiddenField = document.getElementById('document-reminder-status-input');
+    if (reminderHiddenField) {
+      const reminderCheckboxes = Array.prototype.slice.call(document.querySelectorAll('.document-reminder-checkbox'));
+      const defaultValue = 'all_approved';
+
+      const syncCheckboxes = function (targetValue) {
+        reminderCheckboxes.forEach(function (checkbox) {
+          const optionValue = checkbox.dataset.value || '';
+          checkbox.checked = optionValue === targetValue;
+        });
+      };
+
+      const ensureSelection = function () {
+        const currentValue = reminderHiddenField.value || defaultValue;
+        syncCheckboxes(currentValue);
+        reminderHiddenField.value = currentValue;
+      };
+
+      ensureSelection();
+
+      reminderCheckboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+          const optionValue = this.dataset.value || '';
+
+          if (this.checked) {
+            reminderHiddenField.value = optionValue || defaultValue;
+            reminderCheckboxes.forEach(function (other) {
+              if (other !== checkbox) {
+                other.checked = false;
+              }
+            });
+          } else {
+            if (reminderHiddenField.value === optionValue) {
+              reminderHiddenField.value = defaultValue;
+            }
+            window.setTimeout(ensureSelection, 0);
+          }
+        });
+      });
+    }
+
     document.querySelectorAll('.action-delete-document').forEach(function (button) {
       button.addEventListener('click', function () {
         const documentId = this.dataset.documentId;

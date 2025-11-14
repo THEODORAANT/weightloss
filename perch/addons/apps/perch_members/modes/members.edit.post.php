@@ -154,6 +154,49 @@
         </table>
     </div>
 
+    <?php
+        echo $HTML->heading3('Automated document reminders');
+    ?>
+    <div class="form-inner">
+        <p class="hint">Select the reminder that matches the outstanding documents. Only one option can be active at a time.</p>
+        <fieldset class="document-reminder-fieldset">
+            <legend>Reminder status</legend>
+            <input type="hidden" name="document_reminder_status" id="document-reminder-status-input" value="<?php echo PerchUtil::html($documentReminderStatus); ?>" />
+        <?php
+            if (PerchUtil::count($documentReminderOptions)) {
+                foreach ($documentReminderOptions as $value => $option) {
+                    $label = isset($option['label']) ? $option['label'] : ucfirst(str_replace('_', ' ', (string) $value));
+                    $description = isset($option['description']) ? trim((string) $option['description']) : '';
+                    $checked = ($documentReminderStatus === $value) ? ' checked="checked"' : '';
+
+                    echo '<label class="document-reminder-choice">';
+                    echo '<input type="checkbox" class="document-reminder-checkbox" name="document_reminder_status_choice[]" value="'.PerchUtil::html($value).'" data-value="'.PerchUtil::html($value).'"'.$checked.' />';
+                    echo '<span class="document-reminder-label">'.PerchUtil::html($label).'</span>';
+                    if ($description !== '') {
+                        echo '<span class="document-reminder-description">'.PerchUtil::html($description).'</span>';
+                    }
+                    echo '</label>';
+                }
+            }
+        ?>
+        </fieldset>
+        <?php
+            if ($documentReminderLastSentAt) {
+                $lastSentTimestamp = strtotime($documentReminderLastSentAt);
+                $lastSentFormatted = $lastSentTimestamp ? date('d M Y H:i', $lastSentTimestamp) : (string) $documentReminderLastSentAt;
+                $lastStatusLabel = isset($documentReminderOptions[$documentReminderLastStatus]['label'])
+                    ? $documentReminderOptions[$documentReminderLastStatus]['label']
+                    : $documentReminderLastStatus;
+
+                echo '<p class="info">Last reminder sent on '.PerchUtil::html($lastSentFormatted);
+                if ($lastStatusLabel) {
+                    echo ' ('.PerchUtil::html($lastStatusLabel).')';
+                }
+                echo '.</p>';
+            }
+        ?>
+    </div>
+
      <?php
         if ($is_customer) {
             echo $HTML->heading2('Customer addresses');
