@@ -56,6 +56,9 @@ specific day (`YYYY-MM-DD`), or `--days` to override the 21-day offset. You can
 also limit the run to a single order or customer via `--order-id` or
 `--customer-id`.
 
+For a quick safety check, run `php scripts/send_reorder_reminders.php --test-date=2024-01-15` to
+dry-run all orders from that day without delivering emails or push notifications.
+
 ## Advancing Billing Dates
 
 After recording a payment, run `advance_next_billing.php` to move the

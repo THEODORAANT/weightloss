@@ -7,6 +7,7 @@ require_once __DIR__ . '/../perch/runtime.php';
 $options = getopt('', [
     'date::',
     'days::',
+    'test-date::',
     'order-id::',
     'customer-id::',
     'dry-run',
@@ -18,6 +19,7 @@ if (isset($options['help'])) {
     echo "       --dry-run        Output the actions without sending notifications." . PHP_EOL;
     echo "       --date           Process orders created on the specified date (YYYY-MM-DD)." . PHP_EOL;
     echo "       --days           Process orders created N days ago (default: 21)." . PHP_EOL;
+    echo "       --test-date      Dry-run orders created on the specified date (YYYY-MM-DD)." . PHP_EOL;
     echo "       --order-id       Limit the run to a specific order ID." . PHP_EOL;
     echo "       --customer-id    Limit the run to a specific customer ID." . PHP_EOL;
     exit(0);
@@ -27,13 +29,29 @@ $dryRun = array_key_exists('dry-run', $options);
 
 $dateOption = $options['date'] ?? null;
 $daysOption = $options['days'] ?? null;
+$testDateOption = $options['test-date'] ?? null;
 
 if ($dateOption !== null && $daysOption !== null) {
     fwrite(STDERR, "Please specify either --date or --days, not both." . PHP_EOL);
     exit(1);
 }
 
-if ($dateOption !== null) {
+if ($testDateOption !== null && ($dateOption !== null || $daysOption !== null)) {
+    fwrite(STDERR, "--test-date can't be combined with --date or --days." . PHP_EOL);
+    exit(1);
+}
+
+$testMode = false;
+
+if ($testDateOption !== null) {
+    $targetDate = DateTimeImmutable::createFromFormat('Y-m-d', $testDateOption);
+    if (!$targetDate) {
+        fwrite(STDERR, "Invalid test date supplied. Use YYYY-MM-DD." . PHP_EOL);
+        exit(1);
+    }
+    $dryRun = true;
+    $testMode = true;
+} elseif ($dateOption !== null) {
     $targetDate = DateTimeImmutable::createFromFormat('Y-m-d', $dateOption);
     if (!$targetDate) {
         fwrite(STDERR, "Invalid date supplied. Use YYYY-MM-DD." . PHP_EOL);
@@ -51,6 +69,10 @@ if ($dateOption !== null) {
 $startOfDay = $targetDate->setTime(0, 0, 0)->format('Y-m-d H:i:s');
 $endOfDay = $targetDate->setTime(23, 59, 59)->format('Y-m-d H:i:s');
 $targetDateString = $targetDate->format('Y-m-d');
+
+if ($testMode) {
+    echo 'Test mode: dry-run for orders created on ' . $targetDateString . '.' . PHP_EOL;
+}
 
 $API = new PerchAPI(1.0, 'perch_shop');
 $DB = PerchDB::fetch();
@@ -133,6 +155,7 @@ $appendLog = function (int $orderID, int $customerID, string $status) use ($logF
     file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
 };
 
+
 $notifiedCustomers = [];
 $sentCount = 0;
 $skippedCount = 0;
@@ -156,99 +179,21 @@ foreach ($orders as $order) {
         continue;
     }
 
-    $laterOrderSQL = 'SELECT orderID FROM ' . $ordersTable
-        . ' WHERE customerID=' . $DB->pdb($customerID)
-        . ' AND orderStatus=' . $DB->pdb('paid')
-        . ' AND orderDeleted IS NULL'
-        . ' AND orderCreated>' . $DB->pdb($order['orderCreated'])
-        . ' ORDER BY orderCreated DESC LIMIT 1';
-
-    $laterOrderID = $DB->get_value($laterOrderSQL);
-    if ($laterOrderID) {
-        echo 'Skipping order ' . $orderID . ' – customer has a later paid order #' . $laterOrderID . '.' . PHP_EOL;
-        if (!$dryRun) {
-            $appendLog($orderID, $customerID, 'skipped-later-order');
-        }
-        $skippedCount++;
-        continue;
-    }
-
-    $Customer = $Customers->find($customerID);
-    if (!$Customer) {
-        echo 'Skipping order ' . $orderID . ' – customer record not found.' . PHP_EOL;
-        if (!$dryRun) {
-            $appendLog($orderID, $customerID, 'skipped-missing-customer');
-        }
-        $skippedCount++;
-        continue;
-    }
-
-    $emailAddress = trim((string)$Customer->customerEmail());
-    if ($emailAddress === '') {
-        echo 'Skipping order ' . $orderID . ' – customer has no email address.' . PHP_EOL;
-        if (!$dryRun) {
-            $appendLog($orderID, $customerID, 'skipped-missing-email');
-        }
-        $skippedCount++;
-        continue;
-    }
-
-    $firstName = trim((string)$Customer->customerFirstName());
-    if ($firstName === '') {
-        $firstName = 'there';
-    }
-
-    $orderDate = new DateTimeImmutable($order['orderCreated']);
-    $orderDateHuman = $orderDate->format('j F Y');
-
-    $title = 'Time to reorder';
-    $message = "It's been about three weeks since your order on {$orderDateHuman}. You can place your next order and pay online at {$reorderURL}.";
-
-    echo 'Preparing reminder for order ' . $orderID . ' (customer ' . $customerID . ').' . PHP_EOL;
-
-    if ($dryRun) {
-        $notifiedCustomers[$customerID] = true;
-        continue;
-    }
-
-    try {
-        $Email = $API->get('Email');
-        $Email->subject('Time to reorder your medication');
-        $Email->senderName($senderName);
-        $Email->senderEmail($senderEmail);
-        $Email->recipientEmail($emailAddress);
-        $Email->set_template('members/emails/reorder_reminder.html');
-        $Email->set_bulk([
-            'first_name' => $firstName,
-            'order_date' => $orderDateHuman,
-            'reorder_url' => $reorderURL,
-            'sender_name' => $senderName,
-        ]);
-
-        $Email->send();
-    } catch (Exception $exception) {
-        echo 'Failed to send email for order ' . $orderID . ': ' . $exception->getMessage() . PHP_EOL;
-        $appendLog($orderID, $customerID, 'error-email');
-        $skippedCount++;
-        continue;
-    }
-
-    $memberID = (int)$Customer->memberID();
-    if ($memberID > 0) {
-        try {
-            perch_member_add_notification($memberID, $title, $message);
-        } catch (Exception $exception) {
-            echo 'Failed to create notification for order ' . $orderID . ': ' . $exception->getMessage() . PHP_EOL;
-            $appendLog($orderID, $customerID, 'sent-notification-error');
-            $notifiedCustomers[$customerID] = true;
-            $sentCount++;
-            continue;
-        }
-    }
-
-    $appendLog($orderID, $customerID, 'sent');
-    $notifiedCustomers[$customerID] = true;
-    $sentCount++;
+    send_reorder_reminder(
+        $order,
+        $dryRun,
+        $appendLog,
+        $notifiedCustomers,
+        $sentCount,
+        $skippedCount,
+        $DB,
+        $ordersTable,
+        $Customers,
+        $API,
+        $reorderURL,
+        $senderName,
+        $senderEmail
+    );
 }
 
 echo 'Finished. Sent ' . $sentCount . ' reminder' . ($sentCount === 1 ? '' : 's') . ' and skipped ' . $skippedCount . '.' . PHP_EOL;
