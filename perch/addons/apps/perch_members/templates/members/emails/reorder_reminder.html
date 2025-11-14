@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time to reorder</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #313638;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 32px 24px;
+        }
+        p {
+            line-height: 1.5;
+            font-size: 16px;
+            margin: 0 0 16px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #e8bf6a;
+            color: #313638;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>
+            Hi
+            <perch:if exists="first_name">
+                <perch:email id="first_name" />
+            <perch:else />
+                there
+            </perch:if>,
+        </p>
+        <p>
+            It's been about three weeks since your order on <strong><perch:email id="order_date" /></strong>.
+            When you're ready for your next supply you can place your order and pay securely online.
+        </p>
+        <p style="text-align: center; margin: 32px 0;">
+            <a class="button" href="<perch:email id=&quot;reorder_url&quot; />">Reorder now</a>
+        </p>
+        <p>
+            If you have any questions or need help, just reply to this message and our team will be happy to assist.
+        </p>
+        <p>
+            Best regards,<br />
+            <perch:if exists="sender_name">
+                <perch:email id="sender_name" />
+            <perch:else />
+                The Weightloss Team
+            </perch:if>
+        </p>
+    </div>
+</body>
+</html>
