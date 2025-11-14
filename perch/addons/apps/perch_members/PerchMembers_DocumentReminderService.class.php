@@ -8,6 +8,11 @@ class PerchMembers_DocumentReminderService
     protected $api;
 
     /**
+     * @var string|null
+     */
+    protected $logFilePath;
+
+    /**
      * @var array<string,array<string,mixed>>
      */
     protected $options = [
@@ -85,6 +90,19 @@ class PerchMembers_DocumentReminderService
     public function __construct(PerchAPI $api)
     {
         $this->api = $api;
+
+        $rootDir = realpath(__DIR__ . '/../../../../');
+        if ($rootDir === false) {
+            $rootDir = dirname(dirname(dirname(dirname(__DIR__))));
+        }
+
+        $logDir = $rootDir . DIRECTORY_SEPARATOR . 'logs';
+
+        if (!is_dir($logDir)) {
+            @mkdir($logDir, 0777, true);
+        }
+
+        $this->logFilePath = PerchUtil::file_path($logDir . DIRECTORY_SEPARATOR . 'document_reminders.log');
     }
 
     /**
@@ -339,10 +357,14 @@ class PerchMembers_DocumentReminderService
                 if (is_callable($logger)) {
                     call_user_func($logger, 'Sent "' . $option['label'] . '" reminder to member #' . $Member->id() . ' (' . $Member->memberEmail() . ')');
                 }
+
+                $this->log_message('Sent "' . $option['label'] . '" reminder to member #' . $Member->id() . ' (' . $Member->memberEmail() . ')');
             } else {
                 if (is_callable($logger)) {
                     call_user_func($logger, 'Failed to send "' . $option['label'] . '" reminder to member #' . $Member->id() . ' (' . $Member->memberEmail() . ')');
                 }
+
+                $this->log_message('Failed to send "' . $option['label'] . '" reminder to member #' . $Member->id() . ' (' . $Member->memberEmail() . ')');
             }
         }
 
@@ -362,5 +384,20 @@ class PerchMembers_DocumentReminderService
         $decoded = PerchUtil::json_safe_decode($json, true);
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    protected function log_message($message)
+    {
+        if (!$this->logFilePath) {
+            return;
+        }
+
+        $line = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
+
+        @file_put_contents($this->logFilePath, $line, FILE_APPEND | LOCK_EX);
     }
 }
