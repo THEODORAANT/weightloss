@@ -7,11 +7,17 @@
     $Notes = new PerchMembers_Notes($API);
     $NotePharmacyStatuses = new PerchMembers_NotePharmacyStatuses($API);
     $Documents = new PerchMembers_Documents($API);
+    $DocumentReminders = new PerchMembers_DocumentReminderService($API);
      $Notifications = new PerchMembers_Notifications($API);
     $Questionnaires = new PerchMembers_Questionnaires($API);
         $Orders   = new PerchShop_Orders($API);
         $Customers = new PerchShop_Customers($API);
         $Addresses = new PerchShop_Addresses($API);
+
+    $documentReminderOptions = $DocumentReminders->get_options();
+    $documentReminderStatus = 'all_approved';
+    $documentReminderLastStatus = '';
+    $documentReminderLastSentAt = null;
 
     $HTML = $API->get('HTML');
 
@@ -47,6 +53,11 @@
        $Customer = $Customers->find_by_memberID($memberID);
 
         $details = $Member->to_array();
+
+        $reminderData = $DocumentReminders->get_member_status_data($Member);
+        $documentReminderStatus = $reminderData['status'];
+        $documentReminderLastStatus = $reminderData['last_status'];
+        $documentReminderLastSentAt = $reminderData['last_sent_at'];
 
         $heading1 = 'Editing a Member';
 
@@ -92,6 +103,16 @@
     if ($Form->submitted()) {
 
         $post = $_POST;
+
+        if (isset($post['document_reminder_status'])) {
+            $document_reminder_selection = $DocumentReminders->sanitize_status($post['document_reminder_status']);
+        } elseif (isset($post['document_reminder_status_choice']) && is_array($post['document_reminder_status_choice'])) {
+            $selected_choice = reset($post['document_reminder_status_choice']);
+            $document_reminder_selection = $DocumentReminders->sanitize_status($selected_choice);
+        } else {
+            $document_reminder_selection = 'all_approved';
+        }
+        $documentReminderStatus = $document_reminder_selection;
 
         if (isset($post['send_note_to_pharmacy']) && $post['send_note_to_pharmacy'] !== '') {
             if (!is_object($Member)) {
@@ -212,6 +233,11 @@
 
             if (is_object($Member)) {
                 $Member->update($data);
+                $DocumentReminders->update_member_status($Member, $document_reminder_selection);
+                $statusData = $DocumentReminders->get_member_status_data($Member);
+                $documentReminderStatus = $statusData['status'];
+                $documentReminderLastStatus = $statusData['last_status'];
+                $documentReminderLastSentAt = $statusData['last_sent_at'];
                 $result = true;
             }else{
 
@@ -239,6 +265,12 @@
                         );
 
                         $Member->update($member);
+
+                        $DocumentReminders->update_member_status($Member, $document_reminder_selection);
+                        $statusData = $DocumentReminders->get_member_status_data($Member);
+                        $documentReminderStatus = $statusData['status'];
+                        $documentReminderLastStatus = $statusData['last_status'];
+                        $documentReminderLastSentAt = $statusData['last_sent_at'];
 
                         if (isset($post['send_email']) && $post['send_email']=='1') {
                             $Member->send_welcome_email();
@@ -429,6 +461,11 @@
 
             if (is_object($Member)) {
                 $details = $Member->to_array();
+
+                $reminderData = $DocumentReminders->get_member_status_data($Member);
+                $documentReminderStatus = $reminderData['status'];
+                $documentReminderLastStatus = $reminderData['last_status'];
+                $documentReminderLastSentAt = $reminderData['last_sent_at'];
             }else{
                 $details = array();
             }
