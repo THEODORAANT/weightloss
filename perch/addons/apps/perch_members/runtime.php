@@ -1015,8 +1015,8 @@ function send_reorder_reminder(
     string $senderName,
     string $senderEmail
 ): void {
-    $orderID = (int)$order['orderID'];
-    $customerID = (int)$order['customerID'];
+    $orderID = (int) $order['orderID'];
+    $customerID = (int) $order['customerID'];
 
     $laterOrderSQL = 'SELECT orderID FROM ' . $ordersTable
         . ' WHERE customerID=' . $DB->pdb($customerID)
@@ -1045,9 +1045,9 @@ function send_reorder_reminder(
         return;
     }
 
-    $emailAddress = trim((string)$Customer->customerEmail());
-    if ($emailAddress === '') {
-        echo 'Skipping order ' . $orderID . ' – customer has no email address.' . PHP_EOL;
+    $emailAddress = trim((string) $Customer->customerEmail());
+    if ($emailAddress === '' || !PerchUtil::is_valid_email($emailAddress)) {
+        echo 'Skipping order ' . $orderID . ' – customer has no valid email address.' . PHP_EOL;
         if (!$dryRun) {
             $appendLog($orderID, $customerID, 'skipped-missing-email');
         }
@@ -1055,16 +1055,33 @@ function send_reorder_reminder(
         return;
     }
 
-    $firstName = trim((string)$Customer->customerFirstName());
+    $firstName = trim((string) $Customer->customerFirstName());
     if ($firstName === '') {
         $firstName = 'there';
     }
 
-    $orderDate = new DateTimeImmutable($order['orderCreated']);
+    try {
+        $orderDate = new DateTimeImmutable($order['orderCreated']);
+    } catch (Exception $exception) {
+        echo 'Skipping order ' . $orderID . ' – invalid order date (' . $exception->getMessage() . ').' . PHP_EOL;
+        if (!$dryRun) {
+            $appendLog($orderID, $customerID, 'skipped-invalid-date');
+        }
+        $skippedCount++;
+        return;
+    }
+
     $orderDateHuman = $orderDate->format('j F Y');
 
     $title = 'Time to reorder';
     $message = "It's been about three weeks since your order on {$orderDateHuman}. You can place your next order and pay online at {$reorderURL}.";
+
+    $emailData = [
+        'first_name'  => $firstName,
+        'order_date'  => $orderDateHuman,
+        'reorder_url' => $reorderURL,
+        'sender_name' => $senderName,
+    ];
 
     echo 'Preparing reminder for order ' . $orderID . ' (customer ' . $customerID . ').' . PHP_EOL;
 
@@ -1075,19 +1092,14 @@ function send_reorder_reminder(
 
     try {
         $Email = $API->get('Email');
+        $Email->set_template('members/emails/reorder_reminder.html');
+        $Email->set_bulk($emailData);
         $Email->subject('Time to reorder your medication');
         $Email->senderName($senderName);
         $Email->senderEmail($senderEmail);
         $Email->recipientEmail($emailAddress);
-        $Email->set_template('members/emails/reorder_reminder.html');
-        $Email->set_bulk([
-            'first_name' => $firstName,
-            'order_date' => $orderDateHuman,
-            'reorder_url' => $reorderURL,
-            'sender_name' => $senderName,
-        ]);
 
-        $Email->send();
+        $emailSent = $Email->send();
     } catch (Exception $exception) {
         echo 'Failed to send email for order ' . $orderID . ': ' . $exception->getMessage() . PHP_EOL;
         $appendLog($orderID, $customerID, 'error-email');
@@ -1095,7 +1107,14 @@ function send_reorder_reminder(
         return;
     }
 
-    $memberID = (int)$Customer->memberID();
+    if (!$emailSent) {
+        echo 'Failed to send email for order ' . $orderID . ' – send() returned false.' . PHP_EOL;
+        $appendLog($orderID, $customerID, 'error-email');
+        $skippedCount++;
+        return;
+    }
+
+    $memberID = (int) $Customer->memberID();
     if ($memberID > 0) {
         try {
             perch_member_add_notification($memberID, $title, $message);
