@@ -996,8 +996,9 @@ function perch_members_weight_goal_upsert($memberID, array $data)
 /**
  * Process a single order for reorder reminder delivery.
  *
- * @param array<string,mixed> $order
- * @param array<int,bool>     $notifiedCustomers
+ * @param array<string,mixed>          $order
+ * @param array<int,bool>              $notifiedCustomers
+ * @param PerchDB_MySQL|PerchDB_MySQLi $DB
  */
 function send_reorder_reminder(
     array $order,
@@ -1006,7 +1007,7 @@ function send_reorder_reminder(
     array &$notifiedCustomers,
     int &$sentCount,
     int &$skippedCount,
-    PerchDB $DB,
+    $DB,
     string $ordersTable,
     PerchShop_Customers $Customers,
     PerchAPI $API,
