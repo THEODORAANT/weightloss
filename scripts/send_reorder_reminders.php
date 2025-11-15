@@ -77,6 +77,7 @@ if ($testMode) {
 $API = new PerchAPI(1.0, 'perch_shop');
 $DB = PerchDB::fetch();
 $Customers = new PerchShop_Customers($API);
+$ReminderService = new PerchMembers_ReorderReminderService($API);
 
 $ordersTable = PERCH_DB_PREFIX . 'shop_orders';
 
@@ -179,7 +180,7 @@ foreach ($orders as $order) {
         continue;
     }
 
-    send_reorder_reminder(
+    $ReminderService->sendReminder(
         $order,
         $dryRun,
         $appendLog,
@@ -189,7 +190,6 @@ foreach ($orders as $order) {
         $DB,
         $ordersTable,
         $Customers,
-        $API,
         $reorderURL,
         $senderName,
         $senderEmail
