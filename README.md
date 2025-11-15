@@ -36,6 +36,29 @@ php send_payment_notification.php
 Each matching customer receives an email reminder to complete the payment
 from their portal.
 
+## Reorder Reminders
+
+Run `scripts/send_reorder_reminders.php` to email customers roughly three
+weeks after a paid order. By default the script looks for orders created 21
+days ago, skips anyone who has already placed a newer paid order, and sends a
+push notification through `perch_member_add_notification` alongside the
+email. A log entry is stored in `logs/reorder_reminders/` for each processed
+order so follow-up runs stay idempotent.
+
+Common usage:
+
+```
+php scripts/send_reorder_reminders.php
+```
+
+Use `--dry-run` to preview actions without sending messages, `--date` to target a
+specific day (`YYYY-MM-DD`), or `--days` to override the 21-day offset. You can
+also limit the run to a single order or customer via `--order-id` or
+`--customer-id`.
+
+For a quick safety check, run `php scripts/send_reorder_reminders.php --test-date=2024-01-15` to
+dry-run all orders from that day without delivering emails or push notifications.
+
 ## Advancing Billing Dates
 
 After recording a payment, run `advance_next_billing.php` to move the
