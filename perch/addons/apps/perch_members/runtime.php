@@ -992,3 +992,4 @@ function perch_members_weight_goal_upsert($memberID, array $data)
 {
     return perch_members_weight_goals_repository()->upsertGoal($memberID, $data);
 }
+
