@@ -74,10 +74,11 @@ if ($testMode) {
     echo 'Test mode: dry-run for orders created on ' . $targetDateString . '.' . PHP_EOL;
 }
 
-$API = new PerchAPI(1.0, 'perch_shop');
+$ShopAPI = new PerchAPI(1.0, 'perch_shop');
+$MembersAPI = new PerchAPI(1.0, 'perch_members');
 $DB = PerchDB::fetch();
-$Customers = new PerchShop_Customers($API);
-$ReminderService = new PerchMembers_ReorderReminderService($API);
+$Customers = new PerchShop_Customers($ShopAPI);
+$ReminderService = new PerchMembers_ReorderReminderService($MembersAPI);
 
 $ordersTable = PERCH_DB_PREFIX . 'shop_orders';
 
