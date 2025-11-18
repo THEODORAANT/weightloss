@@ -9,7 +9,9 @@ class PerchMembers_ReorderReminderService
 
     public function __construct(PerchAPI $api)
     {
-        $this->api = $api;
+       // $this->api = $api;
+                $this->api = $api instanceof PerchAPI ? $api : new PerchAPI(1.0, 'perch_members');
+
     }
 
     /**
@@ -107,23 +109,35 @@ class PerchMembers_ReorderReminderService
             $notifiedCustomers[$customerID] = true;
             return;
         }
-
-        try {
+echo "emailData"; print_r($emailData);
+       // try {
             $Email = $this->api->get('Email');
-            $Email->set_template('members/emails/reorder_reminder.html');
+           // $Email->set_template('/perch/addons/apps/perch_members/templates/members/emails/reorder_reminder.html','members');
+             $Email->set_template('members/emails/reorder_reminder.html');
+
             $Email->set_bulk($emailData);
             $Email->subject('Time to reorder your medication');
-            $Email->senderName($senderName);
-            $Email->senderEmail($senderEmail);
-            $Email->recipientEmail($emailAddress);
+           // $Email->senderName($senderName);
+          //  $Email->senderEmail($senderEmail);
+          //  $Email->recipientEmail($emailAddress);
 
+                    $Email->senderName(PERCH_EMAIL_FROM_NAME);
+                    $Email->senderEmail(PERCH_EMAIL_FROM);
+                    $Email->recipientEmail($emailAddress);
+                   // $Email->recipientEmail('perchrunway@gmail.com');
+
+  echo "Email";
+            print_r($Email);
             $emailSent = $Email->send();
-        } catch (Exception $exception) {
+
+            echo "email";
+            print_r($emailSent);
+     /*   } catch (Exception $exception) {
             echo 'Failed to send email for order ' . $orderID . ': ' . $exception->getMessage() . PHP_EOL;
             $appendLog($orderID, $customerID, 'error-email');
             $skippedCount++;
             return;
-        }
+        }*/
 
         if (!$emailSent) {
             echo 'Failed to send email for order ' . $orderID . ' – send() returned false.' . PHP_EOL;

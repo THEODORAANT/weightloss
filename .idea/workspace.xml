@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/weightloss/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_ReorderReminderService.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_ReorderReminderService.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/edit/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/edit/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_all_required.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_all_required.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_id.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_id.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_previous.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_previous.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_proof_id_previous.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_proof_id_previous.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_proof_id_video.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_proof_id_video.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_thirty_day.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_thirty_day.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_video.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_video.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_video_previous.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_video_previous.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/reorder_reminder.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/reorder_reminder.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +46,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_members/templates/members",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -65,10 +59,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
+      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members" />
       <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/modes" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -123,15 +117,7 @@
       <workItem from="1762339455381" duration="20000" />
       <workItem from="1763117018193" duration="4281000" />
       <workItem from="1763364298118" duration="1303000" />
-      <workItem from="1763451137906" duration="391000" />
-    </task>
-    <task id="LOCAL-00048" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1758186911313</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1758186911313</updated>
+      <workItem from="1763451137906" duration="1049000" />
     </task>
     <task id="LOCAL-00049" summary="weightloss">
       <option name="closed" value="true" />
@@ -517,7 +503,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762179478987</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1763458048135</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1763458048135</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
