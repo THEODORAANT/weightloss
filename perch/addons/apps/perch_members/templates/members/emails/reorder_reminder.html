@@ -100,7 +100,7 @@
                                                                 <tr>
                                                                         <td style="padding-top: 5px; padding-bottom: 20px;">
                                                                                 <div style="color: rgb(49, 54, 56); line-height: 1.6;">
-                                                                                        <div style="text-align: center;">Hi&nbsp;<perch:if exists="first_name"><perch:email id="first_name" /><perch:else />there</perch:if>,</div>
+                                                                                        <div style="text-align: center;">Hi&nbsp;<perch:email id="first_name" /><perch:if exists="first_name"><perch:email id="first_name" /><perch:else />there</perch:if>,</div>
 
                                                                                         <div style="text-align: center;"><br /></div>
                                                                                         <div style="text-align: center;">It's been about three weeks since your order on <strong><perch:email id="order_date" /></strong>.</div>
@@ -112,7 +112,7 @@
                                                                                                         <tbody>
                                                                                                         <tr>
                                                                                                                 <td align="center" bgcolor="#e8bf6a" style="border-radius: 30px;">
-                                                                                                                        <a href="<perch:email id=&quot;reorder_url&quot; />" style="display: inline-block; padding: 12px 28px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #313638; text-decoration: none;">Reorder now</a>
+                                                                                                                        <a href="<perch:email id="reorder_url" />" style="display: inline-block; padding: 12px 28px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #313638; text-decoration: none;">Reorder now</a>
                                                                                                                 </td>
                                                                                                         </tr>
                                                                                                         </tbody>
