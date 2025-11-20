@@ -157,16 +157,59 @@ class PerchShop_Order extends PerchShop_Base
 
 
 		}
-	public function getOrderPharmacyDetails( $orderNumber){
-	   $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
-   $response =[];
-         $response = $pharmacy_api->getOrderDetails($orderNumber);
-              //   echo "response";
-         	//print_r($response);
-         if($response["success"]){
-         return $response["data"];
+        public function getOrderPharmacyDetails( $orderNumber){
+           $db   = PerchDB::fetch();
+           $table = PERCH_DB_PREFIX.'orders_match_pharmacy';
+           $stored = $db->get_row('SELECT * FROM '.$table.' WHERE pharmacy_orderID='.$db->pdb($orderNumber).' ORDER BY created_at DESC LIMIT 1');
+
+           $details = [];
+
+           if (PerchUtil::count($stored)) {
+               $status = $stored['status'] ?? $stored['pharmacy_status'] ?? $stored['order_status'] ?? '';
+               $tracking = $stored['trackingno'] ?? $stored['tracking_no'] ?? $stored['trackingnumber'] ?? $stored['tracking_number'] ?? $stored['trackingref'] ?? $stored['tracking_reference'] ?? '';
+               $dispatchDate = $stored['dispatch_date'] ?? $stored['dispatchdate'] ?? $stored['dispatched_at'] ?? $stored['dispatcheddate'] ?? '';
+
+               if ($status !== '') {
+                   $details['status'] = $status;
+                   $details['statusText'] = $stored['status_text'] ?? $status;
+               }
+
+               if ($dispatchDate !== '') {
+                   $details['dispatchDate'] = $dispatchDate;
+               }
+
+               if ($tracking !== '') {
+                   $details['trackingNo'] = $tracking;
+                   $details['trackingUrl'] = 'https://www.royalmail.com/track-your-item#/tracking-results/'.urlencode($tracking);
+               }
+
+               if (isset($stored['created_at']) && $stored['created_at'] && (!isset($details['status']) || strcasecmp($details['status'], 'completed') !== 0)) {
+                   $sentTs = strtotime((string)$stored['created_at']);
+                   if ($sentTs) {
+                       $details['daysSinceSent'] = (int)floor((time() - $sentTs) / 86400);
+                   }
+               }
            }
-	}
+
+           if (!isset($details['status']) || $details['status'] === '' || !isset($details['trackingNo'])) {
+               $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
+               $response = $pharmacy_api->getOrderDetails($orderNumber);
+               if ($response['success'] && isset($response['data'])) {
+                   $remote = $response['data'];
+                   foreach (['status', 'statusText', 'dispatchDate', 'trackingNo'] as $key) {
+                       if ((!isset($details[$key]) || $details[$key] === '') && isset($remote[$key]) && $remote[$key] !== '') {
+                           $details[$key] = $remote[$key];
+                       }
+                   }
+
+                   if (!isset($details['trackingUrl']) && isset($details['trackingNo']) && $details['trackingNo'] !== '') {
+                       $details['trackingUrl'] = 'https://www.royalmail.com/track-your-item#/tracking-results/'.urlencode($details['trackingNo']);
+                   }
+               }
+           }
+
+           return $details;
+        }
 
 	public function isReorder($Customer){
 		$Orders = new PerchShop_Orders($this->api);

@@ -152,4 +152,71 @@ variables:
 When the variables are omitted the endpoints will accept any valid token issued
 by the provider.
 
+## Pharmacy order tracking webhook
+
+External pharmacy systems should notify Weightloss whenever an order moves
+between **Pending → Processing → To Dispatch → Completed** (or any other
+status they track). The webhook endpoint listens at:
+
+```
+POST /api/webhook_pharmacy
+Content-Type: application/json
+X-Signature: <HMAC signature>
+```
+
+### Authentication
+
+Requests must include an `X-Signature` header containing the hexadecimal
+SHA-256 HMAC of the raw JSON payload using the shared secret `l0ss_ky_9harCY`.
+In pseudocode:
+
+```
+signature = HMAC_SHA256(secret="l0ss_ky_9harCY", body=<raw request body>)
+```
+
+If the header is missing or the signature check fails, the request is rejected
+with `403 Invalid signature`.
+
+### Payload shape
+
+The webhook accepts either `orderNumber`, `order_number`, or
+`pharmacy_orderID` to match the pharmacy order and update its record. Any of
+the following optional fields can be supplied; the handler normalises them to
+the correct database columns:
+
+| Purpose                | Accepted keys                                           |
+|------------------------|--------------------------------------------------------|
+| Status/state           | `status`, `orderStatus`, `pharmacyStatus`              |
+| Human-readable text    | `statusText`, `message`                                |
+| Dispatch date/time     | `dispatchDate`, `dispatch_date`, `dispatched_at`       |
+| Royal Mail tracking ID | `trackingNo`, `tracking_number`, `trackingRef`, etc.   |
+
+Any combination of the above can be provided. Missing fields are left
+untouched.
+
+### Responses
+
+- `200` – updates were stored; the body is `{"success": true}`.
+- `400` – malformed JSON or missing order number.
+- `403` – signature validation failed.
+- `404` – order number was not recognised.
+
+### Example request
+
+```
+curl -X POST https://example.com/api/webhook_pharmacy \
+  -H 'Content-Type: application/json' \
+  -H 'X-Signature: <calculated hmac>' \
+  -d '{
+        "orderNumber": "RX12345",
+        "status": "To Dispatch",
+        "dispatchDate": "2024-03-18T15:30:00Z",
+        "trackingNo": "RA123456789GB"
+      }'
+```
+
+The webhook stores the latest status, dispatch date, and tracking reference so
+members and staff can see fulfilment progress along with a Royal Mail tracking
+link in the portal.
+
 # perchDocumenttion
