@@ -274,12 +274,13 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 	"more_side_effects"=>"Please tell us as much as you can about your side effects",
 	"additional-medication"=>"Have you started taking any additional medication?",
 	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
-	"rate_current_experience"=>"Are you happy with your monthly weight loss?",
-	"no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
+        "rate_current_experience"=>"Are you happy with your monthly weight loss?",
+        "no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
         "chat_with_us"=>"Would you like to chat with someone?",
+        "nhs_summary_permission"=>"Do you give permission for our clinical team to access your NHS Summary Care Record?",
         "multiple_answers"=>"Have client alter answers?",
         "documents"=>"Member Documents",
-	];
+        ];
 	public $steps=[
     "age"=>"howold",
     "ethnicity"=>"18to74",
@@ -312,6 +313,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "GP_name"=>"gp_address",
     "GP_address"=>"gp_address",
     "GP_email_address"=>"gp_address",
+    "nhs_summary_permission"=>"nhs_summary_record",
     "special_offers_email"=>"access_special_offers"
     ];
     public $reorder_questions_answers = [
@@ -389,6 +391,15 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
             "label" => "Would you like to chat with someone?",
             "type" => "button",
             "name" => "chat_with_us",
+            "options" => [
+                "yes" => "Yes",
+                "no" => "No"
+            ]
+        ],
+        "nhs_summary_permission" => [
+            "label" => "Do you give permission for our clinical team to access your NHS Summary Care Record?",
+            "type" => "checkbox",
+            "name" => "nhs_summary_permission",
             "options" => [
                 "yes" => "Yes",
                 "no" => "No"
@@ -719,6 +730,16 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
                                            "name" => "GP_email_address",
                                            "step" => "gp_address"
                                        ],
+                                       "nhs_summary_permission" => [
+                                           "label" => "Do you give permission for our clinical team to access your NHS Summary Care Record?",
+                                           "type" => "checkbox",
+                                           "name" => "nhs_summary_permission",
+                                           "options" => [
+                                               "yes" => "Yes",
+                                               "no" => "No"
+                                           ],
+                                           "step" => "nhs_summary_record"
+                                       ],
                                        "special_offers_email" => [
                                            "label" => "Get access to special offers",
                                            "type" => "text",
@@ -780,6 +801,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
     "GP_name"=>"Please enter your GP's name",
     "GP_address"=>"Please enter your GP's address",
     "GP_email_address"=>"Please enter your GP's email address",
+    "nhs_summary_permission"=>"Do you give permission for our clinical team to access your NHS Summary Care Record?",
     "special_offers_email"=>"Get access to special offers",
     "multiple_answers"=>"Have client alter answers?",
     "documents"=>"Member Documents",

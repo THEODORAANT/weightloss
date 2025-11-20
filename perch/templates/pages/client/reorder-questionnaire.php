@@ -149,6 +149,7 @@ PerchSystem::set_var('side_effects_back_step', $sideEffectsBackStep);
 if(isset( $_GET["step"])){
     PerchSystem::set_var('step', $_GET["step"]);
 }
+PerchSystem::set_vars($_SESSION['questionnaire-reorder']);
 
  perch_form('reorder-questionnaire.html');
 

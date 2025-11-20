@@ -101,11 +101,17 @@ function setValuesreorderForm(id,value) {
 
     if(id=="chat_with_us"){
 
+        document.getElementById("nextstep").value="nhs_summary_record";
+
+    }
+
+    if(id=="chat_with_us"){
+
         if(value=="no"){
-            document.getElementById("nextstep").value="cart";
+            document.getElementById("nextstep").value="nhs_summary_record";
         }else{
 
-            document.getElementById("nextstep").value="cart";
+            document.getElementById("nextstep").value="nhs_summary_record";
         }
     }
 
@@ -158,7 +164,7 @@ function setValuesForm(id,value){
             document.getElementById("nextstep").value="gp_address";
         }else{
 
-            document.getElementById("nextstep").value="access_special_offers";
+            document.getElementById("nextstep").value="nhs_summary_record";
         }
     }
     if(id=="bariatricoperation"){
