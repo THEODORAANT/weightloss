@@ -2172,13 +2172,13 @@
                     <div class="weight-inputs mt-3">
                         <input type="text" id="GP_email_address" name="GP_email_address" placeholder="GP’s e-mail address" style="width: 100%;" value="<perch:forms id='GP_email_address' encode='true' />" required>
 
-                        <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
+                        <input type="hidden" id="nextstep" name="nextstep" value="nhs_summary_record">
 
                     </div>
                     <p id="gp-details-error" class="error-message" style="display:none;"></p>
 
                     <div class="buttons skip ">
-                        <button class="back skip_button "><a href="/get-started/questionnaire?step=access_special_offers" style="text-decoration: none;color: #000;" >Skip</a></button>
+                        <button class="back skip_button "><a href="/get-started/questionnaire?step=nhs_summary_record" style="text-decoration: none;color: #000;" >Skip</a></button>
                     </div>
 
 
@@ -2242,6 +2242,70 @@
                         form.submit();
                     }
                 };
+            })();
+        </script>
+
+    </perch:if>
+    <perch:if id="step" value="nhs_summary_record">
+
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <div class="old_title">
+                        <h2>Do you give permission for our clinical team to access your NHS Summary Care Record?</h2>
+                        <p style="font-weight: 600;">This is optional. Providing access helps our clinical team make the safest decisions for your care.</p>
+                    </div>
+
+                    <div class="box_group mt-2">
+                        <label class="box_list" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="nhs_summary_permission_checkbox" class="check1">
+                            <span class="box_text">Yes, I give permission</span>
+                        </label>
+                        <input type="hidden" id="nhs_summary_permission" name="nhs_summary_permission" value="<perch:forms id='nhs_summary_permission' default='no' encode='true' />">
+                    </div>
+
+                    <div class="buttons skip ">
+                        <button id="nhsPermissionSkip" type="button" class="back skip_button">Skip</button>
+                    </div>
+
+                    <div class="buttons">
+                        <input type="hidden" id="nextstep" name="nextstep" value="access_special_offers">
+                        <button class="back"><a href='<perch:forms id="previousPage"  />' style="text-decoration: none;color: #000;" >Back</a></button>
+
+                        <button type="button" onclick="document.getElementById('form1_questionnaire').submit();" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <script>
+            (function () {
+                var checkbox = document.getElementById('nhs_summary_permission_checkbox');
+                var field = document.getElementById('nhs_summary_permission');
+
+                if (!checkbox || !field) {
+                    return;
+                }
+
+                var form = document.getElementById('form1_questionnaire');
+
+                var sync = function () {
+                    field.value = checkbox.checked ? 'yes' : 'no';
+                };
+
+                checkbox.checked = field.value === 'yes';
+                sync();
+                checkbox.addEventListener('change', sync);
+
+                var skipButton = document.getElementById('nhsPermissionSkip');
+                if (skipButton && form) {
+                    skipButton.addEventListener('click', function () {
+                        field.value = 'no';
+                        form.submit();
+                    });
+                }
             })();
         </script>
 
