@@ -9,17 +9,17 @@ echo $HTML->title_panel([
 $smartbar = new PerchSmartbar($CurrentUser, $HTML, $Lang);
 $smartbar->add_item([
     'title' => $Lang->get('Open'),
-    'link'  => '/'.$API->app_path() .'/chat/?status=open',
+    'link'  =>'/perch/addons/apps/perch_members/chat/?status=open',
     'active' => ($status === 'open'),
 ]);
 $smartbar->add_item([
     'title' => $Lang->get('Closed'),
-    'link'  =>  '/'.$API->app_path() .'/chat/?status=closed',
+    'link'  =>  '/perch/addons/apps/perch_members/chat/?status=closed',
     'active' => ($status === 'closed'),
 ]);
 $smartbar->add_item([
     'title' => $Lang->get('All'),
-    'link'  =>  '/'.$API->app_path() .'/chat/?status=all',
+    'link'  =>  '/perch/addons/apps/perch_members/chat/?status=all',
     'active' => ($status === 'all'),
 ]);
 
