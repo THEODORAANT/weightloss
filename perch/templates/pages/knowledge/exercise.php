@@ -501,4 +501,4 @@ Pay attention to your body’s signals during exercise. If you feel pain or exce
 
   <?php
 
-      perch_layout('global/footer');?>
+      perch_layout('global/new/footer');?>

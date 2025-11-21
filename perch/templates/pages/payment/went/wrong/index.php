@@ -24,4 +24,4 @@
      	</main>
 
  <?php
-  perch_layout('global/footer');?>
+  perch_layout('global/new/footer');?>

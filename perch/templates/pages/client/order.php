@@ -6,7 +6,6 @@
 if (perch_member_logged_in()) {
     $order_id = isset($_GET['id']) ? trim($_GET['id']) : null;
 ?>
-
     <section class="client-order py-5">
         <style>
             .client-order {

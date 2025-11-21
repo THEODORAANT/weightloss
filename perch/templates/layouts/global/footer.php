@@ -52,7 +52,6 @@
                   <li><a style="text-decoration: none;" href="/client">Log in</a></li>
                   <li><a style="text-decoration: none;"  href="/sitemap">Sitemap</a></li>
                       <li><a style="text-decoration: none;" href="/terms-and-conditions">Terms & conditions</a></li>
-                                      <li><a style="text-decoration: none;" href="/refer-a-friend">Refer a friend</a></li>
                                       <li><a style="text-decoration: none;" href="/privacy-notice">Privacy notice</a></li>
                                       <li><a style="text-decoration: none;" href="/cookies-policy">Cookies policy</a></li>
                                       <li><a style="text-decoration: none;"  href="/make-a-complaint">Make a complaint</a></li>

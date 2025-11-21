@@ -455,4 +455,4 @@ Too much caffeine or sugar can increase anxiety and cause energy crashes, making
 
         <?php
        // perch_content('Intro');
-      perch_layout('global/footer');?>
+      perch_layout('global/new/footer');?>

@@ -537,4 +537,4 @@ Maximize your weight loss results by combining weight loss injections with healt
 
       <?php
 
-      perch_layout('global/footer');?>
+      perch_layout('global/new/footer');?>

@@ -350,7 +350,7 @@
             <div class="treatment-pricing-content hidden mt-4 space-y-2 text-sm sm:text-base">
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>2.5mg</span>
-                <span class="font-semibold">£139</span>
+                <span class="font-semibold">£136.50</span>
               </div>
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>5mg</span>
