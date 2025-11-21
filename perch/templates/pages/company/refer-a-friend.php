@@ -61,7 +61,7 @@
                     <p>
 Refer a new patient (“New Patient”) to the GetWeightLoss site and you (“you” or “Referrer”) could receive a discount on your next Programme payment (“Referral Scheme”) subject to the following terms and conditions:
                    </p>
-                    <ol>
+                    <ol style="list-style: decimal; padding-left: 20px;">
                       <li>You must be an existing patient of the Programme at the time of referring a New Patient to the Programme and you must be an existing patient of the Programme at the time the New Patient is accepted to the Programme;</li>
                       <li>You must invite a New Patient to the Programme using your unique referral ID (“Referral ID”) shared with you. The Referral ID must only be used by you for the purposes of the Referral Scheme and must only be shared with a New Patient;</li>
                       <li>The New Patient must be 18+ and reside in the United Kingdom;</li>
