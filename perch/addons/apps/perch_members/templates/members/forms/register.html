@@ -35,20 +35,45 @@
 	</div>
 
 
-	<div  class="scheduleForm__field inter-regular d-flex flex-column">
-		<perch:input type="submit" value="Register" />
-		<button
+        <div  class="scheduleForm__field inter-regular d-flex flex-column">
+                <perch:input type="submit" value="Register" />
+                <button
 				id="submitForm-Btn"
 				type="submit"
 				form="scheduleForm"
 				class="scheduleForm__button scheduleForm__button_submit inter-medium text-center d-none button_fill">
-			Register
-		</button>
-	</div>
+                        Register
+                </button>
+        </div>
 
-	<perch:success>
-		<p>Thanks!</p>
-	</perch:success>
+        <perch:input type="hidden" id="referrer" />
+
+        <perch:success>
+                <p>Thanks!</p>
+        </perch:success>
 
 </perch:form>
+
+<script>
+        (function() {
+                function getCookie(name) {
+                        const value = `; ${document.cookie}`;
+                        const parts = value.split(`; ${name}=`);
+                        if (parts.length === 2) return parts.pop().split(';').shift();
+                        return '';
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                const refFromUrl = params.get('ref');
+                const refFromCookie = getCookie('affiliate_referrer');
+                const referrer = refFromUrl || refFromCookie;
+
+                if (referrer) {
+                        const field = document.getElementById('form1_referrer');
+                        if (field && !field.value) {
+                                field.value = referrer;
+                        }
+                }
+        })();
+</script>
 </div>

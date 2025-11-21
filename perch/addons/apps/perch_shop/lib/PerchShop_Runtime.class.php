@@ -1167,31 +1167,52 @@ public function get_package_future_items($opts){
 
 		return false;
 	}
-	public function register_customer_from_api( $memberID,$data)
-	{
-	$Customers = new PerchShop_Customers($this->api);
-			$Customer = $Customers->create_from_api( $memberID,$data);
+        private function resolve_affiliate_referrer($value = '')
+        {
+                $referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $value);
+
+                if ($referrer === '' && isset($_SESSION['affiliate_referrer'])) {
+                        $referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_SESSION['affiliate_referrer']);
+                }
+
+                if ($referrer === '' && isset($_COOKIE['affiliate_referrer'])) {
+                        $referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_COOKIE['affiliate_referrer']);
+                }
+
+                return $referrer;
+        }
+
+        public function register_customer_from_api( $memberID,$data)
+        {
+        $Customers = new PerchShop_Customers($this->api);
+                        $Customer = $Customers->create_from_api( $memberID,$data);
 
 
-			$data = [];
+                        $referrer = $this->resolve_affiliate_referrer($data['referrer'] ?? '');
+                        $data = [];
 
 
-                        			$data['email_address'] =  $Customer->email();
-                        			$data['fields']=array();
-                        			$data['fields']['FirstName']=$Customer->first_name();
-                        			$data['fields']['LastName']=$Customer->last_name();
-                        			$data['status']  = "subscribed";
-                        			$data['tags']= ['registration-app'];
+                                                $data['email_address'] =  $Customer->email();
+                                                $data['fields']=array();
+                                                $data['fields']['FirstName']=$Customer->first_name();
+                                                $data['fields']['LastName']=$Customer->last_name();
+                                                $data['status']  = "subscribed";
+                                                $data['tags']= ['registration-app'];
 
                          perch_emailoctopus_subscribe($data);
                           perch_member_add_tag('pending-docs');
+
+                          if ($referrer !== '') {
+                                perch_member_register_referral($Customer->memberID(), $referrer);
+                          }
+
                           return true;
                           // perch_member_register_referral($Customer->memberID(), $SubmittedForm->data['referrer']);
 
-	}
-	public function register_customer_from_form($SubmittedForm)
-	{
-		$Session = PerchMembers_Session::fetch();
+        }
+        public function register_customer_from_form($SubmittedForm)
+        {
+                $Session = PerchMembers_Session::fetch();
 
 		$MembersForm = $SubmittedForm->duplicate(['first_name', 'last_name', 'email', 'password','phone','dob','gender','affID','referrer'], ['password']);
 		//,'postcode','city','country','shipping_address_1'], ['password']);
@@ -1216,7 +1237,12 @@ public function get_package_future_items($opts){
 
                          perch_emailoctopus_subscribe($data);
                           perch_member_add_tag('pending-docs');
-                           perch_member_register_referral($Customer->memberID(), $SubmittedForm->data['referrer']);
+                          $referrer = $this->resolve_affiliate_referrer($SubmittedForm->data['referrer'] ?? '');
+
+                          if ($referrer !== '') {
+                                $SubmittedForm->data['referrer'] = $referrer;
+                                perch_member_register_referral($Customer->memberID(), $referrer);
+                          }
 
 
 
