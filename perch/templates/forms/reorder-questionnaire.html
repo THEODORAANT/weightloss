@@ -354,20 +354,12 @@
                         <input type="hidden" id="nhs_summary_permission" name="nhs_summary_permission" value="<perch:forms id='nhs_summary_permission' default='no' encode='true' />">
                     </div>
 
-                    <div class="get_started">
-                        <div class="started_button">
-                            <div class="get_btn">
-                                <button><a href="/client/questionnaire-re-order?step=chat_with_us">Back</a></button>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="buttons skip ">
                         <button id="nhsPermissionSkipReorder" type="button" class="back skip_button">Skip</button>
                     </div>
 
                     <div class="buttons">
-                        <input type="hidden" id="nextstep" name="nextstep" value="cart">
+                        <input type="hidden" id="nhs_summary_nextstep" name="nextstep" value="cart">
                         <button type="button" onclick="document.getElementById('questionnaire').submit();" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
                 </div>
@@ -378,6 +370,7 @@
             (function () {
                 var checkbox = document.getElementById('nhs_summary_permission_checkbox_reorder');
                 var field = document.getElementById('nhs_summary_permission');
+                var nextStepField = document.getElementById('nhs_summary_nextstep');
 
                 if (!checkbox || !field) {
                     return;
@@ -397,6 +390,9 @@
                 if (skipButton && form) {
                     skipButton.addEventListener('click', function () {
                         field.value = 'no';
+                        if (nextStepField) {
+                            nextStepField.value = 'cart';
+                        }
                         form.submit();
                     });
                 }
