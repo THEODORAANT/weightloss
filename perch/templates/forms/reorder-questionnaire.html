@@ -317,7 +317,7 @@
                         <div class="button-group">
                             <button id="yesBtn" onclick="setValuesreorderForm('chat_with_us','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
                             <button id="noBtn" onclick="setValuesreorderForm('chat_with_us','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
-                            <input type="hidden" id="nextstep" name="nextstep" value="cart">
+                            <input type="hidden" id="nextstep" name="nextstep" value="nhs_summary_record">
                             <input type="hidden" id="chat_with_us" name="chat_with_us" value="">
 
 
@@ -335,6 +335,69 @@
                 </div>
             </div>
         </section>
+    </perch:if>
+
+    <perch:if id="step" value="nhs_summary_record">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <div class="old_title">
+                        <h2>Do you give permission for our clinical team to access your NHS Summary Care Record?</h2>
+                        <p style="font-weight: 600;">This is optional. Providing access helps our clinical team make the safest decisions for your care.</p>
+                    </div>
+
+                    <div class="box_group mt-2">
+                        <label class="box_list" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="nhs_summary_permission_checkbox_reorder" class="check1">
+                            <span class="box_text">Yes, I give permission</span>
+                        </label>
+                        <input type="hidden" id="nhs_summary_permission" name="nhs_summary_permission" value="<perch:forms id='nhs_summary_permission' default='no' encode='true' />">
+                    </div>
+
+                    <div class="buttons skip ">
+                        <button id="nhsPermissionSkipReorder" type="button" class="back skip_button">Skip</button>
+                    </div>
+
+                    <div class="buttons">
+                        <input type="hidden" id="nhs_summary_nextstep" name="nextstep" value="cart">
+                        <button type="button" onclick="document.getElementById('questionnaire').submit();" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            (function () {
+                var checkbox = document.getElementById('nhs_summary_permission_checkbox_reorder');
+                var field = document.getElementById('nhs_summary_permission');
+                var nextStepField = document.getElementById('nhs_summary_nextstep');
+
+                if (!checkbox || !field) {
+                    return;
+                }
+
+                var form = document.getElementById('questionnaire');
+
+                var sync = function () {
+                    field.value = checkbox.checked ? 'yes' : 'no';
+                };
+
+                checkbox.checked = field.value === 'yes';
+                sync();
+                checkbox.addEventListener('change', sync);
+
+                var skipButton = document.getElementById('nhsPermissionSkipReorder');
+                if (skipButton && form) {
+                    skipButton.addEventListener('click', function () {
+                        field.value = 'no';
+                        if (nextStepField) {
+                            nextStepField.value = 'cart';
+                        }
+                        form.submit();
+                    });
+                }
+            })();
+        </script>
     </perch:if>
 
 </perch:form>

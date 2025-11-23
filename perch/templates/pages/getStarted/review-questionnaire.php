@@ -36,6 +36,7 @@ $questions = [
     "GP_name" => "Please enter your GP's name",
     "GP_address" => "Please enter your GP's address",
     "GP_email_address" => "Please enter your GP's email address",
+    "nhs_summary_permission" => "Do you give permission for our clinical team to access your NHS Summary Care Record?",
     "special_offers_email" => "Get access to special offers"
 ];
 
@@ -107,6 +108,7 @@ $steps = [
     "GP_name" => "gp_address",
     "GP_address" => "gp_address",
     "GP_email_address" => "gp_address",
+    "nhs_summary_permission" => "nhs_summary_record",
     "special_offers_email" => "access_special_offers"
 ];
 
