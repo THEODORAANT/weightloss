@@ -30,11 +30,11 @@
 		<perch:error for="email" class="error-message text-danger" type="required">Please add your email address</perch:error>
 		<perch:error for="email" class="error-message text-danger" type="helper">That email address is already in use</perch:error>
 	</div>
-	<div class="mb-3">
-		<label for="referrer" class="form-label">Referrer:</label>
-		<perch:input class="form-control required" type="text" id="referrer"  label="Referrer"  placeholder="Referrer" />
+        <div class="mb-3">
+                <label for="referrer" class="form-label">Referrer:</label>
+                <perch:input class="form-control required" type="text" id="referrer"  label="Referrer"  placeholder="Referrer" />
 
-	</div>
+        </div>
 	<div class="mb-3">
 		<label for="dob" class="form-label">Date of birth</label>
 
@@ -132,9 +132,30 @@
 </perch:form>
 <script src="https://cdn.getaddress.io/scripts/getaddress-autocomplete-3.0.9.js"></script>
 <script>
-	const enableAutocomplete = async ()=>
-	{
-		await getAddress.autocomplete('form1_shipping_address_1','6B82fZXnbkGpxSx5YDcx0Q46399',
+        (function() {
+                function getCookie(name) {
+                        const value = `; ${document.cookie}`;
+                        const parts = value.split(`; ${name}=`);
+                        if (parts.length === 2) return parts.pop().split(';').shift();
+                        return '';
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                const refFromUrl = params.get('ref');
+                const refFromCookie = getCookie('affiliate_referrer');
+                const referrer = refFromUrl || refFromCookie;
+
+                if (referrer) {
+                        const field = document.getElementById('form1_referrer');
+                        if (field && !field.value) {
+                                field.value = referrer;
+                        }
+                }
+        })();
+
+        const enableAutocomplete = async ()=>
+        {
+                await getAddress.autocomplete('form1_shipping_address_1','6B82fZXnbkGpxSx5YDcx0Q46399',
 
 				{
 					selected : (address)=>{
