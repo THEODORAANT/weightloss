@@ -360,7 +360,7 @@
 
                     <div class="buttons">
                         <input type="hidden" id="nhs_summary_nextstep" name="nextstep" value="cart">
-                        <button type="button" onclick="document.getElementById('questionnaire').submit();" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
+                        <button type="submit" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
                 </div>
             </div>
@@ -376,7 +376,7 @@
                     return;
                 }
 
-                var form = document.getElementById('questionnaire');
+                var form = document.getElementById('form1_questionnaire') || document.getElementById('questionnaire');
 
                 var sync = function () {
                     field.value = checkbox.checked ? 'yes' : 'no';
