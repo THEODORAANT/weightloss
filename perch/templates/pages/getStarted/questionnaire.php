@@ -379,7 +379,8 @@ $back_links = [
     'medication_allergies_other' => '/get-started/questionnaire?step=medication_allergies',
     'gp_informed' => '/get-started/questionnaire?step=medication_allergies',
     'gp_address' => '/get-started/questionnaire?step=gp_informed',
-    'access_special_offers' => '/get-started/questionnaire?step=gp_address',
+    'nhs_summary_record' => '/get-started/questionnaire?step=gp_informed',
+    'access_special_offers' => '/get-started/questionnaire?step=nhs_summary_record',
     'review-questionnaire' => '/get-started/questionnaire?step=access_special_offers'
 ];
 //print_r($_SESSION['questionnaire']);
@@ -403,6 +404,10 @@ if (isset($_SESSION['questionnaire']['more_conditions'])) {
 }
 if (isset($_SESSION['questionnaire']['medical_conditions']) && $_SESSION['questionnaire']['medical_conditions'] == "no") {
     $back_links['medications'] = "/get-started/questionnaire?step=medical_conditions";
+}
+
+if (isset($_SESSION['questionnaire']['gp_informed']) && $_SESSION['questionnaire']['gp_informed'] === 'yes') {
+    $back_links['nhs_summary_record'] = '/get-started/questionnaire?step=gp_address';
 }
 
 if (isset($_SESSION['questionnaire']['effects_with_wegovy']) && $_SESSION['questionnaire']['effects_with_wegovy'] == "no") {
