@@ -2,21 +2,24 @@
 
 class PerchShop_Session extends PerchSession 
 {
-	public static function commence()
-	{
-	    if (!isset($_SESSION['ready'])) {
-            ob_start();
-			$path          = '/';
-			$domain        = '';
-			$secure        = (defined('PERCH_SSL') && PERCH_SSL);
-			$http_only     = true;
-	    	session_set_cookie_params((strtotime(' + '.PERCH_MEMBERS_SESSION_TIME) - time()), $path, $domain, $secure, $http_only);
-	        session_start();
-	        self::extend_session();
-	        $_SESSION['ready'] = true;
+        public static function commence()
+        {
+            if (!isset($_SESSION['ready'])) {
+                ob_start();
+                $path      = '/';
+                $domain    = '';
+                $secure    = (defined('PERCH_SSL') && PERCH_SSL);
+                $http_only = true;
 
-	    }
-	}
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_set_cookie_params((strtotime(' + '.PERCH_MEMBERS_SESSION_TIME) - time()), $path, $domain, $secure, $http_only);
+                    session_start();
+                }
+
+                self::extend_session();
+                $_SESSION['ready'] = true;
+            }
+        }
 
 	public static function regenerate()
 	{
