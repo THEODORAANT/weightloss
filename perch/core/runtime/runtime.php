@@ -34,8 +34,10 @@
     //echo "ref";
    // echo $_GET['ref'];
     // Persist a valid affiliate referrer from the query string
-    if (isset($_GET['ref'])) {
-        $referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_GET['ref']);
+    $query_referrer = $_GET['affiliate_referrer'] ?? $_GET['ref'] ?? null;
+
+    if ($query_referrer !== null) {
+        $referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $query_referrer);
 
         if ($referrer !== '') {
             $API = new PerchAPI(1.0, 'perch_members');

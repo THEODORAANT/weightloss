@@ -54,19 +54,22 @@
 
 </perch:form>
 
+<?php
+        $affiliate_referrer = '';
+
+        if (!empty($_SESSION['affiliate_referrer'])) {
+                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_SESSION['affiliate_referrer']);
+        } elseif (!empty($_COOKIE['affiliate_referrer'])) {
+                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_COOKIE['affiliate_referrer']);
+        }
+?>
+
 <script>
         (function() {
-                function getCookie(name) {
-                        const value = `; ${document.cookie}`;
-                        const parts = value.split(`; ${name}=`);
-                        if (parts.length === 2) return parts.pop().split(';').shift();
-                        return '';
-                }
-
                 const params = new URLSearchParams(window.location.search);
-                const refFromUrl = params.get('ref');
-                const refFromCookie = getCookie('affiliate_referrer');
-                const referrer = refFromUrl || refFromCookie;
+                const refFromUrl = params.get('affiliate_referrer') || params.get('ref');
+                const refFromServer = <?php echo json_encode($affiliate_referrer, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+                const referrer = refFromUrl || refFromServer;
 
                 if (referrer) {
                         const field = document.getElementById('form1_referrer');
