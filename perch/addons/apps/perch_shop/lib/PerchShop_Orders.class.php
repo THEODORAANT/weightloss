@@ -274,7 +274,6 @@ $sort_val = null;
         }
 $sql= $selectsql. $fromsql.$wheresql;
 
-
 	    if ($sort_val) {
                     $sql .= ' ORDER BY '.$sort_val.' '.$sort_dir;
                 } else {
@@ -286,6 +285,7 @@ $sql= $selectsql. $fromsql.$wheresql;
                 if ($Paging && $Paging->enabled()) {
                     $sql .=  ' '.$Paging->limit_sql();
                 }
+
 
                 $results = $this->db->get_rows($sql);
 
