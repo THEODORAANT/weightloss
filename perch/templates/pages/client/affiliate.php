@@ -37,6 +37,7 @@ if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($
               $affiliateLink = 'https://' . $_SERVER['HTTP_HOST'] . '/?ref=' . perch_member_get('affID');
               $credit = perch_member_credit();
               $payouts = perch_member_aff_payouts();
+              $referrals = perch_member_aff_referrals();
             ?>
             <div class="client-card__section">
               <h2 class="client-card__title">Your referral link</h2>
@@ -49,6 +50,42 @@ if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($
                   <button class="btn btn-outline-primary px-4" type="button" onclick="copyAffiliateLink()">Copy link</button>
                 </div>
                 <span id="tooltip" class="d-inline-block mt-2 text-success" style="display:none;">Link copied!</span>
+              </div>
+            </div>
+
+            <div class="client-card__section">
+              <h2 class="client-card__title">Referrals</h2>
+              <p class="client-card__intro">Track who you&apos;ve referred and how many orders each person has placed.</p>
+              <div class="client-panel p-3">
+                <div class="table-responsive">
+                  <table class="client-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Referred user</th>
+                        <th scope="col">Orders</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php if ($referrals) { ?>
+                        <?php foreach ($referrals as $referral) { ?>
+                          <tr>
+                            <td>
+                              <?php
+                                $displayName = $referral['name'] ?: 'Member #' . $referral['member_id'];
+                                echo htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8');
+                              ?>
+                            </td>
+                            <td><?php echo (int) $referral['orders']; ?></td>
+                          </tr>
+                        <?php } ?>
+                      <?php } else { ?>
+                        <tr>
+                          <td colspan="2">No referrals yet. Your referred clients will appear here once they place orders.</td>
+                        </tr>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
