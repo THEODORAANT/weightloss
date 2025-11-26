@@ -97,7 +97,14 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
 
                                <?php
 
+   $affiliate_referrer = '';
 
+        if (!empty($_SESSION['affiliate_referrer'])) {
+                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_SESSION['affiliate_referrer']);
+        } elseif (!empty($_COOKIE['affiliate_referrer'])) {
+                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_COOKIE['affiliate_referrer']);
+        }
+        PerchSystem::set_var('affiliate_referrer', $affiliate_referrer);
 
                                                                 // New customer sign up form
                                                                                             perch_shop_registration_form( ['template' => 'checkout/customer_create_wl.html']);

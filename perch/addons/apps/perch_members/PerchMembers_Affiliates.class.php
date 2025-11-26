@@ -5,7 +5,7 @@ class PerchMembers_Affiliates extends PerchAPI_Factory
     protected $table  = 'affiliates';
     protected $pk     = 'id';
     	protected $singular_classname = 'PerchMembers_Affiliate';
-
+	protected $default_sort_column = 'id';
        public $default_fields = '
         				<perch:affiliates type="email" id="memberEmail" label="Email" listing="true" order="98" />
                         ';

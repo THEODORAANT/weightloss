@@ -131,21 +131,12 @@
 	</perch:success>
 </perch:form>
 <script src="https://cdn.getaddress.io/scripts/getaddress-autocomplete-3.0.9.js"></script>
-<?php
-        $affiliate_referrer = '';
-
-        if (!empty($_SESSION['affiliate_referrer'])) {
-                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_SESSION['affiliate_referrer']);
-        } elseif (!empty($_COOKIE['affiliate_referrer'])) {
-                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_COOKIE['affiliate_referrer']);
-        }
-?>
 
 <script>
         (function() {
                 const params = new URLSearchParams(window.location.search);
                 const refFromUrl = params.get('affiliate_referrer') || params.get('ref');
-                const refFromServer = <?php echo json_encode($affiliate_referrer, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+                const refFromServer = '<perch:shop id="affiliate_referrer" />';
                 const referrer = refFromUrl || refFromServer;
 
                 if (referrer) {
@@ -156,9 +147,10 @@
                 }
         })();
 
-        const enableAutocomplete = async ()=>
-        {
-                await getAddress.autocomplete('form1_shipping_address_1','6B82fZXnbkGpxSx5YDcx0Q46399',
+
+	const enableAutocomplete = async ()=>
+	{
+		await getAddress.autocomplete('form1_shipping_address_1','pRKmYx-D1EW37DUzFBUV6w48872',
 
 				{
 					selected : (address)=>{

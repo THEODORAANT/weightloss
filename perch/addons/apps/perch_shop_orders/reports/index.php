@@ -297,7 +297,7 @@ $total_conversions = array_sum(array_map(function ($row) {
             <p><?= number_format($total_conversions) ?></p>
         </div>
         <div class="summary-card">
-            <h3>Total Net Profit</h3>
+            <h3>Total Revenue</h3>
             <p><?= htmlspecialchars($format_currency($profits_total), ENT_QUOTES, 'UTF-8') ?></p>
         </div>
     </div>

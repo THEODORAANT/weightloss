@@ -391,7 +391,7 @@ $output.=  $HTML->heading2('Customer');
                             'form'  => $form_button,
                         ], $CurrentUser);*/
 
-                if (PerchUtil::count($orders_pharmacy)) {
+              /*  if (PerchUtil::count($orders_pharmacy)) {
                     $status_text = 'Status: Sent';
                     $status_class_suffix = 'sent';
                     if (is_array($pharmacy_status_details) && isset($pharmacy_status_details['status']) && $pharmacy_status_details['status'] !== '') {
@@ -404,9 +404,9 @@ $output.=  $HTML->heading2('Customer');
                         }
                     }
                     $output.=  '<span class="pharmacy-status pharmacy-status-'.$status_class_suffix.'">'.$status_text.'</span>';
-                } else {
+                } else {*/
       $output.=  '<a style="background-color:#199d19"  href="/perch/addons/apps/perch_shop_orders/sendToPharmacy?id='.$Order->id().'" name="sendtopahramcy" id="sendtopahramcy"  class="button button-icon icon-left" title="Send to Pharmacy"><div> <svg role="img" width="14" height="14" class="icon icon-cross"> <use xlink:href="/perch/core/assets/svg/ext.svg#cross"></use> </svg><span>Send to Pharmacy</span></div></a>';
-                }
+                //}
                 $output.=  '</td></tr>';
 
                  if (PerchUtil::count($orders_pharmacy)) {

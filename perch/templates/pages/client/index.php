@@ -31,7 +31,17 @@ perch_layout('client/header', [
             <div class="client-card__section">
               <h2 class="client-card__title">Create an account</h2>
               <p class="client-card__intro">Set up your profile in a couple of minutes so you can complete your consultation, upload documents and receive tailored treatment plans.</p>
-              <?php perch_shop_registration_form(['template' => 'checkout/customer_create_wl.html']); ?>
+              <?php
+
+     $affiliate_referrer = '';
+
+        if (!empty($_SESSION['affiliate_referrer'])) {
+                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_SESSION['affiliate_referrer']);
+        } elseif (!empty($_COOKIE['affiliate_referrer'])) {
+                $affiliate_referrer = preg_replace('/[^A-Za-z0-9]/', '', (string) $_COOKIE['affiliate_referrer']);
+        }
+        PerchSystem::set_var('affiliate_referrer', $affiliate_referrer);
+               perch_shop_registration_form(['template' => 'checkout/customer_create_wl.html']); ?>
             </div>
           <?php } ?>
         </div>
