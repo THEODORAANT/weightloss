@@ -71,6 +71,8 @@
       </div>
     </footer>
   </div>
+      <script src="/js/my.js"></script>
+      <script src="/js/due.js"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPHS5SQJ5B"></script>
 <script>

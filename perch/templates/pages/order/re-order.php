@@ -65,8 +65,6 @@ else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Loc
         display: flex;
         flex-direction: column;
         gap: 32px;
-        max-width: 960px;
-        margin: 0 auto;
     }
 
     .card-shadow {
