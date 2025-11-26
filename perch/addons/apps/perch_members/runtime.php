@@ -707,6 +707,50 @@ $memberid=0;
                          }
 
          }
+       function perch_member_aff_referrals(){
+        $Session = PerchMembers_Session::fetch();
+        if ($Session->logged_in) {
+            $API  = new PerchAPI(1.0, 'perch_members');
+            $Affiliate = new PerchMembers_Affiliate($API);
+            $Members = new PerchMembers_Members($API);
+
+            $referrals = $Affiliate->getAffReferrals($Session->get('affID'));
+
+            if (PerchUtil::count($referrals)) {
+                $output = [];
+
+                foreach ($referrals as $referral) {
+                    $memberID = (int) ($referral['referred_member_id'] ?? 0);
+                    $orderCount = (int) ($referral['purchase_count'] ?? 0);
+                    $name = '';
+
+                    if ($memberID > 0) {
+                        $Member = $Members->find($memberID);
+                        if (is_object($Member)) {
+                            $details = $Member->to_array();
+                            $first = isset($details['first_name']) ? trim($details['first_name']) : '';
+                            $last = isset($details['last_name']) ? trim($details['last_name']) : '';
+                            $name = trim($first . ' ' . $last);
+
+                            if ($name === '' && isset($details['email'])) {
+                                $name = $details['email'];
+                            }
+                        }
+                    }
+
+                    $output[] = [
+                        'member_id' => $memberID,
+                        'name' => $name,
+                        'orders' => $orderCount,
+                    ];
+                }
+
+                return $output;
+            }
+        }
+
+        return null;
+       }
        function   perch_member_credit(){
          $Session = PerchMembers_Session::fetch();
                                     //print_r( $Session );
