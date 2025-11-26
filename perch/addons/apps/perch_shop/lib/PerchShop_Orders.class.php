@@ -253,12 +253,12 @@ $sort_val = null;
         }
 
         if (isset($details['sendtopharmacy']) && $details['sendtopharmacy'] !== '') {
+            $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID AND p.pharmacy_orderID!=""';
+
             if ($details['sendtopharmacy'] == 'yes') {
-                $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
-                $wheresql .= '     AND p.orderID =o.orderID AND p.pharmacy_orderID!=""';
+                $wheresql .= '     AND p.orderID IS NOT NULL';
             } elseif ($details['sendtopharmacy'] == 'no') {
-                $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
-                $wheresql .= '     AND p.orderID =o.orderID AND p.pharmacy_orderID=""';
+                $wheresql .= '     AND p.orderID IS NULL';
             }
         }
 
