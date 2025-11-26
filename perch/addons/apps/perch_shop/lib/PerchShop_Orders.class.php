@@ -210,7 +210,9 @@ $sort_val = null;
         }
 
         $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
-         $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
+         $fromsql =  '      FROM ' . $this->table .' o '
+            . 'JOIN '.PERCH_DB_PREFIX.'shop_customers c ON o.customerID = c.customerID '
+            . 'LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID = o.orderID ';
 
                 if ($status_filter === null) {
                         $status_filter = ['paid'];
@@ -226,8 +228,7 @@ $sort_val = null;
                         $status_filter = ['paid'];
                 }
 
-                $wheresql = ' WHERE o.customerID=c.customerID
-                                AND o.orderDeleted IS NULL
+                $wheresql = ' WHERE o.orderDeleted IS NULL
                                 AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status_filter).')';
 
         if (isset($details['name']) && $details['name'] !== '') {
@@ -253,12 +254,12 @@ $sort_val = null;
         }
 
         if (isset($details['sendtopharmacy']) && $details['sendtopharmacy'] !== '') {
+            $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID AND p.pharmacy_orderID!=""';
+
             if ($details['sendtopharmacy'] == 'yes') {
-                $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
-                $wheresql .= '     AND p.orderID =o.orderID AND p.pharmacy_orderID!=""';
+                $wheresql .= '     AND p.orderID IS NOT NULL';
             } elseif ($details['sendtopharmacy'] == 'no') {
-                $fromsql .=  ','.PERCH_DB_PREFIX.'orders_match_pharmacy p ';
-                $wheresql .= '     AND p.orderID =o.orderID AND p.pharmacy_orderID=""';
+                $wheresql .= '     AND p.orderID IS NULL';
             }
         }
 
