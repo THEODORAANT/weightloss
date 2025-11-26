@@ -210,7 +210,9 @@ $sort_val = null;
         }
 
         $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
-         $fromsql =  '      FROM ' . $this->table .' o LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID=o.orderID, '.PERCH_DB_PREFIX.'shop_customers c ';
+         $fromsql =  '      FROM ' . $this->table .' o '
+            . 'JOIN '.PERCH_DB_PREFIX.'shop_customers c ON o.customerID = c.customerID '
+            . 'LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID = o.orderID ';
 
                 if ($status_filter === null) {
                         $status_filter = ['paid'];
@@ -226,8 +228,7 @@ $sort_val = null;
                         $status_filter = ['paid'];
                 }
 
-                $wheresql = ' WHERE o.customerID=c.customerID
-                                AND o.orderDeleted IS NULL
+                $wheresql = ' WHERE o.orderDeleted IS NULL
                                 AND o.orderStatus IN ('.$this->db->implode_for_sql_in($status_filter).')';
 
         if (isset($details['name']) && $details['name'] !== '') {
