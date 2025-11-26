@@ -264,20 +264,22 @@ try{
     //print_r($rowtype);
             if (isset($rowtype["program_type"]) && $rowtype["program_type"] == 1) {
                 // Add £10 credit immediately
-                  $sqlupdate="UPDATE ".PERCH_DB_PREFIX."affiliates  SET credit = credit + 10 WHERE affid=".$this->db->pdb($referralrow["referrer_affiliate_id"]);
-                   $this->db->execute($sqlupdate);
+                $sqlupdate = "UPDATE " . PERCH_DB_PREFIX . "affiliates  SET credit = credit + 10 WHERE affid=" . $this->db->pdb($referralrow["referrer_affiliate_id"]);
+                $this->db->execute($sqlupdate);
 
+            } else if (isset($rowtype["program_type"]) && $rowtype["program_type"] == 2) {
+                if (!$isreorder) {
+                    $firstOrderPayout = 30;
 
-            }else if (isset($rowtype["program_type"]) && $rowtype["program_type"] == 2) {
-            if(!$isreorder){
+                    if ($referralrow['referrer_affiliate_id'] === 'AFFEX3Y4') {
+                        $firstOrderPayout = 7.50;
+                    }
 
+                    $sql = "UPDATE " . PERCH_DB_PREFIX . "affiliates  SET credit = credit + " . $this->db->pdb($firstOrderPayout) . " WHERE affid=" . $this->db->pdb($referralrow["referrer_affiliate_id"]);
+                    $this->db->execute($sql);
+                }
 
-                            // Add £30 credit
-                                $sql="UPDATE ".PERCH_DB_PREFIX."affiliates  SET credit = credit + 30 WHERE affid=".$this->db->pdb($referralrow["referrer_affiliate_id"]);
-                                               $this->db->execute($sql);
-                                               }
-
-                        }
+            }
 
      //   }
         /*elseif (PerchUtil::count($counts) == 2) {
