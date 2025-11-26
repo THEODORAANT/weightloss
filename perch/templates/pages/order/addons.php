@@ -1,6 +1,6 @@
 <?php
     // output the top of the page
-    perch_layout('global/new/header', [
+    perch_layout('product/header', [
         'page_title' => perch_page_title(true),
     ]);
 
@@ -51,6 +51,8 @@
       display: flex;
       flex-direction: column;
       gap: 32px;
+      max-width: 960px;
+      margin: 0 auto;
   }
 
   .client-documents__eyebrow {
