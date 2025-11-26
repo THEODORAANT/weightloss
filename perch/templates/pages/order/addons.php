@@ -1,6 +1,6 @@
 <?php
     // output the top of the page
-    perch_layout('product/header', [
+    perch_layout('global/new/header', [
         'page_title' => perch_page_title(true),
     ]);
 
