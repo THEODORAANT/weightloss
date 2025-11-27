@@ -426,6 +426,7 @@
         $affiliate_tab="";
         $notifications_tab="";
         $chat_tab="";
+        $appointments_tab="";
         $chat_unread=false;
         $unread_count=0;
         $member_notifications = perch_member_notifications();
@@ -440,8 +441,8 @@
                 $chat_unread = $chatRepo->member_has_unread(perch_member_get('memberID'));
             }
         } catch (Throwable $chatException) {
-            $chat_unread = false;
-        }
+       $chat_unread = false;
+    }
   if($lastPart=="client"){
   $profile_tab="active";
   }else if( $lastPart=="orders" ){
@@ -454,9 +455,11 @@
 
            $affiliate_tab="active";
            }else if($lastPart=="notifications" ){
-            $notifications_tab="active";
-           }else if($lastPart=="chat" ){
+          $notifications_tab="active";
+          }else if($lastPart=="chat" ){
             $chat_tab="active";
+           }else if($lastPart=="appointments" ){
+            $appointments_tab="active";
            }
       ?>
      <ul class="client-tabs">
@@ -466,6 +469,7 @@
        <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
        <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
        <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
+       <li><a href="/client/appointments" class="client-tab-link <?php echo $appointments_tab === 'active' ? 'is-active' : ''; ?>">Appointments</a></li>
        <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
        <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
        <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
