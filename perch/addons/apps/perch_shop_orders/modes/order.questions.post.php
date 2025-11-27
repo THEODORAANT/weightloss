@@ -60,7 +60,6 @@
             ];
 
             $answer_select_options = [];
-            $questions_with_option_sets = [];
 
             foreach ($missing_questions as $slug => $label) {
                 $question_select_options[] = [
@@ -69,8 +68,6 @@
                 ];
 
                 if (isset($question_configs[$slug]['options']) && is_array($question_configs[$slug]['options'])) {
-                    $questions_with_option_sets[$slug] = true;
-
                     foreach ($question_configs[$slug]['options'] as $value => $option_label) {
                         $answer_select_options[] = [
                             'question' => $slug,
@@ -84,16 +81,7 @@
             $selected_question = $ManualQuestionForm->get_value('question_slug', '');
             $selected_answer   = $ManualQuestionForm->get_value('manual_answer_text', '');
             $answer_select_id = 'manual-answer-'.$section['type'];
-            $answer_textarea_id = 'manual-answer-textarea-'.$section['type'];
-
-            $select_should_be_active = ($selected_question === '')
-                ? !empty($questions_with_option_sets)
-                : isset($questions_with_option_sets[$selected_question]);
-
-            $textarea_name = $select_should_be_active ? '' : 'manual_answer_text';
-            $textarea_display = $select_should_be_active ? ' style="display:none"' : '';
-            $select_name = $select_should_be_active ? 'manual_answer_text' : '';
-            $select_disabled = $select_should_be_active ? '' : ' disabled="disabled"';
+            $select_name = 'manual_answer_text';
 
             ob_start();
             echo '<div class="manual-question">';
@@ -106,7 +94,7 @@
             echo '<div class="field manual-answer-select">';
             echo $ManualQuestionForm->label($answer_select_id, $Lang->get('Answer'), '', false, false);
             echo '<div class="form-entry">';
-            echo '<select id="'.$answer_select_id.'" name="'.$select_name.'"'.$select_disabled.' class="input-simple">';
+            echo '<select id="'.$answer_select_id.'" name="'.$select_name.'" class="input-simple">';
             echo '<option value="">'.$Lang->get('Select an answer').'</option>';
 
             foreach ($answer_select_options as $option) {
@@ -128,13 +116,6 @@
             echo '</div>';
             echo '</div>';
 
-            echo '<div class="field manual-answer-textarea"'.$textarea_display.'>';
-            echo $ManualQuestionForm->label($answer_textarea_id, $Lang->get('Answer'), '', false, false);
-            echo '<div class="form-entry">';
-            echo '<textarea id="'.$answer_textarea_id.'" name="'.$textarea_name.'" class="input-simple">'.PerchUtil::html($textarea_name === '' ? '' : $selected_answer).'</textarea>';
-            echo '</div>';
-            echo '</div>';
-
             echo $ManualQuestionForm->submit_field('btnAddManual', 'Add answer');
             echo $ManualQuestionForm->form_end();
 
@@ -144,8 +125,7 @@
             echo 'if(!form)return;';
             echo 'var questionSelect=form.querySelector("[name=\\"question_slug\\"]");';
             echo 'var answerSelect=document.getElementById("'.$answer_select_id.'");';
-            echo 'var answerTextarea=document.getElementById("'.$answer_textarea_id.'");';
-            echo 'if(!questionSelect||!answerSelect||!answerTextarea)return;';
+            echo 'if(!questionSelect||!answerSelect)return;';
             echo 'var answerOptions=Array.prototype.slice.call(answerSelect.querySelectorAll("option[data-question]"));';
             echo 'function syncAnswerField(){';
             echo ' var slug=questionSelect.value;';
@@ -156,23 +136,10 @@
             echo '  opt.disabled=!match;';
             echo '  if(match)hasOptions=true;';
             echo ' });';
-            echo ' if(hasOptions){';
-            echo '  answerSelect.name="manual_answer_text";';
-            echo '  answerSelect.disabled=false;';
-            echo '  answerSelect.parentNode.parentNode.style.display="";';
-            echo '  answerTextarea.name="";';
-            echo '  answerTextarea.disabled=true;';
-            echo '  answerTextarea.parentNode.parentNode.style.display="none";';
-            echo '  if(!answerSelect.value||answerSelect.selectedOptions.length===0||answerSelect.selectedOptions[0].disabled){';
-            echo '   answerSelect.value="";';
-            echo '  }';
-            echo ' }else{';
-            echo '  answerSelect.name="";';
-            echo '  answerSelect.disabled=true;';
-            echo '  answerSelect.parentNode.parentNode.style.display="none";';
-            echo '  answerTextarea.name="manual_answer_text";';
-            echo '  answerTextarea.disabled=false;';
-            echo '  answerTextarea.parentNode.parentNode.style.display="";';
+            echo ' if(!hasOptions || !slug){';
+            echo '  answerSelect.value="";';
+            echo ' }else if(answerSelect.selectedOptions.length===0 || answerSelect.selectedOptions[0].disabled){';
+            echo '  answerSelect.value="";';
             echo ' }';
             echo '}';
             echo 'questionSelect.addEventListener("change", syncAnswerField);';
