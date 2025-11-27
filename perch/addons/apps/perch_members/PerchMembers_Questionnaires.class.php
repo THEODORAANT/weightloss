@@ -1806,6 +1806,9 @@ function getNextStepforFirstOrder(array $data): string {
   }
 
   function calculateBMIAdvanced($weight, $weightUnit, $height1, $weight2=0, $height2 = 0, $heightUnit = 'cm') {
+      $heightUnit = strtolower(trim((string)$heightUnit));
+      $heightUnit = str_replace(['_', '/'], '-', $heightUnit);
+
       // Normalise numeric values defensively before calculations
       $weightNumeric  = is_numeric($weight)  ? (float)$weight  : null;
       $weight2Numeric = is_numeric($weight2) ? (float)$weight2 : null;
@@ -1870,7 +1873,7 @@ function getNextStepforFirstOrder(array $data): string {
           $totalInches = ($height1Numeric * 12) + $height2Numeric;
           $heightM = $totalInches * 0.0254;
       } else {
-          return "Invalid height unit. Use 'cm', 'in', or 'ft_in'.";
+          return "Invalid height unit. Use 'cm', 'in', or 'ft-in'.";
       }
 
       if ($heightM <= 0) {
