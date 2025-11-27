@@ -467,7 +467,7 @@
        <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
        <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
        <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
-       <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Order</a></li>
+       <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
        <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
      </ul>
 
