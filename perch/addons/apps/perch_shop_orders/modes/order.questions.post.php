@@ -46,11 +46,24 @@
             }
         }
 
+        $question_configs = isset($section['question_configs']) && is_array($section['question_configs'])
+            ? $section['question_configs']
+            : [];
+
+        // On some questionnaire types (notably re-orders) the question labels might not be
+        // populated in $questions. Fall back to the configured metadata so the dropdown still
+        // lists every available question that could be manually added.
+        if (!PerchUtil::count($missing_questions) && PerchUtil::count($question_configs)) {
+            foreach ($question_configs as $slug => $config) {
+                if (!isset($answers_by_slug[$slug])) {
+                    $label = $questions[$slug] ?? ($config['label'] ?? $slug);
+                    $missing_questions[$slug] = $label;
+                }
+            }
+        }
+
         $manual_form_html = '';
         if (PerchUtil::count($missing_questions)) {
-            $question_configs = isset($section['question_configs']) && is_array($section['question_configs'])
-                ? $section['question_configs']
-                : [];
 
             $question_select_options = [
                 [
