@@ -74,12 +74,14 @@
                             'type'      => 'first-order',
                             'title'     => $Lang->get('First-order questionnaire'),
                             'questions' => $Questionnaires->get_questions('first-order'),
+                            'question_configs' => $Questionnaires->get_questions_answers('first-order'),
                             'answers'   => $Questionnaires->get_for_order($order_id, 'first-order'),
                         ],
                         [
                             'type'      => 're-order',
                             'title'     => $Lang->get('Re-order questionnaire'),
                             'questions' => $Questionnaires->get_questions('re-order'),
+                            'question_configs' => $Questionnaires->get_questions_answers('re-order'),
                             'answers'   => $Questionnaires->get_for_order($order_id, 're-order'),
                         ],
                     ];
