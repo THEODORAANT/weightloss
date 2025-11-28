@@ -273,6 +273,10 @@ try{
 
                     if ($referralrow['referrer_affiliate_id'] === 'AFFEX3Y4') {
                         $firstOrderPayout = 7.50;
+                    } else if ($referralrow['referrer_affiliate_id'] === 'AFFKKPJK') {
+                        $firstOrderPayout = 5;
+                    } else if ($referralrow['referrer_affiliate_id'] === 'AFFZQOVY') {
+                        $firstOrderPayout = $this->order_has_prepaid_or_preorder($orderID) ? 10 : 5;
                     }
 
                     $sql = "UPDATE " . PERCH_DB_PREFIX . "affiliates  SET credit = credit + " . $this->db->pdb($firstOrderPayout) . " WHERE affid=" . $this->db->pdb($referralrow["referrer_affiliate_id"]);
@@ -330,11 +334,44 @@ public function addCommission($member_id, $amount) {
            }
         }
 
-          public function getMemberSumCommissions($affID) {
+         public function getMemberSumCommissions($affID) {
         $sql = 'SELECT tier, SUM(amount) as total FROM  '.PERCH_DB_PREFIX.'commissions  WHERE referrer_id ='.$this->db->pdb($affID) .'GROUP BY tier';
 
-		return $this->db->get_rows($sql);
+                return $this->db->get_rows($sql);
 
+        }
+
+        private function order_has_prepaid_or_preorder($orderID)
+        {
+            $OrderItems = new PerchShop_OrderItems($this->api);
+            $items = $OrderItems->get_for_admin($orderID);
+
+            if (!PerchUtil::count($items)) {
+                return false;
+            }
+
+            $keywords = [
+                'prepaid',
+                'pre-paid',
+                'pre paid',
+                'preorder',
+                'pre-order',
+                'pre order',
+                'mounjaro prepaid',
+                'mounjaro monthly',
+            ];
+
+            foreach ($items as $Item) {
+                $title = strtolower((string) $Item->title());
+
+                foreach ($keywords as $keyword) {
+                    if (strpos($title, $keyword) !== false) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public function getMemberCommissions($affID) {
