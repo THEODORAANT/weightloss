@@ -351,14 +351,8 @@ public function addCommission($member_id, $amount) {
             }
 
             $keywords = [
-                'prepaid',
-                'pre-paid',
-                'pre paid',
-                'preorder',
-                'pre-order',
-                'pre order',
-                'mounjaro prepaid',
-                'mounjaro monthly',
+         'Mounjaro Prepaid',
+                'Mounjaro monthly',
             ];
 
             foreach ($items as $Item) {
