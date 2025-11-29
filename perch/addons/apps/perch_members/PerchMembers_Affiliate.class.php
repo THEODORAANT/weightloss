@@ -269,7 +269,7 @@ try{
 
             } else if (isset($rowtype["program_type"]) && $rowtype["program_type"] == 2) {
                 if (!$isreorder) {
-                    $firstOrderPayout = 30;
+                    $firstOrderPayout = 5;
 
                     if ($referralrow['referrer_affiliate_id'] === 'AFFEX3Y4') {
                         $firstOrderPayout = 7.50;
