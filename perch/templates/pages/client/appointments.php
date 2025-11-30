@@ -161,50 +161,10 @@ perch_layout('client/header', [
             </form>
 
             <div class="step-actions">
-              <button class="btn btn-primary" id="go-to-checkout" disabled>Go to checkout</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="client-card" data-step="checkout" aria-disabled="true">
-          <div class="client-card__section">
-            <div class="client-card__heading">
-              <div>
-                <p class="step-label">Step 4</p>
-                <h2 class="client-card__title">Checkout</h2>
-                <p class="client-card__intro">Confirm your details and place the booking. We’ll send a confirmation and calendar invite.</p>
+              <div class="step-actions__group">
+                <div id="submission-error" class="form-error" role="alert" hidden></div>
+                <button class="btn btn-primary" id="go-to-cart" disabled>Go to cart</button>
               </div>
-              <span class="step-status" aria-live="polite"></span>
-            </div>
-
-            <form id="checkout-form" class="form-grid" novalidate>
-              <div>
-                <label class="form-label" for="full-name">Full name</label>
-                <input id="full-name" name="full-name" class="form-control" type="text" required placeholder="Your name" />
-              </div>
-              <div>
-                <label class="form-label" for="email">Email</label>
-                <input id="email" name="email" class="form-control" type="email" required placeholder="you@example.com" />
-              </div>
-              <div>
-                <label class="form-label" for="phone">Mobile number (optional)</label>
-                <input id="phone" name="phone" class="form-control" type="tel" placeholder="For reminders" />
-              </div>
-              <div>
-                <label class="form-label" for="checkout-notes">Anything else to share?</label>
-                <textarea id="checkout-notes" name="checkout-notes" class="form-control" rows="2" placeholder="Access needs, preferred clinician or other details"></textarea>
-              </div>
-              <div id="checkout-error" class="form-error" role="alert" hidden></div>
-              <div class="step-actions">
-                <button class="btn btn-primary" id="confirm-booking">Confirm booking</button>
-              </div>
-            </form>
-
-            <div id="confirmation" class="confirmation" hidden>
-              <div class="confirmation__icon" aria-hidden="true">✓</div>
-              <h3>Booking confirmed</h3>
-              <p>We’ve reserved your <span data-summary="product-name"></span> on <span data-summary="date"></span> at <span data-summary="slot"></span>. A confirmation email will follow shortly.</p>
-              <p class="muted">You can revisit this page any time to book another slot.</p>
             </div>
           </div>
         </div>
@@ -263,6 +223,8 @@ perch_layout('client/header', [
   .slot.is-selected { border-color:#4338ca; background:#eef2ff; box-shadow:0 12px 24px rgba(67,56,202,0.16); }
 
   .step-actions { margin-top:18px; display:flex; justify-content:flex-end; }
+  .step-actions__group { display:flex; flex-direction:column; align-items:flex-end; gap:10px; width:100%; }
+  .step-actions__group .form-error { width:100%; }
   .form-grid { display:grid; gap:16px; grid-template-columns:1fr; }
   @media (min-width: 720px) { .form-grid { grid-template-columns:1fr 1fr; } }
   .form-grid textarea { min-height:88px; }
@@ -273,8 +235,6 @@ perch_layout('client/header', [
   .summary-list dd { margin:0; font-weight:700; color:#111827; }
   .summary-total { display:flex; align-items:center; justify-content:space-between; font-size:1.05rem; padding-top:10px; border-top:1px solid #e5e7eb; }
 
-  .confirmation { margin-top:20px; padding:18px; border-radius:12px; background:#ecfdf3; border:1px solid #bbf7d0; }
-  .confirmation__icon { width:42px; height:42px; border-radius:50%; background:#16a34a; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:10px; }
   .form-error { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:10px; padding:10px 12px; margin-top:6px; font-weight:600; }
 </style>
 
@@ -282,17 +242,12 @@ perch_layout('client/header', [
   const state = {
     product: null,
     date: null,
+    dateISO: null,
     slot: null,
     price: 0,
     questions: {
       goal: '',
       medical: '',
-      notes: ''
-    },
-    checkout: {
-      name: '',
-      email: '',
-      phone: '',
       notes: ''
     }
   };
@@ -300,15 +255,12 @@ perch_layout('client/header', [
   const productRadios = Array.from(document.querySelectorAll('input[name="appointment_product"]'));
   const goToScheduleBtn = document.getElementById('go-to-schedule');
   const goToQuestionsBtn = document.getElementById('go-to-questions');
-  const goToCheckoutBtn = document.getElementById('go-to-checkout');
-  const confirmBookingBtn = document.getElementById('confirm-booking');
+  const goToCartBtn = document.getElementById('go-to-cart');
   const dateInput = document.getElementById('appointment-date');
   const slotList = document.getElementById('slot-list');
   const slotMessage = document.getElementById('slot-message');
   const preQuestionsForm = document.getElementById('pre-questions');
-  const checkoutForm = document.getElementById('checkout-form');
-  const confirmation = document.getElementById('confirmation');
-  const checkoutError = document.getElementById('checkout-error');
+  const submissionError = document.getElementById('submission-error');
   const summaryElements = {
     product: document.getElementById('summary-product'),
     date: document.getElementById('summary-date'),
@@ -327,14 +279,14 @@ perch_layout('client/header', [
   const SLOT_LENGTH = 25; // minutes
   const SLOT_PADDING = 5; // minutes prep
 
-  function setCheckoutError(message) {
-    if (!checkoutError) return;
+  function setSubmissionError(message) {
+    if (!submissionError) return;
     if (message) {
-      checkoutError.textContent = message;
-      checkoutError.hidden = false;
+      submissionError.textContent = message;
+      submissionError.hidden = false;
     } else {
-      checkoutError.textContent = '';
-      checkoutError.hidden = true;
+      submissionError.textContent = '';
+      submissionError.hidden = true;
     }
   }
 
@@ -358,6 +310,28 @@ perch_layout('client/header', [
     const result = await response.json();
     if (!result?.result) {
       throw new Error('We could not add this appointment to your basket.');
+    }
+
+    return true;
+  }
+
+  async function saveAppointment(payload) {
+    const response = await fetch('/perch/addons/apps/perch_appointments/save_appointment.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error('We could not save your appointment details. Please try again.');
+    }
+
+    const result = await response.json();
+    if (!result?.result) {
+      throw new Error(result?.message || 'We could not save your appointment details.');
     }
 
     return true;
@@ -462,29 +436,14 @@ perch_layout('client/header', [
     const goal = document.getElementById('goal');
     const medical = document.getElementById('medical');
     if (!goal.value.trim() || !medical.value.trim()) {
-      goToCheckoutBtn.disabled = true;
+      goToCartBtn.disabled = true;
       return false;
     }
     state.questions.goal = goal.value.trim();
     state.questions.medical = medical.value.trim();
     state.questions.notes = document.getElementById('notes').value.trim();
-    goToCheckoutBtn.disabled = false;
+    goToCartBtn.disabled = false;
     setStepComplete('questions');
-    return true;
-  }
-
-  function validateCheckout() {
-    if (!checkoutForm.reportValidity()) {
-      return false;
-    }
-    const nameField = document.getElementById('full-name');
-    const emailField = document.getElementById('email');
-    const phoneField = document.getElementById('phone');
-    state.checkout.name = nameField.value.trim();
-    state.checkout.email = emailField.value.trim();
-    state.checkout.phone = phoneField.value.trim();
-    state.checkout.notes = document.getElementById('checkout-notes').value.trim();
-    setStepComplete('checkout');
     return true;
   }
 
@@ -514,9 +473,11 @@ perch_layout('client/header', [
 
   dateInput.addEventListener('change', () => {
     const value = dateInput.value;
+    state.dateISO = value || null;
     state.date = value ? new Date(value + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : null;
     state.slot = null;
     goToQuestionsBtn.disabled = true;
+    goToCartBtn.disabled = true;
     if (!value) {
       slotList.innerHTML = '';
       slotMessage.textContent = 'Select a date to see available times.';
@@ -537,35 +498,40 @@ perch_layout('client/header', [
     document.getElementById('goal').focus();
   });
 
-  goToCheckoutBtn.addEventListener('click', () => {
+  goToCartBtn.addEventListener('click', async () => {
     if (!validateQuestions()) return;
-    setStepEnabled('checkout', true);
-    document.getElementById('full-name').focus();
-  });
-
-  confirmBookingBtn.addEventListener('click', async (event) => {
-    event.preventDefault();
-    if (!validateCheckout()) return;
-
-    setCheckoutError('');
-    const slug = state.product?.slug;
-    if (!slug) {
-      setCheckoutError('Please choose an appointment before confirming.');
+    if (!state.product?.slug) {
+      setSubmissionError('Please choose an appointment product.');
+      return;
+    }
+    if (!state.dateISO || !state.slot) {
+      setSubmissionError('Please pick a date and time before continuing.');
       return;
     }
 
-    confirmBookingBtn.disabled = true;
-    confirmBookingBtn.textContent = 'Processing...';
+    setSubmissionError('');
+    goToCartBtn.disabled = true;
+    goToCartBtn.textContent = 'Processing...';
 
     try {
-      await addProductToCart(slug);
-      confirmation.hidden = false;
-      confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await saveAppointment({
+        product_slug: state.product.slug,
+        product_name: state.product.name,
+        product_price: state.price,
+        appointment_date: state.dateISO,
+        appointment_date_label: state.date,
+        slot: state.slot,
+        goal: state.questions.goal,
+        medical: state.questions.medical,
+        notes: state.questions.notes,
+      });
+      await addProductToCart(state.product.slug);
+      window.location.href = 'https://getweightloss-dev-d2c5gpf7asdvh3a2.uksouth-01.azurewebsites.net/order/cart';
     } catch (error) {
-      setCheckoutError(error.message || 'Unable to complete booking. Please try again.');
+      setSubmissionError(error.message || 'Unable to continue to checkout. Please try again.');
     } finally {
-      confirmBookingBtn.disabled = false;
-      confirmBookingBtn.textContent = 'Confirm booking';
+      goToCartBtn.disabled = false;
+      goToCartBtn.textContent = 'Go to cart';
     }
   });
 
@@ -573,7 +539,6 @@ perch_layout('client/header', [
   setStepEnabled('product', true);
   setStepEnabled('schedule', false);
   setStepEnabled('questions', false);
-  setStepEnabled('checkout', false);
 </script>
 
 <?php perch_layout('getStarted/footer'); ?>
