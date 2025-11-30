@@ -8,22 +8,50 @@ if (!perch_member_logged_in()) {
     exit;
 }
 
-$appointmentProducts = [
-    [
-        'id' => 'nutritionist',
-        'name' => 'Nutritionist consultation',
-        'price' => 60,
-        'duration' => '25 minutes + 5 minutes prep',
-        'description' => 'Personalised nutrition guidance with actionable next steps.',
-    ],
-    [
-        'id' => 'wellbeing',
-        'name' => 'Wellbeing check-in',
-        'price' => 55,
-        'duration' => '25 minutes + 5 minutes prep',
-        'description' => 'Holistic review focused on lifestyle, mood and habits.',
-    ],
-];
+if (!function_exists('wl_appointment_extract_currency_amount')) {
+    function wl_appointment_extract_currency_amount($value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $amount) {
+                if (is_numeric($amount)) {
+                    return $amount + 0;
+                }
+            }
+            return null;
+        }
+
+        if (is_numeric($value)) {
+            return $value + 0;
+        }
+
+        return null;
+    }
+}
+
+$appointmentProducts = [];
+
+if (function_exists('perch_shop_products')) {
+    $rawProducts = perch_shop_products([
+        'template' => 'products/medical-list.html',
+        'category' => 'products/medical-tests',
+        'skip-template' => true,
+    ], true);
+
+    if (is_array($rawProducts)) {
+        foreach ($rawProducts as $product) {
+            $price = wl_appointment_extract_currency_amount($product['sale_price'] ?? $product['price'] ?? null);
+
+            $appointmentProducts[] = [
+                'id' => $product['slug'] ?? ($product['productSlug'] ?? ($product['productID'] ?? uniqid('appointment_', true))),
+                'slug' => $product['slug'] ?? ($product['productSlug'] ?? ''),
+                'name' => $product['title'] ?? 'Appointment',
+                'price' => $price ?? 0,
+                'duration' => '25 minutes + 5 minutes prep',
+                'description' => trim(strip_tags($product['description'] ?? '')),
+            ];
+        }
+    }
+}
 
 perch_layout('client/header', [
     'page_title' => perch_page_title(true),
@@ -51,23 +79,27 @@ perch_layout('client/header', [
             </div>
 
             <div class="appointment-grid" role="radiogroup" aria-label="Appointment products">
-              <?php foreach ($appointmentProducts as $product): ?>
-                <label class="appointment-card">
-                  <input type="radio" name="appointment_product" value="<?php echo htmlspecialchars($product['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>" data-price="<?php echo htmlspecialchars($product['price'], ENT_QUOTES, 'UTF-8'); ?>" data-duration="<?php echo htmlspecialchars($product['duration'], ENT_QUOTES, 'UTF-8'); ?>">
-                  <div class="appointment-card__body">
-                    <div class="appointment-card__title-row">
-                      <h3><?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                      <span class="appointment-card__price">£<?php echo number_format((float) $product['price'], 2); ?></span>
+              <?php if (!empty($appointmentProducts)): ?>
+                <?php foreach ($appointmentProducts as $product): ?>
+                  <label class="appointment-card">
+                    <input type="radio" name="appointment_product" value="<?php echo htmlspecialchars($product['id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>" data-price="<?php echo htmlspecialchars($product['price'], ENT_QUOTES, 'UTF-8'); ?>" data-duration="<?php echo htmlspecialchars($product['duration'], ENT_QUOTES, 'UTF-8'); ?>" data-slug="<?php echo htmlspecialchars($product['slug'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <div class="appointment-card__body">
+                      <div class="appointment-card__title-row">
+                        <h3><?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                        <span class="appointment-card__price">£<?php echo number_format((float) $product['price'], 2); ?></span>
+                      </div>
+                      <p class="appointment-card__description"><?php echo htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8'); ?></p>
+                      <p class="appointment-card__meta"><strong>Duration:</strong> <?php echo htmlspecialchars($product['duration'], ENT_QUOTES, 'UTF-8'); ?></p>
                     </div>
-                    <p class="appointment-card__description"><?php echo htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8'); ?></p>
-                    <p class="appointment-card__meta"><strong>Duration:</strong> <?php echo htmlspecialchars($product['duration'], ENT_QUOTES, 'UTF-8'); ?></p>
-                  </div>
-                </label>
-              <?php endforeach; ?>
+                  </label>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p class="muted">No appointment products are available right now. Please check back soon.</p>
+              <?php endif; ?>
             </div>
 
             <div class="step-actions">
-              <button class="btn btn-primary" id="go-to-schedule" disabled>Continue to scheduling</button>
+              <button class="btn btn-primary" id="go-to-schedule" <?php echo empty($appointmentProducts) ? 'disabled' : ''; ?>>Continue to scheduling</button>
             </div>
           </div>
         </div>
@@ -162,6 +194,7 @@ perch_layout('client/header', [
                 <label class="form-label" for="checkout-notes">Anything else to share?</label>
                 <textarea id="checkout-notes" name="checkout-notes" class="form-control" rows="2" placeholder="Access needs, preferred clinician or other details"></textarea>
               </div>
+              <div id="checkout-error" class="form-error" role="alert" hidden></div>
               <div class="step-actions">
                 <button class="btn btn-primary" id="confirm-booking">Confirm booking</button>
               </div>
@@ -242,6 +275,7 @@ perch_layout('client/header', [
 
   .confirmation { margin-top:20px; padding:18px; border-radius:12px; background:#ecfdf3; border:1px solid #bbf7d0; }
   .confirmation__icon { width:42px; height:42px; border-radius:50%; background:#16a34a; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:10px; }
+  .form-error { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:10px; padding:10px 12px; margin-top:6px; font-weight:600; }
 </style>
 
 <script>
@@ -274,6 +308,7 @@ perch_layout('client/header', [
   const preQuestionsForm = document.getElementById('pre-questions');
   const checkoutForm = document.getElementById('checkout-form');
   const confirmation = document.getElementById('confirmation');
+  const checkoutError = document.getElementById('checkout-error');
   const summaryElements = {
     product: document.getElementById('summary-product'),
     date: document.getElementById('summary-date'),
@@ -291,6 +326,42 @@ perch_layout('client/header', [
   ];
   const SLOT_LENGTH = 25; // minutes
   const SLOT_PADDING = 5; // minutes prep
+
+  function setCheckoutError(message) {
+    if (!checkoutError) return;
+    if (message) {
+      checkoutError.textContent = message;
+      checkoutError.hidden = false;
+    } else {
+      checkoutError.textContent = '';
+      checkoutError.hidden = true;
+    }
+  }
+
+  async function addProductToCart(slug) {
+    if (!slug) {
+      throw new Error('Please select an appointment product before checking out.');
+    }
+
+    const response = await fetch('/order/addtocart.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `m=${encodeURIComponent(slug)}`,
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to reach checkout. Please try again.');
+    }
+
+    const result = await response.json();
+    if (!result?.result) {
+      throw new Error('We could not add this appointment to your basket.');
+    }
+
+    return true;
+  }
 
   function setStepEnabled(stepName, enabled) {
     const card = document.querySelector(`[data-step="${stepName}"]`);
@@ -424,6 +495,7 @@ perch_layout('client/header', [
       state.product = {
         id: input.value,
         name: input.dataset.name,
+        slug: input.dataset.slug,
         duration: input.dataset.duration,
       };
       state.price = Number(input.dataset.price) || 0;
@@ -471,11 +543,30 @@ perch_layout('client/header', [
     document.getElementById('full-name').focus();
   });
 
-  confirmBookingBtn.addEventListener('click', (event) => {
+  confirmBookingBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     if (!validateCheckout()) return;
-    confirmation.hidden = false;
-    confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    setCheckoutError('');
+    const slug = state.product?.slug;
+    if (!slug) {
+      setCheckoutError('Please choose an appointment before confirming.');
+      return;
+    }
+
+    confirmBookingBtn.disabled = true;
+    confirmBookingBtn.textContent = 'Processing...';
+
+    try {
+      await addProductToCart(slug);
+      confirmation.hidden = false;
+      confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (error) {
+      setCheckoutError(error.message || 'Unable to complete booking. Please try again.');
+    } finally {
+      confirmBookingBtn.disabled = false;
+      confirmBookingBtn.textContent = 'Confirm booking';
+    }
   });
 
   updateSummary();
