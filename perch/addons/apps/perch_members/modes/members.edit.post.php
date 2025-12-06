@@ -504,7 +504,7 @@
 
                       echo '<tr>';
                           echo '<td colspan="6" class="action">'.$Form->label('new-note', PerchLang::get('New'));
-                          echo $Form->text('new-note', false).'</td>';
+                          echo $Form->textarea('new-note', false, '', false, ' maxlength="2000"').'</td>';
 
                       echo '</tr>';
 

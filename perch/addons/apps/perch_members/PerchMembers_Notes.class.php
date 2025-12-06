@@ -72,26 +72,17 @@ class PerchMembers_Notes extends PerchAPI_Factory
      */
     public function parse_string($str)
     {
-        $notes = explode(',', (string) $str);
-        $out = array();
+        $note = trim((string) $str);
 
-        if (!PerchUtil::count($notes)) {
-                return $out;
+        if ($note === '') {
+            return [];
         }
 
-        foreach ($notes as $note) {
-                $note = trim($note);
-
-                if ($note === '') {
-                        continue;
-                }
-
-                $out[] = array(
-                        'note' => $note,
-                );
-        }
-
-        return $out;
+        return [
+            [
+                'note' => $note,
+            ],
+        ];
     }
 
 }
