@@ -64,6 +64,7 @@ foreach ($threads as $item) {
     $statusClass = $thread['status'] === 'closed' ? 'tag-warning' : 'tag-success';
 
     $rows[] = [
+        'member_id' => '<a href="' . $API->app_path() . '/edit/?id=' . (int)$thread['memberID'] . '">' . (int)$thread['memberID'] . '</a>',
         'member' => '<a href="' . $API->app_path() . '/chat/thread.php?id=' . (int)$thread['id'] . '">' . $HTML->encode($memberName) . '</a>' . ($item['staff_has_unread'] ? ' <span class="tag tag-alert">' . $Lang->get('Unread') . '</span>' : ''),
         'last_message' => $preview ?: '<span class="hint">' . $Lang->get('No messages yet') . '</span>',
         'updated' => $thread['last_message_at'] ? date('d M Y H:i', strtotime($thread['last_message_at'])) : $Lang->get('Never'),
@@ -74,6 +75,7 @@ foreach ($threads as $item) {
 echo '<table class="d">';
 echo '<thead>';
 echo '<tr>';
+echo '<th>' . $HTML->encode($Lang->get('Member ID')) . '</th>';
 echo '<th>' . $HTML->encode($Lang->get('Member')) . '</th>';
 echo '<th>' . $HTML->encode($Lang->get('Last message')) . '</th>';
 echo '<th>' . $HTML->encode($Lang->get('Updated')) . '</th>';
@@ -84,6 +86,7 @@ echo '<tbody>';
 
 foreach ($rows as $row) {
     echo '<tr>';
+    echo '<td>' . $row['member_id'] . '</td>';
     echo '<td>' . $row['member'] . '</td>';
     echo '<td>' . $row['last_message'] . '</td>';
     echo '<td>' . $HTML->encode($row['updated']) . '</td>';
