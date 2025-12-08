@@ -175,6 +175,12 @@
                                 },
                                 'priv'  => 'perch_members.impersonate',
                             ]);
+             $Listing->add_misc_action([
+                                 'title' => $Lang->get('Open chat'),
+                                 'path'  => function($item) use ($API) {
+                                     return $API->app_path() . '/chat/thread.php?member_id=' . $item->id();
+                                 },
+                             ]);
         echo $Listing->render($members);
       /*  echo "<script>
             document.getElementById('download-button').addEventListener('click', function () {

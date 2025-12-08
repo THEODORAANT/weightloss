@@ -4,6 +4,12 @@ if (!$tables_ready) {
     return;
 }
 
+if ($creation_error) {
+    echo $HTML->failure_message($HTML->encode($creation_error));
+    echo '<p><a href="' . $API->app_path() . '/chat/">' . $Lang->get('Back to chat list') . '</a></p>';
+    return;
+}
+
 if (!$thread) {
     echo $HTML->failure_message($Lang->get('Conversation not found.'));
     echo '<p><a href="' . $API->app_path() . '/chat/">' . $Lang->get('Back to chat list') . '</a></p>';
@@ -37,6 +43,10 @@ if ($status_change === 'closed') {
     echo $HTML->success_message($Lang->get('Conversation closed.'));
 } elseif ($status_change === 'open') {
     echo $HTML->success_message($Lang->get('Conversation reopened.'));
+}
+
+if ($created) {
+    echo $HTML->success_message($Lang->get('Conversation created. Send a reply to start the chat.'));
 }
 
 if ($sent) {

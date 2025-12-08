@@ -1,7 +1,17 @@
 <?php
 
+    $chat_button = null;
+    if (is_object($Member)) {
+        $chat_button = [
+            'text' => $Lang->get('Open chat'),
+            'link' => $API->app_path() . '/chat/thread.php?member_id=' . (int)$Member->id(),
+            'icon' => 'ext/o-chat',
+        ];
+    }
+
     echo $HTML->title_panel([
         'heading' => $Lang->get($heading1),
+        'button' => $chat_button,
     ], $CurrentUser);
 
     if ($message) echo $message;    

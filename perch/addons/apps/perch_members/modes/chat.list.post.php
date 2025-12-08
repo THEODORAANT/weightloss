@@ -25,6 +25,24 @@ $smartbar->add_item([
 
 echo $smartbar->render();
 
+if ($create_error) {
+    echo $HTML->failure_message($HTML->encode($create_error));
+}
+
+if ($tables_ready) {
+    echo '<div class="chat-start-panel">';
+    echo '<h2>' . $HTML->encode($Lang->get('Start a conversation')) . '</h2>';
+    echo '<p class="hint">' . $HTML->encode($Lang->get('Open a new chat by entering a member ID. We will create the thread if it does not exist.')) . '</p>';
+    echo '<form method="post" class="form-simple chat-start-form">';
+    echo '<label class="description" for="member_id">' . $HTML->encode($Lang->get('Member ID')) . '</label>';
+    echo '<input type="number" min="1" class="input-simple" id="member_id" name="member_id" required />';
+    echo '<div class="buttons">';
+    echo '<button type="submit" class="button button-primary">' . $HTML->encode($Lang->get('Open chat')) . '</button>';
+    echo '</div>';
+    echo '</form>';
+    echo '</div>';
+}
+
 if (!$tables_ready) {
     echo $HTML->warning_message($Lang->get('Chat tables have not been created yet. Run the SQL script in %s.', '<code>sql/create_chat_tables.sql</code>'));
     return;
@@ -96,3 +114,23 @@ foreach ($rows as $row) {
 
 echo '</tbody>';
 echo '</table>';
+
+?>
+
+<style>
+.chat-start-panel {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.chat-start-panel h2 {
+    margin-top: 0;
+}
+
+.chat-start-form {
+    max-width: 320px;
+}
+</style>
