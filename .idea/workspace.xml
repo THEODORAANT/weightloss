@@ -5,25 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/_default_delete.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/_default_index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/activate.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/admin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/dashboard.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/edit/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/lib/PerchAppointment_Runtime.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/lib/PerchAppointments_Appointment.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/lib/PerchAppointments_Appointments.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/lib/PerchAppointments_Factory.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/_subnav.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/delete.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/delete.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/edit.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/edit.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/list.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_appointments/modes/list.pre.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/variant_list_treatment.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/landing/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/landing/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/set-up-nutritionist-appointment-flow-g32jhp" />
+    <option name="BRANCH" value="origin/codex/add-chat-initiation-for-admin" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -60,7 +44,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_shop",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -138,6 +122,8 @@
       <workItem from="1764149865063" duration="15080000" />
       <workItem from="1764324938138" duration="9847000" />
       <workItem from="1764598372159" duration="4304000" />
+      <workItem from="1764928875103" duration="3057000" />
+      <workItem from="1765188938111" duration="2305000" />
     </task>
     <task id="LOCAL-00064" summary="weightloss">
       <option name="closed" value="true" />

@@ -348,9 +348,12 @@
               <a href="/medications/mounjaro" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-medium border-2 hover:bg-gray-50 transition-all flex-1" style="border-color: #d1d5db; color: var(--blue)">Learn more</a>
             </div>
             <div class="treatment-pricing-content hidden mt-4 space-y-2 text-sm sm:text-base">
-              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+              <?php perch_shop_product_variants('mounjaro-mounjaro', [
+                                                         'template' => 'products/variant_list_treatment.html',
+                        ]); ?>
+           <!--   <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>2.5mg</span>
-                <span class="font-semibold">£136.50</span>
+                <span class="font-semibold">£136.00</span>
               </div>
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>5mg</span>
@@ -371,7 +374,7 @@
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>15mg</span>
                 <span class="font-semibold">£269</span>
-              </div>
+              </div>-->
             </div>
           </div>
         </article>
@@ -393,8 +396,12 @@
               </details>
               <a href="/medications/wegovy" class="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-medium border-2 hover:bg-gray-50 transition-all flex-1" style="border-color: #d1d5db; color: var(--blue)">Learn more</a>
             </div>
+
             <div class="treatment-pricing-content hidden mt-4 space-y-2 text-sm sm:text-base">
-              <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
+                     <?php perch_shop_product_variants('wegovy-skuwegovy', [
+                                                                     'template' => 'products/variant_list_treatment.html',
+                                    ]); ?>
+         <!--   <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>0.25mg</span>
                 <span class="font-semibold">£95</span>
               </div>
@@ -413,7 +420,7 @@
               <div class="flex justify-between items-center py-2 px-3 rounded-lg" style="background-color: #f9fafb">
                 <span>2.4mg</span>
                 <span class="font-semibold">£199</span>
-              </div>
+              </div>-->
             </div>
           </div>
         </article>
