@@ -65,6 +65,26 @@
         $manual_form_html = '';
         if (PerchUtil::count($missing_questions)) {
 
+            $truncate_label = static function ($label, $max_length = 60) {
+                $label = trim((string) $label);
+
+                if ($max_length <= 0) {
+                    return $label;
+                }
+
+                $length = function_exists('mb_strlen') ? mb_strlen($label) : strlen($label);
+
+                if ($length <= $max_length) {
+                    return $label;
+                }
+
+                $truncated = function_exists('mb_substr')
+                    ? mb_substr($label, 0, $max_length - 1)
+                    : substr($label, 0, $max_length - 1);
+
+                return rtrim($truncated).'…';
+            };
+
             $question_select_options = [
                 [
                     'label' => $Lang->get('Select a question'),
@@ -76,7 +96,7 @@
 
             foreach ($missing_questions as $slug => $label) {
                 $question_select_options[] = [
-                    'label' => $label,
+                    'label' => $truncate_label($label),
                     'value' => $slug,
                 ];
 
@@ -86,6 +106,7 @@
                             'question' => $slug,
                             'value'    => $value,
                             'label'    => $option_label,
+                            'display_label' => $truncate_label($option_label),
                         ];
                     }
                 }
@@ -122,7 +143,14 @@
                     $selected = ' selected="selected"';
                 }
 
-                echo '<option data-question="'.PerchUtil::html($option['question'], true).'" value="'.PerchUtil::html($option['value']).'"'.$selected.'>'.PerchUtil::html($option['label']).'</option>';
+                $display_label = $option['display_label'] ?? $option['label'];
+                $title = '';
+
+                if ($display_label !== $option['label']) {
+                    $title = ' title="'.PerchUtil::html($option['label'], true).'"';
+                }
+
+                echo '<option data-question="'.PerchUtil::html($option['question'], true).'" value="'.PerchUtil::html($option['value']).'"'.$selected.$title.'>'.PerchUtil::html($display_label).'</option>';
             }
 
             echo '</select>';
