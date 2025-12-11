@@ -4,6 +4,33 @@ require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_med
 if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
     $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
 }
+
+$contraindicationsQuestionText = <<<QUESTION
+Do any of the following statements apply to you?
+
+I have chronic malabsorption syndrome (problems absorbing food)?
+
+I have cholestasis.
+
+I’m currently being treated for cancer.
+
+I have diabetic retinopathy.
+
+I have severe heart failure.
+
+I have a family history of thyroid cancer and/or I’ve had thyroid cancer.
+
+I have Multiple endocrine neoplasia type 2 (MEN2).
+
+I have a history of pancreatitis.
+
+I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder.
+
+I have had surgery or an operation to my thyroid.
+
+I have had a bariatric operation such as gastric band or sleeve surgery.
+QUESTION;
+
 $questions = [
     "age" => "How old are you?",
     "ethnicity" => "Which ethnicity are you?",
@@ -13,7 +40,7 @@ $questions = [
     "weight" => "What is your weight?",
     "height" => "What is your height?",
     "diabetes" => "Have you been diagnosed with diabetes?",
-    "conditions" => "Do any of the following statements apply to you?",
+    "conditions" => $contraindicationsQuestionText,
     "bariatricoperation" => "Was your bariatric operation in the last 6 months?",
     "more_pancreatitis" => "Tell me about your gastric surgery procedure.",
     "thyroidoperation" => "Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",

@@ -1,5 +1,31 @@
 <?php
 
+$contraindicationsQuestionText = <<<QUESTION
+Do any of the following statements apply to you?
+
+I have chronic malabsorption syndrome (problems absorbing food)?
+
+I have cholestasis.
+
+I’m currently being treated for cancer.
+
+I have diabetic retinopathy.
+
+I have severe heart failure.
+
+I have a family history of thyroid cancer and/or I’ve had thyroid cancer.
+
+I have Multiple endocrine neoplasia type 2 (MEN2).
+
+I have a history of pancreatitis.
+
+I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder.
+
+I have had surgery or an operation to my thyroid.
+
+I have had a bariatric operation such as gastric band or sleeve surgery.
+QUESTION;
+
 return [
     'reorder' => [
         'weight' => [
@@ -248,7 +274,7 @@ return [
             'step' => 'diabetes',
         ],
         'conditions' => [
-            'label' => 'Do any of the following statements apply to you?',
+            'label' => $contraindicationsQuestionText,
             'type' => 'checkbox',
             'name' => 'conditions[]',
             'options' => [
