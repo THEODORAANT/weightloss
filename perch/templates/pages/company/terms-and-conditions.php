@@ -166,7 +166,7 @@ perch_layout('terms/header', [
               <p> 4.4.4 we will ask you to upload a photo of your identification (proof of ID) in the form of a government issued document such as driving license or passport. In addition to this you will need to upload a video as per our guidance. Failure to do so will delay the distribution of your purchased products and in the event that you have not completed the upload within 30 days we have the right to return the funds less a £25 administration fee.
 
               </p>
-              <p> 4.5. All refunds requested by you the Client will be subject to a £10 deduction for the processing fees charged by our payment service providers and adminstration fees.
+              <p> 4.5. All refunds requested by you the Client after the questionnaire has been submitted will be subject to a £10 fee, in the event of requesting a cancellation, for adminstration charges before the medicine has been prescribed.
               </p> <br />
 
               <b>

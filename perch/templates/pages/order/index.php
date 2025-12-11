@@ -85,7 +85,7 @@ perch_layout('getStarted/header', [
                                     </tr>
                                   </thead>
                                   <tbody>
-                        <?php perch_content("plans"); //  perch_shop_product_variants('Wegovy-Wegovy'); ?>
+                        <?php perch_content("plans-Wegovy"); //  perch_shop_product_variants('Wegovy-Wegovy'); ?>
                         </tbody>   </table>
 
 

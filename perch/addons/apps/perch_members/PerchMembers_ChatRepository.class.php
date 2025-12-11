@@ -266,7 +266,7 @@ class PerchMembers_ChatRepository
             'status' => 'open',
         ]);
 
-        try {
+       /* try {
             $this->notify_staff_of_unread_member_message($thread, [
                 'id' => $message_id,
                 'body' => $body,
@@ -274,7 +274,7 @@ class PerchMembers_ChatRepository
             ]);
         } catch (Throwable $e) {
             PerchUtil::debug('Unable to send chat notification email: ' . $e->getMessage(), 'error');
-        }
+        }*/
 
         return $message_id ?: null;
     }

@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/variant_list_treatment.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/landing/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/landing/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_ChatRepository.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_ChatRepository.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_approved_notification.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_approved_notification.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/order/edit/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/order/edit/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/forms/questionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/forms/questionnaire.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/forms/reorder-questionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/forms/reorder-questionnaire.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/client/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/client/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/company/contact-us.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/company/contact-us.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/company/terms-and-conditions.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/company/terms-and-conditions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +52,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_shop",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -124,6 +132,7 @@
       <workItem from="1764598372159" duration="4304000" />
       <workItem from="1764928875103" duration="3057000" />
       <workItem from="1765188938111" duration="2305000" />
+      <workItem from="1765377848299" duration="2487000" />
     </task>
     <task id="LOCAL-00064" summary="weightloss">
       <option name="closed" value="true" />

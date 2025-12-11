@@ -159,7 +159,7 @@
                       <p class="mt-4 text-sm leading-relaxed text-slate-600">
                           Check delivery updates, track parcels, and review your recent order history. <?php //perch_content('contact_resources_card_one_description'); ?>
                       </p>
-                      <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/client/orders">
+                      <a class="mt-6 inline-flex items-center text-sm font-semibold text-[#3328bf] underline-offset-4 transition hover:underline" href="/client">
                           View my orders <?php //perch_content('contact_resources_card_one_link_text'); ?>
                           <span class="ml-2">&rarr;</span>
                       </a>

@@ -765,7 +765,7 @@ class PerchMembers_Questionnaires extends PerchAPI_Factory
 
 
 		public $questions=[
-	"consultation"=>"agree-consultation",
+	"consultation"=>"You are completing this consultation for yourself, providing information to the best of your knowledge.You agree to disclose any medical conditions, serious illnesses, or past surgeries, as well as any prescription medications you are currently taking. Additionally, you acknowledge that you will use only one weight loss treatment at a time.By proceeding, you confirm your acceptance of our Terms & Conditions, Privacy Policy and acknowledge that you have read our Privacy Policy.It is essential to provide honest and accurate responses to this online questionnaire. Withholding or misrepresenting information can pose serious health risks, including life-threatening consequences. By submitting this questionnaire, you affirm that your responses are truthful and understand the potential dangers of misinformation.",
     "age"=>"How old are you?",
     "ethnicity"=>"Which ethnicity are you?",
     "ethnicity-more"=>"Please tell us which ethnicities",
