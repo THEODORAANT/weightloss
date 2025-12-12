@@ -1279,6 +1279,24 @@ function getNextStepforFirstOrder(array $data): string {
         return $data['bariatricoperation'] === 'yes' ? 'history_pancreatitis' : 'more_pancreatitis';
     }
 
+    if (isset($data['conditions']) && is_array($data['conditions'])) {
+        $historyPancreatitisConditions = [
+            'familythyroid',
+            'heartfailure',
+            'malabsorption',
+            'cholestasis',
+            'cancer',
+            'retinopathy',
+            'pancreatitishistory',
+            'eatingdisorder',
+            'neoplasia',
+        ];
+
+        if (!empty(array_intersect($data['conditions'], $historyPancreatitisConditions))) {
+            return 'history_pancreatitis';
+        }
+    }
+
     // Default fallback
     return $data['nextstep'] ?? 'start';
 }
