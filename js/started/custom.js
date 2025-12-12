@@ -295,27 +295,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("nextstep").value = "more";
             }
     }
-        let neoplasiacheckbox = document.querySelector(`input[type="checkbox"][value="neoplasia"]`);
-        let pancreatitcheckbox = document.querySelector(`input[type="checkbox"][value="pancreatitishistory"]`);
-        let eatingdisordercheckbox = document.querySelector(`input[type="checkbox"][value="eatingdisorder"]`);
+        const nextStepInput = document.getElementById("nextstep");
+        const checkedValues = Array.from(checkboxes)
+            .filter(chk => chk.checked)
+            .map(chk => chk.value);
 
-        if(neoplasiacheckbox || pancreatitcheckbox ||  eatingdisordercheckbox) {
-            if (neoplasiacheckbox.checked  || pancreatitcheckbox.checked ||  eatingdisordercheckbox.checked) {
-                document.getElementById("nextstep").value ="history_pancreatitis";
+        if (nextStepInput) {
+            const historyPancreatitisConditions = [
+                "familythyroid",
+                "heartfailure",
+                "malabsorption",
+                "cholestasis",
+                "cancer",
+                "retinopathy",
+                "pancreatitishistory",
+                "eatingdisorder",
+                "neoplasia",
+            ];
 
-            }
-        }
-        let thyroidoperationcheckbox = document.querySelector(`input[type="checkbox"][value="thyroidoperation"]`);
-        if(thyroidoperationcheckbox){
-            if(thyroidoperationcheckbox.checked) {
-                document.getElementById("nextstep").value = "thyroidoperation";
-            }
-        }
-
-        let  bariatricoperationcheckbox = document.querySelector(`input[type="checkbox"][value="bariatricoperation"]`);
-        if(bariatricoperationcheckbox){
-            if(bariatricoperationcheckbox.checked) {
-                document.getElementById("nextstep").value = "bariatricoperation";
+            if (checkedValues.some(value => historyPancreatitisConditions.includes(value))) {
+                nextStepInput.value = "history_pancreatitis";
+            } else if (checkedValues.includes("thyroidoperation")) {
+                nextStepInput.value = "thyroidoperation";
+            } else if (checkedValues.includes("bariatricoperation")) {
+                nextStepInput.value = "bariatricoperation";
             }
         }
 
