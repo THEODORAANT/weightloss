@@ -10,6 +10,7 @@
                                 'label'=>'Orders'],
                 ['page'=>'perch_shop_orders/pending', 'label'=>'Pending Orders'],
                 ['page'=>'perch_shop_orders/lost', 'label'=>'Lost Orders'],
+                ['page'=>'perch_shop_orders/pharmacy-report', 'label'=>'Pharmacy Pending'],
                 ['page'=>[
                                                 'perch_shop_orders/customers',
                                                 'perch_shop_orders/customers/edit',
