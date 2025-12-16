@@ -6,16 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_ChatRepository.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_ChatRepository.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_approved_notification.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_approved_notification.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/order/edit/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/order/edit/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/forms/questionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/forms/questionnaire.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/forms/reorder-questionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/forms/reorder-questionnaire.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/client/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/client/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/company/contact-us.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/company/contact-us.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/company/terms-and-conditions.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/company/terms-and-conditions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/getStarted/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/getStarted/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/add-chat-initiation-for-admin" />
+    <option name="BRANCH" value="origin/codex/add-pop-up-window-on-getstarted-page" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -65,8 +56,8 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
-      <recent name="$PROJECT_DIR$/perch/core" />
       <recent name="$PROJECT_DIR$/perch" />
+      <recent name="$PROJECT_DIR$/perch/core" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails" />
       <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
     </key>
@@ -132,15 +123,7 @@
       <workItem from="1764598372159" duration="4304000" />
       <workItem from="1764928875103" duration="3057000" />
       <workItem from="1765188938111" duration="2305000" />
-      <workItem from="1765377848299" duration="2487000" />
-    </task>
-    <task id="LOCAL-00064" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1759139235415</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1759139235415</updated>
+      <workItem from="1765377848299" duration="12170000" />
     </task>
     <task id="LOCAL-00065" summary="weightloss">
       <option name="closed" value="true" />
@@ -526,7 +509,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764592009180</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <task id="LOCAL-00113" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1765450204842</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1765450204842</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
