@@ -13,7 +13,7 @@
     ?>
     <div class="modal fade" id="holidayScheduleModal" tabindex="-1" aria-labelledby="holidayScheduleTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content" style="background-color: rgb(51 40 191 / var(--tw-bg-opacity, 1));">
                 <div class="modal-header">
                     <h5 class="modal-title" id="holidayScheduleTitle">Holiday delivery schedule</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
