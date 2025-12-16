@@ -11,6 +11,28 @@
         ]);*/
 
     ?>
+    <div class="modal fade" id="holidayScheduleModal" tabindex="-1" aria-labelledby="holidayScheduleTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="holidayScheduleTitle">Holiday delivery schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>As the Christmas and New Year holidays fast approach, we want to make sure you have your medication when you need it.</p>
+                    <p>Please take a moment to review our holiday delivery schedule below when planning your orders:</p>
+                    <ul>
+                        <li><strong>Standard Service:</strong> All orders placed before December 21st will be delivered as normal.</li>
+                        <li><strong>Late December Orders:</strong> Orders placed between December 21st and December 28th will be dispatched on December 29th.</li>
+                        <li><strong>New Year Orders:</strong> Orders placed between December 29th and January 1st will be dispatched on January 2nd.</li>
+                        <li><strong>Back to Normal:</strong> Our regular service and delivery schedule will fully resume on January 2nd, 2026!</li>
+                    </ul>
+                    <p>We truly appreciate your support this past year. We hope you have a wonderful holiday season and a very Happy New Year!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
        <section class="treatment_journey">
 
             <div class="container">
@@ -142,6 +164,16 @@ Once you have placed your order you will need to access our portal to complete t
             </div>
 
         </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var modalElement = document.getElementById('holidayScheduleModal');
+        if (modalElement && window.bootstrap) {
+          var holidayModal = bootstrap.Modal.getOrCreateInstance(modalElement, {backdrop: 'static'});
+          holidayModal.show();
+        }
+      });
+    </script>
 
     <?php
   perch_layout('getStarted/footer');?>
