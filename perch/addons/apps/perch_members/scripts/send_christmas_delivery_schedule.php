@@ -24,8 +24,8 @@ function perch_members_send_christmas_delivery_schedule($last_run = null)
     $campaignYear = 2025;
 
     $scheduledDates = [
-        sprintf('%04d-12-16', $campaignYear),
-        sprintf('%04d-12-18', $campaignYear),
+        sprintf('%04d-12-17', $campaignYear),
+        sprintf('%04d-12-19', $campaignYear),
     ];
 
     if (!in_array($todayString, $scheduledDates, true)) {
@@ -59,8 +59,8 @@ function perch_members_send_christmas_delivery_schedule($last_run = null)
         }
     }
 
-    $members = $Members->get_by_status('active');
-
+  // $members = $Members->get_by_status('active');
+$members[] = $Members->get_one_by('memberEmail', "theodoraantoniou@live.com");
     if (!PerchUtil::count($members)) {
         return [
             'result'  => 'OK',

@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
+      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/injection-schedule-settings.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/injection-schedule-settings/helpers.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/injection-schedule-settings/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/order_history.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/getStarted/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/getStarted/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/member.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/member.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/chat.list.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/chat.list.post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/scheduled_tasks.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/scheduled_tasks.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/scripts/send_christmas_delivery_schedule.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/scripts/send_christmas_delivery_schedule.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/christmas_delivery_schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/christmas_delivery_schedule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_thirty_day.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_thirty_day.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +23,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/add-pop-up-window-on-getstarted-page" />
+    <option name="BRANCH" value="origin/codex/create-christmas-email-template-k0nhi8" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -123,23 +132,7 @@
       <workItem from="1764598372159" duration="4304000" />
       <workItem from="1764928875103" duration="3057000" />
       <workItem from="1765188938111" duration="2305000" />
-      <workItem from="1765377848299" duration="12170000" />
-    </task>
-    <task id="LOCAL-00065" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1759149207041</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1759149207041</updated>
-    </task>
-    <task id="LOCAL-00066" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1759158924764</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1759158924769</updated>
+      <workItem from="1765377848299" duration="15965000" />
     </task>
     <task id="LOCAL-00067" summary="weightloss">
       <option name="closed" value="true" />
@@ -517,7 +510,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765450204842</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1765885809472</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1765885809472</updated>
+    </task>
+    <task id="LOCAL-00115" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1765893594152</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1765893594152</updated>
+    </task>
+    <option name="localTasksCounter" value="116" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
