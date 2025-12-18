@@ -124,6 +124,8 @@ The self-hosted chat system lets members talk directly with the support team ins
 
 - `GET /api/products/{id}` returns the specified product with all of its variants.
 - `GET /api/products/{id}/variants` returns only the variants for that product.
+- `GET /api/product_variant_paid_stock` returns total paid quantities for each product variant, optionally filtered by `product_id` (the parent product ID).
+- `GET /api/product_variants_stock` returns all product variants with their current stock levels, optionally filtered by `product_id` (the parent product ID).
 
 `{id}` corresponds to the product slug in Perch Shop.
 
