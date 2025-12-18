@@ -16,7 +16,7 @@
              <div class="modal-content" style="color:white;background-color: rgb(51 40 191 / var(--tw-bg-opacity, 1));">
                 <div class="modal-header">
                     <h5 class="modal-title" id="holidayScheduleTitle">Holiday delivery schedule</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>As the Christmas and New Year holidays fast approach, we want to make sure you have your medication when you need it.</p>
@@ -28,6 +28,9 @@
                         <li><strong>Back to Normal:</strong> Our regular service and delivery schedule will fully resume on January 2nd, 2026!</li>
                     </ul>
                     <p>We truly appreciate your support this past year. We hope you have a wonderful holiday season and a very Happy New Year!</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light w-100" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -169,7 +172,20 @@ Once you have placed your order you will need to access our portal to complete t
       document.addEventListener('DOMContentLoaded', function () {
         var modalElement = document.getElementById('holidayScheduleModal');
         if (modalElement && window.bootstrap) {
-          var holidayModal = bootstrap.Modal.getOrCreateInstance(modalElement, {backdrop: 'static'});
+          var holidayModal = bootstrap.Modal.getOrCreateInstance(modalElement);
+          var closeTriggers = modalElement.querySelectorAll('[data-bs-dismiss="modal"]');
+
+          closeTriggers.forEach(function (trigger) {
+            trigger.addEventListener('click', function () {
+              holidayModal.hide();
+            });
+
+            trigger.addEventListener('touchend', function (event) {
+              event.preventDefault();
+              holidayModal.hide();
+            }, { passive: false });
+          });
+
           holidayModal.show();
         }
       });
