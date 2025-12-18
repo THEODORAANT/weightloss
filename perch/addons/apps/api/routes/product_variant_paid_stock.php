@@ -76,10 +76,10 @@ $variants = [];
 if (PerchUtil::count($rows)) {
     foreach ($rows as $row) {
         $variants[] = [
-            'variant_id' => isset($row['variantID']) ? (int) $row['variantID'] : null,
-            'product_id' => isset($row['productID']) ? (int) $row['productID'] : null,
-            'sku' => $row['sku'] ?? '',
-            'title' => $row['title'] ?? '',
+            //'variant_id' => isset($row['variantID']) ? (int) $row['variantID'] : null,
+           // 'product_id' => isset($row['productID']) ? (int) $row['productID'] : null,
+           // 'sku' => $row['sku'] ?? '',
+          //  'title' => $row['title'] ?? '',
             'variant' => $row['productVariantDesc'] ?? null,
             'total_paid' => isset($row['totalPaidQuantity']) ? (int) $row['totalPaidQuantity'] : 0,
         ];

@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/injection-schedule-settings.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/injection-schedule-settings/helpers.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/injection-schedule-settings/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/order_history.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/member.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/member.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/chat.list.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/modes/chat.list.post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/scheduled_tasks.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/scheduled_tasks.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/scripts/send_christmas_delivery_schedule.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/scripts/send_christmas_delivery_schedule.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/christmas_delivery_schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/christmas_delivery_schedule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_thirty_day.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/document_reminder_thirty_day.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/product_variant_paid_stock.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/product_variant_paid_stock.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/create-christmas-email-template-k0nhi8" />
+    <option name="BRANCH" value="origin/codex/create-api-for-total-stock-per-variant" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -52,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/templates/pages/getStarted",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -64,11 +55,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/core" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails" />
-      <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -132,23 +123,7 @@
       <workItem from="1764598372159" duration="4304000" />
       <workItem from="1764928875103" duration="3057000" />
       <workItem from="1765188938111" duration="2305000" />
-      <workItem from="1765377848299" duration="15965000" />
-    </task>
-    <task id="LOCAL-00067" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1759159010885</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1759159010885</updated>
-    </task>
-    <task id="LOCAL-00068" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1759159931994</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1759159931994</updated>
+      <workItem from="1765377848299" duration="22827000" />
     </task>
     <task id="LOCAL-00069" summary="weightloss">
       <option name="closed" value="true" />
@@ -526,7 +501,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765893594152</updated>
     </task>
-    <option name="localTasksCounter" value="116" />
+    <task id="LOCAL-00116" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1765979186487</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1765979186487</updated>
+    </task>
+    <task id="LOCAL-00117" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1765979716072</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1765979716072</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
