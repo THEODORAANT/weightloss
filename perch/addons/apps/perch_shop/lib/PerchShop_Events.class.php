@@ -8,6 +8,10 @@ class PerchShop_Events
 		$status = $Event->args[0];
 //print_r($Order);echo "status"; echo $status;
 		if ($status) {
+			if ($status === 'paid') {
+				self::send_mounjaro_wegovy_guidance_email($Order);
+			}
+
 			$API  = new PerchAPI(1.0, 'perch_shop');
 			$OrderStatuses = new PerchShop_OrderStatuses($API);
 
@@ -41,5 +45,38 @@ class PerchShop_Events
 	{
 		$ShopRuntime = PerchShop_Runtime::fetch();
 		$ShopRuntime->register_member_login($Event);
+	}
+
+	private static function send_mounjaro_wegovy_guidance_email(PerchShop_Order $Order)
+	{
+		$API = new PerchAPI(1.0, 'perch_shop');
+
+		$Customers = new PerchShop_Customers($API);
+		$Customer  = $Customers->find($Order->customerID());
+		if (!$Customer) {
+			return;
+		}
+
+		$Members = new PerchMembers_Members($API);
+		$Member  = $Members->find($Customer->memberID());
+		if (!$Member || !$Member->memberEmail()) {
+			return;
+		}
+
+		$patient_name = trim($Customer->customerFirstName().' '.$Customer->customerLastName());
+		if ($patient_name === '') {
+			$patient_name = 'Client';
+		}
+
+		$Email = $API->get('Email');
+		$Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
+		$Email->set_bulk([
+			'patient_name' => $patient_name,
+		]);
+
+		$Email->senderName(PERCH_EMAIL_FROM_NAME);
+		$Email->senderEmail(PERCH_EMAIL_FROM);
+		$Email->recipientEmail($Member->memberEmail());
+		$Email->send();
 	}
 }
