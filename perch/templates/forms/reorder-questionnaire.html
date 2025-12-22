@@ -244,12 +244,15 @@
 
 
                     <div class="unde">
+                        <perch:if id="rate_current_experience_error" match="neq" value="">
+                            <p class="error-message" style="display:block;"><perch:show id="rate_current_experience_error" encode="true" /></p>
+                        </perch:if>
 
                         <div class="button-group">
                             <button id="yesBtn" onclick="setValuesreorderForm('rate_current_experience','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
                             <button id="noBtn" onclick="setValuesreorderForm('rate_current_experience','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="chat_with_us">
-                            <input type="hidden" id="rate_current_experience" name="rate_current_experience" value="">
+                            <input type="hidden" id="rate_current_experience" name="rate_current_experience" value="<perch:show id='rate_current_experience' encode='true' />">
 
 
                         </div>
@@ -315,12 +318,15 @@
 
 
                     <div class="unde">
+                        <perch:if id="chat_with_us_error" match="neq" value="">
+                            <p class="error-message" style="display:block;"><perch:show id="chat_with_us_error" encode="true" /></p>
+                        </perch:if>
 
                         <div class="button-group">
                             <button id="yesBtn" onclick="setValuesreorderForm('chat_with_us','yes')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >Yes</span></button>
                             <button id="noBtn" onclick="setValuesreorderForm('chat_with_us','no')"  class="custom_btn"><span style="text-decoration: none; color: #000;" >No</span></button>
                             <input type="hidden" id="nextstep" name="nextstep" value="nhs_summary_record">
-                            <input type="hidden" id="chat_with_us" name="chat_with_us" value="">
+                            <input type="hidden" id="chat_with_us" name="chat_with_us" value="<perch:show id='chat_with_us' encode='true' />">
 
 
                         </div>
