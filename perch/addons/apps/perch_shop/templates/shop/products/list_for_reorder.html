@@ -9,6 +9,7 @@
         <span class="order-card__price-old"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></span>
         <span class="order-card__price-current"><perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" /></span>
       <perch:else />
+        <span class="order-card__price-old" style="display: none;"></span>
         <span class="order-card__price-current"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></span>
       </perch:if>
     </div>
@@ -23,7 +24,9 @@
       <perch:variants>
         <span class="order-card__variant"
               data-variant-id="<perch:variant id='productID' />"
-              data-variant-price="<perch:if exists='sale_price'><perch:variant id='sale_price' type='shop_currency_value' /><perch:else /><perch:variant id='price' type='shop_currency_value' /></perch:if>"></span>
+              data-variant-price="<perch:variant id='price' type='shop_currency_value' />"
+              data-variant-sale-price="<perch:variant id='sale_price' type='shop_currency_value' />"
+              data-variant-current-price="<perch:if exists='sale_price'><perch:variant id='sale_price' type='shop_currency_value' /><perch:else /><perch:variant id='price' type='shop_currency_value' /></perch:if>"></span>
       </perch:variants>
     </div>
     <perch:cartitems>
@@ -163,6 +166,7 @@
     orderCards.forEach(function (card) {
       var select = card.querySelector('.order-card__select');
       var priceEl = card.querySelector('.order-card__price-current');
+      var priceOldEl = card.querySelector('.order-card__price-old');
       var variantNodes = card.querySelectorAll('.order-card__variant');
 
       if (!select || !priceEl || !variantNodes.length) {
@@ -171,18 +175,38 @@
 
       var variantPrices = Array.prototype.reduce.call(variantNodes, function (acc, node) {
         var id = node.getAttribute('data-variant-id');
-        var price = node.getAttribute('data-variant-price');
         if (id) {
-          acc[id] = price;
+          acc[id] = {
+            price: node.getAttribute('data-variant-price'),
+            salePrice: node.getAttribute('data-variant-sale-price'),
+            currentPrice: node.getAttribute('data-variant-current-price')
+          };
         }
         return acc;
       }, {});
 
       var updatePrice = function () {
         var selected = select.value;
-        if (selected && variantPrices[selected]) {
-          priceEl.textContent = variantPrices[selected];
+        var variant = selected ? variantPrices[selected] : null;
+
+        if (!variant || !priceEl) {
+          return;
         }
+
+        var hasSale = variant.salePrice && variant.salePrice.trim() !== '';
+
+        if (priceOldEl) {
+          if (hasSale && variant.price) {
+            priceOldEl.textContent = variant.price;
+            priceOldEl.style.display = '';
+          } else {
+            priceOldEl.textContent = '';
+            priceOldEl.style.display = 'none';
+          }
+        }
+
+        var nextPrice = hasSale ? variant.salePrice : (variant.currentPrice || variant.price || '');
+        priceEl.textContent = nextPrice;
       };
 
       updatePrice();
