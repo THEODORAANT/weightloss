@@ -10,9 +10,15 @@
 		<!--<h6>Up to 22% weight loss</h6>-->
 		<h3><perch:shop id="title" type="text" /></h3>
 
-		<p class="d-inline-block"><del>		<perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" />
-		</del> </p> <span><strong>		<perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" />
-</strong></span>
+		<p class="d-inline-block product-price">
+            <perch:if exists="sale_price">
+                <del class="product-price__old"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></del>
+                <span class="product-price__current"><strong><perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" /></strong></span>
+            <perch:else />
+                <del class="product-price__old" style="display:none;"></del>
+                <span class="product-price__current"><strong><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></strong></span>
+            </perch:if>
+		</p>
 		<p><perch:shop id="description" type="textarea" label="Description" editor="markitup" order="3" markdown="true" size="s" />
 
 			<!--<a class="learn-more" id="<perch:shop id="slug" type="slug" />" href="/medications/<perch:shop id="slug" type="slug" />">Learn more</a>
@@ -26,10 +32,59 @@
             </perch:form>
 
         </div>
-    </div>
+	</div>
 
 
-    <perch:after>
+	<perch:after>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var products = document.querySelectorAll('.product');
+        if (!products.length) return;
 
+        products.forEach(function (productEl) {
+          var select = productEl.querySelector('.dose_dropdown');
+          var priceEl = productEl.querySelector('.product-price__current');
+          var priceOldEl = productEl.querySelector('.product-price__old');
+
+          if (!select || !priceEl) return;
+
+          var renderPrices = function (data) {
+            if (!data || !priceEl) return;
+
+            var sale = data.sale_price || '';
+            var price = data.price || '';
+            var current = data.current_price || '';
+            var hasSale = sale !== '';
+
+            if (priceOldEl) {
+              if (hasSale && price) {
+                priceOldEl.textContent = price;
+                priceOldEl.style.display = '';
+              } else {
+                priceOldEl.textContent = '';
+                priceOldEl.style.display = 'none';
+              }
+            }
+
+            priceEl.textContent = hasSale ? sale : (current || price || '');
+          };
+
+          var updatePrice = function () {
+            var selected = select.value;
+            if (!selected) return;
+
+            fetch('/api/product_prices?id=' + encodeURIComponent(selected), { credentials: 'same-origin' })
+              .then(function (response) {
+                if (!response.ok) throw new Error('Price lookup failed');
+                return response.json();
+              })
+              .then(renderPrices)
+              .catch(function () {});
+          };
+
+          updatePrice();
+          select.addEventListener('change', updatePrice);
+        });
+      });
+    </script>
     </perch:after>
-

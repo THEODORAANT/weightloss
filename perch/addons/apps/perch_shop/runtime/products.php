@@ -112,3 +112,9 @@
 
 		}
 	}
+
+	function perch_shop_product_prices($productID)
+	{
+		$ShopRuntime = PerchShop_Runtime::fetch();
+		return $ShopRuntime->get_product_prices($productID);
+	}
