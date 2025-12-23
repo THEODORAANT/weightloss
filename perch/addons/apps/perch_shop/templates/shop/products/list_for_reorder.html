@@ -9,6 +9,7 @@
         <span class="order-card__price-old"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></span>
         <span class="order-card__price-current"><perch:shop id="sale_price" type="shop_currency_value" label="Sale price" size="s" min="0" step="any" /></span>
       <perch:else />
+        <span class="order-card__price-old" style="display: none;"></span>
         <span class="order-card__price-current"><perch:shop id="price" type="shop_currency_value" label="Price" divider-before="Pricing" size="s" min="0" step="any" /></span>
       </perch:if>
     </div>
@@ -142,3 +143,62 @@
     }
   }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var orderCards = document.querySelectorAll('.order-card');
+    if (!orderCards.length) {
+      return;
+    }
+
+    orderCards.forEach(function (card) {
+      var select = card.querySelector('.order-card__select');
+      var priceEl = card.querySelector('.order-card__price-current');
+      var priceOldEl = card.querySelector('.order-card__price-old');
+
+      if (!select || !priceEl) {
+        return;
+      }
+
+      var renderPrices = function (priceData) {
+        if (!priceData || !priceEl) return;
+
+        var sale = priceData.sale_price || '';
+        var price = priceData.price || '';
+        var current = priceData.current_price || '';
+        var hasSale = sale !== '';
+
+        if (priceOldEl) {
+          if (hasSale && price) {
+            priceOldEl.textContent = price;
+            priceOldEl.style.display = '';
+          } else {
+            priceOldEl.textContent = '';
+            priceOldEl.style.display = 'none';
+          }
+        }
+
+        priceEl.textContent = hasSale ? sale : (current || price || '');
+      };
+
+      var updatePrice = function () {
+        var selected = select.value;
+        if (!selected) {
+          return;
+        }
+
+        fetch('/api/product_prices?id=' + encodeURIComponent(selected), { credentials: 'same-origin' })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Price lookup failed');
+            }
+            return response.json();
+          })
+          .then(renderPrices)
+          .catch(function () {});
+      };
+
+      updatePrice();
+      select.addEventListener('change', updatePrice);
+    });
+  });
+</script>
