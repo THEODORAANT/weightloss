@@ -1494,6 +1494,55 @@ public function get_package_future_items($opts){
 		return false;
 	}
 
+	public function get_product_prices($productID)
+	{
+		$Products = new PerchShop_Products($this->api);
+		$Product  = $Products->find((int) $productID);
+
+		if (!$Product) {
+			return false;
+		}
+
+		$price       = $this->resolve_price_value($Product->price());
+		$sale_price  = $this->resolve_price_value($Product->sale_price());
+		$trade_price = $this->resolve_price_value($Product->trade_price());
+
+		$pricing_mode = 'standard';
+		if ($this->trade_enabled()) {
+			$pricing_mode = 'trade';
+		} elseif ($this->sale_enabled()) {
+			$pricing_mode = 'sale';
+		}
+
+		$current_price = $price;
+
+		if ($pricing_mode === 'trade' && $trade_price !== null && $trade_price !== '') {
+			$current_price = $trade_price;
+		} elseif (($pricing_mode === 'sale' || $Product->on_sale()) && $sale_price !== null && $sale_price !== '') {
+			$current_price = $sale_price;
+		}
+
+		$Currency = $this->get_currency();
+		$format = function ($value) use ($Currency) {
+			if ($value === null || $value === '') {
+				return '';
+			}
+
+			if ($Currency) {
+				return $Currency->get_formatted((float) $value);
+			}
+
+			return $value;
+		};
+
+		return [
+			'price'          => $format($price),
+			'sale_price'     => $format($sale_price),
+			'trade_price'    => $format($trade_price),
+			'current_price'  => $format($current_price),
+		];
+	}
+
 	private function get_customer($memberID=false)
 	{
 		if (!$memberID) $memberID = perch_member_get('id');
@@ -1586,7 +1635,7 @@ public function get_package_future_items($opts){
 
 
 
-public function customer_has_paid_order($memberID=false)
+	public function customer_has_paid_order($memberID=false)
  	{
 
  	if($memberID){
@@ -1610,4 +1659,24 @@ public function customer_has_paid_order($memberID=false)
 
 
  	}
+
+	private function resolve_price_value($price)
+	{
+		if (is_array($price)) {
+			$currencyID = $this->get_currency_id();
+
+			if (isset($price[$currencyID])) {
+				return $price[$currencyID];
+			}
+
+			if (isset($price['_default'])) {
+				return $price['_default'];
+			}
+
+			$first = reset($price);
+			return $first;
+		}
+
+		return $price;
+	}
 }
