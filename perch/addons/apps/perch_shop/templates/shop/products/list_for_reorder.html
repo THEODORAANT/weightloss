@@ -20,15 +20,6 @@
       <label class="order-card__label" for="product<perch:shop id="productID" env-autofill="false" />">Choose dosage</label>
       <perch:input class="form-select order-card__select" type="select" id="product<perch:shop id="productID" env-autofill="false" />" name="dose" options="<perch:shop id="_variant_opts" type="hidden" />" />
     </div>
-    <div class="order-card__variant-data" aria-hidden="true">
-      <perch:variants>
-        <span class="order-card__variant"
-              data-variant-id="<perch:variant id='productID' />"
-              data-variant-price="<perch:variant id='price' type='shop_currency_value' />"
-              data-variant-sale-price="<perch:variant id='sale_price' type='shop_currency_value' />"
-              data-variant-current-price="<perch:if exists='sale_price'><perch:variant id='sale_price' type='shop_currency_value' /><perch:else /><perch:variant id='price' type='shop_currency_value' /></perch:if>"></span>
-      </perch:variants>
-    </div>
     <perch:cartitems>
       <perch:input id="qty:<perch:cartitem id="identifier" />" value="<perch:cartitem id="quantity" />" type="number" min="0" class="visually-hidden" />
     </perch:cartitems>
@@ -144,10 +135,6 @@
     border: 0;
   }
 
-  .order-card__variant-data {
-    display: none;
-  }
-
   @media (max-width: 575px) {
     .order-card__submit {
       width: 100%;
@@ -167,37 +154,22 @@
       var select = card.querySelector('.order-card__select');
       var priceEl = card.querySelector('.order-card__price-current');
       var priceOldEl = card.querySelector('.order-card__price-old');
-      var variantNodes = card.querySelectorAll('.order-card__variant');
 
-      if (!select || !priceEl || !variantNodes.length) {
+      if (!select || !priceEl) {
         return;
       }
 
-      var variantPrices = Array.prototype.reduce.call(variantNodes, function (acc, node) {
-        var id = node.getAttribute('data-variant-id');
-        if (id) {
-          acc[id] = {
-            price: node.getAttribute('data-variant-price'),
-            salePrice: node.getAttribute('data-variant-sale-price'),
-            currentPrice: node.getAttribute('data-variant-current-price')
-          };
-        }
-        return acc;
-      }, {});
+      var renderPrices = function (priceData) {
+        if (!priceData || !priceEl) return;
 
-      var updatePrice = function () {
-        var selected = select.value;
-        var variant = selected ? variantPrices[selected] : null;
-
-        if (!variant || !priceEl) {
-          return;
-        }
-
-        var hasSale = variant.salePrice && variant.salePrice.trim() !== '';
+        var sale = priceData.sale_price || '';
+        var price = priceData.price || '';
+        var current = priceData.current_price || '';
+        var hasSale = sale !== '';
 
         if (priceOldEl) {
-          if (hasSale && variant.price) {
-            priceOldEl.textContent = variant.price;
+          if (hasSale && price) {
+            priceOldEl.textContent = price;
             priceOldEl.style.display = '';
           } else {
             priceOldEl.textContent = '';
@@ -205,8 +177,24 @@
           }
         }
 
-        var nextPrice = hasSale ? variant.salePrice : (variant.currentPrice || variant.price || '');
-        priceEl.textContent = nextPrice;
+        priceEl.textContent = hasSale ? sale : (current || price || '');
+      };
+
+      var updatePrice = function () {
+        var selected = select.value;
+        if (!selected) {
+          return;
+        }
+
+        fetch('/api/product_prices?id=' + encodeURIComponent(selected), { credentials: 'same-origin' })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Price lookup failed');
+            }
+            return response.json();
+          })
+          .then(renderPrices)
+          .catch(function () {});
       };
 
       updatePrice();
