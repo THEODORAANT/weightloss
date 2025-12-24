@@ -1,0 +1,82 @@
+{
+  "info": {
+    "name": "Webhook Pharmacy",
+    "_postman_id": "20271b55-e10f-468a-86c1-996c5246b84e",
+    "description": "Single-call collection to POST pharmacy webhook updates with HMAC-SHA256 signature generation in Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Send Pharmacy Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Signature",
+            "value": "{{computedSignature}}",
+            "description": "Automatically set in the pre-request script using HMAC-SHA256 of the raw body with the configured secret.",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orderNumber\": \"{{orderNumber}}\",\n  \"status\": \"dispatched\",\n  \"statusText\": \"Left warehouse\",\n  \"dispatchDate\": \"2024-05-31T10:00:00Z\",\n  \"trackingNo\": \"TRACK-001\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook_pharmacy.php",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook_pharmacy.php"
+          ]
+        },
+        "description": "Posts pharmacy order updates to the webhook endpoint. Signature is generated from the raw body using the configured secret before sending."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Generates X-Signature header using HMAC-SHA256 over the raw body.",
+              "const secret = pm.collectionVariables.get('pharmacyWebhookSecret') || 'l0ss_ky_9harCY';",
+              "const body = pm.request.body && pm.request.body.raw ? pm.request.body.raw : '';",
+              "const signature = CryptoJS.HmacSHA256(body, secret).toString();",
+              "pm.collectionVariables.set('computedSignature', signature);",
+              "pm.request.headers.upsert({ key: 'X-Signature', value: signature });"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://your-host.example.com/path/to",
+      "type": "string"
+    },
+    {
+      "key": "pharmacyWebhookSecret",
+      "value": "l0ss_ky_9harCY",
+      "type": "string"
+    },
+    {
+      "key": "orderNumber",
+      "value": "12345",
+      "type": "string"
+    },
+    {
+      "key": "computedSignature",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
