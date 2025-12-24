@@ -639,7 +639,7 @@ QUESTION;
                                                "mysimba" => "Mysimba",
                                                "other" => "Other",
                                                "none" => "I have never taken medication to lose weight",
-                                               "never" => "I have never taken medication to lose weight"
+                                               //"never" => "I have never taken medication to lose weight"
                                            ]
                                        ],
                                        "weight-wegovy" => [

@@ -235,6 +235,34 @@ class PerchMembers_Member extends PerchAPI_Base
         return $details;
     }
 
+    public function send_guidance_email($patient_name)
+    {
+
+        $API = new PerchAPI(1.0, 'perch_members');
+
+        $Settings = $API->get('Settings');
+        $login_page = str_replace('{returnURL}', '', $Settings->get('perch_members_login_page')->val());
+
+
+if ($patient_name === '') {
+			$patient_name = 'Client';
+		}
+
+		$Email = $API->get('Email');
+		$Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
+		$Email->set_bulk([
+			'patient_name' => $patient_name,
+		]);
+
+		$Email->senderName(PERCH_EMAIL_FROM_NAME);
+		$Email->senderEmail(PERCH_EMAIL_FROM);
+		//$Email->recipientEmail($Member->memberEmail());
+		 $Email->recipientEmail($this->memberEmail());
+
+		$Email->send();
+        return true;
+    }
+
 
     public function send_welcome_email()
     {

@@ -1,4 +1,8 @@
 <?php
+//include(__DIR__ . '/../../../../core/inc/api.php');
+
+$API = new PerchAPI(1.0, 'perch_shop');
+$DB  = PerchDB::fetch();
     $orders_table    = PERCH_DB_PREFIX . 'shop_orders';
     $customers_table = PERCH_DB_PREFIX . 'shop_customers';
     $pharmacy_table  = PERCH_DB_PREFIX . 'orders_match_pharmacy';
@@ -28,7 +32,7 @@
         . ' AND p.created_at IS NOT NULL'
         . ' AND TIME(p.created_at) < ' . $DB->pdb('14:00:00')
         . ' AND TIMESTAMPDIFF(HOUR, p.created_at, NOW()) > 28'
-        . ' AND ' . $status_expression . ' = ' . $DB->pdb('pending')
+       // . ' AND ' . $status_expression . ' = ' . $DB->pdb('pending')
         . " AND p.pharmacy_orderID IS NOT NULL AND p.pharmacy_orderID <> ''"
         . ' ORDER BY p.created_at ASC';
 

@@ -59,8 +59,8 @@ function perch_members_send_christmas_delivery_schedule($last_run = null)
         }
     }
 
-  // $members = $Members->get_by_status('active');
-$members[] = $Members->get_one_by('memberEmail', "theodoraantoniou@live.com");
+   $members = $Members->get_by_status('active');
+//$members[] = $Members->get_one_by('memberEmail', "theodoraantoniou@live.com");
     if (!PerchUtil::count($members)) {
         return [
             'result'  => 'OK',

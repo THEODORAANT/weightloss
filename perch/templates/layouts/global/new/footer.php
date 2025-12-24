@@ -42,10 +42,15 @@
         <!-- Disclaimer -->
         <div class="w-full px-0 py-[24px] lg:max-w-[1120px]">
           <div class="text-white text-[12px] leading-[18px] space-y-[12px]">
-            <p>GetWeightLoss, the website and consultations are owned and operated by MI Health Ltd, a company registered in the United Kingdom under company number 13008704. The business operates under a General Pharmaceutical Council registered premises number 9011648. You are able to verify the pharmacy's registration and our superintendent pharmacist, Imran Tailor SI pharmacist with GPhC 2216145.</p>
-            <p>Medical disclaimer: The information on this site provides general guidance only and does not replace a consultation with a qualified healthcare professional. We do not guarantee prescriptions or outcomes.</p>
-            <p>Mounjaro® is a registered trademark of Eli Lilly and Company. Wegovy® is a registered trademark of Novo Nordisk A/S. We are not affiliated with these manufacturers.</p>
-            <p>Longcroft House, 2-8 Victoria Avenue, London, EC2M 4NS,  Tel: 0330 043 6462 </p>
+            <p>GetWeightLoss, the website and consultations are owned and operated by MI Health Ltd, a company registered in the United Kingdom under company number 13008704.</p>
+
+             <p>The business operates under a General Pharmaceutical Council registered premises number 9011648. MI Health ltd provide clinical, prescribing and dispensing services. You are able to verify the pharmacy's registration and our superintendent pharmacist, Imran Tailor SI pharmacist with GPhC 2216145. Dispensing services are also provided by Berkely Care Ltd. Unit C, 34-42 Peregrine Road, Ilford, IG6 3SZ. Pharmacy number: 9012873. Superintendent, Masum Shah (GPhC number: 2217872).</p>
+
+             <p>Medical disclaimer: The information on this site provides general guidance only and does not replace a consultation with a qualified healthcare professional. We do not guarantee prescriptions or outcomes.</p>
+
+             <p>Mounjaro® is a registered trademark of Eli Lilly and Company. Wegovy® is a registered trademark of Novo Nordisk A/S. We are not affiliated with these manufacturers.</p>
+
+             <p>Longcroft House, 2-8 Victoria Avenue, London, EC2M 4NS, Tel: 0330 043 6462 </p>
           </div>
         </div>
         
