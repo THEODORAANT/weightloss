@@ -64,7 +64,19 @@ class PerchShop_Events
 		}
 
 		$patient_name = trim($Customer->customerFirstName().' '.$Customer->customerLastName());
-		$Member->send_guidance_email($patient_name);
+		if ($patient_name === '') {
+			$patient_name = 'Client';
+		}
 
+		$Email = $API->get('Email');
+		$Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
+		$Email->set_bulk([
+			'patient_name' => $patient_name,
+		]);
+
+		$Email->senderName(PERCH_EMAIL_FROM_NAME);
+		$Email->senderEmail(PERCH_EMAIL_FROM);
+		$Email->recipientEmail($Member->memberEmail());
+		$Email->send();
 	}
 }

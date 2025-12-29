@@ -29,19 +29,19 @@
                                 <tr>
                                     <td>
                                         <a href="https://www.getweightloss.co.uk" target="_blank" style="display:inline-block; background-color:#ffffff; padding:10px 14px; border-radius:14px; box-shadow:0 12px 28px rgba(0,0,0,0.18);">
-                                            <img alt="Get Weight Loss logo" src="https://getweightloss.co.uk/asset/GWL-Logo.svg" style="display:block; width:auto; object-fit:contain; padding:0; outline:none; border:none;" />
+                                            <img alt="Get Weight Loss logo" src="https://getweightloss.co.uk/GWL-Logo.svg" style="display:block; width:auto; object-fit:contain; padding:0; outline:none; border:none;" />
                                         </a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top:18px; font-size:15px; line-height:1.6; color:rgba(255,255,255,0.9);">Your guide to using and safely disposing of your medication.</td>
+                                    <td style="padding-top:18px; font-size:16px; line-height:1.7; color:rgba(255,255,255,0.9);">Your guide to using and safely disposing of your medication.</td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr>
                         <td class="mobile-padding" style="padding:36px 40px 32px; font-size:16px; line-height:1.7;">
-                            <p style="margin:0 0 18px;">Dear [Patient Name],</p>
+                            <p style="margin:0 0 18px;">Dear <perch:email id="patient_name" type="text" label="Patient name" default="Client" escape="true" />,</p>
                             <p style="margin:0 0 18px;">We are pleased to provide the following instructional videos and important information to help guide you through your treatment. These resources are designed to support you step by step, including safe and proper handling and disposal of sharps.</p>
                             <p style="margin:0 0 22px;">Please take a few moments to review all materials carefully before beginning, and keep them for future reference. If you have any questions or concerns after reviewing the information, do not hesitate to contact us: support@getweightloss.co.uk.</p>
 
@@ -49,7 +49,7 @@
                                 <tr>
                                     <td style="padding:18px 20px;">
                                         <p style="font-size:15px; font-weight:700; color:#0c2b55; letter-spacing:0.2px; text-transform:uppercase; margin:0 0 6px;">How to Use Mounjaro KwikPen</p>
-                                        <p style="margin:0; font-size:15px; color:#2f3c4d;">How to use Mounjaro® KwikPen®</p>
+                                        <p style="margin:0; font-size:15px; color:#2f3c4d;"><a href="https://www.lilly.com/en-CA/resources/faq/mounjaro-kwikpen/use-kwikpen" style="color:#2b5ea3; text-decoration:none;">How to use Mounjaro® KwikPen®</a></p>
                                     </td>
                                 </tr>
                             </table>
@@ -58,7 +58,7 @@
                                 <tr>
                                     <td style="padding:18px 20px;">
                                         <p style="font-size:15px; font-weight:700; color:#0c2b55; letter-spacing:0.2px; text-transform:uppercase; margin:0 0 6px;">How to Use Wegovy</p>
-                                        <p style="margin:0; font-size:15px; color:#2f3c4d;">Wegovy®▼ (semaglutide injection) support materials</p>
+                                        <p style="margin:0; font-size:15px; color:#2f3c4d;"><a href="https://www.wegovy.com/taking-wegovy/how-to-use-the-wegovy-pen.html" style="color:#2b5ea3; text-decoration:none;">Wegovy®▼ (semaglutide injection) support materials</a></p>
                                     </td>
                                 </tr>
                             </table>
@@ -170,8 +170,7 @@
                                 </tr>
                             </table>
 
-                            <p style="margin:0;">Kind regards,<br /><strong>
-                             the  GetWeightLoss Team</strong></p>
+                            <p style="margin:0;">Kind regards,<br /><strong><perch:setting id="perch_email_from_name" /></strong></p>
                         </td>
                     </tr>
                     <tr>
