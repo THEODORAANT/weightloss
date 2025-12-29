@@ -133,8 +133,14 @@
                     if ($memberEmail === '') {
                         $message = $HTML->failure_message('The note could not be sent because the member does not have an email address.');
                     } else {
+                        $noteTimestamp = $Note->noteDate();
+                        $noteDateTime = $noteTimestamp ? strtotime((string) $noteTimestamp) : time();
+                        $noteDateLabel = date('Y-m-d H:i:s', $noteDateTime);
+                        $noteText = trim((string) $Note->note_text());
+                        $noteWithTimestamp = '['.$noteDateLabel.'] '.$noteText;
+
                         $pharmacy_api = new PerchMembers_PharmacyApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
-                        $apiResponse = $pharmacy_api->sendCustomerNote($memberEmail, (string) $Note->note_text(), false);
+                        $apiResponse = $pharmacy_api->sendCustomerNote($memberEmail, $noteWithTimestamp, false);
 
                         if ($apiResponse['success']) {
                             $message = $HTML->success_message('The note has been sent to the pharmacy.');
