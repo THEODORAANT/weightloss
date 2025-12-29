@@ -5,6 +5,9 @@ require_once __DIR__ . '/perch/runtime.php';
 $API       = new PerchAPI(1.0, 'perch_shop');
 $DB        = PerchDB::fetch();
 $Customers = new PerchShop_Customers($API);
+$emailOptOutCustomers = [
+    // Add customer IDs who have requested not to receive payment reminder emails.
+];
 $table  = PERCH_DB_PREFIX . 'shop_packages';
 $tableitems  = PERCH_DB_PREFIX . 'shop_package_items';
 $target = (new DateTimeImmutable('+1 week'))->format('Y-m-d');
@@ -43,7 +46,7 @@ $packages = $DB->get_rows($sql);
 if (PerchUtil::count($packages)) {
     foreach ($packages as $package) {
         $itemID = isset($package['itemID']) ? (int) $package['itemID'] : 0;
-        $customerID = $package['customerID'] ?? '';
+        $customerID = isset($package['customerID']) ? (int) $package['customerID'] : 0;
         $billingDate = $package['billingDate'] ?? '';
         $itemKey = 'item:' . $itemID;
         $legacyKey = 'legacy:' . $customerID . '|' . $billingDate;
@@ -54,6 +57,12 @@ if (PerchUtil::count($packages)) {
             if (isset($sent[$legacyKey])) {
                 unset($sent[$legacyKey]);
             }
+            continue;
+        }
+
+        if (in_array($customerID, $emailOptOutCustomers, true)) {
+            $writeLog($itemID, $customerID, $billingDate, 'skipped-email-opt-out');
+            echo 'Skipping customer ' . $customerID . ' – opted out of payment reminder emails.' . PHP_EOL;
             continue;
         }
 
@@ -86,4 +95,3 @@ if (PerchUtil::count($packages)) {
         $sent[$itemKey] = true;
     }
 }
-
