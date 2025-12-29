@@ -27,6 +27,10 @@ if (isset($options['help'])) {
 
 $dryRun = array_key_exists('dry-run', $options);
 
+$emailOptOutCustomers = [
+    // Add customer IDs who do not want to receive reorder reminder emails.
+];
+
 $dateOption = $options['date'] ?? null;
 $daysOption = $options['days'] ?? null;
 $testDateOption = $options['test-date'] ?? null;
@@ -168,6 +172,15 @@ foreach ($orders as $order) {
 
     if (isset($processedOrders[$orderID])) {
         echo 'Skipping order ' . $orderID . ' – reminder already logged.' . PHP_EOL;
+        $skippedCount++;
+        continue;
+    }
+
+    if (in_array($customerID, $emailOptOutCustomers, true)) {
+        echo 'Skipping order ' . $orderID . ' – customer ' . $customerID . ' opted out of reminder emails.' . PHP_EOL;
+        if (!$dryRun) {
+            $appendLog($orderID, $customerID, 'skipped-email-opt-out');
+        }
         $skippedCount++;
         continue;
     }
