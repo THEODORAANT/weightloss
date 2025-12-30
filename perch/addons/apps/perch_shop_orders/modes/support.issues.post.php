@@ -70,10 +70,10 @@
         </select>
     </div>
     <div class="field-group">
-        <?php echo $Form->date_field('export_from', $Lang->get('From (date/time)'), PerchUtil::get('export_from', ''), true); ?>
+        <?php echo $Form->date_field('export_from', $Lang->get('From (date)'), PerchUtil::get('export_from', ''), false); ?>
     </div>
     <div class="field-group">
-        <?php echo $Form->date_field('export_to', $Lang->get('To (date/time)'), PerchUtil::get('export_to', ''), true); ?>
+        <?php echo $Form->date_field('export_to', $Lang->get('To (date)'), PerchUtil::get('export_to', ''), false); ?>
     </div>
     <div class="field-group buttons">
         <button type="submit" class="button"><?php echo $Lang->get('Download CSV'); ?></button>
