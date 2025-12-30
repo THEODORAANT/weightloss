@@ -19,5 +19,6 @@
                                 'label'=>'Customers'],
                 ['page'=>'perch_shop_orders/packages', 'label'=>'Packages'],
                 ['page'=>'perch_shop_orders/reports', 'label'=>'Reports'],
+                ['page'=>'perch_shop_orders/support-issues', 'label'=>'Support issues'],
 
         ], $CurrentUser);
