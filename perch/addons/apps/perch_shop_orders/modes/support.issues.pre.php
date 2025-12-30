@@ -34,17 +34,29 @@
         }
     }
 
-    $parse_date = function ($date_string) {
+    $parse_date_time = function ($date_string, $is_end = false) {
         $date_string = trim((string)$date_string);
         if ($date_string === '') {
             return null;
         }
 
-        $formats = ['d/m/Y', 'd/m/y'];
+        $formats = [
+            'd/m/Y H:i',
+            'd/m/y H:i',
+            'd/m/Y',
+            'd/m/y',
+            'Y-m-d H:i:s',
+            'Y-m-d H:i',
+            'Y-m-d',
+        ];
+
         foreach ($formats as $format) {
             $dt = DateTime::createFromFormat($format, $date_string);
             if ($dt instanceof DateTime) {
-                return $dt->format('Y-m-d');
+                if (strpos($format, 'H:i') === false) {
+                    $dt->setTime($is_end ? 23 : 0, $is_end ? 59 : 0, $is_end ? 59 : 0);
+                }
+                return $dt->format('Y-m-d H:i:s');
             }
         }
 
@@ -53,8 +65,8 @@
 
     $requested_export = PerchUtil::get('export') === '1';
     $export_issue_type = PerchUtil::get('export_issue_type', 'complaint');
-    $export_from = $parse_date(PerchUtil::get('export_from'));
-    $export_to = $parse_date(PerchUtil::get('export_to'));
+    $export_from = $parse_date_time(PerchUtil::get('export_from'));
+    $export_to = $parse_date_time(PerchUtil::get('export_to'), true);
 
     $filters = [];
     if (PerchUtil::get('filter_issue_type')) {
@@ -80,7 +92,7 @@
         }
 
         if (!$export_from || !$export_to) {
-            $message = $HTML->failure_message($Lang->get('Please provide valid from/to dates in dd/mm/yy format.'));
+            $message = $HTML->failure_message($Lang->get('Please provide valid from/to date-times.'));
         } else {
             $export_rows = $Issues->list($export_filters, 0, $export_from, $export_to);
             $filename = sprintf('support-issues-%s-to-%s.csv', str_replace('-', '', $export_from), str_replace('-', '', $export_to));

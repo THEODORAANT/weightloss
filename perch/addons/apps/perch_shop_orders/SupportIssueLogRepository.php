@@ -76,7 +76,7 @@ class SupportIssueLogRepository
         return $this->db->get_row('SELECT * FROM ' . $this->table . ' WHERE id = ' . $this->db->pdb($id) . ' LIMIT 1');
     }
 
-    public function list(array $filters = [], $limit = 200, $startDate = null, $endDate = null)
+    public function list(array $filters = [], $limit = 200, $startDateTime = null, $endDateTime = null)
     {
         $sql = 'SELECT * FROM ' . $this->table;
         $where = [];
@@ -97,12 +97,12 @@ class SupportIssueLogRepository
             $where[] = 'orderID = ' . $this->db->pdb((int)$filters['orderID']);
         }
 
-        if (!empty($startDate)) {
-            $where[] = 'DATE(COALESCE(eventDate, createdAt)) >= ' . $this->db->pdb($startDate);
+        if (!empty($startDateTime)) {
+            $where[] = 'COALESCE(CONCAT(eventDate, " 00:00:00"), createdAt) >= ' . $this->db->pdb($startDateTime);
         }
 
-        if (!empty($endDate)) {
-            $where[] = 'DATE(COALESCE(eventDate, createdAt)) <= ' . $this->db->pdb($endDate);
+        if (!empty($endDateTime)) {
+            $where[] = 'COALESCE(CONCAT(eventDate, " 23:59:59"), createdAt) <= ' . $this->db->pdb($endDateTime);
         }
 
         if (count($where)) {
