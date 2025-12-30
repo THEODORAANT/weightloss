@@ -16,16 +16,106 @@
     ];
 
     $message = '';
+    $current_issue = null;
+    $form_defaults = [];
 
     $Issues = new SupportIssueLogRepository();
     if (!$Issues->table_ready()) {
         $Issues->ensure_table_exists();
     }
 
+    $editing_id = PerchUtil::get('id');
+    if ($editing_id) {
+        $current_issue = $Issues->find((int)$editing_id);
+        if ($current_issue) {
+            $form_defaults = $current_issue;
+        } else {
+            $message = $HTML->failure_message($Lang->get('Issue not found.'));
+        }
+    }
+
+    $parse_date = function ($date_string) {
+        $date_string = trim((string)$date_string);
+        if ($date_string === '') {
+            return null;
+        }
+
+        $formats = ['d/m/Y', 'd/m/y'];
+        foreach ($formats as $format) {
+            $dt = DateTime::createFromFormat($format, $date_string);
+            if ($dt instanceof DateTime) {
+                return $dt->format('Y-m-d');
+            }
+        }
+
+        return null;
+    };
+
+    $requested_export = PerchUtil::get('export') === '1';
+    $export_issue_type = PerchUtil::get('export_issue_type', 'complaint');
+    $export_from = $parse_date(PerchUtil::get('export_from'));
+    $export_to = $parse_date(PerchUtil::get('export_to'));
+
+    $filters = [];
+    if (PerchUtil::get('filter_issue_type')) {
+        $filters['issueType'] = PerchUtil::get('filter_issue_type');
+    }
+
+    if (PerchUtil::get('filter_status')) {
+        $filters['status'] = PerchUtil::get('filter_status');
+    }
+
+    if (PerchUtil::get('filter_member')) {
+        $filters['memberID'] = (int)PerchUtil::get('filter_member');
+    }
+
+    if (PerchUtil::get('filter_order')) {
+        $filters['orderID'] = (int)PerchUtil::get('filter_order');
+    }
+
+    if ($requested_export) {
+        $export_filters = $filters;
+        if ($export_issue_type) {
+            $export_filters['issueType'] = $export_issue_type;
+        }
+
+        if (!$export_from || !$export_to) {
+            $message = $HTML->failure_message($Lang->get('Please provide valid from/to dates in dd/mm/yy format.'));
+        } else {
+            $export_rows = $Issues->list($export_filters, 0, $export_from, $export_to);
+            $filename = sprintf('support-issues-%s-to-%s.csv', str_replace('-', '', $export_from), str_replace('-', '', $export_to));
+            header('Content-Type: text/csv');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['ID', 'Issue type', 'Summary', 'Status', 'Event date', 'Created at', 'Member ID', 'Order ID', 'Order number', 'Tracking', 'Details', 'Resolution', 'Logged by']);
+            foreach ($export_rows as $row) {
+                fputcsv($out, [
+                    $row['id'],
+                    $row['issueType'],
+                    $row['summary'],
+                    $row['status'],
+                    $row['eventDate'],
+                    $row['createdAt'],
+                    $row['memberID'],
+                    $row['orderID'],
+                    $row['orderNumber'],
+                    $row['trackingNumber'],
+                    $row['details'],
+                    $row['resolution'],
+                    $row['loggedByName'],
+                ]);
+            }
+            fclose($out);
+            exit;
+        }
+    }
+
     $submitted = $Form->submitted();
 
     if ($submitted) {
         $postvars = [
+            'issue_id',
             'issueType',
             'memberID',
             'orderID',
@@ -39,6 +129,7 @@
         ];
 
         $data = $Form->receive($postvars);
+        $issue_id = isset($data['issue_id']) ? (int)$data['issue_id'] : null;
 
         $data['issueType'] = $data['issueType'] ?? 'complaint';
         $data['status'] = $data['status'] ?? 'open';
@@ -64,29 +155,21 @@
         if ($data['summary'] === '') {
             $message = $HTML->failure_message($Lang->get('Please enter a brief summary.'));
         } else {
-            $Issues->save($data);
-            $message = $HTML->success_message($Lang->get('Support issue logged.'));
+            $Issues->save($data, $issue_id);
+            $message = $HTML->success_message($issue_id ? $Lang->get('Support issue updated.') : $Lang->get('Support issue logged.'));
 
-            $Form = $API->get('Form');
+            if ($issue_id) {
+                $current_issue = $Issues->find($issue_id);
+                $form_defaults = $current_issue ?: [];
+            } else {
+                $current_issue = null;
+                $form_defaults = [];
+            }
         }
     }
 
-    $filters = [];
-
-    if (PerchUtil::get('filter_issue_type')) {
-        $filters['issueType'] = PerchUtil::get('filter_issue_type');
-    }
-
-    if (PerchUtil::get('filter_status')) {
-        $filters['status'] = PerchUtil::get('filter_status');
-    }
-
-    if (PerchUtil::get('filter_member')) {
-        $filters['memberID'] = (int)PerchUtil::get('filter_member');
-    }
-
-    if (PerchUtil::get('filter_order')) {
-        $filters['orderID'] = (int)PerchUtil::get('filter_order');
+    if (!empty($form_defaults)) {
+        $Form->set_defaults($form_defaults);
     }
 
     $issues = $Issues->list($filters, 200);

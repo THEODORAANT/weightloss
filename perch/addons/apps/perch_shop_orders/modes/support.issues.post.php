@@ -10,8 +10,13 @@
         $status_lookup[$status['value']] = $status['label'];
     }
 
+    $panel_heading = $Lang->get('Support issues log');
+    if (!empty($current_issue)) {
+        $panel_heading = $Lang->get('Edit support issue #%s', (int)$current_issue['id']);
+    }
+
     echo $HTML->title_panel([
-        'heading' => $Lang->get('Support issues log'),
+        'heading' => $panel_heading,
     ], $CurrentUser);
 
     include('_subnav.php');
@@ -22,10 +27,16 @@
 
 ?>
 
-<h2><?php echo $Lang->get('Log a new issue'); ?></h2>
+<h2 id="support-issue-form">
+    <?php echo !empty($current_issue) ? $Lang->get('Edit issue') : $Lang->get('Log a new issue'); ?>
+</h2>
 
 <?php
     echo $Form->form_start('support-issue');
+
+        if (!empty($current_issue)) {
+            echo '<input type="hidden" name="issue_id" value="' . $HTML->encode($current_issue['id']) . '">';
+        }
 
         echo $Form->select_field('issueType', $Lang->get('Issue type'), $issue_types, $Form->get_value('issueType', 'complaint'));
         echo $Form->text_field('summary', $Lang->get('Summary'), $Form->get_value('summary', ''));
@@ -38,10 +49,38 @@
         echo $Form->select_field('status', $Lang->get('Status'), $status_options, $Form->get_value('status', 'open'));
         echo $Form->textarea_field('resolution', $Lang->get('Resolution / follow-up'), $Form->get_value('resolution', ''), 'input-simple');
 
-        echo $Form->submit_field('btnSubmit', $Lang->get('Save issue'), $API->app_path());
+        echo $Form->submit_field('btnSubmit', !empty($current_issue) ? $Lang->get('Update issue') : $Lang->get('Save issue'), $API->app_path());
 
     echo $Form->form_end();
 ?>
+
+<h2><?php echo $Lang->get('Export issues'); ?></h2>
+
+<form class="filter-bar" method="get" action="<?php echo $HTML->encode($Form->action()); ?>">
+    <input type="hidden" name="export" value="1">
+    <div class="field-group">
+        <label><?php echo $Lang->get('Issue type'); ?></label>
+        <select name="export_issue_type">
+            <option value=""><?php echo $Lang->get('All'); ?></option>
+            <?php foreach ($issue_types as $type): ?>
+                <option value="<?php echo $HTML->encode($type['value']); ?>" <?php echo (PerchUtil::get('export_issue_type', 'complaint') === $type['value']) ? 'selected' : ''; ?>>
+                    <?php echo $HTML->encode($type['label']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="field-group">
+        <label><?php echo $Lang->get('From (dd/mm/yy)'); ?></label>
+        <input type="text" name="export_from" value="<?php echo $HTML->encode(PerchUtil::get('export_from', '')); ?>" placeholder="dd/mm/yy">
+    </div>
+    <div class="field-group">
+        <label><?php echo $Lang->get('To (dd/mm/yy)'); ?></label>
+        <input type="text" name="export_to" value="<?php echo $HTML->encode(PerchUtil::get('export_to', '')); ?>" placeholder="dd/mm/yy">
+    </div>
+    <div class="field-group buttons">
+        <button type="submit" class="button"><?php echo $Lang->get('Download CSV'); ?></button>
+    </div>
+</form>
 
 <h2><?php echo $Lang->get('Recent entries'); ?></h2>
 
@@ -98,6 +137,7 @@
                 <th><?php echo $Lang->get('Tracking'); ?></th>
                 <th><?php echo $Lang->get('Status'); ?></th>
                 <th><?php echo $Lang->get('Logged by'); ?></th>
+                <th><?php echo $Lang->get('Actions'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -141,6 +181,11 @@
                         }
                         echo $author ? $HTML->encode($author) : '&ndash;';
                     ?>
+                </td>
+                <td>
+                    <a class="button button-small" href="<?php echo $HTML->encode($Form->action()); ?>?id=<?php echo (int)$issue['id']; ?>#support-issue-form">
+                        <?php echo $Lang->get('Edit'); ?>
+                    </a>
                 </td>
             </tr>
         <?php endforeach; ?>
