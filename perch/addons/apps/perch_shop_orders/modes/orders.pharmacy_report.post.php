@@ -1,6 +1,5 @@
 <?php
-    $refresh_url = $API->app_path() . '/pharmacy-report/';
-
+    $refresh_url =  '/addons/apps/perch_shop_orders/pharmacy-report/';
     echo $HTML->title_panel([
         'heading' => $Lang->get('Pharmacy orders awaiting pharmacy action'),
     ], $CurrentUser);

@@ -17,5 +17,6 @@
 		$API = new PerchAPI(1.0, 'perch_shop');
 		
 		$API->on('shop.order_status_update', 'PerchShop_Events::order_status');
+		$API->on('shop.order_status_update', 'PerchShop_StockTrackerWebhook::notify_sold');
 		$API->on('members.login', 'PerchShop_Events::register_member_login');
 	}

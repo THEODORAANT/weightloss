@@ -25,7 +25,18 @@ perch_layout('client/header', [
             <div class="client-card__section">
               <h2 class="client-card__title">Profile details</h2>
               <p class="client-card__intro">Keep your personal details up to date so our clinicians can tailor their care and communications to you.</p>
-              <?php perch_member_form('profile.html'); ?>
+              <?php perch_member_form('profile.html');
+               if(!perch_twillio_is_customerphone_registered()){
+
+                     perch_twillio_registration_form();
+
+
+                      }else{
+                      perch_twillio_customer_confirmPhone_form(  [
+                                                                     'return_url' => '/client/verify_phonecode'
+
+                                                                   ]);
+                      }?>
             </div>
           <?php } else { ?>
             <div class="client-card__section">
