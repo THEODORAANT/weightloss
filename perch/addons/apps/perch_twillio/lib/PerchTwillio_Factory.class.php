@@ -28,7 +28,6 @@ class PerchTwillio_Factory extends PerchAPI_Factory
      //   $sid = getenv("TWILIO_ACCOUNT_SID");
       //  $token = getenv("TWILIO_AUTH_TOKEN");
        $twilio_instance = new Client($sid, $token);
-        	//$twilio_instance = new Client("AC70bc776cf4707fce8cbdf27c4face760", "b9b26ad2b32c51034f96910d560aba5a");
 
 		if (is_object($twilio_instance)) {
 		//	$instance->verify_ssl = false;
