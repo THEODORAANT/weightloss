@@ -263,6 +263,26 @@ if ($patient_name === '') {
         return true;
     }
 
+    public function send_refer_a_friend_email(string $template, string $subject, array $emailData, string $emailAddress): bool
+    {
+        if ($emailAddress === '' || !PerchUtil::is_valid_email($emailAddress)) {
+            return false;
+        }
+
+        $templatePath = ltrim($template, '/');
+
+        $API = new PerchAPI(1.0, 'perch_members');
+        $Email = $API->get('Email');
+        $Email->set_template('members/emails/' . $templatePath);
+        $Email->set_bulk($emailData);
+        $Email->subject($subject);
+        $Email->senderName(PERCH_EMAIL_FROM_NAME);
+        $Email->senderEmail(PERCH_EMAIL_FROM);
+        $Email->recipientEmail($emailAddress);
+
+        return $Email->send();
+    }
+
 
     public function send_welcome_email()
     {

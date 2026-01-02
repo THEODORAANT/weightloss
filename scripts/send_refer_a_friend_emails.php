@@ -170,15 +170,12 @@ foreach ($rows as $row) {
         continue;
     }
 
-    $Email = $API->get('Email');
-    $Email->set_template('members/emails/' . $campaign['template']);
-    $Email->set_bulk($emailData);
-    $Email->subject($campaign['subject']);
-    $Email->senderName(PERCH_EMAIL_FROM_NAME);
-    $Email->senderEmail(PERCH_EMAIL_FROM);
-    $Email->recipientEmail($emailAddress);
-
-    $sent = $Email->send();
+    $sent = $Member->send_refer_a_friend_email(
+        $campaign['template'],
+        $campaign['subject'],
+        $emailData,
+        $emailAddress
+    );
 
     $status = $sent ? 'sent' : 'failed';
     file_put_contents($logFile, $memberID . '|' . $emailAddress . '|' . date('c') . '|' . $status . PHP_EOL, FILE_APPEND | LOCK_EX);
