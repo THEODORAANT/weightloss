@@ -19,6 +19,32 @@ if (perch_member_logged_in()) {
                 text-align: center;
             }
 
+            .client-order__success {
+                margin-bottom: 1.5rem;
+                padding: 1rem 1.25rem;
+                border-radius: 14px;
+                background: #e9f6ef;
+                border: 1px solid #c2e6d2;
+                color: #0f5132;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.65rem;
+                font-weight: 600;
+            }
+
+            .client-order__success-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: #198754;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 1.1rem;
+                box-shadow: 0 10px 25px rgba(25, 135, 84, 0.25);
+            }
+
             .client-order__intro h1 {
                 font-size: clamp(1.75rem, 2.5vw + 1.5rem, 2.75rem);
                 font-weight: 700;
@@ -193,11 +219,17 @@ if (perch_member_logged_in()) {
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-11 col-xl-9">
                         <div class="client-order__intro">
-                         <?php if (isset($_GET["success"])) {
-                                    perch_shop_empty_cart();
-                                ?>
-                                  <span class="client-documents__eyebrow">Payment complete</span>
-                              <?php  } ?>
+                            <?php if (isset($_GET['success'])) {
+                                perch_shop_empty_cart();
+                            ?>
+                                <div class="client-order__success" role="status">
+                                    <span class="client-order__success-icon" aria-hidden="true">✓</span>
+                                    <div>
+                                        <div>Payment complete</div>
+                                        <small class="d-block fw-normal text-success">Thank you! Your order has been confirmed and we're preparing it now.</small>
+                                    </div>
+                                </div>
+                            <?php } ?>
                             <p class="text-uppercase text-muted small mb-2">Order reference</p>
                             <h1 class="mb-2">#<?php echo htmlspecialchars($order_id, ENT_QUOTES, 'UTF-8'); ?></h1>
                             <p>Below you'll find a clear breakdown of your order and the latest delivery information.</p>
