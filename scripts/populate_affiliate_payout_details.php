@@ -1,5 +1,7 @@
-<?php
-declare(strict_types=1);
+<?php ini_set('display_errors', 1);
+      ini_set('display_startup_errors', 1);
+      error_reporting(E_ALL);
+//declare(strict_types=1);
 
 require_once __DIR__ . '/../perch/runtime.php';
 
@@ -9,24 +11,22 @@ if (!function_exists('write_to_stderr')) {
         file_put_contents('php://stderr', $message, FILE_APPEND);
     }
 }
-
-if (PHP_SAPI !== 'cli') {
-    write_to_stderr("This script must be run from the command line." . PHP_EOL);
-    exit(1);
-}
+echo "a";
+echo "b";
 
 $API     = new PerchAPI(1.0, 'perch_members');
+echo "c";
+
 $DB      = PerchDB::fetch();
 $Members = new PerchMembers_Members($API);
 
 $columns = $DB->get_rows('SHOW COLUMNS FROM ' . PERCH_DB_PREFIX . 'purchases LIKE "payout_id"');
-if (!PerchUtil::count($columns)) {
-    write_to_stderr("The purchases table does not contain a payout_id column. Nothing to do." . PHP_EOL);
-    exit(1);
-}
+
+echo "COLUMNS"; print_r('SHOW COLUMNS FROM ' . PERCH_DB_PREFIX . 'purchases LIKE "payout_id"');
+
 
 $payouts = $DB->get_rows('SELECT id, affiliate_id, requested_at FROM ' . PERCH_DB_PREFIX . 'affiliate_payouts ORDER BY id ASC');
-
+echo 'SELECT id, affiliate_id, requested_at FROM ' . PERCH_DB_PREFIX . 'affiliate_payouts ORDER BY id ASC';
 if (!PerchUtil::count($payouts)) {
     echo "No affiliate payouts found." . PHP_EOL;
     exit(0);

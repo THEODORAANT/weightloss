@@ -93,15 +93,16 @@ if (file_exists($logFile)) {
 }
 
 $memberFilterSQL = '';
+
 if (isset($options['member-id'])) {
     $memberFilterSQL = ' AND memberID=' . $DB->pdb((int) $options['member-id']);
 }
 
 $sql = 'SELECT memberID FROM ' . PERCH_DB_PREFIX . 'members'
     . ' WHERE memberStatus=' . $DB->pdb('active')
-    . ' AND memberProperties LIKE ' . $DB->pdb('%"affID"%')
-    . $memberFilterSQL;
-
+    //. ' AND memberProperties LIKE ' . $DB->pdb('%"affID"%')
+    . $memberFilterSQL ;
+echo $sql;
 $rows = $DB->get_rows($sql);
 
 if (!PerchUtil::count($rows)) {
@@ -132,12 +133,13 @@ foreach ($rows as $row) {
         continue;
     }
 
-    $properties = decode_properties($Member->memberProperties());
+ $properties = decode_properties($Member->memberProperties());
     $affiliateID = trim((string) ($properties['affID'] ?? ''));
     if ($affiliateID === '') {
-        echo 'Skipping member ' . $memberID . ' – missing affiliate ID.' . PHP_EOL;
+    $affiliateID ='AFFXXXX';
+        /*echo 'Skipping member ' . $memberID . ' – missing affiliate ID.' . PHP_EOL;
         $skippedCount++;
-        continue;
+        continue;*/
     }
 
     $emailAddress = trim((string) $Member->memberEmail());

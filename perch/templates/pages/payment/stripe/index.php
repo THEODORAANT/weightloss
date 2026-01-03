@@ -10,7 +10,13 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
 }
 
       // your 'success' and 'failure' URLs
+
     $success_url= "https://".$_SERVER['HTTP_HOST']."/payment/success";
+            if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
+    $success_url= "https://".$_SERVER['HTTP_HOST']."/client/order?id=".perch_shop_successful_order_id()."&success";
+
+
+}
    $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
 //$success_url="/payment/success";
 //$cancel_url ="/payment/went/wrong";
@@ -45,6 +51,7 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
 
         if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
         unset($_SESSION['questionnaire-reorder']['nextstep']);
+
     perch_member_add_questionnaire($_SESSION['questionnaire-reorder'],'re-order',$orderIdForQuestionnaire);
     $_SESSION['questionnaire-reorder'] = array();
     setcookie('questionnaire_reorder', '', time()-3600, '/');

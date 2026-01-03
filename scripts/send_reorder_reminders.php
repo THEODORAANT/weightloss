@@ -27,7 +27,7 @@ if (isset($options['help'])) {
 
 $dryRun = array_key_exists('dry-run', $options);
 
-$emailOptOutCustomers = [
+$emailOptOutCustomers = [1160
     // Add customer IDs who do not want to receive reorder reminder emails.
 ];
 

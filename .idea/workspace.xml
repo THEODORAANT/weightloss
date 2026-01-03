@@ -5,69 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_StockTrackerWebhook.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/_default_delete.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/_default_index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/activate.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/admin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/dashboard.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/delete/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/dispatches/delete/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/dispatches/edit/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/dispatches/edit/load.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/dispatches/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/edit/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/events.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lang/en-gb.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Base.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Customer.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Customers.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Dispatch.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Dispatches.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Events.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Factory.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Message.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Messages.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Runtime.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/lib/PerchTwillio_Session.class.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/_subnav.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/delete.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/delete.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/dispatches.edit.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/dispatches.edit.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/dispatches.list.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/dispatches.list.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/edit.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/edit.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/list.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/list.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/messages.list.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/messages.list.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/send.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/send.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/webhooks.post.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/modes/webhooks.pre.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/runtime.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/send/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/customers/customer.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/customer_confirm_phone.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/customer_confirm_phone.min.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/customer_create.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/customer_login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/dispatch.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/message.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/verify_customer.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/templates/messages/verify_customer.min.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_twillio/webhooks/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/perch/templates/pages/client/verify_phonecode.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/mounjaro_wegovy_guidance.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/mounjaro_wegovy_guidance.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/events.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/events.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Events.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Events.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/checkout/customer_create_wl.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/checkout/customer_create_wl.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.pharmacy_report.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.pharmacy_report.post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_monday.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_monday.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_thursday.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_thursday.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.pharmacy_report.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.pharmacy_report.pre.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/templates/pages/client/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/client/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/client/order.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/client/order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/populate_affiliate_payout_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/populate_affiliate_payout_details.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/send_refer_a_friend_emails.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/send_refer_a_friend_emails.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/send_reorder_reminders.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/send_reorder_reminders.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/sync_affiliate_credits.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/sync_affiliate_credits.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/update_order_item_product.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/update_order_item_product.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +25,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/implement-complaint-and-refund-logging-system-xyggov" />
+    <option name="BRANCH" value="origin/codex/add-cron-job-for-referral-emails-rhu50m" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -83,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="mainmerge" />
+        <entry key="$PROJECT_DIR$" value="maintheo" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -100,27 +50,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
       <recent name="$PROJECT_DIR$/perch/core" />
-      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />

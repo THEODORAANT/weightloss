@@ -1,19 +1,10 @@
 <?php
-declare(strict_types=1);
 
 require_once __DIR__ . '/../perch/runtime.php';
 
-if (!function_exists('write_to_stderr')) {
-    function write_to_stderr(string $message): void
-    {
-        file_put_contents('php://stderr', $message, FILE_APPEND);
-    }
-}
 
-if (PHP_SAPI !== 'cli') {
-    write_to_stderr('This script must be run from the command line.' . PHP_EOL);
-    exit(1);
-}
+
+
 
 $membersAPI = new PerchAPI(1.0, 'perch_members');
 $shopAPI    = new PerchAPI(1.0, 'perch_shop');
@@ -27,13 +18,6 @@ $requiredTables = [
     PERCH_DB_PREFIX . 'shop_customers',
 ];
 
-foreach ($requiredTables as $table) {
-    $sql = 'SHOW TABLES LIKE ' . $DB->pdb($table);
-    if (!$DB->get_value($sql)) {
-        write_to_stderr('Required table "' . $table . '" was not found. Aborting.' . PHP_EOL);
-        exit(1);
-    }
-}
 
 $purchasedOrderIDs = $DB->get_rows_flat('SELECT orderID FROM ' . PERCH_DB_PREFIX . 'purchases');
 $orderIdLookup     = [];
@@ -54,7 +38,11 @@ $sql = 'SELECT o.orderID, o.customerID, c.memberID, a.id AS affiliate_id, a.affi
      . 'INNER JOIN ' . PERCH_DB_PREFIX . 'affiliates a ON a.affid = r.referrer_affiliate_id '
      . 'WHERE o.orderStatus = ' . $DB->pdb('paid') . ' '
      . 'ORDER BY o.orderCreated ASC, o.orderID ASC';
-
+/*SELECT o.orderID, o.customerID, c.memberID, a.id AS affiliate_id, a.affid FROM getweightlossmain.p4_shop_orders o
+   INNER JOIN getweightlossmain.p4_shop_customers c ON c.customerID = o.customerID
+  INNER JOIN getweightlossmain.p4_referrals r ON r.referred_member_id = c.memberID
+  INNER JOIN getweightlossmain.p4_affiliates a ON a.affid = r.referrer_affiliate_id
+   where a.affid="AFFEX3Y4" and o.orderStatus = 'paid' ORDER BY o.orderCreated ASC, o.orderID ASC*/
 $orders = $DB->get_rows($sql);
 
 if (!PerchUtil::count($orders)) {
@@ -88,13 +76,13 @@ foreach ($orders as $row) {
 
     $Order = $OrdersFactory->find($orderID);
     if (!$Order instanceof PerchShop_Order) {
-        write_to_stderr('Unable to load order #' . $orderID . '. Skipping.' . PHP_EOL);
+        //write_to_stderr('Unable to load order #' . $orderID . '. Skipping.' . PHP_EOL);
         continue;
     }
 
     $Customer = $CustomersFactory->find($customerID);
     if (!$Customer instanceof PerchShop_Customer) {
-        write_to_stderr('Unable to load customer #' . $customerID . ' for order #' . $orderID . '. Skipping.' . PHP_EOL);
+      //  write_to_stderr('Unable to load customer #' . $customerID . ' for order #' . $orderID . '. Skipping.' . PHP_EOL);
         continue;
     }
 

@@ -32,8 +32,8 @@ $DB  = PerchDB::fetch();
         . ' AND p.created_at IS NOT NULL'
         . ' AND TIME(p.created_at) < ' . $DB->pdb('14:00:00')
         . ' AND TIMESTAMPDIFF(HOUR, p.created_at, NOW()) > 28'
-       // . ' AND ' . $status_expression . ' = ' . $DB->pdb('pending')
+        . ' AND ' . $status_expression . ' != ' . $DB->pdb('SHIPPED')
         . " AND p.pharmacy_orderID IS NOT NULL AND p.pharmacy_orderID <> ''"
-        . ' ORDER BY p.created_at ASC';
+        . ' ORDER BY p.created_at DESC';
 
     $pharmacy_pending_orders = $DB->get_rows($pharmacy_pending_sql) ?: [];

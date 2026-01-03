@@ -193,6 +193,11 @@ if (perch_member_logged_in()) {
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-11 col-xl-9">
                         <div class="client-order__intro">
+                         <?php if (isset($_GET["success"])) {
+                                    perch_shop_empty_cart();
+                                ?>
+                                  <span class="client-documents__eyebrow">Payment complete</span>
+                              <?php  } ?>
                             <p class="text-uppercase text-muted small mb-2">Order reference</p>
                             <h1 class="mb-2">#<?php echo htmlspecialchars($order_id, ENT_QUOTES, 'UTF-8'); ?></h1>
                             <p>Below you'll find a clear breakdown of your order and the latest delivery information.</p>

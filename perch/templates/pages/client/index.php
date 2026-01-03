@@ -26,17 +26,17 @@ perch_layout('client/header', [
               <h2 class="client-card__title">Profile details</h2>
               <p class="client-card__intro">Keep your personal details up to date so our clinicians can tailor their care and communications to you.</p>
               <?php perch_member_form('profile.html');
-               $phoneRegistered = perch_twillio_is_customerphone_registered();
-               $phoneVerified = perch_twillio_customer_verified();
-               ?>
-              <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
-                <div class="badge bg-<?php echo $phoneVerified ? 'success' : 'warning text-dark'; ?> text-uppercase px-3 py-2">
-                  <?php echo $phoneVerified ? 'Phone verified' : ($phoneRegistered ? 'Pending verification' : 'Phone not added'); ?>
-                </div>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#phoneModal">
-                  <?php echo $phoneRegistered ? 'Verify phone' : 'Add phone'; ?>
-                </button>
-              </div>
+               if(!perch_twillio_is_customerphone_registered()){
+
+                     perch_twillio_registration_form();
+
+
+                      }else{
+                      perch_twillio_customer_confirmPhone_form(  [
+                                                                     'return_url' => '/client/verify_phonecode'
+
+                                                                   ]);
+                      }?>
             </div>
           <?php } else { ?>
             <div class="client-card__section">
@@ -76,40 +76,6 @@ perch_layout('client/header', [
     </div>
   </div>
 </section>
-<?php if ($isLoggedIn) { ?>
-  <div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content p-2 p-md-4">
-        <div class="modal-header border-0 pb-0">
-          <div>
-            <p class="text-uppercase text-muted small mb-1">Phone verification</p>
-            <h2 class="modal-title h4" id="phoneModalLabel">
-              <?php echo $phoneRegistered ? 'Verify your phone number' : 'Add your phone number'; ?>
-            </h2>
-            <p class="text-muted mb-0">
-              <?php echo $phoneRegistered ? 'Enter the code we sent to confirm your phone number.' : 'Add your phone details so we can send you a verification code.'; ?>
-            </p>
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <?php
-            if (!$phoneRegistered) {
-              perch_twillio_registration_form();
-            } elseif (!$phoneVerified) {
-              perch_twillio_customer_confirmPhone_form([
-                'return_url' => '/client/verify_phonecode',
-              ]);
-            } else {
-              echo '<div class="alert alert-success mb-0" role="alert">Your phone number is already verified.</div>';
-            }
-          ?>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
 <?php /*
 <script>
     const addressInput = document.getElementById('form1_shipping_postcode');

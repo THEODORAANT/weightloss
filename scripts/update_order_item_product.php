@@ -10,10 +10,7 @@ if (!function_exists('write_to_stderr')) {
     }
 }
 
-if (PHP_SAPI !== 'cli') {
-    write_to_stderr('This script must be run from the command line.' . PHP_EOL);
-    exit(1);
-}
+
 
 $options = getopt('', [
     'order-id:',
