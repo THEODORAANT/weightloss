@@ -221,4 +221,23 @@ The webhook stores the latest status, dispatch date, and tracking reference so
 members and staff can see fulfilment progress along with a Royal Mail tracking
 link in the portal.
 
+# Mailer add-on
+
+The `perch_mailer` add-on provides a Perch-powered mailing tool that uses
+PerchEmail for delivery. Enable it by adding `perch_mailer` to
+`perch/config/apps.php`.
+
+Key features:
+
+- Manage reusable email templates (subject, sender, HTML/plain content) from the
+  Perch admin at **Mailer → Templates**.
+- Define triggers that map a slug to a template and enable or disable each
+  trigger. Triggers are available under **Mailer → Triggers** and can be fired
+  with `perch_mailer_trigger($slug, $memberID, $vars, $contactEmail)`.
+- Maintain a contact list (including optional member links) at
+  **Mailer → Contacts**. Use the **Sync from members** action to bulk-create or
+  update contacts from the members table.
+- The runtime helper `perch_mailer_sync_contacts_from_members()` mirrors the
+  admin sync for scheduled or scripted imports.
+
 # perchDocumenttion
