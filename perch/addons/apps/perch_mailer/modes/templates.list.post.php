@@ -40,6 +40,14 @@ if (PerchUtil::count($templates)) {
         'format' => ['type' => 'date', 'format' => PERCH_DATE_SHORT . ' ' . PERCH_TIME_SHORT],
     ]);
 
+    $Listing->add_col([
+        'title' => $Lang->get('Preview'),
+        'value' => function ($Template, $HTML) use ($API) {
+            $url = $API->app_nav() . '/templates/view/?id=' . $Template->id();
+            return '<a class="button button-simple" href="' . $HTML->encode($url) . '">' . $HTML->encode('View') . '</a>';
+        },
+    ]);
+
     echo $Listing->render($templates);
 } else {
     echo $HTML->warning_message($Lang->get('No mail templates have been created yet.'));

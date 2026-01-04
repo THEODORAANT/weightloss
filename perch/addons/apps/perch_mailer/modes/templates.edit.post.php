@@ -2,6 +2,13 @@
 
 echo $HTML->title_panel([
     'heading' => $heading1,
+    'button'  => [
+        'text' => $Lang->get('View template'),
+        'link' => $TemplateItem ? $API->app_nav() . '/templates/view/?id=' . $TemplateItem->id() : '',
+        'icon' => 'core/o-visibility',
+        'priv' => 'perch_mailer.templates.manage',
+        'display' => (bool)$TemplateItem,
+    ],
 ], $CurrentUser);
 
 if (isset($message)) {
