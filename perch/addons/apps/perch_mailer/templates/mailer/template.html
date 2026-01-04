@@ -1,0 +1,9 @@
+<perch:mailer id="templateTitle" type="text" label="Title" required="true" />
+<perch:mailer id="templateSlug" type="slug" label="Slug" for="templateTitle" required="true" help="Used to reference this template from triggers." />
+<perch:mailer id="templateSubject" type="text" label="Subject" required="true" />
+
+<perch:mailer id="templateFromName" type="text" label="From name" />
+<perch:mailer id="templateFromEmail" type="email" label="From email" />
+
+<perch:mailer id="templateHTML" type="textarea" label="HTML body" size="xxl" markdown="0" divider-before="Content" />
+<perch:mailer id="templatePlain" type="textarea" label="Plain text body" size="xxl" markdown="0" />
