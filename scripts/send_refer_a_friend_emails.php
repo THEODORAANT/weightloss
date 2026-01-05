@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../perch/runtime.php';
+require_once __DIR__ . '/email_unsubscribe_list.php';
 
 $options = getopt('', [
     'day::',
@@ -145,6 +146,19 @@ foreach ($rows as $row) {
     $emailAddress = trim((string) $Member->memberEmail());
     if ($emailAddress === '' || !PerchUtil::is_valid_email($emailAddress)) {
         echo 'Skipping member ' . $memberID . ' – invalid email address.' . PHP_EOL;
+        $skippedCount++;
+        continue;
+    }
+
+    if (is_member_unsubscribed($memberID) || is_email_unsubscribed($emailAddress)) {
+        echo 'Skipping member ' . $memberID . ' – unsubscribed from scripted emails.' . PHP_EOL;
+        if (!$dryRun) {
+            file_put_contents(
+                $logFile,
+                $memberID . '|' . $emailAddress . '|' . date('c') . '|skipped-unsubscribed' . PHP_EOL,
+                FILE_APPEND | LOCK_EX
+            );
+        }
         $skippedCount++;
         continue;
     }

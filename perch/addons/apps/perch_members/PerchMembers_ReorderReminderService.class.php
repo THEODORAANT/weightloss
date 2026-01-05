@@ -1,5 +1,10 @@
 <?php
 
+$unsubscribeListPath = realpath(__DIR__ . '/../../../../scripts/email_unsubscribe_list.php');
+if ($unsubscribeListPath && file_exists($unsubscribeListPath)) {
+    require_once $unsubscribeListPath;
+}
+
 class PerchMembers_ReorderReminderService
 {
     /**
@@ -70,6 +75,20 @@ class PerchMembers_ReorderReminderService
             echo 'Skipping order ' . $orderID . ' – customer has no valid email address.' . PHP_EOL;
             if (!$dryRun) {
                 $appendLog($orderID, $customerID, 'skipped-missing-email');
+            }
+            $skippedCount++;
+            return;
+        }
+
+        $memberID = (int) $Customer->memberID();
+        if (
+            (function_exists('is_customer_unsubscribed') && is_customer_unsubscribed($customerID))
+            || (function_exists('is_member_unsubscribed') && is_member_unsubscribed($memberID))
+            || (function_exists('is_email_unsubscribed') && is_email_unsubscribed($emailAddress))
+        ) {
+            echo 'Skipping order ' . $orderID . ' – recipient unsubscribed from scripted emails.' . PHP_EOL;
+            if (!$dryRun) {
+                $appendLog($orderID, $customerID, 'skipped-email-unsubscribed');
             }
             $skippedCount++;
             return;
@@ -146,7 +165,6 @@ echo "emailData"; print_r($emailData);
             return;
         }
 
-        $memberID = (int) $Customer->memberID();
         if ($memberID > 0) {
             try {
                 perch_member_add_notification($memberID, $title, $message);
@@ -164,4 +182,3 @@ echo "emailData"; print_r($emailData);
         $sentCount++;
     }
 }
-
