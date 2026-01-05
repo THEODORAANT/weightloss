@@ -213,14 +213,20 @@ class PerchShop_Order extends PerchShop_Base
 
 	public function isReorder($Customer){
 		$Orders = new PerchShop_Orders($this->api);
-        //	$Customer = $Customers->find_from_logged_in_member();
-            $orders = $Orders->findAll_for_customer($Customer);
+		//	$Customer = $Customers->find_from_logged_in_member();
+		$orders = $Orders->findAll_for_customer($Customer);
 
-                if (PerchUtil::count($orders)) {
+		if (!PerchUtil::count($orders)) {
+			return false;
+		}
 
-                return false;
-                }
-                return true;
+		foreach ($orders as $Order) {
+			if ((int)$Order->id() !== (int)$this->id()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 	public function sendOrdertoPharmacy( $Customer){
 	   $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
