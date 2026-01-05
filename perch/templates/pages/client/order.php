@@ -4,7 +4,21 @@
     ]);
 
 if (perch_member_logged_in()) {
-    $order_id = isset($_GET['id']) ? trim($_GET['id']) : null;
+    $order_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+    if ($order_id !== null && $order_id <= 0) {
+        $order_id = null;
+    }
+
+    if ($order_id !== null) {
+        $order_check = perch_shop_orders([
+            'orderID' => $order_id,
+            'skip-template' => true,
+        ], true);
+
+        if (!is_array($order_check) || count($order_check) === 0) {
+            $order_id = null;
+        }
+    }
 ?>
     <section class="client-order py-5">
         <style>
