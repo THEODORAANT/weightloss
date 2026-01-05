@@ -898,9 +898,9 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 	public function get_order($opts)
 	{
 		$this->init_cart();
-    		$memberID   = perch_member_get('memberID');
-    		$Customer   = $this->get_customer($memberID);
-    		$db         = PerchDB::fetch();
+    	$memberID   = perch_member_get('memberID');
+    	$Customer   = $this->get_customer($memberID);
+    	$db         = PerchDB::fetch();
 			$Orders = new PerchShop_Orders($this->api);
 			$Order = $Orders->find((int)$opts['orderID']);
 
@@ -908,6 +908,9 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		  $r = false;
 
+			if (!$Customer || !$Order || (int)$Order->customerID() !== (int)$Customer->id()) {
+				return $r;
+			}
 
 		  $Template = $this->api->get("Template");
           $Template->set($opts["template"], 'shop');
@@ -1610,6 +1613,11 @@ public function get_package_future_items($opts){
     		$Orders    = new PerchShop_Orders($this->api);
          	$Order = $Orders->find((int)$opts['orderID']);
               $r = false;
+
+				if (!$Customer || !$Order || (int)$Order->customerID() !== (int)$Customer->id()) {
+					return $r;
+				}
+
          	    $orders_pharmacy=$Order->getPharmacyOrderbyOrderid($Order->id());
 
                              if (PerchUtil::count($orders_pharmacy)) {

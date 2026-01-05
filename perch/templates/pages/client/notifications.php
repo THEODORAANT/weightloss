@@ -1,4 +1,9 @@
 <?php
+if (!perch_member_logged_in()) {
+    PerchUtil::redirect('/client');
+    exit;
+}
+
 perch_layout('client/header', [
     'page_title' => perch_page_title(true),
 ]);
