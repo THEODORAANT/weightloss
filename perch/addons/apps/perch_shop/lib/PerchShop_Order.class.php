@@ -229,6 +229,24 @@ class PerchShop_Order extends PerchShop_Base
 		return false;
 	}
 	public function sendOrdertoPharmacy( $Customer){
+		$existing_pharmacy_orders = $this->getPharmacyOrderbyOrderid($this->id());
+		if (PerchUtil::count($existing_pharmacy_orders)) {
+			foreach ($existing_pharmacy_orders as $existing_pharmacy_order) {
+				$existing_pharmacy_order_id = isset($existing_pharmacy_order['pharmacy_orderID'])
+					? trim((string) $existing_pharmacy_order['pharmacy_orderID'])
+					: '';
+
+				if ($existing_pharmacy_order_id !== '') {
+					return [
+						'success' => false,
+						'data' => [
+							'message' => 'This order has already been sent to the pharmacy (order '.$existing_pharmacy_order_id.').',
+						],
+					];
+				}
+			}
+		}
+
 	   $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
        	$Countries  = new PerchShop_Countries($this->api);
        	$Addresses  = new PerchShop_Addresses($this->api);
