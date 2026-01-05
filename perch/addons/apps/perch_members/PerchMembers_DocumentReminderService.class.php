@@ -1,5 +1,10 @@
 <?php
 
+$unsubscribeListPath = realpath(__DIR__ . '/../../../../scripts/email_unsubscribe_list.php');
+if ($unsubscribeListPath && file_exists($unsubscribeListPath)) {
+    require_once $unsubscribeListPath;
+}
+
 class PerchMembers_DocumentReminderService
 {
     /**
@@ -244,6 +249,13 @@ class PerchMembers_DocumentReminderService
 
         $memberEmail = trim((string) $Member->memberEmail());
         if ($memberEmail === '' || !PerchUtil::is_valid_email($memberEmail)) {
+            return false;
+        }
+
+        if (
+            (function_exists('is_member_unsubscribed') && is_member_unsubscribed($Member->id()))
+            || (function_exists('is_email_unsubscribed') && is_email_unsubscribed($memberEmail))
+        ) {
             return false;
         }
 

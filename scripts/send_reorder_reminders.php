@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../perch/runtime.php';
+require_once __DIR__ . '/email_unsubscribe_list.php';
 
 $options = getopt('', [
     'date::',
@@ -26,10 +27,6 @@ if (isset($options['help'])) {
 }
 
 $dryRun = array_key_exists('dry-run', $options);
-
-$emailOptOutCustomers = [1160
-    // Add customer IDs who do not want to receive reorder reminder emails.
-];
 
 $dateOption = $options['date'] ?? null;
 $daysOption = $options['days'] ?? null;
@@ -176,10 +173,10 @@ foreach ($orders as $order) {
         continue;
     }
 
-    if (in_array($customerID, $emailOptOutCustomers, true)) {
-        echo 'Skipping order ' . $orderID . ' – customer ' . $customerID . ' opted out of reminder emails.' . PHP_EOL;
+    if (is_customer_unsubscribed($customerID)) {
+        echo 'Skipping order ' . $orderID . ' – customer ' . $customerID . ' unsubscribed from scripted emails.' . PHP_EOL;
         if (!$dryRun) {
-            $appendLog($orderID, $customerID, 'skipped-email-opt-out');
+            $appendLog($orderID, $customerID, 'skipped-email-unsubscribed');
         }
         $skippedCount++;
         continue;
