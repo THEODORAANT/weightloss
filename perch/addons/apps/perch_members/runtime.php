@@ -221,6 +221,25 @@ function perch_member_api_login($data)
 
 }
 
+function reset_member_password_api($email)
+{
+    if (!$email || !is_string($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+
+    $API  = new PerchAPI(1.0, 'perch_members');
+    $Members = new PerchMembers_Members($API);
+
+    if (is_object($Members)) {
+        $Member = $Members->get_one_by('memberEmail', $email);
+        if (is_object($Member)) {
+            return $Member->reset_password();
+        }
+    }
+
+    return false;
+}
+
 function perch_member_upload_document_api($memberID,$data){
   $API  = new PerchAPI(1.0, 'perch_members');
 
@@ -1036,4 +1055,3 @@ function perch_members_weight_goal_upsert($memberID, array $data)
 {
     return perch_members_weight_goals_repository()->upsertGoal($memberID, $data);
 }
-
