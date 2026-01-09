@@ -170,6 +170,7 @@ foreach ($rows as $row) {
 
     $affiliateLink = $siteURL . '/?ref=' . rawurlencode($affiliateID);
     $portalLink = $siteURL . '/client/affiliate';
+    $unsubscribeURL = build_scripted_email_unsubscribe_url($siteURL, $memberID, null, $emailAddress);
 
     $emailData = [
         'first_name'      => $firstName,
@@ -177,6 +178,7 @@ foreach ($rows as $row) {
         'affiliate_link'  => $affiliateLink,
         'portal_link'     => $portalLink,
         'support_email'   => PERCH_EMAIL_FROM,
+        'unsubscribe_url' => $unsubscribeURL,
     ];
 
     echo 'Preparing ' . $campaign['key'] . ' email for member ' . $memberID . ' (' . $emailAddress . ').' . PHP_EOL;

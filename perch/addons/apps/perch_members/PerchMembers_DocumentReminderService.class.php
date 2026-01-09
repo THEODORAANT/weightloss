@@ -262,12 +262,31 @@ class PerchMembers_DocumentReminderService
         $memberData = $Member->to_array();
 
         $loginPage = '';
+        $siteURL = '';
         $Settings = $this->api->get('Settings');
         if ($Settings) {
             $loginSetting = $Settings->get('perch_members_login_page');
             if ($loginSetting) {
                 $loginPage = str_replace('{returnURL}', '', (string) $loginSetting->val());
             }
+
+            $siteURLSetting = $Settings->get('siteURL');
+            $siteURLValue = $siteURLSetting ? trim((string) $siteURLSetting->val()) : '';
+            if ($siteURLValue !== '' && $siteURLValue !== '/') {
+                $siteURL = rtrim($siteURLValue, '/');
+                if (stripos($siteURL, 'http://') !== 0 && stripos($siteURL, 'https://') !== 0) {
+                    $siteURL = 'https://' . ltrim($siteURL, '/');
+                }
+            }
+        }
+
+        if ($siteURL === '') {
+            $siteURL = 'https://www.getweightloss.co.uk';
+        }
+
+        $unsubscribeURL = '';
+        if (function_exists('build_scripted_email_unsubscribe_url')) {
+            $unsubscribeURL = build_scripted_email_unsubscribe_url($siteURL, (int) $Member->id(), null, $memberEmail);
         }
 
         $emailData = array_merge($memberData, [
@@ -275,6 +294,7 @@ class PerchMembers_DocumentReminderService
             'document_reminder_description' => $option['description'],
             'document_reminder_status'      => $status,
             'login_page'                    => $loginPage,
+            'unsubscribe_url'               => $unsubscribeURL,
         ]);
 
         $Email = $this->api->get('Email');
