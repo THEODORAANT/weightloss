@@ -202,6 +202,7 @@ foreach ($orders as $order) {
         $ordersTable,
         $Customers,
         $reorderURL,
+        $siteURL,
         $senderName,
         $senderEmail
     );

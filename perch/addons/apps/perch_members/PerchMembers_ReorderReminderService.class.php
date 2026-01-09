@@ -37,6 +37,7 @@ class PerchMembers_ReorderReminderService
         string $ordersTable,
         PerchShop_Customers $Customers,
         string $reorderURL,
+        string $siteURL,
         string $senderName,
         string $senderEmail
     ): void {
@@ -115,11 +116,17 @@ class PerchMembers_ReorderReminderService
         $title = 'Time to reorder';
         $message = "It's been about three weeks since your order on {$orderDateHuman}. You can place your next order and pay online at {$reorderURL}.";
 
+        $unsubscribeURL = '';
+        if (function_exists('build_scripted_email_unsubscribe_url')) {
+            $unsubscribeURL = build_scripted_email_unsubscribe_url($siteURL, $memberID, $customerID, $emailAddress);
+        }
+
         $emailData = [
             'first_name'  => $firstName,
             'order_date'  => $orderDateHuman,
             'reorder_url' => $reorderURL,
             'sender_name' => $senderName,
+            'unsubscribe_url' => $unsubscribeURL,
         ];
 
         echo 'Preparing reminder for order ' . $orderID . ' (customer ' . $customerID . ').' . PHP_EOL;
