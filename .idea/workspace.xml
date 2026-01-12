@@ -6,18 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/mounjaro_wegovy_guidance.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/mounjaro_wegovy_guidance.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_monday.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_monday.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_thursday.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/templates/members/emails/refer_a_friend_thursday.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.pharmacy_report.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.pharmacy_report.pre.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/client/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/client/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/client/order.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/client/order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/populate_affiliate_payout_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/populate_affiliate_payout_details.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/send_refer_a_friend_emails.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/send_refer_a_friend_emails.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/send_reorder_reminders.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/send_reorder_reminders.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/sync_affiliate_credits.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/sync_affiliate_credits.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/update_order_item_product.php" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/update_order_item_product.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/shop/accessories.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/shop/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/add-cron-job-for-referral-emails-rhu50m" />
+    <option name="BRANCH" value="origin/codex/create-mailing-addon-with-templates-and-triggers-slhami" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -54,7 +43,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -67,8 +56,8 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/perch" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/perch/templates/pages/getStarted" />
       <recent name="$PROJECT_DIR$/perch/core" />
     </key>
@@ -137,14 +126,8 @@
       <workItem from="1765377848299" duration="23434000" />
       <workItem from="1766399006847" duration="9627000" />
       <workItem from="1767002075096" duration="11034000" />
-    </task>
-    <task id="LOCAL-00071" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1759226264042</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1759226264042</updated>
+      <workItem from="1767535386103" duration="1763000" />
+      <workItem from="1767779269712" duration="8542000" />
     </task>
     <task id="LOCAL-00072" summary="weightloss">
       <option name="closed" value="true" />
@@ -530,7 +513,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766506714228</updated>
     </task>
-    <option name="localTasksCounter" value="120" />
+    <task id="LOCAL-00120" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1767436554433</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1767436554434</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
