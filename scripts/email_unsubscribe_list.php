@@ -17,7 +17,8 @@ function get_email_unsubscribe_config(): array
             ],
             'customer_ids' => [
                 // Customer IDs to exclude from all scripted email sends.
-                1160,
+                1160,1465,909,1045,766,767,308,681,706, 766, 767, 795, 971,1200,1232,1460, 2311, 2323, 909, 1045 , 1465
+
             ],
             'emails'       => [
                 // Email addresses to exclude from all scripted email sends.
