@@ -18,12 +18,19 @@
 
         if ($product_slug) {
           perch_shop_product($product_slug, [
-            'template' => 'my-template.html',
+            'template' => 'products/shop-product.html',
           ]);
+
+           perch_shop_product_variants($product_slug, [
+
+                   'template' => 'products/shop-product.html',
+                                            ]);
+
         } elseif (function_exists('perch_shop_products')) {
           perch_shop_products([
             'template' => 'products/shop-grid.html',
           ]);
+
         } else {
           echo '<p class="text-center text-slate-500">Shop products are unavailable right now.</p>';
         }
