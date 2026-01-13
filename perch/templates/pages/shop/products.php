@@ -14,7 +14,13 @@
       </div>
 
       <?php
-        if (function_exists('perch_shop_products')) {
+        $product_slug = perch_get('s');
+
+        if ($product_slug) {
+          perch_shop_product($product_slug, [
+            'template' => 'my-template.html',
+          ]);
+        } elseif (function_exists('perch_shop_products')) {
           perch_shop_products([
             'template' => 'products/shop-grid.html',
           ]);
