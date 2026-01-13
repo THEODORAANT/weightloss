@@ -560,6 +560,11 @@ return $response;
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
           $data["NextOrderDoseDate"]= $this->orderCreated();
+          $Members = new PerchMembers_Members($this->api);
+          $Member = $Members->find($Customer->memberID());
+          if ($Member) {
+              $this->send_reorder_thank_you_email($Member);
+          }
         }else{
          $data["FirstOrderDate"]= $this->orderCreated();
 
@@ -573,7 +578,7 @@ return $response;
        // echo "perch_member_add_commission";
 //$this->send_order_email_trustpilot($this->details['orderStatus']);
 
-        }
+       }
 
 
 	}
@@ -706,7 +711,7 @@ return $response;
     	$this->update(['orderGatewayRef'=>$ref]);
     }
 
-       public function send_order_email_trustpilot($status)
+    public function send_order_email_trustpilot($status)
         { //echo "send_order_email_trustpilot"; echo $status;
         if ($status) {
 
@@ -770,6 +775,19 @@ return $response;
                             $Email->bccToEmail("getweightloss.co.uk+25a853a1a5@invite.trustpilot.com");
     $Email->send();
 }
+    public function send_reorder_thank_you_email(PerchMembers_Member $Member)
+    {
+        $API = new PerchAPI(1.0, 'perch_members');
+        $Email = $API->get('Email');
+        $Email->set_template('members/emails/reorder_thank_you.html');
+        $Email->set_bulk($Member->to_array());
+        $Email->subject('Thank you for your continued trust in GetWeightLoss');
+        $Email->senderName(PERCH_EMAIL_FROM_NAME);
+        $Email->senderEmail(PERCH_EMAIL_FROM);
+        $Email->recipientEmail($Member->memberEmail());
+
+        return $Email->send();
+    }
     public function send_order_email(PerchShop_Email $ShopEmail)
     {
         PerchUtil::debug('Sending customer email');
