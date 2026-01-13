@@ -1,0 +1,12 @@
+<div class="product-gallery swiper">
+	<div class="swiper-wrapper">
+		<div class="swiper-slide">
+			<img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />">
+		</div>
+		<perch:repeater id="images">
+			<div class="swiper-slide">
+				<img src="<perch:shop id="image" type="image" />" alt="<perch:shop id="title" type="text" />">
+			</div>
+		</perch:repeater>
+	</div>
+</div>
