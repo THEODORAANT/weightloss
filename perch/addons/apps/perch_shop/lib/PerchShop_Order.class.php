@@ -781,6 +781,20 @@ return $response;
         $Email = $API->get('Email');
         $Email->set_template('members/emails/reorder_thank_you.html');
         $Email->set_bulk($Member->to_array());
+        $unsubscribeURL = '';
+        if (function_exists('build_scripted_email_unsubscribe_url')) {
+            $Settings = $API->get('Settings');
+            $siteURL = rtrim($Settings->get('siteURL')->val(), '/');
+            $unsubscribeURL = build_scripted_email_unsubscribe_url(
+                $siteURL,
+                (int) $Member->id(),
+                (int) $this->customerID(),
+                $Member->memberEmail()
+            );
+        }
+        $Email->set_bulk([
+            'unsubscribe_url' => $unsubscribeURL,
+        ]);
         $Email->subject('Thank you for your continued trust in GetWeightLoss');
         $Email->senderName(PERCH_EMAIL_FROM_NAME);
         $Email->senderEmail(PERCH_EMAIL_FROM);
