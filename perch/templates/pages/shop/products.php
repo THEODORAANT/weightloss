@@ -15,6 +15,7 @@
 
       <?php
         $product_slug = perch_get('s');
+        $category_slug = perch_get('category');
 
         if ($product_slug) {
           perch_shop_product($product_slug, [
@@ -27,13 +28,15 @@
                                             ]);*/
 
         } elseif (function_exists('perch_shop_products')) {
-          perch_shop_products([
-
-           'category' => 'products/hydration',
+          $product_options = [
             'template' => 'products/shop-grid.html',
+          ];
 
-          ]);
+          if ($category_slug) {
+            $product_options['category'] = $category_slug;
+          }
 
+          perch_shop_products($product_options);
         } else {
           echo '<p class="text-center text-slate-500">Shop products are unavailable right now.</p>';
         }
