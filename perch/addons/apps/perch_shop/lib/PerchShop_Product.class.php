@@ -151,7 +151,37 @@ class PerchShop_Product extends PerchShop_Base
     }
 
  public function get_variant_images(){
+        if (!$this->has_variants()) {
+            return [];
+        }
 
+        $variants = $this->get_variants();
+        if (!PerchUtil::count($variants)) {
+            return [];
+        }
+
+        $images = [];
+
+        foreach ($variants as $Variant) {
+            $fields = PerchUtil::json_safe_decode($Variant->productDynamicFields(), true);
+            if (!isset($fields['variant_images']) || !is_array($fields['variant_images'])) {
+                continue;
+            }
+
+            foreach ($fields['variant_images'] as $image) {
+                if (!isset($image['variant_images']) || !is_array($image['variant_images'])) {
+                    continue;
+                }
+
+                $item = $image;
+                $item['productID'] = $Variant->id();
+                $item['productVariantDesc'] = $Variant->productVariantDesc();
+                $item['sku'] = $Variant->sku();
+                $images[] = $item;
+            }
+        }
+
+        return $images;
 }
     public function get_variant_select_opts()
     {
