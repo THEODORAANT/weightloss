@@ -1,0 +1,26 @@
+<perch:before>
+  <div class="grid gap-[24px] sm:grid-cols-2">
+</perch:before>
+
+  <a class="group flex h-full flex-col justify-between overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md" href="/shop/products?category=<perch:category id="catSlug" type="slug" />">
+    <div class="p-[24px]">
+      <span class="inline-flex items-center justify-center rounded-full bg-[#3328bf]/10 px-[14px] py-[6px] text-[11px] font-semibold uppercase tracking-[0.2em] text-[#3328bf]">Category</span>
+      <h2 class="mt-[16px] text-[22px] font-semibold text-[#0f172a]"><perch:category id="catTitle" type="smarttext" /></h2>
+      <perch:if exists="desc">
+        <p class="mt-[10px] text-[15px] text-slate-600"><perch:category id="desc" type="textarea" /></p>
+      </perch:if>
+    </div>
+    <div class="flex items-center justify-between gap-[16px] px-[24px] pb-[24px]">
+      <div class="inline-flex items-center gap-[8px] text-[14px] font-semibold text-[#3328bf]">
+        Browse products
+        <span aria-hidden="true">→</span>
+      </div>
+      <perch:if exists="image">
+        <perch:category id="image" type="image" width="96" height="96" crop="true" output="tag" class="h-[64px] w-[64px] rounded-[16px] object-cover" />
+      </perch:if>
+    </div>
+  </a>
+
+<perch:after>
+  </div>
+</perch:after>

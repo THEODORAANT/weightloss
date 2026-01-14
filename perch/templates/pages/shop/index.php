@@ -14,43 +14,16 @@
       </div>
 
       <div class="space-y-[56px]">
-        <section class="space-y-[24px]">
-          <div>
-            <h2 class="text-[24px] font-semibold text-[#0f172a]">Scales</h2>
-            <p class="mt-[6px] text-[15px] text-slate-600">Track progress with accurate, easy-to-read digital scales.</p>
-          </div>
-          <div class="grid gap-[24px] sm:grid-cols-2 lg:grid-cols-3">
-            <?php
-              if (function_exists('perch_shop_products')) {
-                perch_shop_products([
-                  'category' => 'products/supplies',
-                  'template' => 'products/accessory-card.html',
-                ]);
-              } else {
-                echo '<p class="text-slate-500">Shop products are unavailable right now.</p>';
-              }
-            ?>
-          </div>
-        </section>
-
-        <section class="space-y-[24px]">
-          <div>
-            <h2 class="text-[24px] font-semibold text-[#0f172a]">Hydration</h2>
-            <p class="mt-[6px] text-[15px] text-slate-600">Pick your bottle and choose a color variant that suits your style.</p>
-          </div>
-          <div class="grid gap-[24px] sm:grid-cols-2 lg:grid-cols-3">
-            <?php
-              if (function_exists('perch_shop_products')) {
-                perch_shop_products([
-                  'category' => 'products/hydration',
-                  'template' => 'products/accessory-card.html',
-                ]);
-              } else {
-                echo '<p class="text-slate-500">Shop products are unavailable right now.</p>';
-              }
-            ?>
-          </div>
-        </section>
+        <?php
+          if (function_exists('perch_categories')) {
+            perch_categories([
+              'set' => 'shop',
+              'template' => 'categories/shop-category-card.html',
+            ]);
+          } else {
+            echo '<p class="text-center text-slate-500">Shop categories are unavailable right now.</p>';
+          }
+        ?>
       </div>
     </div>
   </section>
