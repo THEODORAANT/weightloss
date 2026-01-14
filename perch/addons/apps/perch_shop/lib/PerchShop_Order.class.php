@@ -213,40 +213,16 @@ class PerchShop_Order extends PerchShop_Base
 
 	public function isReorder($Customer){
 		$Orders = new PerchShop_Orders($this->api);
-		//	$Customer = $Customers->find_from_logged_in_member();
-		$orders = $Orders->findAll_for_customer($Customer);
+        //	$Customer = $Customers->find_from_logged_in_member();
+            $orders = $Orders->findAll_for_customer($Customer);
 
-		if (!PerchUtil::count($orders)) {
-			return false;
-		}
+                if (PerchUtil::count($orders)>=2) {
 
-		foreach ($orders as $Order) {
-			if ((int)$Order->id() !== (int)$this->id()) {
-				return true;
-			}
-		}
-
-		return false;
+                return true;
+                }
+                return false;
 	}
 	public function sendOrdertoPharmacy( $Customer){
-		$existing_pharmacy_orders = $this->getPharmacyOrderbyOrderid($this->id());
-		if (PerchUtil::count($existing_pharmacy_orders)) {
-			foreach ($existing_pharmacy_orders as $existing_pharmacy_order) {
-				$existing_pharmacy_order_id = isset($existing_pharmacy_order['pharmacy_orderID'])
-					? trim((string) $existing_pharmacy_order['pharmacy_orderID'])
-					: '';
-
-				if ($existing_pharmacy_order_id !== '') {
-					return [
-						'success' => false,
-						'data' => [
-							'message' => 'This order has already been sent to the pharmacy (order '.$existing_pharmacy_order_id.').',
-						],
-					];
-				}
-			}
-		}
-
 	   $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
        	$Countries  = new PerchShop_Countries($this->api);
        	$Addresses  = new PerchShop_Addresses($this->api);
@@ -560,11 +536,11 @@ return $response;
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
           $data["NextOrderDoseDate"]= $this->orderCreated();
-          $Members = new PerchMembers_Members($this->api);
-          $Member = $Members->find($Customer->memberID());
-          if ($Member) {
-              $this->send_reorder_thank_you_email($Member);
-          }
+          /* $Members = new PerchMembers_Members($this->api);
+                    $Member = $Members->find($Customer->memberID());
+                    if ($Member) {
+                        $Member->send_reorder_thank_you_email();
+                    }*/
         }else{
          $data["FirstOrderDate"]= $this->orderCreated();
 
@@ -578,7 +554,7 @@ return $response;
        // echo "perch_member_add_commission";
 //$this->send_order_email_trustpilot($this->details['orderStatus']);
 
-       }
+        }
 
 
 	}
@@ -711,7 +687,7 @@ return $response;
     	$this->update(['orderGatewayRef'=>$ref]);
     }
 
-    public function send_order_email_trustpilot($status)
+       public function send_order_email_trustpilot($status)
         { //echo "send_order_email_trustpilot"; echo $status;
         if ($status) {
 
@@ -775,33 +751,6 @@ return $response;
                             $Email->bccToEmail("getweightloss.co.uk+25a853a1a5@invite.trustpilot.com");
     $Email->send();
 }
-    public function send_reorder_thank_you_email(PerchMembers_Member $Member)
-    {
-        $API = new PerchAPI(1.0, 'perch_members');
-        $Email = $API->get('Email');
-        $Email->set_template('members/emails/reorder_thank_you.html');
-        $Email->set_bulk($Member->to_array());
-        $unsubscribeURL = '';
-        if (function_exists('build_scripted_email_unsubscribe_url')) {
-            $Settings = $API->get('Settings');
-            $siteURL = rtrim($Settings->get('siteURL')->val(), '/');
-            $unsubscribeURL = build_scripted_email_unsubscribe_url(
-                $siteURL,
-                (int) $Member->id(),
-                (int) $this->customerID(),
-                $Member->memberEmail()
-            );
-        }
-        $Email->set_bulk([
-            'unsubscribe_url' => $unsubscribeURL,
-        ]);
-        $Email->subject('Thank you for your continued trust in GetWeightLoss');
-        $Email->senderName(PERCH_EMAIL_FROM_NAME);
-        $Email->senderEmail(PERCH_EMAIL_FROM);
-        $Email->recipientEmail($Member->memberEmail());
-
-        return $Email->send();
-    }
     public function send_order_email(PerchShop_Email $ShopEmail)
     {
         PerchUtil::debug('Sending customer email');

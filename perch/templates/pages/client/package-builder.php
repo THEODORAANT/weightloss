@@ -1,11 +1,6 @@
 <?php
 // Front-end package builder form
 include('../perch/runtime.php');
-
-if (!perch_member_logged_in()) {
-    PerchUtil::redirect('/client');
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html>

@@ -262,7 +262,63 @@ if ($patient_name === '') {
 		$Email->send();
         return true;
     }
+     public function build_scripted_email_unsubscribe_url(
+        string $siteURL = '',
+        ?int $memberID = null,
+        ?int $customerID = null,
+        ?string $emailAddress = null
+    ): string {
+        $query = [];
 
+        if ($memberID !== null && $memberID > 0) {
+            $query['member_id'] = $memberID;
+        }
+
+        if ($customerID !== null && $customerID > 0) {
+            $query['customer_id'] = $customerID;
+        }
+
+        if ($emailAddress !== null && trim($emailAddress) !== '') {
+            $query['email'] = $emailAddress;
+        }
+
+        $base = $siteURL !== '' ? rtrim($siteURL, '/') : '';
+        $url = ($base !== '' ? $base : '') . '/scripts/unsubscribe.php';
+
+        if (!empty($query)) {
+            $url .= '?' . http_build_query($query);
+        }
+
+        return $url;
+    }
+
+    public function send_reorder_thank_you_email()
+    {
+        $API = new PerchAPI(1.0, 'perch_members');
+        $Email = $API->get('Email');
+        $Email->set_template('members/emails/reorder_thank_you.html');
+        $Email->set_bulk($this->to_array());
+              $unsubscribeURL = '';
+                    $Settings = $API->get('Settings');
+                    $siteURL = rtrim($Settings->get('siteURL')->val(), '/');
+                    $unsubscribeURL = $this->build_scripted_email_unsubscribe_url(
+                        $siteURL,
+                        (int) $this->id(),
+                        0,
+                        $this->memberEmail()
+                    );
+
+                $Email->set_bulk([
+                'support_email'=>'support@getweightloss.co.uk',
+                    'unsubscribe_url' => $unsubscribeURL,
+                ]);
+        $Email->subject('Thank you for your continued trust in GetWeightLoss');
+        $Email->senderName(PERCH_EMAIL_FROM_NAME);
+        $Email->senderEmail(PERCH_EMAIL_FROM);
+        $Email->recipientEmail($this->memberEmail());
+
+        return $Email->send();
+    }
     public function send_refer_a_friend_email(string $template, string $subject, array $emailData, string $emailAddress): bool
     {
         if ($emailAddress === '' || !PerchUtil::is_valid_email($emailAddress)) {

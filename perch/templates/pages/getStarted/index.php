@@ -11,7 +11,7 @@
         ]);*/
 
     ?>
-    <div class="modal fade" id="holidayScheduleModal" tabindex="-1" aria-labelledby="holidayScheduleTitle" aria-hidden="true">
+  <!--  <div class="modal fade" id="holidayScheduleModal" tabindex="-1" aria-labelledby="holidayScheduleTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
              <div class="modal-content" style="color:white;background-color: rgb(51 40 191 / var(--tw-bg-opacity, 1));">
                 <div class="modal-header">
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-
+-->
        <section class="treatment_journey">
 
             <div class="container">
@@ -168,7 +168,7 @@ Once you have placed your order you will need to access our portal to complete t
 
         </section>
 
-    <script>
+  <!--  <script>
       document.addEventListener('DOMContentLoaded', function () {
         var modalElement = document.getElementById('holidayScheduleModal');
         if (modalElement && window.bootstrap) {
@@ -189,7 +189,7 @@ Once you have placed your order you will need to access our portal to complete t
           holidayModal.show();
         }
       });
-    </script>
+    </script>-->
 
     <?php
   perch_layout('getStarted/footer');?>

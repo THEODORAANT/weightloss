@@ -92,6 +92,7 @@ class PerchShop_Product extends PerchShop_Base
         }else{
             $out = $child;
         }
+
         if ($this->has_variants()) {
             $out['has_variants'] = true;
             $out['_variant_opts'] = $this->get_variant_select_opts();
@@ -154,6 +155,7 @@ class PerchShop_Product extends PerchShop_Base
         $sql = 'SELECT productID, productVariantDesc, stock_level FROM '.$this->table.'
                 WHERE parentID='.$this->db->pdb((int)$this->id()).' AND productDeleted IS NULL
                 ORDER BY productOrder ASC';
+
         $rows = $this->db->get_rows($sql);
 
         if (PerchUtil::count($rows)) {

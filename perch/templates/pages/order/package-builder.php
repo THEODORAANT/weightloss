@@ -245,7 +245,8 @@ if (isset($_GET['months'])) {
                 PerchSystem::set_var('package_id', $packageId);
                 PerchSystem::set_var('months', $months);
                 PerchSystem::set_var('billing_type', $billing);
-                if($billing=="monthly"){
+               /*  if($billing=="monthly"){
+
                     perch_shop_product('mounjaro-monthly-mounjaro-monthly',[
                         'template' => 'products/package-builder/variant-options'
                     ]);
@@ -253,12 +254,12 @@ if (isset($_GET['months'])) {
                     perch_shop_product('mounjaro-prepaid-mounjaro-prepaid',[
                         'template' => 'products/package-builder/variant-options'
                     ]);
-                }
+                }*/
 
-                /*   perch_shop_products([
+                  perch_shop_products([
                         'category' => 'products/weight-loss',
                         'template' => 'products/package-builder/variant-options'
-                    ]);*/
+                    ]);
             } else {
                 echo '<p class="muted">perch_shop_products() not available in this environment.</p>';
             }

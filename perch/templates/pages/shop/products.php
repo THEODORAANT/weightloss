@@ -21,14 +21,17 @@
             'template' => 'products/shop-product.html',
           ]);
 
-           perch_shop_product_variants($product_slug, [
+          /* perch_shop_product_variants($product_slug, [
 
                    'template' => 'products/shop-product.html',
-                                            ]);
+                                            ]);*/
 
         } elseif (function_exists('perch_shop_products')) {
           perch_shop_products([
+
+           'category' => 'products/hydration',
             'template' => 'products/shop-grid.html',
+
           ]);
 
         } else {

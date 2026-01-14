@@ -23,7 +23,7 @@
             <?php
               if (function_exists('perch_shop_products')) {
                 perch_shop_products([
-                  'category' => 'products/scales',
+                  'category' => 'products/supplies',
                   'template' => 'products/accessory-card.html',
                 ]);
               } else {
@@ -35,14 +35,14 @@
 
         <section class="space-y-[24px]">
           <div>
-            <h2 class="text-[24px] font-semibold text-[#0f172a]">Water bottles</h2>
+            <h2 class="text-[24px] font-semibold text-[#0f172a]">Hydration</h2>
             <p class="mt-[6px] text-[15px] text-slate-600">Pick your bottle and choose a color variant that suits your style.</p>
           </div>
           <div class="grid gap-[24px] sm:grid-cols-2 lg:grid-cols-3">
             <?php
               if (function_exists('perch_shop_products')) {
                 perch_shop_products([
-                  'category' => 'products/water-bottles',
+                  'category' => 'products/hydration',
                   'template' => 'products/accessory-card.html',
                 ]);
               } else {
