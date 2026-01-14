@@ -96,7 +96,7 @@ class PerchShop_Product extends PerchShop_Base
         if ($this->has_variants()) {
             $out['has_variants'] = true;
             $out['_variant_opts'] = $this->get_variant_select_opts();
-
+  $out['_variant_images'] = $this->get_variant_images();
             $out['options'] = $this->get_variant_opts();
         }
 
@@ -111,6 +111,7 @@ class PerchShop_Product extends PerchShop_Base
                 $out['current_price'] = $out['trade_price'];
             }    
         }
+
         return $out;
     }
 
@@ -149,7 +150,9 @@ class PerchShop_Product extends PerchShop_Base
         return $Options->get_for_product_template($this->id());
     }
 
+ public function get_variant_images(){
 
+}
     public function get_variant_select_opts()
     {
         $sql = 'SELECT productID, productVariantDesc, stock_level FROM '.$this->table.'
