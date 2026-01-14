@@ -295,6 +295,18 @@ if ($patient_name === '') {
     public function send_reorder_thank_you_email()
     {
         $API = new PerchAPI(1.0, 'perch_members');
+        $unsubscribeListPath = realpath(__DIR__ . '/../../../../scripts/email_unsubscribe_list.php');
+        if ($unsubscribeListPath && file_exists($unsubscribeListPath)) {
+            require_once $unsubscribeListPath;
+        }
+
+        if (
+            (function_exists('is_member_unsubscribed') && is_member_unsubscribed((int) $this->id()))
+            || (function_exists('is_email_unsubscribed') && is_email_unsubscribed($this->memberEmail()))
+        ) {
+            return false;
+        }
+
         $Email = $API->get('Email');
         $Email->set_template('members/emails/reorder_thank_you.html');
         $Email->set_bulk($this->to_array());
