@@ -279,13 +279,7 @@ let changeColor12 = function(){
 document.addEventListener("DOMContentLoaded", function () {
     let checkboxes = document.querySelectorAll(".check1");
     let nextButton = document.getElementById("nextButton");
-
-    if (nextButton) {
-        let nextLink = nextButton.querySelector("span");
-
-
-        // Rest of your code that depends on nextButton and nextLink
-    }
+    const nextLink = nextButton ? nextButton.querySelector("span") : null;
     function toggleNextButton() {
         let isAnyChecked = Array.from(checkboxes).some(chk => chk.checked);
         let nonecheckbox = document.querySelector(`input[type="checkbox"][value="mentalhealth"]`);
@@ -361,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 */
-        if (nextButton) {
+        if (nextButton && nextLink) {
             if (isAnyChecked) {
                 nextButton.disabled = false;
                 nextButton.style.backgroundColor = "#B0D136";

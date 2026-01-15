@@ -283,14 +283,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function toggleNextButton() {
         let isAnyChecked = Array.from(checkboxes).some(chk => chk.checked);
-
         if (isAnyChecked) {
+            nextButton.disabled = false;
             nextButton.classList.remove("disabled"); 
             nextButton.style.backgroundColor = "#00beb0"; 
             nextLink.style.color = "black"; 
             nextButton.style.cursor = "pointer"; 
             nextLink.style.pointerEvents = "auto"; 
         } else {
+            nextButton.disabled = true;
             nextButton.classList.add("disabled"); 
             nextButton.style.backgroundColor = "#d3d3d3"; 
             nextLink.style.color = "#a0a0a0"; 
