@@ -283,10 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function toggleNextButton() {
         let isAnyChecked = Array.from(checkboxes).some(chk => chk.checked);
-        const allowEmpty = nextButton && nextButton.dataset.allowEmpty === "true";
-        const shouldEnable = allowEmpty || isAnyChecked;
-
-        if (shouldEnable) {
+        if (isAnyChecked) {
             nextButton.disabled = false;
             nextButton.classList.remove("disabled"); 
             nextButton.style.backgroundColor = "#00beb0"; 

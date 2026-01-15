@@ -612,7 +612,8 @@ QUESTION;
                                                "erectile" => "I have erectile dysfunction.",
                                                "testosterone" => "I have low testosterone.",
                                                "menopausal" => "I have menopausal symptoms.",
-                                               "pcos" => "I have polycystic ovary syndrome (PCOS)."
+                                               "pcos" => "I have polycystic ovary syndrome (PCOS).",
+                                               "none" => "None of these statements apply to me"
                                            ]
                                        ],
                                        "medical_conditions" => [

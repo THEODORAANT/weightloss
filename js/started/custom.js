@@ -356,10 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 */
         if (nextButton && nextLink) {
-            const allowEmpty = nextButton.dataset.allowEmpty === "true";
-            const shouldEnable = allowEmpty || isAnyChecked;
-
-            if (shouldEnable) {
+            if (isAnyChecked) {
                 nextButton.disabled = false;
                 nextButton.style.backgroundColor = "#B0D136";
                 nextLink.style.color = "black";

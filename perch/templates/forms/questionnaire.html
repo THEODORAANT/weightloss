@@ -1172,6 +1172,11 @@
                                     <input type="checkbox" name="conditions2[]" value="pcos" class="check1" onclick="changeColor15()">
                                     <span class="box_text">I have polycystic ovary syndrome (PCOS).</span>
                                 </div>
+                                <hr>
+                                <div class="box_list mt-2" id="fullBox16">
+                                    <input type="checkbox" name="conditions2[]" value="none" class="check1" onclick="changeColor16()">
+                                    <span class="box_text">None of these statements apply to me</span>
+                                </div>
                             </div>
                             <!--////////////========chekbox section END=======/////////////-->
 
@@ -1182,7 +1187,7 @@
                                 <button class="btn_back"><a href='<perch:forms id="previousPage"  />'>Back</a></button>
                                <!-- <perch:if id="reviewed" value="InProcess" ><button id="reviewButton" style="background-color: rgb(176, 209, 54);" class="btn_next" ><a href='/get-started/review-questionnaire'>Back to Review Page</a></button></perch:if>-->
 
-                                <button id="nextButton" data-allow-empty="true" onclick="submitForm('conditions')" class="btn_next" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
+                                <button id="nextButton" onclick="submitForm('conditions')" class="btn_next" disabled><span>Next <i class="fa-solid fa-arrow-right"></i></span></button>
                             </div>
                             <!--////////////========Button section END=======/////////////-->
 

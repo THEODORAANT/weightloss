@@ -368,6 +368,7 @@ return [
                 'testosterone' => 'I have low testosterone.',
                 'menopausal' => 'I have menopausal symptoms.',
                 'pcos' => 'I have polycystic ovary syndrome (PCOS).',
+                'none' => 'None of these statements apply to me',
             ],
             'step' => 'conditions',
         ],
