@@ -249,10 +249,15 @@
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
-  $historyPrinted = false;
-        foreach ($questions as $slug => $label) {
+        $historyPrinted = false;
+        $rendered_slugs = [];
+        foreach ($answers as $Answer) {
+            $slug = $Answer->question_slug();
+            if ($slug === null || $slug === '') {
+                continue;
+            }
 
-            if (!isset($answers_by_slug[$slug])) {
+            if (isset($rendered_slugs[$slug])) {
                 continue;
             }
 
@@ -260,7 +265,11 @@
                 continue;
             }
 
-            $Answer = $answers_by_slug[$slug];
+            $rendered_slugs[$slug] = true;
+            $label = $questions[$slug] ?? $Answer->question_text();
+            if ($label === null || $label === '') {
+                $label = $slug;
+            }
             $answer_text = $Answer->answer_text();
             if ($answer_text === null || $answer_text === '') {
                 $answer_text = $Answer->answer();
