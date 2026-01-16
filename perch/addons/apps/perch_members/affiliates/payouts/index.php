@@ -1,5 +1,14 @@
 <?php  # include the API
           include('../../../../../core/inc/api.php');
+
+    $API  = new PerchAPI(1.0, 'perch_members');
+    $HTML   = $API->get('HTML');
+    $Lang   = $API->get('Lang');
+    $Paging = $API->get('Paging');
+
+        $Affiliate = new PerchMembers_Affiliate($API);
+        $Members = new PerchMembers_Members($API);
+
            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       if($_POST['action']=="export"){
 
@@ -12,22 +21,12 @@
 
       }
 
-
-    $API  = new PerchAPI(1.0, 'perch_members');
-    $HTML   = $API->get('HTML');
-    $Lang   = $API->get('Lang');
-    $Paging = $API->get('Paging');
-
     # Set the page title
     $Perch->page_title = $Lang->get('Affiliate');
 
     # Do anything you want to do before output is started
     include('../../modes/_subnav.php');
         $message = false;
-
-        $Affiliate = new PerchMembers_Affiliate($API);
-        $Members = new PerchMembers_Members($API);
-
 
         $HTML = $API->get('HTML');
 
