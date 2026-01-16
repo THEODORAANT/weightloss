@@ -37,6 +37,18 @@
             }
         }
 
+        if (PerchUtil::count($answers_by_slug)) {
+            foreach ($answers_by_slug as $slug => $Answer) {
+                if (!isset($questions[$slug])) {
+                    $label = $Answer->question_text();
+                    if ($label === null || $label === '') {
+                        $label = $slug;
+                    }
+                    $questions[$slug] = $label;
+                }
+            }
+        }
+
         $missing_questions = [];
         if (is_array($questions) && count($questions)) {
             foreach ($questions as $slug => $label) {
