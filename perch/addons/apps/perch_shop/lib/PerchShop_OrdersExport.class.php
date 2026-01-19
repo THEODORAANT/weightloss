@@ -12,6 +12,8 @@ class PerchShop_OrdersExport
 
 	private $options;
 
+	private $db;
+
 	public function __construct($api)
 	{
 		$this->api = $api;
