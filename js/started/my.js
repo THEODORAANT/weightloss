@@ -115,6 +115,10 @@ function setValuesreorderForm(id,value) {
         }
     }
 
+    if (id == "consent_confirmation") {
+        document.getElementById("nextstep").value = "cart";
+    }
+
 
 }
 function setValuesForm(id,value){
@@ -269,5 +273,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 */
-
 

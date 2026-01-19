@@ -367,7 +367,7 @@
                     </div>
 
                     <div class="buttons">
-                        <input type="hidden" id="nhs_summary_nextstep" name="nextstep" value="cart">
+                        <input type="hidden" id="nhs_summary_nextstep" name="nextstep" value="consent-confirmation">
                         <button type="submit" class="next"><span style="text-decoration: none;color: #000;" >Next →</span></button>
                     </div>
                 </div>
@@ -399,13 +399,50 @@
                     skipButton.addEventListener('click', function () {
                         field.value = 'no';
                         if (nextStepField) {
-                            nextStepField.value = 'cart';
+                            nextStepField.value = 'consent-confirmation';
                         }
                         form.submit();
                     });
                 }
             })();
         </script>
+    </perch:if>
+
+    <perch:if id="step" value="consent-confirmation">
+        <section class="how_old">
+            <div class="contanier">
+                <div class="what_Is_your">
+                    <div class="old_title">
+                        <h2>Lastly, do you agree and consent to the following?</h2>
+                    </div>
+                    <ul class="mt-4" style="line-height: 1.6;">
+                        <li>I will be the sole user of the medication.</li>
+                        <li>I will read all relevant information before starting treatment.</li>
+                        <li>I will inform the clinical team of any changes to my medical history.</li>
+                        <li>I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception.</li>
+                        <li>I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes.</li>
+                        <li>I will contact the clinicians if I miss two or more doses.</li>
+                        <li>I understand medication may be prescribed off-label when clinically appropriate.</li>
+                        <li>I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help.</li>
+                        <li>I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications.</li>
+                        <li>I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately.</li>
+                    </ul>
+                    <p class="mt-4" style="font-weight: 600;">I confirm that I understand and agree to the above.</p>
+                    <div class="buttons">
+                        <input type="hidden" id="nextstep" name="nextstep" value="cart">
+                        <input type="hidden" id="consent_confirmation" name="consent_confirmation" value="<perch:show id='consent_confirmation' encode='true' />">
+                        <button id="consentConfirmationButton" type="submit" onclick="setValuesreorderForm('consent_confirmation','yes')" class="next"><span style="text-decoration: none;color: #000;" >Agree and continue →</span></button>
+                    </div>
+                    <div class="get_started">
+                        <div class="started_button">
+                            <div class="get_btn">
+                                <button><a href="/client/questionnaire-re-order?step=nhs_summary_record">Back</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </perch:if>
 
 </perch:form>

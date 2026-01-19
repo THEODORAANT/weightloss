@@ -304,6 +304,7 @@ QUESTION;
         "no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
         "chat_with_us"=>"Would you like to chat with someone?",
         "nhs_summary_permission"=>"Do you give permission for our clinical team to access your NHS Summary Care Record?",
+        "consent_confirmation"=>"I confirm that I understand and agree to the above.",
         "multiple_answers"=>"Have client alter answers?",
         "documents"=>"Member Documents",
         ];
@@ -429,6 +430,14 @@ QUESTION;
             "options" => [
                 "yes" => "Yes",
                 "no" => "No"
+            ]
+        ],
+        "consent_confirmation" => [
+            "label" => "I confirm that I understand and agree to the above.",
+            "type" => "button",
+            "name" => "consent_confirmation",
+            "options" => [
+                "yes" => "Yes"
             ]
         ],
         "bmi" => [
