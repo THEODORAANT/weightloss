@@ -302,4 +302,6 @@ class PerchShop_OrdersExport
 	public function id() {}
 
 	public function ready_to_log_resources() { return false; }
+
+	public function log_user_actions() {}
 }
