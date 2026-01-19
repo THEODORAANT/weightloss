@@ -129,6 +129,15 @@ return [
             ],
             'step' => 'chat_with_us',
         ],
+        'consent_confirmation' => [
+            'label' => 'I confirm that I understand and agree to the above.',
+            'type' => 'radio',
+            'name' => 'consent_confirmation',
+            'options' => [
+                'yes' => 'Yes',
+            ],
+            'step' => 'consent-confirmation',
+        ],
     ],
     'first-order' => [
         'age' => [
