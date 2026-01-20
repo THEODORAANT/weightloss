@@ -99,7 +99,6 @@ class PerchShop_Product extends PerchShop_Base
   $out['_variant_images'] = $this->get_variant_images();
             $out['options'] = $this->get_variant_opts();
         }
-
         if (isset($out['regular_pricing'])) {
             $out['current_price'] = $out['price'];
 
@@ -172,15 +171,13 @@ class PerchShop_Product extends PerchShop_Base
                 if (!isset($image['variant_images']) || !is_array($image['variant_images'])) {
                     continue;
                 }
+                $item['variant_image'] = $image['variant_images']['_default'];
 
-                $item = $image;
-                $item['productID'] = $Variant->id();
-                $item['productVariantDesc'] = $Variant->productVariantDesc();
-                $item['sku'] = $Variant->sku();
-                $images[] = $item;
+               $images[] = $item;
             }
         }
 
+//return implode(',', $images);
         return $images;
 }
     public function get_variant_select_opts()
