@@ -81,7 +81,10 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
                 <!-- Left Section -->
                 <div class="col-md-7">
 
-                        <h2 class="fw-bold">Order summary</h2>
+                        <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+                            <h2 class="fw-bold mb-0">Order summary</h2>
+                            <a href="/shop" class="text-decoration-none" style="font-weight: 600; color: #3328bf;">Continue shopping</a>
+                        </div>
 
                     <div class="main_page">
                         <!-- Create an Account Section -->

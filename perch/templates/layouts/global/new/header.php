@@ -152,6 +152,9 @@
           <a href="/about-us" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
             <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">About Us</p>
           </a>
+          <a href="/shop" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
+            <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Shop</p>
+          </a>
         </div>
         
         <!-- Desktop Buttons -->
@@ -230,6 +233,9 @@
           <a href="/about-us" class="mobile-menu-link py-[16px] border-b border-gray-200">
             <p class="font-semibold text-[16px] text-[#616161]">About Us</p>
           </a>
+          <a href="/shop" class="mobile-menu-link py-[16px] border-b border-gray-200">
+            <p class="font-semibold text-[16px] text-[#616161]">Shop</p>
+          </a>
           <div class="flex flex-col gap-[12px] pt-[24px]">
             <a href="/client" class="mobile-menu-link text-[14px] text-[#3328bf] font-semibold">Log in</a>
             <a href="/get-started" class="mobile-menu-link text-[14px] text-white font-semibold bg-[#3328bf] rounded-[8px] text-center py-[10px]">Get Started</a>
@@ -238,4 +244,3 @@
       </div>
     </div>
   </div>
-
