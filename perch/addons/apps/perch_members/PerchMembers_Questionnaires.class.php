@@ -297,9 +297,9 @@ QUESTION;
         "pregnancy_status"=>"Are you pregnant or trying to conceive?",
         "bmi"=>"BMI",
         "side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
-	"more_side_effects"=>"Please tell us as much as you can about your side effects",
+	"more_side_effects"=>"Please tell us what side effects you have been experiencing.",
 	"additional-medication"=>"Have you started taking any additional medication?",
-	"list_additional_medication"=>"Please tell us as much as you can about your  additional medication",
+	"list_additional_medication"=>"Please tell us what new medication you have started including the name of the medication, dose and how often you take it.",
         "rate_current_experience"=>"Are you happy with your monthly weight loss?",
         "no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
         "chat_with_us"=>"Would you like to chat with someone?",
@@ -382,7 +382,7 @@ QUESTION;
             ]
         ],
         "more_side_effects" => [
-            "label" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.",
+            "label" => "Please tell us what side effects you have been experiencing.",
             "type" => "textarea",
             "name" => "more_side_effects"
         ],
@@ -396,7 +396,7 @@ QUESTION;
             ]
         ],
         "list_additional_medication" => [
-            "label" => "Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.",
+            "label" => "Please tell us what new medication you have started including the name of the medication, dose and how often you take it.",
             "type" => "textarea",
             "name" => "list_additional_medication"
         ],

@@ -68,7 +68,7 @@ return [
             ],
         ],
         'more_side_effects' => [
-            'label' => 'Please tell us as much as you can about your side effects - the type, duration, severity and whether they have resolved.',
+            'label' => 'Please tell us what side effects you have been experiencing.',
             'type' => 'textarea',
             'name' => 'more_side_effects',
             'step' => 'more_side_effects',
@@ -91,7 +91,7 @@ return [
             ],
         ],
         'list_additional_medication' => [
-            'label' => 'Please tell us as much as you can about your additional medication - the type, duration, severity and whether any side effects have resolved.',
+            'label' => 'Please tell us what new medication you have started including the name of the medication, dose and how often you take it.',
             'type' => 'textarea',
             'name' => 'list_additional_medication',
             'step' => 'list_additional_medication',
