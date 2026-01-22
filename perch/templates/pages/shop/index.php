@@ -17,8 +17,10 @@
         <?php
           if (function_exists('perch_categories')) {
             perch_categories([
-              'set' => 'shop',
-              'template' => 'categories/shop-category-card.html',
+            'filter'=> 'catID',
+            'match'=> 'in',
+           'value'=> '7,9' ,
+              'template' => 'shop-category-card.html',
             ]);
           } else {
             echo '<p class="text-center text-slate-500">Shop categories are unavailable right now.</p>';

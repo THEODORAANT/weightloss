@@ -13,7 +13,7 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    
+
     /* FAQ Accordion smooth animations */
     .faq-answer {
       max-height: 0;
@@ -21,7 +21,7 @@
       opacity: 0;
       transition: all 0.3s linear;
     }
-    
+
     .faq-answer.active {
       max-height: 500px;
       opacity: 1;
@@ -37,37 +37,37 @@
       border-color: #3328bf;
       color: #ffffff;
     }
-    
+
     /* Mobile Sidebar Animations */
     .mobile-menu {
       transform: translateX(100%);
       transition: transform 0.3s ease;
     }
-    
+
     .mobile-menu.active {
       transform: translateX(0);
     }
-    
+
     .mobile-backdrop {
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-    
+
     .mobile-backdrop.active {
       opacity: 1;
     }
-    
+
     /* Button Glow Effect */
     @keyframes buttonGlow {
       0% { background-position: -200% center; }
       100% { background-position: 200% center; }
     }
-    
+
     .btn-glow:hover {
       position: relative;
       overflow: hidden;
     }
-    
+
     .btn-glow:hover::before {
       content: '';
       position: absolute;
@@ -81,12 +81,12 @@
       pointer-events: none;
       z-index: 1;
     }
-    
+
     .btn-glow > * {
       position: relative;
       z-index: 2;
     }
-    
+
     /* Carousel */
     .testimonial-carousel {
       transition: transform 0.5s ease-in-out;
@@ -95,14 +95,14 @@
 </head>
 <body class="bg-white">
   <div class="bg-white flex flex-col items-center justify-center w-full">
-    
+
     <!-- Navbar -->
     <nav id="mainNav" class="bg-white w-full h-[100px] flex items-center justify-center sticky top-0 z-[1000] transition-all duration-300">
       <div class="flex items-center justify-between px-[20px] lg:px-[60px] py-[28px] w-full">
         <a href="/" class="logo-container transition-all duration-300">
           <img src="/asset/logo-final.png" alt="GetWeightLoss" class="h-auto w-full object-contain" />
         </a>
-        
+
         <!-- Desktop Menu Links -->
         <div class="hidden lg:flex items-center justify-center">
           <a href="/" class="flex flex-col h-[36px] items-center justify-center px-[12px] py-0">
@@ -152,11 +152,11 @@
           <a href="/about-us" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
             <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">About Us</p>
           </a>
-          <a href="/shop" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
-            <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Shop</p>
-          </a>
+           <a href="/shop" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
+                      <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Shop</p>
+                    </a>
         </div>
-        
+
         <!-- Desktop Buttons -->
         <div class="hidden lg:flex gap-[10px] items-center justify-end">
           <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[8px]">
@@ -179,7 +179,7 @@
               <p class="font-semibold leading-[20px] text-[#fcfcfc] text-[14px] whitespace-nowrap">Get Started</p>
             </div>
           </a>
-          
+
           <!-- Hamburger Menu Button -->
           <button id="mobileMenuBtn" class="flex flex-col gap-[5px] items-center justify-center w-[40px] h-[40px] ml-[10px]">
             <span class="w-[24px] h-[2px] bg-[#0d0d0d] transition-all"></span>
@@ -233,9 +233,9 @@
           <a href="/about-us" class="mobile-menu-link py-[16px] border-b border-gray-200">
             <p class="font-semibold text-[16px] text-[#616161]">About Us</p>
           </a>
-          <a href="/shop" class="mobile-menu-link py-[16px] border-b border-gray-200">
-            <p class="font-semibold text-[16px] text-[#616161]">Shop</p>
-          </a>
+           <a href="/shop" class="mobile-menu-link py-[16px] border-b border-gray-200">
+                      <p class="font-semibold text-[16px] text-[#616161]">Shop</p>
+                    </a>
           <div class="flex flex-col gap-[12px] pt-[24px]">
             <a href="/client" class="mobile-menu-link text-[14px] text-[#3328bf] font-semibold">Log in</a>
             <a href="/get-started" class="mobile-menu-link text-[14px] text-white font-semibold bg-[#3328bf] rounded-[8px] text-center py-[10px]">Get Started</a>
@@ -244,3 +244,4 @@
       </div>
     </div>
   </div>
+

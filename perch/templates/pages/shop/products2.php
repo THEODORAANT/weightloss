@@ -42,7 +42,7 @@
         <?php if (function_exists('perch_categories')) { ?>
           <?php perch_categories([
             'set' => 'shop',
-            'template' => 'shop-category-nav.html',
+            'template' => 'categories/shop-category-nav.html',
           ]); ?>
         <?php } ?>
       </div>
@@ -58,9 +58,6 @@
       </div>
 
       <?php
-        $product_slug = perch_get('s');
-        $category_slug = perch_get('category');
-
         if ($product_slug) {
           perch_shop_product($product_slug, [
             'template' => 'products/shop-product.html',
