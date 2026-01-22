@@ -19,7 +19,7 @@
               <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
             </div>
             <perch:repeater id="_variant_images">
-              <div id="product-image-<perch:counter />" class="min-w-full snap-center">
+              <div id="product-image-<perch:shop id="variant_image_id" />" class="min-w-full snap-center">
                 <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
               </div>
             </perch:repeater>
@@ -30,7 +30,7 @@
             <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
           </a>
           <perch:repeater id="_variant_images">
-            <a href="#product-image-<perch:counter />" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
+            <a href="#product-image-<perch:shop id="variant_image_id" />" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
               <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
             </a>
           </perch:repeater>
@@ -96,12 +96,11 @@
     const options = Array.from(select.options).filter((option) => option.value);
     container.innerHTML = '';
 
-    options.forEach((option, index) => {
+    options.forEach((option) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.textContent = option.textContent;
       button.dataset.value = option.value;
-      button.dataset.index = String(index + 1);
       button.className = 'rounded-full border border-slate-200 px-[14px] py-[8px] text-[13px] font-semibold text-slate-600 transition hover:border-[#3328bf] hover:text-[#3328bf]';
       container.appendChild(button);
     });
@@ -128,11 +127,15 @@
       if (!button) return;
       select.value = button.dataset.value;
       updateActive(select.value);
-      scrollToImage(button.dataset.index);
+      scrollToImage(button.dataset.value);
     });
 
     select.addEventListener('change', (event) => {
-      updateActive(event.target.value);
+      const selectedValue = event.target.value;
+      updateActive(selectedValue);
+      if (selectedValue) {
+        scrollToImage(selectedValue);
+      }
     });
 
     updateActive(select.value || options[0]?.value || '');
