@@ -16,7 +16,7 @@
         <div class="overflow-hidden rounded-[16px] bg-white">
           <div class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth">
             <div id="product-image-main" class="min-w-full snap-center">
-
+              <perch:shop id="image" />
               <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
             </div>
             <perch:repeater id="_variant_images">
@@ -97,17 +97,13 @@
     const options = Array.from(select.options).filter((option) => option.value);
     container.innerHTML = '';
 
-    const optionIndexMap = new Map();
-
-    options.forEach((option, index) => {
+    options.forEach((option) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.textContent = option.textContent;
       button.dataset.value = option.value;
-      button.dataset.index = String(index + 1);
       button.className = 'rounded-full border border-slate-200 px-[14px] py-[8px] text-[13px] font-semibold text-slate-600 transition hover:border-[#3328bf] hover:text-[#3328bf]';
       container.appendChild(button);
-      optionIndexMap.set(option.value, index + 1);
     });
 
     const updateActive = (value) => {
@@ -132,15 +128,14 @@
       if (!button) return;
       select.value = button.dataset.value;
       updateActive(select.value);
-      scrollToImage(button.dataset.index);
+      scrollToImage(button.dataset.value);
     });
 
     select.addEventListener('change', (event) => {
       const selectedValue = event.target.value;
       updateActive(selectedValue);
-      const imageIndex = optionIndexMap.get(selectedValue);
-      if (imageIndex) {
-        scrollToImage(String(imageIndex));
+      if (selectedValue) {
+        scrollToImage(selectedValue);
       }
     });
 
