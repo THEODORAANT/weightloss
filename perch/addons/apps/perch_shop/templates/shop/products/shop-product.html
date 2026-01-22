@@ -65,8 +65,9 @@
           <div class="flex flex-col gap-[16px] rounded-[16px] border border-slate-200 bg-slate-50 p-[16px]">
             <div>
               <span class="text-[12px] font-semibold uppercase tracking-[0.12em] text-slate-500">Color</span>
+              <div class="variant-options mt-[10px] flex flex-wrap gap-[8px]"></div>
               <perch:form id="cart" action="" app="perch_shop">
-                <perch:input class="mt-[8px] w-full rounded-[10px] border border-slate-200 bg-white px-[12px] py-[10px] text-[14px]"
+                <perch:input class="variant-select mt-[8px] w-full rounded-[10px] border border-slate-200 bg-white px-[12px] py-[10px] text-[14px]"
                              type="select"  id="product"  name="product"
                              options="<perch:shop id="_variant_opts" type="hidden" />" />
                 <div  style="padding: 10px;">
@@ -96,6 +97,8 @@
     const options = Array.from(select.options).filter((option) => option.value);
     container.innerHTML = '';
 
+    const optionIndexMap = new Map();
+
     options.forEach((option, index) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -104,6 +107,7 @@
       button.dataset.index = String(index + 1);
       button.className = 'rounded-full border border-slate-200 px-[14px] py-[8px] text-[13px] font-semibold text-slate-600 transition hover:border-[#3328bf] hover:text-[#3328bf]';
       container.appendChild(button);
+      optionIndexMap.set(option.value, index + 1);
     });
 
     const updateActive = (value) => {
@@ -132,7 +136,12 @@
     });
 
     select.addEventListener('change', (event) => {
-      updateActive(event.target.value);
+      const selectedValue = event.target.value;
+      updateActive(selectedValue);
+      const imageIndex = optionIndexMap.get(selectedValue);
+      if (imageIndex) {
+        scrollToImage(String(imageIndex));
+      }
     });
 
     updateActive(select.value || options[0]?.value || '');
