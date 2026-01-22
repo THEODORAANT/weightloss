@@ -1,6 +1,6 @@
 
 <div class="mx-auto mb-[24px] w-full max-w-[960px] text-[13px] font-semibold text-slate-500">
-    <a href="/shop" class="text-[#3328bf] hover:text-[#2a21a3]">← Back to shop</a>
+  <!--  <a href="/shop" class="text-[#3328bf] hover:text-[#2a21a3]">← Back to shop</a>-->
     <perch:if exists="category_slug">
         <span class="mx-[8px] text-slate-300">|</span>
         <a href="/shop/products?category=<perch:show id="category_slug" />" class="text-[#3328bf] hover:text-[#2a21a3]">
@@ -16,7 +16,7 @@
         <div class="overflow-hidden rounded-[16px] bg-white">
           <div class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth">
             <div id="product-image-main" class="min-w-full snap-center">
-              <perch:shop id="image" />
+
               <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
             </div>
             <perch:repeater id="_variant_images">
