@@ -343,7 +343,51 @@ $output.=  $HTML->heading2('Customer');
 
     if (PerchUtil::count($items)) {
 
-        //$output.=  $HTML->heading2('Order items');
+        $output.=  $HTML->heading2('Edit order items');
+        $output.=  $Form->form_start('edit');
+        $output.=  '<table class="">';
+        $output.=  '<thead>';
+        $output.=  '<tr>';
+                $output.=  '<th>'.$Lang->get('Item').'</th>';
+                $output.=  '<th>'.$Lang->get('SKU').'</th>';
+                $output.=  '<th>'.$Lang->get('Product').'</th>';
+                $output.=  '<th>'.$Lang->get('Qty').'</th>';
+                $output.=  '<th>'.$Lang->get('Unit Price').'</th>';
+                $output.=  '<th>'.$Lang->get('Tax').'</th>';
+        $output.=  '</tr>';
+        $output.=  '</thead>';
+        $output.=  '<tbody>';
+
+        foreach($items as $Item) {
+            $item_id = (int)$Item->itemID();
+            $current_product_id = (int)$Item->productID();
+            $item_label = $Item->title();
+            if ($Item->is_variant()) {
+                $item_label .= ' - '.$Item->productVariantDesc();
+            }
+
+            $options_html = '';
+            foreach ($product_options as $product_id => $label) {
+                $selected = ((int)$product_id === $current_product_id) ? ' selected' : '';
+                $options_html .= '<option value="'.$HTML->encode($product_id).'"'.$selected.'>'.$HTML->encode($label).'</option>';
+            }
+
+            $output.=  '<tr>';
+                $output.=  '<td>'.$HTML->encode($item_label).'</td>';
+                $output.=  '<td>'.$HTML->encode($Item->sku()).'</td>';
+                $output.=  '<td><select name="order_items['.$item_id.'][product_id]">'.$options_html.'</select></td>';
+                $output.=  '<td><input type="number" name="order_items['.$item_id.'][qty]" min="1" value="'.$HTML->encode($Item->itemQty()).'" class="input-text"></td>';
+                $output.=  '<td>'.$HTML->encode($Item->itemPrice()).'</td>';
+                $output.=  '<td>'.$HTML->encode($Item->itemTax()).'</td>';
+            $output.=  '</tr>';
+        }
+
+        $output.=  '</tbody>';
+        $output.=  '</table>';
+        $output.=  $Form->submit_field('btnUpdateItems', 'Update items', $API->app_path());
+        $output.=  $Form->form_end();
+
+        $output.=  $HTML->heading2('Order items');
 
         $output.=  '<table class="">';
 
