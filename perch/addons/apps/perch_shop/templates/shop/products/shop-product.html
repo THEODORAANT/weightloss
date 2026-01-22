@@ -16,11 +16,11 @@
         <div class="overflow-hidden rounded-[16px] bg-white">
           <div class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth">
             <div id="product-image-main" class="min-w-full snap-center">
-              <perch:shop id="image" />
+
               <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
             </div>
             <perch:repeater id="_variant_images">
-              <div id="product-image-<perch:counter />" class="min-w-full snap-center">
+              <div id="product-image-<perch:shop id="variant_image_id" />" class="min-w-full snap-center">
                 <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
               </div>
             </perch:repeater>
@@ -31,7 +31,7 @@
             <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
           </a>
           <perch:repeater id="_variant_images">
-            <a href="#product-image-<perch:counter />" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
+            <a href="#product-image-<perch:shop id="variant_image_id" />" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
               <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
             </a>
           </perch:repeater>
