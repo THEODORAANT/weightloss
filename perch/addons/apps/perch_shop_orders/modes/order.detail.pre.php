@@ -16,6 +16,38 @@
 	$message = false;
 	$product_options = [];
 
+	if (!function_exists('normalise_decimal')) {
+		function normalise_decimal($value)
+		{
+			if (is_float($value) || is_int($value)) {
+				return (float) $value;
+			}
+
+			if (is_string($value)) {
+				$filtered = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND);
+				if ($filtered === '' || !is_numeric($filtered)) {
+					return null;
+				}
+
+				return (float) $filtered;
+			}
+
+			return null;
+		}
+	}
+
+	if (!function_exists('format_decimal')) {
+		function format_decimal($value)
+		{
+			$value = (float)$value;
+			if (abs($value) < 0.0005) {
+				$value = 0.0;
+			}
+
+			return number_format($value, 2, '.', '');
+		}
+	}
+
 	if (PerchUtil::get('id')) {
 
 		if (!$CurrentUser->has_priv('perch_shop.orders.edit')) {
@@ -187,38 +219,6 @@
 	    PerchUtil::redirect($API->app_path());
 	}
 
-	if (!function_exists('normalise_decimal')) {
-		function normalise_decimal($value)
-		{
-			if (is_float($value) || is_int($value)) {
-				return (float) $value;
-			}
-
-			if (is_string($value)) {
-				$filtered = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND);
-				if ($filtered === '' || !is_numeric($filtered)) {
-					return null;
-				}
-
-				return (float) $filtered;
-			}
-
-			return null;
-		}
-	}
-
-	if (!function_exists('format_decimal')) {
-		function format_decimal($value)
-		{
-			$value = (float)$value;
-			if (abs($value) < 0.0005) {
-				$value = 0.0;
-			}
-
-			return number_format($value, 2, '.', '');
-		}
-	}
-
 	if (!function_exists('recalculate_order_totals')) {
 		function recalculate_order_totals(PerchDB_MySQL $DB, $orderID, $override = null)
 		{
@@ -329,4 +329,3 @@
 			];
 		}
 	}
-
