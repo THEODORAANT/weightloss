@@ -173,12 +173,15 @@
 	    			$updated_order_items = true;
 	    		}
 	    	}
-
+echo "updated_order_items".$updated_order_items;
 	    	if ($updated_order_items) {
 	    		$order_update = recalculate_order_totals($DB, (int)$Order->id());
 	    		$order_update['orderUpdated'] = date('Y-m-d H:i:s');
 	    		$Order->update($order_update);
 	    		$items = $OrderItems->get_for_admin($shop_id);
+	    	 $message = $HTML->success_message('Questionnaire notes have been saved.');
+	    	echo $message;
+	    		//PerchUtil::redirect($API->app_path());
 	    	}
 	    }
 	   
