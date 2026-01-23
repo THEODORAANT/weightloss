@@ -83,8 +83,10 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
 
                         <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
                             <h2 class="fw-bold mb-0">Order summary</h2>
-                            <a href="/shop" class="text-decoration-none" style="font-weight: 600; color: #3328bf;">Continue shopping</a>
-                        </div>
+ <a href="/shop" class="continue-shopping-link text-decoration-none">
+                                <span aria-hidden="true">&#8592;</span>
+                                Continue shopping
+                            </a>                        </div>
 
                     <div class="main_page">
                         <!-- Create an Account Section -->
@@ -298,3 +300,29 @@ setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'
         });
     </script>
     <!-- script code for login form -->
+           <style>
+                            .continue-shopping-link {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                padding: 8px 16px;
+                                border-radius: 999px;
+                                border: 1px solid #3328bf;
+                                color: #3328bf;
+                                font-weight: 600;
+                                background-color: #fff;
+                                transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+                            }
+
+                            .continue-shopping-link:hover,
+                            .continue-shopping-link:focus {
+                                background-color: #3328bf;
+                                color: #fff;
+                                border-color: #3328bf;
+                            }
+
+                            .continue-shopping-link span {
+                                font-size: 18px;
+                                line-height: 1;
+                            }
+                        </style>

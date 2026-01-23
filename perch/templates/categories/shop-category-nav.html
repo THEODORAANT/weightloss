@@ -2,13 +2,31 @@
   <div class="flex flex-wrap items-center justify-center gap-[12px]">
 </perch:before>
 
+<perch:if id="catSlug" match="eq" value="<perch:category id="current_category_slug" />">
   <a
-    href="/shop/products?category=<perch:category id="catSlug" type="slug" />"
-    class="category-pill inline-flex items-center rounded-full border border-slate-200 bg-white px-[16px] py-[8px] text-[13px] font-semibold text-slate-600 transition hover:border-[#3328bf] hover:text-[#3328bf]"
-    data-category="<perch:category id="catSlug" type="slug" />"
+          href="/shop/products?category=products/<perch:category id="catSlug" type="slug" />"
+  class="category-pill inline-flex items-center rounded-full border-[#3328bf]  border-slate-200 bg-[#3328bf]/10
+
+  px-[16px] py-[8px] text-[13px] font-semibold text-[#3328bf] shadow-md  transition
+  hover:-translate-y-px hover:border-[#3328bf] hover:bg-[#3328bf]/10 hover:text-[#3328bf]
+  hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3328bf]/40"
+  data-category="<perch:category id="catSlug" type="slug" />"
   >
-    <perch:category id="catTitle" type="smarttext" />
+  <perch:category id="catTitle" type="smarttext" />**
   </a>
+  <perch:else />
+  <a
+          href="/shop/products?category=products/<perch:category id="catSlug" type="slug" />"
+  class="category-pill inline-flex items-center rounded-full border border-slate-200 bg-white
+
+  px-[16px] py-[8px] text-[13px] font-semibold text-slate-600 shadow-sm transition
+  hover:-translate-y-px hover:border-[#3328bf] hover:bg-[#3328bf]/10 hover:text-[#3328bf]
+  hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3328bf]/40"
+  data-category="<perch:category id="catSlug" type="slug" />"
+  >
+  <perch:category id="catTitle" type="smarttext" />
+  </a></perch:if>
+
 
 <perch:after>
   </div>

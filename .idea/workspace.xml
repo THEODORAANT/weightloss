@@ -7,6 +7,11 @@
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.pre.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.questions.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.questions.post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/categories/shop-category-card.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/categories/shop-category-card.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/categories/shop-category-nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/categories/shop-category-nav.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/shop/products.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/shop/products.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +19,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/change-variant-image-on-color-select-5orubu" />
+    <option name="BRANCH" value="origin/codex/allow-admin-to-update-order-items" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -39,27 +44,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps/perch_shop/templates/shop/products&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch/addons/apps" />
+      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop" />
-      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib" />
-      <recent name="$PROJECT_DIR$/perch/addons/apps" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -130,15 +135,7 @@
       <workItem from="1767779269712" duration="24232000" />
       <workItem from="1768470601217" duration="596000" />
       <workItem from="1768725058879" duration="19969000" />
-      <workItem from="1769162579487" duration="1758000" />
-    </task>
-    <task id="LOCAL-00086" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1761640039312</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1761640039312</updated>
+      <workItem from="1769162579487" duration="3023000" />
     </task>
     <task id="LOCAL-00087" summary="weightloss">
       <option name="closed" value="true" />
@@ -524,7 +521,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769085309721</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1769180912987</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1769180912989</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
