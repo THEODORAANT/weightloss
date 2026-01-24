@@ -11,6 +11,8 @@ $questions=perch_member_questionsForQuestionnaire($type);
 if($questions){
 if($type=="first-order"){
 $questions["conditions"]["label"]="Do any of the following statements apply to you?";
+$questions["conditions2"]["label"]="Do any of the following statements apply to you?";
+
 }
     echo json_encode(["questions" => $questions]);
 } else {

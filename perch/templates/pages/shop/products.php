@@ -81,7 +81,7 @@
  perch_categories([
            'filter'=> 'catID',
            'match'=> 'in',
-           'value'=> '7,9' ,
+           'value'=> '3,5,6,9' ,
             'set' => 'shop',
             'template' => 'shop-category-nav.html',
           ]); ?>

@@ -155,10 +155,10 @@ class PerchMembers_Member extends PerchAPI_Base
        //  $data["ReviewLink"]="https://".$_SERVER['HTTP_HOST']."/perch/addons/apps/perch_members/edit/?id=".$Session->get('memberID');
 
     //  perch_emailoctopus_update_contact($data);
-        if ($uploadPerformed) {
+       /* if ($uploadPerformed) {
       $this->sendtoadmin_docs_email( $memberID,"george@nlclinicisleofwight.co.uk");
        $this->sendtoadmin_docs_email( $memberID,"reshat1987@gmail.com");
-        }
+        }*/
 
         return $uploadPerformed;
         }
@@ -295,10 +295,10 @@ if ($patient_name === '') {
     public function send_reorder_thank_you_email()
     {
         $API = new PerchAPI(1.0, 'perch_members');
-        $unsubscribeListPath = realpath(__DIR__ . '/../../../../scripts/email_unsubscribe_list.php');
+       /* $unsubscribeListPath = realpath(__DIR__ . '/../../../../scripts/email_unsubscribe_list.php');
         if ($unsubscribeListPath && file_exists($unsubscribeListPath)) {
             require_once $unsubscribeListPath;
-        }
+        }*/
 
         if (
             (function_exists('is_member_unsubscribed') && is_member_unsubscribed((int) $this->id()))

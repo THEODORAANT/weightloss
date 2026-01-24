@@ -61,7 +61,7 @@ if (!function_exists('wl_format_measurement')) {
     function wl_format_measurement(array $row, $includeBodyComposition = true)
     {
         $measurement = [
-            'id' => isset($row['measurement_id']) ? (int)$row['measurement_id'] : null,
+            'id' => isset($row['id']) ? (int)$row['id'] : null,
             'weight_kg' => wl_cast_float($row['weight_kg'] ?? null),
             'bmi' => wl_cast_float($row['bmi'] ?? null),
             'body_fat_percent' => wl_cast_float($row['body_fat_percent'] ?? null),

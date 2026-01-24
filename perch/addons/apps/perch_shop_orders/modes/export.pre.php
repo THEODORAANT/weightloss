@@ -1,5 +1,10 @@
 <?php
 
+      ini_set('display_errors', '1');
+      ini_set('display_startup_errors', '1');
+      error_reporting(E_ALL);
+
+
 	$Form = $API->get('Form');
 
 	$l1 = $Lang->get('Export');
@@ -94,7 +99,3 @@
     	$OrdersExport->export();
 
     } 
-
-    if (PerchDB::$driver!='PDO') {
-    	$message = $HTML->failure_message('Export requires the PHP PDO library for connecting to your database.');
-    }

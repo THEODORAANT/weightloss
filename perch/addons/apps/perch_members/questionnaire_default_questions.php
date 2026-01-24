@@ -1,5 +1,37 @@
 <?php
+$comorbiditiesQuestionText = <<<QUESTION
+Do any of the following statements apply to you?
 
+I have been diagnosed with a mental health condition such as depression or anxiety.
+
+My weight makes me anxious in social situations.
+
+I have joint pains and/or aches.
+
+I have osteoarthritis.
+
+I have GORD and/or indigestion.
+
+I have a heart/cardiovascular problem.
+
+I’ve been diagnosed with, or have a family history of, high blood pressure.
+
+I’ve been diagnosed with, or have a family history of, high cholesterol.
+
+I have fatty liver disease.
+
+I have sleep apnoea.
+
+I have asthma or COPD.
+
+I have erectile dysfunction.
+
+I have low testosterone.
+
+I have menopausal symptoms.
+
+I have polycystic ovary syndrome (PCOS).
+QUESTION;
 $contraindicationsQuestionText = <<<QUESTION
 Do any of the following statements apply to you?
 
@@ -68,7 +100,7 @@ return [
             ],
         ],
         'more_side_effects' => [
-            'label' => 'Please tell us what side effects you have been experiencing.',
+'label' => 'Please tell us what side effects you have been experiencing.',
             'type' => 'textarea',
             'name' => 'more_side_effects',
             'step' => 'more_side_effects',
@@ -91,8 +123,7 @@ return [
             ],
         ],
         'list_additional_medication' => [
-            'label' => 'Please tell us what new medication you have started including the name of the medication, dose and how often you take it.',
-            'type' => 'textarea',
+ 'label' => 'Please tell us what new medication you have started including the name of the medication, dose and how often you take it.',            'type' => 'textarea',
             'name' => 'list_additional_medication',
             'step' => 'list_additional_medication',
         ],
@@ -129,17 +160,18 @@ return [
             ],
             'step' => 'chat_with_us',
         ],
-        'consent_confirmation' => [
+         'consent_confirmation' => [
             'label' => 'I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately.',
-            'type' => 'radio',
-            'name' => 'consent_confirmation',
-            'options' => [
-                'yes' => 'Yes',
-            ],
-            'step' => 'consent-confirmation',
-        ],
+                    'type' => 'radio',
+                    'name' => 'consent_confirmation',
+                    'options' => [
+                        'yes' => 'Yes',
+                    ],
+                    'step' => 'consent-confirmation',
+                ],
     ],
     'first-order' => [
+    	'consultation'=>"You are completing this consultation for yourself, providing information to the best of your knowledge.You agree to disclose any medical conditions, serious illnesses, or past surgeries, as well as any prescription medications you are currently taking. Additionally, you acknowledge that you will use only one weight loss treatment at a time.By proceeding, you confirm your acceptance of our Terms & Conditions, Privacy Policy and acknowledge that you have read our Privacy Policy.It is essential to provide honest and accurate responses to this online questionnaire. Withholding or misrepresenting information can pose serious health risks, including life-threatening consequences. By submitting this questionnaire, you affirm that your responses are truthful and understand the potential dangers of misinformation.",
         'age' => [
             'label' => 'How old are you?',
             'type' => 'radio',
@@ -358,25 +390,25 @@ return [
             'step' => 'more',
         ],
         'conditions2' => [
-            'label' => 'Do any of the following statements apply to you?',
+            'label' => $comorbiditiesQuestionText,
             'type' => 'checkbox',
             'name' => 'conditions2[]',
             'options' => [
-                'mentalhealth' => 'I have been diagnosed with a mental health condition such as depression or anxiety.',
-                'anxious' => 'My weight makes me anxious in social situations.',
-                'joint' => 'I have joint pains and/or aches.',
-                'osteoarthritis' => 'I have osteoarthritis.',
-                'indigestion' => 'I have GORD and/or indigestion.',
-                'cardiovascular' => 'I have a heart/cardiovascular problem.',
-                'bloodpressure' => 'I’ve been diagnosed with, or have a family history of, high blood pressure.',
-                'cholesterol' => 'I’ve been diagnosed with, or have a family history of, high cholesterol.',
-                'fattyliver' => 'I have fatty liver disease.',
-                'apnoea' => 'I have sleep apnoea.',
-                'asthma' => 'I have asthma or COPD.',
-                'erectile' => 'I have erectile dysfunction.',
-                'testosterone' => 'I have low testosterone.',
-                'menopausal' => 'I have menopausal symptoms.',
-                'pcos' => 'I have polycystic ovary syndrome (PCOS).',
+                'mentalhealth' => 'I have been diagnosed with a mental health condition such as depression or anxiety',
+                'anxious' => 'My weight makes me anxious in social situations',
+                'joint' => 'I have joint pains and/or aches',
+                'osteoarthritis' => 'I have osteoarthritis',
+                'indigestion' => 'I have GORD and/or indigestion',
+                'cardiovascular' => 'I have a heart/cardiovascular problem',
+                'bloodpressure' => 'I’ve been diagnosed with, or have a family history of, high blood pressure',
+                'cholesterol' => 'I’ve been diagnosed with, or have a family history of, high cholesterol',
+                'fattyliver' => 'I have fatty liver disease',
+                'apnoea' => 'I have sleep apnoea',
+                'asthma' => 'I have asthma or COPD',
+                'erectile' => 'I have erectile dysfunction',
+                'testosterone' => 'I have low testosterone',
+                'menopausal' => 'I have menopausal symptoms',
+                'pcos' => 'I have polycystic ovary syndrome (PCOS)',
                 'none' => 'None of these statements apply to me',
             ],
             'step' => 'conditions',

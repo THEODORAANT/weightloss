@@ -400,6 +400,7 @@ $output.=  $HTML->heading2('Customer');
                 $output.=  '<th>'.$Lang->get('Price').'</th>';
                 $output.=  '<th>'.$Lang->get('Tax').'</th>';
                 $output.=  '<th>'.$Lang->get('Total').'</th>';
+                  $output.=  '<th>'.$Lang->get('Status').'</th>';
         $output.=  '</tr>';
         $output.=  '</thead>';
 
@@ -413,6 +414,7 @@ $output.=  $HTML->heading2('Customer');
                 $output.=  '<td>'.$Item->itemPrice().'</td>';
                 $output.=  '<td>'.$Item->itemTax().'</td>';
                 $output.=  '<td>'.$Currency->format_display($Item->itemTotal()*$Item->itemQty()).'</td>';
+                 $output.=  '<td>'.$Item->itemStatus().'</td>';
             $output.=  '</tr>';
         }
                 $orders_pharmacy=$Order->getPharmacyOrderbyOrderid($Order->id());

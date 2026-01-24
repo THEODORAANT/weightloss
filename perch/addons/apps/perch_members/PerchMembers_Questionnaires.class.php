@@ -4,6 +4,50 @@ require_once __DIR__ . '/questionnaire_medication_helpers.php';
 
 class PerchMembers_Questionnaires extends PerchAPI_Factory
 {
+    private const CONSULTATION_AGREEMENT = <<<'QUESTION'
+You are completing this consultation for yourself, providing information to the best of your knowledge.
+
+You agree to disclose any medical conditions, serious illnesses, or past surgeries, as well as any prescription medications you are currently taking. Additionally, you acknowledge that you will use only one weight loss treatment at a time.
+
+By proceeding, you confirm your acceptance of our Terms & Conditions, Privacy Policy and acknowledge that you have read our Privacy Policy.
+
+It is essential to provide honest and accurate responses to this online questionnaire. Withholding or misrepresenting information can pose serious health risks, including life-threatening consequences. By submitting this questionnaire, you affirm that your responses are truthful and understand the potential dangers of misinformation.
+QUESTION;
+
+
+    private const COMORBIDITIES_QUESTION = <<<'QUESTION'
+Do any of the following statements apply to you?
+
+I have been diagnosed with a mental health condition such as depression or anxiety.
+
+My weight makes me anxious in social situations.
+
+I have joint pains and/or aches.
+
+I have osteoarthritis.
+
+I have GORD and/or indigestion.
+
+I have a heart/cardiovascular problem.
+
+I’ve been diagnosed with, or have a family history of, high blood pressure.
+
+I’ve been diagnosed with, or have a family history of, high cholesterol.
+
+I have fatty liver disease.
+
+I have sleep apnoea.
+
+I have asthma or COPD.
+
+I have erectile dysfunction.
+
+I have low testosterone.
+
+I have menopausal symptoms.
+
+I have polycystic ovary syndrome (PCOS).
+QUESTION;
     private const CONTRAINDICATIONS_QUESTION = <<<'QUESTION'
 Do any of the following statements apply to you?
 
@@ -297,9 +341,9 @@ QUESTION;
         "pregnancy_status"=>"Are you pregnant or trying to conceive?",
         "bmi"=>"BMI",
         "side_effects"=>"Have you experienced any side effects whilst taking the medication? ",
-	"more_side_effects"=>"Please tell us what side effects you have been experiencing.",
+      "more_side_effects"=>"Please tell us what side effects you have been experiencing.",
 	"additional-medication"=>"Have you started taking any additional medication?",
-	"list_additional_medication"=>"Please tell us what new medication you have started including the name of the medication, dose and how often you take it.",
+     "list_additional_medication"=>"Please tell us what new medication you have started including the name of the medication, dose and how often you take it.",        "rate_current_experience"=>"Are you happy with your monthly weight loss?",
         "rate_current_experience"=>"Are you happy with your monthly weight loss?",
         "no_happy_reasons"=>"Please tell us as much as you can about the reasons you are not happy with your monthly weight loss.",
         "chat_with_us"=>"Would you like to chat with someone?",
@@ -382,7 +426,7 @@ QUESTION;
             ]
         ],
         "more_side_effects" => [
-            "label" => "Please tell us what side effects you have been experiencing.",
+  "label" => "Please tell us what side effects you have been experiencing.",
             "type" => "textarea",
             "name" => "more_side_effects"
         ],
@@ -396,7 +440,7 @@ QUESTION;
             ]
         ],
         "list_additional_medication" => [
-            "label" => "Please tell us what new medication you have started including the name of the medication, dose and how often you take it.",
+ "label" => "Please tell us what new medication you have started including the name of the medication, dose and how often you take it.",            "type" => "textarea",
             "type" => "textarea",
             "name" => "list_additional_medication"
         ],
@@ -432,14 +476,14 @@ QUESTION;
                 "no" => "No"
             ]
         ],
-        "consent_confirmation" => [
-            "label" => "I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately.",
-            "type" => "button",
-            "name" => "consent_confirmation",
-            "options" => [
-                "yes" => "Yes"
-            ]
-        ],
+         "consent_confirmation" => [
+        "consent_confirmation"=>"I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately.",
+                    "type" => "button",
+                    "name" => "consent_confirmation",
+                    "options" => [
+                        "yes" => "Yes"
+                    ]
+                ],
         "bmi" => [
             "label" => "BMI",
             "type" => "text",
@@ -459,7 +503,7 @@ QUESTION;
 
     public $questions_and_answers  = [
                                        "consultation" => [
-                                           "label" => "agree-consultation",
+                                           "label" =>  self::CONSULTATION_AGREEMENT,
                                            "type" => "text",
                                            "name" => "consultation"
                                        ],
@@ -603,25 +647,25 @@ QUESTION;
                                            "name" => "more_conditions"
                                        ],
                                        "conditions2" => [
-                                           "label" => "Do any of the following statements apply to you?",
+                                           "label" => self::COMORBIDITIES_QUESTION,
                                            "type" => "checkbox",
                                            "name" => "conditions2[]",
                                            "options" => [
-                                               "mentalhealth" => "I have been diagnosed with a mental health condition such as depression or anxiety.",
-                                               "anxious" => "My weight makes me anxious in social situations.",
-                                               "joint" => "I have joint pains and/or aches.",
-                                               "osteoarthritis" => "I have osteoarthritis.",
-                                               "indigestion" => "I have GORD and/or indigestion.",
-                                               "cardiovascular" => "I have a heart/cardiovascular problem.",
-                                               "bloodpressure" => "I’ve been diagnosed with, or have a family history of, high blood pressure.",
-                                               "cholesterol" => "I’ve been diagnosed with, or have a family history of, high cholesterol.",
-                                               "fattyliver" => "I have fatty liver disease.",
-                                               "apnoea" => "I have sleep apnoea.",
-                                               "asthma" => "I have asthma or COPD.",
-                                               "erectile" => "I have erectile dysfunction.",
-                                               "testosterone" => "I have low testosterone.",
-                                               "menopausal" => "I have menopausal symptoms.",
-                                               "pcos" => "I have polycystic ovary syndrome (PCOS).",
+                                               "mentalhealth" => "I have been diagnosed with a mental health condition such as depression or anxiety",
+                                               "anxious" => "My weight makes me anxious in social situations",
+                                               "joint" => "I have joint pains and/or aches",
+                                               "osteoarthritis" => "I have osteoarthritis",
+                                               "indigestion" => "I have GORD and/or indigestion",
+                                               "cardiovascular" => "I have a heart/cardiovascular problem",
+                                               "bloodpressure" => "I’ve been diagnosed with, or have a family history of, high blood pressure",
+                                               "cholesterol" => "I’ve been diagnosed with, or have a family history of, high cholesterol",
+                                               "fattyliver" => "I have fatty liver disease",
+                                               "apnoea" => "I have sleep apnoea",
+                                               "asthma" => "I have asthma or COPD",
+                                               "erectile" => "I have erectile dysfunction",
+                                               "testosterone" => "I have low testosterone",
+                                               "menopausal" => "I have menopausal symptoms",
+                                               "pcos" => "I have polycystic ovary syndrome (PCOS)",
                                                "none" => "None of these statements apply to me"
                                            ]
                                        ],
@@ -818,7 +862,7 @@ QUESTION;
     "more_pancreatitis"=>"Tell me about your gastric surgery procedure.",
     "thyroidoperation"=>"Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
     "more_conditions"=>"Please tell us more about your mental health condition and how you manage it",
-    "conditions2"=>"Do any of the following statements apply to you?",
+   "label" => self::COMORBIDITIES_QUESTION,
     "medical_conditions"=>"Do you have any other medical conditions?",
     "medications"=>"Have you ever taken any of the following medications to help you lose weight?",
     "weight-wegovy"=>"What was your weight in kg before starting the weight loss medication?",

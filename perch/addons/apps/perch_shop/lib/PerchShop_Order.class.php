@@ -211,7 +211,7 @@ class PerchShop_Order extends PerchShop_Base
            return $details;
         }
 
-	public function isReorder($Customer){
+public function isReorder($Customer){
 		$Orders = new PerchShop_Orders($this->api);
         //	$Customer = $Customers->find_from_logged_in_member();
             $orders = $Orders->findAll_for_customer($Customer);
@@ -395,9 +395,9 @@ class PerchShop_Order extends PerchShop_Base
             ];
         }
 
-//echo "questions_items";
-	//print_r($questions_items);
-        /*echo "order_items";
+/*echo "questions_items";
+	print_r($questions_items);
+        echo "order_items";
 	print_r($order_items);
                       echo "ShippingAdr";
 	print_r($ShippingAddr);*/
@@ -536,11 +536,6 @@ return $response;
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
           $data["NextOrderDoseDate"]= $this->orderCreated();
-          /* $Members = new PerchMembers_Members($this->api);
-                    $Member = $Members->find($Customer->memberID());
-                    if ($Member) {
-                        $Member->send_reorder_thank_you_email();
-                    }*/
         }else{
          $data["FirstOrderDate"]= $this->orderCreated();
 

@@ -64,11 +64,9 @@ class PerchShop_Events
 		}
 
 		$patient_name = trim($Customer->customerFirstName().' '.$Customer->customerLastName());
-		//$Member->send_guidance_email($patient_name);
-
-		if($Order->isReorder($Customer)){
+		$Member->send_guidance_email($patient_name);
+      if($Order->isReorder($Customer)){
 		$Member->send_reorder_thank_you_email();
 		}
-
 	}
 }

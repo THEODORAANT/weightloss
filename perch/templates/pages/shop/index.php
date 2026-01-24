@@ -19,7 +19,7 @@
             perch_categories([
             'filter'=> 'catID',
             'match'=> 'in',
-           'value'=> '7,9' ,
+           'value'=> '3,5,6,9' ,
               'template' => 'shop-category-card.html',
             ]);
           } else {

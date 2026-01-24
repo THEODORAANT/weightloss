@@ -94,7 +94,7 @@ class WeightMeasurementsRepository
 
     public function deleteById($measurementId)
     {
-        $result = $this->db->delete($this->table, 'measurement_id', $measurementId, 1);
+        $result = $this->db->delete($this->table, 'id', $measurementId, 1);
 
         if ($result === false) {
             return false;

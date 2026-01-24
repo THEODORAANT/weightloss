@@ -3,7 +3,6 @@ include(__DIR__ .'/../../../../core/runtime/runtime.php');
 
 
 require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../lib/date_normalization.php';
 
 //require_once __DIR__ . '/../../perch_members/PerchMembers_Member.class.php';
 
@@ -23,10 +22,6 @@ if (!is_array($data)) {
     http_response_code(400);
     echo json_encode(["error" => "Invalid JSON payload"]);
     exit;
-}
-
-if (isset($data['dob'])) {
-    $data['dob'] = api_normalize_dob($data['dob']);
 }
 
 $shippingFields = [

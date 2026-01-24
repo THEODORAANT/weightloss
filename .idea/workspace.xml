@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.pre.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.questions.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.questions.post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/categories/shop-category-card.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/categories/shop-category-card.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/categories/shop-category-nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/categories/shop-category-nav.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/shop/products.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/shop/products.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,15 +129,7 @@
       <workItem from="1767779269712" duration="24232000" />
       <workItem from="1768470601217" duration="596000" />
       <workItem from="1768725058879" duration="19969000" />
-      <workItem from="1769162579487" duration="3023000" />
-    </task>
-    <task id="LOCAL-00087" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1761642819006</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1761642819006</updated>
+      <workItem from="1769162579487" duration="4802000" />
     </task>
     <task id="LOCAL-00088" summary="weightloss">
       <option name="closed" value="true" />
@@ -529,7 +515,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769180912989</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1769190324517</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1769190324517</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -86,6 +86,7 @@ perch_layout('terms/header', [
               </p>
 
               <p>2.1.2 The Prescriber/Pharmacy services including consultations and distribution are performed by Imran Tailor (details in clause 2.4.2) .
+             The business operates under a General Pharmaceutical Council registered premises number 9011648. MI Health ltd provide clinical, prescribing and dispensing services, Longcroft House, 2-8 Victoria Avenue, London, EC2M 4NS, Tel: 0330 043 6462. You are able to verify the pharmacy's registration and our superintendent pharmacist, Imran Tailor SI pharmacist with GPhC 2216145. Dispensing services are also provided by Berkely Care Ltd. Unit C, 34-42 Peregrine Road, Ilford, IG6 3SZ. Pharmacy number: 9012873. Superintendent, Masum Shah (GPhC number: 2217872).
               </p>
               <p>2.2 How to contact us. For general queries, you can contact us by contacting the Get Weight Loss customer service team at 0330 043 6462 or by writing to us at support@getweightloss.co.uk.</p>
               <p>2.3 How we may contact you. If we have to contact you, we will do so by telephone or by writing to you at the email address or postal address you provide to us during the registration/ordering process (see clause 4 below).</p>
