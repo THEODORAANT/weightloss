@@ -1,7 +1,7 @@
 <perch:before>
   <div class="flex flex-wrap items-center justify-center gap-[12px]">
 </perch:before>
-
+<perch:category id="catSlug" type="slug" /> <perch:category id="current_category_slug" />
 <perch:if id="catSlug" match="eq" value="<perch:category id="current_category_slug" />">
   <a
           href="/shop/products?category=products/<perch:category id="catSlug" type="slug" />"

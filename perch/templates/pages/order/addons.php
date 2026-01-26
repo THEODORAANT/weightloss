@@ -17,7 +17,7 @@
     <div class="container client-documents__container">
       <div class="client-documents__intro text-center mb-5">
         <span class="client-documents__eyebrow">Order</span>
-        <h1 class="client-documents__heading fw-bolder mb-3">Choose your add-ons</h1>
+        <h1 class="client-documents__heading fw-bolder mb-3">Choose your optional add-ons</h1>
         <p class="client-documents__lead mb-0">Power up your health plan with additional diagnostics and supplements tailored to your journey.</p>
       </div>
 
