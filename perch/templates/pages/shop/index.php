@@ -9,7 +9,10 @@
     <div class="mx-auto w-full max-w-[1120px]">
       <div class="text-center mb-[50px]">
         <span class="inline-flex items-center justify-center rounded-full bg-[#3328bf]/10 px-[18px] py-[6px] text-[12px] font-semibold uppercase tracking-[0.2em] text-[#3328bf]">Shop accessories</span>
-        <h1 class="mt-[16px] text-[32px] md:text-[40px] font-semibold text-[#0f172a]">Scales &amp; water bottles</h1>
+        <h1 class="mt-[16px] text-[32px] md:text-[40px] font-semibold text-[#0f172a]">GetWeightLoss Shop</h1>
+
+             <p class="mt-[12px] text-[16px] md:text-[18px] text-slate-600"> Within the GWL Shop you will find products that have been curated to provide complimentary benefits for you during your weight loss programme.
+</p>
         <p class="mt-[12px] text-[16px] md:text-[18px] text-slate-600">Stay on track with smart scales and devices; blood tests to help you monitor your body’s response to the weight loss and medication or stay hydrated with the a selection of water bottles.</p>
       </div>
 

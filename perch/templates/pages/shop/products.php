@@ -55,8 +55,9 @@
           <?php echo $category_title ? PerchUtil::html($category_title) . ' accessories' : 'Browse our shop'; ?>
         </h1>
         <p class="mt-[12px] text-[16px] md:text-[18px] text-slate-600">
-          <?php echo $category_title ? 'Explore everything in this category and compare the options.' : 'Explore our latest products and add your favorites to the cart in one click.'; ?>
-        </p>
+          <?php   echo $category_title ? 'Explore everything in this category and compare the options.' : 'Explore our latest products and add your favorites to the cart in one click.'; ?>
+
+                 </p>
       </div>
  <div class="mb-[32px] flex flex-col items-center gap-[16px] text-center">
         <div class="flex flex-wrap items-center justify-center gap-[10px] text-[13px] font-semibold text-slate-500">
