@@ -14,6 +14,11 @@ $questions["conditions"]["label"]="Do any of the following statements apply to y
 $questions["conditions2"]["label"]="Do any of the following statements apply to you?";
 
 }
+    foreach ($questions as $key => $question) {
+        if (isset($question['label']) && is_string($question['label'])) {
+            $questions[$key]['label'] = preg_replace('/\s*\(Options:.*?\)\s*/', '', $question['label']);
+        }
+    }
     echo json_encode(["questions" => $questions]);
 } else {
     http_response_code(401);

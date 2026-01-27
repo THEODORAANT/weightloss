@@ -508,7 +508,7 @@ QUESTION;
                                            "name" => "consultation"
                                        ],
                                        "age" => [
-                                           "label" => "How old are you?",
+                                           "label" => "How old are you? (Options: Under 18, 18 to 74, 75 or over)",
                                            "type" => "radio",
                                            "name" => "age",
                                            "options" => [
@@ -518,7 +518,7 @@ QUESTION;
                                            ]
                                        ],
                                        "ethnicity" => [
-                                           "label" => "Which ethnicity are you?",
+                                           "label" => "Which ethnicity are you? (Options: Asian or Asian British, Black (African/Caribbean), Mixed ethnicities, Other ethnic group, White, Prefer not to say)",
                                            "type" => "radio",
                                            "name" => "ethnicity",
                                            "options" => [
@@ -536,7 +536,7 @@ QUESTION;
                                            "name" => "ethnicity-more"
                                        ],
                                        "gender" => [
-                                           "label" => "What sex were you assigned at birth?",
+                                           "label" => "What sex were you assigned at birth? (Options: Male, Female)",
                                            "type" => "radio",
                                            "name" => "gender",
                                            "options" => [
@@ -545,7 +545,7 @@ QUESTION;
                                            ]
                                        ],
                                        "pregnancy" => [
-                                           "label" => "Are you currently pregnant, trying to get pregnant, or breastfeeding?",
+                                           "label" => "Are you currently pregnant, trying to get pregnant, or breastfeeding? (Options: Yes, No)",
                                            "type" => "radio",
                                            "name" => "pregnancy",
                                            "options" => [
@@ -564,7 +564,7 @@ QUESTION;
                                            "name" => "weight2"
                                        ],*/
                                        "weightunit" => [
-                                           "label" => "weight unit",
+                                           "label" => "weight unit (Options: kg, st/lbs)",
                                            "type" => "radio",
                                            "name" => "weightunit",
                                            "options" => [
@@ -583,7 +583,7 @@ QUESTION;
                                            "name" => "height2"
                                        ],*/
                                        "heightunit" => [
-                                           "label" => "height unit",
+                                           "label" => "height unit (Options: cm, ft/in)",
                                            "type" => "radio",
                                            "name" => "heightunit",
                                            "options" => [
@@ -592,7 +592,7 @@ QUESTION;
                                            ]
                                        ],
                                        "diabetes" => [
-                                           "label" => "Have you been diagnosed with diabetes?",
+                                           "label" => "Have you been diagnosed with diabetes? (Options: I have diabetes and take medication for it, I have diabetes and it's diet-controlled, No, but there is history of diabetes in my family, I have pre-diabetes, I don't have diabetes)",
                                            "type" => "radio",
                                            "name" => "diabetes",
                                            "options" => [
@@ -604,7 +604,7 @@ QUESTION;
                                            ]
                                        ],
                                        "conditions" => [
-                                           "label" => self::CONTRAINDICATIONS_QUESTION,
+                                           "label" => self::CONTRAINDICATIONS_QUESTION . " (Options: I have chronic malabsorption syndrome (problems absorbing food), I have cholestasis, I’m currently being treated for cancer, I have diabetic retinopathy, I have severe heart failure, I have a family history of thyroid cancer and/or I’ve had thyroid cancer, I have Multiple endocrine neoplasia type 2 (MEN2), I have a history of pancreatitis, I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder, I have had surgery or an operation to my thyroid, I have had a bariatric operation such as gastric band or sleeve surgery, None of these statements apply to me)",
                                            "type" => "checkbox",
                                            "name" => "conditions[]",
                                            "options" => [
@@ -623,7 +623,7 @@ QUESTION;
                                            ]
                                        ],
                                        "bariatricoperation" => [
-                                           "label" => "Was your bariatric operation in the last 6 months?",
+                                           "label" => "Was your bariatric operation in the last 6 months? (Options: Yes, No)",
                                            "type" => "radio",
                                            "name" => "bariatricoperation",
                                            "options" => [
@@ -647,7 +647,7 @@ QUESTION;
                                            "name" => "more_conditions"
                                        ],
                                        "conditions2" => [
-                                           "label" => self::COMORBIDITIES_QUESTION,
+                                           "label" => self::COMORBIDITIES_QUESTION . " (Options: I have been diagnosed with a mental health condition such as depression or anxiety, My weight makes me anxious in social situations, I have joint pains and/or aches, I have osteoarthritis, I have GORD and/or indigestion, I have a heart/cardiovascular problem, I’ve been diagnosed with, or have a family history of, high blood pressure, I’ve been diagnosed with, or have a family history of, high cholesterol, I have fatty liver disease, I have sleep apnoea, I have asthma or COPD, I have erectile dysfunction, I have low testosterone, I have menopausal symptoms, I have polycystic ovary syndrome (PCOS), None of these statements apply to me)",
                                            "type" => "checkbox",
                                            "name" => "conditions2[]",
                                            "options" => [
@@ -670,7 +670,7 @@ QUESTION;
                                            ]
                                        ],
                                        "medical_conditions" => [
-                                           "label" => "Do you have any other medical conditions?",
+                                           "label" => "Do you have any other medical conditions? (Options: Yes, No)",
                                            "type" => "radio",
                                            "name" => "medical_conditions",
                                            "options" => [
@@ -679,7 +679,7 @@ QUESTION;
                                            ]
                                        ],
                                        "medications" => [
-                                           "label" => "Have you ever taken any of the following medications to help you lose weight?",
+                                           "label" => "Have you ever taken any of the following medications to help you lose weight? (Options: Wegovy, Ozempic, Saxenda, Rybelsus, Mounjaro, Alli, Mysimba, Other, I have never taken medication to lose weight)",
                                            "type" => "checkbox",
                                            "name" => "medications[]",
                                            "options" => [
@@ -701,7 +701,7 @@ QUESTION;
                                            "name" => "weight-wegovy"
                                        ],
                                        "dose-wegovy" => [
-                                           "label" => "When was your last dose of the weight loss medication?",
+                                           "label" => "When was your last dose of the weight loss medication? (Options: Less than 4 weeks ago, 4–6 weeks ago, More than 6 weeks ago)",
                                            "type" => "radio",
                                            "name" => "dose-wegovy",
                                            "options" => [
@@ -711,7 +711,7 @@ QUESTION;
                                            ]
                                        ],
                                        "recently-dose-wegovy" => [
-                                           "label" => "What dose of the weight loss medication were you prescribed most recently?",
+                                           "label" => "What dose of the weight loss medication were you prescribed most recently? (Options: 0.25mg/2.5mg, 0.5mg/5mg, 1mg/7.5mg, 1.7mg/12.5mg, 2.4mg/15mg, Other)",
                                            "type" => "radio",
                                            "name" => "recently-dose-wegovy",
                                            "options" => [
@@ -724,7 +724,7 @@ QUESTION;
                                            ]
                                        ],
                                        "continue-dose-wegovy" => [
-                                           "label" => "What dose would you like to continue with?",
+                                           "label" => "What dose would you like to continue with? (Options: Increase my dose, Keep my dose, Decrease my dose, I don't want to continue with this medication)",
                                            "type" => "radio",
                                            "name" => "continue-dose-wegovy",
                                            "options" => [
@@ -735,7 +735,7 @@ QUESTION;
                                            ]
                                        ],
                                        "effects_with_wegovy" => [
-                                           "label" => "Have you experienced any side effects with the weight loss medication?",
+                                           "label" => "Have you experienced any side effects with the weight loss medication? (Options: Yes, No)",
                                            "type" => "radio",
                                            "name" => "effects_with_wegovy",
                                            "options" => [
@@ -749,7 +749,7 @@ QUESTION;
                                            "name" => "wegovy_side_effects"
                                        ],
                                        "other_medications" => [
-                                           "label" => "Do you currently take any other medication or supplements?",
+                                           "label" => "Do you currently take any other medication or supplements? (Options: I take other medication or supplements., I do not take other medication or supplements.)",
                                            "type" => "radio",
                                            "name" => "other_medications",
                                            "options" => [
@@ -763,7 +763,7 @@ QUESTION;
                                            "name" => "other_medication_details"
                                        ],
                                        "allergies" => [
-                                           "label" => "Do you have any allergies including to medication, food, environmental or anything else?",
+                                           "label" => "Do you have any allergies including to medication, food, environmental or anything else? (Options: Yes, I have allergies, No allergies, Prefer not to say)",
                                            "type" => "radio",
                                            "name" => "allergies",
                                            "options" => [
@@ -783,7 +783,7 @@ QUESTION;
                                            "name" => "other_medical_conditions"
                                        ],
                                        "gp_informed" => [
-                                           "label" => "Would you like your GP to be informed of this consultation?",
+                                           "label" => "Would you like your GP to be informed of this consultation? (Options: Yes, No)",
                                            "type" => "radio",
                                            "name" => "gp_informed",
                                            "options" => [
@@ -810,7 +810,7 @@ QUESTION;
                                            "step" => "gp_address"
                                        ],
                                        "nhs_summary_permission" => [
-                                           "label" => "Do you give permission for our clinical team to access your NHS Summary Care Record?",
+                                           "label" => "Do you give permission for our clinical team to access your NHS Summary Care Record? (Options: Yes, No)",
                                            "type" => "checkbox",
                                            "name" => "nhs_summary_permission",
                                            "options" => [
