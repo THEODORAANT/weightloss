@@ -73,7 +73,7 @@ return [
             'step' => 'weight',
         ],
         'weightunit' => [
-            'label' => 'Weight unit',
+            'label' => 'Weight unit (Options: kg, st/lbs)',
             'type' => 'radio',
             'name' => 'weightradio-unit',
             'options' => [
@@ -83,7 +83,7 @@ return [
             'step' => 'weight',
         ],
         'side_effects' => [
-            'label' => 'Have you experienced any side effects whilst taking the medication?',
+            'label' => 'Have you experienced any side effects whilst taking the medication? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'side_effects',
             'options' => [
@@ -106,7 +106,7 @@ return [
             'step' => 'more_side_effects',
         ],
         'additional_medication' => [
-            'label' => 'Have you started taking any additional medication?',
+            'label' => 'Have you started taking any additional medication? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'additional-medication',
             'options' => [
@@ -128,7 +128,7 @@ return [
             'step' => 'list_additional_medication',
         ],
         'rate_current_experience' => [
-            'label' => 'Are you happy with your monthly weight loss?',
+            'label' => 'Are you happy with your monthly weight loss? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'rate_current_experience',
             'options' => [
@@ -151,7 +151,7 @@ return [
             'step' => 'no-happy',
         ],
         'chat_with_us' => [
-            'label' => 'Would you like to chat with someone?',
+            'label' => 'Would you like to chat with someone? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'chat_with_us',
             'options' => [
@@ -161,7 +161,7 @@ return [
             'step' => 'chat_with_us',
         ],
          'consent_confirmation' => [
-            'label' => 'I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately.',
+            'label' => 'I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately. (Options: Yes)',
                     'type' => 'radio',
                     'name' => 'consent_confirmation',
                     'options' => [
@@ -173,7 +173,7 @@ return [
     'first-order' => [
     	'consultation'=>"You are completing this consultation for yourself, providing information to the best of your knowledge.You agree to disclose any medical conditions, serious illnesses, or past surgeries, as well as any prescription medications you are currently taking. Additionally, you acknowledge that you will use only one weight loss treatment at a time.By proceeding, you confirm your acceptance of our Terms & Conditions, Privacy Policy and acknowledge that you have read our Privacy Policy.It is essential to provide honest and accurate responses to this online questionnaire. Withholding or misrepresenting information can pose serious health risks, including life-threatening consequences. By submitting this questionnaire, you affirm that your responses are truthful and understand the potential dangers of misinformation.",
         'age' => [
-            'label' => 'How old are you?',
+            'label' => 'How old are you? (Options: Under 18, Older than 18 or Younger than 75, 75 or over)',
             'type' => 'radio',
             'name' => 'age',
             'options' => [
@@ -198,7 +198,7 @@ return [
             ],
         ],
         'ethnicity' => [
-            'label' => 'Which ethnicity are you?',
+            'label' => 'Which ethnicity are you? (Options: Asian or Asian British, Black (African/Caribbean), Mixed ethnicities, Other ethnic group, White, Prefer not to say)',
             'type' => 'radio',
             'name' => 'ethnicity',
             'options' => [
@@ -225,7 +225,7 @@ return [
             'step' => 'Mixed',
         ],
         'gender' => [
-            'label' => 'What sex were you assigned at birth?',
+            'label' => 'What sex were you assigned at birth? (Options: Male, Female)',
             'type' => 'radio',
             'name' => 'gender',
             'options' => [
@@ -242,7 +242,7 @@ return [
             ],
         ],
         'pregnancy' => [
-            'label' => 'Are you currently pregnant, trying to get pregnant, or breastfeeding?',
+            'label' => 'Are you currently pregnant, trying to get pregnant, or breastfeeding? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'pregnancy',
             'options' => [
@@ -270,7 +270,7 @@ return [
             'step' => 'weight',
         ],
         'weightunit' => [
-            'label' => 'Weight unit',
+            'label' => 'Weight unit (Options: kg, st/lbs)',
             'type' => 'radio',
             'name' => 'weightradio-unit',
             'options' => [
@@ -292,7 +292,7 @@ return [
             'step' => 'height',
         ],
         'heightunit' => [
-            'label' => 'Height unit',
+            'label' => 'Height unit (Options: cm, ft/in)',
             'type' => 'radio',
             'name' => 'heightunit-radio',
             'options' => [
@@ -302,7 +302,7 @@ return [
             'step' => 'height',
         ],
         'diabetes' => [
-            'label' => 'Have you been diagnosed with diabetes?',
+            'label' => 'Have you been diagnosed with diabetes? (Options: I have diabetes and take medication for it, I have diabetes and it\'s diet-controlled, No, but there is history of diabetes in my family, I have pre-diabetes, I don\'t have diabetes)',
             'type' => 'radio',
             'name' => 'diabetes',
             'options' => [
@@ -315,7 +315,7 @@ return [
             'step' => 'diabetes',
         ],
         'conditions' => [
-            'label' => $contraindicationsQuestionText,
+            'label' => $contraindicationsQuestionText . ' (Options: I have chronic malabsorption syndrome (problems absorbing food), I have cholestasis, I’m currently being treated for cancer, I have diabetic retinopathy, I have severe heart failure, I have a family history of thyroid cancer and/or I’ve had thyroid cancer, I have Multiple endocrine neoplasia type 2 (MEN2), I have a history of pancreatitis, I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder, I have had surgery or an operation to my thyroid, I have had a bariatric operation such as gastric band or sleeve surgery, None of these statements apply to me)',
             'type' => 'checkbox',
             'name' => 'conditions[]',
             'options' => [
@@ -356,7 +356,7 @@ return [
             ],
         ],
         'bariatricoperation' => [
-            'label' => 'Was your bariatric operation in the last 6 months?',
+            'label' => 'Was your bariatric operation in the last 6 months? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'bariatricoperation',
             'options' => [
@@ -390,7 +390,7 @@ return [
             'step' => 'more',
         ],
         'conditions2' => [
-            'label' => $comorbiditiesQuestionText,
+            'label' => $comorbiditiesQuestionText . ' (Options: I have been diagnosed with a mental health condition such as depression or anxiety, My weight makes me anxious in social situations, I have joint pains and/or aches, I have osteoarthritis, I have GORD and/or indigestion, I have a heart/cardiovascular problem, I’ve been diagnosed with, or have a family history of, high blood pressure, I’ve been diagnosed with, or have a family history of, high cholesterol, I have fatty liver disease, I have sleep apnoea, I have asthma or COPD, I have erectile dysfunction, I have low testosterone, I have menopausal symptoms, I have polycystic ovary syndrome (PCOS), None of these statements apply to me)',
             'type' => 'checkbox',
             'name' => 'conditions2[]',
             'options' => [
@@ -414,7 +414,7 @@ return [
             'step' => 'conditions',
         ],
         'medical_conditions' => [
-            'label' => 'Do you have any other medical conditions?',
+            'label' => 'Do you have any other medical conditions? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'medical_conditions',
             'options' => [
@@ -437,7 +437,7 @@ return [
             'step' => 'list_any',
         ],
         'medications' => [
-            'label' => 'Have you ever taken any of the following medications to help you lose weight?',
+            'label' => 'Have you ever taken any of the following medications to help you lose weight? (Options: Wegovy, Ozempic, Saxenda, Rybelsus, Mounjaro, Alli, Mysimba, Other, I have never taken medication to lose weight)',
             'type' => 'checkbox',
             'name' => 'medications[]',
             'options' => [
@@ -473,7 +473,7 @@ return [
             'step' => 'starting_wegovy',
         ],
         'unit-wegovy' => [
-            'label' => 'Weight before medication unit',
+            'label' => 'Weight before medication unit (Options: kg, st/lbs)',
             'type' => 'radio',
             'name' => 'unit-wegovy',
             'options' => [
@@ -483,7 +483,7 @@ return [
             'step' => 'starting_wegovy',
         ],
         'dose-wegovy' => [
-            'label' => 'When was your last dose of the weight loss medication?',
+            'label' => 'When was your last dose of the weight loss medication? (Options: Less than 4 weeks ago, 4-6 weeks ago, More than 6 weeks ago)',
             'type' => 'radio',
             'name' => 'dose-wegovy',
             'options' => [
@@ -494,7 +494,7 @@ return [
             'step' => 'dose_wegovy',
         ],
         'recently-dose-wegovy' => [
-            'label' => 'What dose of the weight loss medication were you prescribed most recently?',
+            'label' => 'What dose of the weight loss medication were you prescribed most recently? (Options: 0.25mg/2.5mg, 0.5mg/5mg, 1mg/7.5mg, 1.7mg/12.5mg, 2.4mg/15mg, Other)',
             'type' => 'radio',
             'name' => 'recently-dose-wegovy',
             'options' => [
@@ -508,7 +508,7 @@ return [
             'step' => 'recently_wegovy',
         ],
         'continue-dose-wegovy' => [
-            'label' => 'If you want to continue with the weight loss medication, what dose would you like to continue with?',
+            'label' => 'If you want to continue with the weight loss medication, what dose would you like to continue with? (Options: Increase my dose, Keep my dose, Decrease my dose, I don\'t want to continue with this medication)',
             'type' => 'radio',
             'name' => 'continue-dose-wegovy',
             'options' => [
@@ -520,7 +520,7 @@ return [
             'step' => 'continue_with_wegovy',
         ],
         'effects_with_wegovy' => [
-            'label' => 'Have you experienced any side effects with the weight loss medication?',
+            'label' => 'Have you experienced any side effects with the weight loss medication? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'effects_with_wegovy',
             'options' => [
@@ -543,7 +543,7 @@ return [
             'step' => 'wegovy_side_effects',
         ],
         'other_medications' => [
-            'label' => 'Do you currently take any other medication or supplements?',
+            'label' => 'Do you currently take any other medication or supplements? (Options: I take other medication or supplements., I do not take other medication or supplements.)',
             'type' => 'radio',
             'name' => 'other_medications',
             'options' => [
@@ -566,7 +566,7 @@ return [
             'step' => 'medication_allergies',
         ],
         'allergies' => [
-            'label' => 'Do you have any allergies including to medication, food, environmental or anything else?',
+            'label' => 'Do you have any allergies including to medication, food, environmental or anything else? (Options: Yes, I have allergies, No allergies, Prefer not to say)',
             'type' => 'radio',
             'name' => 'allergies',
             'options' => [
@@ -590,7 +590,7 @@ return [
             'step' => 'medication_allergies',
         ],
         'gp_informed' => [
-            'label' => 'Would you like your GP to be informed of this consultation?',
+            'label' => 'Would you like your GP to be informed of this consultation? (Options: Yes, No)',
             'type' => 'radio',
             'name' => 'gp_informed',
             'options' => [
