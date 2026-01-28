@@ -399,7 +399,7 @@ QUESTION;
             "name" => "weight2"
         ],*/
         "weightunit" => [
-            "label" => "Weight Unit (kg or st/lbs)",
+            "label" => "Weight Unit (Options: kg, st/lbs)",
             "type" => "radio",
             "name" => "weightradio-unit",
             "options" => [
@@ -408,7 +408,7 @@ QUESTION;
             ]
         ],
         "pregnancy_status" => [
-            "label" => "Are you pregnant or trying to conceive?",
+            "label" => "Are you pregnant or trying to conceive? (Options: Yes, No)",
             "type" => "button",
             "name" => "pregnancy_status",
             "options" => [
@@ -417,7 +417,7 @@ QUESTION;
             ]
         ],
         "side_effects" => [
-            "label" => "Have you experienced any side effects whilst taking the medication?",
+            "label" => "Have you experienced any side effects whilst taking the medication? (Options: Yes, No)",
             "type" => "button",
             "name" => "side_effects",
             "options" => [
@@ -431,7 +431,7 @@ QUESTION;
             "name" => "more_side_effects"
         ],
         "additional-medication" => [
-            "label" => "Have you started taking any additional medication?",
+            "label" => "Have you started taking any additional medication? (Options: Yes, No)",
             "type" => "button",
             "name" => "additional-medication",
             "options" => [
@@ -445,7 +445,7 @@ QUESTION;
             "name" => "list_additional_medication"
         ],
         "rate_current_experience" => [
-            "label" => "Are you happy with your monthly weight loss?",
+            "label" => "Are you happy with your monthly weight loss? (Options: Yes, No)",
             "type" => "button",
             "name" => "rate_current_experience",
             "options" => [
@@ -459,7 +459,7 @@ QUESTION;
             "name" => "no_happy_reasons"
         ],
         "chat_with_us" => [
-            "label" => "Would you like to chat with someone?",
+            "label" => "Would you like to chat with someone? (Options: Yes, No)",
             "type" => "button",
             "name" => "chat_with_us",
             "options" => [
@@ -468,7 +468,7 @@ QUESTION;
             ]
         ],
         "nhs_summary_permission" => [
-            "label" => "Do you give permission for our clinical team to access your NHS Summary Care Record?",
+            "label" => "Do you give permission for our clinical team to access your NHS Summary Care Record? (Options: Yes, No)",
             "type" => "checkbox",
             "name" => "nhs_summary_permission",
             "options" => [
@@ -477,7 +477,7 @@ QUESTION;
             ]
         ],
          "consent_confirmation" => [
-        "consent_confirmation"=>"I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately.",
+        "consent_confirmation"=>"I will be the sole user of the medication. I will read all relevant information before starting treatment. I will inform the clinical team of any changes to my medical history. I understand that severe diarrhoea for over 24 hours or vomiting within 3 hours of taking the contraceptive pill can reduce its effectiveness. If this happens, I will call my GP or 111 for advice. I understand I may need a repeat dose of the contraceptive pill or to use additional contraception. I will stop the medication if I fall pregnant or try to conceive, and I will let the clinicians know about these changes. I will contact the clinicians if I miss two or more doses. I understand medication may be prescribed off-label when clinically appropriate. I understand that rapid weight loss and injectable weight loss treatments like Mounjaro and Wegovy can both raise the risk of pancreatitis and gallbladder issues. If I have severe abdominal pain, vomiting, jaundice (yellowing of the skin), or worsening symptoms, I will seek urgent medical help. I understand that injectable weight loss treatments like Mounjaro and Wegovy should not be combined with other weight loss medications. I recognise that these treatments may affect my mood. If I experience low mood or any mental health issues, I will stop the treatment and consult a doctor immediately. (Options: Yes)",
                     "type" => "button",
                     "name" => "consent_confirmation",
                     "options" => [
