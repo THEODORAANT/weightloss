@@ -23,7 +23,7 @@ class PerchMembers_Documents extends PerchAPI_Factory
            return $this->db->get_row($sql);
        }
 
-        public function update_document_status($documentID,$status)
+        public function update_document_status($documentID, $status, $note = '')
        {
        $Document = $this->find((int)$documentID);
        if (!$Document) {
@@ -36,7 +36,7 @@ class PerchMembers_Documents extends PerchAPI_Factory
        $r = $this->db->update($this->table, $updatedata, $this->pk, $documentID );
 
        if ($r && $status === 'rerequest' && $previousStatus !== 'rerequest') {
-           $this->send_document_rerequest_email($Document);
+           $this->send_document_rerequest_email($Document, $note);
        }
 
        return $r;
@@ -83,7 +83,7 @@ class PerchMembers_Documents extends PerchAPI_Factory
        ];
         }
 
-       protected function send_document_rerequest_email(PerchMembers_Document $Document)
+       protected function send_document_rerequest_email(PerchMembers_Document $Document, $note = '')
        {
        if (!$this->api) {
            return;
@@ -136,6 +136,10 @@ class PerchMembers_Documents extends PerchAPI_Factory
            'document_upload_date'  => $formattedUploadDate,
            'login_page'            => $loginPage,
        ];
+
+       if (trim((string)$note) !== '') {
+           $emailData['document_rejection_reason'] = $note;
+       }
 
        $Email = $this->api->get('Email');
        $Email->set_template('members/emails/document_rerequest_notification.html');
