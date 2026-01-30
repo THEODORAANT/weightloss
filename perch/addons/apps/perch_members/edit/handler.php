@@ -59,6 +59,10 @@
                 } elseif (isset($data['selectedValue'])) {
                     $status = (string) $data['selectedValue'];
                 }
+                $note = '';
+                if (isset($data['note'])) {
+                    $note = trim((string) $data['note']);
+                }
 
                 $allowed_statuses = ['pending', 'accepted', 'declined', 'rerequest'];
 
@@ -72,7 +76,7 @@
                     break;
                 }
 
-                $updated = $Documents->update_document_status($documentId, $status);
+                $updated = $Documents->update_document_status($documentId, $status, $note);
 
                 if ($updated) {
                     $response = [

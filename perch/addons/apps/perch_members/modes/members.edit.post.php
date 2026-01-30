@@ -138,6 +138,10 @@
                                     echo '<option value="'.PerchUtil::html($value).'"'.$selected.'>'.PerchUtil::html($label).'</option>';
                                 }
                                 echo '</select>';
+                                echo '<label class="document-status-note">';
+                                echo '<span class="note-label">Document notification</span>';
+                                echo '<textarea id="document-note-'.$document_id.'" class="document-status-note-input" data-document-id="'.$document_id.'" placeholder="Add a note for the member (optional)." rows="3"></textarea>';
+                                echo '</label>';
                                 echo '<span class="document-status-result" id="document-result-'.$document_id.'"></span>';
                             echo '</span>';
                         echo '</td>';

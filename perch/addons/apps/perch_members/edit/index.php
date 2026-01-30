@@ -72,6 +72,8 @@ echo <<<'JS'
       select.addEventListener('change', function () {
         const documentId = this.dataset.documentId;
         const status = this.value;
+        const noteField = document.querySelector('.document-status-note-input[data-document-id="' + documentId + '"]');
+        const note = noteField ? noteField.value.trim() : '';
 
         if (!documentId) {
           return;
@@ -80,7 +82,8 @@ echo <<<'JS'
         sendRequest({
           action: 'update-status',
           documentId: parseInt(documentId, 10),
-          status: status
+          status: status,
+          note: note
         })
           .then(function (data) {
             const message = data.message || 'Saved';

@@ -36,6 +36,10 @@
                                 <p><strong>Document:</strong> <perch:email id="document_name" /><br />
                                 <strong>Type:</strong> <perch:email id="document_type" /><br />
                                 <perch:if exists="document_upload_date"><strong>Last uploaded:</strong> <perch:email id="document_upload_date" /></perch:if></p>
+                                <perch:if exists="document_rejection_reason">
+                                    <p><strong>What needs updating:</strong><br />
+                                    <perch:email id="document_rejection_reason" /></p>
+                                </perch:if>
                                 <p>Please log in to your account to provide the requested document:</p>
                                 <p><a href="<perch:email id='login_page' />" style="color: #0055A5;">Log in to your account</a></p>
                                 <p>If you have any questions, reply to this email and our team will be happy to help.</p>
