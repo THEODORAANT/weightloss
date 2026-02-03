@@ -1,5 +1,6 @@
 <?php
 include(__DIR__ .'/../../../../core/runtime/runtime.php');
+require_once __DIR__ . '/lib/comms_sync.php';
 
 
 require_once __DIR__ . '/../auth.php';
@@ -117,6 +118,7 @@ if (!empty($shippingData)) {
 }
 
 if (perch_member_api_update_profile($payload['user_id'], $data)) {
+    comms_sync_member((int)$payload['user_id']);
     echo json_encode(["success" => true]);
 } else {
     http_response_code(400);

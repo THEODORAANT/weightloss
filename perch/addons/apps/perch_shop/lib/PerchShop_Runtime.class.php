@@ -1244,7 +1244,7 @@ public function get_package_future_items($opts){
                                 perch_member_register_referral($Customer->memberID(), $referrer);
                           }
 
-
+                          $this->sync_comms_member($Customer->memberID());
 
    if (!isset($_SESSION['perch_shop_package_id']) && isset($_COOKIE['perch_shop_package_id'])) {
               $_SESSION['perch_shop_package_id'] = $_COOKIE['perch_shop_package_id'];
@@ -1278,11 +1278,24 @@ public function get_package_future_items($opts){
 			$Customers = new PerchShop_Customers($this->api);
 			$Customer = $Customers->find_from_logged_in_member();
 			$Customer->update_from_form($SubmittedForm);
-			
+			$this->sync_comms_member($Customer->memberID());
 
 			$this->set_location_from_address($this->billingAddress);
 		}
 
+        }
+
+        private function sync_comms_member($memberID)
+        {
+                if (!defined('PERCH_PATH')) {
+                        return;
+                }
+
+                require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_sync.php';
+
+                if (function_exists('comms_sync_member')) {
+                        comms_sync_member((int)$memberID);
+                }
         }
 
         private function get_shipping_field_names()

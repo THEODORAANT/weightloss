@@ -8,6 +8,9 @@ if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
 if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
     $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
 }
+if (defined('PERCH_PATH')) {
+    require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_sync.php';
+}
 
       // your 'success' and 'failure' URLs
 
@@ -47,6 +50,13 @@ if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_r
                     $orderIdForQuestionnaire = $ActiveOrder->id();
                 }
             }
+        }
+        if ($orderIdForQuestionnaire && function_exists('comms_sync_order')) {
+            $memberId = null;
+            if (function_exists('perch_member_logged_in') && perch_member_logged_in()) {
+                $memberId = perch_member_get('id');
+            }
+            comms_sync_order((int)$orderIdForQuestionnaire, $memberId ? (int)$memberId : null);
         }
 
         if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){

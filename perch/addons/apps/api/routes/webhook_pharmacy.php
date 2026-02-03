@@ -1,5 +1,6 @@
 <?php
 include(__DIR__ . '/../../../../core/runtime/runtime.php');
+require_once __DIR__ . '/lib/comms_sync.php';
 
 $secret = 'l0ss_ky_9harCY';
 $rawData = file_get_contents('php://input');
@@ -72,6 +73,11 @@ if (!empty($updates)) {
     }
     $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $setParts) . ', updated_at=' . $db->pdb(date('Y-m-d H:i:s')) . ' WHERE pharmacy_orderID=' . $db->pdb($orderNumber) . ' LIMIT 1';
     $db->execute($sql);
+}
+
+$orderID = isset($existing['orderID']) ? (int)$existing['orderID'] : 0;
+if ($orderID > 0) {
+    comms_sync_order($orderID);
 }
 
 $logFile = __DIR__ . '/webhook_log.txt';
