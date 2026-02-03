@@ -509,7 +509,7 @@
                                     echo '</td>';
                                     echo '<td class="action">';
                                     if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
-                                        echo '<button type="submit" style="background-color:#199d19" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Send to pharmacy</button>';
+                                        echo '<button type="submit" style="background-color:#199d19" class="button button-simple" name="send_note_to_pharmacy" value="'.(int)$Note->id().'">Push to pharmacy</button>';
                                     }
                                     echo '</td>';
                               echo '</tr>';
