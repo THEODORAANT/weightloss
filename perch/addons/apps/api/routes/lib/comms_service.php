@@ -3,12 +3,18 @@
 function comms_service_base_url(): string
 {
     $base = getenv('COMMS_SERVICE_URL') ?: '';
+    if ($base === '' && defined('COMMS_SERVICE_URL')) {
+        $base = COMMS_SERVICE_URL;
+    }
     return rtrim($base, '/');
 }
 
 function comms_service_auth_header(): ?string
 {
     $token = getenv('COMMS_SERVICE_TOKEN') ?: '';
+    if ($token === '' && defined('COMMS_SERVICE_TOKEN')) {
+        $token = COMMS_SERVICE_TOKEN;
+    }
     if ($token === '') {
         return null;
     }

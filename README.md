@@ -124,6 +124,13 @@ The self-hosted chat system lets members talk directly with the support team ins
 
 Perch should call the Comms Service endpoints below to keep member, order, note, and message data in sync. Order-scoped notes require an order link to exist first, so always link orders before sending order notes.
 
+### Configuration
+
+Define these environment variables in the web server/PHP-FPM environment (or container) so the Comms Service client can authenticate and build requests:
+
+- `COMMS_SERVICE_URL` – Base URL for the Comms Service (e.g. `https://comms.example.com`).
+- `COMMS_SERVICE_TOKEN` – Bearer token for the Comms Service API.
+
 ### Link members (create/update)
 
 ```
