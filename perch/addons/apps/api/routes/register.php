@@ -5,6 +5,7 @@
 //require_once '/perch/addons/apps/perch_members/PerchMembers_Member.class.php';
 //require_once __DIR__ . '/../../perch_members/PerchMembers_Member.class.php';
 include(__DIR__ .'/../../../../core/runtime/runtime.php');
+require_once __DIR__ . '/lib/comms_sync.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -25,6 +26,7 @@ $data["device"]="app";
 $memberID=perch_member_api_register($data);
 if ($memberID) {
     if(perch_shop_register_customer_from_api($memberID,$data)){
+      comms_sync_member((int)$memberID);
       echo json_encode(["success" => true]);
     }
 
@@ -32,4 +34,3 @@ if ($memberID) {
     http_response_code(500);
     echo json_encode(["error" => "Registration failed"]);
 }
-
