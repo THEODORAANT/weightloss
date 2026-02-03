@@ -16,6 +16,6 @@
 // ));
 // "
 
-if (!defined('COMMS_SERVICE_URL')) {
-    define('COMMS_SERVICE_URL', getenv('COMMS_SERVICE_URL') ?: '');
-}
+
+define('COMMS_SERVICE_URL', 'https://gwlcomms.azurewebsites.net');
+
