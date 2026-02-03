@@ -604,7 +604,7 @@ QUESTION;
                                            ]
                                        ],
                                        "conditions" => [
-                                           "label" => self::CONTRAINDICATIONS_QUESTION . " (Options: I have chronic malabsorption syndrome (problems absorbing food), I have cholestasis, I’m currently being treated for cancer, I have diabetic retinopathy, I have severe heart failure, I have a family history of thyroid cancer and/or I’ve had thyroid cancer, I have Multiple endocrine neoplasia type 2 (MEN2), I have a history of pancreatitis, I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder, I have had surgery or an operation to my thyroid, I have had a bariatric operation such as gastric band or sleeve surgery, None of these statements apply to me)",
+                                           "label" => self::CONTRAINDICATIONS_QUESTION ,
                                            "type" => "checkbox",
                                            "name" => "conditions[]",
                                            "options" => [
@@ -647,7 +647,7 @@ QUESTION;
                                            "name" => "more_conditions"
                                        ],
                                        "conditions2" => [
-                                           "label" => self::COMORBIDITIES_QUESTION . " (Options: I have been diagnosed with a mental health condition such as depression or anxiety, My weight makes me anxious in social situations, I have joint pains and/or aches, I have osteoarthritis, I have GORD and/or indigestion, I have a heart/cardiovascular problem, I’ve been diagnosed with, or have a family history of, high blood pressure, I’ve been diagnosed with, or have a family history of, high cholesterol, I have fatty liver disease, I have sleep apnoea, I have asthma or COPD, I have erectile dysfunction, I have low testosterone, I have menopausal symptoms, I have polycystic ovary syndrome (PCOS), None of these statements apply to me)",
+                                           "label" => self::COMORBIDITIES_QUESTION ,
                                            "type" => "checkbox",
                                            "name" => "conditions2[]",
                                            "options" => [
@@ -857,12 +857,12 @@ QUESTION;
     // "height2"=>"",
     "heightunit"=>"height unit (Options: cm, ft/in)",
     "diabetes"=>"Have you been diagnosed with diabetes? (Options: I have diabetes and take medication for it, I have diabetes and it's diet-controlled, No, but there is history of diabetes in my family, I have pre-diabetes, I don't have diabetes)",
-    "conditions"=>self::CONTRAINDICATIONS_QUESTION . " (Options: I have chronic malabsorption syndrome (problems absorbing food), I have cholestasis, I’m currently being treated for cancer, I have diabetic retinopathy, I have severe heart failure, I have a family history of thyroid cancer and/or I’ve had thyroid cancer, I have Multiple endocrine neoplasia type 2 (MEN2), I have a history of pancreatitis, I have or have had an eating disorder such as bulimia, anorexia nervosa, or a binge eating disorder, I have had surgery or an operation to my thyroid, I have had a bariatric operation such as gastric band or sleeve surgery, None of these statements apply to me)",
+    "conditions"=>self::CONTRAINDICATIONS_QUESTION ,
     "bariatricoperation"=>"Was your bariatric operation in the last 6 months? (Options: Yes, No)",
     "more_pancreatitis"=>"Tell me about your gastric surgery procedure.",
     "thyroidoperation"=>"Please tell us further details on the thyroid surgery you had, the outcome of the surgery and any ongoing monitoring",
     "more_conditions"=>"Please tell us more about your mental health condition and how you manage it",
-   "label" => self::COMORBIDITIES_QUESTION . " (Options: I have been diagnosed with a mental health condition such as depression or anxiety, My weight makes me anxious in social situations, I have joint pains and/or aches, I have osteoarthritis, I have GORD and/or indigestion, I have a heart/cardiovascular problem, I’ve been diagnosed with, or have a family history of, high blood pressure, I’ve been diagnosed with, or have a family history of, high cholesterol, I have fatty liver disease, I have sleep apnoea, I have asthma or COPD, I have erectile dysfunction, I have low testosterone, I have menopausal symptoms, I have polycystic ovary syndrome (PCOS), None of these statements apply to me)",
+   "label" => self::COMORBIDITIES_QUESTION ,
     "medical_conditions"=>"Do you have any other medical conditions? (Options: Yes, No)",
     "medications"=>"Have you ever taken any of the following medications to help you lose weight? (Options: Wegovy, Ozempic, Saxenda, Rybelsus, Mounjaro, Alli, Mysimba, Other, I have never taken medication to lose weight)",
     "weight-wegovy"=>"What was your weight in kg before starting the weight loss medication?",

@@ -3,7 +3,7 @@
   <!--  <a href="/shop" class="text-[#3328bf] hover:text-[#2a21a3]">← Back to shop</a>-->
     <perch:if exists="category_slug">
         <span class="mx-[8px] text-slate-300">|</span>
-        <a href="/shop/products?category=<perch:show id="category_slug" />" class="text-[#3328bf] hover:text-[#2a21a3]">
+        <a href="/shop/products?category=<perch:shop id="category_slug" />" class="text-[#3328bf] hover:text-[#2a21a3]">
         Back to category
         </a>
     </perch:if>

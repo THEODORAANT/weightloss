@@ -18,24 +18,29 @@
       <?php
         $product_slug = perch_get('s');
         $category_slug = perch_get('category');
-        $category_title = $category_slug ? ucwords(str_replace('products/', ' ', $category_slug)) : null;
+       // $category_title = $category_slug ? ucwords(str_replace('products/', ' ', $category_slug)) : null;
  if (!$category_slug && $product_slug) {
           $product_data = perch_shop_product($product_slug, [
             'skip-template' => true,
           ]);
-
+          $product_data=$product_data[0];
+        //echo "product_data***"; print_r($product_data);
           if (is_array($product_data)) {
-            $category_slug = $product_data['category_slug'] ?? $product_data['category'] ?? $category_slug;
-
-            if (!$category_slug && !empty($product_data['category_slugs'])) {
-              $slugs = is_array($product_data['category_slugs'])
-                ? $product_data['category_slugs']
-                : preg_split('/\s+/', (string) $product_data['category_slugs']);
+          /*  $category_slug = $product_data['category_slug'] ?? $product_data['category'] ?? $category_slug;
+  echo "category_slug*2**"; print_r($category_slug);
+            if (!$category_slug && !empty($product_data['category_slug'])) {
+              $slugs = is_array($product_data['category_slug'])
+                ? $product_data['category_slug']
+                : preg_split('/\s+/', (string) $product_data['category_slug']);
               $category_slug = $slugs[0] ?? $category_slug;
-            }
+            }*/
 
-            if (!$category_slug && !empty($product_data['categories']) && is_array($product_data['categories'])) {
-              $first_category = $product_data['categories'][0] ?? null;
+        //echo "category***"; print_r($product_data['category']);echo is_array($product_data['category']);
+            if (!$category_slug && is_array($product_data['category'])) {
+
+              $first_category = $product_data['category'][0] ?? null;
+              //echo "first_category";
+
               if (is_array($first_category)) {
                 $category_slug = $first_category['slug'] ?? $first_category['catSlug'] ?? $category_slug;
               } elseif (is_string($first_category)) {
@@ -44,18 +49,33 @@
             }
           }
         }
-        //echo "category_slug***"; echo $category_slug;
-        PerchSystem::set_var('category_slug', $category_slug);
+       // echo "category_slug***"; echo $category_slug;
+             $category_desc = null;
+                if ($category_slug && function_exists('perch_category')) {
+                  $category_data = perch_category($category_slug, [
+                    'set' => 'shop',
+                    'skip-template' => true,
+                  ]);
+                 // echo "category_data";
+//print_r($category_data);
+                  if (is_array($category_data)) {
+                    $category_desc = $category_data[0]['desc'] ?? null;
+                  }
+                }
+ $category_title =$category_data[0]['catTitle'];
+
+                PerchSystem::set_var('category_slug', $category_slug);
+                PerchSystem::set_var('category_desc', $category_desc);
       ?>
 
 
       <div class="text-center mb-[50px]">
         <span class="inline-flex items-center justify-center rounded-full bg-[#3328bf]/10 px-[18px] py-[6px] text-[12px] font-semibold uppercase tracking-[0.2em] text-[#3328bf]">Shop products</span>
         <h1 class="mt-[16px] text-[32px] md:text-[40px] font-semibold text-[#0f172a]">
-          <?php echo $category_title ? PerchUtil::html($category_title) . ' accessories' : 'Browse our shop'; ?>
+          <?php echo $category_title ? PerchUtil::html($category_title) : 'Browse our shop'; ?>
         </h1>
         <p class="mt-[12px] text-[16px] md:text-[18px] text-slate-600">
-          <?php   echo $category_title ? 'Explore everything in this category and compare the options.' : 'Explore our latest products and add your favorites to the cart in one click.'; ?>
+          <?php   echo $category_desc ? $category_desc : 'Explore our latest products and add your favorites to the cart in one click.'; ?>
 
                  </p>
       </div>
@@ -65,7 +85,7 @@
             ← Back to shop
           </a>
           <span class="text-slate-300">|</span>
-          <a href="/shop/products" class="inline-flex items-center gap-[6px] text-[#3328bf] hover:text-[#2a21a3]">
+          <a href="/shop" class="inline-flex items-center gap-[6px] text-[#3328bf] hover:text-[#2a21a3]">
             All categories
           </a>
           <?php if ($category_title) { ?>
@@ -82,7 +102,7 @@
  perch_categories([
            'filter'=> 'catID',
            'match'=> 'in',
-           'value'=> '3,5,6,9' ,
+           'value'=> '3,5,6,9,10' ,
             'set' => 'shop',
             'template' => 'shop-category-nav.html',
           ]); ?>

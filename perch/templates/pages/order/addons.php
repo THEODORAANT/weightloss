@@ -26,7 +26,7 @@
           <?php
             perch_shop_products([
               'template' => 'products/medical-list.html',
-              'category' => 'products/medical-tests',
+              'category' => 'products/optional-add-ons',
             ]);
           ?>
         </div>
