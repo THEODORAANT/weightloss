@@ -82,6 +82,12 @@ function comms_service_link_order(int $orderID, array $orderData = []): bool
     return comms_service_request('POST', '/v1/perch/orders/' . $orderID . '/link', $payload);
 }
 
+function comms_service_send_member_note(int $memberID, array $noteData = []): bool
+{
+    $payload = array_merge($noteData, ['memberID' => $memberID]);
+    return comms_service_request('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
+}
+
 function comms_service_base64url_encode(string $value): string
 {
     return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
