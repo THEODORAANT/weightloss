@@ -1,4 +1,6 @@
 <?php
+
+require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
     
     $Members = new PerchMembers_Members($API);
     $message = false;
@@ -139,21 +141,23 @@
                         $noteText = trim((string) $Note->note_text());
                         $noteWithTimestamp = '['.$noteDateLabel.'] '.$noteText;
 
-                        $pharmacy_api = new PerchMembers_PharmacyApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
-                        $apiResponse = $pharmacy_api->sendCustomerNote($memberEmail, $noteWithTimestamp, false);
+                        $notePayload = [
+                            'note_id' => $noteID,
+                            'note' => $noteWithTimestamp,
+                            'note_raw' => $noteText,
+                            'note_date' => $noteDateLabel,
+                            'added_by' => (string) $Note->addedBy(),
+                            'member_email' => $memberEmail,
+                            'escalate_clinical_review' => $should_escalate ? 1 : 0,
+                        ];
 
-                        if ($apiResponse['success']) {
+                        $sendSuccess = comms_service_send_member_note((int) $Member->id(), $notePayload);
+
+                        if ($sendSuccess) {
                             $message = $HTML->success_message('The note has been sent to the pharmacy.');
 
                             $statusValue = 'Sent';
-                            if (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['status']) && $apiResponse['data']['status'] !== '') {
-                                $statusValue = (string) $apiResponse['data']['status'];
-                            }
-
                             $statusMessage = null;
-                            if (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['message']) && $apiResponse['data']['message'] !== '') {
-                                $statusMessage = (string) $apiResponse['data']['message'];
-                            }
 
                             if ($should_escalate) {
                                 $properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
@@ -202,19 +206,7 @@
 
                             $NotePharmacyStatuses->record_sent_status((int) $Member->id(), (int) $Note->id(), $statusValue, $statusMessage);
                         } else {
-                            $errorMessage = 'The note could not be sent to the pharmacy.';
-
-                            if (isset($apiResponse['message']) && $apiResponse['message']) {
-                                $errorMessage .= ' '.$apiResponse['message'];
-                            } elseif (isset($apiResponse['data']) && is_array($apiResponse['data']) && isset($apiResponse['data']['message'])) {
-                                $errorMessage .= ' '.$apiResponse['data']['message'];
-                            }
-
-                            $message = $HTML->failure_message($errorMessage);
-
-                            if (isset($apiResponse['data']) && !is_string($apiResponse['data'])) {
-                                PerchUtil::debug($apiResponse['data'], 'error');
-                            }
+                            $message = $HTML->failure_message('The note could not be sent to the pharmacy.');
                         }
                     }
                 }
