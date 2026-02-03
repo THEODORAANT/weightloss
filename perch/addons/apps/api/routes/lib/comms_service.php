@@ -12,11 +12,13 @@ function comms_service_base_url(): string
 function comms_service_auth_header(): ?string
 {
     $token = getenv('COMMS_SERVICE_TOKEN') ?: '';
-    if ($token === '' && defined('COMMS_SERVICE_TOKEN')) {
-        $token = COMMS_SERVICE_TOKEN;
-    }
     if ($token === '') {
-        return null;
+        if (function_exists('comms_service_generate_token')) {
+            $token = comms_service_generate_token();
+        }
+        if ($token === '') {
+            return null;
+        }
     }
 
     return 'Authorization: Bearer ' . $token;
