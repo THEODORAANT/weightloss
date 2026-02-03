@@ -20,6 +20,16 @@ if (!defined('COMMS_SERVICE_URL')) {
     define('COMMS_SERVICE_URL', getenv('COMMS_SERVICE_URL') ?: '');
 }
 
+$commsToken = getenv('COMMS_SERVICE_TOKEN') ?: '';
+if ($commsToken === '') {
+    if (defined('PERCH_PATH')) {
+        require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
+    }
+    if (function_exists('comms_service_generate_token')) {
+        $commsToken = comms_service_generate_token();
+    }
+}
+
 if (!defined('COMMS_SERVICE_TOKEN')) {
-    define('COMMS_SERVICE_TOKEN', getenv('COMMS_SERVICE_TOKEN') ?: '');
+    define('COMMS_SERVICE_TOKEN', $commsToken);
 }
