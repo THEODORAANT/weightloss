@@ -141,14 +141,20 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
                         $noteText = trim((string) $Note->note_text());
                         $noteWithTimestamp = '['.$noteDateLabel.'] '.$noteText;
 
+                        $addedBy = trim((string) $Note->addedBy());
                         $notePayload = [
                             'note_id' => $noteID,
                             'note' => $noteWithTimestamp,
                             'note_raw' => $noteText,
                             'note_date' => $noteDateLabel,
-                            'added_by' => (string) $Note->addedBy(),
+                            'added_by' => $addedBy,
                             'member_email' => $memberEmail,
                             'escalate_clinical_review' => $should_escalate ? 1 : 0,
+                            'note_type' => $should_escalate ? 'clinical_note' : 'admin_note',
+                            'body' => $noteText,
+                            'created_by' => [
+                                'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
+                            ],
                         ];
 
                         $sendSuccess = comms_service_send_member_note((int) $Member->id(), $notePayload);
