@@ -79,3 +79,41 @@ function comms_service_link_order(int $orderID, array $orderData = []): bool
     $payload = array_merge($orderData, ['orderID' => $orderID]);
     return comms_service_request('POST', '/v1/perch/orders/' . $orderID . '/link', $payload);
 }
+
+function comms_service_base64url_encode(string $value): string
+{
+    return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+}
+
+function comms_service_generate_token(string $secret = 'jwtgrtts', ?int $issuedAt = null): string
+{
+    $issuedAt = $issuedAt ?? time();
+
+    $header = [
+        'alg' => 'HS256',
+        'typ' => 'JWT',
+    ];
+
+    $payload = [
+        'tenant_id' => 'gwl-cy',
+        'actor' => [
+            'role' => 'admin',
+            'user_id' => 'cli',
+            'display_name' => 'CLI',
+        ],
+        'iss' => 'perch',
+        'aud' => 'comms-service',
+        'iat' => $issuedAt,
+        'exp' => $issuedAt + 3600,
+    ];
+
+    $segments = [
+        comms_service_base64url_encode(json_encode($header)),
+        comms_service_base64url_encode(json_encode($payload)),
+    ];
+
+    $signature = hash_hmac('sha256', implode('.', $segments), $secret, true);
+    $segments[] = comms_service_base64url_encode($signature);
+
+    return implode('.', $segments);
+}
