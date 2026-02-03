@@ -120,6 +120,53 @@ The self-hosted chat system lets members talk directly with the support team ins
 - The client navigation shows a red dot when a staff reply is waiting to be read.
 - Staff users can access **Members → Chat** in the Perch admin to review all conversations, reply, and close or reopen threads. The menu badge highlights how many chats are waiting for a staff response.
 
+## Perch Comms Service integration
+
+Perch should call the Comms Service endpoints below to keep member, order, note, and message data in sync. Order-scoped notes require an order link to exist first, so always link orders before sending order notes.
+
+### Link members (create/update)
+
+```
+POST /v1/perch/members/:memberID/link
+```
+
+Call when a member is created or when their email, phone, name, or pharmacy patient reference changes. The Comms Service upserts the member record and emits `member.link.updated`.
+
+### Link orders (create/update)
+
+```
+POST /v1/perch/orders/:orderID/link
+```
+
+Call on order creation and whenever the member or order status changes. This must happen before any order-scoped notes are created; otherwise, the notes endpoint returns a 400 error instructing you to link the order first.
+
+### Member/patient notes
+
+```
+GET  /v1/perch/members/:memberID/notes
+POST /v1/perch/members/:memberID/notes
+```
+
+Use these endpoints for patient-scoped notes (optionally pass `?scope=patient` when listing).
+
+### Order notes
+
+```
+GET  /v1/perch/orders/:orderID/notes
+POST /v1/perch/orders/:orderID/notes
+```
+
+Use these endpoints for order-scoped notes after the order is linked.
+
+### Member messages (chat)
+
+```
+GET  /v1/perch/members/:memberID/messages?channel=all
+POST /v1/perch/members/:memberID/messages
+```
+
+Use these endpoints to retrieve message history or send new admin↔patient and pharmacist↔patient messages. Messages are stored by `memberID` and channel.
+
 ## Product API
 
 - `GET /api/products/{id}` returns the specified product with all of its variants.
