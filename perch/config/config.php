@@ -19,7 +19,3 @@
 if (!defined('COMMS_SERVICE_URL')) {
     define('COMMS_SERVICE_URL', getenv('COMMS_SERVICE_URL') ?: '');
 }
-
-if (!defined('COMMS_SERVICE_TOKEN')) {
-    define('COMMS_SERVICE_TOKEN', getenv('COMMS_SERVICE_TOKEN') ?: '');
-}
