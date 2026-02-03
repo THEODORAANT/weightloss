@@ -5,18 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
+      <change afterPath="$PROJECT_DIR$/perch/config/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/PerchMembers_Questionnaires.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Product.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Product.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/orders/item.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/orders/item.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/shop-grid.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/shop-grid.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/shop-product.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/shop-product.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/variant.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/variant.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/categories/shop-category-nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/categories/shop-category-nav.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/global/new/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/global/new/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/addons.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/addons.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/shop/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/shop/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/shop/products.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/shop/products.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/config",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -65,11 +55,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch/config" />
       <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch/templates" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop" />
-      <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders" />
@@ -141,15 +131,7 @@
       <workItem from="1768470601217" duration="596000" />
       <workItem from="1768725058879" duration="19969000" />
       <workItem from="1769162579487" duration="14924000" />
-      <workItem from="1770111981285" duration="320000" />
-    </task>
-    <task id="LOCAL-00091" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1761819211541</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1761819211542</updated>
+      <workItem from="1770111981285" duration="3726000" />
     </task>
     <task id="LOCAL-00092" summary="weightloss">
       <option name="closed" value="true" />
@@ -535,7 +517,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769438044315</updated>
     </task>
-    <option name="localTasksCounter" value="140" />
+    <task id="LOCAL-00140" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1770112423567</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1770112423568</updated>
+    </task>
+    <option name="localTasksCounter" value="141" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
