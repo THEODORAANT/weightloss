@@ -139,6 +139,24 @@ POST /v1/perch/members/:memberID/link
 
 Call when a member is created or when their email, phone, name, or pharmacy patient reference changes. The Comms Service upserts the member record and emits `member.link.updated`.
 
+Required payload fields for the comms sync member add request:
+
+```
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "dob": "1990-05-15",
+  "phone": "+441234567890",
+  "gender": "Male",
+  "address1": "123 Main Street",
+  "city": "London",
+  "zip": "SW1A 1AA",
+  "country": "UK",
+  "createdAt": "2023-06-25T10:30:00.000Z",
+  "updatedAt": "2023-06-25T10:30:00.000Z"
+}
+```
+
 ### Link orders (create/update)
 
 ```
