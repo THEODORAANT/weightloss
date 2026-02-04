@@ -154,6 +154,7 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
                             'body' => $noteText,
                             'created_by' => [
                                 'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
+                                'role' => $addedBy !== '' ? 'admin' : 'system',
                             ],
                         ];
 
