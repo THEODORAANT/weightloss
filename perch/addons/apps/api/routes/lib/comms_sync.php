@@ -23,6 +23,23 @@ function comms_sync_member(int $memberID): bool
         $memberData = [];
     }
 
+    $addressData = [];
+    if (class_exists('PerchAPI') && class_exists('PerchShop_Customers')) {
+        $API = new PerchAPI(1.0, 'perch_shop');
+        $Customers = new PerchShop_Customers($API);
+        $Customer = $Customers->find_by_memberID($memberID);
+        if ($Customer instanceof PerchShop_Customer) {
+            $Addresses = new PerchShop_Addresses($API);
+            $Address = $Addresses->find_for_customer($Customer->id(), 'default');
+            if (!$Address instanceof PerchShop_Address) {
+                $Address = $Addresses->find_for_customer($Customer->id(), 'shipping');
+            }
+            if ($Address instanceof PerchShop_Address) {
+                $addressData = $Address->to_array();
+            }
+        }
+    }
+
     $firstName = trim((string)($memberData['first_name'] ?? ''));
     $lastName = trim((string)($memberData['last_name'] ?? ''));
     $name = trim($firstName . ' ' . $lastName);
@@ -34,10 +51,10 @@ function comms_sync_member(int $memberID): bool
     $dob = (string)($memberData['dob'] ?? '');
     $phone = (string)($memberData['phone'] ?? '');
     $gender = (string)($memberData['gender'] ?? '');
-    $address1 = (string)($memberData['address1'] ?? ($memberData['address_1'] ?? ''));
-    $city = (string)($memberData['city'] ?? '');
-    $zip = (string)($memberData['zip'] ?? ($memberData['postcode'] ?? ''));
-    $country = (string)($memberData['country'] ?? '');
+    $address1 = (string)($addressData['address_1'] ?? ($memberData['address1'] ?? ($memberData['address_1'] ?? '')));
+    $city = (string)($addressData['city'] ?? ($memberData['city'] ?? ''));
+    $zip = (string)($addressData['postcode'] ?? ($memberData['zip'] ?? ($memberData['postcode'] ?? '')));
+    $country = (string)($addressData['country_name'] ?? ($addressData['country'] ?? ($memberData['country'] ?? '')));
     $createdAt = comms_sync_format_datetime(
         (string)($memberData['memberCreated'] ?? ($memberData['createdAt'] ?? ''))
     );
