@@ -212,15 +212,32 @@ class PerchShop_Order extends PerchShop_Base
         }
 
 public function isReorder($Customer){
-		$Orders = new PerchShop_Orders($this->api);
-        //	$Customer = $Customers->find_from_logged_in_member();
-            $orders = $Orders->findAll_for_customer($Customer);
+		$Products = new PerchShop_Products($this->api);
+		$products = $Products->get_by_category('products/weight-loss');
 
-                if (PerchUtil::count($orders)>=2) {
+		if (!PerchUtil::count($products)) {
+			return false;
+		}
 
-                return true;
-                }
-                return false;
+		$product_ids = [];
+		foreach ($products as $Product) {
+			$product_ids[] = (int)$Product->id();
+		}
+
+		if (!PerchUtil::count($product_ids)) {
+			return false;
+		}
+
+		$db = PerchDB::fetch();
+		$Statuses = new PerchShop_OrderStatuses($this->api);
+		$sql = 'SELECT COUNT(DISTINCT o.orderID)
+				FROM '.PERCH_DB_PREFIX.'shop_orders o
+				INNER JOIN '.PERCH_DB_PREFIX.'shop_order_items oi ON oi.orderID = o.orderID
+				WHERE o.customerID='.$db->pdb((int)$Customer->id()).'
+					AND o.orderStatus IN ('.$db->implode_for_sql_in($Statuses->get_status_and_above('paid')).')
+					AND oi.productID IN ('.$db->implode_for_sql_in($product_ids).')';
+
+		return $db->get_count($sql) >= 2;
 	}
 	public function sendOrdertoPharmacy( $Customer){
 	   $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
@@ -234,7 +251,8 @@ public function isReorder($Customer){
         $OrderItems = new PerchShop_OrderItems($this->api);
          $Orders = new PerchShop_Orders($this->api);
         $items = $OrderItems->get_by('orderID', $this->id());
-            $reorder= $Orders->customer_has_paid_order( $Customer);
+            $ShopRuntime = PerchShop_Runtime::fetch();
+            $reorder = $ShopRuntime->customer_has_paid_order($Customer->memberID(), 'products/weight-loss');
                 $order_items = [];
                     $questions_items=[];
                $questionnaire_type="first-order";

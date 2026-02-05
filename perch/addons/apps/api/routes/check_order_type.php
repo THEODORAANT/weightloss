@@ -15,7 +15,7 @@ if (!$payload) {
 
 
 if (isset($payload['user_id'])) {
-$details = customer_has_paid_order($payload['user_id']);
+$details = customer_has_paid_order($payload['user_id'], 'products/weight-loss');
     echo json_encode(["is_reorder"=>$details]);
 } else {
     http_response_code(404);
