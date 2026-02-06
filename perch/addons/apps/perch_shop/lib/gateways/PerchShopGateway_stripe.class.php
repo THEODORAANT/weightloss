@@ -163,6 +163,9 @@ return true;
     $data_transaction = json_decode($response, true);
     if(isset($data_transaction['id'])){
       $Order->set_transaction_reference($data_transaction['id']);
+      if (!$Orders->is_order_send_to_pharmacy($Order->id())) {
+          $Order->sendOrdertoPharmacy($Customer);
+      }
        // return $data_transaction;
        return json_encode([
            "success" => true,
