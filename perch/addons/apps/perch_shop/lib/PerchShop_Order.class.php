@@ -240,8 +240,8 @@ public function isReorder($Customer){
 		return $db->get_count($sql) >= 2;
 	}
 	public function sendOrdertoPharmacy( $Customer){
-	   $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
-       	$Countries  = new PerchShop_Countries($this->api);
+        require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
+        $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
        	$Addresses  = new PerchShop_Addresses($this->api);
        $ShippingAddr = $Addresses->find((int)$this->orderShippingAddress());
            	$Members = new PerchMembers_Members($this->api);
@@ -419,42 +419,49 @@ public function isReorder($Customer){
 	print_r($order_items);
                       echo "ShippingAdr";
 	print_r($ShippingAddr);*/
+         $shippingAddressLine1 = '';
+         $shippingAddressLine2 = '';
+         $shippingCity = '';
+         $shippingPostCode = '';
+         $shippingCountry = '';
+
+         if ($ShippingAddr instanceof PerchShop_Address) {
+             $shippingAddressLine1 = $ShippingAddr->get('address_1') ?? '';
+             $shippingAddressLine2 = $ShippingAddr->get('address_2') ?? '';
+             $shippingCity = $ShippingAddr->get('city') ?? '';
+             $shippingPostCode = $ShippingAddr->get('postcode') ?? '';
+             $shippingCountry = $ShippingAddr->get_country_name() ?? '';
+         }
+
          $orderData = [
-             "customer" => [
-                 "name" => $Customer->customerFirstName()." ".$Customer->customerLastName(),
-                 "email" => $Customer->customerEmail(),
-                 "phone" =>$Member->phone(),
-                  "gender" =>$Member->gender(),
-                 "dob" => $Member->dob(),
-                 "addressLine1" => $ShippingAddr->get('address_1')!=null ? $ShippingAddr->get('address_1') : '',
-                 "addressLine2" => $ShippingAddr->get('address_2')!=null ? $ShippingAddr->get('address_2') : '',
-                 "city" =>  $ShippingAddr->get('city'),
-                 "county" => $ShippingAddr->get('county')!=null ? $ShippingAddr->get('county') : '',
-                 "postCode" =>$ShippingAddr->get('postcode'),
-                 "country" => $ShippingAddr->get_country_name()
-             ],
-             "items" => $order_items
-             ,
+             "status" => "PAYMENT_RECEIVED",
+             "customerId" => sprintf('GWL-CUST-%05d', (int)$Customer->id()),
+             "items" => $order_items,
              "shipping" => [
-                 "addressLine1" => $ShippingAddr->get('address_1'),
-                 "addressLine2" => $ShippingAddr->get('address_2')!=null ? $ShippingAddr->get('address_2') : '',
-                 "city" => $ShippingAddr->get('city'),
-                 "county" => $ShippingAddr->get('county')!=null ? $ShippingAddr->get('county') : '',
-                 "postCode" => $ShippingAddr->get('postcode'),
-                 "country" => $ShippingAddr->get_country_name()
+                 "addressLine1" => $shippingAddressLine1,
+                 "addressLine2" => $shippingAddressLine2,
+                 "city" => $shippingCity,
+                 "postCode" => $shippingPostCode,
+                 "country" => $shippingCountry
              ],
-             "assessment"=>$questions_items,
+             "assessment" => $questions_items,
              "notes" => $questionnaire_notes
          ];
-          // print_r($orderData);
-           $response =[];
-    $response = $pharmacy_api->createOrder($orderData);
+
+           $response = [];
+           $sendResult = comms_service_request('POST', '/v1/pharmacy/orders', $orderData);
+           $response = [
+               'success' => $sendResult,
+               'data' => [
+                   'message' => $sendResult ? 'Order sent to comms service.' : 'Failed to send order to comms service.'
+               ],
+           ];
                              //  echo "response";
          	//print_r($response);
          if($response["success"]){
     $pharmacy_data = [
                'orderID'    => $this->id(),
-               'pharmacy_orderID'    => $response["data"]["orderNumber"],
+               'pharmacy_orderID'    => $this->orderInvoiceNumber() ?: (string)$this->id(),
                'pharmacy_message' =>$response["data"]["message"],
            ];
          	}else{
@@ -502,6 +509,7 @@ return $response;
                         $Runtime = PerchShop_Runtime::fetch();
                         $Runtime->update_member_shipping_profile_from_address($ShippingAddress, $Customer->memberID());
                 }
+
         }
 
                 // Update stock levels
