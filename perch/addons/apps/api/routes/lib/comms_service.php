@@ -156,10 +156,40 @@ function comms_service_extract_notes(?array $response): array
     return [];
 }
 
+function comms_service_extract_customer_id(?array $response): string
+{
+    if (!$response) {
+        return '';
+    }
+
+    $candidates = [
+        $response['customerId'] ?? null,
+        $response['customer_id'] ?? null,
+        $response['data']['customerId'] ?? null,
+        $response['data']['customer_id'] ?? null,
+        $response['customer']['customerId'] ?? null,
+        $response['customer']['customer_id'] ?? null,
+    ];
+
+    foreach ($candidates as $candidate) {
+        if (is_string($candidate) && $candidate !== '') {
+            return $candidate;
+        }
+    }
+
+    return '';
+}
+
 function comms_service_link_member(int $memberID, array $memberData = []): bool
 {
     $payload = array_merge($memberData, ['memberID' => $memberID]);
     return comms_service_request('POST', '/v1/perch/members/' . $memberID . '/link', $payload);
+}
+
+function comms_service_link_member_response(int $memberID, array $memberData = []): ?array
+{
+    $payload = array_merge($memberData, ['memberID' => $memberID]);
+    return comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/link', $payload);
 }
 
 function comms_service_link_order(int $orderID, array $orderData = []): bool
