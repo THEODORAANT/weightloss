@@ -502,6 +502,7 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
     if (is_object($Member)) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
+        $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
         $documents = $Documents->get_for_member($Member->id());
           $questionnaire =  $Questionnaires->get_for_member($Member->id());
                   $notifications = $Notifications->get_for_member($Member->id());
@@ -510,6 +511,7 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
     }else{
         $tags = false;
          $notes = false;
+        $comms_member_notes = [];
         $documents = false;
         $questionnaire =false;
          $notifications = false;
