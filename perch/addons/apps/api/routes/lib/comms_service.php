@@ -70,6 +70,92 @@ function comms_service_request(string $method, string $path, array $payload = []
     return $status >= 200 && $status < 300;
 }
 
+function comms_service_request_json(string $method, string $path, array $payload = [], array $query = []): ?array
+{
+    $baseUrl = comms_service_base_url();
+    if ($baseUrl === '') {
+        return null;
+    }
+
+    $url = $baseUrl . $path;
+    if (!empty($query)) {
+        $separator = strpos($url, '?') === false ? '?' : '&';
+        $url .= $separator . http_build_query($query);
+    }
+
+    $ch = curl_init($url);
+
+    if ($ch === false) {
+        return null;
+    }
+
+    $headers = [
+        'Accept: application/json',
+    ];
+
+    $authHeader = comms_service_auth_header();
+    if ($authHeader) {
+        $headers[] = $authHeader;
+    }
+
+    $method = strtoupper($method);
+    if ($method === 'GET') {
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+    } else {
+        $jsonPayload = json_encode($payload);
+        if ($jsonPayload === false) {
+            return null;
+        }
+        $headers[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
+    }
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($response === false || $status < 200 || $status >= 300) {
+        return null;
+    }
+
+    $decoded = json_decode($response, true);
+    if (!is_array($decoded)) {
+        return null;
+    }
+
+    return $decoded;
+}
+
+function comms_service_extract_notes(?array $response): array
+{
+    if (!$response) {
+        return [];
+    }
+
+    if (isset($response['notes']) && is_array($response['notes'])) {
+        return $response['notes'];
+    }
+
+    if (isset($response['data']) && is_array($response['data'])) {
+        return $response['data'];
+    }
+
+    if (isset($response['items']) && is_array($response['items'])) {
+        return $response['items'];
+    }
+
+    if (isset($response[0]) && is_array($response[0])) {
+        return $response;
+    }
+
+    return [];
+}
+
 function comms_service_link_member(int $memberID, array $memberData = []): bool
 {
     $payload = array_merge($memberData, ['memberID' => $memberID]);
@@ -86,6 +172,12 @@ function comms_service_send_member_note(int $memberID, array $noteData = []): bo
 {
     $payload = array_merge($noteData, ['memberID' => $memberID]);
     return comms_service_request('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
+}
+
+function comms_service_get_member_notes(int $memberID): array
+{
+    $response = comms_service_request_json('GET', '/v1/perch/members/' . $memberID . '/notes');
+    return comms_service_extract_notes($response);
 }
 
 function comms_service_send_order_note(int $orderID, array $noteData = []): bool

@@ -529,6 +529,88 @@
               </div>
 <?php
 
+          echo $HTML->heading2('Member note replies');
+
+          ?>
+
+           <div class="form-inner">
+                  <table class="notes">
+                      <thead>
+                          <tr>
+                              <th>Reply</th>
+                              <th>Date</th>
+                              <th>From</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                  <?php
+                      if (PerchUtil::count($comms_member_notes)) {
+                          foreach ($comms_member_notes as $commsNote) {
+                              $replyText = '';
+                              $replyDate = '';
+                              $replyAuthor = '';
+
+                              if (is_array($commsNote)) {
+                                  if (isset($commsNote['reply'])) {
+                                      $replyText = (string) $commsNote['reply'];
+                                  } elseif (isset($commsNote['reply_text'])) {
+                                      $replyText = (string) $commsNote['reply_text'];
+                                  } elseif (isset($commsNote['note'])) {
+                                      $replyText = (string) $commsNote['note'];
+                                  } elseif (isset($commsNote['body'])) {
+                                      $replyText = (string) $commsNote['body'];
+                                  } elseif (isset($commsNote['message'])) {
+                                      $replyText = (string) $commsNote['message'];
+                                  }
+
+                                  if (isset($commsNote['created_at'])) {
+                                      $replyDate = (string) $commsNote['created_at'];
+                                  } elseif (isset($commsNote['createdAt'])) {
+                                      $replyDate = (string) $commsNote['createdAt'];
+                                  } elseif (isset($commsNote['sent_at'])) {
+                                      $replyDate = (string) $commsNote['sent_at'];
+                                  } elseif (isset($commsNote['note_date'])) {
+                                      $replyDate = (string) $commsNote['note_date'];
+                                  } elseif (isset($commsNote['date'])) {
+                                      $replyDate = (string) $commsNote['date'];
+                                  }
+
+                                  if (isset($commsNote['created_by']) && is_array($commsNote['created_by'])) {
+                                      $replyAuthor = (string) ($commsNote['created_by']['name'] ?? $commsNote['created_by']['email'] ?? '');
+                                  } elseif (isset($commsNote['createdBy']) && is_array($commsNote['createdBy'])) {
+                                      $replyAuthor = (string) ($commsNote['createdBy']['name'] ?? $commsNote['createdBy']['email'] ?? '');
+                                  } elseif (isset($commsNote['added_by'])) {
+                                      $replyAuthor = (string) $commsNote['added_by'];
+                                  } elseif (isset($commsNote['author'])) {
+                                      $replyAuthor = (string) $commsNote['author'];
+                                  }
+                              }
+
+                              $displayDate = '-';
+                              if ($replyDate !== '') {
+                                  $timestamp = strtotime($replyDate);
+                                  $displayDate = $timestamp ? date('d M Y H:i', $timestamp) : $replyDate;
+                              }
+
+                              echo '<tr>';
+                                  echo '<td>'.PerchUtil::html($replyText !== '' ? $replyText : '-').'</td>';
+                                  echo '<td>'.PerchUtil::html($displayDate).'</td>';
+                                  echo '<td>'.PerchUtil::html($replyAuthor !== '' ? $replyAuthor : '-').'</td>';
+                              echo '</tr>';
+                          }
+                      } else {
+                          echo '<tr>';
+                              echo '<td colspan="3">No replies found.</td>';
+                          echo '</tr>';
+                      }
+
+                  ?>
+
+                      </tbody>
+                  </table>
+              </div>
+<?php
+
           echo $HTML->heading2('Notifications');
 
           ?>
