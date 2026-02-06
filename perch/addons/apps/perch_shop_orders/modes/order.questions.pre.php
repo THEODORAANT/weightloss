@@ -16,6 +16,12 @@
         if (!class_exists('PerchMembers_Questionnaires')) {
             include_once(PERCH_PATH.'/addons/apps/perch_members/PerchMembers_Questionnaires.class.php');
         }
+        if (!function_exists('comms_service_send_order_note')) {
+            require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
+        }
+        if (!function_exists('comms_sync_order')) {
+            require_once __DIR__ . '/../../api/routes/lib/comms_sync.php';
+        }
 
         $MembersAPI = new PerchAPI(1.0, 'perch_members');
         $Questionnaires = new PerchMembers_Questionnaires($MembersAPI);
@@ -61,6 +67,44 @@
 
                     if ($updated) {
                         $message = $HTML->success_message('Questionnaire notes have been saved.');
+
+                        if ($note !== '' && function_exists('comms_sync_order') && function_exists('comms_service_send_order_note')) {
+                            $memberID = null;
+                            if (method_exists($Order, 'memberID')) {
+                                $memberID = $Order->memberID();
+                            }
+
+                            $orderLinked = comms_sync_order($order_id, $memberID !== null ? (int) $memberID : null);
+
+                            if ($orderLinked) {
+                                $noteDateLabel = date('Y-m-d H:i:s');
+                                $noteWithTimestamp = '[' . $noteDateLabel . '] ' . $note;
+
+                                $nameParts = [];
+                                if ($CurrentUser->userGivenName()) {
+                                    $nameParts[] = $CurrentUser->userGivenName();
+                                }
+                                if ($CurrentUser->userFamilyName()) {
+                                    $nameParts[] = $CurrentUser->userFamilyName();
+                                }
+                                $addedBy = trim(implode(' ', $nameParts)) ?: $CurrentUser->userUsername();
+
+                                $notePayload = [
+                                    'note' => $noteWithTimestamp,
+                                    'note_raw' => $note,
+                                    'note_date' => $noteDateLabel,
+                                    'added_by' => $addedBy,
+                                    'note_type' => 'admin_note',
+                                    'body' => $note,
+                                    'created_by' => [
+                                        'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
+                                        'role' => 'admin',
+                                    ],
+                                ];
+
+                                comms_service_send_order_note($order_id, $notePayload);
+                            }
+                        }
                     } else {
                         $message = $HTML->failure_message('Sorry, the notes could not be saved.');
                     }
@@ -213,4 +257,3 @@
         }else{
             PerchUtil::redirect($API->app_path());
         }
-
