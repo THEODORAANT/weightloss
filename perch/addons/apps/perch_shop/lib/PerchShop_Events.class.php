@@ -7,6 +7,9 @@ class PerchShop_Events
 		$Order = $Event->subject;
 		$status = $Event->args[0];
 //print_r($Order);echo "status"; echo $status;
+		if ($Order instanceof PerchShop_Order) {
+			self::sync_comms_order($Order);
+		}
 		if ($status) {
 			if ($status === 'paid') {
 				self::send_mounjaro_wegovy_guidance_email($Order);
@@ -39,6 +42,32 @@ class PerchShop_Events
 		}else{
 			#PerchUtil::debug($Event);
 		}
+	}
+
+	private static function sync_comms_order(PerchShop_Order $Order): void
+	{
+		if (!defined('PERCH_PATH')) {
+			return;
+		}
+
+		require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_sync.php';
+
+		if (!function_exists('comms_sync_order')) {
+			return;
+		}
+
+		$memberID = null;
+
+		if (class_exists('PerchAPI') && class_exists('PerchShop_Customers')) {
+			$API = new PerchAPI(1.0, 'perch_shop');
+			$Customers = new PerchShop_Customers($API);
+			$Customer = $Customers->find($Order->customerID());
+			if ($Customer instanceof PerchShop_Customer && $Customer->memberID()) {
+				$memberID = (int) $Customer->memberID();
+			}
+		}
+
+		comms_sync_order((int) $Order->id(), $memberID);
 	}
 
 	public static function register_member_login($Event)
