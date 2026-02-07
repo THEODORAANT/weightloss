@@ -435,7 +435,7 @@ public function isReorder($Customer){
 
          $orderData = [
              "status" => "PAYMENT_RECEIVED",
-             "customerId" => sprintf('GWL-CUST-%05d', (int)$Customer->id()),
+             "customerId" => $Customer->get('pharmacy_refid'),
              "items" => $order_items,
              "shipping" => [
                  "addressLine1" => $shippingAddressLine1,
