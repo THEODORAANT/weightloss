@@ -25,6 +25,7 @@ function comms_sync_member(int $memberID): bool
 
     $addressData = [];
     $Customer = null;
+     echo "sync_comms_member2";
     if (class_exists('PerchAPI') && class_exists('PerchShop_Customers')) {
         $API = new PerchAPI(1.0, 'perch_shop');
         $Customers = new PerchShop_Customers($API);
@@ -63,20 +64,22 @@ function comms_sync_member(int $memberID): bool
         (string)($memberData['memberUpdated'] ?? ($memberData['updatedAt'] ?? $memberData['memberCreated'] ?? ''))
     );
 
-    $payload = array_merge($memberData, [
+    $payload =  [
+      'first_name' =>$firstName,
+       'last_name' =>$lastName,
         'name' => $name,
         'email' => $email,
         'dob' => $dob,
         'phone' => $phone,
         'gender' => $gender,
-        'address1' => $address1,
+        'addressLine1' => $address1,
         'city' => $city,
-        'zip' => $zip,
-        'country' => $country,
+        'postCode' => $zip,
+        'country' => "UK",
         'createdAt' => $createdAt,
         'updatedAt' => $updatedAt,
-    ]);
-
+    ];
+ echo "sync_comms_member3";
     $response = comms_service_link_member_response($memberID, $payload);
     if ($response !== null) {
         $customerId = comms_service_extract_customer_id($response);

@@ -47,7 +47,7 @@ function comms_service_request(string $method, string $path, array $payload = []
     if ($authHeader) {
         $headers[] = $authHeader;
     }
-
+echo "auth";print_r($headers);
     $jsonPayload = json_encode($payload);
     if ($jsonPayload === false) {
         return false;
@@ -60,6 +60,8 @@ function comms_service_request(string $method, string $path, array $payload = []
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
+    echo "response"; print_r($response);
+    //die();exit();
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -116,6 +118,9 @@ function comms_service_request_json(string $method, string $path, array $payload
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
+        echo "responsejson"; print_r($response);
+        //die();exit();
+
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -221,7 +226,7 @@ function comms_service_base64url_encode(string $value): string
     return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
 }
 
-function comms_service_generate_token(string $secret = 'jwtgrtts', ?int $issuedAt = null): string
+function comms_service_generate_token(string $secret = '2wwTARwF19RYnS3POX/8UyP8eIKDhx2jjY479IeKGag=', ?int $issuedAt = null): string
 {
     $issuedAt = $issuedAt ?? time();
 
