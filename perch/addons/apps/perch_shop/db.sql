@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `__PREFIX__shop_cart` (
   `shippingAddress` char(128) DEFAULT NULL,
   `cartProperties` text,
   `cartDiscountCode` char(255) DEFAULT '',
+  `cartCompleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`cartID`)
 ) CHARSET=utf8;
 

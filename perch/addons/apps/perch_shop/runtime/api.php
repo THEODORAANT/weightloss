@@ -40,6 +40,18 @@ function perch_shop_createPaymentIntent_for_api($memberID,$payment_method,$order
 
 	}
 
+	function perch_shop_get_cart_for_api($member_id)
+	{
+		$ShopRuntime = PerchShop_Runtime::fetch();
+		return $ShopRuntime->get_cart_api($member_id);
+	}
+
+	function perch_shop_clear_cart_for_api($member_id)
+	{
+		$ShopRuntime = PerchShop_Runtime::fetch();
+		return $ShopRuntime->clear_cart_api($member_id);
+	}
+
 	function perch_shop_authPayment_for_api($memberID,$gateway){
 	 $Gateway = PerchShop_Gateways::get($gateway);
 

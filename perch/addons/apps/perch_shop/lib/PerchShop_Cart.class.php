@@ -665,13 +665,21 @@ public function add_cart_api($member_id,$product, $qty=1,$cart_id=0, $replace=fa
 			$location_id = $this->get_home_tax_location_id();
 		}
         if(!$cart_id){
-        $cart_id= $this->db->insert($this->table, [
+            // Look for existing open cart for this member (not yet checked out)
+            $sql = 'SELECT cartID FROM '.$this->table.' WHERE memberID='.$this->db->pdb((int)$member_id).' AND cartCompleted=0 ORDER BY cartID DESC LIMIT 1';
+            $existing_cart = $this->db->get_value($sql);
+
+            if ($existing_cart) {
+                $cart_id = (int)$existing_cart;
+            } else {
+                $cart_id = $this->db->insert($this->table, [
                     'memberID'       => $member_id,
                     'locationID'     => $location_id,
                     'currencyID'     => $currency_id,
                     'cartPricing'    => 'standard',
                     'cartProperties' => '[]',
-                    ]);
+                ]);
+            }
         }
 //echo "cart";echo $cart_id;
 //echo "memberID";echo $member_id;

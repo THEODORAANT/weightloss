@@ -691,14 +691,9 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 			$Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
 
 			if ($Order) {
-				//$this->Order = $Order;
-
-				//PerchShop_Session::set('shop_order_id', $Order->id());
-
-				//$Gateway = PerchShop_Gateways::get($gateway);
-               // $payment_opts["redirect"]=false;
-				//$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
-				//PerchUtil::debug($result);
+				// Mark cart as completed so it is not reused
+				$db = PerchDB::fetch();
+				$db->update(PERCH_DB_PREFIX.'shop_cart', ['cartCompleted' => 1], 'cartID', $cartID);
 				return  $Order->id() ;
 			}
 
@@ -712,6 +707,99 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
          			return false;
          		}
     	}
+public function checkout_questionnaire($orderIdForQuestionnaire)
+	{ echo "checkout_questionnaire"; echo $orderIdForQuestionnaire;
+if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
+    if (isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])) {
+        unset($_SESSION['questionnaire-reorder']['nextstep']);
+
+        perch_member_add_questionnaire($_SESSION['questionnaire-reorder'], 're-order', $orderIdForQuestionnaire);
+        $_SESSION['questionnaire_saved'] = true;
+    }
+
+    if (isset($_SESSION['questionnaire']) && !isset($_SESSION['questionnaire-reorder']["dose"])) {
+        $userId = $_SESSION['step_data']['user_id'];
+        $metadata = [
+            'user_id'    => $userId,
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'registered' => date('Y-m-d H:i:s')
+        ];
+        $logDir = '/var/www/html/logs';
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+
+        if (!is_dir($logDir) && !mkdir($logDir, 0755, true)) {
+            die("Failed to create log directory: $logDir");
+        }
+
+        $_SESSION['questionnaire']["multiple_answers"] = "No";
+
+        if (isset($_SESSION['answer_log'])) {
+            $rawLog = is_array($_SESSION['answer_log']) ? $_SESSION['answer_log'] : [];
+
+            if (file_put_contents("{$logDir}/{$userId}_raw_log.json", json_encode([
+                'metadata' => $metadata,
+                'log' => $rawLog
+            ], JSON_PRETTY_PRINT)) === false) {
+                die("Failed to write log file.");
+            }
+
+            $summary = perch_members_summarise_answer_log($rawLog);
+            $grouped = $summary['grouped'];
+
+            if (!empty($summary['has_changes'])) {
+                $_SESSION['questionnaire']["multiple_answers"] = "Yes-" . "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/questionnaire_logs/?userId=" . $userId;
+            }
+            $_SESSION['questionnaire']["documents"] = "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/edit/?id=" . perch_member_get('id');
+            //print_r( $_SESSION['questionnaire']);
+            perch_member_add_questionnaire($_SESSION['questionnaire'], 'first-order', $orderIdForQuestionnaire);
+
+            if (file_put_contents("{$logDir}/{$userId}_grouped_log.json", json_encode([
+                'metadata' => $metadata,
+                'grouped_log' => $grouped
+            ], JSON_PRETTY_PRINT)) === false) {
+                die("Failed to write log file.");
+            }
+            // Optional: clear the session log
+            unset($_SESSION['answer_log']);
+        }
+
+        $_SESSION['questionnaire_saved'] = true;
+    }
+}
+	}
+
+
+	public function get_cart_api($memberID)
+	{
+		$db = PerchDB::fetch();
+		$sql = 'SELECT cartID FROM '.PERCH_DB_PREFIX.'shop_cart WHERE memberID='.$db->pdb((int)$memberID).' AND cartCompleted=0 ORDER BY cartID DESC LIMIT 1';
+		$cart_id = $db->get_value($sql);
+
+		if (!$cart_id) {
+			return ['cart_id' => null, 'items' => []];
+		}
+
+		$Cart = new PerchShop_Cart($this->api);
+		$data = $Cart->calculate_cart_for_api((int)$cart_id);
+
+		return ['cart_id' => (string)$cart_id, 'raw_items' => isset($data['items']) ? $data['items'] : []];
+	}
+
+	public function clear_cart_api($memberID)
+	{
+		$db = PerchDB::fetch();
+		$sql = 'SELECT cartID FROM '.PERCH_DB_PREFIX.'shop_cart WHERE memberID='.$db->pdb((int)$memberID).' AND cartCompleted=0 ORDER BY cartID DESC LIMIT 1';
+		$cart_id = $db->get_value($sql);
+
+		if ($cart_id) {
+			$db->update(PERCH_DB_PREFIX.'shop_cart', ['cartCompleted' => 1], 'cartID', (int)$cart_id);
+		}
+
+		return true;
+	}
+
 	public function checkout($gateway, $payment_opts=[])
 	{
 		$this->init_cart();
@@ -740,7 +828,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 			if ($Order) {
 				$this->Order = $Order;
-
+                  $this->checkout_questionnaire($Order->id());
 				PerchShop_Session::set('shop_order_id', $Order->id());
 
 				$Gateway = PerchShop_Gateways::get($gateway);
@@ -846,8 +934,8 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 	}
 
 	public function get_active_order()
-	{
-		
+	{ echo "get_active_order";
+		print_r(PerchShop_Session::get('shop_order_id'));
 		if (PerchShop_Session::is_set('shop_order_id')) {
 			$orderID = PerchShop_Session::get('shop_order_id');
 			$Orders = new PerchShop_Orders($this->api);
