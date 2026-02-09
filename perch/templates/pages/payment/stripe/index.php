@@ -12,18 +12,6 @@ if (defined('PERCH_PATH')) {
     require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_sync.php';
 }
 
-      // your 'success' and 'failure' URLs
-
-    $success_url= "https://".$_SERVER['HTTP_HOST']."/payment/success";
-            if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
-    $success_url= "https://".$_SERVER['HTTP_HOST']."/client/order?id=".perch_shop_successful_order_id()."&success";
-
-
-}
-$cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
-//$success_url="/payment/success";
-//$cancel_url ="/payment/went/wrong";
-
         $orderIdForQuestionnaire = perch_shop_successful_order_id();
         if (!$orderIdForQuestionnaire) {
             $ShopRuntime = PerchShop_Runtime::fetch();
@@ -94,6 +82,18 @@ $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
                 $_SESSION['questionnaire_saved'] = true;
             }
         }
+
+      // your 'success' and 'failure' URLs
+
+    $success_url= "https://".$_SERVER['HTTP_HOST']."/payment/success";
+            if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
+    $success_url= "https://".$_SERVER['HTTP_HOST']."/client/order?id=".perch_shop_successful_order_id()."&success";
+
+
+}
+$cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
+//$success_url="/payment/success";
+//$cancel_url ="/payment/went/wrong";
 
 
         $order_complete = perch_shop_active_order_has_status(['paid', 'pending']);
