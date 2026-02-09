@@ -21,15 +21,15 @@ if (!$orderIdForQuestionnaire) {
  $return_url = '/payment/stripe';
   //$cancel_url = 'https://getweightloss-dev-d2c5gpf7asdvh3a2.uksouth-01.azurewebsites.net/payment/went/wrong';
   $cancel_url = '/payment/went/wrong';
-  if(isset($_GET["payment_method_types"])){
-   $payment_method_types="card";
-  $payment_method_types=$_GET["payment_method_types"];
+  $payment_method_types = 'card';
+  if (isset($_GET["payment_method_types"])) {
+    $payment_method_types = $_GET["payment_method_types"];
   }
  perch_shop_checkout('stripe', [
-  'payment_method_types'=>$payment_method_types,
+  'payment_method_types' => $payment_method_types,
     'return_url' => $return_url,
     'cancel_url' => $cancel_url
-  ]
+  ]);
 ?>
 <?php
    /* $stripeform=false;
