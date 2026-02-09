@@ -1,4 +1,82 @@
 <?php //include('../perch/runtime.php');
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
+    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+}
+if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
+    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
+}
+
+$orderIdForQuestionnaire = perch_shop_successful_order_id();
+if (!$orderIdForQuestionnaire) {
+    $ShopRuntime = PerchShop_Runtime::fetch();
+    if ($ShopRuntime) {
+        $ActiveOrder = $ShopRuntime->get_active_order();
+        if ($ActiveOrder) {
+            $orderIdForQuestionnaire = $ActiveOrder->id();
+        }
+    }
+}
+
+if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
+    if (isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])) {
+        unset($_SESSION['questionnaire-reorder']['nextstep']);
+
+        perch_member_add_questionnaire($_SESSION['questionnaire-reorder'], 're-order', $orderIdForQuestionnaire);
+        $_SESSION['questionnaire_saved'] = true;
+    }
+
+    if (isset($_SESSION['questionnaire']) && !isset($_SESSION['questionnaire-reorder']["dose"])) {
+        $userId = $_SESSION['step_data']['user_id'];
+        $metadata = [
+            'user_id'    => $userId,
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'registered' => date('Y-m-d H:i:s')
+        ];
+        $logDir = '/var/www/html/logs';
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+
+        if (!is_dir($logDir) && !mkdir($logDir, 0755, true)) {
+            die("Failed to create log directory: $logDir");
+        }
+
+        $_SESSION['questionnaire']["multiple_answers"] = "No";
+
+        if (isset($_SESSION['answer_log'])) {
+            $rawLog = is_array($_SESSION['answer_log']) ? $_SESSION['answer_log'] : [];
+
+            if (file_put_contents("{$logDir}/{$userId}_raw_log.json", json_encode([
+                'metadata' => $metadata,
+                'log' => $rawLog
+            ], JSON_PRETTY_PRINT)) === false) {
+                die("Failed to write log file.");
+            }
+
+            $summary = perch_members_summarise_answer_log($rawLog);
+            $grouped = $summary['grouped'];
+
+            if (!empty($summary['has_changes'])) {
+                $_SESSION['questionnaire']["multiple_answers"] = "Yes-" . "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/questionnaire_logs/?userId=" . $userId;
+            }
+            $_SESSION['questionnaire']["documents"] = "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/edit/?id=" . perch_member_get('id');
+            //print_r( $_SESSION['questionnaire']);
+            perch_member_add_questionnaire($_SESSION['questionnaire'], 'first-order', $orderIdForQuestionnaire);
+
+            if (file_put_contents("{$logDir}/{$userId}_grouped_log.json", json_encode([
+                'metadata' => $metadata,
+                'grouped_log' => $grouped
+            ], JSON_PRETTY_PRINT)) === false) {
+                die("Failed to write log file.");
+            }
+            // Optional: clear the session log
+            unset($_SESSION['answer_log']);
+        }
+
+        $_SESSION['questionnaire_saved'] = true;
+    }
+}
  $return_url = '/payment/stripe';
   //$cancel_url = 'https://getweightloss-dev-d2c5gpf7asdvh3a2.uksouth-01.azurewebsites.net/payment/went/wrong';
   $cancel_url = '/payment/went/wrong';
@@ -82,4 +160,3 @@
 
     <?php
   perch_layout('getStarted/footer'); */?>
-
