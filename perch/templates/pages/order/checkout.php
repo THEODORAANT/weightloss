@@ -82,4 +82,3 @@
 
     <?php
   perch_layout('getStarted/footer'); */?>
-
