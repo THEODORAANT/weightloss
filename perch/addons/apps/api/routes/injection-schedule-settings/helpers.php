@@ -2,7 +2,7 @@
 
 function wl_injection_schedule_settings_table()
 {
-    return "getweightloss_measurements." . PERCH_DB_PREFIX . "injection_schedule_settings";
+    return PERCH_MEASUREMENTS_DB . "." . PERCH_DB_PREFIX . "injection_schedule_settings";
 }
 
 function wl_injection_schedule_settings_error($statusCode, $message)

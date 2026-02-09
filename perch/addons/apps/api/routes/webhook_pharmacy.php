@@ -72,6 +72,7 @@ if (!empty($updates)) {
         $setParts[] = $column . '=' . $db->pdb($value);
     }
     $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $setParts) . ', updated_at=' . $db->pdb(date('Y-m-d H:i:s')) . ' WHERE pharmacy_orderID=' . $db->pdb($orderNumber) . ' LIMIT 1';
+   echo $sql;
     $db->execute($sql);
 }
 

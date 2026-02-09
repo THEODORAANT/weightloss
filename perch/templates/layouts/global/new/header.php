@@ -161,6 +161,9 @@
            <a href="/shop" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
                                 <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Shop</p>
                               </a>
+          <a href="/app" class="flex gap-[10px] items-center justify-center px-[12px] py-[8px]">
+            <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">App</p>
+          </a>
         </div>
         
         <!-- Desktop Buttons -->
@@ -242,6 +245,9 @@
               <a href="/shop" class="mobile-menu-link py-[16px] border-b border-gray-200">
                                 <p class="font-semibold text-[16px] text-[#616161]">Shop</p>
                               </a>
+          <a href="/app" class="mobile-menu-link py-[16px] border-b border-gray-200">
+            <p class="font-semibold text-[16px] text-[#616161]">App</p>
+          </a>
           <div class="flex flex-col gap-[12px] pt-[24px]">
            <?php if (perch_member_logged_in()) { ?>
                        <a href="/client" class="mobile-menu-link text-[14px] text-[#3328bf] font-semibold">Portal</a>

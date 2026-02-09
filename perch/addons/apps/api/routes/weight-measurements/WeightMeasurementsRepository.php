@@ -226,7 +226,7 @@ class WeightMeasurementsRepository
             return $table;
         }
 
-        return "getweightloss_measurements.".PERCH_DB_PREFIX . $table;
+        return PERCH_MEASUREMENTS_DB . "." . PERCH_DB_PREFIX . $table;
     }
 
     private function isDateTime($value)

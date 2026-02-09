@@ -447,21 +447,21 @@ public function isReorder($Customer){
              "assessment" => $questions_items,
              "notes" => $questionnaire_notes
          ];
-
+	print_r($orderData);
            $response = [];
-           $sendResult = comms_service_request('POST', '/v1/pharmacy/orders', $orderData);
+           $sendResult = comms_service_request('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
            $response = [
                'success' => $sendResult,
                'data' => [
                    'message' => $sendResult ? 'Order sent to comms service.' : 'Failed to send order to comms service.'
                ],
            ];
-                             //  echo "response";
-         	//print_r($response);
+                           echo "response";
+         	print_r($response);die();exit();
          if($response["success"]){
     $pharmacy_data = [
                'orderID'    => $this->id(),
-               'pharmacy_orderID'    => $this->orderInvoiceNumber() ?: (string)$this->id(),
+               'pharmacy_orderID'    => $sendResult["pharmacy_order_ref"],
                'pharmacy_message' =>$response["data"]["message"],
            ];
          	}else{
@@ -706,6 +706,11 @@ return $response;
     public function set_transaction_reference($ref)
     {
     	$this->update(['orderGatewayRef'=>$ref]);
+    	if (!$this->is_order_send_to_pharmacy($this->id())) {
+    	  $Customers = new PerchShop_Customers($this->api);
+                $Customer = $Customers->find($this->customerID());
+                  $this->sendOrdertoPharmacy($Customer);
+              }
     }
 
        public function send_order_email_trustpilot($status)

@@ -51,13 +51,13 @@ if (defined('PERCH_PATH')) {
                 }
             }
         }
-        if ($orderIdForQuestionnaire && function_exists('comms_sync_order')) {
+    /*    if ($orderIdForQuestionnaire && function_exists('comms_sync_order')) {
             $memberId = null;
             if (function_exists('perch_member_logged_in') && perch_member_logged_in()) {
                 $memberId = perch_member_get('id');
             }
             comms_sync_order((int)$orderIdForQuestionnaire, $memberId ? (int)$memberId : null);
-        }
+        }*/
 
         if(isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])){
         unset($_SESSION['questionnaire-reorder']['nextstep']);
@@ -124,7 +124,7 @@ if (defined('PERCH_PATH')) {
             setcookie('questionnaire', '', time()-3600, '/');
             }
 
-                   echo("<script>location.href = '".$success_url."';</script>");
+                   //echo("<script>location.href = '".$success_url."';</script>");
                 }else{
                    setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
                    setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');

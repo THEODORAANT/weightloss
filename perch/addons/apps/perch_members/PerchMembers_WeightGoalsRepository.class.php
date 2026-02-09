@@ -123,7 +123,7 @@ class PerchMembers_WeightGoalsRepository
         }
 
        // return PERCH_DB_PREFIX . ltrim($table, '_');
-         return "getweightloss_measurements.".PERCH_DB_PREFIX . $table;
+         return PERCH_MEASUREMENTS_DB . "." . PERCH_DB_PREFIX . $table;
     }
 
     private function defaultTableName()

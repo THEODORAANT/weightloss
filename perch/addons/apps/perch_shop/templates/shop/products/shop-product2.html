@@ -16,76 +16,76 @@
                 <div class="overflow-hidden rounded-[16px] bg-white">
                     <div class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth">
                         <div id="product-image-main" class="min-w-full snap-center">
-                            <perch:shop id="image" />
+
                             <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
                         </div>
                         <perch:repeater id="_variant_images">
-                            <div id="product-image-<perch:counter />" class="min-w-full snap-center">
-                                <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
-                            </div>
-                        </perch:repeater>
+                            <div id="product-image-<perch:shop id="variant_image_id" />" class="min-w-full snap-center">
+                            <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-auto w-full object-cover">
                     </div>
-                </div>
-                <div class="flex gap-[12px] overflow-x-auto pb-[4px]">
-                    <a href="#product-image-main" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
-                        <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
-                    </a>
-                    <perch:repeater id="_variant_images">
-                        <a href="#product-image-<perch:counter />" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
-                            <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
-                        </a>
                     </perch:repeater>
                 </div>
             </div>
+            <div class="flex gap-[12px] overflow-x-auto pb-[4px]">
+                <a href="#product-image-main" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
+                    <img src="<perch:shop id="image" type="image" label="Main product image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
+                </a>
+                <perch:repeater id="_variant_images">
+                    <a href="#product-image-<perch:shop id="variant_image_id" />" class="block w-[80px] shrink-0 overflow-hidden rounded-[12px] bg-white">
+                    <img src="<perch:shop id="variant_image" type="image" />" alt="<perch:shop id="title" type="text" />" class="h-full w-full object-cover">
+                    </a>
+                </perch:repeater>
+            </div>
         </div>
+    </div>
 
-        <div class="flex flex-col">
-            <p class="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#3328bf]">Shop product</p>
-            <h1 class="mt-[12px] text-[28px] md:text-[34px] font-semibold text-[#0f172a]"><perch:shop id="title" type="text" /></h1>
-            <p class="mt-[16px] text-[15px] text-slate-600"><perch:shop id="shortdescription" type="textarea" /></p>
+    <div class="flex flex-col">
+        <p class="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#3328bf]">Shop product</p>
+        <h1 class="mt-[12px] text-[28px] md:text-[34px] font-semibold text-[#0f172a]"><perch:shop id="title" type="text" /></h1>
+        <p class="mt-[16px] text-[15px] text-slate-600"><perch:shop id="shortdescription" type="textarea" /></p>
 
-            <div class="mt-[20px] text-[22px] font-semibold text-[#0f172a]">
-                <perch:if exists="sale_price">
-                    <span><perch:shop id="sale_price" type="shop_currency_value" /></span>
-                    <span class="ml-[10px] text-[14px] font-normal text-slate-400 line-through">
+        <div class="mt-[20px] text-[22px] font-semibold text-[#0f172a]">
+            <perch:if exists="sale_price">
+                <span><perch:shop id="sale_price" type="shop_currency_value" /></span>
+                <span class="ml-[10px] text-[14px] font-normal text-slate-400 line-through">
             <perch:shop id="price" type="shop_currency_value" />
           </span>
-                    <perch:else />
-                    <perch:shop id="price" type="shop_currency_value" />
-                </perch:if>
-            </div>
+                <perch:else />
+                <perch:shop id="price" type="shop_currency_value" />
+            </perch:if>
+        </div>
 
-            <div class="mt-[24px]">
-                <perch:if not-exists="has_variants">
-                    <perch:form id="add_to_cart" app="perch_shop" action="/order/cart">
-                        <perch:input id="product" type="hidden" value="<perch:shop id="productID" env-autofill="false" />" />
-                        <perch:input type="submit" value="Add to cart" class="w-full rounded-full bg-[#3328bf] px-[18px] py-[12px] text-[14px] font-semibold text-white hover:bg-[#2a21a3] transition" />
-                    </perch:form>
-                    <perch:else />
-                    <div class="flex flex-col gap-[16px] rounded-[16px] border border-slate-200 bg-slate-50 p-[16px]">
-                        <div>
-                            <span class="text-[12px] font-semibold uppercase tracking-[0.12em] text-slate-500">Color</span>
-                            <div class="variant-options mt-[10px] flex flex-wrap gap-[8px]"></div>
-                            <perch:form id="cart" action="" app="perch_shop">
-                                <perch:input class="variant-select mt-[8px] w-full rounded-[10px] border border-slate-200 bg-white px-[12px] py-[10px] text-[14px]"
-                                             type="select"  id="product"  name="product"
-                                             options="<perch:shop id="_variant_opts" type="hidden" />" />
-                                <div style="padding: 10px;">
-                                    <perch:input type="submit" value="Add to cart"
-                                                 class="w-full rounded-full bg-[#3328bf] px-[18px] py-[12px] text-[14px] font-semibold text-white hover:bg-[#2a21a3] transition" />
-                                </div>
-                            </perch:form>
-
-                        </div>
+        <div class="mt-[24px]">
+            <perch:if not-exists="has_variants">
+                <perch:form id="add_to_cart" app="perch_shop" action="/order/cart">
+                    <perch:input id="product" type="hidden" value="<perch:shop id="productID" env-autofill="false" />" />
+                    <perch:input type="submit" value="Add to cart" class="w-full rounded-full bg-[#3328bf] px-[18px] py-[12px] text-[14px] font-semibold text-white hover:bg-[#2a21a3] transition" />
+                </perch:form>
+                <perch:else />
+                <div class="flex flex-col gap-[16px] rounded-[16px] border border-slate-200 bg-slate-50 p-[16px]">
+                    <div>
+                        <span class="text-[12px] font-semibold uppercase tracking-[0.12em] text-slate-500">Color</span>
+                        <div class="variant-options mt-[10px] flex flex-wrap gap-[8px]"></div>
+                        <perch:form id="cart" action="" app="perch_shop">
+                            <perch:input class="variant-select mt-[8px] w-full rounded-[10px] border border-slate-200 bg-white px-[12px] py-[10px] text-[14px]"
+                                         type="select"  id="product"  name="product"
+                                         options="<perch:shop id="_variant_opts" type="hidden" />" />
+                            <div  style="padding: 10px;">
+                                <perch:input type="submit" value="Add to cart"
+                                             class="w-full rounded-full bg-[#3328bf] px-[18px] py-[12px] text-[14px] font-semibold text-white hover:bg-[#2a21a3] transition" />
+                            </div>
+                        </perch:form>
 
                     </div>
-                </perch:if>
-            </div>
+
+                </div>
+            </perch:if>
         </div>
     </div>
-    <div class="mt-[32px] border-t border-slate-200 pt-[24px] text-[15px] text-slate-600">
-        <perch:shop id="description" type="textarea" />
-    </div>
+</div>
+<div class="mt-[32px] border-t border-slate-200 pt-[24px] text-[15px] text-slate-600">
+    <perch:shop id="description" type="textarea" />
+</div>
 </div>
 
 <script>
@@ -97,6 +97,8 @@
         const options = Array.from(select.options).filter((option) => option.value);
         container.innerHTML = '';
 
+        const optionIndexMap = new Map();
+
         options.forEach((option, index) => {
             const button = document.createElement('button');
             button.type = 'button';
@@ -105,6 +107,7 @@
             button.dataset.index = String(index + 1);
             button.className = 'rounded-full border border-slate-200 px-[14px] py-[8px] text-[13px] font-semibold text-slate-600 transition hover:border-[#3328bf] hover:text-[#3328bf]';
             container.appendChild(button);
+            optionIndexMap.set(option.value, index + 1);
         });
 
         const updateActive = (value) => {
@@ -120,7 +123,7 @@
         const scrollToImage = (index) => {
             const target = document.getElementById(`product-image-${index}`);
             if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                target.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
             }
         };
 
@@ -133,7 +136,12 @@
         });
 
         select.addEventListener('change', (event) => {
-            updateActive(event.target.value);
+            const selectedValue = event.target.value;
+            updateActive(selectedValue);
+            const imageIndex = optionIndexMap.get(selectedValue);
+            if (imageIndex) {
+                scrollToImage(String(imageIndex));
+            }
         });
 
         updateActive(select.value || options[0]?.value || '');

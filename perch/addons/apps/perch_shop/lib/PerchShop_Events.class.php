@@ -67,7 +67,7 @@ class PerchShop_Events
 			}
 		}
 
-		comms_sync_order((int) $Order->id(), $memberID);
+		//comms_sync_order((int) $Order->id(), $memberID);
 	}
 
 	public static function register_member_login($Event)

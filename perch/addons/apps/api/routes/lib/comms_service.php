@@ -32,6 +32,7 @@ function comms_service_request(string $method, string $path, array $payload = []
     }
 
     $url = $baseUrl . $path;
+    echo "url"; echo $url;
     $ch = curl_init($url);
 
     if ($ch === false) {
@@ -61,7 +62,7 @@ echo "auth";print_r($headers);
 
     $response = curl_exec($ch);
     echo "response"; print_r($response);
-    //die();exit();
+   die();exit();
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -119,7 +120,7 @@ function comms_service_request_json(string $method, string $path, array $payload
 
     $response = curl_exec($ch);
         echo "responsejson"; print_r($response);
-        //die();exit();
+        die();exit();
 
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);

@@ -1286,7 +1286,7 @@ public function get_package_future_items($opts){
         }
 
         private function sync_comms_member($memberID)
-        {
+        { echo "sync_comms_member1";
                 if (!defined('PERCH_PATH')) {
                         return;
                 }
@@ -1648,7 +1648,7 @@ public function get_package_future_items($opts){
 
 
 
-	public function customer_has_paid_order($memberID=false, $categorySlug=false)
+	public function customer_has_paid_order($memberID=false)
  	{
 
  	if($memberID){
@@ -1657,40 +1657,8 @@ public function get_package_future_items($opts){
  	     $Customer = $this->get_customer();
  	}
 
-		if (!$Customer) {
-			return false;
-		}
 
-		if ($categorySlug) {
-			$Products = new PerchShop_Products($this->api);
-			$products = $Products->get_by_category($categorySlug);
-
-			if (!PerchUtil::count($products)) {
-				return false;
-			}
-
-			$product_ids = [];
-			foreach ($products as $Product) {
-				$product_ids[] = (int)$Product->id();
-			}
-
-			if (!PerchUtil::count($product_ids)) {
-				return false;
-			}
-
-			$db = PerchDB::fetch();
-			$Statuses = new PerchShop_OrderStatuses($this->api);
-			$sql = 'SELECT COUNT(DISTINCT o.orderID)
-					FROM '.PERCH_DB_PREFIX.'shop_orders o
-					INNER JOIN '.PERCH_DB_PREFIX.'shop_order_items oi ON oi.orderID = o.orderID
-					WHERE o.customerID='.$db->pdb((int)$Customer->id()).'
-						AND o.orderStatus IN ('.$db->implode_for_sql_in($Statuses->get_status_and_above('paid')).')
-						AND oi.productID IN ('.$db->implode_for_sql_in($product_ids).')';
-
-			return (bool)$db->get_count($sql);
-		}
-
-		$Orders = new PerchShop_Orders($this->api);
+        		$Orders = new PerchShop_Orders($this->api);
         //	$Customer = $Customers->find_from_logged_in_member();
    $orders = $Orders->findAll_for_customer($Customer);
 

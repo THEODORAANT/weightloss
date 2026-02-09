@@ -12,7 +12,7 @@ if($questions){
 if($type=="first-order"){
 $questions["conditions"]["label"]="Do any of the following statements apply to you?";
 $questions["conditions2"]["label"]="Do any of the following statements apply to you?";
-
+$questions["ethnicity"]["label"]="Which ethnicity are you?";
 }
     foreach ($questions as $key => $question) {
         if (isset($question['label']) && is_string($question['label'])) {
