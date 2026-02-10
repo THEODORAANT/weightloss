@@ -26,64 +26,169 @@ if ($cutoffTimestamp === false) {
 }
 
 $cutoff = date('Y-m-d H:i:s', $cutoffTimestamp);
-
 $DB = PerchDB::fetch();
 
-$sql = 'SELECT r.id, r.referred_member_id, m.memberEmail, m.memberCreated '
-     . 'FROM ' . PERCH_DB_PREFIX . 'referrals r '
-     . 'INNER JOIN ' . PERCH_DB_PREFIX . 'members m ON m.memberID = r.referred_member_id '
-     . 'WHERE r.referrer_affiliate_id = ' . $DB->pdb($fromAffiliate) . ' '
-     . 'AND m.memberCreated < ' . $DB->pdb($cutoff) . ' '
-     . 'AND NOT EXISTS ( '
-     . '    SELECT 1 FROM ' . PERCH_DB_PREFIX . 'purchases p '
-     . '    WHERE p.member_id = r.referred_member_id '
-     . ') '
-     . 'AND NOT EXISTS ( '
-     . '    SELECT 1 '
-     . '    FROM ' . PERCH_DB_PREFIX . 'shop_customers c '
-     . '    INNER JOIN ' . PERCH_DB_PREFIX . 'shop_orders o ON o.customerID = c.customerID '
-     . '    WHERE c.memberID = r.referred_member_id '
-     . '      AND o.orderStatus = ' . $DB->pdb('paid') . ' '
-     . ') '
-     . 'ORDER BY m.memberCreated ASC, r.id ASC';
+$candidateSQL = 'SELECT m.memberID, m.memberEmail, m.memberCreated, m.memberProperties '
+    . 'FROM ' . PERCH_DB_PREFIX . 'members m '
+    . 'WHERE m.memberCreated < ' . $DB->pdb($cutoff) . ' '
+    . 'AND (m.memberProperties LIKE ' . $DB->pdb('%"referrer":"' . $fromAffiliate . '"%') . ' '
+    . '     OR m.memberProperties LIKE ' . $DB->pdb('%"affID":"' . $fromAffiliate . '"%') . ') '
+    . 'ORDER BY m.memberCreated ASC, m.memberID ASC';
 
-$rows = $DB->get_rows($sql);
-$count = PerchUtil::count($rows);
+$candidates = $DB->get_rows($candidateSQL);
+
+$purchaseMemberIDs = [];
+$purchasedRows = $DB->get_rows(
+    'SELECT DISTINCT member_id FROM ' . PERCH_DB_PREFIX . 'purchases WHERE member_id IS NOT NULL'
+);
+
+if (PerchUtil::count($purchasedRows)) {
+    foreach ($purchasedRows as $row) {
+        $memberID = (int) ($row['member_id'] ?? 0);
+        if ($memberID > 0) {
+            $purchaseMemberIDs[$memberID] = true;
+        }
+    }
+}
+
+$paidOrderMemberIDs = [];
+$paidRows = $DB->get_rows(
+    'SELECT DISTINCT c.memberID '
+    . 'FROM ' . PERCH_DB_PREFIX . 'shop_customers c '
+    . 'INNER JOIN ' . PERCH_DB_PREFIX . 'shop_orders o ON o.customerID = c.customerID '
+    . 'WHERE o.orderStatus = ' . $DB->pdb('paid')
+);
+
+if (PerchUtil::count($paidRows)) {
+    foreach ($paidRows as $row) {
+        $memberID = (int) ($row['memberID'] ?? 0);
+        if ($memberID > 0) {
+            $paidOrderMemberIDs[$memberID] = true;
+        }
+    }
+}
+
+$matches = [];
+
+if (PerchUtil::count($candidates)) {
+    foreach ($candidates as $row) {
+        $memberID = (int) ($row['memberID'] ?? 0);
+        if ($memberID <= 0) {
+            continue;
+        }
+
+        if (isset($purchaseMemberIDs[$memberID]) || isset($paidOrderMemberIDs[$memberID])) {
+            continue;
+        }
+
+        $propertiesRaw = (string) ($row['memberProperties'] ?? '');
+        $properties = PerchUtil::json_safe_decode($propertiesRaw, true);
+
+        if (!is_array($properties)) {
+            continue;
+        }
+
+        $changed = false;
+
+        if (($properties['referrer'] ?? null) === $fromAffiliate) {
+            $properties['referrer'] = $toAffiliate;
+            $changed = true;
+        }
+
+        if (($properties['affID'] ?? null) === $fromAffiliate) {
+            $properties['affID'] = $toAffiliate;
+            $changed = true;
+        }
+
+        if (!$changed) {
+            continue;
+        }
+
+        $matches[] = [
+            'memberID' => $memberID,
+            'memberEmail' => (string) ($row['memberEmail'] ?? ''),
+            'memberCreated' => (string) ($row['memberCreated'] ?? ''),
+            'memberProperties' => PerchUtil::json_safe_encode($properties),
+        ];
+    }
+}
+
+$count = count($matches);
 
 echo 'From affiliate: ' . $fromAffiliate . PHP_EOL;
 echo 'To affiliate: ' . $toAffiliate . PHP_EOL;
 echo 'Cutoff (exclusive): ' . $cutoff . PHP_EOL;
 echo 'Mode: ' . ($dryRun ? 'dry-run' : 'execute') . PHP_EOL;
-echo 'Matched referrals: ' . $count . PHP_EOL;
+echo 'Matched members: ' . $count . PHP_EOL;
 
-if (!$count) {
-    echo 'No matching referrals found. Nothing to update.' . PHP_EOL;
+if ($count === 0) {
+    echo 'No matching members found. Nothing to update.' . PHP_EOL;
     exit(0);
 }
 
-foreach ($rows as $row) {
-    $memberID = (int) ($row['referred_member_id'] ?? 0);
-    $email = (string) ($row['memberEmail'] ?? '');
-    $created = (string) ($row['memberCreated'] ?? '');
-    echo '- referral #' . (int) $row['id'] . ' member #' . $memberID . ' (' . $email . ') registered ' . $created . PHP_EOL;
+foreach ($matches as $row) {
+    echo '- member #' . $row['memberID'] . ' (' . $row['memberEmail'] . ') registered ' . $row['memberCreated'] . PHP_EOL;
 }
+
+$memberIDs = array_map(static function ($row) {
+    return (int) $row['memberID'];
+}, $matches);
+
+$memberIDList = implode(',', array_unique($memberIDs));
+$referralsToUpdate = 0;
+
+if ($memberIDList !== '') {
+    $referralsToUpdate = (int) $DB->get_value(
+        'SELECT COUNT(*) FROM ' . PERCH_DB_PREFIX . 'referrals '
+        . 'WHERE referred_member_id IN (' . $memberIDList . ') '
+        . 'AND referrer_affiliate_id = ' . $DB->pdb($fromAffiliate)
+    );
+}
+
+echo 'Matched referral rows to update: ' . $referralsToUpdate . PHP_EOL;
 
 if ($dryRun) {
     echo 'Dry run complete. No changes were made.' . PHP_EOL;
     exit(0);
 }
 
-$updateSQL = 'UPDATE ' . PERCH_DB_PREFIX . 'referrals '
-          . 'SET referrer_affiliate_id = ' . $DB->pdb($toAffiliate) . ' '
-          . 'WHERE id IN (' . implode(',', array_map(static function ($row) {
-              return (int) $row['id'];
-          }, $rows)) . ')';
+$updatedMembers = 0;
 
-$updated = $DB->execute($updateSQL);
+foreach ($matches as $row) {
+    $ok = $DB->update(
+        PERCH_DB_PREFIX . 'members',
+        [
+            'memberProperties' => $row['memberProperties'],
+        ],
+        'memberID',
+        $row['memberID']
+    );
 
-if ($updated === false) {
-    fwrite(STDERR, 'Update failed.' . PHP_EOL);
-    exit(1);
+    if ($ok !== false) {
+        $updatedMembers++;
+    }
 }
 
-echo 'Updated ' . $count . ' referral(s) from ' . $fromAffiliate . ' to ' . $toAffiliate . '.' . PHP_EOL;
+$updatedReferrals = 0;
+
+if ($memberIDList !== '') {
+    $updatedReferrals = $DB->execute(
+        'UPDATE ' . PERCH_DB_PREFIX . 'referrals '
+        . 'SET referrer_affiliate_id = ' . $DB->pdb($toAffiliate) . ' '
+        . 'WHERE referred_member_id IN (' . $memberIDList . ') '
+        . 'AND referrer_affiliate_id = ' . $DB->pdb($fromAffiliate)
+    );
+
+    if ($updatedReferrals === false) {
+        fwrite(STDERR, 'Failed to update referrals table.' . PHP_EOL);
+        exit(1);
+    }
+}
+
+echo 'Updated ' . $updatedMembers . ' member(s) in memberProperties.' . PHP_EOL;
+echo 'Updated ' . (int) $updatedReferrals . ' referral row(s).' . PHP_EOL;
+
+if ($updatedMembers !== $count) {
+    fwrite(STDERR, 'Warning: expected to update ' . $count . ' member(s), updated ' . $updatedMembers . '.' . PHP_EOL);
+    exit(1);
+}
