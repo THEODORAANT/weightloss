@@ -2,6 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_medication_helpers.php';
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_session_helpers.php';
 
 /*
 function generateUUID() {
@@ -167,12 +168,7 @@ function generateUUID()
     );
 }
 
-$cookieQuestionnaire = isset($_COOKIE['questionnaire'])
-    ? json_decode($_COOKIE['questionnaire'], true)
-    : [];
-if (!isset($_SESSION['questionnaire']) || empty($_SESSION['questionnaire'])) {
-    $_SESSION['questionnaire'] = $cookieQuestionnaire;
-}
+wl_restore_questionnaire_session('first_time');
 if (!isset($_SESSION['questionnaire_question_order']) || !is_array($_SESSION['questionnaire_question_order'])) {
     $_SESSION['questionnaire_question_order'] = [];
 }
@@ -180,9 +176,9 @@ if (!isset($_SESSION['questionnaire_question_order']) || !is_array($_SESSION['qu
 $previousPage = $_SERVER['HTTP_REFERER'] ?? 'No referrer';
 $redirect = true;
 if (isset($_GET['step']) && $_GET['step'] === 'startagain') {
+    wl_clear_questionnaire_session('first_time');
     $_SESSION['questionnaire'] = [];
     $_SESSION['questionnaire_question_order'] = [];
-    setcookie('questionnaire', '', time() - 3600, '/');
     header("Location: /get-started/questionnaire?step=howold");
     exit();
 }
@@ -306,7 +302,7 @@ if (isset($_POST['nextstep'])) {
     $redirectUrl = ($nextStep === 'plans')
         ? "/get-started/review-questionnaire"
         : "/get-started/questionnaire?step=" . urlencode($nextStep);
-    setcookie('questionnaire', json_encode($_SESSION['questionnaire']), time() + 3600, '/');
+    wl_save_questionnaire_session('first_time');
     /* if($_SESSION['questionnaire']['reviewed'] === 'InProcess' && $nextStep=="plans" ){
         exit;
         }else{
@@ -322,7 +318,7 @@ if (isset($_POST['nextstep'])) {
 if (isset($_SESSION['step_data']['user_id'])) {
     $_SESSION['questionnaire']['uuid'] = $_SESSION['step_data']['user_id'];
 }
-setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time() + 3600, '/');
+wl_save_questionnaire_session('first_time');
 
 ?>
 
