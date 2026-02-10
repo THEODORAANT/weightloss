@@ -6,14 +6,11 @@ if (!perch_member_logged_in()) {
     exit;
 }
 
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_session_helpers.php';
+
 $currentStep = isset($_GET['step']) ? trim((string)$_GET['step']) : 'weight';
 
-if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
-    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
-}
-if (!isset($_SESSION['questionnaire-reorder']) || !is_array($_SESSION['questionnaire-reorder'])) {
-    $_SESSION['questionnaire-reorder'] = [];
-}
+wl_restore_questionnaire_session('reorder');
 
 $validationErrors = $_SESSION['reorder_validation_errors'] ?? [];
 unset($_SESSION['reorder_validation_errors']);
@@ -101,7 +98,7 @@ if (isset($_POST['nextstep'])) {
         logAnswerChange($key, $_SESSION['questionnaire-reorder'][$key], 'reorder');
     }
 
-    setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time() + 3600, '/');
+    wl_save_questionnaire_session('reorder');
 
     if ($_POST['nextstep'] === 'cart') {
         $userId = $_SESSION['step_data']['user_id'];
@@ -156,7 +153,7 @@ if (isset($_POST['nextstep'])) {
 if (isset($_SESSION['step_data']['user_id'])) {
     $_SESSION['questionnaire-reorder']['uuid'] = $_SESSION['step_data']['user_id'];
 }
-setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time() + 3600, '/');
+wl_save_questionnaire_session('reorder');
 perch_layout('getStarted/header', [
     'page_title' => perch_page_title(true),
 ]);

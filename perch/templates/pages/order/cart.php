@@ -1,36 +1,36 @@
  <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_session_helpers.php';
     if(isset($_POST["dose"])){
+                wl_restore_questionnaire_session('reorder');
                 $_SESSION['questionnaire-reorder']["dose"] = $_POST["dose"];
-                setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder']), time()+3600, '/');
+                wl_save_questionnaire_session('reorder');
                $result= perch_shop_add_to_cart($_POST["dose"]);
                echo "<script>window.location.href='/client/questionnaire-re-order?step=weight';</script> ";
                exit;
 
                 }
 
-if (!isset($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
-    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+$activeQuestionnaireMode = 'first_time';
+if (perch_member_logged_in() && customer_has_paid_order()) {
+    $activeQuestionnaireMode = 'reorder';
 }
-if (!isset($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
-    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
-}
+
+wl_restore_questionnaire_session($activeQuestionnaireMode);
+
 if (perch_member_logged_in() && perch_shop_addresses_set() && isset($_SESSION["package_billing_type"])) {
-            $is_reorder = customer_has_paid_order();
+    $activeQuestionnaireSessionKey = wl_questionnaire_session_meta($activeQuestionnaireMode)['session_key'];
 
-                             if ($is_reorder) {
-                                 if (empty($_SESSION['questionnaire-reorder'])) {
-                                     PerchUtil::redirect('/client/questionnaire-re-order?step=weight');
-                                 }
-                             } else {
-                                 if (empty($_SESSION['questionnaire'])) {
-                                     PerchUtil::redirect('/get-started');
-                                 }
-                             }
-           }
+    if (empty($_SESSION[$activeQuestionnaireSessionKey])) {
+        if ($activeQuestionnaireMode === 'reorder') {
+            PerchUtil::redirect('/client/questionnaire-re-order?step=weight');
+        }
 
-setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');
-setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
+        PerchUtil::redirect('/get-started');
+    }
+}
+
+wl_save_questionnaire_session($activeQuestionnaireMode);
   //print_r($_SESSION);
     // output the top of the page
      perch_layout('product/header', [

@@ -1,11 +1,13 @@
 <?php //include('../perch/runtime.php');
 if (session_status() === PHP_SESSION_NONE) session_start();
-if (empty($_SESSION['questionnaire']) && isset($_COOKIE['questionnaire'])) {
-    $_SESSION['questionnaire'] = json_decode($_COOKIE['questionnaire'], true) ?: [];
+require_once dirname(__DIR__, 3) . '/addons/apps/perch_members/questionnaire_session_helpers.php';
+$activeQuestionnaireMode = 'first_time';
+if (perch_member_logged_in() && customer_has_paid_order()) {
+    $activeQuestionnaireMode = 'reorder';
 }
-if (empty($_SESSION['questionnaire-reorder']) && isset($_COOKIE['questionnaire_reorder'])) {
-    $_SESSION['questionnaire-reorder'] = json_decode($_COOKIE['questionnaire_reorder'], true) ?: [];
-}
+
+wl_restore_questionnaire_session($activeQuestionnaireMode);
+wl_save_questionnaire_session($activeQuestionnaireMode);
 /*
 $orderIdForQuestionnaire = perch_shop_successful_order_id();
 if (!$orderIdForQuestionnaire) {
