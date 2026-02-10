@@ -63,7 +63,7 @@ $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
         }
         unset($_SESSION['questionnaire_saved']);
 
-                   //echo("<script>location.href = '".$success_url."';</script>");
+                   echo("<script>location.href = '".$success_url."';</script>");
                 }else{
                    setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
                    setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');

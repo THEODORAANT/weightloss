@@ -449,7 +449,7 @@ echo "questions_items";
          ];
 	print_r($orderData);
            $response = [];
-           $sendResult = comms_service_request('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
+           $sendResult = comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
            $response = [
                'success' => $sendResult,
                'data' => [
@@ -457,11 +457,13 @@ echo "questions_items";
                ],
            ];
                            echo "response";
-         	print_r($response);die();exit();
-         if($response["success"]){
+         	print_r($response);
+         	//die();exit();
+         if(isset($response["success"]["ok"])){
     $pharmacy_data = [
                'orderID'    => $this->id(),
-               'pharmacy_orderID'    => $sendResult["pharmacy_order_ref"],
+               'pharmacy_orderID'    => $response["success"]["orderNumber"],
+               'status'=> "PAYMENT_RECEIVED",
                'pharmacy_message' =>$response["data"]["message"],
            ];
          	}else{
