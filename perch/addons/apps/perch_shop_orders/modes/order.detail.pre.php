@@ -16,6 +16,10 @@
 	$message = false;
 	$product_options = [];
 
+	if (!function_exists('comms_service_request_json')) {
+		require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
+	}
+
 	if (!function_exists('recalculate_order_totals')) {
 		function recalculate_order_totals(PerchDB_MySQL $DB, $orderID, $override = null)
 		{
@@ -179,7 +183,18 @@
 			$data = $Form->receive(['status']);
 
 			if ($Order && isset($data['status']) && $data['status'] !== '') {
+				$newStatus = strtolower(trim((string)$data['status']));
 				$Order->set_status($data['status']);
+
+				if (in_array($newStatus, ['refund', 'refunded'], true)) {
+					$orderStatusData = [
+						'status' => 'CANCELLED',
+					];
+					$statusUpdateResult = comms_service_request_json('POST', '/v1/perch/orders/'.$Order->id().'/status', $orderStatusData);
+					if (!is_array($statusUpdateResult)) {
+						$message = 'Order updated, but comms status update to CANCELLED failed.';
+					}
+				}
 			}
 		}
 
