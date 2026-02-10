@@ -1,6 +1,8 @@
 <?php if (!perch_member_logged_in() ){ header("Location: /client");}
 else if (perch_member_logged_in() &&  !customer_has_paid_order()) {  header("Location: /get-started"); }
-
+        unset($_SESSION['questionnaire_saved']);
+ unset($_SESSION['questionnaire']);
+  unset($_SESSION['questionnaire-reorder']);
     perch_layout('client/header', [
         'page_title' => perch_page_title(true),
     ]);
