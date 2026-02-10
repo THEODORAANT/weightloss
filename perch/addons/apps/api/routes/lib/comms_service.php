@@ -32,7 +32,6 @@ function comms_service_request(string $method, string $path, array $payload = []
     }
 
     $url = $baseUrl . $path;
-    echo "url"; echo $url;
     $ch = curl_init($url);
 
     if ($ch === false) {
@@ -48,7 +47,7 @@ function comms_service_request(string $method, string $path, array $payload = []
     if ($authHeader) {
         $headers[] = $authHeader;
     }
-echo "auth";print_r($headers);
+
     $jsonPayload = json_encode($payload);
     if ($jsonPayload === false) {
         return false;
@@ -61,8 +60,6 @@ echo "auth";print_r($headers);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
-    echo "response"; print_r($response);
-  // die();exit();
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -114,14 +111,12 @@ function comms_service_request_json(string $method, string $path, array $payload
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
     }
 
+
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
-        echo "responsejson"; print_r($response);
-       // die();exit();
-
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
