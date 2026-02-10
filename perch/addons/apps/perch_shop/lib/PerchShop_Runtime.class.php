@@ -709,6 +709,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
     	}
 public function checkout_questionnaire($orderIdForQuestionnaire)
 	{ echo "checkout_questionnaire"; echo $orderIdForQuestionnaire;
+	echo "SESSION";print_r($_SESSION);
 if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
     if (isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])) {
         unset($_SESSION['questionnaire-reorder']['nextstep']);

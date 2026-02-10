@@ -346,8 +346,8 @@ public function isReorder($Customer){
                 } else {
                     $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
                 }
-                //echo "questionnaire";
-               // echo $sql_questionnaire;
+                echo "questionnaire";
+               echo $sql_questionnaire;
 
                 $questionnaire = $this->db->get_rows($sql_questionnaire);
              //   print_r($questionnaire);
@@ -413,11 +413,11 @@ public function isReorder($Customer){
             ];
         }
 
-/*echo "questions_items";
+echo "questions_items";
 	print_r($questions_items);
         echo "order_items";
 	print_r($order_items);
-                      echo "ShippingAdr";
+                    /*  echo "ShippingAdr";
 	print_r($ShippingAddr);*/
          $shippingAddressLine1 = '';
          $shippingAddressLine2 = '';
@@ -435,7 +435,7 @@ public function isReorder($Customer){
 
          $orderData = [
              "status" => "PAYMENT_RECEIVED",
-             "customerId" => $Customer->get('pharmacy_refid'),
+             "customerId" => $Customer->pharmacy_refid(),
              "items" => $order_items,
              "shipping" => [
                  "addressLine1" => $shippingAddressLine1,
