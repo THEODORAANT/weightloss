@@ -165,6 +165,25 @@ POST /v1/perch/orders/:orderID/link
 
 Call on order creation and whenever the member or order status changes. This must happen before any order-scoped notes are created; otherwise, the notes endpoint returns a 400 error instructing you to link the order first.
 
+Required payload fields for the comms service request JSON used when an admin pushes an order to the pharmacy as approved:
+
+```json
+{
+  "status": "APPROVED"
+}
+```
+
+Example pharmacy status update call:
+
+```bash
+curl -X PATCH "https://<your-comms-host>/api/orders/ORD-2023-00001/status" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: <PHARMACY_API_KEY>" \
+  -d '{
+    "status": "APPROVED"
+  }'
+```
+
 ### Member/patient notes
 
 ```

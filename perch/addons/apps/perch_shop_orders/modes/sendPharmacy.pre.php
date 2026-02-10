@@ -3,6 +3,10 @@
 $details="";
   $success=false;
 $message="";
+
+if (!function_exists('comms_service_request_json')) {
+    require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
+}
 $Orders     = new PerchShop_Orders($API);
 	$OrderItems = new PerchShop_OrderItems($API);
 	$Customers  = new PerchShop_Customers($API);
@@ -36,6 +40,14 @@ $Orders     = new PerchShop_Orders($API);
 
                                      $success=true;
                                      $message='The order has been successfully send to the pharmacy .';
+
+                                     $orderStatusData = [
+                                         'status' => 'APPROVED',
+                                     ];
+                                     $statusUpdateResult = comms_service_request_json('POST', '/v1/perch/orders/'.$Order->id().'/status', $orderStatusData);
+                                     if (!is_array($statusUpdateResult)) {
+                                         $message .= ' Pharmacy status update to APPROVED failed.';
+                                     }
 
                                                           }else{
                                                             $message=$apiresponse["data"]["message"];
