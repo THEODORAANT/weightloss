@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
+require_once __DIR__ . '/../../api/routes/lib/comms_sync.php';
 
 if (!function_exists('wl_member_note_extract_metadata')) {
     function wl_member_note_extract_metadata($noteText)
@@ -570,18 +571,40 @@ if (!function_exists('wl_member_note_build_text')) {
 
                                         $Note->add_to_member($Member->id(), $User->userUsername());
 
+                                        $noteTimestamp = $Note->noteDate();
+                                        $noteDateTime = $noteTimestamp ? strtotime((string) $noteTimestamp) : time();
+                                        $noteDateLabel = date('Y-m-d H:i:s', $noteDateTime);
+                                        $noteBody = trim((string) $Note->note_text());
+                                        $addedBy = trim((string) $User->userUsername());
+                                        $noteType = ($noteCategory === 'clinical' || $noteCategory === 'complaint') ? 'clinical_note' : 'admin_note';
+                                        $createdBy = [
+                                            'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
+                                            'role' => $addedBy !== '' ? 'admin' : 'system',
+                                        ];
+
+                                        if ($noteTargetType === 'order_note' && $noteOrderId > 0 && $noteBody !== '' && is_object($Member)) {
+                                            comms_sync_order($noteOrderId, (int) $Member->id());
+
+                                            $orderNotePayload = [
+                                                'note_type' => $noteType,
+                                                'title' => null,
+                                                'body' => $noteBody,
+                                                'status' => 'open',
+                                                'created_by' => $createdBy,
+                                                'external_note_ref' => (string) $Note->id(),
+                                            ];
+
+                                            comms_service_send_order_note($noteOrderId, $orderNotePayload);
+                                        }
+
                                         if ($isRedFlag && is_object($Member)) {
                                             $memberEmail = trim((string)$Member->memberEmail());
-                                            $noteTimestamp = $Note->noteDate();
-                                            $noteDateTime = $noteTimestamp ? strtotime((string) $noteTimestamp) : time();
-                                            $noteDateLabel = date('Y-m-d H:i:s', $noteDateTime);
-                                            $noteBody = trim((string) $Note->note_text());
                                             $notePayload = [
                                                 'note_id' => (int) $Note->id(),
                                                 'note' => '['.$noteDateLabel.'] '.$noteBody,
                                                 'note_raw' => $noteBody,
                                                 'note_date' => $noteDateLabel,
-                                                'added_by' => $User->userUsername(),
+                                                'added_by' => $addedBy,
                                                 'member_email' => $memberEmail,
                                                 'escalate_clinical_review' => 1,
                                                 'note_type' => 'clinical_note',
@@ -590,12 +613,11 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'thread_ref' => $noteThreadRef,
                                                 'order_id' => $noteOrderId > 0 ? $noteOrderId : null,
                                                 'body' => $noteBody,
+                                                'created_by' => $createdBy,
+                                                'external_note_ref' => (string) $Note->id(),
                                             ];
 
                                             $sentToComms = comms_service_send_member_note((int) $Member->id(), $notePayload);
-                                            if ($noteTargetType === 'order_note' && $noteOrderId > 0) {
-                                                comms_service_send_order_note($noteOrderId, $notePayload);
-                                            }
 
                                             if ($sentToComms) {
                                                 $NotePharmacyStatuses->record_sent_status((int) $Member->id(), (int) $Note->id(), 'Sent', 'Escalated for clinical review');
