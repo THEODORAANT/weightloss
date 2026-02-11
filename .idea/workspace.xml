@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/re-order.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/re-order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/sendPharmacy.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/sendPharmacy.pre.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/add-required-fields-to-member-payload-bf7e4x" />
+    <option name="BRANCH" value="origin/codex/update-affiliate-id-for-non-purchasing-clients-ama2hg" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -43,7 +43,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/templates",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -55,9 +55,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch/templates" />
-      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/api/routes/lib" />
       <recent name="$PROJECT_DIR$/perch/config" />
     </key>
@@ -132,31 +132,7 @@
       <workItem from="1768725058879" duration="19969000" />
       <workItem from="1769162579487" duration="14924000" />
       <workItem from="1770111981285" duration="25068000" />
-      <workItem from="1770719343614" duration="721000" />
-    </task>
-    <task id="LOCAL-00097" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1763458048135</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1763458048135</updated>
-    </task>
-    <task id="LOCAL-00098" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1763463544599</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1763463544599</updated>
-    </task>
-    <task id="LOCAL-00099" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1763624681980</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1763624681980</updated>
+      <workItem from="1770719343614" duration="6086000" />
     </task>
     <task id="LOCAL-00100" summary="weightloss">
       <option name="closed" value="true" />
@@ -526,7 +502,31 @@
       <option name="project" value="LOCAL" />
       <updated>1770648883193</updated>
     </task>
-    <option name="localTasksCounter" value="146" />
+    <task id="LOCAL-00146" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1770725061429</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1770725061429</updated>
+    </task>
+    <task id="LOCAL-00147" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1770725134805</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1770725134805</updated>
+    </task>
+    <task id="LOCAL-00148" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1770736804161</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1770736804164</updated>
+    </task>
+    <option name="localTasksCounter" value="149" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -583,6 +583,11 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
               <option name="FILTERS">
                 <map>
                   <entry key="branch">
