@@ -11,11 +11,14 @@
         }
     }
 
+    $status_reason_value = isset($status_reason) ? $status_reason : '';
+    $status_reason_field = '<input type="hidden" name="status_reason" id="status_reason" value="'.$HTML->encode($status_reason_value).'">';
+
     echo $HTML->title_panel([
         'heading' => $Lang->get('Viewing order'),
         'form' => [
             'action' => $Form->action(),
-            'button' => $Form->select_field('status', 'Change status to', $opts, $value).$Form->submit('btnSubmit', 'Update', 'button button-small')
+            'button' => $Form->select_field('status', 'Change status to', $opts, $value).$status_reason_field.$Form->submit('btnSubmit', 'Update', 'button button-small')
         ]
     ], $CurrentUser);
 
@@ -766,6 +769,48 @@ form.topadd .field label {
 
 
 <script type="text/javascript">
+function orderStatusNeedsReason(statusValue) {
+    if (!statusValue) return false;
+    var normalized = String(statusValue).toLowerCase().trim();
+    return ['cancelled', 'refund', 'refunded'].indexOf(normalized) !== -1;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var statusField = document.querySelector('select[name="status"]');
+    var reasonField = document.getElementById('status_reason');
+
+    if (!statusField || !reasonField) {
+        return;
+    }
+
+    var form = statusField.form;
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener('submit', function(event) {
+        if (!orderStatusNeedsReason(statusField.value)) {
+            return;
+        }
+
+        var reason = (reasonField.value || '').trim();
+        while (reason === '') {
+            var popupReason = window.prompt('Please enter a reason for cancelling or refunding this order:', reason);
+            if (popupReason === null) {
+                event.preventDefault();
+                return;
+            }
+
+            reason = popupReason.trim();
+            if (reason === '') {
+                window.alert('A reason is required before you can update this status.');
+            }
+        }
+
+        reasonField.value = reason;
+    });
+});
+
 function exportInPDF(){
 
 

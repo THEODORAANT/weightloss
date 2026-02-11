@@ -14,6 +14,7 @@
 	$Form = $API->get('Form');
 
 	$message = false;
+	$status_reason = '';
 	$product_options = [];
 
 	if (!function_exists('comms_service_request_json')) {
@@ -181,18 +182,26 @@
 		if ($Form->submitted()) {
 
 			$data = $Form->receive(['status']);
+			$status_reason = trim((string)PerchUtil::post('status_reason'));
 
 			if ($Order && isset($data['status']) && $data['status'] !== '') {
 				$newStatus = strtolower(trim((string)$data['status']));
-				$Order->set_status($data['status']);
+				$requires_status_reason = in_array($newStatus, ['cancelled', 'refund', 'refunded'], true);
 
-				if (in_array($newStatus, ['refund', 'refunded'], true)) {
+				if ($requires_status_reason && $status_reason === '') {
+					$message = 'Please provide a reason when cancelling or refunding this order.';
+				} else {
+					$Order->set_status($data['status']);
+
+					if ($requires_status_reason) {
 					$orderStatusData = [
 						'status' => 'CANCELLED',
+						'reason' => $status_reason,
 					];
 					$statusUpdateResult = comms_service_request_json('POST', '/v1/perch/orders/'.$Order->id().'/status', $orderStatusData);
 					if (!is_array($statusUpdateResult)) {
 						$message = 'Order updated, but comms status update to CANCELLED failed.';
+					}
 					}
 				}
 			}
@@ -346,4 +355,3 @@
 	}else{
 	    PerchUtil::redirect($API->app_path());
 	}
-
