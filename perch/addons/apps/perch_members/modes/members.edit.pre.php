@@ -1,11 +1,91 @@
 <?php
 
 require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
+
+if (!function_exists('wl_member_note_extract_metadata')) {
+    function wl_member_note_extract_metadata($noteText)
+    {
+        $noteText = trim((string) $noteText);
+
+        $metadata = [
+            'category' => 'admin_notes',
+            'target_type' => 'patient_note',
+            'thread_ref' => '',
+            'order_id' => null,
+            'red_flag' => false,
+            'body' => $noteText,
+        ];
+
+        if ($noteText === '') {
+            return $metadata;
+        }
+
+        if (preg_match('/^\[(Admin Notes|Clinical|Complaint)\]/i', $noteText, $matches)) {
+            $label = strtolower(trim((string) $matches[1]));
+            $metadata['category'] = str_replace(' ', '_', $label);
+            $noteText = trim(substr($noteText, strlen($matches[0])));
+        }
+
+        if (preg_match('/^\[(Patient Notes|Order Notes)\]/i', $noteText, $matches)) {
+            $label = strtolower(trim((string) $matches[1]));
+            $metadata['target_type'] = $label === 'order notes' ? 'order_note' : 'patient_note';
+            $noteText = trim(substr($noteText, strlen($matches[0])));
+        }
+
+        if (preg_match('/^\[Thread:([^\]]+)\]/i', $noteText, $matches)) {
+            $metadata['thread_ref'] = trim((string) $matches[1]);
+            $noteText = trim(substr($noteText, strlen($matches[0])));
+        }
+
+        if (preg_match('/^\[Order\s*#(\d+)\]/i', $noteText, $matches)) {
+            $metadata['order_id'] = (int) $matches[1];
+            $noteText = trim(substr($noteText, strlen($matches[0])));
+        }
+
+        $metadata['red_flag'] = $metadata['category'] !== 'admin_notes';
+        $metadata['body'] = $noteText;
+
+        return $metadata;
+    }
+}
+
+if (!function_exists('wl_member_note_build_text')) {
+    function wl_member_note_build_text($noteText, $category, $targetType, $threadRef = '', $orderId = null)
+    {
+        $labels = [
+            'admin_notes' => 'Admin Notes',
+            'clinical' => 'Clinical',
+            'complaint' => 'Complaint',
+        ];
+
+        $typeLabels = [
+            'patient_note' => 'Patient Notes',
+            'order_note' => 'Order Notes',
+        ];
+
+        $parts = [];
+        $parts[] = '[' . ($labels[$category] ?? 'Admin Notes') . ']';
+        $parts[] = '[' . ($typeLabels[$targetType] ?? 'Patient Notes') . ']';
+
+        if ($threadRef !== '') {
+            $parts[] = '[Thread:' . trim($threadRef) . ']';
+        }
+
+        if ($targetType === 'order_note' && $orderId) {
+            $parts[] = '[Order #' . (int) $orderId . ']';
+        }
+
+        $parts[] = trim((string) $noteText);
+
+        return trim(implode(' ', array_filter($parts)));
+    }
+}
     
     $Members = new PerchMembers_Members($API);
     $message = false;
     
     $Tags = new PerchMembers_Tags($API);
+    $Users = new PerchUsers();
     $Notes = new PerchMembers_Notes($API);
     $NotePharmacyStatuses = new PerchMembers_NotePharmacyStatuses($API);
     $Documents = new PerchMembers_Documents($API);
@@ -138,10 +218,15 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
                         $noteTimestamp = $Note->noteDate();
                         $noteDateTime = $noteTimestamp ? strtotime((string) $noteTimestamp) : time();
                         $noteDateLabel = date('Y-m-d H:i:s', $noteDateTime);
-                        $noteText = trim((string) $Note->note_text());
+                        $rawNoteText = trim((string) $Note->note_text());
+                        $noteMeta = wl_member_note_extract_metadata($rawNoteText);
+                        $noteText = trim((string) $noteMeta['body']);
                         $noteWithTimestamp = '['.$noteDateLabel.'] '.$noteText;
 
                         $addedBy = trim((string) $Note->addedBy());
+                        $isClinicalCategory = in_array($noteMeta['category'], ['clinical', 'complaint'], true);
+                        $should_escalate = $should_escalate || $isClinicalCategory;
+                        $noteType = $should_escalate ? 'clinical_note' : 'admin_note';
                         $notePayload = [
                             'note_id' => $noteID,
                             'note' => $noteWithTimestamp,
@@ -150,7 +235,11 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
                             'added_by' => $addedBy,
                             'member_email' => $memberEmail,
                             'escalate_clinical_review' => $should_escalate ? 1 : 0,
-                            'note_type' => $should_escalate ? 'clinical_note' : 'admin_note',
+                            'note_type' => $noteType,
+                            'note_category' => $noteMeta['category'],
+                            'target_type' => $noteMeta['target_type'],
+                            'thread_ref' => $noteMeta['thread_ref'],
+                            'order_id' => $noteMeta['order_id'],
                             'body' => $noteText,
                             'created_by' => [
                                 'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
@@ -417,7 +506,25 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
 
                  // new note
                if (isset($post['new-note']) && $post['new-note']!='') {
-                                $noteset = $Notes->parse_string($post['new-note']);
+                                $noteCategory = isset($post['new-note-category']) ? trim((string) $post['new-note-category']) : 'admin_notes';
+                                if (!in_array($noteCategory, ['admin_notes', 'clinical', 'complaint'], true)) {
+                                    $noteCategory = 'admin_notes';
+                                }
+
+                                $noteTargetType = isset($post['new-note-target']) ? trim((string) $post['new-note-target']) : 'patient_note';
+                                if (!in_array($noteTargetType, ['patient_note', 'order_note'], true)) {
+                                    $noteTargetType = 'patient_note';
+                                }
+
+                                $noteThreadRef = isset($post['new-note-thread']) ? trim((string) $post['new-note-thread']) : '';
+                                $noteOrderId = isset($post['new-note-order-id']) ? (int) $post['new-note-order-id'] : 0;
+                                $isRedFlag = isset($post['new-note-red-flag']) && $post['new-note-red-flag'] === '1';
+                                if ($noteCategory === 'clinical' || $noteCategory === 'complaint') {
+                                    $isRedFlag = true;
+                                }
+
+                                $structuredNote = wl_member_note_build_text($post['new-note'], $noteCategory, $noteTargetType, $noteThreadRef, $noteOrderId);
+                                $noteset = $Notes->parse_string($structuredNote);
                                  $User = $Users->find($CurrentUser->id());
 
                                 if (PerchUtil::count($noteset)) {
@@ -429,6 +536,38 @@ require_once __DIR__ . '/../../api/routes/lib/comms_service.php';
                                         }
 
                                         $Note->add_to_member($Member->id(), $User->userUsername());
+
+                                        if ($isRedFlag && is_object($Member)) {
+                                            $memberEmail = trim((string)$Member->memberEmail());
+                                            $noteTimestamp = $Note->noteDate();
+                                            $noteDateTime = $noteTimestamp ? strtotime((string) $noteTimestamp) : time();
+                                            $noteDateLabel = date('Y-m-d H:i:s', $noteDateTime);
+                                            $noteBody = trim((string) $Note->note_text());
+                                            $notePayload = [
+                                                'note_id' => (int) $Note->id(),
+                                                'note' => '['.$noteDateLabel.'] '.$noteBody,
+                                                'note_raw' => $noteBody,
+                                                'note_date' => $noteDateLabel,
+                                                'added_by' => $User->userUsername(),
+                                                'member_email' => $memberEmail,
+                                                'escalate_clinical_review' => 1,
+                                                'note_type' => 'clinical_note',
+                                                'note_category' => $noteCategory,
+                                                'target_type' => $noteTargetType,
+                                                'thread_ref' => $noteThreadRef,
+                                                'order_id' => $noteOrderId > 0 ? $noteOrderId : null,
+                                                'body' => $noteBody,
+                                            ];
+
+                                            $sentToComms = comms_service_send_member_note((int) $Member->id(), $notePayload);
+                                            if ($noteTargetType === 'order_note' && $noteOrderId > 0) {
+                                                comms_service_send_order_note($noteOrderId, $notePayload);
+                                            }
+
+                                            if ($sentToComms) {
+                                                $NotePharmacyStatuses->record_sent_status((int) $Member->id(), (int) $Note->id(), 'Sent', 'Escalated for clinical review');
+                                            }
+                                        }
                                     }
                                 }
                  }

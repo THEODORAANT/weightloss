@@ -419,7 +419,52 @@
 
 
 
-    <?php echo $HTML->heading2('Notes'); ?>
+    
+<?php
+if (!function_exists('wl_member_note_present')) {
+    function wl_member_note_present($rawNote)
+    {
+        $rawNote = trim((string) $rawNote);
+        $meta = [
+            'category' => 'Admin Notes',
+            'target' => 'Patient Notes',
+            'thread' => '-',
+            'order' => '-',
+            'red_flag' => 'No',
+            'body' => $rawNote,
+        ];
+
+        if (preg_match('/^\[(Admin Notes|Clinical|Complaint)\]/i', $rawNote, $matches)) {
+            $meta['category'] = trim((string) $matches[1]);
+            $rawNote = trim(substr($rawNote, strlen($matches[0])));
+        }
+
+        if (preg_match('/^\[(Patient Notes|Order Notes)\]/i', $rawNote, $matches)) {
+            $meta['target'] = trim((string) $matches[1]);
+            $rawNote = trim(substr($rawNote, strlen($matches[0])));
+        }
+
+        if (preg_match('/^\[Thread:([^\]]+)\]/i', $rawNote, $matches)) {
+            $thread = trim((string) $matches[1]);
+            $meta['thread'] = $thread !== '' ? $thread : '-';
+            $rawNote = trim(substr($rawNote, strlen($matches[0])));
+        }
+
+        if (preg_match('/^\[Order\s*#(\d+)\]/i', $rawNote, $matches)) {
+            $meta['order'] = '#' . (int) $matches[1];
+            $rawNote = trim(substr($rawNote, strlen($matches[0])));
+        }
+
+        $meta['red_flag'] = in_array(strtolower($meta['category']), ['clinical', 'complaint'], true) ? 'Yes' : 'No';
+        $meta['body'] = $rawNote;
+
+        return $meta;
+    }
+}
+?>
+
+
+<?php echo $HTML->heading2('Notes'); ?>
 
 <?php
     if (!isset($NotePharmacyStatuses) || !($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses)) {
@@ -438,8 +483,12 @@
 
                               <th>Note</th>
                               <th>Date</th>
+                              <th>Category</th>
+                              <th>Type</th>
+                              <th>Thread</th>
                                 <th>Added by</th>
                               <th>Pharmacy status</th>
+                              <th>Red flag</th>
                               <th>Escalate clinical review</th>
                                 <th class="action">Action</th>
                           </tr>
@@ -482,10 +531,15 @@
                                   }
                               }
 
+                              $noteMeta = wl_member_note_present($Note->note_text());
+
                               echo '<tr>';
 
-                                  echo '<td>'.PerchUtil::html($Note->note_text()).'</td>';
-                                  echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d M Y', strtotime($Note->noteDate())) : '-').'</td>';
+                                  echo '<td>'.PerchUtil::html($noteMeta['body']).'</td>';
+                                  echo '<td>'.PerchUtil::html($Note->noteDate() ? date('d M Y H:i', strtotime($Note->noteDate())) : '-').'</td>';
+                                  echo '<td>'.PerchUtil::html($noteMeta['category']).'</td>';
+                                  echo '<td>'.PerchUtil::html($noteMeta['target']).(($noteMeta['order'] !== '-') ? ' '.PerchUtil::html($noteMeta['order']) : '').'</td>';
+                                  echo '<td>'.PerchUtil::html($noteMeta['thread']).'</td>';
                                     echo '<td>'.PerchUtil::html($Note->addedBy()).'</td>';
                                     echo '<td>';
                                     if ($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus) {
@@ -500,6 +554,7 @@
                                         echo '-';
                                     }
                                     echo '</td>';
+                                    echo '<td>'.PerchUtil::html($noteMeta['red_flag']).'</td>';
                                     echo '<td class="action">';
                                     if (is_object($Member) && !($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
                                         echo '<label><input type="checkbox" name="note_escalate['.(int)$Note->id().']" value="1" /> Escalate clinical review</label>';
@@ -517,8 +572,24 @@
                       }
 
                       echo '<tr>';
-                          echo '<td colspan="6" class="action">'.$Form->label('new-note', PerchLang::get('New'));
-                          echo $Form->textarea('new-note', false, '', false, ' maxlength="2000"').'</td>';
+                          echo '<td colspan="10" class="action">'.$Form->label('new-note', PerchLang::get('New'));
+                          echo $Form->textarea('new-note', false, '', false, ' maxlength="2000"');
+                          echo '<div style="margin-top:8px;display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:10px;align-items:start;">';
+                          echo '<label>Notes category<br />';
+                          echo '<select name="new-note-category">';
+                          echo '<option value="admin_notes">Admin Notes</option>';
+                          echo '<option value="clinical">Clinical</option>';
+                          echo '<option value="complaint">Complaint</option>';
+                          echo '</select></label>';
+                          echo '<label>Notes type<br />';
+                          echo '<select name="new-note-target">';
+                          echo '<option value="patient_note">Patient Notes</option>';
+                          echo '<option value="order_note">Order Notes</option>';
+                          echo '</select></label>';
+                          echo '<label>Origin thread/message ID<br /><input type="text" name="new-note-thread" value="" /></label>';
+                          echo '<label>Order ID (when using Order Notes)<br /><input type="number" min="1" name="new-note-order-id" value="" /></label>';
+                          echo '<label style="grid-column:1/-1;"><input type="checkbox" name="new-note-red-flag" value="1" /> Red-flag for clinical escalation</label>';
+                          echo '</div></td>';
 
                       echo '</tr>';
 
