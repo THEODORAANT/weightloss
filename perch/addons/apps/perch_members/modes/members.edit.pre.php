@@ -49,6 +49,32 @@ if (!function_exists('wl_member_note_extract_metadata')) {
     }
 }
 
+
+if (!function_exists('wl_member_order_ids')) {
+    function wl_member_order_ids($Orders, $Customer)
+    {
+        $ids = [];
+
+        if (!is_object($Customer) || !is_object($Orders)) {
+            return $ids;
+        }
+
+        $orders = $Orders->findAll_for_customer($Customer);
+        if (!PerchUtil::count($orders)) {
+            return $ids;
+        }
+
+        foreach ($orders as $Order) {
+            $orderID = (int) $Order->orderID();
+            if ($orderID > 0) {
+                $ids[$orderID] = true;
+            }
+        }
+
+        return $ids;
+    }
+}
+
 if (!function_exists('wl_member_note_build_text')) {
     function wl_member_note_build_text($noteText, $category, $targetType, $threadRef = '', $orderId = null)
     {
@@ -518,6 +544,13 @@ if (!function_exists('wl_member_note_build_text')) {
 
                                 $noteThreadRef = isset($post['new-note-thread']) ? trim((string) $post['new-note-thread']) : '';
                                 $noteOrderId = isset($post['new-note-order-id']) ? (int) $post['new-note-order-id'] : 0;
+                                $validMemberOrderIds = wl_member_order_ids($Orders, $Customer);
+                                if ($noteOrderId > 0 && !isset($validMemberOrderIds[$noteOrderId])) {
+                                    $noteOrderId = 0;
+                                }
+                                if ($noteTargetType === 'order_note' && $noteOrderId <= 0) {
+                                    $noteTargetType = 'patient_note';
+                                }
                                 $isRedFlag = isset($post['new-note-red-flag']) && $post['new-note-red-flag'] === '1';
                                 if ($noteCategory === 'clinical' || $noteCategory === 'complaint') {
                                     $isRedFlag = true;

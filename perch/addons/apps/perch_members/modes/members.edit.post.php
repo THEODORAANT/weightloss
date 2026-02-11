@@ -235,6 +235,7 @@
 
      <?php
        //Questionnaire
+             $orders = [];
              echo $HTML->heading2('Orders');
              if( $Customer){
                      echo'<div class="form-inner">
@@ -587,7 +588,22 @@ if (!function_exists('wl_member_note_present')) {
                           echo '<option value="order_note">Order Notes</option>';
                           echo '</select></label>';
                           echo '<label>Origin thread/message ID<br /><input type="text" name="new-note-thread" value="" /></label>';
-                          echo '<label>Order ID (when using Order Notes)<br /><input type="number" min="1" name="new-note-order-id" value="" /></label>';
+                          echo '<label>Order ID (when using Order Notes)<br />';
+                          echo '<select name="new-note-order-id">';
+                          echo '<option value="">Select an order</option>';
+                          if (isset($orders) && PerchUtil::count($orders)) {
+                              foreach ($orders as $OrderOption) {
+                                  $orderId = (int) $OrderOption->orderID();
+                                  $invoice = trim((string) $OrderOption->orderInvoiceNumber());
+                                  $orderDate = trim((string) $OrderOption->orderCreated());
+                                  $optionLabel = ($invoice !== '' ? $invoice : ('Order #' . $orderId));
+                                  if ($orderDate !== '') {
+                                      $optionLabel .= ' - ' . $orderDate;
+                                  }
+                                  echo '<option value="'.PerchUtil::html($orderId).'">'.PerchUtil::html($optionLabel).'</option>';
+                              }
+                          }
+                          echo '</select></label>';
                           echo '<label style="grid-column:1/-1;"><input type="checkbox" name="new-note-red-flag" value="1" /> Red-flag for clinical escalation</label>';
                           echo '</div></td>';
 
