@@ -462,6 +462,118 @@ if (!function_exists('wl_member_note_present')) {
         return $meta;
     }
 }
+
+if (!function_exists('wl_normalize_comms_notes')) {
+    function wl_normalize_comms_notes($commsMemberNotes)
+    {
+        $normalized = [];
+
+        if (!is_array($commsMemberNotes)) {
+            return $normalized;
+        }
+
+        foreach ($commsMemberNotes as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            if (isset($item['notes']) && is_array($item['notes'])) {
+                foreach ($item['notes'] as $note) {
+                    if (is_array($note)) {
+                        $normalized[] = $note;
+                    }
+                }
+                continue;
+            }
+
+            if (isset($item['note_id']) || isset($item['body']) || isset($item['replies'])) {
+                $normalized[] = $item;
+            }
+        }
+
+        return $normalized;
+    }
+}
+
+if (!function_exists('wl_comms_note_author')) {
+    function wl_comms_note_author($entry)
+    {
+        if (!is_array($entry)) {
+            return '-';
+        }
+
+        $displayName = trim((string) ($entry['created_by_display_name'] ?? ''));
+        if ($displayName !== '') {
+            return $displayName;
+        }
+
+        $role = trim((string) ($entry['created_by_role'] ?? ''));
+        if ($role !== '') {
+            return ucfirst($role);
+        }
+
+        return '-';
+    }
+}
+
+if (!function_exists('wl_comms_note_date')) {
+    function wl_comms_note_date($value)
+    {
+        $rawDate = trim((string) $value);
+        if ($rawDate === '') {
+            return '-';
+        }
+
+        $timestamp = strtotime($rawDate);
+        return $timestamp ? date('d M Y H:i', $timestamp) : $rawDate;
+    }
+}
+
+
+if (!function_exists('wl_comms_text_key')) {
+    function wl_comms_text_key($value)
+    {
+        $text = strtolower(trim((string) $value));
+        if ($text === '') {
+            return '';
+        }
+
+        return preg_replace('/\s+/', ' ', $text);
+    }
+}
+
+if (!function_exists('wl_comms_indexed_texts')) {
+    function wl_comms_indexed_texts($commsMemberNotes)
+    {
+        $indexed = [];
+        $normalized = wl_normalize_comms_notes($commsMemberNotes);
+
+        foreach ($normalized as $note) {
+            if (!is_array($note)) {
+                continue;
+            }
+
+            $noteKey = wl_comms_text_key($note['body'] ?? $note['note'] ?? '');
+            if ($noteKey !== '') {
+                $indexed[$noteKey] = true;
+            }
+
+            $replies = isset($note['replies']) && is_array($note['replies']) ? $note['replies'] : [];
+            foreach ($replies as $reply) {
+                if (!is_array($reply)) {
+                    continue;
+                }
+
+                $replyKey = wl_comms_text_key($reply['body'] ?? $reply['reply'] ?? '');
+                if ($replyKey !== '') {
+                    $indexed[$replyKey] = true;
+                }
+            }
+        }
+
+        return $indexed;
+    }
+}
 ?>
 
 
@@ -496,8 +608,21 @@ if (!function_exists('wl_member_note_present')) {
                       </thead>
                       <tbody>
                   <?php
+                      $commsIndexedTexts = wl_comms_indexed_texts($comms_member_notes);
                       if (PerchUtil::count($notes)) {
                           foreach($notes as $Note) {
+                              $rawNoteText = (string) $Note->note_text();
+                              $noteMeta = wl_member_note_present($rawNoteText);
+
+                              $rawNoteKey = wl_comms_text_key($rawNoteText);
+                              $parsedNoteKey = wl_comms_text_key($noteMeta['body']);
+                              $noteExistsInComms = ($rawNoteKey !== '' && isset($commsIndexedTexts[$rawNoteKey]))
+                                  || ($parsedNoteKey !== '' && isset($commsIndexedTexts[$parsedNoteKey]));
+
+                              if ($noteExistsInComms) {
+                                  continue;
+                              }
+
                               $noteID = (int) $Note->id();
                               $pharmacyStatus = false;
                               if ($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses && isset($Member) && is_object($Member)) {
@@ -532,7 +657,6 @@ if (!function_exists('wl_member_note_present')) {
                                   }
                               }
 
-                              $noteMeta = wl_member_note_present($Note->note_text());
 
                               echo '<tr>';
 
@@ -616,80 +740,56 @@ if (!function_exists('wl_member_note_present')) {
               </div>
 <?php
 
-          echo $HTML->heading2('Member note replies');
+	          echo $HTML->heading2('Member comms notes and replies');
 
           ?>
 
            <div class="form-inner">
-                  <table class="notes">
-                      <thead>
-                          <tr>
-                              <th>Reply</th>
-                              <th>Date</th>
-                              <th>From</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                  <?php
-                      if (PerchUtil::count($comms_member_notes)) {
-                          foreach ($comms_member_notes as $commsNote) {
-                              $replyText = '';
-                              $replyDate = '';
-                              $replyAuthor = '';
+	                  <table class="notes">
+	                      <thead>
+	                          <tr>
+	                              <th>Note / Reply</th>
+	                              <th>Date</th>
+	                              <th>From</th>
+	                          </tr>
+	                      </thead>
+	                      <tbody>
+	                  <?php
+	                      $normalizedCommsNotes = wl_normalize_comms_notes($comms_member_notes);
+	                      if (PerchUtil::count($normalizedCommsNotes)) {
+	                          foreach ($normalizedCommsNotes as $commsNote) {
+	                              $noteBody = trim((string) ($commsNote['body'] ?? $commsNote['note'] ?? ''));
+	                              $noteDate = wl_comms_note_date($commsNote['created_at'] ?? '');
+	                              $noteAuthor = wl_comms_note_author($commsNote);
 
-                              if (is_array($commsNote)) {
-                                  if (isset($commsNote['reply'])) {
-                                      $replyText = (string) $commsNote['reply'];
-                                  } elseif (isset($commsNote['reply_text'])) {
-                                      $replyText = (string) $commsNote['reply_text'];
-                                  } elseif (isset($commsNote['note'])) {
-                                      $replyText = (string) $commsNote['note'];
-                                  } elseif (isset($commsNote['body'])) {
-                                      $replyText = (string) $commsNote['body'];
-                                  } elseif (isset($commsNote['message'])) {
-                                      $replyText = (string) $commsNote['message'];
-                                  }
+	                              echo '<tr>';
+	                                  echo '<td><strong>Note:</strong> '.PerchUtil::html($noteBody !== '' ? $noteBody : '-').'</td>';
+	                                  echo '<td>'.PerchUtil::html($noteDate).'</td>';
+	                                  echo '<td>'.PerchUtil::html($noteAuthor).'</td>';
+	                              echo '</tr>';
 
-                                  if (isset($commsNote['created_at'])) {
-                                      $replyDate = (string) $commsNote['created_at'];
-                                  } elseif (isset($commsNote['createdAt'])) {
-                                      $replyDate = (string) $commsNote['createdAt'];
-                                  } elseif (isset($commsNote['sent_at'])) {
-                                      $replyDate = (string) $commsNote['sent_at'];
-                                  } elseif (isset($commsNote['note_date'])) {
-                                      $replyDate = (string) $commsNote['note_date'];
-                                  } elseif (isset($commsNote['date'])) {
-                                      $replyDate = (string) $commsNote['date'];
-                                  }
+	                              $replies = isset($commsNote['replies']) && is_array($commsNote['replies']) ? $commsNote['replies'] : [];
+	                              foreach ($replies as $reply) {
+	                                  if (!is_array($reply)) {
+	                                      continue;
+	                                  }
 
-                                  if (isset($commsNote['created_by']) && is_array($commsNote['created_by'])) {
-                                      $replyAuthor = (string) ($commsNote['created_by']['name'] ?? $commsNote['created_by']['email'] ?? '');
-                                  } elseif (isset($commsNote['createdBy']) && is_array($commsNote['createdBy'])) {
-                                      $replyAuthor = (string) ($commsNote['createdBy']['name'] ?? $commsNote['createdBy']['email'] ?? '');
-                                  } elseif (isset($commsNote['added_by'])) {
-                                      $replyAuthor = (string) $commsNote['added_by'];
-                                  } elseif (isset($commsNote['author'])) {
-                                      $replyAuthor = (string) $commsNote['author'];
-                                  }
-                              }
+	                                  $replyBody = trim((string) ($reply['body'] ?? $reply['reply'] ?? ''));
+	                                  $replyDate = wl_comms_note_date($reply['created_at'] ?? '');
+	                                  $replyAuthor = wl_comms_note_author($reply);
 
-                              $displayDate = '-';
-                              if ($replyDate !== '') {
-                                  $timestamp = strtotime($replyDate);
-                                  $displayDate = $timestamp ? date('d M Y H:i', $timestamp) : $replyDate;
-                              }
-
-                              echo '<tr>';
-                                  echo '<td>'.PerchUtil::html($replyText !== '' ? $replyText : '-').'</td>';
-                                  echo '<td>'.PerchUtil::html($displayDate).'</td>';
-                                  echo '<td>'.PerchUtil::html($replyAuthor !== '' ? $replyAuthor : '-').'</td>';
-                              echo '</tr>';
-                          }
-                      } else {
-                          echo '<tr>';
-                              echo '<td colspan="3">No replies found.</td>';
-                          echo '</tr>';
-                      }
+	                                  echo '<tr>';
+	                                      echo '<td style="padding-left:24px;">↳ '.PerchUtil::html($replyBody !== '' ? $replyBody : '-').'</td>';
+	                                      echo '<td>'.PerchUtil::html($replyDate).'</td>';
+	                                      echo '<td>'.PerchUtil::html($replyAuthor).'</td>';
+	                                  echo '</tr>';
+	                              }
+	                          }
+	                      } else {
+	                          echo '<tr>';
+	                              echo '<td colspan="3">No comms notes found.</td>';
+	                          echo '</tr>';
+	                      }
 
                   ?>
 
