@@ -528,6 +528,52 @@ if (!function_exists('wl_comms_note_date')) {
         return $timestamp ? date('d M Y H:i', $timestamp) : $rawDate;
     }
 }
+
+
+if (!function_exists('wl_comms_text_key')) {
+    function wl_comms_text_key($value)
+    {
+        $text = strtolower(trim((string) $value));
+        if ($text === '') {
+            return '';
+        }
+
+        return preg_replace('/\s+/', ' ', $text);
+    }
+}
+
+if (!function_exists('wl_comms_indexed_texts')) {
+    function wl_comms_indexed_texts($commsMemberNotes)
+    {
+        $indexed = [];
+        $normalized = wl_normalize_comms_notes($commsMemberNotes);
+
+        foreach ($normalized as $note) {
+            if (!is_array($note)) {
+                continue;
+            }
+
+            $noteKey = wl_comms_text_key($note['body'] ?? $note['note'] ?? '');
+            if ($noteKey !== '') {
+                $indexed[$noteKey] = true;
+            }
+
+            $replies = isset($note['replies']) && is_array($note['replies']) ? $note['replies'] : [];
+            foreach ($replies as $reply) {
+                if (!is_array($reply)) {
+                    continue;
+                }
+
+                $replyKey = wl_comms_text_key($reply['body'] ?? $reply['reply'] ?? '');
+                if ($replyKey !== '') {
+                    $indexed[$replyKey] = true;
+                }
+            }
+        }
+
+        return $indexed;
+    }
+}
 ?>
 
 
@@ -562,8 +608,21 @@ if (!function_exists('wl_comms_note_date')) {
                       </thead>
                       <tbody>
                   <?php
+                      $commsIndexedTexts = wl_comms_indexed_texts($comms_member_notes);
                       if (PerchUtil::count($notes)) {
                           foreach($notes as $Note) {
+                              $rawNoteText = (string) $Note->note_text();
+                              $noteMeta = wl_member_note_present($rawNoteText);
+
+                              $rawNoteKey = wl_comms_text_key($rawNoteText);
+                              $parsedNoteKey = wl_comms_text_key($noteMeta['body']);
+                              $noteExistsInComms = ($rawNoteKey !== '' && isset($commsIndexedTexts[$rawNoteKey]))
+                                  || ($parsedNoteKey !== '' && isset($commsIndexedTexts[$parsedNoteKey]));
+
+                              if ($noteExistsInComms) {
+                                  continue;
+                              }
+
                               $noteID = (int) $Note->id();
                               $pharmacyStatus = false;
                               if ($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses && isset($Member) && is_object($Member)) {
@@ -598,7 +657,6 @@ if (!function_exists('wl_comms_note_date')) {
                                   }
                               }
 
-                              $noteMeta = wl_member_note_present($Note->note_text());
 
                               echo '<tr>';
 
