@@ -574,16 +574,22 @@ if (!function_exists('wl_member_note_build_text')) {
                                         $noteTimestamp = $Note->noteDate();
                                         $noteDateTime = $noteTimestamp ? strtotime((string) $noteTimestamp) : time();
                                         $noteDateLabel = date('Y-m-d H:i:s', $noteDateTime);
-                                        $noteBody = trim((string) $Note->note_text());
+                                        $rawNoteText = trim((string) $Note->note_text());
+                                        $noteMeta = wl_member_note_extract_metadata($rawNoteText);
+                                        $noteBody = trim((string) $noteMeta['body']);
+                                        $effectiveCategory = trim((string) $noteMeta['category']);
+                                        $effectiveTargetType = trim((string) $noteMeta['target_type']);
+                                        $effectiveThreadRef = trim((string) $noteMeta['thread_ref']);
+                                        $effectiveOrderId = isset($noteMeta['order_id']) ? (int) $noteMeta['order_id'] : 0;
                                         $addedBy = trim((string) $User->userUsername());
-                                        $noteType = ($noteCategory === 'clinical' || $noteCategory === 'complaint') ? 'clinical_note' : 'admin_note';
+                                        $noteType = ($effectiveCategory === 'clinical' || $effectiveCategory === 'complaint') ? 'clinical_note' : 'admin_note';
                                         $createdBy = [
                                             'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
                                             'role' => $addedBy !== '' ? 'admin' : 'system',
                                         ];
 
-                                        if ($noteTargetType === 'order_note' && $noteOrderId > 0 && $noteBody !== '' && is_object($Member)) {
-                                            comms_sync_order($noteOrderId, (int) $Member->id());
+                                        if ($effectiveTargetType === 'order_note' && $effectiveOrderId > 0 && $noteBody !== '' && is_object($Member)) {
+                                            comms_sync_order($effectiveOrderId, (int) $Member->id());
 
                                             $orderNotePayload = [
                                                 'note_type' => $noteType,
@@ -594,10 +600,10 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'external_note_ref' => (string) $Note->id(),
                                             ];
 
-                                            comms_service_send_order_note($noteOrderId, $orderNotePayload);
+                                            comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
                                         }
 
-                                        if ($isRedFlag && is_object($Member)) {
+                                        if ($isRedFlag && $effectiveTargetType === 'patient_note' && is_object($Member)) {
                                             $memberEmail = trim((string)$Member->memberEmail());
                                             $notePayload = [
                                                 'note_id' => (int) $Note->id(),
@@ -608,10 +614,10 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'member_email' => $memberEmail,
                                                 'escalate_clinical_review' => 1,
                                                 'note_type' => 'clinical_note',
-                                                'note_category' => $noteCategory,
-                                                'target_type' => $noteTargetType,
-                                                'thread_ref' => $noteThreadRef,
-                                                'order_id' => $noteOrderId > 0 ? $noteOrderId : null,
+                                                'note_category' => $effectiveCategory,
+                                                'target_type' => $effectiveTargetType,
+                                                'thread_ref' => $effectiveThreadRef,
+                                                'order_id' => $effectiveOrderId > 0 ? $effectiveOrderId : null,
                                                 'body' => $noteBody,
                                                 'created_by' => $createdBy,
                                                 'external_note_ref' => (string) $Note->id(),
