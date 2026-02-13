@@ -64,3 +64,51 @@ table.tags {
 	background-color: #7898cb;
 }
 
+
+.member-edit-tabs {
+	margin: 0 0 1.5rem;
+}
+
+.member-edit-tabs-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0 0 1rem;
+}
+
+.member-edit-tab-button {
+	border: 0;
+	border-radius: 999px;
+	color: #fff;
+	font-weight: 600;
+	padding: 0.5rem 1rem;
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+.member-edit-tab-button.is-active {
+	opacity: 1;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+.member-edit-tab-button.color-a { background: #2563eb; }
+.member-edit-tab-button.color-b { background: #7c3aed; }
+.member-edit-tab-button.color-c { background: #0891b2; }
+.member-edit-tab-button.color-d { background: #0f766e; }
+.member-edit-tab-button.color-e { background: #16a34a; }
+.member-edit-tab-button.color-f { background: #ca8a04; }
+.member-edit-tab-button.color-g { background: #ea580c; }
+.member-edit-tab-button.color-h { background: #db2777; }
+.member-edit-tab-button.color-i { background: #475569; }
+
+.member-edit-tab-panel {
+	display: none;
+	padding: 0.75rem;
+	border-radius: 8px;
+	background: #fff;
+	border: 1px solid #e4e7ec;
+}
+
+.member-edit-tab-panel.is-active {
+	display: block;
+}

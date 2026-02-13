@@ -16,9 +16,8 @@
 
     if ($message) echo $message;    
         
-    echo $HTML->heading2('Member details');
-    
     echo $Form->form_start(false);
+        echo $HTML->heading2('Member details');
         //echo $Form->text_field('memberEmail', 'Email', isset($details['memberEmail'])?$details['memberEmail']:false, 'l');
 
 
@@ -841,3 +840,83 @@ if (!function_exists('wl_comms_indexed_texts')) {
         echo $Form->submit_field('btnSubmit', 'Save', $API->app_path());
     
     echo $Form->form_end();
+
+    if (is_object($Member)) {
+?>
+<script>
+(function () {
+    var form = document.querySelector('form.form-simple');
+    if (!form) return;
+
+    var children = Array.prototype.slice.call(form.children || []);
+    var headings = children.filter(function (node) {
+        return node.tagName === 'H2';
+    });
+
+    if (headings.length < 2) return;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'member-edit-tabs';
+
+    var nav = document.createElement('div');
+    nav.className = 'member-edit-tabs-nav';
+    nav.setAttribute('role', 'tablist');
+
+    var panels = document.createElement('div');
+    panels.className = 'member-edit-tabs-panels';
+
+    var colorClasses = ['color-a', 'color-b', 'color-c', 'color-d', 'color-e', 'color-f', 'color-g', 'color-h', 'color-i'];
+
+    headings.forEach(function (heading, index) {
+        var panel = document.createElement('section');
+        var tabId = 'member-edit-tab-' + index;
+        var headingText = (heading.textContent || '').trim() || ('Section ' + (index + 1));
+
+        panel.className = 'member-edit-tab-panel' + (index === 0 ? ' is-active' : '');
+        panel.id = tabId;
+
+        var next = heading.nextSibling;
+        panel.appendChild(heading);
+        while (next && next.tagName !== 'H2' && !(next.classList && next.classList.contains('submit-bar'))) {
+            var move = next;
+            next = next.nextSibling;
+            panel.appendChild(move);
+        }
+
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'member-edit-tab-button ' + colorClasses[index % colorClasses.length] + (index === 0 ? ' is-active' : '');
+        button.setAttribute('role', 'tab');
+        button.setAttribute('aria-controls', tabId);
+        button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        button.textContent = headingText;
+
+        button.addEventListener('click', function () {
+            var buttons = nav.querySelectorAll('.member-edit-tab-button');
+            var allPanels = panels.querySelectorAll('.member-edit-tab-panel');
+
+            buttons.forEach(function (btn) {
+                btn.classList.remove('is-active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+
+            allPanels.forEach(function (tabPanel) {
+                tabPanel.classList.remove('is-active');
+            });
+
+            button.classList.add('is-active');
+            button.setAttribute('aria-selected', 'true');
+            panel.classList.add('is-active');
+        });
+
+        nav.appendChild(button);
+        panels.appendChild(panel);
+    });
+
+    wrapper.appendChild(nav);
+    wrapper.appendChild(panels);
+    form.insertBefore(wrapper, form.firstChild);
+})();
+</script>
+<?php
+    }
