@@ -16,9 +16,8 @@
 
     if ($message) echo $message;    
         
-    echo $HTML->heading2('Member details');
-    
     echo $Form->form_start(false);
+        echo $HTML->heading2('Member details');
         //echo $Form->text_field('memberEmail', 'Email', isset($details['memberEmail'])?$details['memberEmail']:false, 'l');
 
 
@@ -841,3 +840,116 @@ if (!function_exists('wl_comms_indexed_texts')) {
         echo $Form->submit_field('btnSubmit', 'Save', $API->app_path());
     
     echo $Form->form_end();
+
+    if (is_object($Member)) {
+?>
+<script>
+(function () {
+    var form = document.querySelector('form.form-simple');
+    if (!form || form.classList.contains('member-tabs-enhanced')) return;
+
+    var children = Array.prototype.slice.call(form.children || []);
+    var headings = children.filter(function (node) {
+        return node.tagName === 'H2';
+    });
+
+    if (headings.length < 2) return;
+
+    form.classList.add('member-tabs-enhanced');
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'member-edit-tabs';
+
+    var nav = document.createElement('div');
+    nav.className = 'member-edit-tabs-nav';
+    nav.setAttribute('role', 'tablist');
+    nav.setAttribute('aria-label', 'Member edit sections');
+
+    var panels = document.createElement('div');
+    panels.className = 'member-edit-tabs-panels';
+
+    var colorClasses = ['color-a', 'color-b', 'color-c', 'color-d', 'color-e', 'color-f', 'color-g', 'color-h', 'color-i'];
+    var tabButtons = [];
+
+    var activateTab = function (activeIndex, shouldFocus) {
+        tabButtons.forEach(function (btn, idx) {
+            var isActive = idx === activeIndex;
+            var targetPanel = document.getElementById(btn.getAttribute('aria-controls'));
+
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            btn.setAttribute('tabindex', isActive ? '0' : '-1');
+
+            if (targetPanel) {
+                targetPanel.classList.toggle('is-active', isActive);
+                targetPanel.hidden = !isActive;
+            }
+
+            if (isActive && shouldFocus) {
+                btn.focus();
+            }
+        });
+    };
+
+    headings.forEach(function (heading, index) {
+        var panel = document.createElement('section');
+        var tabId = 'member-edit-tab-' + index;
+        var tabButtonId = 'member-edit-tab-button-' + index;
+        var headingText = (heading.textContent || '').trim() || ('Section ' + (index + 1));
+
+        panel.className = 'member-edit-tab-panel';
+        panel.id = tabId;
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tabButtonId);
+        panel.hidden = index !== 0;
+
+        heading.classList.add('member-edit-section-heading');
+
+        var next = heading.nextSibling;
+        panel.appendChild(heading);
+        while (next && next.tagName !== 'H2' && !(next.classList && next.classList.contains('submit-bar'))) {
+            var move = next;
+            next = next.nextSibling;
+            panel.appendChild(move);
+        }
+
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.id = tabButtonId;
+        button.className = 'member-edit-tab-button ' + colorClasses[index % colorClasses.length];
+        button.setAttribute('role', 'tab');
+        button.setAttribute('aria-controls', tabId);
+        button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        button.setAttribute('tabindex', index === 0 ? '0' : '-1');
+        button.textContent = headingText;
+
+        button.addEventListener('click', function () {
+            activateTab(index, false);
+        });
+
+        button.addEventListener('keydown', function (event) {
+            var key = event.key;
+            if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') return;
+
+            event.preventDefault();
+            var nextIndex = index;
+            if (key === 'ArrowRight') nextIndex = (index + 1) % tabButtons.length;
+            if (key === 'ArrowLeft') nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+            if (key === 'Home') nextIndex = 0;
+            if (key === 'End') nextIndex = tabButtons.length - 1;
+            activateTab(nextIndex, true);
+        });
+
+        tabButtons.push(button);
+        nav.appendChild(button);
+        panels.appendChild(panel);
+    });
+
+    wrapper.appendChild(nav);
+    wrapper.appendChild(panels);
+    form.insertBefore(wrapper, form.firstChild);
+    activateTab(0, false);
+})();
+</script>
+<?php
+    }
