@@ -205,16 +205,22 @@ function comms_service_send_member_note(int $memberID, array $noteData = []): bo
     return comms_service_request('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
 }
 
-function comms_service_send_member_note_reply(int $memberID, int $noteID, array $replyData = []): bool
+function comms_service_send_member_note_reply(int $memberID, string $noteID, array $replyData = []): bool
 {
+    $normalizedNoteID = trim($noteID);
+    if ($normalizedNoteID === '') {
+        return false;
+    }
+
     $payload = array_merge($replyData, [
         'memberID' => $memberID,
-        'note_id' => $noteID,
+        'note_id' => $normalizedNoteID,
     ]);
 
+    $encodedNoteID = rawurlencode($normalizedNoteID);
     $paths = [
-        '/v1/perch/members/' . $memberID . '/notes/' . $noteID . '/replies',
-        '/v1/perch/members/' . $memberID . '/notes/' . $noteID . '/reply',
+        '/v1/perch/members/' . $memberID . '/notes/' . $encodedNoteID . '/replies',
+        '/v1/perch/members/' . $memberID . '/notes/' . $encodedNoteID . '/reply',
     ];
 
     foreach ($paths as $path) {
