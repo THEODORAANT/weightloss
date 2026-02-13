@@ -227,13 +227,13 @@ if (!function_exists('wl_member_note_build_text')) {
             if (!is_object($Member)) {
                 $message = $HTML->failure_message('The reply could not be sent because the member record could not be found.');
             } else {
-                $targetNoteID = (int) $post['send_member_note_reply'];
+                $targetNoteID = trim((string) $post['send_member_note_reply']);
                 $replyText = '';
                 if (isset($post['note-reply']) && is_array($post['note-reply']) && isset($post['note-reply'][$targetNoteID])) {
                     $replyText = trim((string) $post['note-reply'][$targetNoteID]);
                 }
 
-                if ($targetNoteID <= 0) {
+                if ($targetNoteID === '') {
                     $message = $HTML->failure_message('The reply could not be sent because the note could not be identified.');
                 } elseif ($replyText === '') {
                     $message = $HTML->failure_message('Please enter a reply before sending.');
