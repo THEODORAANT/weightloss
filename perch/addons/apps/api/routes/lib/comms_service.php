@@ -60,6 +60,8 @@ function comms_service_request(string $method, string $path, array $payload = []
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
+        print_r($jsonPayload);
+        print_r($response);
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -219,8 +221,8 @@ function comms_service_send_member_note_reply(int $memberID, string $noteID, arr
 
     $encodedNoteID = rawurlencode($normalizedNoteID);
     $paths = [
-        '/v1/perch/members/' . $memberID . '/notes/' . $encodedNoteID . '/replies',
-        '/v1/perch/members/' . $memberID . '/notes/' . $encodedNoteID . '/reply',
+        '/v1/notes/' . $encodedNoteID . '/replies',
+        //'/v1/perch/members/' . $memberID . '/notes/' . $encodedNoteID . '/reply',
     ];
 
     foreach ($paths as $path) {
