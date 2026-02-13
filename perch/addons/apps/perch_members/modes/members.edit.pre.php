@@ -223,7 +223,45 @@ if (!function_exists('wl_member_note_build_text')) {
         }
         $documentReminderStatus = $document_reminder_selection;
 
-        if (isset($post['send_note_to_pharmacy']) && $post['send_note_to_pharmacy'] !== '') {
+        if (isset($post['send_member_note_reply']) && $post['send_member_note_reply'] !== '') {
+            if (!is_object($Member)) {
+                $message = $HTML->failure_message('The reply could not be sent because the member record could not be found.');
+            } else {
+                $targetNoteID = (int) $post['send_member_note_reply'];
+                $replyText = '';
+                if (isset($post['note-reply']) && is_array($post['note-reply']) && isset($post['note-reply'][$targetNoteID])) {
+                    $replyText = trim((string) $post['note-reply'][$targetNoteID]);
+                }
+
+                if ($targetNoteID <= 0) {
+                    $message = $HTML->failure_message('The reply could not be sent because the note could not be identified.');
+                } elseif ($replyText === '') {
+                    $message = $HTML->failure_message('Please enter a reply before sending.');
+                } else {
+                    $replyAuthor = trim((string) $CurrentUser->username());
+                    $replyPayload = [
+                        'body' => $replyText,
+                        'reply' => $replyText,
+                        'created_by' => [
+                            'name' => $replyAuthor !== '' ? $replyAuthor : 'Perch admin',
+                            'role' => 'admin',
+                        ],
+                    ];
+
+                    $replySent = comms_service_send_member_note_reply((int) $Member->id(), $targetNoteID, $replyPayload);
+
+                    if ($replySent) {
+                        $message = $HTML->success_message('Reply sent successfully.');
+                    } else {
+                        $message = $HTML->failure_message('The reply could not be sent.');
+                    }
+                }
+            }
+
+            if (is_object($Member)) {
+                $details = $Member->to_array();
+            }
+        } elseif (isset($post['send_note_to_pharmacy']) && $post['send_note_to_pharmacy'] !== '') {
             if (!is_object($Member)) {
                 $message = $HTML->failure_message('The note could not be sent because the member record could not be found.');
             } else {

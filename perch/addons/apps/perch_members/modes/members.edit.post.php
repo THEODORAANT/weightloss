@@ -529,6 +529,33 @@ if (!function_exists('wl_comms_note_date')) {
 }
 
 
+if (!function_exists('wl_comms_note_identifier')) {
+    function wl_comms_note_identifier($entry)
+    {
+        if (!is_array($entry)) {
+            return 0;
+        }
+
+        $candidates = [
+            $entry['note_id'] ?? null,
+            $entry['id'] ?? null,
+            $entry['noteID'] ?? null,
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (is_numeric($candidate)) {
+                $id = (int) $candidate;
+                if ($id > 0) {
+                    return $id;
+                }
+            }
+        }
+
+        return 0;
+    }
+}
+
+
 if (!function_exists('wl_comms_text_key')) {
     function wl_comms_text_key($value)
     {
@@ -761,6 +788,8 @@ if (!function_exists('wl_comms_indexed_texts')) {
 	                              $noteDate = wl_comms_note_date($commsNote['created_at'] ?? '');
 	                              $noteAuthor = wl_comms_note_author($commsNote);
 
+	                              $commsNoteID = wl_comms_note_identifier($commsNote);
+
 	                              echo '<tr>';
 	                                  echo '<td><strong>Note:</strong> '.PerchUtil::html($noteBody !== '' ? $noteBody : '-').'</td>';
 	                                  echo '<td>'.PerchUtil::html($noteDate).'</td>';
@@ -781,6 +810,18 @@ if (!function_exists('wl_comms_indexed_texts')) {
 	                                      echo '<td style="padding-left:24px;">↳ '.PerchUtil::html($replyBody !== '' ? $replyBody : '-').'</td>';
 	                                      echo '<td>'.PerchUtil::html($replyDate).'</td>';
 	                                      echo '<td>'.PerchUtil::html($replyAuthor).'</td>';
+	                                  echo '</tr>';
+	                              }
+
+	                              if ($commsNoteID > 0) {
+	                                  echo '<tr>';
+	                                      echo '<td colspan="3">';
+	                                      echo '<label for="note-reply-'.(int) $commsNoteID.'" style="display:block;margin-bottom:6px;">Reply to this note</label>';
+	                                      echo '<textarea id="note-reply-'.(int) $commsNoteID.'" name="note-reply['.(int) $commsNoteID.']" rows="2" style="width:100%;max-width:680px;" placeholder="Type your reply"></textarea>';
+	                                      echo '<div style="margin-top:8px;">';
+	                                      echo '<button type="submit" class="button button-simple" name="send_member_note_reply" value="'.(int) $commsNoteID.'">Send reply</button>';
+	                                      echo '</div>';
+	                                      echo '</td>';
 	                                  echo '</tr>';
 	                              }
 	                          }
