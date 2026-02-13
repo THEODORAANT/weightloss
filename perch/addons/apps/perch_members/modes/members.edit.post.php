@@ -879,6 +879,7 @@ if (!function_exists('wl_comms_indexed_texts')) {
             btn.classList.toggle('is-active', isActive);
             btn.classList.toggle('active', isActive);
             btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            btn.setAttribute('aria-current', isActive ? 'page' : 'false');
             btn.setAttribute('tabindex', isActive ? '0' : '-1');
 
             if (targetPanel) {
@@ -900,7 +901,7 @@ if (!function_exists('wl_comms_indexed_texts')) {
         var tabButtonId = 'member-edit-tab-button-' + index;
         var headingText = (heading.textContent || '').trim() || ('Section ' + (index + 1));
 
-        panel.className = 'member-edit-tab-panel tab-pane fade';
+        panel.className = 'member-edit-tab-panel tab-pane fade' + (index === 0 ? ' is-active active show' : '');
         panel.id = tabId;
         panel.setAttribute('role', 'tabpanel');
         panel.setAttribute('aria-labelledby', tabButtonId);
@@ -919,10 +920,11 @@ if (!function_exists('wl_comms_indexed_texts')) {
         var button = document.createElement('button');
         button.type = 'button';
         button.id = tabButtonId;
-        button.className = 'member-edit-tab-button nav-link ' + colorClasses[index % colorClasses.length];
+        button.className = 'member-edit-tab-button nav-link ' + colorClasses[index % colorClasses.length] + (index === 0 ? ' is-active active' : '');
         button.setAttribute('role', 'tab');
         button.setAttribute('aria-controls', tabId);
         button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        button.setAttribute('aria-current', index === 0 ? 'page' : 'false');
         button.setAttribute('tabindex', index === 0 ? '0' : '-1');
         button.textContent = headingText;
 
