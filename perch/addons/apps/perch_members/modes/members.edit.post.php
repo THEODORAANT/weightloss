@@ -533,7 +533,7 @@ if (!function_exists('wl_comms_note_identifier')) {
     function wl_comms_note_identifier($entry)
     {
         if (!is_array($entry)) {
-            return 0;
+            return '';
         }
 
         $candidates = [
@@ -543,15 +543,13 @@ if (!function_exists('wl_comms_note_identifier')) {
         ];
 
         foreach ($candidates as $candidate) {
-            if (is_numeric($candidate)) {
-                $id = (int) $candidate;
-                if ($id > 0) {
-                    return $id;
-                }
+            $id = trim((string) $candidate);
+            if ($id !== '') {
+                return $id;
             }
         }
 
-        return 0;
+        return '';
     }
 }
 
@@ -813,13 +811,18 @@ if (!function_exists('wl_comms_indexed_texts')) {
 	                                  echo '</tr>';
 	                              }
 
-	                              if ($commsNoteID > 0) {
+	                              if ($commsNoteID !== '') {
+	                                  $safeCommsNoteID = preg_replace('/[^a-zA-Z0-9_-]/', '-', $commsNoteID);
+	                                  $safeCommsNoteID = trim((string) $safeCommsNoteID, '-');
+	                                  if ($safeCommsNoteID === '') {
+	                                      $safeCommsNoteID = 'note-reply';
+	                                  }
 	                                  echo '<tr>';
 	                                      echo '<td colspan="3">';
-	                                      echo '<label for="note-reply-'.(int) $commsNoteID.'" style="display:block;margin-bottom:6px;">Reply to this note</label>';
-	                                      echo '<textarea id="note-reply-'.(int) $commsNoteID.'" name="note-reply['.(int) $commsNoteID.']" rows="2" style="width:100%;max-width:680px;" placeholder="Type your reply"></textarea>';
+	                                      echo '<label for="note-reply-'.PerchUtil::html($safeCommsNoteID).'" style="display:block;margin-bottom:6px;">Reply to this note</label>';
+	                                      echo '<textarea id="note-reply-'.PerchUtil::html($safeCommsNoteID).'" name="note-reply['.PerchUtil::html($commsNoteID).']" rows="2" style="width:100%;max-width:680px;" placeholder="Type your reply"></textarea>';
 	                                      echo '<div style="margin-top:8px;">';
-	                                      echo '<button type="submit" class="button button-simple" name="send_member_note_reply" value="'.(int) $commsNoteID.'">Send reply</button>';
+	                                      echo '<button type="submit" class="button button-simple" name="send_member_note_reply" value="'.PerchUtil::html($commsNoteID).'">Send reply</button>';
 	                                      echo '</div>';
 	                                      echo '</td>';
 	                                  echo '</tr>';
