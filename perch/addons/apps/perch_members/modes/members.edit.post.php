@@ -537,6 +537,7 @@ if (!function_exists('wl_comms_note_identifier')) {
         }
 
         $candidates = [
+            $entry['external_note_ref'] ?? null,
             $entry['note_id'] ?? null,
             $entry['id'] ?? null,
             $entry['noteID'] ?? null,
