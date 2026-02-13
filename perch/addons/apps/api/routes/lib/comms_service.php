@@ -205,6 +205,27 @@ function comms_service_send_member_note(int $memberID, array $noteData = []): bo
     return comms_service_request('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
 }
 
+function comms_service_send_member_note_reply(int $memberID, int $noteID, array $replyData = []): bool
+{
+    $payload = array_merge($replyData, [
+        'memberID' => $memberID,
+        'note_id' => $noteID,
+    ]);
+
+    $paths = [
+        '/v1/perch/members/' . $memberID . '/notes/' . $noteID . '/replies',
+        '/v1/perch/members/' . $memberID . '/notes/' . $noteID . '/reply',
+    ];
+
+    foreach ($paths as $path) {
+        if (comms_service_request('POST', $path, $payload)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function comms_service_get_member_notes(int $memberID): array
 {
     $response = comms_service_request_json('GET', '/v1/perch/members/' . $memberID . '/notes');
