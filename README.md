@@ -88,6 +88,30 @@ Replace the option values with the relevant IDs and unit price. You can supply
 additional flags such as `--qty`, `--discount`, or `--dry-run`; run the script
 with `--help` to see every available option and their descriptions.
 
+## Database Backup
+
+Use `scripts/backup_db.php` to create a SQL backup using `mysqldump`.
+You can pass credentials via CLI options or environment variables.
+
+Basic usage:
+
+```
+php scripts/backup_db.php \
+  --database=your_db_name \
+  --user=your_db_user \
+  --password=your_db_password
+```
+
+Optional flags:
+
+- `--host` and `--port` to target a non-default MySQL server
+- `--output-dir` to choose a backup folder (default `backups/db`)
+- `--filename` to override the generated filename
+- `--gzip` to also create a `.gz` copy
+- `--dry-run` to preview the command without running it
+
+You can also run backups from Perch admin at **Orders → DB Backup**.
+
 ## Package Report
 
 In the admin interface, under the Orders section, use the **Package Report** link to view upcoming payments. The report lists each package along with its customer ID, status, and next billing date.
