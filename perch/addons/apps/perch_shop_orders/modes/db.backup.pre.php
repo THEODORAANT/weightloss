@@ -9,6 +9,7 @@ $message_type = 'success';
 
 $template_string = '<perch:shop id="output_dir" type="text" label="Output folder" default="backups/db" required="true" />\n'
     . '<perch:shop id="filename" type="text" label="Filename (optional)" />\n'
+    . '<perch:shop id="engine" type="select" label="Backup engine" options="Auto|auto,mysqldump|mysqldump,PHP fallback|php" default="auto" />\n'
     . '<perch:shop id="gzip" type="checkbox" label="Also create .gz file" value="1" />';
 
 $Template = $API->get('Template');
@@ -30,6 +31,11 @@ if ($Form->submitted()) {
 
     $gzip = isset($_POST['gzip']) && (string) $_POST['gzip'] !== '' && (string) $_POST['gzip'] !== '0';
 
+    $engine = isset($_POST['engine']) ? trim((string) $_POST['engine']) : 'auto';
+    if (!in_array($engine, ['auto', 'mysqldump', 'php'], true)) {
+        $engine = 'auto';
+    }
+
     $result = weightloss_db_backup([
         'host' => defined('PERCH_DB_SERVER') ? PERCH_DB_SERVER : '127.0.0.1',
         'port' => defined('PERCH_DB_PORT') ? (string) PERCH_DB_PORT : '3306',
@@ -39,11 +45,15 @@ if ($Form->submitted()) {
         'output_dir' => $output_dir,
         'filename' => $filename,
         'gzip' => $gzip,
+        'engine' => $engine,
         'dry_run' => false,
     ]);
 
     if (!empty($result['ok'])) {
         $message = 'Backup created: ' . $result['sql_path'];
+        if (!empty($result['engine'])) {
+            $message .= ' | Engine: ' . $result['engine'];
+        }
         if (!empty($result['gz_path'])) {
             $message .= ' | Compressed: ' . $result['gz_path'];
         }

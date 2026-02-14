@@ -13,6 +13,7 @@ $options = getopt('', [
     'output-dir::',
     'filename::',
     'gzip',
+    'engine::',
     'dry-run',
     'help',
 ]);
@@ -30,6 +31,7 @@ if (isset($options['help'])) {
     echo "  --output-dir=<dir>     Output directory (default: backups/db)\n";
     echo "  --filename=<name>      Override output filename\n";
     echo "  --gzip                 Also create a gzip-compressed copy (.gz)\n";
+    echo "  --engine=<engine>      Backup engine: auto|mysqldump|php (default: auto)\n";
     echo "  --dry-run              Show command and output path without running\n";
     echo "  --help                 Show this help message\n";
     exit(0);
@@ -56,6 +58,7 @@ $result = weightloss_db_backup([
     'output_dir' => isset($options['output-dir']) ? (string)$options['output-dir'] : 'backups/db',
     'filename' => isset($options['filename']) ? (string)$options['filename'] : null,
     'gzip' => isset($options['gzip']),
+    'engine' => isset($options['engine']) ? (string)$options['engine'] : 'auto',
     'dry_run' => isset($options['dry-run']),
 ]);
 
@@ -75,6 +78,9 @@ if (!empty($result['dry_run'])) {
 }
 
 echo "Backup created: " . $result['sql_path'] . "\n";
+if (!empty($result['engine'])) {
+    echo "Engine used: " . $result['engine'] . "\n";
+}
 if (!empty($result['gz_path'])) {
     echo "Compressed backup created: " . $result['gz_path'] . "\n";
 }

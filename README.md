@@ -108,9 +108,11 @@ Optional flags:
 - `--output-dir` to choose a backup folder (default `backups/db`)
 - `--filename` to override the generated filename
 - `--gzip` to also create a `.gz` copy
+- `--engine` to choose `auto` (default), `mysqldump`, or PHP fallback mode
 - `--dry-run` to preview the command without running it
 
 You can also run backups from Perch admin at **Orders → DB Backup**.
+If `mysqldump` is unavailable on the server, backup runs automatically fall back to a PHP-based exporter.
 
 ## Package Report
 
