@@ -4,74 +4,97 @@ require_once __DIR__ . '/../perch/runtime.php';
 require_once __DIR__ . '/../perch/addons/apps/api/routes/lib/comms_service.php';
 
 $options = getopt('', [
-    'email:',
     'dry-run',
     'help',
 ]);
 
-if (isset($options['help']) || !isset($options['email'])) {
-    echo 'Usage: php scripts/update_customer_pharmacy_refid.php --email=<customer-email> [--dry-run]' . PHP_EOL;
-    exit(isset($options['help']) ? 0 : 1);
+if (isset($options['help'])) {
+    echo 'Usage: php scripts/update_customer_pharmacy_refid.php [--dry-run]' . PHP_EOL;
+    exit(0);
 }
 
-$email = trim((string) $options['email']);
 $dryRun = array_key_exists('dry-run', $options);
-
-if ($email === '') {
-    echo 'Error: --email cannot be empty.' . PHP_EOL;
-    exit(1);
-}
-
-$commsResponse = comms_service_get_customer_by_email($email);
-if (!is_array($commsResponse) || !($commsResponse['success'] ?? false)) {
-    echo 'Error: comm service request failed for email: ' . $email . PHP_EOL;
-    exit(1);
-}
-
-$customerId = comms_service_extract_customer_id($commsResponse);
-if ($customerId === '') {
-    echo 'Error: no customerId returned for email: ' . $email . PHP_EOL;
-    exit(1);
-}
 
 $API = new PerchAPI(1.0, 'perch_shop');
 $Customers = new PerchShop_Customers($API);
-$Customer = $Customers->get_one_by('customerEmail', $email);
+$DB = PerchDB::fetch();
 
-if (!$Customer instanceof PerchShop_Customer) {
-    $DB = PerchDB::fetch();
-    $row = $DB->get_row(
-        'SELECT customerID FROM ' . PERCH_DB_PREFIX . 'shop_customers WHERE LOWER(customerEmail)=LOWER(' . $DB->pdb($email) . ') LIMIT 1'
-    );
+$rows = $DB->get_rows(
+    'SELECT customerID, customerEmail FROM ' . PERCH_DB_PREFIX . "shop_customers WHERE customerEmail IS NOT NULL AND customerEmail != '' ORDER BY customerID ASC"
+);
 
-    if (is_array($row) && isset($row['customerID'])) {
-        $Customer = $Customers->find((int) $row['customerID']);
+if (!PerchUtil::count($rows)) {
+    echo 'No customers with email were found.' . PHP_EOL;
+    exit(0);
+}
+
+$total = 0;
+$updated = 0;
+$unchanged = 0;
+$failed = 0;
+
+foreach ($rows as $row) {
+    $total++;
+
+    $localCustomerID = (int) ($row['customerID'] ?? 0);
+    $email = trim((string) ($row['customerEmail'] ?? ''));
+
+    if ($localCustomerID <= 0 || $email === '') {
+        $failed++;
+        continue;
+    }
+
+    $Customer = $Customers->find($localCustomerID);
+    if (!$Customer instanceof PerchShop_Customer) {
+        echo 'Customer #' . $localCustomerID . ' not found in model lookup. Skipping.' . PHP_EOL;
+        $failed++;
+        continue;
+    }
+
+    $commsResponse = comms_service_get_customer_by_email($email);
+    if (!is_array($commsResponse) || !($commsResponse['success'] ?? false)) {
+        echo 'Comms lookup failed for customer #' . $localCustomerID . ' (' . $email . '). Skipping.' . PHP_EOL;
+        $failed++;
+        continue;
+    }
+
+    $remoteCustomerId = comms_service_extract_customer_id($commsResponse);
+    if ($remoteCustomerId === '') {
+        echo 'No comms customerId returned for customer #' . $localCustomerID . ' (' . $email . '). Skipping.' . PHP_EOL;
+        $failed++;
+        continue;
+    }
+
+    $currentRefId = trim((string) $Customer->pharmacy_refid());
+
+    if ($currentRefId === $remoteCustomerId) {
+        $unchanged++;
+        echo 'No change for customer #' . $localCustomerID . ': pharmacy_refid already "' . $remoteCustomerId . '".' . PHP_EOL;
+        continue;
+    }
+
+    if ($dryRun) {
+        $updated++;
+        echo '[dry-run] Would update customer #' . $localCustomerID . ' pharmacy_refid from "' . $currentRefId . '" to "' . $remoteCustomerId . '".' . PHP_EOL;
+        continue;
+    }
+
+    $ok = $Customer->update(['pharmacy_refid' => $remoteCustomerId]);
+
+    if ($ok) {
+        $updated++;
+        echo 'Updated customer #' . $localCustomerID . ' pharmacy_refid to "' . $remoteCustomerId . '".' . PHP_EOL;
+    } else {
+        $failed++;
+        echo 'Failed to update customer #' . $localCustomerID . '.' . PHP_EOL;
     }
 }
 
-if (!$Customer instanceof PerchShop_Customer) {
-    echo 'Error: no Perch customer found for email: ' . $email . PHP_EOL;
-    exit(1);
-}
-
-$currentRefId = trim((string) $Customer->pharmacy_refid());
-
-if ($currentRefId === $customerId) {
-    echo 'No update needed. pharmacy_refid is already set to: ' . $customerId . PHP_EOL;
-    exit(0);
-}
-
+echo PHP_EOL;
+echo 'Summary: total=' . $total . ', updated=' . $updated . ', unchanged=' . $unchanged . ', failed=' . $failed;
 if ($dryRun) {
-    echo '[dry-run] Would update customer #' . $Customer->id() . ' pharmacy_refid from "' . $currentRefId . '" to "' . $customerId . '"' . PHP_EOL;
-    exit(0);
+    echo ' [dry-run]';
 }
+echo '.' . PHP_EOL;
 
-$updated = $Customer->update(['pharmacy_refid' => $customerId]);
-
-if (!$updated) {
-    echo 'Error: failed to update pharmacy_refid for customer #' . $Customer->id() . PHP_EOL;
-    exit(1);
-}
-
-echo 'Updated customer #' . $Customer->id() . ' pharmacy_refid to "' . $customerId . '"' . PHP_EOL;
-exit(0);
+exit($failed > 0 ? 1 : 0);
