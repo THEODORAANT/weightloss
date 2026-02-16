@@ -1,3 +1,10 @@
+<div class="smartbar">
+    <ul>
+        <li class="selected"><a href="<?php echo $HTML->encode($API->app_nav()); ?>"><?php echo $Lang->get('Notification Logs'); ?></a></li>
+        <li><a href="<?php echo $HTML->encode($API->app_nav().'/webhook_logs/'); ?>"><?php echo $Lang->get('Webhook Logs'); ?></a></li>
+    </ul>
+</div>
+
 <?php if (!empty($logs)): ?>
     <?php foreach ($logs as $filename => $entries): ?>
         <h2><?php echo $HTML->encode($filename); ?></h2>
