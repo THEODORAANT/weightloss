@@ -600,6 +600,27 @@ if (!function_exists('wl_comms_indexed_texts')) {
     }
 }
 
+
+
+if (!function_exists('wl_seen_reply_keys_index')) {
+    function wl_seen_reply_keys_index($seenReplyKeys)
+    {
+        $indexed = [];
+
+        if (!is_array($seenReplyKeys)) {
+            return $indexed;
+        }
+
+        foreach ($seenReplyKeys as $key) {
+            $normalized = trim((string) $key);
+            if ($normalized !== '') {
+                $indexed[$normalized] = true;
+            }
+        }
+
+        return $indexed;
+    }
+}
 if (!function_exists('wl_member_notes_indexed_texts')) {
     function wl_member_notes_indexed_texts($memberNotes)
     {
@@ -654,11 +675,12 @@ if (!function_exists('wl_comms_is_non_admin_author')) {
 
 
 if (!function_exists('wl_count_unseen_comms_replies')) {
-    function wl_count_unseen_comms_replies($commsMemberNotes, $memberNotes)
+    function wl_count_unseen_comms_replies($commsMemberNotes, $memberNotes, $seenReplyKeys = [])
     {
         $count = 0;
         $normalizedCommsNotes = wl_normalize_comms_notes($commsMemberNotes);
         $memberIndexedTexts = wl_member_notes_indexed_texts($memberNotes);
+        $seenReplyIndex = wl_seen_reply_keys_index($seenReplyKeys);
 
         foreach ($normalizedCommsNotes as $commsNote) {
             if (!is_array($commsNote)) {
@@ -675,7 +697,8 @@ if (!function_exists('wl_count_unseen_comms_replies')) {
                 $replyKey = wl_comms_text_key($replyBody);
                 $showUnseenIndicator = wl_comms_is_non_admin_author($reply)
                     && $replyKey !== ''
-                    && !isset($memberIndexedTexts[$replyKey]);
+                    && !isset($memberIndexedTexts[$replyKey])
+                    && !isset($seenReplyIndex[$replyKey]);
 
                 if ($showUnseenIndicator) {
                     $count++;
@@ -852,7 +875,9 @@ if (!function_exists('wl_count_unseen_comms_replies')) {
               </div>
 <?php
 
-	          $unseenCommsReplyCount = wl_count_unseen_comms_replies($comms_member_notes, $notes);
+	          $seenCommsReplyKeys = isset($seen_comms_reply_keys) && is_array($seen_comms_reply_keys) ? $seen_comms_reply_keys : [];
+	          $seenReplyIndex = wl_seen_reply_keys_index($seenCommsReplyKeys);
+	          $unseenCommsReplyCount = wl_count_unseen_comms_replies($comms_member_notes, $notes, $seenCommsReplyKeys);
 	          $commsHeading = 'Member comms notes and replies';
 	          if ($unseenCommsReplyCount > 0) {
 	              $commsHeading .= ' (Unseen: '.(int) $unseenCommsReplyCount.')';
@@ -900,12 +925,14 @@ if (!function_exists('wl_count_unseen_comms_replies')) {
 	                                  $replyKey = wl_comms_text_key($replyBody);
 	                                  $showUnseenIndicator = wl_comms_is_non_admin_author($reply)
 	                                      && $replyKey !== ''
-	                                      && !isset($memberIndexedTexts[$replyKey]);
+	                                      && !isset($memberIndexedTexts[$replyKey])
+	                                      && !isset($seenReplyIndex[$replyKey]);
 
 	                                  echo '<tr>';
 	                                      echo '<td style="padding-left:24px;">↳ '.PerchUtil::html($replyBody !== '' ? $replyBody : '-');
 	                                      if ($showUnseenIndicator) {
 	                                          echo ' <span style="display:inline-block;margin-left:8px;padding:2px 6px;border-radius:999px;background:#fff3cd;color:#7a4b00;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;">Unseen</span>';
+	                                          echo ' <button type="submit" class="button button-simple" name="mark_comms_reply_seen" value="'.PerchUtil::html($replyKey).'" style="margin-left:8px;padding:2px 8px;line-height:1.4;">Mark seen</button>';
 	                                      }
 	                                      echo '</td>';
 	                                      echo '<td>'.PerchUtil::html($replyDate).'</td>';
