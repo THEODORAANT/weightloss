@@ -276,8 +276,13 @@ if (!function_exists('wl_member_note_build_text')) {
                     $message = $HTML->failure_message('The selected note could not be found.');
                 } else {
                     $memberEmail = trim((string)$Member->memberEmail());
+                    $existingPharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), $noteID);
+                    $alreadySentToPharmacy = ($existingPharmacyStatus instanceof PerchMembers_NotePharmacyStatus)
+                        && strtolower((string) $existingPharmacyStatus->status()) === 'sent';
 
-                    if ($memberEmail === '') {
+                    if ($alreadySentToPharmacy) {
+                        $message = $HTML->success_message('This note has already been sent to the pharmacy.');
+                    } elseif ($memberEmail === '') {
                         $message = $HTML->failure_message('The note could not be sent because the member does not have an email address.');
                     } else {
                         $noteTimestamp = $Note->noteDate();
@@ -642,6 +647,14 @@ if (!function_exists('wl_member_note_build_text')) {
                                         }
 
                                         if ($isRedFlag && $effectiveTargetType === 'patient_note' && is_object($Member)) {
+                                            $existingPharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), (int) $Note->id());
+                                            $alreadySentToPharmacy = ($existingPharmacyStatus instanceof PerchMembers_NotePharmacyStatus)
+                                                && strtolower((string) $existingPharmacyStatus->status()) === 'sent';
+
+                                            if ($alreadySentToPharmacy) {
+                                                continue;
+                                            }
+
                                             $memberEmail = trim((string)$Member->memberEmail());
                                             $notePayload = [
                                                 'note_id' => (int) $Note->id(),
