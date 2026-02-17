@@ -125,9 +125,10 @@
             }
 
             $selected_question = $ManualQuestionForm->get_value('question_slug', '');
-            $selected_answer   = $ManualQuestionForm->get_value('manual_answer_text', '');
-            $answer_select_id = 'manual-answer-'.$section['type'];
-            $select_name = 'manual_answer_text';
+            $selected_answer_choice = $ManualQuestionForm->get_value('manual_answer_choice', '');
+            $selected_answer_text   = $ManualQuestionForm->get_value('manual_answer_text', '');
+            $answer_select_id = 'manual-answer-choice-'.$section['type'];
+            $answer_text_id = 'manual-answer-text-'.$section['type'];
 
             ob_start();
             echo '<div class="manual-question">';
@@ -140,7 +141,7 @@
             echo '<div class="field manual-answer-select">';
             echo $ManualQuestionForm->label($answer_select_id, $Lang->get('Answer'), '', false, false);
             echo '<div class="form-entry">';
-            echo '<select id="'.$answer_select_id.'" name="'.$select_name.'" class="input-simple">';
+            echo '<select id="'.$answer_select_id.'" name="manual_answer_choice" class="input-simple">';
             echo '<option value="">'.$Lang->get('Select an answer').'</option>';
 
             foreach ($answer_select_options as $option) {
@@ -149,8 +150,8 @@
                 if (
                     $selected_question !== ''
                     && $selected_question === $option['question']
-                    && $selected_answer !== ''
-                    && (string) $selected_answer === (string) $option['value']
+                    && $selected_answer_choice !== ''
+                    && (string) $selected_answer_choice === (string) $option['value']
                 ) {
                     $selected = ' selected="selected"';
                 }
@@ -169,6 +170,13 @@
             echo '</div>';
             echo '</div>';
 
+            echo '<div class="field manual-answer-text">';
+            echo $ManualQuestionForm->label($answer_text_id, $Lang->get('Answer'), '', false, false);
+            echo '<div class="form-entry">';
+            echo '<input type="text" id="'.$answer_text_id.'" name="manual_answer_text" class="input-simple" value="'.PerchUtil::html($selected_answer_text).'">';
+            echo '</div>';
+            echo '</div>';
+
             echo $ManualQuestionForm->submit_field('btnAddManual', 'Add answer');
             echo $ManualQuestionForm->form_end();
 
@@ -178,7 +186,10 @@
             echo 'if(!form)return;';
             echo 'var questionSelect=form.querySelector("[name=\\"question_slug\\"]");';
             echo 'var answerSelect=document.getElementById("'.$answer_select_id.'");';
-            echo 'if(!questionSelect||!answerSelect)return;';
+            echo 'var answerText=document.getElementById("'.$answer_text_id.'");';
+            echo 'if(!questionSelect||!answerSelect||!answerText)return;';
+            echo 'var answerSelectField=answerSelect.closest(".manual-answer-select");';
+            echo 'var answerTextField=answerText.closest(".manual-answer-text");';
             echo 'var answerOptions=Array.prototype.slice.call(answerSelect.querySelectorAll("option[data-question]"));';
             echo 'function syncAnswerField(){';
             echo ' var slug=questionSelect.value;';
@@ -189,9 +200,16 @@
             echo '  opt.disabled=!match;';
             echo '  if(match)hasOptions=true;';
             echo ' });';
-            echo ' if(!hasOptions || !slug){';
-            echo '  answerSelect.value="";';
-            echo ' }else if(answerSelect.selectedOptions.length===0 || answerSelect.selectedOptions[0].disabled){';
+            echo ' if(hasOptions && slug){';
+            echo '  if(answerSelectField)answerSelectField.style.display="";';
+            echo '  if(answerTextField)answerTextField.style.display="none";';
+            echo '  answerText.value="";';
+            echo '  if(answerSelect.selectedOptions.length===0 || answerSelect.selectedOptions[0].disabled){';
+            echo '   answerSelect.value="";';
+            echo '  }';
+            echo ' }else{';
+            echo '  if(answerSelectField)answerSelectField.style.display="none";';
+            echo '  if(answerTextField)answerTextField.style.display="";';
             echo '  answerSelect.value="";';
             echo ' }';
             echo '}';
