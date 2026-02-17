@@ -7,7 +7,6 @@
         $ManualQuestionForm->set_name('manual_question');
         $ManualQuestionForm->require_field('question_type', 'Please select a questionnaire.');
         $ManualQuestionForm->require_field('question_slug', 'Please select a question.');
-        $ManualQuestionForm->require_field('manual_answer_text', 'Please enter an answer.');
         $message    = false;
         $manual_question_message = false;
         $smartbar_selection = 'questions';
@@ -134,12 +133,13 @@
                 $questionnaire_sections = $buildQuestionnaireSections();
 
                 if ($ManualQuestionForm->submitted()) {
-                    $postvars = ['question_type', 'question_slug', 'manual_answer_text'];
+                    $postvars = ['question_type', 'question_slug', 'manual_answer_text', 'manual_answer_choice'];
                     $manual_data = $ManualQuestionForm->receive($postvars);
 
                     $question_type = isset($manual_data['question_type']) ? trim((string) $manual_data['question_type']) : '';
                     $question_slug = isset($manual_data['question_slug']) ? trim((string) $manual_data['question_slug']) : '';
-                    $answer_text   = isset($manual_data['manual_answer_text']) ? trim((string) $manual_data['manual_answer_text']) : '';
+                    $answer_text_input   = isset($manual_data['manual_answer_text']) ? trim((string) $manual_data['manual_answer_text']) : '';
+                    $answer_choice_input = isset($manual_data['manual_answer_choice']) ? trim((string) $manual_data['manual_answer_choice']) : '';
 
                     $section_lookup = [];
                     foreach ($questionnaire_sections as $section) {
@@ -162,6 +162,32 @@
                             $ManualQuestionForm->messages['question_slug'] = 'Please select a valid question.';
                             $manual_question_message = $HTML->failure_message('Please select a valid question.');
                         } else {
+                            $question_configs = $section_lookup[$question_type]['question_configs'] ?? [];
+                            $question_options = [];
+
+                            if (
+                                isset($question_configs[$question_slug]['options'])
+                                && is_array($question_configs[$question_slug]['options'])
+                            ) {
+                                $question_options = $question_configs[$question_slug]['options'];
+                            }
+
+                            $answer_text = '';
+                            if (PerchUtil::count($question_options)) {
+                                if (!array_key_exists($answer_choice_input, $question_options)) {
+                                    $ManualQuestionForm->error = true;
+                                    $ManualQuestionForm->messages['manual_answer_choice'] = 'Please select an answer.';
+                                    $manual_question_message = $HTML->failure_message('Please select an answer.');
+                                } else {
+                                    $answer_text = $answer_choice_input;
+                                }
+                            } else {
+                                $answer_text = $answer_text_input;
+                            }
+
+                            if ($ManualQuestionForm->error) {
+                                // Stop further processing when answer validation fails.
+                            } else {
                             $existing_answers = $section_lookup[$question_type]['answers'];
                             $existing_slugs = [];
                             $existing_uuid = '';
@@ -249,6 +275,7 @@
                                     $ManualQuestionForm->error = true;
                                     $manual_question_message = $HTML->failure_message('Sorry, the answer could not be saved.');
                                 }
+                            }
                             }
                         }
                     }
