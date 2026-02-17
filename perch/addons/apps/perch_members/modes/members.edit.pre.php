@@ -76,6 +76,73 @@ if (!function_exists('wl_member_order_ids')) {
     }
 }
 
+
+
+if (!function_exists('wl_member_seen_comms_reply_keys')) {
+    function wl_member_seen_comms_reply_keys($Member)
+    {
+        if (!is_object($Member)) {
+            return [];
+        }
+
+        $properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+        if (!is_array($properties)) {
+            return [];
+        }
+
+        $keys = isset($properties['seen_comms_reply_keys']) && is_array($properties['seen_comms_reply_keys'])
+            ? $properties['seen_comms_reply_keys']
+            : [];
+
+        $normalized = [];
+        foreach ($keys as $key) {
+            $value = trim((string) $key);
+            if ($value !== '') {
+                $normalized[$value] = $value;
+            }
+        }
+
+        return array_values($normalized);
+    }
+}
+
+if (!function_exists('wl_member_mark_comms_reply_seen')) {
+    function wl_member_mark_comms_reply_seen($Member, $replyKey)
+    {
+        if (!is_object($Member)) {
+            return false;
+        }
+
+        $replyKey = trim((string) $replyKey);
+        if ($replyKey === '') {
+            return false;
+        }
+
+        $properties = PerchUtil::json_safe_decode($Member->memberProperties(), true);
+        if (!is_array($properties)) {
+            $properties = [];
+        }
+
+        $seenKeys = isset($properties['seen_comms_reply_keys']) && is_array($properties['seen_comms_reply_keys'])
+            ? $properties['seen_comms_reply_keys']
+            : [];
+
+        $seenIndex = [];
+        foreach ($seenKeys as $key) {
+            $value = trim((string) $key);
+            if ($value !== '') {
+                $seenIndex[$value] = $value;
+            }
+        }
+
+        $seenIndex[$replyKey] = $replyKey;
+        $properties['seen_comms_reply_keys'] = array_values($seenIndex);
+
+        return (bool) $Member->update([
+            'memberProperties' => PerchUtil::json_safe_encode($properties),
+        ]);
+    }
+}
 if (!function_exists('wl_member_note_build_text')) {
     function wl_member_note_build_text($noteText, $category, $targetType, $threadRef = '', $orderId = null)
     {
@@ -223,7 +290,27 @@ if (!function_exists('wl_member_note_build_text')) {
         }
         $documentReminderStatus = $document_reminder_selection;
 
-        if (isset($post['send_member_note_reply']) && $post['send_member_note_reply'] !== '') {
+        if (isset($post['mark_comms_reply_seen']) && $post['mark_comms_reply_seen'] !== '') {
+            if (!is_object($Member)) {
+                $message = $HTML->failure_message('The reply could not be marked as seen because the member record could not be found.');
+            } else {
+                $replyKey = trim((string) $post['mark_comms_reply_seen']);
+                if ($replyKey === '') {
+                    $message = $HTML->failure_message('The reply could not be marked as seen because the reply key was empty.');
+                } else {
+                    $saved = wl_member_mark_comms_reply_seen($Member, $replyKey);
+                    if ($saved) {
+                        $message = $HTML->success_message('Reply marked as seen.');
+                    } else {
+                        $message = $HTML->failure_message('The reply could not be marked as seen.');
+                    }
+                }
+            }
+
+            if (is_object($Member)) {
+                $details = $Member->to_array();
+            }
+        } elseif (isset($post['send_member_note_reply']) && $post['send_member_note_reply'] !== '') {
             if (!is_object($Member)) {
                 $message = $HTML->failure_message('The reply could not be sent because the member record could not be found.');
             } else {
@@ -754,6 +841,7 @@ if (!function_exists('wl_member_note_build_text')) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
         $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
+        $seen_comms_reply_keys = wl_member_seen_comms_reply_keys($Member);
         $documents = $Documents->get_for_member($Member->id());
           $questionnaire =  $Questionnaires->get_for_member($Member->id());
                   $notifications = $Notifications->get_for_member($Member->id());
@@ -763,6 +851,7 @@ if (!function_exists('wl_member_note_build_text')) {
         $tags = false;
          $notes = false;
         $comms_member_notes = [];
+        $seen_comms_reply_keys = [];
         $documents = false;
         $questionnaire =false;
          $notifications = false;
