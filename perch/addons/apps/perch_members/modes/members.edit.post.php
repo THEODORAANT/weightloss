@@ -599,6 +599,93 @@ if (!function_exists('wl_comms_indexed_texts')) {
         return $indexed;
     }
 }
+
+if (!function_exists('wl_member_notes_indexed_texts')) {
+    function wl_member_notes_indexed_texts($memberNotes)
+    {
+        $indexed = [];
+
+        if (!PerchUtil::count($memberNotes)) {
+            return $indexed;
+        }
+
+        foreach ($memberNotes as $Note) {
+            if (!is_object($Note)) {
+                continue;
+            }
+
+            $rawNote = trim((string) $Note->note_text());
+            $rawKey = wl_comms_text_key($rawNote);
+            if ($rawKey !== '') {
+                $indexed[$rawKey] = true;
+            }
+
+            $meta = wl_member_note_present($rawNote);
+            $bodyKey = wl_comms_text_key($meta['body'] ?? '');
+            if ($bodyKey !== '') {
+                $indexed[$bodyKey] = true;
+            }
+        }
+
+        return $indexed;
+    }
+}
+
+if (!function_exists('wl_comms_is_non_admin_author')) {
+    function wl_comms_is_non_admin_author($entry)
+    {
+        if (!is_array($entry)) {
+            return false;
+        }
+
+        $role = strtolower(trim((string) ($entry['created_by_role'] ?? '')));
+        if ($role !== '') {
+            return !in_array($role, ['admin', 'administrator', 'system'], true);
+        }
+
+        $name = strtolower(trim((string) ($entry['created_by_display_name'] ?? '')));
+        if ($name === '') {
+            return false;
+        }
+
+        return strpos($name, 'admin') === false;
+    }
+}
+
+
+if (!function_exists('wl_count_unseen_comms_replies')) {
+    function wl_count_unseen_comms_replies($commsMemberNotes, $memberNotes)
+    {
+        $count = 0;
+        $normalizedCommsNotes = wl_normalize_comms_notes($commsMemberNotes);
+        $memberIndexedTexts = wl_member_notes_indexed_texts($memberNotes);
+
+        foreach ($normalizedCommsNotes as $commsNote) {
+            if (!is_array($commsNote)) {
+                continue;
+            }
+
+            $replies = isset($commsNote['replies']) && is_array($commsNote['replies']) ? $commsNote['replies'] : [];
+            foreach ($replies as $reply) {
+                if (!is_array($reply)) {
+                    continue;
+                }
+
+                $replyBody = trim((string) ($reply['body'] ?? $reply['reply'] ?? ''));
+                $replyKey = wl_comms_text_key($replyBody);
+                $showUnseenIndicator = wl_comms_is_non_admin_author($reply)
+                    && $replyKey !== ''
+                    && !isset($memberIndexedTexts[$replyKey]);
+
+                if ($showUnseenIndicator) {
+                    $count++;
+                }
+            }
+        }
+
+        return $count;
+    }
+}
 ?>
 
 
@@ -765,7 +852,12 @@ if (!function_exists('wl_comms_indexed_texts')) {
               </div>
 <?php
 
-	          echo $HTML->heading2('Member comms notes and replies');
+	          $unseenCommsReplyCount = wl_count_unseen_comms_replies($comms_member_notes, $notes);
+	          $commsHeading = 'Member comms notes and replies';
+	          if ($unseenCommsReplyCount > 0) {
+	              $commsHeading .= ' (Unseen: '.(int) $unseenCommsReplyCount.')';
+	          }
+	          echo $HTML->heading2($commsHeading);
 
           ?>
 
@@ -781,6 +873,7 @@ if (!function_exists('wl_comms_indexed_texts')) {
 	                      <tbody>
 	                  <?php
 	                      $normalizedCommsNotes = wl_normalize_comms_notes($comms_member_notes);
+	                      $memberIndexedTexts = wl_member_notes_indexed_texts($notes);
 	                      if (PerchUtil::count($normalizedCommsNotes)) {
 	                          foreach ($normalizedCommsNotes as $commsNote) {
 	                              $noteBody = trim((string) ($commsNote['body'] ?? $commsNote['note'] ?? ''));
@@ -804,9 +897,17 @@ if (!function_exists('wl_comms_indexed_texts')) {
 	                                  $replyBody = trim((string) ($reply['body'] ?? $reply['reply'] ?? ''));
 	                                  $replyDate = wl_comms_note_date($reply['created_at'] ?? '');
 	                                  $replyAuthor = wl_comms_note_author($reply);
+	                                  $replyKey = wl_comms_text_key($replyBody);
+	                                  $showUnseenIndicator = wl_comms_is_non_admin_author($reply)
+	                                      && $replyKey !== ''
+	                                      && !isset($memberIndexedTexts[$replyKey]);
 
 	                                  echo '<tr>';
-	                                      echo '<td style="padding-left:24px;">↳ '.PerchUtil::html($replyBody !== '' ? $replyBody : '-').'</td>';
+	                                      echo '<td style="padding-left:24px;">↳ '.PerchUtil::html($replyBody !== '' ? $replyBody : '-');
+	                                      if ($showUnseenIndicator) {
+	                                          echo ' <span style="display:inline-block;margin-left:8px;padding:2px 6px;border-radius:999px;background:#fff3cd;color:#7a4b00;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;">Unseen</span>';
+	                                      }
+	                                      echo '</td>';
 	                                      echo '<td>'.PerchUtil::html($replyDate).'</td>';
 	                                      echo '<td>'.PerchUtil::html($replyAuthor).'</td>';
 	                                  echo '</tr>';
