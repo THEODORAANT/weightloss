@@ -43,4 +43,7 @@
                                         'perch_members/questionnaire_questions/edit',
                                         'perch_members/questionnaire_questions/flowchart',
                         ], 'label'=>'Questionnaires',  'priv'=>'perch_members.questionnaires.manage'],
+                ['page'=>[
+                                        'perch_members/reports',
+                        ], 'label'=>'Reports', 'priv'=>'perch_members.moderate'],
         ], $CurrentUser);
