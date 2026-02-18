@@ -384,6 +384,11 @@ if (!function_exists('wl_member_note_build_text')) {
                         $isClinicalCategory = in_array($noteMeta['category'], ['clinical', 'complaint'], true);
                         $should_escalate = $should_escalate || $isClinicalCategory;
                         $noteType = $should_escalate ? 'clinical_note' : 'admin_note';
+                        $createdBy = [
+                            'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
+                            'role' => $addedBy !== '' ? 'admin' : 'system',
+                        ];
+
                         $notePayload = [
                             'note_id' => $noteID,
                             'note' => $noteWithTimestamp,
@@ -398,13 +403,38 @@ if (!function_exists('wl_member_note_build_text')) {
                             'thread_ref' => $noteMeta['thread_ref'],
                             'order_id' => $noteMeta['order_id'],
                             'body' => $noteText,
-                            'created_by' => [
-                                'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
-                                'role' => $addedBy !== '' ? 'admin' : 'system',
-                            ],
+                            'created_by' => $createdBy,
+                            'external_note_ref' => (string) $noteID,
                         ];
 
-                        $sendSuccess = comms_service_send_member_note((int) $Member->id(), $notePayload);
+                        $targetType = trim((string) $noteMeta['target_type']);
+                        $effectiveOrderId = isset($noteMeta['order_id']) ? (int) $noteMeta['order_id'] : 0;
+
+                        if ($targetType === 'order_note') {
+                            if ($effectiveOrderId <= 0) {
+                                $message = $HTML->failure_message('Order notes require a valid order link before they can be sent.');
+                                $sendSuccess = false;
+                            } else {
+                                comms_sync_order($effectiveOrderId, (int) $Member->id());
+
+                                $orderNotePayload = [
+                                    'note_type' => $noteType,
+                                    'title' => null,
+                                    'body' => $noteText,
+                                    'status' => 'open',
+                                    'created_by' => $createdBy,
+                                    'external_note_ref' => (string) $noteID,
+                                    'escalate_clinical_review' => $should_escalate ? 1 : 0,
+                                    'note_category' => $noteMeta['category'],
+                                    'target_type' => $targetType,
+                                    'thread_ref' => $noteMeta['thread_ref'],
+                                ];
+
+                                $sendSuccess = comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
+                            }
+                        } else {
+                            $sendSuccess = comms_service_send_member_note((int) $Member->id(), $notePayload);
+                        }
 
                         if ($sendSuccess) {
                             $message = $HTML->success_message('The note has been sent to the pharmacy.');
