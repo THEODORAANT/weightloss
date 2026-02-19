@@ -49,6 +49,9 @@ function comms_service_request(string $method, string $path, array $payload = []
     }
 
     $jsonPayload = json_encode($payload);
+    $jsonPayload = json_encode($payload);
+             // echo "jsonPayload";
+               // print_r($jsonPayload );
     if ($jsonPayload === false) {
         return false;
     }
@@ -60,8 +63,8 @@ function comms_service_request(string $method, string $path, array $payload = []
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
-        print_r($jsonPayload);
-        print_r($response);
+     // echo "rrr";
+       // print_r($response);
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -84,7 +87,7 @@ function comms_service_request_json(string $method, string $path, array $payload
         $separator = strpos($url, '?') === false ? '?' : '&';
         $url .= $separator . http_build_query($query);
     }
-
+        //echo "url"; echo $url;
     $ch = curl_init($url);
 
     if ($ch === false) {
@@ -105,6 +108,8 @@ function comms_service_request_json(string $method, string $path, array $payload
         curl_setopt($ch, CURLOPT_HTTPGET, true);
     } else {
         $jsonPayload = json_encode($payload);
+          //echo "jsonPayload";
+          //  print_r($jsonPayload );
         if ($jsonPayload === false) {
             return null;
         }
@@ -122,6 +127,8 @@ function comms_service_request_json(string $method, string $path, array $payload
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
+    //echo "response";
+     //   print_r($response );
     if ($response === false || $status < 200 || $status >= 300) {
         return null;
     }
