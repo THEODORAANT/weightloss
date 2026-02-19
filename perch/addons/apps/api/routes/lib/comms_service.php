@@ -110,6 +110,8 @@ function comms_service_request_json(string $method, string $path, array $payload
         $jsonPayload = json_encode($payload);
           //echo "jsonPayload";
           //  print_r($jsonPayload );
+            PerchUtil::debug('Comms member jsonPayload: ' . json_encode($jsonPayload), 'notice');
+
         if ($jsonPayload === false) {
             return null;
         }

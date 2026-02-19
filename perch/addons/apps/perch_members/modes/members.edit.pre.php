@@ -792,7 +792,10 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'external_note_ref' => (string) $Note->id(),
                                             ];
 
-                                            $commsResponse = comms_service_request_json('POST', '/v1/perch/members/' . (int) $Member->id() . '/notes', $notePayload);
+                                            $commsResponse =  comms_service_send_member_note((int) $Member->id(), $notePayload);
+
+
+                                             //comms_service_request_json('POST', '/v1/perch/members/' . (int) $Member->id() . '/notes', $notePayload);
                                             PerchUtil::debug('Comms member note response: ' . json_encode($commsResponse), 'notice');
 
                                             $sentToComms = is_array($commsResponse);
