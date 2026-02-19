@@ -210,7 +210,73 @@ function comms_service_link_order(int $orderID, array $orderData = []): bool
 
 function comms_service_send_member_note(int $memberID, array $noteData = []): bool
 {
-    $payload = array_merge($noteData, ['memberID' => $memberID]);
+    $email = '';
+    if (isset($noteData['email'])) {
+        $email = trim((string) $noteData['email']);
+    } elseif (isset($noteData['member_email'])) {
+        $email = trim((string) $noteData['member_email']);
+    }
+
+    if ($email === '') {
+        return false;
+    }
+
+    $body = '';
+    if (isset($noteData['body'])) {
+        $body = trim((string) $noteData['body']);
+    }
+
+    $note = '';
+    if (isset($noteData['note'])) {
+        $note = trim((string) $noteData['note']);
+    }
+
+    if ($body === '' && $note === '') {
+        return false;
+    }
+
+    $type = 'ADMIN';
+    if (isset($noteData['type']) && trim((string) $noteData['type']) !== '') {
+        $type = strtoupper(trim((string) $noteData['type']));
+    } elseif (isset($noteData['note_category']) && trim((string) $noteData['note_category']) !== '') {
+        $category = strtolower(trim((string) $noteData['note_category']));
+        if ($category === 'clinical') {
+            $type = 'CLINICAL';
+        } elseif ($category === 'complaint') {
+            $type = 'COMPLAINT';
+        }
+    }
+
+    if (!in_array($type, ['ADMIN', 'CLINICAL', 'COMPLAINT'], true)) {
+        $type = 'ADMIN';
+    }
+
+    $payload = [
+        'email' => $email,
+        'type' => $type,
+    ];
+
+    if ($body !== '') {
+        $payload['body'] = $body;
+    }
+
+    if ($note !== '') {
+        $payload['note'] = $note;
+    }
+
+    $author = '';
+    if (isset($noteData['author'])) {
+        $author = trim((string) $noteData['author']);
+    } elseif (isset($noteData['added_by'])) {
+        $author = trim((string) $noteData['added_by']);
+    } elseif (isset($noteData['created_by']['name'])) {
+        $author = trim((string) $noteData['created_by']['name']);
+    }
+
+    if ($author !== '') {
+        $payload['author'] = $author;
+    }
+
     return comms_service_request('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
 }
 
