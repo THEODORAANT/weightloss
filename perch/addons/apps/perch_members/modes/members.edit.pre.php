@@ -763,7 +763,7 @@ if (!function_exists('wl_member_note_build_text')) {
                                             comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
                                         }
 
-                                        if ($isRedFlag && $effectiveTargetType === 'patient_note' && is_object($Member)) {
+                                        if ($isRedFlag && is_object($Member)) {
                                             $existingPharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), (int) $Note->id());
                                             $alreadySentToPharmacy = ($existingPharmacyStatus instanceof PerchMembers_NotePharmacyStatus)
                                                 && strtolower((string) $existingPharmacyStatus->status()) === 'sent';
@@ -783,7 +783,8 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'escalate_clinical_review' => 1,
                                                 'note_type' => 'clinical_note',
                                                 'note_category' => $effectiveCategory,
-                                                'target_type' => $effectiveTargetType,
+                                                'target_type' => 'patient_note',
+                                                'source_target_type' => $effectiveTargetType,
                                                 'thread_ref' => $effectiveThreadRef,
                                                 'order_id' => $effectiveOrderId > 0 ? $effectiveOrderId : null,
                                                 'body' => $noteBody,
@@ -791,7 +792,10 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'external_note_ref' => (string) $Note->id(),
                                             ];
 
-                                            $sentToComms = comms_service_send_member_note((int) $Member->id(), $notePayload);
+                                            $commsResponse = comms_service_request_json('POST', '/v1/perch/members/' . (int) $Member->id() . '/notes', $notePayload);
+                                            PerchUtil::debug('Comms member note response: ' . json_encode($commsResponse), 'notice');
+
+                                            $sentToComms = is_array($commsResponse);
 
                                             if ($sentToComms) {
                                                 $NotePharmacyStatuses->record_sent_status((int) $Member->id(), (int) $Note->id(), 'Sent', 'Escalated for clinical review');
