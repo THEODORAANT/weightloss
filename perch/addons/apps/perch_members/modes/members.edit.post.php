@@ -528,6 +528,68 @@ if (!function_exists('wl_comms_note_date')) {
     }
 }
 
+if (!function_exists('wl_comms_note_category')) {
+    function wl_comms_note_category($entry)
+    {
+        if (!is_array($entry)) {
+            return '-';
+        }
+
+        $candidates = [
+            $entry['category_label'] ?? null,
+            $entry['note_category_label'] ?? null,
+            $entry['category'] ?? null,
+            $entry['note_category'] ?? null,
+        ];
+
+        foreach ($candidates as $candidate) {
+            $value = trim((string) $candidate);
+            if ($value !== '') {
+                return ucwords(str_replace(['_', '-'], ' ', $value));
+            }
+        }
+
+        return '-';
+    }
+}
+
+if (!function_exists('wl_comms_note_type')) {
+    function wl_comms_note_type($entry)
+    {
+        if (!is_array($entry)) {
+            return '-';
+        }
+
+        $candidates = [
+            $entry['type_label'] ?? null,
+            $entry['note_type_label'] ?? null,
+            $entry['target_label'] ?? null,
+            $entry['target'] ?? null,
+            $entry['type'] ?? null,
+            $entry['note_type'] ?? null,
+        ];
+
+        foreach ($candidates as $candidate) {
+            $value = trim((string) $candidate);
+            if ($value === '') {
+                continue;
+            }
+
+            if ($value === 'patient_note') {
+                return 'Patient Notes';
+            }
+
+            if ($value === 'order_note') {
+                return 'Order Notes';
+            }
+
+            return ucwords(str_replace(['_', '-'], ' ', $value));
+        }
+
+        return '-';
+    }
+}
+
 
 if (!function_exists('wl_comms_note_identifier')) {
     function wl_comms_note_identifier($entry)
@@ -904,11 +966,15 @@ if (!function_exists('wl_count_unseen_comms_replies')) {
 	                              $noteBody = trim((string) ($commsNote['body'] ?? $commsNote['note'] ?? ''));
 	                              $noteDate = wl_comms_note_date($commsNote['created_at'] ?? '');
 	                              $noteAuthor = wl_comms_note_author($commsNote);
+	                              $noteCategory = wl_comms_note_category($commsNote);
+	                              $noteType = wl_comms_note_type($commsNote);
 
 	                              $commsNoteID = wl_comms_note_identifier($commsNote);
 
 	                              echo '<tr>';
-	                                  echo '<td><strong>Note:</strong> '.PerchUtil::html($noteBody !== '' ? $noteBody : '-').'</td>';
+	                                  echo '<td><strong>Note:</strong> '.PerchUtil::html($noteBody !== '' ? $noteBody : '-');
+	                                  echo '<div style="margin-top:6px;font-size:12px;color:#666;">Category: '.PerchUtil::html($noteCategory).' | Type: '.PerchUtil::html($noteType).'</div>';
+	                                  echo '</td>';
 	                                  echo '<td>'.PerchUtil::html($noteDate).'</td>';
 	                                  echo '<td>'.PerchUtil::html($noteAuthor).'</td>';
 	                              echo '</tr>';
