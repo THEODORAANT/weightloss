@@ -278,12 +278,13 @@ function comms_service_send_member_note(int $memberID, array $noteData = []): bo
     if ($author !== '') {
         $payload['author'] = $author;
     }
-echo "note";
-print_r($payload);
-$response=comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
-echo "response";
-print_r($response);
-    return $response;
+    $response = comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
+
+    if (is_array($response)) {
+        return true;
+    }
+
+    return (bool) $response;
 }
 
 function comms_service_send_member_note_reply(int $memberID, string $noteID, array $replyData = []): bool
