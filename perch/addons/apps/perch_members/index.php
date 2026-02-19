@@ -9,7 +9,7 @@
 
     # Set the page title
     $Perch->page_title = $Lang->get('Manage Members');
-    $Perch->add_css($API->app_path().'/assets/css/members.css');
+    //$Perch->add_css($API->app_path().'/assets/css/members.css');
      $Perch->add_javascript($API->app_path().'/assets/js/export_csv.js');
     # Do anything you want to do before output is started
     include('modes/_subnav.php');
