@@ -715,9 +715,6 @@ if (!function_exists('wl_member_note_build_text')) {
                                     $noteTargetType = 'patient_note';
                                 }
                                 $isRedFlag = isset($post['new-note-red-flag']) && $post['new-note-red-flag'] === '1';
-                                if ($noteCategory === 'clinical' || $noteCategory === 'complaint') {
-                                    $isRedFlag = true;
-                                }
 
                                 $structuredNote = wl_member_note_build_text($post['new-note'], $noteCategory, $noteTargetType, $noteThreadRef, $noteOrderId);
                                 $noteset = $Notes->parse_string($structuredNote);
@@ -765,7 +762,7 @@ if (!function_exists('wl_member_note_build_text')) {
                                             comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
                                         }
 
-                                        if ($isRedFlag && is_object($Member)) {
+                                        if ($isRedFlag && $effectiveTargetType === 'patient_note' && is_object($Member)) {
                                             $existingPharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), (int) $Note->id());
                                             $alreadySentToPharmacy = ($existingPharmacyStatus instanceof PerchMembers_NotePharmacyStatus)
                                                 && strtolower((string) $existingPharmacyStatus->status()) === 'sent';
@@ -783,7 +780,8 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'added_by' => $addedBy,
                                                 'member_email' => $memberEmail,
                                                 'escalate_clinical_review' => 1,
-                                                'note_type' => 'clinical_note',
+                                                'note_type' => 'customer_note',
+                                                'type' => 'ADMIN',
                                                 'note_category' => $effectiveCategory,
                                                 'target_type' => 'patient_note',
                                                 'source_target_type' => $effectiveTargetType,
