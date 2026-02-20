@@ -41,13 +41,13 @@ $Orders     = new PerchShop_Orders($API);
 
 
                                      $orderStatusData = [
-                                         'status' => 'APPROVED',
+                                         'status' => 'PENDING',
                                      ];
                                      $statusUpdateResult = comms_service_request_json('POST', '/v1/perch/orders/'.$Order->id().'/status', $orderStatusData);
                                      if (!is_array($statusUpdateResult)) {
-                                         $message = ' Pharmacy status update to APPROVED failed.';
+                                         $message = ' Pharmacy status update to PENDING failed.';
                                      }else{
-                                         $update_query ="UPDATE ".PERCH_DB_PREFIX."orders_match_pharmacy SET status='APPROVED' WHERE orderID = ".$Order->id();
+                                         $update_query ="UPDATE ".PERCH_DB_PREFIX."orders_match_pharmacy SET status='PENDING' WHERE orderID = ".$Order->id();
 
                                       $success=true;
                                                                           $message='The order has been successfully send to the pharmacy .';

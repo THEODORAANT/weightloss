@@ -279,7 +279,10 @@ function comms_service_send_member_note(int $memberID, array $noteData = []): bo
         $payload['author'] = $author;
     }
     $response = comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
-
+echo "note";
+print_r($payload);
+echo "response";
+print_r($response);
     if (is_array($response)) {
         return true;
     }
