@@ -756,13 +756,14 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'body' => $noteBody,
                                                 'status' => 'open',
                                                 'created_by' => $createdBy,
+                                                'escalate_clinical_review' => $isRedFlag,
                                                 'external_note_ref' => (string) $Note->id(),
                                             ];
 
                                             comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
                                         }
 
-                                        if ($isRedFlag && $effectiveTargetType === 'patient_note' && is_object($Member)) {
+                                        if ($isRedFlag){ //&& $effectiveTargetType === 'patient_note' && is_object($Member)) {
                                             $existingPharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), (int) $Note->id());
                                             $alreadySentToPharmacy = ($existingPharmacyStatus instanceof PerchMembers_NotePharmacyStatus)
                                                 && strtolower((string) $existingPharmacyStatus->status()) === 'sent';
@@ -854,9 +855,9 @@ if (!function_exists('wl_member_note_build_text')) {
                 $details = array();
             }
 
-            if ($redirect_after_save && is_object($Member)) {
+          /*  if ($redirect_after_save && is_object($Member)) {
                 PerchUtil::redirect($API->app_path() .'/edit/?id='.$Member->id().'&updated=1');
-            }
+            }*/
 
         }
 
