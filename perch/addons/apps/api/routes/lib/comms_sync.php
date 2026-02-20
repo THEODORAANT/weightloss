@@ -25,7 +25,7 @@ function comms_sync_member(int $memberID): bool
 
     $addressData = [];
     $Customer = null;
-     echo "sync_comms_member2";
+    // echo "sync_comms_member2";
     if (class_exists('PerchAPI') && class_exists('PerchShop_Customers')) {
         $API = new PerchAPI(1.0, 'perch_shop');
         $Customers = new PerchShop_Customers($API);
@@ -79,12 +79,12 @@ function comms_sync_member(int $memberID): bool
         'createdAt' => $createdAt,
         'updatedAt' => $updatedAt,
     ];
- echo "sync_comms_member3";
+ //echo "sync_comms_member3";
     $response = comms_service_link_member_response($memberID, $payload);
-    print_r($response );
+    //print_r($response );
     if ($response !== null) {
         $customerId = comms_service_extract_customer_id($response);
-         echo "customerId";  print_r($customerId );
+         //echo "customerId";  print_r($customerId );
         if ($customerId !== '' && $Customer instanceof PerchShop_Customer) {
             $Customer->update(['pharmacy_refid' => $customerId]);
         }

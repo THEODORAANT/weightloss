@@ -279,10 +279,10 @@ function comms_service_send_member_note(int $memberID, array $noteData = []): bo
         $payload['author'] = $author;
     }
     $response = comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/notes', $payload);
-echo "note";
+/*echo "note";
 print_r($payload);
 echo "response";
-print_r($response);
+print_r($response);*/
     if (is_array($response)) {
         return true;
     }
@@ -346,6 +346,7 @@ function comms_service_update_customer_by_email(string $email, array $customerDa
 function comms_service_send_order_note(int $orderID, array $noteData = []): bool
 {
     $payload = array_merge($noteData, ['orderID' => $orderID]);
+    echo "comms_service_send_order_note";
     return comms_service_request('POST', '/v1/perch/orders/' . $orderID . '/notes', $payload);
 }
 
