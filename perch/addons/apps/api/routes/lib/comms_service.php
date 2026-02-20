@@ -333,6 +333,16 @@ function comms_service_get_customer_by_email(string $email): ?array
     return comms_service_request_json('GET', '/v1/perch/customers/' . rawurlencode($normalizedEmail));
 }
 
+function comms_service_update_customer_by_email(string $email, array $customerData = []): ?array
+{
+    $normalizedEmail = trim($email);
+    if ($normalizedEmail === '') {
+        return null;
+    }
+
+    return comms_service_request_json('PUT', '/v1/perch/customers/' . rawurlencode($normalizedEmail), $customerData);
+}
+
 function comms_service_send_order_note(int $orderID, array $noteData = []): bool
 {
     $payload = array_merge($noteData, ['orderID' => $orderID]);
