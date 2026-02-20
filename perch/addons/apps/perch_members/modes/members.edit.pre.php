@@ -278,6 +278,8 @@ if (!function_exists('wl_member_note_build_text')) {
 
     if ($Form->submitted()) {
 
+        $redirect_after_save = false;
+
         $post = $_POST;
 
         if (isset($post['document_reminder_status'])) {
@@ -834,6 +836,10 @@ if (!function_exists('wl_member_note_build_text')) {
 
             if ($result) {
 
+               if (is_object($Member)) {
+                   $redirect_after_save = true;
+               }
+
                $message = $HTML->success_message('The member has been successfully updated. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>');
             }else{
                 if (!$message) $message = $HTML->failure_message('Sorry, that member could not be updated, or no changes were made.');
@@ -850,12 +856,20 @@ if (!function_exists('wl_member_note_build_text')) {
                 $details = array();
             }
 
+            if ($redirect_after_save && is_object($Member)) {
+                PerchUtil::redirect($API->app_path() .'/edit/?id='.$Member->id().'&updated=1');
+            }
+
         }
 
     }
     
     if (isset($_GET['created']) && !$message) {
         $message = $HTML->success_message('The member has been successfully created. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>');
+    }
+
+    if (isset($_GET['updated']) && !$message) {
+        $message = $HTML->success_message('The member has been successfully updated. Return to %smember listing%s', '<a href="'.$API->app_path() .'">', '</a>');
     }
 
     if ($is_customer && $Customer instanceof PerchShop_Customer) {
