@@ -2,6 +2,7 @@
 include(__DIR__ .'/../../../../core/runtime/runtime.php');
 
 require_once __DIR__ . '/../auth.php';
+require_once __DIR__ . '/lib/comms_service.php';
 
 $token = get_bearer_token();
 $payload = verify_token($token);
@@ -113,6 +114,46 @@ if (!$ShippingAddress instanceof PerchShop_Address) {
 }
 
 $ShopRuntime->update_member_shipping_profile((int) $payload['user_id'], $shippingData);
+
+$memberProfile = perch_member_profile((int) $payload['user_id']);
+if (!is_array($memberProfile)) {
+    $memberProfile = [];
+}
+
+$memberEmail = trim((string) ($memberProfile['memberEmail'] ?? ($memberProfile['email'] ?? '')));
+if ($memberEmail !== '') {
+    $firstName = trim((string) ($memberProfile['first_name'] ?? ($shippingData['first_name'] ?? '')));
+    $lastName = trim((string) ($memberProfile['last_name'] ?? ($shippingData['last_name'] ?? '')));
+    $name = trim($firstName . ' ' . $lastName);
+    if ($name === '') {
+        $name = trim((string) ($memberProfile['name'] ?? ''));
+    }
+
+    $candidateCommsPayload = [
+        'name' => $name,
+        'email' => $memberEmail,
+        'dob' => (string) ($memberProfile['dob'] ?? ''),
+        'phone' => (string) (($shippingData['phone'] ?? '') !== '' ? $shippingData['phone'] : ($memberProfile['phone'] ?? '')),
+        'gender' => (string) ($memberProfile['gender'] ?? ''),
+        'address1' => (string) ($shippingData['address_1'] ?? ''),
+        'city' => (string) ($shippingData['city'] ?? ''),
+        'zip' => (string) ($shippingData['postcode'] ?? ''),
+    ];
+
+    $commsPayload = [];
+    foreach ($candidateCommsPayload as $key => $value) {
+        $value = trim((string) $value);
+        if ($value === '') {
+            continue;
+        }
+
+        $commsPayload[$key] = $value;
+    }
+
+    if (!empty($commsPayload)) {
+        comms_service_update_customer_by_email($memberEmail, $commsPayload);
+    }
+}
 
 $responseAddress = [];
 foreach ($shippingData as $field => $value) {
