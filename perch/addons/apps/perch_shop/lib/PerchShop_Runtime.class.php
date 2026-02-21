@@ -1222,6 +1222,22 @@ public function get_package_future_items($opts){
 		$Customers = new PerchShop_Customers($this->api);
 		$Customer = $Customers->find_by_memberID($memberID);
 		if ($Customer) {
+			$currentRefId = trim((string) $Customer->pharmacy_refid());
+			if ($currentRefId === '') {
+				require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
+
+				$email = trim((string) $Customer->email());
+				if ($email !== '') {
+					$commsResponse = comms_service_get_customer_by_email($email);
+					if (is_array($commsResponse) && ($commsResponse['success'] ?? false)) {
+						$remoteCustomerId = comms_service_extract_customer_id($commsResponse);
+						if ($remoteCustomerId !== '') {
+							$Customer->update(['pharmacy_refid' => $remoteCustomerId]);
+						}
+					}
+				}
+			}
+
 			$this->Cart->set_customer($Customer->id());	
 			$this->set_location_from_address('default');
 			 if (session_status() === PHP_SESSION_NONE) {
