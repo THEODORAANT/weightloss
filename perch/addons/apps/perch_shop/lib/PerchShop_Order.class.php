@@ -346,8 +346,8 @@ public function isReorder($Customer){
                 } else {
                     $sql_questionnaire .= ' ORDER BY created_at ASC, id ASC';
                 }
-                echo "questionnaire";
-               echo $sql_questionnaire;
+             //   echo "questionnaire";
+             //  echo $sql_questionnaire;
 
                 $questionnaire = $this->db->get_rows($sql_questionnaire);
              //   print_r($questionnaire);
@@ -413,11 +413,11 @@ public function isReorder($Customer){
             ];
         }
 
-echo "questions_items";
+/*echo "questions_items";
 	print_r($questions_items);
         echo "order_items";
 	print_r($order_items);
-                    /*  echo "ShippingAdr";
+                      echo "ShippingAdr";
 	print_r($ShippingAddr);*/
          $shippingAddressLine1 = '';
          $shippingAddressLine2 = '';
@@ -447,7 +447,7 @@ echo "questions_items";
              "assessment" => $questions_items,
              "notes" => $questionnaire_notes
          ];
-	print_r($orderData);
+	//print_r($orderData);
            $response = [];
            $sendResult = comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
            $response = [
@@ -456,8 +456,8 @@ echo "questions_items";
                    'message' => $sendResult ? 'Order sent to comms service.' : 'Failed to send order to comms service.'
                ],
            ];
-                           echo "response";
-         	print_r($response);
+                      //     echo "response";
+         //	print_r($response);
          	//die();exit();
          if(isset($response["success"]["ok"])){
     $pharmacy_data = [

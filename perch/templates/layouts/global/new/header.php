@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GT-WRHXK36S"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GT-WRHXK36S');
+  </script>
   <title>GetWeightLoss - Weight Loss Success</title>
   <!-- Version: 2025-01-08-LATEST -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Catamaran:wght@400;500;600;700&display=swap" rel="stylesheet">
- <!-- Google tag (gtag.js) event -->
- <script>
-   gtag('event', 'ads_conversion_Purchase_1', {
-     // <event_parameters>
-   });
- </script>
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;

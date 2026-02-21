@@ -108,8 +108,8 @@ function comms_service_request_json(string $method, string $path, array $payload
         curl_setopt($ch, CURLOPT_HTTPGET, true);
     } else {
         $jsonPayload = json_encode($payload);
-          //echo "jsonPayload";
-          //  print_r($jsonPayload );
+        //  echo "jsonPayload";
+         //   print_r($jsonPayload );
             PerchUtil::debug('Comms member jsonPayload: ' . json_encode($jsonPayload), 'notice');
 
         if ($jsonPayload === false) {
@@ -126,11 +126,13 @@ function comms_service_request_json(string $method, string $path, array $payload
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
     $response = curl_exec($ch);
+                PerchUtil::debug('Comms member response: ' . json_encode($response), 'notice');
+
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
     //echo "response";
-     //   print_r($response );
+    ///   print_r($response );
     if ($response === false || $status < 200 || $status >= 300) {
         return null;
     }
@@ -201,6 +203,7 @@ function comms_service_link_member(int $memberID, array $memberData = []): bool
 function comms_service_link_member_response(int $memberID, array $memberData = []): ?array
 {
     $payload = array_merge($memberData, ['memberID' => $memberID]);
+    echo "comms_service_link_member_response";
     return comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/link', $payload);
 }
 
@@ -346,7 +349,7 @@ function comms_service_update_customer_by_email(string $email, array $customerDa
 function comms_service_send_order_note(int $orderID, array $noteData = []): bool
 {
     $payload = array_merge($noteData, ['orderID' => $orderID]);
-    echo "comms_service_send_order_note";
+    //echo "comms_service_send_order_note";
     return comms_service_request('POST', '/v1/perch/orders/' . $orderID . '/notes', $payload);
 }
 

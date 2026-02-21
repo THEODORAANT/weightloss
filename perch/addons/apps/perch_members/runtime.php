@@ -540,7 +540,7 @@ function perch_member_questionsForQuestionnaire($type) {
                        //  return true;
         }
     function perch_member_add_questionnaire($data,$type,$orderID=null)
-    { echo "perch_member_add_questionnaire";print_r($data);echo "orderID".$orderID;
+    { //echo "perch_member_add_questionnaire";print_r($data);echo "orderID".$orderID;
       $Session = PerchMembers_Session::fetch();
 $memberid=0;
                 if ($Session->logged_in) {

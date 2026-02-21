@@ -1375,7 +1375,7 @@ public function get_package_future_items($opts){
         }
 
         private function sync_comms_member($memberID)
-        { echo "sync_comms_member1";
+        { //echo "sync_comms_member1";
                 if (!defined('PERCH_PATH')) {
                         return;
                 }

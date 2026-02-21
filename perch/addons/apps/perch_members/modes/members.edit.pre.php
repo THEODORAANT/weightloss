@@ -751,7 +751,7 @@ if (!function_exists('wl_member_note_build_text')) {
                                             comms_sync_order($effectiveOrderId, (int) $Member->id());
 
                                             $orderNotePayload = [
-                                                'note_type' => $noteType,
+                                                'note_type' => $effectiveCategory,
                                                 'title' => null,
                                                 'body' => $noteBody,
                                                 'status' => 'open',
@@ -782,7 +782,7 @@ if (!function_exists('wl_member_note_build_text')) {
                                                 'member_email' => $memberEmail,
                                                 'escalate_clinical_review' => 1,
                                                 'note_type' => 'customer_note',
-                                                'type' => 'ADMIN',
+                                                'type' => $effectiveCategory,
                                                 'note_category' => $effectiveCategory,
                                                 'target_type' => 'patient_note',
                                                 'source_target_type' => $effectiveTargetType,

@@ -1,8 +1,10 @@
 <?php
 	$Products = new PerchShop_Products($API);
-	
+	$Variations = new PerchShop_Variations($API);
+
 	$edit_mode  	= false;
 	$Product    	= false;
+	$Variation    	= false;
 	$shop_id  	= false;
 	$message		= false;
 	$details 		= false;
@@ -13,18 +15,30 @@
 		    PerchUtil::redirect($API->app_path());
 		}
 
-		$shop_id           = PerchUtil::get('id');
-		$Product           = $Products->find($shop_id);
+		$shop_id 		   = PerchUtil::get('id');
+		$Variation 		   = $Variations->find($shop_id);
+		$Product           = $Products->find($Variation->productID());
 		$edit_mode         = true;
+
 	}
 
-	if (!is_object($Product) || !$Product->is_variant()) {
-		PerchUtil::redirect($API->app_path('perch_shop_products'));
+	if (PerchUtil::get('pid')) {
+
+		if (!$CurrentUser->has_priv('perch_shop.products.edit')) {
+		    PerchUtil::redirect($API->app_path());
+		}
+
+		$Product           = $Products->find(PerchUtil::get('pid'));
+		$edit_mode         = true;
+
 	}
+
+	$Variations->set_productID($Product->id());
+
 
 	// Template
 	$Template   = $API->get('Template');
-	$Template->set('shop/products/variant.html', 'shop');
+	$Template->set('shop/products/modifier.html', 'shop');
 	$tags = $Template->find_all_tags_and_repeaters();
 
 	$Form = $API->get('Form');
@@ -34,16 +48,24 @@
 
 	if ($Form->submitted()) {
 
-		$data        = $Form->get_posted_content($Template, $Products, $Product);
-		$search_text = $Form->get_search_text();
+		$data = $Form->get_posted_content($Template, $Variations, $Variation);
+		$data['productID'] = $Product->id();
 
-		if (is_object($Product)) {
-			$Product->update($data);
-			$Product->index($Template);	
-			$Product->update_search_text($search_text);
+		if (is_object($Variation)) {
+			$Variation->update($data);
+			$Variation->index($Template);
+		}else{
+
+			$Variation = $Variations->create($data);
+
+			if ($Variation) {
+				$Variation->index($Template);
+				PerchUtil::redirect($Perch->get_page().'?id='.$Variation->id().'&created=1');
+			}
+
 		}
 
-		if (is_object($Product)) {
+		if (is_object($Variation)) {
 		    $message = $HTML->success_message('Your product has been successfully edited. Return to %sproduct listing%s', '<a href="'.$API->app_path('perch_shop_products') .'">', '</a>');
 		}else{
 		    $message = $HTML->failure_message('Sorry, that update was not successful.');
@@ -51,6 +73,12 @@
 
 	}
 
-	if (is_object($Product)) {
-		$details = $Product->to_array();
+
+	if (PerchUtil::get('created') && !$message) {
+	    $message = $HTML->success_message('Your product has been successfully created. Return to %sproduct listing%s', '<a href="'. $API->app_path('perch_shop_products') .'">', '</a>');
+	}
+
+
+	if (is_object($Variation)) {
+		$details = $Variation->to_array();
 	}

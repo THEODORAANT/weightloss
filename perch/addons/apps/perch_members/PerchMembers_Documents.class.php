@@ -35,9 +35,9 @@ class PerchMembers_Documents extends PerchAPI_Factory
        $updatedata['documentStatus']=$status;
        $r = $this->db->update($this->table, $updatedata, $this->pk, $documentID );
 
-       if ($r && $status === 'rerequest' && $previousStatus !== 'rerequest') {
+      /* if ($r && $status === 'rerequest' && $previousStatus !== 'rerequest') {
            $this->send_document_rerequest_email($Document, $note);
-       }
+       }*/
 
        return $r;
        }
