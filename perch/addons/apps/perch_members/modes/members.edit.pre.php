@@ -475,7 +475,7 @@ if (!function_exists('wl_member_note_build_text')) {
                                 $EscalationEmail->senderName(PERCH_EMAIL_FROM_NAME);
                                 $EscalationEmail->senderEmail(PERCH_EMAIL_FROM);
                                 $EscalationEmail->recipientEmail('management@thestgroup.co.uk');
-                                $EscalationEmail->ccToEmail('support@getweightloss.co.uk');
+                                $EscalationEmail->bccToEmail('support@getweightloss.co.uk');
 
                                 if (!$EscalationEmail->send()) {
                                     PerchUtil::debug('Failed to send clinical escalation email for note '.$noteID.': '.$EscalationEmail->errors, 'error');
