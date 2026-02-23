@@ -1232,7 +1232,15 @@ public function get_package_future_items($opts){
 					if (is_array($commsResponse) && ($commsResponse['success'] ?? false)) {
 						$remoteCustomerId = comms_service_extract_customer_id($commsResponse);
 						if ($remoteCustomerId !== '') {
-							$Customer->update(['pharmacy_refid' => $remoteCustomerId]);
+							$CustomersWithEmail = $Customers->get_by('customerEmail', $email);
+
+							if (PerchUtil::count($CustomersWithEmail)) {
+								foreach ($CustomersWithEmail as $CustomerWithEmail) {
+									$CustomerWithEmail->update(['pharmacy_refid' => $remoteCustomerId]);
+								}
+							} else {
+								$Customer->update(['pharmacy_refid' => $remoteCustomerId]);
+							}
 						}
 					}
 				}
