@@ -1226,7 +1226,7 @@ public function get_package_future_items($opts){
 			if ($currentRefId === '') {
 				require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
 
-				$email = trim((string) $Customer->email());
+				$email = trim((string) $Customer->customerEmail());
 				if ($email !== '') {
 					$commsResponse = comms_service_get_customer_by_email($email);
 					if (is_array($commsResponse) && ($commsResponse['success'] ?? false)) {
@@ -1242,6 +1242,8 @@ public function get_package_future_items($opts){
 								$Customer->update(['pharmacy_refid' => $remoteCustomerId]);
 							}
 						}
+					}else{
+					$this->sync_comms_member((int)$memberID);
 					}
 				}
 			}
