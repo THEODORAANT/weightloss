@@ -18,6 +18,7 @@ if (isset($options['help'])) {
 $dryRun = array_key_exists('dry-run', $options);
 
 require_once __DIR__ . '/../perch/runtime.php';
+require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_sync.php';
 
 // Default list for quick ad-hoc runs. Update as needed.
 const ORDER_IDS = [];
@@ -71,6 +72,35 @@ foreach ($orderIDs as $orderID) {
         echo '[fail] Order #' . $orderID . ' has no valid customer.' . PHP_EOL;
         $failed++;
         continue;
+    }
+
+    $customerId = trim((string)$Customer->pharmacy_refid());
+    if ($customerId === '') {
+        $memberID = (int)$Customer->memberID();
+        if ($memberID <= 0) {
+            echo '[fail] Order #' . $orderID . ' customer has no memberID; cannot sync customerId.' . PHP_EOL;
+            $failed++;
+            continue;
+        }
+
+        if ($dryRun) {
+            echo '[dry-run] Order #' . $orderID . ' missing customerId; would call comms_sync_member(' . $memberID . ').' . PHP_EOL;
+        } else {
+            $synced = comms_sync_member($memberID);
+            if (!$synced) {
+                echo '[fail] Order #' . $orderID . ' failed to sync member #' . $memberID . ' for customerId.' . PHP_EOL;
+                $failed++;
+                continue;
+            }
+        }
+
+        $Customer = $Customers->find((int)$Order->customerID());
+        $customerId = $Customer ? trim((string)$Customer->pharmacy_refid()) : '';
+        if ($customerId === '') {
+            echo '[fail] Order #' . $orderID . ' still has empty customerId after sync.' . PHP_EOL;
+            $failed++;
+            continue;
+        }
     }
 
     if ($dryRun) {
