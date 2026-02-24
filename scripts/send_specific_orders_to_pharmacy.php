@@ -21,7 +21,7 @@ require_once __DIR__ . '/../perch/runtime.php';
 require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_sync.php';
 
 // Default list for quick ad-hoc runs. Update as needed.
-const ORDER_IDS = [4830];
+const ORDER_IDS = [4700];
 
 $orderIDs = ORDER_IDS;
 if (isset($options['orders']) && $options['orders'] !== false && trim((string)$options['orders']) !== '') {
