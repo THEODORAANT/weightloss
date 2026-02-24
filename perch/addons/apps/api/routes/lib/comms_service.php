@@ -132,7 +132,7 @@ function comms_service_request_json(string $method, string $path, array $payload
     curl_close($ch);
 
     //echo "response";
-    ///   print_r($response );
+    // print_r($response );
     if ($response === false || $status < 200 || $status >= 300) {
         return null;
     }
@@ -203,7 +203,7 @@ function comms_service_link_member(int $memberID, array $memberData = []): bool
 function comms_service_link_member_response(int $memberID, array $memberData = []): ?array
 {
     $payload = array_merge($memberData, ['memberID' => $memberID]);
-    echo "comms_service_link_member_response";
+    //echo "comms_service_link_member_response";
     return comms_service_request_json('POST', '/v1/perch/members/' . $memberID . '/link', $payload);
 }
 

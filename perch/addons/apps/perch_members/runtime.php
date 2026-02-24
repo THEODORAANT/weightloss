@@ -540,7 +540,7 @@ function perch_member_questionsForQuestionnaire($type) {
                        //  return true;
         }
     function perch_member_add_questionnaire($data,$type,$orderID=null)
-    { //echo "perch_member_add_questionnaire";print_r($data);echo "orderID".$orderID;
+    { echo "perch_member_add_questionnaire";print_r($data);echo "orderID".$orderID;
       $Session = PerchMembers_Session::fetch();
 $memberid=0;
                 if ($Session->logged_in) {
@@ -552,11 +552,11 @@ $memberid=0;
                    if ($orderID === null && function_exists('perch_shop_successful_order_id')) {
                        $orderID = perch_shop_successful_order_id();
                    }
-
+echo "perch_member_add_questionnaire 1";echo "orderID".$orderID;
                    if ($orderID === null && class_exists('PerchShop_Session') && PerchShop_Session::is_set('shop_order_id')) {
                        $orderID = PerchShop_Session::get('shop_order_id');
                    }
-
+echo "perch_member_add_questionnaire 2";echo "orderID".$orderID;
                    $questionnaireID = $Questionnaires->add_to_member($memberid,$data,$type,$orderID);
 
                    /*if ($orderID) {

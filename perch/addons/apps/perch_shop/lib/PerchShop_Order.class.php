@@ -214,7 +214,7 @@ class PerchShop_Order extends PerchShop_Base
 public function isReorder($Customer){
 		$Products = new PerchShop_Products($this->api);
 		$products = $Products->get_by_category('products/weight-loss');
-
+//echo "isReorder";print_r($products );
 		if (!PerchUtil::count($products)) {
 			return false;
 		}
@@ -253,13 +253,14 @@ public function isReorder($Customer){
         $items = $OrderItems->get_by('orderID', $this->id());
             $ShopRuntime = PerchShop_Runtime::fetch();
             $reorder = $ShopRuntime->customer_has_paid_order($Customer->memberID(), 'products/weight-loss');
+
                 $order_items = [];
                     $questions_items=[];
                $questionnaire_type="first-order";
                  $orders = $Orders->findAll_for_customer($Customer);
 
-                                              if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
-
+                                             // if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
+                                             if($reorder){
                                   					      $questionnaire_type="re-order";
                                   					 }
 
@@ -412,7 +413,13 @@ public function isReorder($Customer){
                 "answer" => $questionnaire_notes,
             ];
         }
-
+if(!PerchUtil::count($questions_items)){
+     echo "reorder"; echo  $reorder ;
+ echo $sql_questionnaire;
+echo "questions_items";
+	print_r($questions_items);
+	die();exit();
+}
 /*echo "questions_items";
 	print_r($questions_items);
         echo "order_items";
@@ -447,7 +454,7 @@ public function isReorder($Customer){
              "assessment" => $questions_items,
              "notes" => $questionnaire_notes
          ];
-	//print_r($orderData);
+
            $response = [];
            $sendResult = comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
            $response = [
@@ -467,6 +474,10 @@ public function isReorder($Customer){
                'pharmacy_message' =>$response["data"]["message"],
            ];
          	}else{
+         	print_r(json_encode($orderData));
+            	echo '/v1/perch/orders/'.$this->id().'/create';
+         		print_r($response);
+                     	die();exit();
          	 $pharmacy_data = [
                            'orderID'    => $this->id(),
                            'pharmacy_orderID'    => '',

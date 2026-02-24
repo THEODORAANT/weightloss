@@ -198,6 +198,7 @@
 						'status' => 'CANCELLED',
 						'reason' => $status_reason,
 					];
+
 					$statusUpdateResult = comms_service_request_json('POST', '/v1/perch/orders/'.$Order->id().'/status', $orderStatusData);
 					if (!is_array($statusUpdateResult)) {
 					  $update_query ="UPDATE ".PERCH_DB_PREFIX."orders_match_pharmacy SET status='CANCELLED',pharmacy_message=".$status_reason." WHERE orderID = ".$Order->id();
