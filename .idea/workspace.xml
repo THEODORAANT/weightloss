@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/comms_service.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/comms_service.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_members/runtime.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_members/runtime.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Order.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Order.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.pre.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,25 +38,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib" />
-      <recent name="$PROJECT_DIR$/perch" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_members/modes" />
       <recent name="$PROJECT_DIR$/perch/templates" />
     </key>
@@ -139,15 +135,8 @@
       <workItem from="1770976434642" duration="13996000" />
       <workItem from="1771494584651" duration="14612000" />
       <workItem from="1771832144001" duration="1221000" />
-      <workItem from="1771875167138" duration="1345000" />
-    </task>
-    <task id="LOCAL-00111" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1764404956642</created>
-      <option name="number" value="00111" />
-      <option name="presentableId" value="LOCAL-00111" />
-      <option name="project" value="LOCAL" />
-      <updated>1764404956642</updated>
+      <workItem from="1771875167138" duration="1979000" />
+      <workItem from="1771934040344" duration="1334000" />
     </task>
     <task id="LOCAL-00112" summary="weightloss">
       <option name="closed" value="true" />
@@ -533,7 +522,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771876170986</updated>
     </task>
-    <option name="localTasksCounter" value="160" />
+    <task id="LOCAL-00160" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1771931070224</created>
+      <option name="number" value="00160" />
+      <option name="presentableId" value="LOCAL-00160" />
+      <option name="project" value="LOCAL" />
+      <updated>1771931070224</updated>
+    </task>
+    <option name="localTasksCounter" value="161" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
