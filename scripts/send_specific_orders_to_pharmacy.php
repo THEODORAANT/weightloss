@@ -86,27 +86,30 @@ foreach ($orderIDs as $orderID) {
         if ($dryRun) {
             echo '[dry-run] Order #' . $orderID . ' missing customerId; would call comms_sync_member(' . $memberID . ').' . PHP_EOL;
         } else {
-        	$email = trim((string) $Customer->customerEmail());
+            $synced = false;
+            $email = trim((string)$Customer->customerEmail());
 
-        					$commsResponse = comms_service_get_customer_by_email($email);
-        					if (is_array($commsResponse) && ($commsResponse['success'] ?? false)) {
-        						$remoteCustomerId = comms_service_extract_customer_id($commsResponse);
-        						if ($remoteCustomerId !== '') {
-        							$CustomersWithEmail = $Customers->get_by('customerEmail', $email);
+            $commsResponse = comms_service_get_customer_by_email($email);
+            if (is_array($commsResponse) && ($commsResponse['success'] ?? false)) {
+                $remoteCustomerId = comms_service_extract_customer_id($commsResponse);
+                if ($remoteCustomerId !== '') {
+                    $CustomersWithEmail = $Customers->get_by('customerEmail', $email);
 
-        							if (PerchUtil::count($CustomersWithEmail)) {
-        								foreach ($CustomersWithEmail as $CustomerWithEmail) {
-        									$CustomerWithEmail->update(['pharmacy_refid' => $remoteCustomerId]);
-        									$synced =true;
-        								}
-        							} else {
-        								$Customer->update(['pharmacy_refid' => $remoteCustomerId]);
-        								$synced =true;
-        							}
-        						}
-        					}else{
-        					$synced =sync_comms_member((int)$memberID);
-        					}
+                    if (PerchUtil::count($CustomersWithEmail)) {
+                        foreach ($CustomersWithEmail as $CustomerWithEmail) {
+                            $CustomerWithEmail->update(['pharmacy_refid' => $remoteCustomerId]);
+                        }
+                    } else {
+                        $Customer->update(['pharmacy_refid' => $remoteCustomerId]);
+                    }
+
+                    $synced = true;
+                }
+            }
+
+            if (!$synced) {
+                $synced = comms_sync_member($memberID);
+            }
 
             if (!$synced) {
                 echo '[fail] Order #' . $orderID . ' failed to sync member #' . $memberID . ' for customerId.' . PHP_EOL;
