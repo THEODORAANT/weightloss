@@ -13,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/add-unseen-indicator-for-admin-replies-t10xyg" />
+    <option name="BRANCH" value="origin/codex/add-script-to-send-order-to-pharmacy-9zitmn" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -136,23 +136,7 @@
       <workItem from="1771494584651" duration="14612000" />
       <workItem from="1771832144001" duration="1221000" />
       <workItem from="1771875167138" duration="1979000" />
-      <workItem from="1771934040344" duration="1334000" />
-    </task>
-    <task id="LOCAL-00112" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1764592009179</created>
-      <option name="number" value="00112" />
-      <option name="presentableId" value="LOCAL-00112" />
-      <option name="project" value="LOCAL" />
-      <updated>1764592009180</updated>
-    </task>
-    <task id="LOCAL-00113" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1765450204842</created>
-      <option name="number" value="00113" />
-      <option name="presentableId" value="LOCAL-00113" />
-      <option name="project" value="LOCAL" />
-      <updated>1765450204842</updated>
+      <workItem from="1771934040344" duration="2674000" />
     </task>
     <task id="LOCAL-00114" summary="weightloss">
       <option name="closed" value="true" />
@@ -530,7 +514,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771931070224</updated>
     </task>
-    <option name="localTasksCounter" value="161" />
+    <task id="LOCAL-00161" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1771945158461</created>
+      <option name="number" value="00161" />
+      <option name="presentableId" value="LOCAL-00161" />
+      <option name="project" value="LOCAL" />
+      <updated>1771945158461</updated>
+    </task>
+    <task id="LOCAL-00162" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1771960391116</created>
+      <option name="number" value="00162" />
+      <option name="presentableId" value="LOCAL-00162" />
+      <option name="project" value="LOCAL" />
+      <updated>1771960391116</updated>
+    </task>
+    <option name="localTasksCounter" value="163" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
