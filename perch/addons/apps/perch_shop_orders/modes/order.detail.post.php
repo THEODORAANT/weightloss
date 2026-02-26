@@ -429,6 +429,16 @@ $output.=  $HTML->heading2('Customer');
                     }
                 }
 
+                $has_pharmacy_order_id = false;
+                if (PerchUtil::count($orders_pharmacy)) {
+                    foreach ($orders_pharmacy as $pharmacy_order) {
+                        if (!empty($pharmacy_order['pharmacy_orderID'])) {
+                            $has_pharmacy_order_id = true;
+                            break;
+                        }
+                    }
+                }
+
                $output.=  '<tr >';
 
                     $output.=  '<td colspan="7" class="text-right">';
@@ -454,7 +464,11 @@ $output.=  $HTML->heading2('Customer');
                     }
                     $output.=  '<span class="pharmacy-status pharmacy-status-'.$status_class_suffix.'">'.$status_text.'</span>';
                 } else {*/
-      $output.=  '<a style="background-color:#199d19"  href="/perch/addons/apps/perch_shop_orders/sendToPharmacy?id='.$Order->id().'" name="sendtopahramcy" id="sendtopahramcy"  class="button button-icon icon-left" title="Send to Pharmacy"><div> <svg role="img" width="14" height="14" class="icon icon-cross"> <use xlink:href="/perch/core/assets/svg/ext.svg#cross"></use> </svg><span>Send to Pharmacy</span></div></a>';
+      if (!$has_pharmacy_order_id) {
+          $output.=  '<a style="background-color:#199d19" href="/perch/addons/apps/perch_shop_orders/createOrderToPharmacy/?id='.$Order->id().'" name="createordertopharmacy" id="createordertopharmacy" class="button button-icon icon-left" title="Create Order To Pharmacy"><div><svg role="img" width="14" height="14" class="icon icon-cross"><use xlink:href="/perch/core/assets/svg/ext.svg#cross"></use></svg><span>Create Order To Pharmacy</span></div></a>';
+      } else {
+          $output.=  '<a style="background-color:#199d19"  href="/perch/addons/apps/perch_shop_orders/sendToPharmacy?id='.$Order->id().'" name="sendtopahramcy" id="sendtopahramcy"  class="button button-icon icon-left" title="Send to Pharmacy"><div> <svg role="img" width="14" height="14" class="icon icon-cross"> <use xlink:href="/perch/core/assets/svg/ext.svg#cross"></use> </svg><span>Send to Pharmacy</span></div></a>';
+      }
                 //}
                 $output.=  '</td></tr>';
 
