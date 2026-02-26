@@ -42,7 +42,7 @@ class PerchShop_Orders extends PerchShop_Factory
 	}
 			public function is_order_send_to_pharmacy( $orderId)
         	{
-        	 $sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy WHERE orderID='.$this->db->pdb($orderId).' AND pharmacy_orderID !=""';
+        	 $sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy WHERE orderID='.$this->db->pdb($orderId).' AND `status`="PENDING" AND pharmacy_orderID !=""';
 
               $count = $this->db->get_count($sql);
                if($count){ return true;  }
@@ -254,7 +254,7 @@ $sort_val = null;
         }
 
         if (isset($details['sendtopharmacy']) && $details['sendtopharmacy'] !== '') {
-            $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID AND p.pharmacy_orderID!=""';
+            $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID AND `status`="PENDING" AND p.pharmacy_orderID!=""';
 
             if ($details['sendtopharmacy'] == 'yes') {
                 $wheresql .= '     AND p.orderID IS NOT NULL';
@@ -437,7 +437,7 @@ if(isset( $data["FirstName"])){  $data["FirstName"]=$properties["first_name"];} 
                $Email->recipientEmail($Customer->customerEmail());
                //$Email->body($message);
 $Email->send();
-print_r($Email);
+//print_r($Email);
                return true;
     }
 	public function get_dashboard_widget()

@@ -177,8 +177,8 @@ public function take_payment($Order, $opts)
 
         exit;
     } else {
-        echo "data";
-        print_r($data);
+        //echo "data";
+        //print_r($data);
         // Log or show error
         PerchUtil::debug('Stripe session creation failed', 'error');
         PerchUtil::debug($data, 'error');

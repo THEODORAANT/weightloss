@@ -5,6 +5,7 @@
 //require_once '/perch/addons/apps/perch_members/PerchMembers_Member.class.php';
 //require_once __DIR__ . '/../../perch_members/PerchMembers_Member.class.php';
 include(__DIR__ .'/../../../../core/runtime/runtime.php');
+require_once __DIR__ . '/../lib/date_normalization.php';
 require_once __DIR__ . '/lib/comms_sync.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
