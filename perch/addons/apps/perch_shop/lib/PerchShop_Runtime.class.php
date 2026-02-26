@@ -686,6 +686,11 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		if ($Customer && $BillingAddress) {
 
+	$existingOrderID = $this->find_existing_open_order_for_cart($cartID, $Customer->id());
+	if ($existingOrderID) {
+		return (int)$existingOrderID;
+	}
+
 	$Orders = new PerchShop_Orders($this->api);
 
 			$Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
@@ -703,10 +708,26 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 			return false;
 		}
 		}else{ echo 'no matching cart';
-         			PerchUtil::debug('no matching cart', 'error');
-         			return false;
-         		}
+          			PerchUtil::debug('no matching cart', 'error');
+          			return false;
+          		}
     	}
+
+	private function find_existing_open_order_for_cart($cartID, $customerID)
+	{
+		$db = PerchDB::fetch();
+
+		$sql = 'SELECT o.orderID
+			FROM '.PERCH_DB_PREFIX.'shop_cart_data cd
+			INNER JOIN '.PERCH_DB_PREFIX.'shop_orders o ON o.orderID = cd.orderID
+			WHERE cd.cartID='.$db->pdb((int)$cartID).'
+				AND o.customerID='.$db->pdb((int)$customerID).'
+				AND o.orderStatus IN ('.$db->pdb('created').', '.$db->pdb('pending').', '.$db->pdb('payment_failed').')
+			ORDER BY o.orderCreated DESC
+			LIMIT 1';
+
+		return (int)$db->get_value($sql);
+	}
 public function checkout_questionnaire($orderIdForQuestionnaire)
 	{ //echo "checkout_questionnaire"; echo $orderIdForQuestionnaire;
 	//echo "SESSION";print_r($_SESSION);
