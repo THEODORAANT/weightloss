@@ -257,9 +257,9 @@ $sort_val = null;
             $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID AND `status`="PENDING" AND p.pharmacy_orderID!=""';
 
             if ($details['sendtopharmacy'] == 'yes') {
-                $wheresql .= '     AND p.orderID IS NOT NULL';
+                $wheresql .= '     AND p.pharmacy_orderID IS NOT NULL';
             } elseif ($details['sendtopharmacy'] == 'no') {
-                $wheresql .= '     AND p.orderID IS NULL';
+                $wheresql .= '     AND p.pharmacy_orderID IS NULL';
             }
         }
 

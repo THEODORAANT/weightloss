@@ -259,12 +259,12 @@ public function isReorder($Customer){
                $questionnaire_type="first-order";
                  $orders = $Orders->findAll_for_customer($Customer);
 
-                                             // if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
-                                             if($reorder){
+                                            if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
+                                             //if($reorder){
                                   					      $questionnaire_type="re-order";
                                   					 }
 
-             // echo "reorder **";print_r($reorder);
+             echo "reorder **";print_r($reorder);
 
         if (PerchUtil::count($items)) {
         	foreach($items as $Item) {
@@ -413,13 +413,13 @@ public function isReorder($Customer){
                 "answer" => $questionnaire_notes,
             ];
         }
-/*if(!PerchUtil::count($questions_items)){
+if(!PerchUtil::count($questions_items)){
      echo "reorder"; echo  $reorder ;
  echo $sql_questionnaire;
 echo "questions_items";
 	print_r($questions_items);
 	die();exit();
-}*/
+}
 /*echo "questions_items";
 	print_r($questions_items);
         echo "order_items";
@@ -463,7 +463,9 @@ echo "questions_items";
                    'message' => $sendResult ? 'Order sent to comms service.' : 'Failed to send order to comms service.'
                ],
            ];
-
+                      //     echo "response";
+         //	print_r($response);
+         	//die();exit();
          if(isset($response["success"]["ok"])){
     $pharmacy_data = [
                'orderID'    => $this->id(),
@@ -472,10 +474,10 @@ echo "questions_items";
                'pharmacy_message' =>$response["data"]["message"],
            ];
          	}else{
-         	/*print_r(json_encode($orderData));
+         	print_r(json_encode($orderData));
             	echo '/v1/perch/orders/'.$this->id().'/create';
          		print_r($response);
-                     	die();exit();*/
+                     	die();exit();
          	 $pharmacy_data = [
                            'orderID'    => $this->id(),
                            'pharmacy_orderID'    => '',
