@@ -28,7 +28,6 @@ if (!$payload) {
     http_response_code(500);
        echo json_encode(["errors" => "Failed to create Order!"]);
 }else{
- comms_sync_order((int)$return, (int)$memberID);
  echo json_encode(["orderID" =>  $return]);
 
 }

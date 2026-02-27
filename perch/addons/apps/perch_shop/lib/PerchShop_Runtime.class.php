@@ -686,6 +686,14 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		if ($Customer && $BillingAddress) {
 
+	$cartData = $Cart->calculate_cart_for_api($Cart->cartID);
+	$cartTotal = isset($cartData['grand_total']) ? (float)$cartData['grand_total'] : null;
+
+	$existingOrderID = $this->find_existing_open_order_for_customer($Customer->id(), $gateway, $cartTotal);
+	if ($existingOrderID) {
+		return (int)$existingOrderID;
+	}
+
 	$Orders = new PerchShop_Orders($this->api);
 
 			$Order  = $Orders->create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,true);
@@ -703,10 +711,30 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 			return false;
 		}
 		}else{ echo 'no matching cart';
-         			PerchUtil::debug('no matching cart', 'error');
-         			return false;
-         		}
+          			PerchUtil::debug('no matching cart', 'error');
+          			return false;
+          		}
     	}
+
+	private function find_existing_open_order_for_customer($customerID, $gateway, $cartTotal=null)
+	{
+		$db = PerchDB::fetch();
+
+		$sql = 'SELECT o.orderID
+			FROM '.PERCH_DB_PREFIX.'shop_orders o
+			WHERE o.customerID='.$db->pdb((int)$customerID).'
+				AND o.orderGateway='.$db->pdb($gateway).'
+				AND o.orderStatus IN ('.$db->pdb('created').', '.$db->pdb('pending').', '.$db->pdb('payment_failed').')';
+
+		if ($cartTotal !== null) {
+			$sql .= ' AND ABS(o.orderTotal-'.$db->pdb((float)$cartTotal).') < 0.01';
+		}
+
+		$sql .= ' ORDER BY o.orderCreated DESC
+			LIMIT 1';
+
+		return (int)$db->get_value($sql);
+	}
 public function checkout_questionnaire($orderIdForQuestionnaire)
 	{ //echo "checkout_questionnaire"; echo $orderIdForQuestionnaire;
 	//echo "SESSION";print_r($_SESSION);
