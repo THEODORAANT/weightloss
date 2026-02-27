@@ -738,11 +738,34 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 public function checkout_questionnaire($orderIdForQuestionnaire)
 	{ //echo "checkout_questionnaire"; echo $orderIdForQuestionnaire;
 	//echo "SESSION";print_r($_SESSION);
+if (!$orderIdForQuestionnaire) {
+    return;
+}
+
+if (!empty($_SESSION['questionnaire_saved'])
+    && !empty($_SESSION['questionnaire_qid'])
+    && isset($_SESSION['questionnaire_order_id'])
+    && (int)$_SESSION['questionnaire_order_id'] !== (int)$orderIdForQuestionnaire) {
+    $db = PerchDB::fetch();
+    $memberID = (int)perch_member_get('memberID');
+
+    $sql = 'UPDATE '.PERCH_DB_PREFIX.'questionnaire
+            SET order_id='.$db->pdb((int)$orderIdForQuestionnaire).'
+            WHERE qid='.$db->pdb((int)$_SESSION['questionnaire_qid']).'
+                AND member_id='.$db->pdb($memberID);
+    $db->execute($sql);
+
+    $_SESSION['questionnaire_order_id'] = (int)$orderIdForQuestionnaire;
+    return;
+}
+
 if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
     if (isset($_SESSION['questionnaire-reorder']) && !empty($_SESSION['questionnaire-reorder'])) {
         unset($_SESSION['questionnaire-reorder']['nextstep']);
 
-        perch_member_add_questionnaire($_SESSION['questionnaire-reorder'], 're-order', $orderIdForQuestionnaire);
+        $questionnaireQid = perch_member_add_questionnaire($_SESSION['questionnaire-reorder'], 're-order', $orderIdForQuestionnaire);
+        $_SESSION['questionnaire_qid'] = (int)$questionnaireQid;
+        $_SESSION['questionnaire_order_id'] = (int)$orderIdForQuestionnaire;
         $_SESSION['questionnaire_saved'] = true;
     }
 
@@ -782,7 +805,9 @@ if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
             }
             $_SESSION['questionnaire']["documents"] = "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/edit/?id=" . perch_member_get('id');
             //print_r( $_SESSION['questionnaire']);
-            perch_member_add_questionnaire($_SESSION['questionnaire'], 'first-order', $orderIdForQuestionnaire);
+            $questionnaireQid = perch_member_add_questionnaire($_SESSION['questionnaire'], 'first-order', $orderIdForQuestionnaire);
+            $_SESSION['questionnaire_qid'] = (int)$questionnaireQid;
+            $_SESSION['questionnaire_order_id'] = (int)$orderIdForQuestionnaire;
 
             if (file_put_contents("{$logDir}/{$userId}_grouped_log.json", json_encode([
                 'metadata' => $metadata,
