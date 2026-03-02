@@ -42,15 +42,68 @@ class PerchShop_Orders extends PerchShop_Factory
 	}
 			public function is_order_send_to_pharmacy( $orderId)
         	{
-        	 $sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy WHERE orderID='.$this->db->pdb($orderId).' AND `status`="PENDING" AND pharmacy_orderID !=""';
+        	 $sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy
+        	 WHERE orderID='.$this->db->pdb($orderId).' AND `status`!="PAYMENT_RECEIVED"  AND  pharmacy_orderID IS NOT NULL AND pharmacy_orderID !=""';
 
               $count = $this->db->get_count($sql);
                if($count){ return true;  }
                return false;
 
         	}
+	public function customer_has_paid_order($Customer,$orderId, $categorySlug=false)
+ 	{
 
-		public function customer_has_paid_order( $Customer)
+
+
+		if (!$Customer) {
+			return false;
+		}
+        $memberID=$Customer->memberID();
+		if ($categorySlug) {
+			$Products = new PerchShop_Products($this->api);
+			$products = $Products->get_by_category($categorySlug);
+
+			if (!PerchUtil::count($products)) {
+				return false;
+			}
+
+			$product_ids = [];
+			foreach ($products as $Product) {
+				$product_ids[] = (int)$Product->id();
+			}
+
+			if (!PerchUtil::count($product_ids)) {
+				return false;
+			}
+
+			$db = PerchDB::fetch();
+			$Statuses = new PerchShop_OrderStatuses($this->api);
+			$sql = 'SELECT COUNT(DISTINCT o.orderID)
+					FROM '.PERCH_DB_PREFIX.'shop_orders o
+					INNER JOIN '.PERCH_DB_PREFIX.'shop_order_items oi ON oi.orderID = o.orderID
+					WHERE o.customerID='.$db->pdb((int)$Customer->id()).'
+					AND o.orderID!='.$db->pdb((int)$orderId).'
+						AND o.orderStatus IN ('.$db->implode_for_sql_in($Statuses->get_status_and_above('paid')).')
+						AND oi.productID IN ('.$db->implode_for_sql_in($product_ids).')';
+//echo $sql ;
+			return (bool)$db->get_count($sql);
+		}
+
+		$Orders = new PerchShop_Orders($this->api);
+        //	$Customer = $Customers->find_from_logged_in_member();
+   $orders = $Orders->findAll_for_customer($Customer);
+
+                if (!PerchUtil::count($orders)) {
+
+                return false;
+                }
+                return true;
+    //  return $Orders->customer_has_paid_order($Customer);
+
+
+
+ 	}
+		/*public function customer_has_paid_order( $Customer)
     	{
     		$Statuses = new PerchShop_OrderStatuses($this->api);
     		$sql = 'SELECT * FROM '.$this->table.'	WHERE customerID='.$this->db->pdb((int)$Customer->id()).' AND orderStatus="paid")';
@@ -66,7 +119,7 @@ class PerchShop_Orders extends PerchShop_Factory
     					 }
 
     		return true;
-    	}
+    	}*/
 
 	public function create_from_cart($Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress,$api=false)
 	{
@@ -81,7 +134,7 @@ class PerchShop_Orders extends PerchShop_Factory
 		// check shipping
 		if (!isset($cart_data['shipping_id'])) {
 			$cart_data['shipping_id'] = null;
-		} 
+		}
 	if (!isset($cart_data['shipping_tax'])) {
 			$cart_data['shipping_tax'] = null;
 		}
@@ -149,7 +202,7 @@ class PerchShop_Orders extends PerchShop_Factory
         $Perch->event('shop.order_status_update', $Order, 'created');
 //echo "W";
 		return $Order;
-		
+
 	}
 
 	public function insert_order_for_booking($orderid,$customerID)
@@ -209,7 +262,7 @@ $sort_val = null;
             $selectsql = 'SELECT';
         }
 
-        $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName ';
+        $selectsql .=  '  o.*, c.*, pkg.billing_type, CONCAT(customerFirstName, " ", customerLastName) AS customerName,p.pharmacy_orderID ';
          $fromsql =  '      FROM ' . $this->table .' o '
             . 'JOIN '.PERCH_DB_PREFIX.'shop_customers c ON o.customerID = c.customerID '
             . 'LEFT JOIN '.PERCH_DB_PREFIX.'shop_packages pkg ON pkg.orderID = o.orderID ';
@@ -254,12 +307,15 @@ $sort_val = null;
         }
 
         if (isset($details['sendtopharmacy']) && $details['sendtopharmacy'] !== '') {
-            $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID AND `status`="PENDING" AND p.pharmacy_orderID!=""';
+            $fromsql .= ' LEFT JOIN '.PERCH_DB_PREFIX.'orders_match_pharmacy p ON p.orderID = o.orderID ';
 
             if ($details['sendtopharmacy'] == 'yes') {
-                $wheresql .= '     AND p.pharmacy_orderID IS NOT NULL';
+
+                $wheresql .= '     AND ( p.pharmacy_orderID IS NOT NULL and p.pharmacy_orderID!="" and p.status!="PAYMENT_RECEIVED")';
             } elseif ($details['sendtopharmacy'] == 'no') {
-                $wheresql .= '     AND p.pharmacy_orderID IS NULL';
+              //AND (p.pharmacy_orderID IS null or  p.pharmacy_orderID="" OR (p.pharmacy_orderID IS NOT NULL AND p.pharmacy_orderID!="" AND p.`status`="PAYMENT_RECEIVED"))
+
+                $wheresql .= '     AND (p.pharmacy_orderID IS NULL OR  p.pharmacy_orderID="" OR (p.pharmacy_orderID IS NOT NULL AND p.pharmacy_orderID!="" AND p.`status`="PAYMENT_RECEIVED"))';
             }
         }
 
@@ -273,7 +329,7 @@ $sort_val = null;
             }
         }
 $sql= $selectsql. $fromsql.$wheresql;
-
+echo $sql;
 	    if ($sort_val) {
                     $sql .= ' ORDER BY '.$sort_val.' '.$sort_dir;
                 } else {
@@ -281,6 +337,7 @@ $sql= $selectsql. $fromsql.$wheresql;
         	            $sql .= ' ORDER BY o.orderCreated DESC ';
         	        }
         	    }
+        	   // echo $sql;
 
                 if ($Paging && $Paging->enabled()) {
                     $sql .=  ' '.$Paging->limit_sql();
