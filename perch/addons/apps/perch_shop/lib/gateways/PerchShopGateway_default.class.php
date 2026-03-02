@@ -88,6 +88,34 @@ public function take_klarna_payment($Order, $opts)
                    return ;
     }
 }
+
+	private function get_order_stripe_product_id($Order)
+	{
+		$OrderItems = new PerchShop_OrderItems($this->api);
+		$items = $OrderItems->get_by('orderID', $Order->id());
+
+		if (!PerchUtil::count($items)) {
+			return '';
+		}
+
+		$Products = new PerchShop_Products($this->api);
+
+		foreach($items as $Item) {
+			$Product = $Products->find((int)$Item->productID());
+			if (!$Product) continue;
+
+			$fields = PerchUtil::json_safe_decode($Product->productDynamicFields(), true);
+			if (is_array($fields) && isset($fields['stripe_product_id'])) {
+				$stripe_product_id = trim((string)$fields['stripe_product_id']);
+				if ($stripe_product_id !== '') {
+					return $stripe_product_id;
+				}
+			}
+		}
+
+		return '';
+	}
+
 public function take_payment($Order, $opts)
 {
 		$Customers = new PerchShop_Customers($this->api);
@@ -117,14 +145,18 @@ public function take_payment($Order, $opts)
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_USERPWD, $stripe_secret_key . ':');
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+    $stripe_price_id = isset($opts['stripe_price_id']) ? trim((string)$opts['stripe_price_id']) : '';
+    $stripe_product_id = isset($opts['stripe_product_id']) ? trim((string)$opts['stripe_product_id']) : '';
+
+    if ($stripe_product_id === '') {
+        $stripe_product_id = $this->get_order_stripe_product_id($Order);
+    }
+
+    $checkout_fields = [
         //'payment_method_types[]' => 'card',
        // 'payment_method_types[]' => 'klarna',
        'payment_method_types[]' =>$opts["payment_method_types"],
          'customer_email' => $Customer->customerEmail(),
-        'line_items[0][price_data][currency]' => $currency,
-        'line_items[0][price_data][product_data][name]' => $product_name,
-        'line_items[0][price_data][unit_amount]' => $amount,
         'line_items[0][quantity]' => 1,
 
         'mode' => 'payment',
@@ -134,7 +166,22 @@ public function take_payment($Order, $opts)
         //'billing_address_collection' => 'required',
         'customer_creation' => 'always',
         //'payment_method_options[klarna][preferred_locale]' => 'en-GB',
-    ]));
+    ];
+
+    if ($stripe_price_id !== '') {
+        $checkout_fields['line_items[0][price]'] = $stripe_price_id;
+    } else {
+        $checkout_fields['line_items[0][price_data][currency]'] = $currency;
+        $checkout_fields['line_items[0][price_data][unit_amount]'] = $amount;
+
+        if ($stripe_product_id !== '') {
+            $checkout_fields['line_items[0][price_data][product]'] = $stripe_product_id;
+        } else {
+            $checkout_fields['line_items[0][price_data][product_data][name]'] = $product_name;
+        }
+    }
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($checkout_fields));
 
 
     $response = curl_exec($ch);
