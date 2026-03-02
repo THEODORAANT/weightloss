@@ -40,25 +40,21 @@ class PerchShop_Orders extends PerchShop_Factory
 
 		return $this->return_instances($this->db->get_rows($sql));
 	}
-			public function is_order_send_to_pharmacy( $orderId)
-        	{
-        	 $sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy
-        	 WHERE orderID='.$this->db->pdb($orderId).' AND `status`!="PAYMENT_RECEIVED"  AND  pharmacy_orderID IS NOT NULL AND pharmacy_orderID !=""';
+	public function is_order_send_to_pharmacy($orderId)
+	{
+		$sql = 'SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy
+				WHERE orderID='.$this->db->pdb($orderId).' AND `status`!="PAYMENT_RECEIVED" AND pharmacy_orderID IS NOT NULL AND pharmacy_orderID !=""';
 
-              $count = $this->db->get_count($sql);
-               if($count){ return true;  }
-               return false;
+		$count = $this->db->get_count($sql);
 
-        	}
+		return (bool)$count;
+	}
 	public function customer_has_paid_order($Customer,$orderId, $categorySlug=false)
  	{
-
-
-
 		if (!$Customer) {
 			return false;
 		}
-        $memberID=$Customer->memberID();
+
 		if ($categorySlug) {
 			$Products = new PerchShop_Products($this->api);
 			$products = $Products->get_by_category($categorySlug);
@@ -90,19 +86,14 @@ class PerchShop_Orders extends PerchShop_Factory
 		}
 
 		$Orders = new PerchShop_Orders($this->api);
-        //	$Customer = $Customers->find_from_logged_in_member();
-   $orders = $Orders->findAll_for_customer($Customer);
+		$orders = $Orders->findAll_for_customer($Customer);
 
-                if (!PerchUtil::count($orders)) {
+		if (!PerchUtil::count($orders)) {
+			return false;
+		}
 
-                return false;
-                }
-                return true;
-    //  return $Orders->customer_has_paid_order($Customer);
-
-
-
- 	}
+		return true;
+  	}
 		/*public function customer_has_paid_order( $Customer)
     	{
     		$Statuses = new PerchShop_OrderStatuses($this->api);
