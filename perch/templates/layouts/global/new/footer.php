@@ -78,15 +78,6 @@
   </div>
       <script src="/js/my.js"></script>
       <script src="/js/due.js"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPHS5SQJ5B"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TPHS5SQJ5B');
-</script>
  <script>
     // Navbar scroll effect
     const mainNav = document.getElementById('mainNav');

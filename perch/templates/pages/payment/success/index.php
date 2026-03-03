@@ -32,6 +32,23 @@ if (!$order_complete) {
     <div class="container client-documents__container">
       <div class="client-documents__intro text-center mb-5">
         <?php if ($order_complete) {
+            $dl_order_id = $_SESSION['gwl_purchase_order_id'] ?? '';
+            unset($_SESSION['gwl_purchase_order_id']);
+
+            // Only fire purchase event if we have a valid order ID from the payment callback
+            // This prevents duplicate fires on page refresh or visits with pending orders
+            if (!empty($dl_order_id)) {
+        ?>
+          <script>
+          if (typeof gtag === 'function') {
+            gtag('event', 'purchase', {
+              transaction_id: '<?php echo htmlspecialchars((string)$dl_order_id, ENT_QUOTES, "UTF-8"); ?>',
+              currency: 'GBP'
+            });
+          }
+          </script>
+        <?php
+            }
             perch_shop_empty_cart();
         ?>
           <span class="client-documents__eyebrow">Payment complete</span>

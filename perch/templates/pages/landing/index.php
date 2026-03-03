@@ -222,7 +222,7 @@
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style="background-color: #e3f2d3; color: #5a7c2e;">
           ✓ UK-regulated • GPhC registered
         </div>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss support today</h1>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">Get expert weight-loss treatments today</h1>
         <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">
         <p class="mt-5 text-lg sm:text-xl leading-relaxed opacity-90">Start your journey with a confidential consultation from one of our UK-registered clinicians. They’ll assess your health needs and determine if a prescription treatment is suitable for you.</p>
         </p>
@@ -291,7 +291,6 @@
           </ul>
           <div class="mt-6 space-y-2 text-xs sm:text-sm italic opacity-75">
             <p>*If appropriate, your clinician will prescribe your medication for dispensing by our pharmacy team</p>
-            <p>*Consultation fees apply; treatment costs may vary depending on what’s prescribed.</p>
           </div>
         </div>
       </div>
@@ -460,7 +459,6 @@
           </ul>
         </div>
       </div>
-      <p class="mt-6 text-sm sm:text-base leading-relaxed">Your clinician will discuss benefits, risks, side effects, and alternatives. If prescribed, you'll receive clear directions for use and follow-up.</p>
     </div>
   </section>
 
@@ -494,14 +492,7 @@
         </details>
         <details class="rounded-2xl p-4 sm:p-5" style="border: 1px solid var(--grey); background-color: var(--white)">
           <summary class="font-semibold cursor-pointer text-base sm:text-lg">Do you work with my GP?</summary>
-          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.
-          <ol class="mt-10 space-y-3 text-sm sm:text-base leading-relaxed opacity-80 list-decimal pl-6">
-            <li><span class="font-medium">Clinical independence maintained</span>: Repeated emphasis that a prescriber decides if treatment is suitable. Avoids implying automatic supply (“if issued,” not “when issued”).</li>
-            <li><span class="font-medium">Transparent and factual</span>: Clearly states that fees are shown before commitment, aligning with GPhC expectations for transparency. Avoids promotional phrasing like “affordable,” “quick,” or “convenient.”</li>
-            <li><span class="font-medium">Balanced medical information</span>: Notes potential side effects in a general, non-promotional way. Refers to official patient leaflets for full safety information (an MHRA expectation).</li>
-            <li><span class="font-medium">Professional and responsible tone</span>: Neutral language throughout (no claims of success or efficacy). Reinforces joined-up care with the patient’s GP — a GPhC priority for online prescribing.</li>
-          </ol>
-          </p>
+          <p class="mt-3 text-sm sm:text-base leading-relaxed opacity-80">Yes, with your consent. We can share relevant prescribing or monitoring information with your GP to support coordinated and safe ongoing care.</p>
         </details>
       </div>
 

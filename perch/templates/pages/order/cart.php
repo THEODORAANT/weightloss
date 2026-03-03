@@ -153,6 +153,13 @@ wl_save_questionnaire_session($activeQuestionnaireMode);
 
       <?php
       if (perch_member_logged_in() && perch_shop_addresses_set() && !isset($_POST["dose"])) {
+?>
+<script>
+if (typeof gtag === 'function') {
+  gtag('event', 'begin_checkout', { currency: 'GBP' });
+}
+</script>
+<?php
        /* $return_url = '/payment/stripe';
         //$cancel_url = 'https://getweightloss-dev-d2c5gpf7asdvh3a2.uksouth-01.azurewebsites.net/payment/went/wrong';
         $cancel_url = '/payment/went/wrong';

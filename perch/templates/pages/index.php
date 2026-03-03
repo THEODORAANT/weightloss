@@ -20,13 +20,26 @@ perch_layout('global/new/header', [
       <div class="flex flex-col gap-[24px] lg:gap-[32px] items-start w-full xl:mt-[100px]">
         <div class="flex flex-col gap-[16px] lg:gap-[20px] items-start w-full">
           <div class="flex flex-col justify-center w-full">
-            <p class="font-semibold text-[#0d0d0d] text-[36px] md:text-[52px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.04px] lg:tracking-[-1.44px] leading-[44px] md:leading-[60px] lg:leading-[90px]">Get expert weight-loss support today. <?php //perch_content('hero_heading'); 
+            <p class="font-semibold text-[#0d0d0d] text-[36px] md:text-[52px] lg:text-[72px] tracking-[-0.72px] md:tracking-[-1.04px] lg:tracking-[-1.44px] leading-[44px] md:leading-[60px] lg:leading-[90px]">Get expert weight-loss treatments today. <?php //perch_content('hero_heading'); 
                                                                                                                                                                                                                                                       ?></p>
           </div>
           <div class="flex flex-col justify-center w-full lg:w-[457px]">
-            <p class="leading-[24px] text-[16px] text-[grey]">Our team of licensed UK clinicians will take the time to understand your health before recommending a plan that’s right for you. Through the consultation, they’ll assess which treatments are a safe and effective option for you.* <?php //perch_content('hero_description'); 
-                                                                                                                                                                                                                                                                                                    ?></p>
+            <p class="leading-[24px] text-[16px] text-[grey]">Our team of licensed UK clinicians will take the time to understand your health before recommending a treatment that’s right for you. Through the consultation, they’ll assess which treatments are a safe and effective option for you.* <?php //perch_content('hero_description');                                                                                                                                                                                                                                                                                     ?></p>
           </div>
+        </div>
+        <div class="flex flex-col gap-[6px] md:gap-[12px] items-start w-full">
+          <p class="font-semibold text-[#0d0d0d] text-[16px] md:text-[24px] leading-[22px] md:leading-[32px]">No Teaser Discounts
+            <span class="font-normal text-[grey] text-[13px] md:text-[16px] leading-[18px] md:leading-[24px] hidden md:block mt-[4px]">What you see is what you pay. No introductory offers that increase later.</span>
+            <span class="font-normal text-[grey] text-[13px] md:hidden"> — the price you see is the price you pay.</span>
+          </p>
+          <p class="font-semibold text-[#0d0d0d] text-[16px] md:text-[24px] leading-[22px] md:leading-[32px]">No Subscriptions
+            <span class="font-normal text-[grey] text-[13px] md:text-[16px] leading-[18px] md:leading-[24px] hidden md:block mt-[4px]">Order month to month and stop whenever you choose. No cancellation fees.</span>
+            <span class="font-normal text-[grey] text-[13px] md:hidden"> — stop or pause anytime, no cancellation fees.</span>
+          </p>
+          <p class="font-semibold text-[#0d0d0d] text-[16px] md:text-[24px] leading-[22px] md:leading-[32px]">No Tie-Ins
+            <span class="font-normal text-[grey] text-[13px] md:text-[16px] leading-[18px] md:leading-[24px] hidden md:block mt-[4px]">You're free to leave at any time. We earn your loyalty through quality care.</span>
+            <span class="font-normal text-[grey] text-[13px] md:hidden"> — free to leave at any time.</span>
+          </p>
         </div>
         <div class="flex flex-col gap-[10px] items-stretch w-full sm:w-auto">
           <div class="flex flex-col sm:flex-row gap-[10px] sm:h-[64px] items-stretch sm:items-center p-[8px] rounded-[8px] w-full sm:w-auto">
@@ -73,7 +86,7 @@ perch_layout('global/new/header', [
           <p class="leading-[32px] lg:leading-[44px] text-[24px] lg:text-[36px] mb-0">Treatments From* <?php //perch_content('hero_price_heading'); 
                                                                                                         ?></p>
           <p class="leading-[32px] lg:leading-[44px]">
-            <span class="text-[24px] lg:text-[36px]">£95 <?php //perch_content('hero_price_amount'); 
+            <span class="text-[24px] lg:text-[36px]">£88.75 <?php //perch_content('hero_price_amount'); 
                                                           ?></span><span class="text-[16px] lg:text-[20px]">/ month <?php //perch_content('hero_price_suffix'); 
                                                                                                                                                                 ?></span>
           </p>
@@ -397,7 +410,7 @@ perch_layout('global/new/header', [
 <div class="w-full flex flex-col items-center justify-center">
   <div class="bg-white flex flex-col items-center justify-center px-[20px] md:px-[40px] lg:px-[60px] py-0 w-full">
     <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[32px] lg:gap-0 px-0 pt-[30px] md:pt-[40px] lg:pt-[50px] pb-[60px] md:pb-[80px] lg:pb-[100px] w-full lg:max-w-[1120px]">
-      <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-[544px]">Let's Find Your Perfect Plan Together <?php //perch_content('cta_heading'); 
+      <p class="font-medium text-[#0d0d0d] text-[32px] md:text-[40px] lg:text-[48px] tracking-[-0.64px] md:tracking-[-0.8px] lg:tracking-[-0.96px] leading-[40px] md:leading-[50px] lg:leading-[60px] w-full lg:w-[544px]">Let's Find Your Perfect Treatment Together <?php //perch_content('cta_heading'); 
                                                                                                                                                                                                                                                                   ?></p>
       <div class="flex flex-col sm:flex-row gap-[10px] items-stretch sm:items-start w-full sm:w-auto">
         <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
