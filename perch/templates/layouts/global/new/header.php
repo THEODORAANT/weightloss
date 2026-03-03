@@ -1,3 +1,11 @@
+<?php
+$memberFirstName = '';
+if (perch_member_logged_in()) {
+  $memberFirstName = trim((string)perch_member_get('first_name'));
+}
+
+$cartItemCount = function_exists('perch_shop_cart_item_count') ? (int)perch_shop_cart_item_count([], true) : 0;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -170,26 +178,54 @@
         
         <!-- Desktop Buttons -->
         <div class="hidden lg:flex gap-[10px] items-center justify-end">
-          <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[8px]">
-            <p class="font-semibold leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Log in</p>
+          <a href="/order/cart" class="relative flex items-center justify-center p-[10px] rounded-[8px] text-[#616161]" aria-label="Cart">
+            <svg class="w-[24px] h-[24px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 4H5L7.2 14.2C7.3 14.7 7.7 15 8.2 15H17.7C18.2 15 18.6 14.7 18.7 14.2L20 8H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="19" r="1.4" fill="currentColor"/>
+              <circle cx="17" cy="19" r="1.4" fill="currentColor"/>
+            </svg>
+            <?php if ($cartItemCount > 0) { ?>
+              <span class="absolute top-[2px] right-[2px] min-w-[18px] h-[18px] px-[4px] rounded-full bg-[#3328bf] text-white text-[11px] leading-[18px] text-center font-semibold"><?php echo (int)$cartItemCount; ?></span>
+            <?php } ?>
           </a>
-          <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
-            <div class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[inherit]">
-              <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
-            </div>
-          </a>
+          <?php if (perch_member_logged_in()) { ?>
+            <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[8px]">
+              <p class="font-semibold leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Hi, <?php echo htmlspecialchars($memberFirstName !== '' ? $memberFirstName : 'Client', ENT_QUOTES, 'UTF-8'); ?></p>
+            </a>
+          <?php } else { ?>
+            <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[8px]">
+              <p class="font-semibold leading-[24px] text-[#616161] text-[16px] whitespace-nowrap">Log in</p>
+            </a>
+            <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
+              <div class="flex gap-[4px] items-center justify-center overflow-clip px-[14px] py-[10px] rounded-[inherit]">
+                <p class="font-semibold leading-[24px] text-[#fcfcfc] text-[16px] whitespace-nowrap">Get Started</p>
+              </div>
+            </a>
+          <?php } ?>
         </div>
 
         <!-- Mobile/Tablet: Buttons and Hamburger -->
         <div class="flex lg:hidden gap-[10px] items-center justify-end">
-          <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[10px] py-[8px] rounded-[8px]">
-            <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap">Log in</p>
+          <a href="/order/cart" class="relative flex items-center justify-center p-[8px] rounded-[8px] text-[#616161]" aria-label="Cart">
+            <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 4H5L7.2 14.2C7.3 14.7 7.7 15 8.2 15H17.7C18.2 15 18.6 14.7 18.7 14.2L20 8H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="19" r="1.4" fill="currentColor"/>
+              <circle cx="17" cy="19" r="1.4" fill="currentColor"/>
+            </svg>
+            <?php if ($cartItemCount > 0) { ?>
+              <span class="absolute top-[0px] right-[-2px] min-w-[16px] h-[16px] px-[3px] rounded-full bg-[#3328bf] text-white text-[10px] leading-[16px] text-center font-semibold"><?php echo (int)$cartItemCount; ?></span>
+            <?php } ?>
           </a>
+          <a href="/client" class="flex gap-[4px] items-center justify-center overflow-clip px-[10px] py-[8px] rounded-[8px]">
+            <p class="font-semibold leading-[20px] text-[#616161] text-[14px] whitespace-nowrap"><?php echo perch_member_logged_in() ? ('Hi, ' . htmlspecialchars($memberFirstName !== '' ? $memberFirstName : 'Client', ENT_QUOTES, 'UTF-8')) : 'Log in'; ?></p>
+          </a>
+          <?php if (!perch_member_logged_in()) { ?>
           <a href="/get-started" class="bg-[#3328bf] border border-[#3328bf] rounded-[8px] btn-glow">
             <div class="flex gap-[4px] items-center justify-center overflow-clip px-[10px] py-[8px] rounded-[inherit]">
               <p class="font-semibold leading-[20px] text-[#fcfcfc] text-[14px] whitespace-nowrap">Get Started</p>
             </div>
           </a>
+          <?php } ?>
           
           <!-- Hamburger Menu Button -->
           <button id="mobileMenuBtn" class="flex flex-col gap-[5px] items-center justify-center w-[40px] h-[40px] ml-[10px]">
