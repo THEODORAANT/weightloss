@@ -13,7 +13,7 @@ if (isset($options['help'])) {
     exit(0);
 }
 
-$dryRun = array_key_exists('dry-run', $options);
+$dryRun = ture;//array_key_exists('dry-run', $options);
 
 $API = new PerchAPI(1.0, 'perch_shop');
 $Customers = new PerchShop_Customers($API);
@@ -79,7 +79,7 @@ foreach ($rows as $row) {
         continue;
     }
 
-    $ok = $Customer->update(['pharmacy_refid' => $remoteCustomerId]);
+ /*   $ok = $Customer->update(['pharmacy_refid' => $remoteCustomerId]);
 
     if ($ok) {
         $updated++;
@@ -87,7 +87,7 @@ foreach ($rows as $row) {
     } else {
         $failed++;
         echo 'Failed to update customer #' . $localCustomerID . '.' . PHP_EOL;
-    }
+    }*/
 }
 
 echo PHP_EOL;
