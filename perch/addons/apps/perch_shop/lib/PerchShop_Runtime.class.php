@@ -1368,6 +1368,9 @@ public function get_package_future_items($opts){
                                                 $data['tags']= ['registration-app'];
 
                          perch_emailoctopus_subscribe($data);
+                         if (function_exists('perch_sendgrid_subscribe')) {
+                                perch_sendgrid_subscribe($data);
+                         }
                           perch_member_add_tag('pending-docs');
 
                           if ($referrer !== '') {
@@ -1404,6 +1407,9 @@ public function get_package_future_items($opts){
                         			$data['tags']= ['registration'];
 
                          perch_emailoctopus_subscribe($data);
+                         if (function_exists('perch_sendgrid_subscribe')) {
+                                perch_sendgrid_subscribe($data);
+                         }
                           perch_member_add_tag('pending-docs');
                           $referrer = $this->resolve_affiliate_referrer($SubmittedForm->data['referrer'] ?? '');
 
