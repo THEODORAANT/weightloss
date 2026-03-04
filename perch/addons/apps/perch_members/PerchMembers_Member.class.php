@@ -419,21 +419,42 @@ public function sendtoadmin_docs_email($memberID,$adminemail)
 
         $Settings = $API->get('Settings');
         $login_page = str_replace('{returnURL}', '', $Settings->get('perch_members_login_page')->val());
-         $data["ResetPassword"]= $clear_pwd;
-         $data["email"]= $this->memberEmail();
-             	$properties = PerchUtil::json_safe_decode($this->memberProperties(), true);
+        $properties = PerchUtil::json_safe_decode($this->memberProperties(), true);
 
-         $data["FirstName"]=$properties["first_name"];
-      //  perch_emailoctopus_update_contact($data);
-        $Email = $API->get('Email');
-        $Email->set_template('members/emails/reset_password.html');
-        $Email->set_bulk($this->to_array());
-        $Email->set('password', $clear_pwd);
-        $Email->set('login_page', $login_page);
-        $Email->senderName(PERCH_EMAIL_FROM_NAME);
-        $Email->senderEmail(PERCH_EMAIL_FROM);
-        $Email->recipientEmail($this->memberEmail());
-        $Email->send();
+        $sendgrid_sent = false;
+
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgrid_result = $SendGrid->send_dynamic_template_email(
+                'd-98635cd28c594fcc9d123d34db0120a9',
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $this->memberEmail(),
+                    'dynamic_data' => [
+                        'password' => $clear_pwd,
+                        'login_page' => $login_page,
+                        'first_name' => $properties['first_name'] ?? '',
+                    ],
+                ]]
+            );
+
+            $sendgrid_sent = !empty($sendgrid_result['ok']);
+        }
+
+        if (!$sendgrid_sent) {
+            $Email = $API->get('Email');
+            $Email->set_template('members/emails/reset_password.html');
+            $Email->set_bulk($this->to_array());
+            $Email->set('password', $clear_pwd);
+            $Email->set('login_page', $login_page);
+            $Email->senderName(PERCH_EMAIL_FROM_NAME);
+            $Email->senderEmail(PERCH_EMAIL_FROM);
+            $Email->recipientEmail($this->memberEmail());
+            $Email->send();
+        }
     }
 
     protected function _generate_password($length=8)
