@@ -1367,11 +1367,13 @@ public function get_package_future_items($opts){
                                                 $data['status']  = "subscribed";
                                                 $data['tags']= ['registration-app'];
 
-                         //perch_emailoctopus_subscribe($data);
-                          perch_member_add_tag('pending-docs');
-if (function_exists('perch_sendgrid_subscribe')) {
+                        // perch_emailoctopus_subscribe($data);
+                         if (function_exists('perch_sendgrid_subscribe')) {
                                 perch_sendgrid_subscribe($data);
                          }
+                         //perch_emailoctopus_subscribe($data);
+                          perch_member_add_tag('pending-docs');
+
                           if ($referrer !== '') {
                                 perch_member_register_referral($Customer->memberID(), $referrer);
                           }

@@ -237,29 +237,46 @@ class PerchMembers_Member extends PerchAPI_Base
 
     public function send_guidance_email($patient_name)
     {
-
         $API = new PerchAPI(1.0, 'perch_members');
 
-        $Settings = $API->get('Settings');
-        $login_page = str_replace('{returnURL}', '', $Settings->get('perch_members_login_page')->val());
+        if ($patient_name === '') {
+            $patient_name = 'Client';
+        }
 
+        $sendgrid_sent = false;
 
-if ($patient_name === '') {
-			$patient_name = 'Client';
-		}
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgrid_result = $SendGrid->send_dynamic_template_email(
+                'd-e9723b220dd24b6989a31f4577eee8cb',
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $this->memberEmail(),
+                    'dynamic_data' => [
+                        'patient_name' => $patient_name,
+                    ],
+                ]]
+            );
 
-		$Email = $API->get('Email');
-		$Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
-		$Email->set_bulk([
-			'patient_name' => $patient_name,
-		]);
+            $sendgrid_sent = !empty($sendgrid_result['ok']);
+        }
 
-		$Email->senderName(PERCH_EMAIL_FROM_NAME);
-		$Email->senderEmail(PERCH_EMAIL_FROM);
-		//$Email->recipientEmail($Member->memberEmail());
-		 $Email->recipientEmail($this->memberEmail());
+        if (!$sendgrid_sent) {
+            $Email = $API->get('Email');
+            $Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
+            $Email->set_bulk([
+                'patient_name' => $patient_name,
+            ]);
 
-		$Email->send();
+            $Email->senderName(PERCH_EMAIL_FROM_NAME);
+            $Email->senderEmail(PERCH_EMAIL_FROM);
+            $Email->recipientEmail($this->memberEmail());
+            $Email->send();
+        }
+
         return true;
     }
      public function build_scripted_email_unsubscribe_url(
