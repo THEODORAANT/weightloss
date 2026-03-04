@@ -164,7 +164,16 @@ return true;
     if(isset($data_transaction['id'])){
       $Order->set_transaction_reference($data_transaction['id']);
 
-       // return $data_transaction;
+       if ($data_transaction['status'] === 'requires_action') {
+           return json_encode([
+               "success" => true,
+               "payment_intent_id" => $data_transaction['id'],
+               "client_secret" => $data_transaction['client_secret'],
+               "status" => "requires_action",
+               "message" => "3D Secure authentication required"
+           ]);
+       }
+
        return json_encode([
            "success" => true,
            "payment_intent_id" => $data_transaction['id'],
@@ -174,7 +183,8 @@ return true;
        return json_encode([
            "success" => false,
            "payment_intent_id" => "na",
-           "message" => "Payment unsuccessful"
+           "message" => "Payment unsuccessful",
+           "error" => $data_transaction['error']['message'] ?? $response
        ]);
     }
 

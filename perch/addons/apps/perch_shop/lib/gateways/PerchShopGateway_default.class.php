@@ -240,9 +240,9 @@ public function take_payment($Order, $opts)
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($checkout_fields));
 
-
+print_r($checkout_fields);
     $response = curl_exec($ch);
-
+echo "take payment";print_r($response);
     curl_close($ch);
 
     $data = json_decode($response, true);

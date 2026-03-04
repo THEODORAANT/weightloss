@@ -320,7 +320,7 @@ $sort_val = null;
             }
         }
 $sql= $selectsql. $fromsql.$wheresql;
-echo $sql;
+
 	    if ($sort_val) {
                     $sql .= ' ORDER BY '.$sort_val.' '.$sort_dir;
                 } else {

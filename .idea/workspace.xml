@@ -6,19 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/getStarted/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/getStarted/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/global/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/global/footer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/global/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/global/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/global/new/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/global/new/footer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/layouts/product/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/layouts/product/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/landing/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/landing/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/mounjaro.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/ozempic.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/ozempic.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/medications/wegovy.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/re-order.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/re-order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/perch/templates/pages/payment/success/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/payment/success/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/modify-stripe-payments-for-product-ids-xuqu9i" />
+    <option name="BRANCH" value="origin/codex/create-sendgrid-mailing-add-on-rv1pet" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -150,15 +137,7 @@
       <workItem from="1771832144001" duration="1221000" />
       <workItem from="1771875167138" duration="1979000" />
       <workItem from="1771934040344" duration="9006000" />
-      <workItem from="1772355077680" duration="3032000" />
-    </task>
-    <task id="LOCAL-00119" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1766506714227</created>
-      <option name="number" value="00119" />
-      <option name="presentableId" value="LOCAL-00119" />
-      <option name="project" value="LOCAL" />
-      <updated>1766506714228</updated>
+      <workItem from="1772355077680" duration="6444000" />
     </task>
     <task id="LOCAL-00120" summary="weightloss">
       <option name="closed" value="true" />
@@ -544,7 +523,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772454123185</updated>
     </task>
-    <option name="localTasksCounter" value="168" />
+    <task id="LOCAL-00168" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1772550324600</created>
+      <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
+      <option name="project" value="LOCAL" />
+      <updated>1772550324600</updated>
+    </task>
+    <option name="localTasksCounter" value="169" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
