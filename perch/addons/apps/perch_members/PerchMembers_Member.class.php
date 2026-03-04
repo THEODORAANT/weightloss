@@ -237,29 +237,46 @@ class PerchMembers_Member extends PerchAPI_Base
 
     public function send_guidance_email($patient_name)
     {
-
         $API = new PerchAPI(1.0, 'perch_members');
 
-        $Settings = $API->get('Settings');
-        $login_page = str_replace('{returnURL}', '', $Settings->get('perch_members_login_page')->val());
+        if ($patient_name === '') {
+            $patient_name = 'Client';
+        }
 
+        $sendgrid_sent = false;
 
-if ($patient_name === '') {
-			$patient_name = 'Client';
-		}
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgrid_result = $SendGrid->send_dynamic_template_email(
+                'd-e9723b220dd24b6989a31f4577eee8cb',
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $this->memberEmail(),
+                    'dynamic_data' => [
+                        'patient_name' => $patient_name,
+                    ],
+                ]]
+            );
 
-		$Email = $API->get('Email');
-		$Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
-		$Email->set_bulk([
-			'patient_name' => $patient_name,
-		]);
+            $sendgrid_sent = !empty($sendgrid_result['ok']);
+        }
 
-		$Email->senderName(PERCH_EMAIL_FROM_NAME);
-		$Email->senderEmail(PERCH_EMAIL_FROM);
-		//$Email->recipientEmail($Member->memberEmail());
-		 $Email->recipientEmail($this->memberEmail());
+        if (!$sendgrid_sent) {
+            $Email = $API->get('Email');
+            $Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
+            $Email->set_bulk([
+                'patient_name' => $patient_name,
+            ]);
 
-		$Email->send();
+            $Email->senderName(PERCH_EMAIL_FROM_NAME);
+            $Email->senderEmail(PERCH_EMAIL_FROM);
+            $Email->recipientEmail($this->memberEmail());
+            $Email->send();
+        }
+
         return true;
     }
      public function build_scripted_email_unsubscribe_url(
@@ -338,6 +355,30 @@ if ($patient_name === '') {
         }
 
         $templatePath = ltrim($template, '/');
+
+        $sendgridTemplateMap = [
+            'refer_a_friend_thursday.html' => 'd-cc30a32ae7dd44b783a60551df8be484',
+            'refer_a_friend_monday.html' => 'd-e5e720a3a8b94c84a5aadfe7cfef96dc',
+        ];
+
+        if (class_exists('PerchSendGrid_Factory') && isset($sendgridTemplateMap[$templatePath])) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgridResult = $SendGrid->send_dynamic_template_email(
+                $sendgridTemplateMap[$templatePath],
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $emailAddress,
+                    'dynamic_data' => $emailData,
+                ]]
+            );
+
+            if (!empty($sendgridResult['ok'])) {
+                return true;
+            }
+        }
 
         $API = new PerchAPI(1.0, 'perch_members');
         $Email = $API->get('Email');
@@ -419,21 +460,42 @@ public function sendtoadmin_docs_email($memberID,$adminemail)
 
         $Settings = $API->get('Settings');
         $login_page = str_replace('{returnURL}', '', $Settings->get('perch_members_login_page')->val());
-         $data["ResetPassword"]= $clear_pwd;
-         $data["email"]= $this->memberEmail();
-             	$properties = PerchUtil::json_safe_decode($this->memberProperties(), true);
+        $properties = PerchUtil::json_safe_decode($this->memberProperties(), true);
 
-         $data["FirstName"]=$properties["first_name"];
-      //  perch_emailoctopus_update_contact($data);
-        $Email = $API->get('Email');
-        $Email->set_template('members/emails/reset_password.html');
-        $Email->set_bulk($this->to_array());
-        $Email->set('password', $clear_pwd);
-        $Email->set('login_page', $login_page);
-        $Email->senderName(PERCH_EMAIL_FROM_NAME);
-        $Email->senderEmail(PERCH_EMAIL_FROM);
-        $Email->recipientEmail($this->memberEmail());
-        $Email->send();
+        $sendgrid_sent = false;
+
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgrid_result = $SendGrid->send_dynamic_template_email(
+                'd-98635cd28c594fcc9d123d34db0120a9',
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $this->memberEmail(),
+                    'dynamic_data' => [
+                        'password' => $clear_pwd,
+                        'login_page' => $login_page,
+                        'first_name' => $properties['first_name'] ?? '',
+                    ],
+                ]]
+            );
+
+            $sendgrid_sent = !empty($sendgrid_result['ok']);
+        }
+
+        if (!$sendgrid_sent) {
+            $Email = $API->get('Email');
+            $Email->set_template('members/emails/reset_password.html');
+            $Email->set_bulk($this->to_array());
+            $Email->set('password', $clear_pwd);
+            $Email->set('login_page', $login_page);
+            $Email->senderName(PERCH_EMAIL_FROM_NAME);
+            $Email->senderEmail(PERCH_EMAIL_FROM);
+            $Email->recipientEmail($this->memberEmail());
+            $Email->send();
+        }
     }
 
     protected function _generate_password($length=8)
