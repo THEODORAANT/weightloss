@@ -209,6 +209,7 @@ $member = array(
 	    		'memberAuthID'=>$Member->memberID()
 	    	);
 	    		$Member->update($member);
+	    		$Member->send_welcome_email();
 	    	return $Member->memberID();
 
 }
@@ -292,6 +293,10 @@ $member = array(
 	    	}
 
 	    	$Member->update($member);
+
+	    	if ($member['memberStatus'] === 'active') {
+	    		$Member->send_welcome_email();
+	    	}
 
 	    	if (isset($form_settings['default_tags']) && $form_settings['default_tags']!='') {
 	    		$tags = explode(',', $form_settings['default_tags']);
