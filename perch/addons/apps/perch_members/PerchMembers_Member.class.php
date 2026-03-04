@@ -356,6 +356,30 @@ class PerchMembers_Member extends PerchAPI_Base
 
         $templatePath = ltrim($template, '/');
 
+        $sendgridTemplateMap = [
+            'refer_a_friend_thursday.html' => 'd-cc30a32ae7dd44b783a60551df8be484',
+            'refer_a_friend_monday.html' => 'd-e5e720a3a8b94c84a5aadfe7cfef96dc',
+        ];
+
+        if (class_exists('PerchSendGrid_Factory') && isset($sendgridTemplateMap[$templatePath])) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgridResult = $SendGrid->send_dynamic_template_email(
+                $sendgridTemplateMap[$templatePath],
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $emailAddress,
+                    'dynamic_data' => $emailData,
+                ]]
+            );
+
+            if (!empty($sendgridResult['ok'])) {
+                return true;
+            }
+        }
+
         $API = new PerchAPI(1.0, 'perch_members');
         $Email = $API->get('Email');
         $Email->set_template('members/emails/' . $templatePath);
