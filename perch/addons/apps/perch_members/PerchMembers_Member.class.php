@@ -402,14 +402,39 @@ class PerchMembers_Member extends PerchAPI_Base
         $Settings = $API->get('Settings');
         $login_page = str_replace('{returnURL}', '', $Settings->get('perch_members_login_page')->val());
 
-        $Email = $API->get('Email');
-        $Email->set_template('members/emails/welcome.html');
-        $Email->set_bulk($this->to_array());
-        $Email->set('login_page', $login_page);
-        $Email->senderName(PERCH_EMAIL_FROM_NAME);
-        $Email->senderEmail(PERCH_EMAIL_FROM);
-        $Email->recipientEmail($this->memberEmail());
-        $Email->send();
+        $sendgrid_sent = false;
+
+        if (class_exists('PerchSendGrid_Factory')) {
+            $properties = PerchUtil::json_safe_decode($this->memberProperties(), true);
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgrid_result = $SendGrid->send_dynamic_template_email(
+                'd-bda40d88d2194e398b0fe0673da1a569',
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $this->memberEmail(),
+                    'dynamic_data' => [
+                        'first_name' => $properties['first_name'] ?? '',
+                        'login_page' => $login_page,
+                    ],
+                ]]
+            );
+
+            $sendgrid_sent = !empty($sendgrid_result['ok']);
+        }
+
+        if (!$sendgrid_sent) {
+            $Email = $API->get('Email');
+            $Email->set_template('members/emails/welcome.html');
+            $Email->set_bulk($this->to_array());
+            $Email->set('login_page', $login_page);
+            $Email->senderName(PERCH_EMAIL_FROM_NAME);
+            $Email->senderEmail(PERCH_EMAIL_FROM);
+            $Email->recipientEmail($this->memberEmail());
+            $Email->send();
+        }
 
         return true;
     }
