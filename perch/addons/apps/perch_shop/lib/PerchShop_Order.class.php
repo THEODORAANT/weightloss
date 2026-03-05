@@ -259,8 +259,8 @@ public function isReorder($Customer){
                $questionnaire_type="first-order";
                  $orders = $Orders->findAll_for_customer($Customer);
 
-                                            if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
-                                             //if($reorder){
+                                          //  if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
+                                             if($reorder){
                                   					      $questionnaire_type="re-order";
                                   					 }
 
@@ -571,7 +571,7 @@ return $response;
 
 
         $orderCreated = new DateTime($this->orderCreated());
-         $data["FirstName"]=$Customer->first_name();
+         $data["first_name"]=$Customer->first_name();
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
           $data["Next_Order_Date"]= $this->orderCreated();
@@ -601,7 +601,7 @@ return $response;
                                    // $Affiliate->addCommission($memberid, $amount);
                   $Affiliate->recordPurchase($Customer->memberID(),$this->id(),$isreorder);
                  // exit();
-        perch_emailoctopus_update_contact($data);
+       // perch_emailoctopus_update_contact($data);
         if (function_exists('perch_sendgrid_update_contact')) {
             perch_sendgrid_update_contact($data);
         }

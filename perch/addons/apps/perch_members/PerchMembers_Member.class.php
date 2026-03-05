@@ -256,7 +256,7 @@ class PerchMembers_Member extends PerchAPI_Base
                 [[
                     'email' => $this->memberEmail(),
                     'dynamic_data' => [
-                        'patient_name' => $patient_name,
+                        'first_name' => $patient_name,
                     ],
                 ]]
             );
