@@ -602,8 +602,13 @@ return $response;
                   $Affiliate->recordPurchase($Customer->memberID(),$this->id(),$isreorder);
                  // exit();
        // perch_emailoctopus_update_contact($data);
-        if (function_exists('perch_sendgrid_update_contact')) {
-            perch_sendgrid_update_contact($data);
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+
+            $custom_fields = $data;
+            unset($custom_fields['email']);
+
+            $SendGrid->updateSendgridContactCustomFields($Customer->email(), $custom_fields);
         }
        // echo "perch_member_add_commission";
 //$this->send_order_email_trustpilot($this->details['orderStatus']);

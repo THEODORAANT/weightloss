@@ -186,6 +186,50 @@ class PerchSendGrid_Factory
         ];
     }
 
+    public function updateSendgridContactCustomFields($email, $customFields = [])
+    {
+        $this->load_settings();
+
+        if ($this->api_key === '') {
+            return [
+                'status' => 0,
+                'response' => '',
+            ];
+        }
+
+        $url = 'https://api.sendgrid.com/v3/marketing/contacts';
+
+        $data = [
+            'contacts' => [
+                [
+                    'email' => $email,
+                    'custom_fields' => $customFields,
+                ],
+            ],
+        ];
+
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer '.$this->api_key,
+            'Content-Type: application/json',
+        ]);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        return [
+            'status' => $status,
+            'response' => $response,
+        ];
+    }
+
     private function extract_email($data)
     {
         $email = $data['email'] ?? $data['email_address'] ?? '';
