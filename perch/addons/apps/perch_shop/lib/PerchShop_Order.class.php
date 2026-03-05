@@ -574,11 +574,28 @@ return $response;
          $data["FirstName"]=$Customer->first_name();
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
-          $data["NextOrderDoseDate"]= $this->orderCreated();
+          $data["Next_Order_Date"]= $this->orderCreated();
         }else{
-         $data["FirstOrderDate"]= $this->orderCreated();
+         $data["First_Order_Date"]= $this->orderCreated();
 
 
+        }
+
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $template_id = $isreorder ? 'd-f9a5440ebf75441e98a7c9294e35cb35' : 'd-68d59e0921f94170aa17aadff9751cfb';
+
+            $SendGrid->send_dynamic_template_email(
+                $template_id,
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $Customer->email(),
+                    'dynamic_data' => $data,
+                ]]
+            );
         }
         $Affiliate = new PerchMembers_Affiliate($this->api);
                                    // $Affiliate->addCommission($memberid, $amount);
