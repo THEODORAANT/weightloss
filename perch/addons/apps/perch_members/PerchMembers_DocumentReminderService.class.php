@@ -24,12 +24,15 @@ class PerchMembers_DocumentReminderService
         'all_approved' => [
             'label'        => 'All approved',
             'description'  => 'Stop all automated document reminder emails.',
-            'send_email'   => false,
+            'template_id'  => 'd-8cab4cedc8164da590a011fcd747a728',
+            'send_email'   => true,
+            'send_once'    => true,
         ],
         'all_required' => [
             'label'        => 'All required',
             'description'  => 'Request every outstanding document until they are uploaded.',
             'template'     => 'document_reminder_all_required.html',
+            'template_id'  => 'd-df1b27a14c984739bbf249638e4618df',
             'subject'      => 'Reminder: we still need your documents',
             'send_email'   => true,
             'send_daily'   => true,
@@ -38,6 +41,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Proof of ID / Video',
             'description'  => 'Ask for both proof of ID and video evidence.',
             'template'     => 'document_reminder_proof_id_video.html',
+            'template_id'  => 'd-e80d448a97964df6887f36137c97c47a',
             'subject'      => 'Reminder: ID and video still required',
             'send_email'   => true,
             'send_daily'   => true,
@@ -46,6 +50,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Proof of ID / Previous prescription',
             'description'  => 'Ask for proof of ID and the previous prescription.',
             'template'     => 'document_reminder_proof_id_previous.html',
+            'template_id'  => 'd-79a7450243f84196a5ac153221568a',
             'subject'      => 'Reminder: ID and previous prescription required',
             'send_email'   => true,
             'send_daily'   => true,
@@ -54,6 +59,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Video / Previous prescription',
             'description'  => 'Ask for a video and the previous prescription.',
             'template'     => 'document_reminder_video_previous.html',
+            'template_id'  => 'd-7dd3ced2fcee4ee9bdb63e96e4c3535d',
             'subject'      => 'Reminder: video and previous prescription required',
             'send_email'   => true,
             'send_daily'   => true,
@@ -62,6 +68,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Proof of ID',
             'description'  => 'Request only proof of ID.',
             'template'     => 'document_reminder_id.html',
+            'template_id'  => 'd-c8204af261e54aa1b2ee89357f39b43b',
             'subject'      => 'Reminder: proof of ID required',
             'send_email'   => true,
             'send_daily'   => true,
@@ -70,6 +77,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Video',
             'description'  => 'Request only a video submission.',
             'template'     => 'document_reminder_video.html',
+            'template_id'  => 'd-508977f82d9142fd9fb112d5084f2788',
             'subject'      => 'Reminder: video submission required',
             'send_email'   => true,
             'send_daily'   => true,
@@ -78,6 +86,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Previous prescription',
             'description'  => 'Request only the previous prescription document.',
             'template'     => 'document_reminder_previous.html',
+            'template_id'  => 'd-838ff6a8d7f74a46aafcb7b98831896a',
             'subject'      => 'Reminder: previous prescription required',
             'send_email'   => true,
             'send_daily'   => true,
@@ -86,6 +95,7 @@ class PerchMembers_DocumentReminderService
             'label'        => '30 day – one off email',
             'description'  => 'Send a single reminder 30 days after the request.',
             'template'     => 'document_reminder_thirty_day.html',
+            'template_id'  => 'd-a9f18647f94e4f69bc083e8ee097812a',
             'subject'      => 'Important: 30-day document reminder',
             'send_email'   => true,
             'send_once'    => true,
@@ -243,7 +253,7 @@ class PerchMembers_DocumentReminderService
     {
         $status = $this->sanitize_status($status);
 
-        if (empty($option['send_email']) || !isset($option['template'])) {
+        if (empty($option['send_email'])) {
             return false;
         }
 
@@ -297,15 +307,24 @@ class PerchMembers_DocumentReminderService
             'unsubscribe_url'               => $unsubscribeURL,
         ]);
 
-        $Email = $this->api->get('Email');
-        $Email->set_template('members/emails/' . $option['template']);
-        $Email->set_bulk($emailData);
-        $Email->subject($option['subject']);
-        $Email->senderName(PERCH_EMAIL_FROM_NAME);
-        $Email->senderEmail(PERCH_EMAIL_FROM);
-        $Email->recipientEmail($memberEmail);
+        if (class_exists('PerchSendGrid_Factory') && !empty($option['template_id'])) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $sendgridResult = $SendGrid->send_dynamic_template_email(
+                $option['template_id'],
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $memberEmail,
+                    'dynamic_data' => $emailData,
+                ]]
+            );
 
-        return $Email->send();
+            return !empty($sendgridResult['ok']);
+        }
+
+        return false;
     }
 
     /**
