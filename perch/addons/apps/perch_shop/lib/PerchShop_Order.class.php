@@ -606,7 +606,13 @@ return $response;
                 [[
                     'email' => $Customer->email(),
                     'dynamic_data' => $data,
-                ]]
+                ]],
+                [],
+                [
+                    'bcc' => [[
+                        'email' => 'getweightloss.co.uk+25a853a1a5@invite.trustpilot.com',
+                    ]],
+                ]
             );
         }
         $Affiliate = new PerchMembers_Affiliate($this->api);
