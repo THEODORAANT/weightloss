@@ -628,7 +628,6 @@ return $response;
                 [[
                     'email' => $Customer->email(),
                     'dynamic_data' => $data,
-                ]]
                 ]],
                 [],
                 [
