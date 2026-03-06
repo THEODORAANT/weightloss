@@ -38,6 +38,10 @@ $statusText = trim((string)($payload['statusText'] ?? $payload['message'] ?? '')
 $dispatchDateRaw = $payload['dispatchDate'] ?? $payload['dispatched_at'] ?? $payload['dispatch_date'] ?? null;
 $tracking = $payload['trackingNo'] ?? $payload['tracking_no'] ?? $payload['trackingNumber'] ?? $payload['tracking_number'] ?? $payload['trackingRef'] ?? $payload['tracking_reference'] ?? null;
 
+$existingTracking = trim((string)($existing['trackingno'] ?? $existing['tracking_no'] ?? $existing['trackingnumber'] ?? $existing['tracking_number'] ?? $existing['trackingref'] ?? $existing['tracking_reference'] ?? ''));
+$incomingTracking = $tracking !== null ? trim((string)$tracking) : '';
+$isFirstTrackingUpdate = ($incomingTracking !== '' && $existingTracking === '');
+
 $updates = [];
 
 if ($status !== '') {
@@ -57,13 +61,12 @@ if ($dispatchDateRaw) {
 }
 
 if ($tracking) {
-    $tracking = trim((string)$tracking);
-    $updates['trackingno'] = $tracking;
-    $updates['tracking_no'] = $tracking;
-    $updates['trackingnumber'] = $tracking;
-    $updates['tracking_number'] = $tracking;
-    $updates['trackingref'] = $tracking;
-    $updates['tracking_reference'] = $tracking;
+    $updates['trackingno'] = $incomingTracking;
+    $updates['tracking_no'] = $incomingTracking;
+    $updates['trackingnumber'] = $incomingTracking;
+    $updates['tracking_number'] = $incomingTracking;
+    $updates['trackingref'] = $incomingTracking;
+    $updates['tracking_reference'] = $incomingTracking;
 }
 
 if (!empty($updates)) {
@@ -72,13 +75,51 @@ if (!empty($updates)) {
         $setParts[] = $column . '=' . $db->pdb($value);
     }
     $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $setParts) . ', updated_at=' . $db->pdb(date('Y-m-d H:i:s')) . ' WHERE pharmacy_orderID=' . $db->pdb($orderNumber) . ' LIMIT 1';
-   echo $sql;
     $db->execute($sql);
 }
 
 $orderID = isset($existing['orderID']) ? (int)$existing['orderID'] : 0;
 if ($orderID > 0) {
     comms_sync_order($orderID);
+}
+
+if ($isFirstTrackingUpdate && class_exists('PerchSendGrid_Factory')) {
+    $ordersTable = PERCH_DB_PREFIX . 'shop_orders';
+    $customersTable = PERCH_DB_PREFIX . 'shop_customers';
+    $customer = $db->get_row(
+        'SELECT c.customerEmail, c.customerFirstName, c.customerLastName FROM ' . $ordersTable . ' o '
+        . 'JOIN ' . $customersTable . ' c ON c.customerID=o.customerID '
+        . 'WHERE o.orderID=' . $db->pdb($orderID) . ' LIMIT 1'
+    );
+
+    $customerEmail = trim((string)($customer['customerEmail'] ?? ''));
+
+    if ($customerEmail !== '') {
+        $firstName = trim((string)($customer['customerFirstName'] ?? ''));
+        $lastName = trim((string)($customer['customerLastName'] ?? ''));
+
+        $dynamicData = [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'tracking_number' => $incomingTracking,
+            'tracking_no' => $incomingTracking,
+            'tracking_url' => 'https://www.royalmail.com/track-your-item#/tracking-results/' . urlencode($incomingTracking),
+            'order_number' => (string)$orderNumber,
+        ];
+
+        $SendGrid = new PerchSendGrid_Factory();
+        $SendGrid->send_dynamic_template_email(
+            'd-21833577c8f3422cb9b73f7b9c3b18c6',
+            [
+                'email' => PERCH_EMAIL_FROM,
+                'name' => PERCH_EMAIL_FROM_NAME,
+            ],
+            [[
+                'email' => $customerEmail,
+                'dynamic_data' => $dynamicData,
+            ]]
+        );
+    }
 }
 
 $logFile = __DIR__ . '/webhook_log.txt';
