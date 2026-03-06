@@ -583,12 +583,13 @@ return $response;
 
 
         $orderCreated = new DateTime($this->orderCreated());
+        $orderCreatedDate = $orderCreated->format('Y-m-d');
          $data["first_name"]=$Customer->first_name();
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
-          $data["Next_Order_Date"]= $this->orderCreated();
+          $data["Next_Order_Date"]= $orderCreatedDate;
         }else{
-         $data["First_Order_Date"]= $this->orderCreated();
+         $data["First_Order_Date"]= $orderCreatedDate;
 
 
         }
