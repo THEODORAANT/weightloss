@@ -264,7 +264,7 @@ class PerchMembers_Member extends PerchAPI_Base
             $sendgrid_sent = !empty($sendgrid_result['ok']);
         }
 
-        if (!$sendgrid_sent) {
+       /* if (!$sendgrid_sent) {
             $Email = $API->get('Email');
             $Email->set_template('members/emails/mounjaro_wegovy_guidance.html', 'members');
             $Email->set_bulk([
@@ -276,7 +276,7 @@ class PerchMembers_Member extends PerchAPI_Base
             $Email->recipientEmail($this->memberEmail());
             $Email->send();
         }
-
+*/
         return true;
     }
      public function build_scripted_email_unsubscribe_url(
@@ -380,7 +380,7 @@ class PerchMembers_Member extends PerchAPI_Base
             }
         }
 
-        $API = new PerchAPI(1.0, 'perch_members');
+      /*  $API = new PerchAPI(1.0, 'perch_members');
         $Email = $API->get('Email');
         $Email->set_template('members/emails/' . $templatePath);
         $Email->set_bulk($emailData);
@@ -389,7 +389,7 @@ class PerchMembers_Member extends PerchAPI_Base
         $Email->senderEmail(PERCH_EMAIL_FROM);
         $Email->recipientEmail($emailAddress);
 
-        return $Email->send();
+        return $Email->send();*/
     }
 
 
@@ -425,7 +425,7 @@ class PerchMembers_Member extends PerchAPI_Base
             $sendgrid_sent = !empty($sendgrid_result['ok']);
         }
 
-        if (!$sendgrid_sent) {
+       /* if (!$sendgrid_sent) {
             $Email = $API->get('Email');
             $Email->set_template('members/emails/welcome.html');
             $Email->set_bulk($this->to_array());
@@ -435,7 +435,7 @@ class PerchMembers_Member extends PerchAPI_Base
             $Email->recipientEmail($this->memberEmail());
             $Email->send();
         }
-
+*/
         return true;
     }
 
@@ -510,7 +510,7 @@ public function sendtoadmin_docs_email($memberID,$adminemail)
             $sendgrid_sent = !empty($sendgrid_result['ok']);
         }
 
-        if (!$sendgrid_sent) {
+     /*   if (!$sendgrid_sent) {
             $Email = $API->get('Email');
             $Email->set_template('members/emails/reset_password.html');
             $Email->set_bulk($this->to_array());
@@ -520,7 +520,7 @@ public function sendtoadmin_docs_email($memberID,$adminemail)
             $Email->senderEmail(PERCH_EMAIL_FROM);
             $Email->recipientEmail($this->memberEmail());
             $Email->send();
-        }
+        }*/
     }
 
     protected function _generate_password($length=8)

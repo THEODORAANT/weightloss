@@ -606,7 +606,36 @@ return $response;
                 [[
                     'email' => $Customer->email(),
                     'dynamic_data' => $data,
+                ]] ,[],
+                                  [
+                                      'bcc' => [[
+                                          'email' => 'getweightloss.co.uk+25a853a1a5@invite.trustpilot.com',
+                                      ]],
+                                  ]
+            );
+        }
+
+        if (class_exists('PerchSendGrid_Factory')) {
+            $SendGrid = new PerchSendGrid_Factory();
+            $template_id = $isreorder ? 'd-f9a5440ebf75441e98a7c9294e35cb35' : 'd-68d59e0921f94170aa17aadff9751cfb';
+
+            $SendGrid->send_dynamic_template_email(
+                $template_id,
+                [
+                    'email' => PERCH_EMAIL_FROM,
+                    'name' => PERCH_EMAIL_FROM_NAME,
+                ],
+                [[
+                    'email' => $Customer->email(),
+                    'dynamic_data' => $data,
                 ]]
+                ]],
+                [],
+                [
+                    'bcc' => [[
+                        'email' => 'getweightloss.co.uk+25a853a1a5@invite.trustpilot.com',
+                    ]],
+                ]
             );
         }
         $Affiliate = new PerchMembers_Affiliate($this->api);
@@ -619,9 +648,13 @@ return $response;
 
             $custom_fields = $data;
             unset($custom_fields['email']);
+            unset($custom_fields['first_name']);
 
             $SendGrid->updateSendgridContactCustomFields($Customer->email(), $custom_fields);
+            print_r($custom_fields);
+             die();exit();
         }
+
        // echo "perch_member_add_commission";
 //$this->send_order_email_trustpilot($this->details['orderStatus']);
 
@@ -759,7 +792,7 @@ return $response;
     	if (!$this->is_order_send_to_pharmacy($this->id())) {
     	  $Customers = new PerchShop_Customers($this->api);
                 $Customer = $Customers->find($this->customerID());
-                  $this->sendOrdertoPharmacy($Customer);
+                  //$this->sendOrdertoPharmacy($Customer);
               }
     }
 
