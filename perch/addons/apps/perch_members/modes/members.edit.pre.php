@@ -412,6 +412,8 @@ if (!function_exists('wl_member_note_build_text')) {
                         $targetType = trim((string) $noteMeta['target_type']);
                         $effectiveOrderId = isset($noteMeta['order_id']) ? (int) $noteMeta['order_id'] : 0;
 
+                        $memberCommsNoteSynced = true;
+
                         if ($targetType === 'order_note') {
                             if ($effectiveOrderId <= 0) {
                                 $message = $HTML->failure_message('Order notes require a valid order link before they can be sent.');
@@ -433,13 +435,22 @@ if (!function_exists('wl_member_note_build_text')) {
                                 ];
 
                                 $sendSuccess = comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
+                                if ($sendSuccess) {
+                                    // Keep a member-thread copy so the note appears under
+                                    // "Member comms notes and replies" and can be replied to by admin.
+                                    $memberCommsNoteSynced = comms_service_send_member_note((int) $Member->id(), $notePayload);
+                                }
                             }
                         } else {
                             $sendSuccess = comms_service_send_member_note((int) $Member->id(), $notePayload);
                         }
 
                         if ($sendSuccess) {
-                            $message = $HTML->success_message('The note has been sent to the pharmacy.');
+                            if ($memberCommsNoteSynced) {
+                                $message = $HTML->success_message('The note has been sent to the pharmacy.');
+                            } else {
+                                $message = $HTML->failure_message('The note was sent to the pharmacy, but could not be added to Member comms notes and replies.');
+                            }
 
                             $statusValue = 'Sent';
                             $statusMessage = null;
