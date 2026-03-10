@@ -25,7 +25,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'All approved',
             'description'  => 'Stop all automated document reminder emails.',
             'template_id'  => 'd-8cab4cedc8164da590a011fcd747a728',
-            'send_email'   => true,
+            'send_email'   => false,
             'send_once'    => true,
         ],
         'all_required' => [
