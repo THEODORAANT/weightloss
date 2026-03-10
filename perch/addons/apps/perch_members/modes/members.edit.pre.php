@@ -174,6 +174,104 @@ if (!function_exists('wl_member_note_build_text')) {
         return trim(implode(' ', array_filter($parts)));
     }
 }
+
+if (!function_exists('wl_comms_member_note_synced')) {
+    function wl_comms_member_note_synced(array $commsMemberNotes, $noteID, $noteBody)
+    {
+        $noteID = trim((string) $noteID);
+        $noteBodyKey = strtolower(trim((string) $noteBody));
+
+        foreach ($commsMemberNotes as $note) {
+            if (!is_array($note)) {
+                continue;
+            }
+
+            $externalRef = trim((string) ($note['external_note_ref'] ?? ''));
+            $remoteNoteID = trim((string) ($note['note_id'] ?? $note['id'] ?? $note['noteID'] ?? ''));
+            if ($noteID !== '' && ($externalRef === $noteID || $remoteNoteID === $noteID)) {
+                return true;
+            }
+
+            $remoteBody = trim((string) ($note['body'] ?? $note['note'] ?? ''));
+            if ($noteBodyKey !== '' && strtolower($remoteBody) === $noteBodyKey) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('wl_backfill_sent_notes_to_member_comms')) {
+    function wl_backfill_sent_notes_to_member_comms($Member, $notes, $commsMemberNotes, $NotePharmacyStatuses)
+    {
+        if (!is_object($Member) || !PerchUtil::count($notes) || !($NotePharmacyStatuses instanceof PerchMembers_NotePharmacyStatuses)) {
+            return false;
+        }
+
+        $memberEmail = trim((string) $Member->memberEmail());
+        if ($memberEmail === '') {
+            return false;
+        }
+
+        $syncedAny = false;
+
+        foreach ($notes as $Note) {
+            if (!is_object($Note)) {
+                continue;
+            }
+
+            $noteID = (int) $Note->id();
+            if ($noteID <= 0) {
+                continue;
+            }
+
+            $pharmacyStatus = $NotePharmacyStatuses->find_one_by_member_and_note((int) $Member->id(), $noteID);
+            if (!($pharmacyStatus instanceof PerchMembers_NotePharmacyStatus)) {
+                continue;
+            }
+
+            $statusValue = strtolower(trim((string) $pharmacyStatus->status()));
+            if ($statusValue !== 'sent') {
+                continue;
+            }
+
+            $noteMeta = wl_member_note_extract_metadata((string) $Note->note_text());
+            $noteBody = trim((string) ($noteMeta['body'] ?? ''));
+            if ($noteBody === '') {
+                continue;
+            }
+
+            if (wl_comms_member_note_synced($commsMemberNotes, (string) $noteID, $noteBody)) {
+                continue;
+            }
+
+            $addedBy = trim((string) $Note->addedBy());
+            $notePayload = [
+                'note_id' => $noteID,
+                'body' => $noteBody,
+                'note' => $noteBody,
+                'member_email' => $memberEmail,
+                'note_category' => $noteMeta['category'] ?? 'admin_notes',
+                'target_type' => $noteMeta['target_type'] ?? 'patient_note',
+                'thread_ref' => $noteMeta['thread_ref'] ?? '',
+                'order_id' => $noteMeta['order_id'] ?? null,
+                'added_by' => $addedBy,
+                'created_by' => [
+                    'name' => $addedBy !== '' ? $addedBy : 'Perch admin',
+                    'role' => 'admin',
+                ],
+                'external_note_ref' => (string) $noteID,
+            ];
+
+            if (comms_service_send_member_note((int) $Member->id(), $notePayload)) {
+                $syncedAny = true;
+            }
+        }
+
+        return $syncedAny;
+    }
+}
     
     $Members = new PerchMembers_Members($API);
     $message = false;
@@ -902,6 +1000,10 @@ if (!function_exists('wl_member_note_build_text')) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
         $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
+        $syncedSentNotes = wl_backfill_sent_notes_to_member_comms($Member, $notes, $comms_member_notes, $NotePharmacyStatuses);
+        if ($syncedSentNotes) {
+            $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
+        }
         $seen_comms_reply_keys = wl_member_seen_comms_reply_keys($Member);
         $documents = $Documents->get_for_member($Member->id());
           $questionnaire =  $Questionnaires->get_for_member($Member->id());

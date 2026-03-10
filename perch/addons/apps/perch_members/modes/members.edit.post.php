@@ -837,6 +837,13 @@ if (!function_exists('wl_count_unseen_comms_replies')) {
                                       $statusLabel = 'Sent';
                                   }
 
+                                  // Notes that have already gone to pharmacy should live in
+                                  // the "Member comms notes and replies" tab only.
+                                  $normalizedStatus = strtolower($statusLabel);
+                                  if ($normalizedStatus === 'sent') {
+                                      continue;
+                                  }
+
                                   $statusClassSuffix = strtolower(preg_replace('/[^a-z0-9]+/', '-', $statusLabel));
                                   $statusClassSuffix = trim($statusClassSuffix, '-');
                                   if ($statusClassSuffix === '') {
