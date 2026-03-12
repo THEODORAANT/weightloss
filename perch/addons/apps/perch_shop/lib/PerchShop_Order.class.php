@@ -271,12 +271,12 @@ public function isReorder($Customer){
                $questionnaire_type="first-order";
                  $orders = $Orders->findAll_for_customer($Customer);
 
-                                          //  if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
+                                             // if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
                                              if($reorder){
                                   					      $questionnaire_type="re-order";
                                   					 }
 
-             echo "reorder **";print_r($reorder);
+             // echo "reorder **";print_r($reorder);
 
         if (PerchUtil::count($items)) {
         	foreach($items as $Item) {
@@ -425,13 +425,13 @@ public function isReorder($Customer){
                 "answer" => $questionnaire_notes,
             ];
         }
-if(!PerchUtil::count($questions_items)){
+/*if(!PerchUtil::count($questions_items)){
      echo "reorder"; echo  $reorder ;
  echo $sql_questionnaire;
 echo "questions_items";
 	print_r($questions_items);
 	die();exit();
-}
+}*/
 /*echo "questions_items";
 	print_r($questions_items);
         echo "order_items";
@@ -475,9 +475,7 @@ echo "questions_items";
                    'message' => $sendResult ? 'Order sent to comms service.' : 'Failed to send order to comms service.'
                ],
            ];
-                      //     echo "response";
-         //	print_r($response);
-         	//die();exit();
+
          if(isset($response["success"]["ok"])){
     $pharmacy_data = [
                'orderID'    => $this->id(),
@@ -486,10 +484,10 @@ echo "questions_items";
                'pharmacy_message' =>$response["data"]["message"],
            ];
          	}else{
-         	print_r(json_encode($orderData));
+         	/*print_r(json_encode($orderData));
             	echo '/v1/perch/orders/'.$this->id().'/create';
          		print_r($response);
-                     	die();exit();
+                     	die();exit();*/
          	 $pharmacy_data = [
                            'orderID'    => $this->id(),
                            'pharmacy_orderID'    => '',
@@ -588,9 +586,10 @@ return $response;
          $isreorder=$this->isReorder($Customer);
         if($isreorder){
           $data["Next_Order_Date"]= $orderCreatedDate;
+           $data["Next_Order_Date1"]= $orderCreatedDate;
         }else{
          $data["First_Order_Date"]= $orderCreatedDate;
-
+          $data["First_Order_Date1"]= $orderCreatedDate;
 
         }
 
@@ -616,32 +615,11 @@ return $response;
             );
         }
 
-        if (class_exists('PerchSendGrid_Factory')) {
-            $SendGrid = new PerchSendGrid_Factory();
-            $template_id = $isreorder ? 'd-f9a5440ebf75441e98a7c9294e35cb35' : 'd-68d59e0921f94170aa17aadff9751cfb';
 
-            $SendGrid->send_dynamic_template_email(
-                $template_id,
-                [
-                    'email' => PERCH_EMAIL_FROM,
-                    'name' => PERCH_EMAIL_FROM_NAME,
-                ],
-                [[
-                    'email' => $Customer->email(),
-                    'dynamic_data' => $data,
-                ]],
-                [],
-                [
-                    'bcc' => [[
-                        'email' => 'getweightloss.co.uk+25a853a1a5@invite.trustpilot.com',
-                    ]],
-                ]
-            );
-        }
         $Affiliate = new PerchMembers_Affiliate($this->api);
                                    // $Affiliate->addCommission($memberid, $amount);
                   $Affiliate->recordPurchase($Customer->memberID(),$this->id(),$isreorder);
-                 // exit();
+
        // perch_emailoctopus_update_contact($data);
         if (class_exists('PerchSendGrid_Factory')) {
             $SendGrid = new PerchSendGrid_Factory();
@@ -652,7 +630,7 @@ return $response;
 
             $SendGrid->updateSendgridContactCustomFields($Customer->email(), $custom_fields);
             print_r($custom_fields);
-             die();exit();
+
         }
 
        // echo "perch_member_add_commission";
@@ -792,7 +770,7 @@ return $response;
     	if (!$this->is_order_send_to_pharmacy($this->id())) {
     	  $Customers = new PerchShop_Customers($this->api);
                 $Customer = $Customers->find($this->customerID());
-                  //$this->sendOrdertoPharmacy($Customer);
+                  $this->sendOrdertoPharmacy($Customer);
               }
     }
 

@@ -691,6 +691,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 	$existingOrderID = $this->find_existing_open_order_for_customer($Customer->id(), $gateway, $cartTotal);
 	if ($existingOrderID) {
+		$this->link_unlinked_questionnaire($memberID, (int)$existingOrderID);
 		return (int)$existingOrderID;
 	}
 
@@ -702,6 +703,10 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 				// Mark cart as completed so it is not reused
 				$db = PerchDB::fetch();
 				$db->update(PERCH_DB_PREFIX.'shop_cart', ['cartCompleted' => 1], 'cartID', $cartID);
+
+				// Link the most recent unlinked questionnaire to this order
+				$this->link_unlinked_questionnaire($memberID, $Order->id());
+
 				return  $Order->id() ;
 			}
 
@@ -715,6 +720,31 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
           			return false;
           		}
     	}
+
+	/**
+	 * Link the most recent unlinked questionnaire submission to an order.
+	 * The app submits questionnaire answers before the order exists,
+	 * so we find the latest batch (by uuid) for this member and assign the order ID.
+	 */
+	private function link_unlinked_questionnaire($memberID, $orderID)
+	{
+		$db = PerchDB::fetch();
+		$latestUuid = $db->get_value(
+			'SELECT uuid FROM '.PERCH_DB_PREFIX.'questionnaire
+			 WHERE member_id='.$db->pdb((int)$memberID).'
+			   AND order_id IS NULL
+			 ORDER BY id DESC LIMIT 1'
+		);
+		if ($latestUuid) {
+			$db->execute(
+				'UPDATE '.PERCH_DB_PREFIX.'questionnaire
+				 SET order_id='.$db->pdb((int)$orderID).'
+				 WHERE member_id='.$db->pdb((int)$memberID).'
+				   AND uuid='.$db->pdb($latestUuid).'
+				   AND order_id IS NULL'
+			);
+		}
+	}
 
 	private function find_existing_open_order_for_customer($customerID, $gateway, $cartTotal=null)
 	{

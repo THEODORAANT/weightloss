@@ -528,16 +528,17 @@ if (!function_exists('wl_backfill_sent_notes_to_member_comms')) {
                                     'external_note_ref' => (string) $noteID,
                                     'escalate_clinical_review' => $should_escalate ? 1 : 0,
                                     'note_category' => $noteMeta['category'],
+                                    'admin_note'=> $noteMeta['category'],
                                     'target_type' => $targetType,
                                     'thread_ref' => $noteMeta['thread_ref'],
                                 ];
 
                                 $sendSuccess = comms_service_send_order_note($effectiveOrderId, $orderNotePayload);
-                                if ($sendSuccess) {
+                               /* if ($sendSuccess) {
                                     // Keep a member-thread copy so the note appears under
                                     // "Member comms notes and replies" and can be replied to by admin.
                                     $memberCommsNoteSynced = comms_service_send_member_note((int) $Member->id(), $notePayload);
-                                }
+                                }*/
                             }
                         } else {
                             $sendSuccess = comms_service_send_member_note((int) $Member->id(), $notePayload);
@@ -866,6 +867,7 @@ if (!function_exists('wl_backfill_sent_notes_to_member_comms')) {
                                                 'status' => 'open',
                                                 'created_by' => $createdBy,
                                                 'escalate_clinical_review' => $isRedFlag,
+                                                   'target_type' => $effectiveTargetType,
                                                 'external_note_ref' => (string) $Note->id(),
                                             ];
 
@@ -1000,7 +1002,7 @@ if (!function_exists('wl_backfill_sent_notes_to_member_comms')) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
         $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
-        $syncedSentNotes = wl_backfill_sent_notes_to_member_comms($Member, $notes, $comms_member_notes, $NotePharmacyStatuses);
+        //$syncedSentNotes = wl_backfill_sent_notes_to_member_comms($Member, $notes, $comms_member_notes, $NotePharmacyStatuses);
         if ($syncedSentNotes) {
             $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
         }

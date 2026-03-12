@@ -50,7 +50,7 @@ class PerchMembers_DocumentReminderService
             'label'        => 'Proof of ID / Previous prescription',
             'description'  => 'Ask for proof of ID and the previous prescription.',
             'template'     => 'document_reminder_proof_id_previous.html',
-            'template_id'  => 'd-79a7450243f84196a5ac153221568a',
+            'template_id'  => 'd-79a7450243f84196a5ac153221568a97',
             'subject'      => 'Reminder: ID and previous prescription required',
             'send_email'   => true,
             'send_daily'   => true,
