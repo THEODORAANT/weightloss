@@ -599,10 +599,12 @@ if (!function_exists('wl_comms_note_identifier')) {
         }
 
         $candidates = [
-            $entry['external_note_ref'] ?? null,
             $entry['note_id'] ?? null,
             $entry['id'] ?? null,
             $entry['noteID'] ?? null,
+            // Keep external references as a fallback only. Replies must target
+            // the comms/pharmacy note ID that was created remotely.
+            $entry['external_note_ref'] ?? null,
         ];
 
         foreach ($candidates as $candidate) {
