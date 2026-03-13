@@ -107,6 +107,16 @@ class PerchShop_Order extends PerchShop_Base
 		 if ((float)$this->orderTotal() <= 0) {
                                 $this->finalize_as_paid('pending');
 
+                                $Orders = new PerchShop_Orders($this->api);
+                                if (!$Orders->is_order_send_to_pharmacy($this->id())) {
+                                        $Customers = new PerchShop_Customers($this->api);
+                                        $Customer = $Customers->find($this->customerID());
+
+                                        if ($Customer) {
+                                                $this->sendOrdertoPharmacy($Customer);
+                                        }
+                                }
+
                                        echo "<script>window.location.href = '" . $opts['return_url'] . "?pending=1';</script>";
 
                                 return true;
