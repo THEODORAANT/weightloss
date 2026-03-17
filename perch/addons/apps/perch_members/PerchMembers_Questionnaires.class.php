@@ -1063,6 +1063,56 @@ QUESTION;
         return $this->return_instances($this->db->get_rows($sql));
     }
 
+
+
+public function hasAnswerHistory($uuid, $type = 'first-order', $requireChanges = false)
+{
+    $uuid = trim((string)$uuid);
+    if ($uuid === '') {
+        return false;
+    }
+
+    $questionnaireType = ($type === 're-order') ? 're-order' : 'first-order';
+
+    if ($this->ensureQuestionnaireAnswerLogsTableExists()) {
+        $sql = 'SELECT COUNT(*)'
+            .' FROM '.PERCH_DB_PREFIX.'questionnaire_answer_logs'
+            .' WHERE user_id='.$this->db->pdb($uuid)
+            .' AND questionnaire_type='.$this->db->pdb($questionnaireType);
+
+        if ($requireChanges) {
+            $sql .= ' AND changed=1';
+        }
+
+        $count = (int)$this->db->get_value($sql);
+        if ($count > 0) {
+            return true;
+        }
+    }
+
+    if (!$this->ensureQuestionnaireLogsTableExists()) {
+        return false;
+    }
+
+    $sql = 'SELECT has_changes, raw_log_json'
+        .' FROM '.PERCH_DB_PREFIX.'questionnaire_logs'
+        .' WHERE user_id='.$this->db->pdb($uuid)
+        .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
+        .' ORDER BY id DESC'
+        .' LIMIT 1';
+
+    $row = $this->db->get_row($sql);
+    if (!is_array($row)) {
+        return false;
+    }
+
+    if ($requireChanges) {
+        return !empty($row['has_changes']);
+    }
+
+    $raw = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
+    return is_array($raw) && PerchUtil::count($raw) > 0;
+}
 function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): array {
     $result = [
         'entries'  => [],
