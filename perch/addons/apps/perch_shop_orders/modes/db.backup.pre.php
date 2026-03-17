@@ -38,7 +38,7 @@ if ($Form->submitted()) {
 
     $result = weightloss_db_backup([
         'host' => defined('PERCH_DB_SERVER') ? PERCH_DB_SERVER : '127.0.0.1',
-        'port' => defined('PERCH_DB_PORT') ? (string) PERCH_DB_PORT : '3306',
+        'port' =>  '3306', //defined('PERCH_DB_PORT') ? (string) PERCH_DB_PORT : '3306',
         'database' => defined('PERCH_DB_DATABASE') ? PERCH_DB_DATABASE : null,
         'user' => defined('PERCH_DB_USERNAME') ? PERCH_DB_USERNAME : null,
         'password' => defined('PERCH_DB_PASSWORD') ? PERCH_DB_PASSWORD : null,

@@ -90,22 +90,33 @@ class PerchShop_PharmacyOrderApiClient extends PerchAPI_Base {
 		$db         = PerchDB::fetch();
 
 
-try{
+		try{
+			$pharmacy_order_id = isset($data['pharmacy_orderID']) ? trim((string) $data['pharmacy_orderID']) : '';
 
+			if ($pharmacy_order_id !== '') {
+				$existing_by_pharmacy_id = $db->get_value('SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy WHERE pharmacy_orderID='.$db->pdb($pharmacy_order_id));
+				if ((int)$existing_by_pharmacy_id > 0) {
+					return;
+				}
+			}
 
+			if (isset($data['orderID'])) {
+				$existing_for_order = $db->get_value('SELECT COUNT(*) FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy WHERE orderID='.$db->pdb((int)$data['orderID']).' AND pharmacy_orderID!=""');
+				if ((int)$existing_for_order > 0 && $pharmacy_order_id !== '') {
+					return;
+				}
+			}
 
-           $columns = implode(", ", array_keys($data)); // Columns as a string
-                                   $values = "'" . implode("', '", array_map('addslashes', array_values($data))) . "'";
-    $insert_query ="INSERT INTO ".PERCH_DB_PREFIX."orders_match_pharmacy ($columns) VALUES ($values); ";
+			$columns = implode(", ", array_keys($data)); // Columns as a string
+			$values = "'" . implode("', '", array_map('addslashes', array_values($data))) . "'";
+			$insert_query ="INSERT INTO ".PERCH_DB_PREFIX."orders_match_pharmacy ($columns) VALUES ($values); ";
 
-
-
-    	$db->execute($insert_query);
-    	}catch (Exception $e) {
-    	echo"getMessage";
-         			echo $e->getMessage();
-         			exit;
-         		}
+			$db->execute($insert_query);
+		}catch (Exception $e) {
+			echo"getMessage";
+			echo $e->getMessage();
+			exit;
+		}
 
     }
 }

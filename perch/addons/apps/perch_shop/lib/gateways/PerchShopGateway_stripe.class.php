@@ -90,7 +90,7 @@ class PerchShopGateway_stripe extends PerchShopGateway_default
 	}
 
 		public function get_order_from_env($Orders, $get, $post)
-    	{
+    	{ echo "perch_shop_successful_order_id2"; echo perch_shop_successful_order_id();
     		if (isset($get['session_id'])) {
     			return $Orders->get_one_by('orderGatewayRef', $get['session_id']);
     		}
@@ -283,10 +283,10 @@ $PackageItem  = $PackageItems->find($_COOKIE['draft_package_item']);
                 return false;//"Payment successful, but no matching order found.";
             }
         } else {
-            echo "Payment incomplete or session invalid.";
+            // echo "Payment incomplete or session invalid.";
         }
     } else {
-        echo "No session_id provided.";
+        // echo "No session_id provided.";
     }
 	}
 

@@ -88,13 +88,86 @@ public function take_klarna_payment($Order, $opts)
                    return ;
     }
 }
+
+	private function get_order_checkout_line_items($Order, $currency, $default_price_id='', $default_product_id='')
+	{
+		$OrderItems = new PerchShop_OrderItems($this->api);
+		$items = $OrderItems->get_by('orderID', $Order->id());
+
+		if (!PerchUtil::count($items)) {
+			return [];
+		}
+
+		$Products = new PerchShop_Products($this->api);
+		$line_items = [];
+
+		foreach($items as $Item) {
+			$item_data = $Item->to_array();
+			$qty = isset($item_data['itemQty']) ? (int)$item_data['itemQty'] : 1;
+			if ($qty < 1) $qty = 1;
+
+			$item_total = isset($item_data['itemTotal']) ? (float)$item_data['itemTotal'] : 0;
+			if ($item_total <= 0) {
+				continue;
+			}
+
+			$unit_amount = (int) round(($item_total / $qty) * 100);
+			if ($unit_amount <= 0) {
+				continue;
+			}
+
+			$item_name = 'GetWeightLoss Order #' . $Order->id();
+			$stripe_product_id = $default_product_id;
+			$stripe_price_id = $default_price_id;
+
+			if (isset($item_data['productID']) && (int)$item_data['productID'] > 0) {
+				$Product = $Products->find((int)$item_data['productID']);
+				if ($Product) {
+					$item_name = $Product->title();
+					if ($Product->productVariantDesc()) {
+						$item_name .= ' - ' . $Product->productVariantDesc();
+					}
+
+					$fields = PerchUtil::json_safe_decode($Product->productDynamicFields(), true);
+					if (is_array($fields)) {
+						if (isset($fields['stripe_product_id']) && trim((string)$fields['stripe_product_id']) !== '') {
+							$stripe_product_id = trim((string)$fields['stripe_product_id']);
+						}
+						if (isset($fields['stripe_price_id']) && trim((string)$fields['stripe_price_id']) !== '') {
+							$stripe_price_id = trim((string)$fields['stripe_price_id']);
+						}
+					}
+				}
+			}
+
+			$line_item = [
+				'quantity' => $qty,
+			];
+
+			if ($stripe_price_id !== '') {
+				$line_item['price'] = $stripe_price_id;
+			} else {
+				$line_item['currency'] = $currency;
+				$line_item['unit_amount'] = $unit_amount;
+				if ($stripe_product_id !== '') {
+					$line_item['product'] = $stripe_product_id;
+				} else {
+					$line_item['name'] = $item_name;
+				}
+			}
+
+			$line_items[] = $line_item;
+		}
+
+		return $line_items;
+	}
+
 public function take_payment($Order, $opts)
 {
 		$Customers = new PerchShop_Customers($this->api);
         $Customer = $Customers->find($Order->customerID());
 
-    $orderTotal = $Order->orderTotal(); // already in pence
-    $amount = (int) round($orderTotal * 100); // Convert to 12900 (pence) — GOOD
+    $orderTotal = $Order->orderTotal();
 
     $currency = $Order->get_currency_code(); // "gbp", "usd", etc.
     $product_name = 'GetWeightLoss Order #' . $Order->id();
@@ -117,15 +190,14 @@ public function take_payment($Order, $opts)
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_USERPWD, $stripe_secret_key . ':');
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+    $stripe_price_id = isset($opts['stripe_price_id']) ? trim((string)$opts['stripe_price_id']) : '';
+    $stripe_product_id = isset($opts['stripe_product_id']) ? trim((string)$opts['stripe_product_id']) : '';
+
+    $checkout_fields = [
         //'payment_method_types[]' => 'card',
        // 'payment_method_types[]' => 'klarna',
        'payment_method_types[]' =>$opts["payment_method_types"],
          'customer_email' => $Customer->customerEmail(),
-        'line_items[0][price_data][currency]' => $currency,
-        'line_items[0][price_data][product_data][name]' => $product_name,
-        'line_items[0][price_data][unit_amount]' => $amount,
-        'line_items[0][quantity]' => 1,
 
         'mode' => 'payment',
         'success_url' => $success_url,
@@ -134,11 +206,43 @@ public function take_payment($Order, $opts)
         //'billing_address_collection' => 'required',
         'customer_creation' => 'always',
         //'payment_method_options[klarna][preferred_locale]' => 'en-GB',
-    ]));
+    ];
 
+    $order_line_items = $this->get_order_checkout_line_items($Order, $currency, $stripe_price_id, $stripe_product_id);
 
+    if (!PerchUtil::count($order_line_items)) {
+        $amount = (int) round($orderTotal * 100);
+        $order_line_items[] = [
+            'quantity' => 1,
+            'currency' => $currency,
+            'unit_amount' => $amount,
+            'name' => $product_name,
+        ];
+    }
+
+    foreach($order_line_items as $index=>$line_item) {
+        $checkout_fields['line_items['.$index.'][quantity]'] = $line_item['quantity'];
+
+        if (isset($line_item['price']) && $line_item['price'] !== '') {
+            $checkout_fields['line_items['.$index.'][price]'] = $line_item['price'];
+            continue;
+        }
+
+        $checkout_fields['line_items['.$index.'][price_data][currency]'] = $line_item['currency'];
+        $checkout_fields['line_items['.$index.'][price_data][unit_amount]'] = $line_item['unit_amount'];
+
+        if (isset($line_item['product']) && $line_item['product'] !== '') {
+            $checkout_fields['line_items['.$index.'][price_data][product]'] = $line_item['product'];
+        } else {
+            $checkout_fields['line_items['.$index.'][price_data][product_data][name]'] = $line_item['name'];
+        }
+    }
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($checkout_fields));
+
+print_r($checkout_fields);
     $response = curl_exec($ch);
-
+echo "take payment";print_r($response);
     curl_close($ch);
 
     $data = json_decode($response, true);

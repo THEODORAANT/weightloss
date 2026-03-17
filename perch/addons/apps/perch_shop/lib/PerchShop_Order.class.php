@@ -107,6 +107,15 @@ class PerchShop_Order extends PerchShop_Base
 		 if ((float)$this->orderTotal() <= 0) {
                                 $this->finalize_as_paid('pending');
 
+                                $Orders = new PerchShop_Orders($this->api);
+                                if (!$Orders->is_order_send_to_pharmacy($this->id())) {
+                                        $Customers = new PerchShop_Customers($this->api);
+                                        $Customer = $Customers->find($this->customerID());
+
+                                        if ($Customer) {
+                                                $this->sendOrdertoPharmacy($Customer);
+                                        }
+                                }
                                        echo "<script>window.location.href = '" . $opts['return_url'] . "?pending=1';</script>";
 
                                 return true;
@@ -257,33 +266,35 @@ public function isReorder($Customer){
        	$Addresses  = new PerchShop_Addresses($this->api);
        $ShippingAddr = $Addresses->find((int)$this->orderShippingAddress());
            	$Members = new PerchMembers_Members($this->api);
+
            	$Member = $Members->find($Customer->memberID());
       $Products = new PerchShop_Products($this->api);
 
         $OrderItems = new PerchShop_OrderItems($this->api);
          $Orders = new PerchShop_Orders($this->api);
+
         $items = $OrderItems->get_by('orderID', $this->id());
-            $ShopRuntime = PerchShop_Runtime::fetch();
-            $reorder = $ShopRuntime->customer_has_paid_order($Customer->memberID(), 'products/weight-loss');
+
+           // $ShopRuntime = PerchShop_Runtime::fetch();
+          $reorder = $Orders->customer_has_paid_order($Customer, $this->id(),'products/weight-loss');
 
                 $order_items = [];
                     $questions_items=[];
                $questionnaire_type="first-order";
                  $orders = $Orders->findAll_for_customer($Customer);
 
-                                             // if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
-                                             if($reorder){
+                                           if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
+                                          //   if($reorder){
                                   					      $questionnaire_type="re-order";
                                   					 }
 
-             // echo "reorder **";print_r($reorder);
 
         if (PerchUtil::count($items)) {
         	foreach($items as $Item) {
         	$sql = 'SELECT * FROM '.PERCH_DB_PREFIX.'products_match_pharmacy
                                         WHERE productID='.$this->db->pdb((int)$Item->productID());
                                          // echo "products_match_pharmacy";
-                                        	//print_r($sql);
+                                        	// print_r($sql);
         $Product = $Products->find((int)$Item->productID());
 
          	/*if ($Product) {
@@ -425,17 +436,18 @@ public function isReorder($Customer){
                 "answer" => $questionnaire_notes,
             ];
         }
-/*if(!PerchUtil::count($questions_items)){
-     echo "reorder"; echo  $reorder ;
- echo $sql_questionnaire;
-echo "questions_items";
-	print_r($questions_items);
-	die();exit();
-}*/
+if(!PerchUtil::count($questions_items)){
+     // echo "reorder"; echo  $reorder ;
+ // echo $sql_questionnaire;
+// echo "questions_items";
+	// print_r($questions_items);
+//	die();exit();
+}
+   // echo "order_items";
+	// print_r($order_items);
 /*echo "questions_items";
 	print_r($questions_items);
-        echo "order_items";
-	print_r($order_items);
+
                       echo "ShippingAdr";
 	print_r($ShippingAddr);*/
          $shippingAddressLine1 = '';
@@ -468,7 +480,8 @@ echo "questions_items";
          ];
 
            $response = [];
-           $sendResult = comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
+           $sendResult= comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
+         if(!$sendResult) { echo "comms_service_request_json no"; print_r($orderData);die();exit();}
            $response = [
                'success' => $sendResult,
                'data' => [
@@ -495,7 +508,7 @@ echo "questions_items";
                        ];
          	}
 
-         	$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
+         	//$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
 
 return $response;
 	}

@@ -598,7 +598,8 @@ if (!function_exists('wl_comms_note_identifier')) {
             return '';
         }
 
-        $candidates = [
+ return $entry['note_id'] ;
+     /*   $candidates = [
             $entry['note_id'] ?? null,
             $entry['id'] ?? null,
             $entry['noteID'] ?? null,
@@ -612,10 +613,11 @@ if (!function_exists('wl_comms_note_identifier')) {
             if ($id !== '') {
                 return $id;
             }
-        }
+        }*/
 
-        return '';
+      //  return '';
     }
+
 }
 
 

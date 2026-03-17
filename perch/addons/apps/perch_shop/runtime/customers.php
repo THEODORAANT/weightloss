@@ -45,9 +45,9 @@ PerchSystem::set_var('referrer', $_SESSION["referrer"]);
     }
 
 
-    function customer_has_paid_order($memberID=false){
+    function customer_has_paid_order($memberID=false, $categorySlug=false){
      $ShopRuntime = PerchShop_Runtime::fetch();
-     return  $ShopRuntime->customer_has_paid_order($memberID);
+     return  $ShopRuntime->customer_has_paid_order($memberID, $categorySlug);
     }
     function perch_shop_customer_edit_form($opts=array(), $return=false)
     {
