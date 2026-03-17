@@ -1077,60 +1077,35 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
     }
 
     $sanitisedUserId = basename(str_replace('\\', '/', $sanitisedUserId));
-    $sanitisedUserId = str_replace(array("\"", "'"), '', $sanitisedUserId);
+    $sanitisedUserId = str_replace(array('"', "'"), '', $sanitisedUserId);
 
-    $logDir = trim($logDir);
-    if ($logDir === '') {
-        $logDir = 'logs';
+    $questionnaireType = ($logDir === 'logs/reorder') ? 're-order' : 'first-order';
+
+    if (!$this->ensureQuestionnaireLogsTableExists()) {
+        $result['error'] = 'Unable to load answer history records.';
+        return $result;
     }
 
-    if ($logDir[0] === '/' || preg_match('/^[A-Za-z]:[\\\\\/]/', $logDir)) {
-        $basePath = PerchUtil::file_path($logDir);
-    } else {
-        $logDir = trim($logDir, '/\\');
-        $siteRoot = defined('PERCH_SITEPATH') ? PERCH_SITEPATH : null;
-        if ($siteRoot === null && defined('PERCH_PATH')) {
-            $siteRoot = realpath(PERCH_PATH . '/../');
-        }
-        if (!is_string($siteRoot) || $siteRoot === '') {
-            $siteRoot = getcwd();
-        }
+    $sql = 'SELECT metadata_json, raw_log_json'
+        .' FROM '.PERCH_DB_PREFIX.'questionnaire_logs'
+        .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
+        .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
+        .' ORDER BY id DESC'
+        .' LIMIT 1';
 
-        $basePath = PerchUtil::file_path(rtrim($siteRoot, '/\\') . '/' . $logDir);
-    }
+    $row = $this->db->get_row($sql);
 
-    $filePath = PerchUtil::file_path($basePath . DIRECTORY_SEPARATOR . $sanitisedUserId . '_raw_log.json');
-
-    if (!file_exists($filePath)) {
+    if (!is_array($row)) {
         $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
         return $result;
     }
 
-    $json = file_get_contents($filePath);
-    if ($json === false) {
-        $result['error'] = sprintf('Unable to read the answer history file for user ID "%s".', $sanitisedUserId);
-        return $result;
+    $metadata = PerchUtil::json_safe_decode($row['metadata_json'] ?? '{}', true);
+    if (is_array($metadata)) {
+        $result['metadata'] = $metadata;
     }
 
-    $data = json_decode($json, true);
-    if (!is_array($data)) {
-        $message = 'JSON error';
-        if (function_exists('json_last_error') && json_last_error() !== JSON_ERROR_NONE) {
-            if (function_exists('json_last_error_msg')) {
-                $message = json_last_error_msg();
-            } else {
-                $message = 'code ' . json_last_error();
-            }
-        }
-        $result['error'] = sprintf('The answer history file for user ID "%s" could not be parsed: %s', $sanitisedUserId, $message);
-        return $result;
-    }
-
-    if (isset($data['metadata']) && is_array($data['metadata'])) {
-        $result['metadata'] = $data['metadata'];
-    }
-
-    $logEntries = $data['log'] ?? [];
+    $logEntries = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
     if (!is_array($logEntries)) {
         $result['error'] = sprintf('The answer history for user ID "%s" does not contain any log entries.', $sanitisedUserId);
         return $result;
@@ -1261,6 +1236,7 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
 
     return $result;
 }
+
 function getNextStepforFirstOrder(array $data): string {
     // Priority-based conditional routing
 
@@ -2574,17 +2550,6 @@ if(isset($data["uuid"])){
             return true;
         }
 
-        $logDirectory = $this->resolveQuestionnaireLogDirectory($type);
-        if ($logDirectory === null) {
-            PerchUtil::debug('Unable to resolve questionnaire log directory.', 'error');
-            return false;
-        }
-
-        if (!$this->ensureDirectoryExists($logDirectory)) {
-            PerchUtil::debug('Unable to create questionnaire log directory: ' . $logDirectory, 'error');
-            return false;
-        }
-
         $metadata = array_merge(
             [
                 'user_id' => $uuid,
@@ -2595,74 +2560,67 @@ if(isset($data["uuid"])){
             $metadata
         );
 
-        $rawPayload = [
-            'metadata' => $metadata,
-            'log' => $rawLogEntries,
-        ];
-
-        $rawPath = PerchUtil::file_path($logDirectory . DIRECTORY_SEPARATOR . $uuid . '_raw_log.json');
-        if (@file_put_contents($rawPath, json_encode($rawPayload, JSON_PRETTY_PRINT)) === false) {
-            PerchUtil::debug('Unable to write questionnaire raw log file: ' . $rawPath, 'error');
-            return false;
-        }
-
         if (!is_array($logSummary) || !array_key_exists('grouped', $logSummary)) {
             if (function_exists('perch_members_summarise_answer_log')) {
                 $logSummary = perch_members_summarise_answer_log($rawLogEntries);
             } else {
-                $logSummary = ['grouped' => []];
+                $logSummary = ['grouped' => [], 'has_changes' => false];
             }
         }
 
-        $groupedPayload = [
-            'metadata' => $metadata,
-            'grouped_log' => $logSummary['grouped'] ?? [],
+        if (!$this->ensureQuestionnaireLogsTableExists()) {
+            PerchUtil::debug('Unable to ensure questionnaire logs table exists.', 'error');
+            return false;
+        }
+
+        $payload = [
+            'user_id' => $uuid,
+            'member_id' => (int)$memberID,
+            'questionnaire_type' => $type,
+            'metadata_json' => PerchUtil::json_safe_encode($metadata),
+            'raw_log_json' => PerchUtil::json_safe_encode($rawLogEntries),
+            'grouped_log_json' => PerchUtil::json_safe_encode($logSummary['grouped'] ?? []),
+            'has_changes' => !empty($logSummary['has_changes']) ? 1 : 0,
+            'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        $groupedPath = PerchUtil::file_path($logDirectory . DIRECTORY_SEPARATOR . $uuid . '_grouped_log.json');
-        if (@file_put_contents($groupedPath, json_encode($groupedPayload, JSON_PRETTY_PRINT)) === false) {
-            @unlink($rawPath);
-            PerchUtil::debug('Unable to write questionnaire grouped log file: ' . $groupedPath, 'error');
+        $inserted = $this->db->insert(PERCH_DB_PREFIX.'questionnaire_logs', $payload);
+        if ($inserted === false) {
+            PerchUtil::debug('Unable to persist questionnaire logs to database.', 'error');
             return false;
         }
 
         return true;
     }
 
-    private function resolveQuestionnaireLogDirectory($type)
+
+    private function ensureQuestionnaireLogsTableExists()
     {
-        $basePath = $_SERVER['DOCUMENT_ROOT'] ?? '';
+        static $tableReady = null;
 
-        if ($basePath === '' && defined('PERCH_SITEPATH')) {
-            $basePath = PERCH_SITEPATH;
+        if ($tableReady !== null) {
+            return $tableReady;
         }
 
-        if ($basePath === '' && defined('PERCH_PATH')) {
-            $basePath = realpath(PERCH_PATH . '/../');
-        }
+        $table = PERCH_DB_PREFIX.'questionnaire_logs';
+        $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'` ('
+            .'`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,'
+            .'`user_id` VARCHAR(128) NOT NULL,'
+            .'`member_id` INT UNSIGNED NOT NULL DEFAULT 0,'
+            .'`questionnaire_type` VARCHAR(32) NOT NULL,'
+            .'`metadata_json` LONGTEXT NULL,'
+            .'`raw_log_json` LONGTEXT NULL,'
+            .'`grouped_log_json` LONGTEXT NULL,'
+            .'`has_changes` TINYINT(1) NOT NULL DEFAULT 0,'
+            .'`created_at` DATETIME NOT NULL,'
+            .'PRIMARY KEY (`id`),'
+            .'KEY `questionnaire_logs_user_type_idx` (`user_id`, `questionnaire_type`),'
+            .'KEY `questionnaire_logs_member_idx` (`member_id`)'
+            .') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4';
 
-        if ($basePath === '') {
-            $basePath = getcwd();
-        }
+        $tableReady = ($this->db->execute($sql) !== false);
 
-        if (!is_string($basePath) || $basePath === '') {
-            return null;
-        }
-
-        $basePath = rtrim($basePath, '/\\') . '/logs';
-        if ($type !== 'first-order') {
-            $basePath .= '/reorder';
-        }
-
-        return PerchUtil::file_path($basePath);
+        return $tableReady;
     }
 
-    private function ensureDirectoryExists($directory)
-    {
-        if (is_dir($directory)) {
-            return true;
-        }
-
-        return @mkdir($directory, 0755, true) || is_dir($directory);
-    }
 }

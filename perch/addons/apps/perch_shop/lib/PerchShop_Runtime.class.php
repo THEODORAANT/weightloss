@@ -806,48 +806,27 @@ if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
             'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             'registered' => date('Y-m-d H:i:s')
         ];
-        $logDir = '/var/www/html/logs';
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0755, true);
-        }
-
-        if (!is_dir($logDir) && !mkdir($logDir, 0755, true)) {
-            die("Failed to create log directory: $logDir");
-        }
 
         $_SESSION['questionnaire']["multiple_answers"] = "No";
 
         if (isset($_SESSION['answer_log'])) {
             $rawLog = is_array($_SESSION['answer_log']) ? $_SESSION['answer_log'] : [];
-
-            if (file_put_contents("{$logDir}/{$userId}_raw_log.json", json_encode([
-                'metadata' => $metadata,
-                'log' => $rawLog
-            ], JSON_PRETTY_PRINT)) === false) {
-                die("Failed to write log file.");
-            }
-
             $summary = perch_members_summarise_answer_log($rawLog);
-            $grouped = $summary['grouped'];
 
             if (!empty($summary['has_changes'])) {
                 $_SESSION['questionnaire']["multiple_answers"] = "Yes-" . "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/questionnaire_logs/?userId=" . $userId;
             }
-            $_SESSION['questionnaire']["documents"] = "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/edit/?id=" . perch_member_get('id');
-            //print_r( $_SESSION['questionnaire']);
-            $questionnaireQid = perch_member_add_questionnaire($_SESSION['questionnaire'], 'first-order', $orderIdForQuestionnaire);
-            $_SESSION['questionnaire_qid'] = (int)$questionnaireQid;
-            $_SESSION['questionnaire_order_id'] = (int)$orderIdForQuestionnaire;
 
-            if (file_put_contents("{$logDir}/{$userId}_grouped_log.json", json_encode([
-                'metadata' => $metadata,
-                'grouped_log' => $grouped
-            ], JSON_PRETTY_PRINT)) === false) {
-                die("Failed to write log file.");
-            }
-            // Optional: clear the session log
+            $_SESSION['questionnaire']['log'] = $rawLog;
+            $_SESSION['questionnaire']['log_metadata'] = $metadata;
+
             unset($_SESSION['answer_log']);
         }
+
+        $_SESSION['questionnaire']["documents"] = "https://" . $_SERVER['HTTP_HOST'] . "/perch/addons/apps/perch_members/edit/?id=" . perch_member_get('id');
+        $questionnaireQid = perch_member_add_questionnaire($_SESSION['questionnaire'], 'first-order', $orderIdForQuestionnaire);
+        $_SESSION['questionnaire_qid'] = (int)$questionnaireQid;
+        $_SESSION['questionnaire_order_id'] = (int)$orderIdForQuestionnaire;
 
         $_SESSION['questionnaire_saved'] = true;
     }
