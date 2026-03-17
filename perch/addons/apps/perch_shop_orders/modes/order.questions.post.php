@@ -21,6 +21,9 @@
 
     echo '<div class="inner">';
 
+    $MembersAPI = new PerchAPI(1.0, 'perch_members');
+    $QuestionnairesForHistory = new PerchMembers_Questionnaires($MembersAPI);
+
     $questions_rendered = false;
 
     foreach ($questionnaire_sections as $section) {
@@ -298,10 +301,22 @@
             }
 
             $answer_text = trim((string) $answer_text);
-   if (!$historyPrinted) {
-                                echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.$Answer->uuid().'">History</a></td></tr>';
-                                $historyPrinted = true;
-                            }
+
+            if (!$historyPrinted) {
+                $historyUserId = trim((string)$Answer->uuid());
+                $historyType = (($section['type'] ?? 'first-order') === 're-order') ? 're-order' : 'first-order';
+
+                if ($historyUserId !== '' && $QuestionnairesForHistory->hasAnswerHistory($historyUserId, $historyType, false)) {
+                    $historyUrl = 'https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.rawurlencode($historyUserId);
+                    if ($historyType === 're-order') {
+                        $historyUrl .= '&type=re-order';
+                    }
+
+                    echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="'.PerchUtil::html($historyUrl).'">History</a></td></tr>';
+                    $historyPrinted = true;
+                }
+            }
+
             echo '<tr>';
             echo '<td class="action">'.PerchUtil::html($label).'</td>';
 
