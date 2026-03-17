@@ -272,6 +272,34 @@
         echo '<tbody>';
         $historyPrinted = false;
         $rendered_slugs = [];
+
+        $resolveLegacyHistoryUrl = static function ($answersBySlug) {
+            if (!isset($answersBySlug['multiple_answers'])) {
+                return null;
+            }
+
+            $legacyAnswer = $answersBySlug['multiple_answers'];
+            $legacyValue = trim((string)$legacyAnswer->answer_text());
+            if ($legacyValue === '') {
+                $legacyValue = trim((string)$legacyAnswer->answer());
+            }
+
+            if ($legacyValue === '' || stripos($legacyValue, 'Yes-') !== 0) {
+                return null;
+            }
+
+            $candidateUrl = trim(substr($legacyValue, 4));
+            if ($candidateUrl === '') {
+                return null;
+            }
+
+            if (preg_match('/^https?:\/\//i', $candidateUrl)) {
+                return $candidateUrl;
+            }
+
+            return null;
+        };
+
         foreach ($answers as $Answer) {
             $slug = $Answer->question_slug();
             if ($slug === null || $slug === '') {
@@ -303,15 +331,21 @@
             $answer_text = trim((string) $answer_text);
 
             if (!$historyPrinted) {
-                $historyUserId = trim((string)$Answer->uuid());
-                $historyType = (($section['type'] ?? 'first-order') === 're-order') ? 're-order' : 'first-order';
+                $historyUrl = $resolveLegacyHistoryUrl($answers_by_slug);
 
-                if ($historyUserId !== '' && $QuestionnairesForHistory->hasAnswerHistory($historyUserId, $historyType, false)) {
-                    $historyUrl = 'https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.rawurlencode($historyUserId);
-                    if ($historyType === 're-order') {
-                        $historyUrl .= '&type=re-order';
+                if ($historyUrl === null) {
+                    $historyUserId = trim((string)$Answer->uuid());
+                    $historyType = (($section['type'] ?? 'first-order') === 're-order') ? 're-order' : 'first-order';
+
+                    if ($historyUserId !== '' && $QuestionnairesForHistory->hasAnswerHistory($historyUserId, $historyType, false)) {
+                        $historyUrl = 'https://'.$_SERVER['HTTP_HOST'].'/perch/addons/apps/perch_members/questionnaire_logs?userId='.rawurlencode($historyUserId);
+                        if ($historyType === 're-order') {
+                            $historyUrl .= '&type=re-order';
+                        }
                     }
+                }
 
+                if ($historyUrl !== null) {
                     echo '<tr><td colspan="2"><a class="button button button-simple" target="_blank" href="'.PerchUtil::html($historyUrl).'">History</a></td></tr>';
                     $historyPrinted = true;
                 }
