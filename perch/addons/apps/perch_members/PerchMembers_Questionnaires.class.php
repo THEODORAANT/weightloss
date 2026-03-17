@@ -1081,34 +1081,70 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
 
     $questionnaireType = ($logDir === 'logs/reorder') ? 're-order' : 'first-order';
 
-    if (!$this->ensureQuestionnaireLogsTableExists()) {
-        $result['error'] = 'Unable to load answer history records.';
-        return $result;
+    $logEntries = [];
+
+    if ($this->ensureQuestionnaireAnswerLogsTableExists()) {
+        $sql = 'SELECT user_id, member_id, question_key, answer_text, previous_answer_text, changed, action, created_at'
+            .' FROM '.PERCH_DB_PREFIX.'questionnaire_answer_logs'
+            .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
+            .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
+            .' ORDER BY created_at ASC, id ASC';
+
+        $rows = $this->db->get_rows($sql);
+        if (is_array($rows) && PerchUtil::count($rows)) {
+            foreach ($rows as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+
+                $logEntries[] = [
+                    'question' => (string)($row['question_key'] ?? ''),
+                    'answer' => $row['answer_text'] ?? '',
+                    'previous_answer' => $row['previous_answer_text'] ?? null,
+                    'changed' => !empty($row['changed']),
+                    'action' => (string)($row['action'] ?? ''),
+                    'time' => (string)($row['created_at'] ?? ''),
+                ];
+            }
+
+            $firstRow = $rows[0];
+            $result['metadata'] = [
+                'user_id' => $sanitisedUserId,
+                'member_id' => (int)($firstRow['member_id'] ?? 0),
+            ];
+        }
     }
 
-    $sql = 'SELECT metadata_json, raw_log_json'
-        .' FROM '.PERCH_DB_PREFIX.'questionnaire_logs'
-        .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
-        .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
-        .' ORDER BY id DESC'
-        .' LIMIT 1';
+    if (empty($logEntries)) {
+        if (!$this->ensureQuestionnaireLogsTableExists()) {
+            $result['error'] = 'Unable to load answer history records.';
+            return $result;
+        }
 
-    $row = $this->db->get_row($sql);
+        $sql = 'SELECT metadata_json, raw_log_json'
+            .' FROM '.PERCH_DB_PREFIX.'questionnaire_logs'
+            .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
+            .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
+            .' ORDER BY id DESC'
+            .' LIMIT 1';
 
-    if (!is_array($row)) {
-        $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
-        return $result;
-    }
+        $row = $this->db->get_row($sql);
 
-    $metadata = PerchUtil::json_safe_decode($row['metadata_json'] ?? '{}', true);
-    if (is_array($metadata)) {
-        $result['metadata'] = $metadata;
-    }
+        if (!is_array($row)) {
+            $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
+            return $result;
+        }
 
-    $logEntries = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
-    if (!is_array($logEntries)) {
-        $result['error'] = sprintf('The answer history for user ID "%s" does not contain any log entries.', $sanitisedUserId);
-        return $result;
+        $metadata = PerchUtil::json_safe_decode($row['metadata_json'] ?? '{}', true);
+        if (is_array($metadata)) {
+            $result['metadata'] = $metadata;
+        }
+
+        $logEntries = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
+        if (!is_array($logEntries)) {
+            $result['error'] = sprintf('The answer history for user ID "%s" does not contain any log entries.', $sanitisedUserId);
+            return $result;
+        }
     }
 
     $normalise = function ($value) {
@@ -2591,6 +2627,39 @@ if(isset($data["uuid"])){
         }
 
         return true;
+    }
+
+
+    private function ensureQuestionnaireAnswerLogsTableExists()
+    {
+        static $tableReady = null;
+
+        if ($tableReady !== null) {
+            return $tableReady;
+        }
+
+        $table = PERCH_DB_PREFIX.'questionnaire_answer_logs';
+        $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'` ('
+            .'`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,'
+            .'`user_id` VARCHAR(128) NOT NULL,'
+            .'`member_id` INT UNSIGNED NOT NULL DEFAULT 0,'
+            .'`questionnaire_type` ENUM(\'first-order\',\'re-order\') NOT NULL,'
+            .'`question_key` VARCHAR(128) NOT NULL,'
+            .'`answer_text` LONGTEXT NULL,'
+            .'`previous_answer_text` LONGTEXT NULL,'
+            .'`changed` TINYINT(1) NOT NULL DEFAULT 0,'
+            .'`action` VARCHAR(16) NOT NULL DEFAULT \'new\','
+            .'`context_step` VARCHAR(128) NULL,'
+            .'`created_at` DATETIME NOT NULL,'
+            .'PRIMARY KEY (`id`),'
+            .'KEY `questionnaire_answer_logs_user_type_idx` (`user_id`, `questionnaire_type`),'
+            .'KEY `questionnaire_answer_logs_member_idx` (`member_id`),'
+            .'KEY `questionnaire_answer_logs_created_idx` (`created_at`)'
+            .') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4';
+
+        $tableReady = ($this->db->execute($sql) !== false);
+
+        return $tableReady;
     }
 
 

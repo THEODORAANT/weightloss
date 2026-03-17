@@ -420,7 +420,97 @@ function perch_member_questionsForQuestionnaire($type) {
         ];
 
         $_SESSION[$logKey][] = $logEntry;
+        perch_members_persist_answer_log_entry($logEntry, $type);
 
+    }
+
+    function perch_members_ensure_answer_log_entries_table($db)
+    {
+        static $tableReady = null;
+
+        if ($tableReady !== null) {
+            return $tableReady;
+        }
+
+        $table = PERCH_DB_PREFIX.'questionnaire_answer_logs';
+        $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'` ('
+            .'`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,'
+            .'`user_id` VARCHAR(128) NOT NULL,'
+            .'`member_id` INT UNSIGNED NOT NULL DEFAULT 0,'
+            .'`questionnaire_type` ENUM(\'first-order\',\'re-order\') NOT NULL,'
+            .'`question_key` VARCHAR(128) NOT NULL,'
+            .'`answer_text` LONGTEXT NULL,'
+            .'`previous_answer_text` LONGTEXT NULL,'
+            .'`changed` TINYINT(1) NOT NULL DEFAULT 0,'
+            .'`action` VARCHAR(16) NOT NULL DEFAULT \'new\','
+            .'`context_step` VARCHAR(128) NULL,'
+            .'`created_at` DATETIME NOT NULL,'
+            .'PRIMARY KEY (`id`),'
+            .'KEY `questionnaire_answer_logs_user_type_idx` (`user_id`, `questionnaire_type`),'
+            .'KEY `questionnaire_answer_logs_member_idx` (`member_id`),'
+            .'KEY `questionnaire_answer_logs_created_idx` (`created_at`)'
+            .') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4';
+
+        $tableReady = ($db->execute($sql) !== false);
+
+        return $tableReady;
+    }
+
+    function perch_members_persist_answer_log_entry($entry, $type = 'firstorder')
+    {
+        if (!is_array($entry)) {
+            return false;
+        }
+
+        $question = isset($entry['question']) ? trim((string)$entry['question']) : '';
+        if ($question === '') {
+            return false;
+        }
+
+        $userId = '';
+        if (isset($_SESSION['step_data']['user_id'])) {
+            $userId = trim((string)$_SESSION['step_data']['user_id']);
+        }
+
+        if ($userId === '' && isset($_SESSION['questionnaire']['uuid'])) {
+            $userId = trim((string)$_SESSION['questionnaire']['uuid']);
+        }
+
+        if ($userId === '' && isset($_SESSION['questionnaire-reorder']['uuid'])) {
+            $userId = trim((string)$_SESSION['questionnaire-reorder']['uuid']);
+        }
+
+        if ($userId === '') {
+            return false;
+        }
+
+        $questionnaireType = ($type === 'reorder') ? 're-order' : 'first-order';
+
+        $memberID = 0;
+        $Session = PerchMembers_Session::fetch();
+        if ($Session && $Session->logged_in) {
+            $memberID = (int)$Session->get('memberID');
+        }
+
+        $db = PerchDB::fetch();
+        if (!$db || !perch_members_ensure_answer_log_entries_table($db)) {
+            return false;
+        }
+
+        $insert = [
+            'user_id' => $userId,
+            'member_id' => $memberID,
+            'questionnaire_type' => $questionnaireType,
+            'question_key' => $question,
+            'answer_text' => perch_members_normalise_answer_log_value($entry['answer'] ?? null),
+            'previous_answer_text' => perch_members_normalise_answer_log_value($entry['previous_answer'] ?? null),
+            'changed' => !empty($entry['changed']) ? 1 : 0,
+            'action' => isset($entry['action']) ? (string)$entry['action'] : 'new',
+            'context_step' => isset($_GET['step']) ? trim((string)$_GET['step']) : null,
+            'created_at' => isset($entry['time']) ? (string)$entry['time'] : date('Y-m-d H:i:s'),
+        ];
+
+        return $db->insert(PERCH_DB_PREFIX.'questionnaire_answer_logs', $insert) !== false;
     }
 
     function perch_members_normalise_answer_log_value($value)
