@@ -15,7 +15,7 @@
         foreach ($products as $ListProduct) {
             $product_options[] = [
                 'value' => (string) $ListProduct->id(),
-                'label' => $ListProduct->productTitle(),
+                'label' => $ListProduct->sku(),
             ];
         }
     }
