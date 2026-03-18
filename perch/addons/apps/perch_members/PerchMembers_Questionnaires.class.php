@@ -1166,35 +1166,45 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
     }
 
     if (empty($logEntries)) {
-        if (!$this->ensureQuestionnaireLogsTableExists()) {
-            $result['error'] = 'Unable to load answer history records.';
-            return $result;
+        if ($this->ensureQuestionnaireLogsTableExists()) {
+            $sql = 'SELECT metadata_json, raw_log_json'
+                .' FROM '.PERCH_DB_PREFIX.'questionnaire_logs'
+                .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
+                .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
+                .' ORDER BY id DESC'
+                .' LIMIT 1';
+
+            $row = $this->db->get_row($sql);
+
+            if (is_array($row)) {
+                $metadata = PerchUtil::json_safe_decode($row['metadata_json'] ?? '{}', true);
+                if (is_array($metadata)) {
+                    $result['metadata'] = $metadata;
+                }
+
+                $logEntries = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
+                if (!is_array($logEntries)) {
+                    $logEntries = [];
+                }
+            }
+        }
+    }
+
+    if (empty($logEntries)) {
+        $fileFallback = $this->loadAnswerHistoryFromLogFiles($sanitisedUserId, $logDir);
+
+        if (!empty($fileFallback['entries']) && is_array($fileFallback['entries'])) {
+            $logEntries = $fileFallback['entries'];
         }
 
-        $sql = 'SELECT metadata_json, raw_log_json'
-            .' FROM '.PERCH_DB_PREFIX.'questionnaire_logs'
-            .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
-            .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
-            .' ORDER BY id DESC'
-            .' LIMIT 1';
-
-        $row = $this->db->get_row($sql);
-
-        if (!is_array($row)) {
-            $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
-            return $result;
+        if (!empty($fileFallback['metadata']) && is_array($fileFallback['metadata'])) {
+            $result['metadata'] = array_merge($result['metadata'], $fileFallback['metadata']);
         }
+    }
 
-        $metadata = PerchUtil::json_safe_decode($row['metadata_json'] ?? '{}', true);
-        if (is_array($metadata)) {
-            $result['metadata'] = $metadata;
-        }
-
-        $logEntries = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
-        if (!is_array($logEntries)) {
-            $result['error'] = sprintf('The answer history for user ID "%s" does not contain any log entries.', $sanitisedUserId);
-            return $result;
-        }
+    if (empty($logEntries)) {
+        $result['error'] = sprintf('No answer history was found for user ID "%s".', $sanitisedUserId);
+        return $result;
     }
 
     $normalise = function ($value) {
@@ -1319,6 +1329,136 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
     unset($entry);
 
     $result['entries'] = $logEntries;
+
+    return $result;
+}
+
+private function loadAnswerHistoryFromLogFiles(string $userId, string $logDir = 'logs'): array
+{
+    $result = [
+        'entries' => [],
+        'metadata' => [],
+    ];
+
+    $relativeLogDir = trim(str_replace('\\', '/', $logDir), '/');
+    if ($relativeLogDir === '' || strpos($relativeLogDir, '..') !== false) {
+        return $result;
+    }
+
+    $baseDir = PerchUtil::file_path(__DIR__ . DIRECTORY_SEPARATOR . $relativeLogDir);
+    if (!is_dir($baseDir)) {
+        return $result;
+    }
+
+    $safeUserId = preg_replace('/[^A-Za-z0-9._-]/', '', $userId);
+    if (!is_string($safeUserId) || $safeUserId === '') {
+        return $result;
+    }
+
+    $candidatePatterns = [
+        $safeUserId . '.json',
+        $safeUserId . '.log',
+        $safeUserId . '.txt',
+        $safeUserId . '-*.json',
+        $safeUserId . '_*.json',
+        $safeUserId . '*.json',
+    ];
+
+    $candidates = [];
+    foreach ($candidatePatterns as $pattern) {
+        $files = glob($baseDir . DIRECTORY_SEPARATOR . $pattern);
+        if (!is_array($files) || empty($files)) {
+            continue;
+        }
+
+        foreach ($files as $filePath) {
+            if (is_string($filePath) && is_file($filePath) && is_readable($filePath)) {
+                $candidates[$filePath] = filemtime($filePath) ?: 0;
+            }
+        }
+    }
+
+    if (empty($candidates)) {
+        return $result;
+    }
+
+    arsort($candidates);
+
+    foreach (array_keys($candidates) as $filePath) {
+        $parsed = $this->parseAnswerHistoryLogFile((string)$filePath);
+        if (empty($parsed['entries']) || !is_array($parsed['entries'])) {
+            continue;
+        }
+
+        $result['entries'] = $parsed['entries'];
+        $result['metadata'] = array_merge(
+            [
+                'source' => 'file',
+                'source_file' => basename((string)$filePath),
+            ],
+            is_array($parsed['metadata']) ? $parsed['metadata'] : []
+        );
+
+        break;
+    }
+
+    return $result;
+}
+
+private function parseAnswerHistoryLogFile(string $filePath): array
+{
+    $result = [
+        'entries' => [],
+        'metadata' => [],
+    ];
+
+    $rawContent = @file_get_contents($filePath);
+    if (!is_string($rawContent) || trim($rawContent) === '') {
+        return $result;
+    }
+
+    $decoded = PerchUtil::json_safe_decode($rawContent, true);
+    if (is_array($decoded)) {
+        if (isset($decoded['entries']) && is_array($decoded['entries'])) {
+            $result['entries'] = $decoded['entries'];
+            if (isset($decoded['metadata']) && is_array($decoded['metadata'])) {
+                $result['metadata'] = $decoded['metadata'];
+            }
+            return $result;
+        }
+
+        if (isset($decoded['log']) && is_array($decoded['log'])) {
+            $result['entries'] = $decoded['log'];
+            if (isset($decoded['log_metadata']) && is_array($decoded['log_metadata'])) {
+                $result['metadata'] = $decoded['log_metadata'];
+            }
+            return $result;
+        }
+
+        if (isset($decoded['question']) && array_key_exists('answer', $decoded)) {
+            $result['entries'] = [$decoded];
+            return $result;
+        }
+
+        $firstItem = reset($decoded);
+        if (is_array($firstItem) && isset($firstItem['question'])) {
+            $result['entries'] = $decoded;
+            return $result;
+        }
+    }
+
+    $lines = preg_split('/\r\n|\r|\n/', $rawContent) ?: [];
+    foreach ($lines as $line) {
+        $line = trim((string)$line);
+        if ($line === '') {
+            continue;
+        }
+
+        $lineDecoded = PerchUtil::json_safe_decode($line, true);
+        if (is_array($lineDecoded) && isset($lineDecoded['question'])) {
+            $result['entries'][] = $lineDecoded;
+        }
+    }
 
     return $result;
 }
