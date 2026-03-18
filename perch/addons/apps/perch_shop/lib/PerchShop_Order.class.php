@@ -437,11 +437,11 @@ public function isReorder($Customer){
             ];
         }
 if(!PerchUtil::count($questions_items)){
-     // echo "reorder"; echo  $reorder ;
- // echo $sql_questionnaire;
-// echo "questions_items";
-	// print_r($questions_items);
-//	die();exit();
+     echo "reorder"; echo  $reorder ;
+echo $sql_questionnaire;
+echo "questions_items";
+	 print_r($questions_items);
+	die();exit();
 }
    // echo "order_items";
 	// print_r($order_items);
@@ -508,7 +508,7 @@ if(!PerchUtil::count($questions_items)){
                        ];
          	}
 
-         	//$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
+         	$pharmacy_api->addOrderPharmacytodb($pharmacy_data);
 
 return $response;
 	}

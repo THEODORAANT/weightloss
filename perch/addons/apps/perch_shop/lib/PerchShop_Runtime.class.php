@@ -1832,7 +1832,7 @@ if (function_exists('perch_sendgrid_subscribe')) {
 
 	public function customer_has_paid_order($memberID=false)
  	{
-
+    $categorySlug='products/weight-loss';
  	if($memberID){
  	   $Customer = $this->get_customer($memberID);
  	}else{
@@ -1840,18 +1840,43 @@ if (function_exists('perch_sendgrid_subscribe')) {
  	}
 
 
+        	if ($categorySlug) {
+        			$Products = new PerchShop_Products($this->api);
+        			$products = $Products->get_by_category($categorySlug);
+
+        			if (!PerchUtil::count($products)) {
+        				return false;
+        			}
+
+        			$product_ids = [];
+        			foreach ($products as $Product) {
+        				$product_ids[] = (int)$Product->id();
+        			}
+
+        			if (!PerchUtil::count($product_ids)) {
+        				return false;
+        			}
+
+        			$db = PerchDB::fetch();
+        			$Statuses = new PerchShop_OrderStatuses($this->api);
+        			$sql = 'SELECT COUNT(DISTINCT o.orderID)
+        					FROM '.PERCH_DB_PREFIX.'shop_orders o
+        					INNER JOIN '.PERCH_DB_PREFIX.'shop_order_items oi ON oi.orderID = o.orderID
+        					WHERE o.customerID='.$db->pdb((int)$Customer->id()).'
+        						AND o.orderStatus IN ('.$db->implode_for_sql_in($Statuses->get_status_and_above('paid')).')
+        						AND oi.productID IN ('.$db->implode_for_sql_in($product_ids).')';
+        //echo $sql ;
+        			return (bool)$db->get_count($sql);
+        		}
+
         		$Orders = new PerchShop_Orders($this->api);
-        //	$Customer = $Customers->find_from_logged_in_member();
-   $orders = $Orders->findAll_for_customer($Customer);
+        		$orders = $Orders->findAll_for_customer($Customer);
 
-                if (!PerchUtil::count($orders)) {
+        		if (!PerchUtil::count($orders)) {
+        			return false;
+        		}
 
-                return false;
-                }
-                return true;
-    //  return $Orders->customer_has_paid_order($Customer);
-
-
+        		return true;
 
  	}
 

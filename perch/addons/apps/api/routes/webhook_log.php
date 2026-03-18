@@ -19,6 +19,13 @@ if ($limit === false) {
     exit;
 }
 
+$email = isset($_GET['email']) ? trim((string)$_GET['email']) : '';
+if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'email must be a valid email address.']);
+    exit;
+}
+
 $contents = file_get_contents($logFile);
 if ($contents === false) {
     http_response_code(500);
@@ -33,7 +40,7 @@ $chunks = array_values(array_filter($chunks, static function ($chunk) {
 
 $totalEntries = count($chunks);
 
-if ($totalEntries > $limit) {
+if ($email === '' && $totalEntries > $limit) {
     $chunks = array_slice($chunks, -1 * $limit);
 }
 
@@ -83,11 +90,28 @@ foreach ($chunks as $chunk) {
         }
     }
 
+    if ($email !== '') {
+        $haystack = strtolower(implode("\n", [
+            (string)$entry['raw_data'],
+            (string)$entry['decoded'],
+            (string)$entry['updates'],
+        ]));
+
+        if (strpos($haystack, strtolower($email)) === false) {
+            continue;
+        }
+    }
+
     $entries[] = $entry;
+}
+
+if (count($entries) > $limit) {
+    $entries = array_slice($entries, -1 * $limit);
 }
 
 echo json_encode([
     'total_entries' => $totalEntries,
+    'matched_entries' => count($entries),
     'returned_entries' => count($entries),
     'entries' => $entries,
 ]);
