@@ -7,11 +7,16 @@
     $Form = $API->get('Form');
 
     $products = $Products->all();
-    $product_options = ['' => $Lang->get('Select a product')];
+    $product_options = [
+        ['value' => '', 'label' => $Lang->get('Select a product')],
+    ];
 
     if (PerchUtil::count($products)) {
         foreach ($products as $ListProduct) {
-            $product_options[(string) $ListProduct->id()] = $ListProduct->productTitle();
+            $product_options[] = [
+                'value' => (string) $ListProduct->id(),
+                'label' => $ListProduct->productTitle(),
+            ];
         }
     }
 
