@@ -17,6 +17,12 @@
 		],
 		[
 			'page'=>[
+						'perch_shop_products/stripe',
+			],
+			'label'=>'Stripe IDs'
+		],
+		[
+			'page'=>[
 						'perch_shop_products/brands',
 						'perch_shop_products/brands/edit',
 			], 
