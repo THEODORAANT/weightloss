@@ -29,7 +29,9 @@
 
     $message = false;
     $selected_product = false;
+    $stripe_product_id_test = '';
     $stripe_product_id = '';
+    $stripe_price_id_test = '';
     $stripe_price_id = '';
 
     if ($selected_product_id !== '') {
@@ -47,10 +49,14 @@
             $dynamic_fields = [];
         }
 
+        $stripe_product_id_test = trim((string) PerchUtil::post('stripe_product_id_test'));
         $stripe_product_id = trim((string) PerchUtil::post('stripe_product_id'));
+        $stripe_price_id_test = trim((string) PerchUtil::post('stripe_price_id_test'));
         $stripe_price_id = trim((string) PerchUtil::post('stripe_price_id'));
 
+        $dynamic_fields['stripe_product_id_test'] = $stripe_product_id_test;
         $dynamic_fields['stripe_product_id'] = $stripe_product_id;
+        $dynamic_fields['stripe_price_id_test'] = $stripe_price_id_test;
         $dynamic_fields['stripe_price_id'] = $stripe_price_id;
 
         $updated = $selected_product->update([
@@ -66,6 +72,8 @@
 
     if ($selected_product) {
         $product_details = $selected_product->to_array();
-        $stripe_product_id = (string) ($product_details['stripe_product_id'] ?? $stripe_product_id);
-        $stripe_price_id = (string) ($product_details['stripe_price_id'] ?? $stripe_price_id);
+        $stripe_product_id_test = (string) ($product_details['stripe_product_id_test'] ?? '');
+        $stripe_product_id = (string) ($product_details['stripe_product_id'] ?? '');
+        $stripe_price_id_test = (string) ($product_details['stripe_price_id_test'] ?? '');
+        $stripe_price_id = (string) ($product_details['stripe_price_id'] ?? '');
     }

@@ -12,7 +12,9 @@
     $fields_hidden = $selected_product ? '' : ' style="display:none;"';
 
     echo '<div id="stripe-fields"' . $fields_hidden . '>';
+    echo $Form->text_field('stripe_product_id_test', $Lang->get('Stripe product ID (Test mode)'), $stripe_product_id_test, 'l');
     echo $Form->text_field('stripe_product_id', $Lang->get('Stripe product ID'), $stripe_product_id, 'l');
+    echo $Form->text_field('stripe_price_id_test', $Lang->get('Stripe price ID (Test mode)'), $stripe_price_id_test, 'l');
     echo $Form->text_field('stripe_price_id', $Lang->get('Stripe price ID'), $stripe_price_id, 'l');
     echo $Form->submit_field('btnSubmit', $Lang->get('Save'), $API->app_path());
     echo '</div>';

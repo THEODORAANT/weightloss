@@ -89,7 +89,7 @@ public function take_klarna_payment($Order, $opts)
     }
 }
 
-	private function get_order_checkout_line_items($Order, $currency, $default_price_id='', $default_product_id='')
+	private function get_order_checkout_line_items($Order, $currency, $default_price_id='', $default_product_id='', $test_mode=false)
 	{
 		$OrderItems = new PerchShop_OrderItems($this->api);
 		$items = $OrderItems->get_by('orderID', $Order->id());
@@ -130,10 +130,15 @@ public function take_klarna_payment($Order, $opts)
 
 					$fields = PerchUtil::json_safe_decode($Product->productDynamicFields(), true);
 					if (is_array($fields)) {
-						if (isset($fields['stripe_product_id']) && trim((string)$fields['stripe_product_id']) !== '') {
+						if ($test_mode && isset($fields['stripe_product_id_test']) && trim((string)$fields['stripe_product_id_test']) !== '') {
+							$stripe_product_id = trim((string)$fields['stripe_product_id_test']);
+						} elseif (isset($fields['stripe_product_id']) && trim((string)$fields['stripe_product_id']) !== '') {
 							$stripe_product_id = trim((string)$fields['stripe_product_id']);
 						}
-						if (isset($fields['stripe_price_id']) && trim((string)$fields['stripe_price_id']) !== '') {
+
+						if ($test_mode && isset($fields['stripe_price_id_test']) && trim((string)$fields['stripe_price_id_test']) !== '') {
+							$stripe_price_id = trim((string)$fields['stripe_price_id_test']);
+						} elseif (isset($fields['stripe_price_id']) && trim((string)$fields['stripe_price_id']) !== '') {
 							$stripe_price_id = trim((string)$fields['stripe_price_id']);
 						}
 					}
@@ -190,8 +195,21 @@ public function take_payment($Order, $opts)
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_USERPWD, $stripe_secret_key . ':');
 
-    $stripe_price_id = isset($opts['stripe_price_id']) ? trim((string)$opts['stripe_price_id']) : '';
-    $stripe_product_id = isset($opts['stripe_product_id']) ? trim((string)$opts['stripe_product_id']) : '';
+    $is_test_mode = !empty($config['test_mode']);
+    $stripe_price_id = '';
+    $stripe_product_id = '';
+
+    if ($is_test_mode) {
+        $stripe_price_id = isset($opts['stripe_price_id_test']) ? trim((string)$opts['stripe_price_id_test']) : '';
+        $stripe_product_id = isset($opts['stripe_product_id_test']) ? trim((string)$opts['stripe_product_id_test']) : '';
+    }
+
+    if ($stripe_price_id === '' && isset($opts['stripe_price_id'])) {
+        $stripe_price_id = trim((string)$opts['stripe_price_id']);
+    }
+    if ($stripe_product_id === '' && isset($opts['stripe_product_id'])) {
+        $stripe_product_id = trim((string)$opts['stripe_product_id']);
+    }
 
     $checkout_fields = [
         //'payment_method_types[]' => 'card',
@@ -208,7 +226,7 @@ public function take_payment($Order, $opts)
         //'payment_method_options[klarna][preferred_locale]' => 'en-GB',
     ];
 
-    $order_line_items = $this->get_order_checkout_line_items($Order, $currency, $stripe_price_id, $stripe_product_id);
+    $order_line_items = $this->get_order_checkout_line_items($Order, $currency, $stripe_price_id, $stripe_product_id, $is_test_mode);
 
     if (!PerchUtil::count($order_line_items)) {
         $amount = (int) round($orderTotal * 100);
