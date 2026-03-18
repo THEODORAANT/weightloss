@@ -38,6 +38,72 @@
         }
     }
 
+    $questionSummaries = [];
+    foreach ($grouped as $questionKey => $entries) {
+        if (!is_array($entries) || empty($entries)) {
+            continue;
+        }
+
+        $latestEntry = end($entries);
+        if (!is_array($latestEntry)) {
+            continue;
+        }
+
+        $normalisedAnswers = [];
+        $changed = false;
+        $latestAnswerValue = $latestEntry['answer'] ?? '';
+        $previousAnswerValue = $latestEntry['previous_answer'] ?? '';
+
+        foreach ($entries as $historyEntry) {
+            if (!is_array($historyEntry)) {
+                continue;
+            }
+
+            $answerValue = $historyEntry['answer'] ?? '';
+            if ($answerValue === null) {
+                $answerValue = '';
+            } elseif (is_array($answerValue)) {
+                $answerValue = implode(', ', $answerValue);
+            } elseif (is_bool($answerValue)) {
+                $answerValue = $answerValue ? $Lang->get('Yes') : $Lang->get('No');
+            }
+
+            $normalisedAnswers[(string)$answerValue] = true;
+
+            if (!empty($historyEntry['changed'])) {
+                $changed = true;
+            }
+        }
+
+        if (!$changed && count($normalisedAnswers) > 1) {
+            $changed = true;
+        }
+
+        if ($latestAnswerValue === null) {
+            $latestAnswerValue = '';
+        } elseif (is_array($latestAnswerValue)) {
+            $latestAnswerValue = implode(', ', $latestAnswerValue);
+        } elseif (is_bool($latestAnswerValue)) {
+            $latestAnswerValue = $latestAnswerValue ? $Lang->get('Yes') : $Lang->get('No');
+        }
+
+        if ($previousAnswerValue === null) {
+            $previousAnswerValue = '';
+        } elseif (is_array($previousAnswerValue)) {
+            $previousAnswerValue = implode(', ', $previousAnswerValue);
+        } elseif (is_bool($previousAnswerValue)) {
+            $previousAnswerValue = $previousAnswerValue ? $Lang->get('Yes') : $Lang->get('No');
+        }
+
+        $questionSummaries[] = [
+            'question' => (string)$questionKey,
+            'answer' => (string)$latestAnswerValue,
+            'previous_answer' => (string)$previousAnswerValue,
+            'time' => (string)($latestEntry['time'] ?? ''),
+            'changed' => $changed,
+        ];
+    }
+
     $Perch->page_title = $Lang->get('History Log');
 
     include(PERCH_CORE . '/inc/top.php');
@@ -55,7 +121,7 @@
 
 <?php if ($errorMessage): ?>
     <div class="notification notification-warning">⚠️ <?php echo PerchUtil::html($errorMessage); ?></div>
-<?php elseif (empty($logEntries)): ?>
+<?php elseif (empty($questionSummaries)): ?>
     <p><?php echo PerchUtil::html($Lang->get('No answers have been recorded for this user yet.')); ?></p>
 <?php else: ?>
     <input
@@ -74,7 +140,7 @@
             </tr>
         </thead>
         <tbody id="historyTable">
-        <?php foreach ($logEntries as $entry):
+        <?php foreach ($questionSummaries as $entry):
             if (!is_array($entry)) {
                 continue;
             }
@@ -82,11 +148,10 @@
             $question       = (string)($entry['question'] ?? '');
             $answerValue    = $entry['answer'] ?? '';
             $timeValue      = (string)($entry['time'] ?? '');
-            $questionCount  = isset($grouped[$question]) ? count($grouped[$question]) : 0;
-            $rowHighlight   = ($questionCount >= 2 || !empty($entry['changed']))
+            $rowHighlight   = (!empty($entry['changed']))
                 ? ' style="background-color: #ffe6e6;"'
                 : '';
-            $badgeHtml      = ($questionCount >= 2 || !empty($entry['changed']))
+            $badgeHtml      = (!empty($entry['changed']))
                 ? " <span class=\"badge\">" . PerchUtil::html($Lang->get('Changed')) . '</span>'
                 : '';
 
