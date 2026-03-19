@@ -201,7 +201,15 @@ if (isset($_POST['nextstep'])) {
 
     $_SESSION['questionnaire']['confirmed'] = false;
 
-    $user_id = generateUUID();
+    $existingUserId = '';
+    if (isset($_SESSION['questionnaire']['uuid']) && is_string($_SESSION['questionnaire']['uuid'])) {
+        $existingUserId = trim((string)$_SESSION['questionnaire']['uuid']);
+    }
+    if ($existingUserId === '' && isset($_SESSION['step_data']['user_id']) && is_string($_SESSION['step_data']['user_id'])) {
+        $existingUserId = trim((string)$_SESSION['step_data']['user_id']);
+    }
+
+    $user_id = ($existingUserId !== '') ? $existingUserId : generateUUID();
     $current_step = $_GET['step'] ?? '';
     $timestamp = time();
 
@@ -215,6 +223,7 @@ if (isset($_POST['nextstep'])) {
         'step' => $current_step,
         'timestamp' => $timestamp
     ];
+    $_SESSION['questionnaire']['uuid'] = $user_id;
     $_SESSION['question_order']++;
     foreach ($_POST as $key => $value) {
         // Cleanup based on logic
@@ -315,7 +324,7 @@ if (isset($_POST['nextstep'])) {
         exit();
     }
 }
-if (isset($_SESSION['step_data']['user_id'])) {
+if (!isset($_SESSION['questionnaire']['uuid']) && isset($_SESSION['step_data']['user_id'])) {
     $_SESSION['questionnaire']['uuid'] = $_SESSION['step_data']['user_id'];
 }
 wl_save_questionnaire_session('first_time');
