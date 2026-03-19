@@ -163,6 +163,40 @@
 		}
 	}
 
+	if (!function_exists('build_pending_order_status_items')) {
+		function build_pending_order_status_items(PerchDB_MySQL $DB, $orderID)
+		{
+			$rows = $DB->get_rows(
+				'SELECT oi.productID, oi.itemQty, pm.pharmacy_productID '
+				. 'FROM ' . PERCH_DB_PREFIX . 'shop_order_items oi '
+				. 'INNER JOIN ' . PERCH_DB_PREFIX . 'products_match_pharmacy pm ON pm.productID = oi.productID '
+				. 'WHERE oi.orderID = ' . $DB->pdb((int)$orderID)
+				. ' AND oi.itemType = "product"'
+			);
+
+			if (!PerchUtil::count($rows)) {
+				return [];
+			}
+
+			$items = [];
+			foreach ($rows as $row) {
+				$product_id = isset($row['pharmacy_productID']) ? trim((string)$row['pharmacy_productID']) : '';
+				$qty = isset($row['itemQty']) ? (int)$row['itemQty'] : 0;
+
+				if ($product_id === '' || $qty < 1) {
+					continue;
+				}
+
+				$items[] = [
+					'productId' => $product_id,
+					'quantity' => $qty,
+				];
+			}
+
+			return $items;
+		}
+	}
+
 	if (PerchUtil::get('id')) {
 
 		if (!$CurrentUser->has_priv('perch_shop.orders.edit')) {
@@ -347,8 +381,27 @@
 	    		$order_update = recalculate_order_totals($DB, (int)$Order->id());
 	    		$order_update['orderUpdated'] = date('Y-m-d H:i:s');
 	    		$Order->update($order_update);
+
+	    		$current_status = strtolower(trim((string)$Order->orderStatus()));
+	    		if ($current_status === 'pending') {
+	    			$pending_items = build_pending_order_status_items($DB, (int)$Order->id());
+	    			if (PerchUtil::count($pending_items)) {
+	    				$orderStatusData = [
+	    					'status' => 'PENDING',
+	    					'items' => $pending_items,
+	    				];
+
+	    				$statusUpdateResult = comms_service_request_json('POST', '/v1/perch/orders/'.$Order->id().'/status', $orderStatusData);
+	    				if (!is_array($statusUpdateResult)) {
+	    					$message = 'Product updated, but comms status update to PENDING failed.';
+	    				}
+	    			}
+	    		}
+
 	    		$items = $OrderItems->get_for_admin($shop_id);
-	    	    $message = $HTML->success_message('Product have been updated.');
+	    	    if (!$message) {
+	    	    	$message = $HTML->success_message('Product have been updated.');
+	    	    }
 	    	    //echo $message;
 	    		//PerchUtil::redirect($API->app_path());
 	    	}
