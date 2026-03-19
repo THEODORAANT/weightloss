@@ -665,7 +665,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 	       	$Cart=new PerchShop_Cart($this->api);
 			$Cart=$Cart->init_api($cartID,$memberID);
 			if($Cart){
-
+	            $Cart->set_property('device', 'app');
 
 		    $Customer = $this->get_customer($memberID);
 //echo "Customer";print_r($Customer->id());
