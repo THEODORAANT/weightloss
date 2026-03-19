@@ -746,7 +746,7 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 		}
 	}
 
-	private function find_existing_open_order_for_customer($customerID, $gateway, $cartTotal=null)
+	private function find_existing_open_order_for_customer($customerID, $gateway, $cartTotal=null, $createdWithinSeconds=null)
 	{
 		$db = PerchDB::fetch();
 
@@ -758,6 +758,10 @@ public function set_addresses_api($memberID,$billingAddress, $shippingAddress=nu
 
 		if ($cartTotal !== null) {
 			$sql .= ' AND ABS(o.orderTotal-'.$db->pdb((float)$cartTotal).') < 0.01';
+		}
+
+		if ($createdWithinSeconds !== null) {
+			$sql .= ' AND o.orderCreated >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL '.(int)$createdWithinSeconds.' SECOND)';
 		}
 
 		$sql .= ' ORDER BY o.orderCreated DESC
@@ -884,20 +888,27 @@ if (empty($_SESSION['questionnaire_saved']) && $orderIdForQuestionnaire) {
 
 		$Orders = new PerchShop_Orders($this->api);
 
-
 		if ($Customer && $BillingAddress) {
+			$cartData = $this->Cart->calculate_cart();
+			$cartTotal = isset($cartData['grand_total']) ? (float)$cartData['grand_total'] : null;
+
+			$existingOrderID = $this->find_existing_open_order_for_customer($Customer->id(), $gateway, $cartTotal, 10);
+			if ($existingOrderID) {
+				PerchUtil::debug('Skipping duplicate checkout call. Reusing order ID: '.$existingOrderID);
+				PerchShop_Session::set('shop_order_id', (int)$existingOrderID);
+				return;
+			}
 
 			$Order  = $Orders->create_from_cart($this->Cart, $gateway, $Customer, $BillingAddress, $ShippingAddress);
 
 			if ($Order) {
 				$this->Order = $Order;
-                  $this->checkout_questionnaire($Order->id());
+				$this->checkout_questionnaire($Order->id());
 				PerchShop_Session::set('shop_order_id', $Order->id());
 
 				$Gateway = PerchShop_Gateways::get($gateway);
 
 				$result = $Order->take_payment($Gateway->payment_method, $payment_opts);
-
 
 				PerchUtil::debug($result);
 			}
