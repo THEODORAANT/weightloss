@@ -24,6 +24,42 @@ if (!function_exists('wl_questionnaire_session_meta')) {
     }
 }
 
+if (!function_exists('wl_questionnaire_user_id_key')) {
+    function wl_questionnaire_user_id_key($mode)
+    {
+        return $mode === 'reorder'
+            ? 'questionnaire_reorder_user_id'
+            : 'questionnaire_user_id';
+    }
+}
+
+if (!function_exists('wl_get_or_create_questionnaire_user_id')) {
+    function wl_get_or_create_questionnaire_user_id($mode, callable $generator)
+    {
+        $sessionUserIdKey = wl_questionnaire_user_id_key($mode);
+        $meta = wl_questionnaire_session_meta($mode);
+        $sessionKey = $meta['session_key'];
+
+        $existingUserId = '';
+        if (isset($_SESSION[$sessionUserIdKey]) && is_string($_SESSION[$sessionUserIdKey])) {
+            $existingUserId = trim((string)$_SESSION[$sessionUserIdKey]);
+        }
+
+        if ($existingUserId === '' && isset($_SESSION[$sessionKey]['uuid']) && is_string($_SESSION[$sessionKey]['uuid'])) {
+            $existingUserId = trim((string)$_SESSION[$sessionKey]['uuid']);
+        }
+
+        if ($existingUserId === '') {
+            $existingUserId = (string)$generator();
+        }
+
+        $_SESSION[$sessionUserIdKey] = $existingUserId;
+        $_SESSION[$sessionKey]['uuid'] = $existingUserId;
+
+        return $existingUserId;
+    }
+}
+
 if (!function_exists('wl_restore_questionnaire_session')) {
     function wl_restore_questionnaire_session($mode)
     {
@@ -38,6 +74,15 @@ if (!function_exists('wl_restore_questionnaire_session')) {
         if (empty($_SESSION[$sessionKey]) && isset($_COOKIE[$cookieKey])) {
             $cookieQuestionnaire = json_decode($_COOKIE[$cookieKey], true);
             $_SESSION[$sessionKey] = is_array($cookieQuestionnaire) ? $cookieQuestionnaire : [];
+        }
+
+        $sessionUserIdKey = wl_questionnaire_user_id_key($mode);
+        if (
+            empty($_SESSION[$sessionUserIdKey]) &&
+            isset($_SESSION[$sessionKey]['uuid']) &&
+            is_string($_SESSION[$sessionKey]['uuid'])
+        ) {
+            $_SESSION[$sessionUserIdKey] = trim((string)$_SESSION[$sessionKey]['uuid']);
         }
 
         return $_SESSION[$sessionKey];
@@ -63,7 +108,9 @@ if (!function_exists('wl_clear_questionnaire_session')) {
     function wl_clear_questionnaire_session($mode)
     {
         $meta = wl_questionnaire_session_meta($mode);
+        $sessionUserIdKey = wl_questionnaire_user_id_key($mode);
         unset($_SESSION[$meta['session_key']]);
+        unset($_SESSION[$sessionUserIdKey]);
         setcookie($meta['cookie_key'], '', time() - 3600, '/');
     }
 }

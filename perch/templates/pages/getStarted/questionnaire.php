@@ -201,15 +201,7 @@ if (isset($_POST['nextstep'])) {
 
     $_SESSION['questionnaire']['confirmed'] = false;
 
-    $existingUserId = '';
-    if (isset($_SESSION['questionnaire']['uuid']) && is_string($_SESSION['questionnaire']['uuid'])) {
-        $existingUserId = trim((string)$_SESSION['questionnaire']['uuid']);
-    }
-    if ($existingUserId === '' && isset($_SESSION['step_data']['user_id']) && is_string($_SESSION['step_data']['user_id'])) {
-        $existingUserId = trim((string)$_SESSION['step_data']['user_id']);
-    }
-
-    $user_id = ($existingUserId !== '') ? $existingUserId : generateUUID();
+    $user_id = wl_get_or_create_questionnaire_user_id('first_time', 'generateUUID');
     $current_step = $_GET['step'] ?? '';
     $timestamp = time();
 
@@ -323,9 +315,6 @@ if (isset($_POST['nextstep'])) {
         header("Location: $redirectUrl");
         exit();
     }
-}
-if (!isset($_SESSION['questionnaire']['uuid']) && isset($_SESSION['step_data']['user_id'])) {
-    $_SESSION['questionnaire']['uuid'] = $_SESSION['step_data']['user_id'];
 }
 wl_save_questionnaire_session('first_time');
 

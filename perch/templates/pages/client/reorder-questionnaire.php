@@ -67,15 +67,7 @@ if (isset($_POST['nextstep'])) {
         }
     }
 
-    $existingUserId = '';
-    if (isset($_SESSION['questionnaire-reorder']['uuid']) && is_string($_SESSION['questionnaire-reorder']['uuid'])) {
-        $existingUserId = trim((string)$_SESSION['questionnaire-reorder']['uuid']);
-    }
-    if ($existingUserId === '' && isset($_SESSION['step_data']['user_id']) && is_string($_SESSION['step_data']['user_id'])) {
-        $existingUserId = trim((string)$_SESSION['step_data']['user_id']);
-    }
-
-    $user_id = ($existingUserId !== '') ? $existingUserId : generateUUID();
+    $user_id = wl_get_or_create_questionnaire_user_id('reorder', 'generateUUID');
     $timestamp = time();
     // Secret key (keep this safe, use env file ideally)
     $secret_key = 'theoloss1066';
@@ -142,9 +134,6 @@ if (isset($_POST['nextstep'])) {
     exit();
 }
 
-if (isset($_SESSION['step_data']['user_id'])) {
-    $_SESSION['questionnaire-reorder']['uuid'] = $_SESSION['step_data']['user_id'];
-}
 wl_save_questionnaire_session('reorder');
 perch_layout('getStarted/header', [
     'page_title' => perch_page_title(true),
