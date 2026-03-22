@@ -260,6 +260,46 @@ public function isReorder($Customer){
 
 		return $db->get_count($sql) >= 2;
 	}
+
+	public function order_has_product_in_category($categorySlug)
+	{
+		$Products = new PerchShop_Products($this->api);
+		$products = $Products->get_by_category($categorySlug);
+
+		if (!PerchUtil::count($products)) {
+			return false;
+		}
+
+		$product_ids = [];
+		foreach ($products as $Product) {
+			$product_ids[] = (int)$Product->id();
+		}
+
+		$db = PerchDB::fetch();
+
+		if (PerchUtil::count($product_ids)) {
+			$sql = 'SELECT productID
+					FROM '.PERCH_DB_PREFIX.'shop_products
+					WHERE parentID IN ('.$db->implode_for_sql_in($product_ids).')
+						AND productDeleted IS NULL';
+			$variant_ids = $db->get_rows_flat($sql);
+
+			if (PerchUtil::count($variant_ids)) {
+				$product_ids = array_map('intval', array_unique(array_merge($product_ids, $variant_ids)));
+			}
+		}
+
+		if (!PerchUtil::count($product_ids)) {
+			return false;
+		}
+
+		$sql = 'SELECT COUNT(*)
+				FROM '.PERCH_DB_PREFIX.'shop_order_items
+				WHERE orderID='.$db->pdb((int)$this->id()).'
+					AND productID IN ('.$db->implode_for_sql_in($product_ids).')';
+
+		return (bool)$db->get_count($sql);
+	}
 	public function sendOrdertoPharmacy( $Customer){
         require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
         $pharmacy_api = new PerchShop_PharmacyOrderApiClient('https://api.myprivatechemist.com/api', '4a1f7a59-9d24-4e38-a3ff-9f8be74c916b');
@@ -606,7 +646,9 @@ return $response;
 
         }
 
-        if (class_exists('PerchSendGrid_Factory')) {
+        $has_weight_loss_product = $this->order_has_product_in_category('products/weight-loss');
+
+        if ($has_weight_loss_product && class_exists('PerchSendGrid_Factory')) {
             $SendGrid = new PerchSendGrid_Factory();
             $template_id = $isreorder ? 'd-f9a5440ebf75441e98a7c9294e35cb35' : 'd-68d59e0921f94170aa17aadff9751cfb';
 
