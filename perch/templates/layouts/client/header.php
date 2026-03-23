@@ -446,7 +446,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       $profile_tab="";
       $orders_tab="";
       $reorder_tab="";
-       $documents_tab="";
+      $documents_tab="";
+      $change_password_tab="";
         $affiliate_tab="";
         $notifications_tab="";
         $chat_tab="";
@@ -481,10 +482,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             $notifications_tab="active";
            }else if($lastPart=="chat" ){
             $chat_tab="active";
+           }else if($lastPart=="change-password" ){
+            $change_password_tab="active";
            }
       ?>
      <ul class="client-tabs">
        <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
+       <li><a href="/client/change-password" class="client-tab-link <?php echo $change_password_tab === 'active' ? 'is-active' : ''; ?>">Change Password</a></li>
                      <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
 
        <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
