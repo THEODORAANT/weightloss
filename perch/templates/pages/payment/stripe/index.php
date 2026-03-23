@@ -27,7 +27,6 @@ $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
 
         $order_complete = perch_shop_active_order_has_status(['paid', 'pending']);
         $redirect_to_success = $order_complete;
-        echo $order_complete;echo perch_shop_successful_order_id();
         if(!isset($_GET["pending"])){
            $result= perch_shop_complete_payment('stripe',[
                  'success_url' => $success_url,
@@ -64,7 +63,7 @@ $cancel_url = "https://".$_SERVER['HTTP_HOST']."/payment/went/wrong";
         }
         unset($_SESSION['questionnaire_saved']);
 
-                  echo("<script>location.href = '".$success_url."';</script>");
+                   echo("<script>location.href = '".$success_url."';</script>");
                 }else{
                    setcookie('questionnaire_reorder', json_encode($_SESSION['questionnaire-reorder'] ?? []), time()+3600, '/');
                    setcookie('questionnaire', json_encode($_SESSION['questionnaire'] ?? []), time()+3600, '/');

@@ -125,7 +125,11 @@ wl_save_questionnaire_session($activeQuestionnaireMode);
 
 
  if (!perch_shop_addresses_set()) {?>
-
+                              <script>
+                              if (typeof rdt === 'function') {
+                                rdt('track', 'SignUp');
+                              }
+                              </script>
                                </div>
                                      <div class="login_sec">
                                                                 <p class="urbanist-regular m-0 flex-grow-1 mb-4"></p>

@@ -46,6 +46,11 @@ if (!$order_complete) {
               currency: 'GBP'
             });
           }
+          if (typeof rdt === 'function') {
+            rdt('track', 'Purchase', {
+              conversionId: '<?php echo htmlspecialchars((string)$dl_order_id, ENT_QUOTES, "UTF-8"); ?>'
+            });
+          }
           </script>
         <?php
             }

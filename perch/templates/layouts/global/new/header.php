@@ -19,6 +19,19 @@ $cartItemCount = function_exists('perch_shop_cart_item_count') ? (int)perch_shop
     gtag('js', new Date());
     gtag('config', 'GT-WRHXK36S');
   </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KF8M25W4');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Reddit Pixel -->
+  <script>
+  !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_in7fk2tr0lco",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_in7fk2tr0lco');rdt('track', 'PageVisit');
+  </script>
+  <!-- DO NOT MODIFY UNLESS TO REPLACE A USER IDENTIFIER -->
+  <!-- End Reddit Pixel -->
   <title>GetWeightLoss - Weight Loss Success</title>
   <!-- Version: 2025-01-08-LATEST -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -110,6 +123,10 @@ $cartItemCount = function_exists('perch_shop_cart_item_count') ? (int)perch_shop
   </style>
 </head>
 <body class="bg-white">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KF8M25W4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
   <div class="bg-white flex flex-col items-center justify-center w-full">
     
     <!-- Navbar -->
@@ -226,7 +243,7 @@ $cartItemCount = function_exists('perch_shop_cart_item_count') ? (int)perch_shop
             </div>
           </a>
           <?php } ?>
-          
+
           <!-- Hamburger Menu Button -->
           <button id="mobileMenuBtn" class="flex flex-col gap-[5px] items-center justify-center w-[40px] h-[40px] ml-[10px]">
             <span class="w-[24px] h-[2px] bg-[#0d0d0d] transition-all"></span>
