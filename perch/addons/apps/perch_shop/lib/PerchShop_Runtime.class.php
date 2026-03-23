@@ -1863,12 +1863,24 @@ if (function_exists('perch_sendgrid_subscribe')) {
         			foreach ($products as $Product) {
         				$product_ids[] = (int)$Product->id();
         			}
+            $db = PerchDB::fetch();
 
+		if (PerchUtil::count($product_ids)) {
+			$sql = 'SELECT productID
+					FROM '.PERCH_DB_PREFIX.'shop_products
+					WHERE parentID IN ('.$db->implode_for_sql_in($product_ids).')
+						AND productDeleted IS NULL';
+			$variant_ids = $db->get_rows_flat($sql);
+
+			if (PerchUtil::count($variant_ids)) {
+				$product_ids = array_map('intval', array_unique(array_merge($product_ids, $variant_ids)));
+			}
+		}
         			if (!PerchUtil::count($product_ids)) {
         				return false;
         			}
 
-        			$db = PerchDB::fetch();
+
         			$Statuses = new PerchShop_OrderStatuses($this->api);
         			$sql = 'SELECT COUNT(DISTINCT o.orderID)
         					FROM '.PERCH_DB_PREFIX.'shop_orders o
@@ -1876,7 +1888,7 @@ if (function_exists('perch_sendgrid_subscribe')) {
         					WHERE o.customerID='.$db->pdb((int)$Customer->id()).'
         						AND o.orderStatus IN ('.$db->implode_for_sql_in($Statuses->get_status_and_above('paid')).')
         						AND oi.productID IN ('.$db->implode_for_sql_in($product_ids).')';
-        //echo $sql ;
+       // echo $sql ;
         			return (bool)$db->get_count($sql);
         		}
 

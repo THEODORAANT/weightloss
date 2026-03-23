@@ -1139,7 +1139,7 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
             .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
             .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
             .' ORDER BY created_at ASC, id ASC';
-
+echo $sql ;echo "1";
         $rows = $this->db->get_rows($sql);
         if (is_array($rows) && PerchUtil::count($rows)) {
             foreach ($rows as $row) {
@@ -1173,9 +1173,10 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
                 .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
                 .' ORDER BY id DESC'
                 .' LIMIT 1';
+//echo $sql ;echo "2";
 
             $row = $this->db->get_row($sql);
-
+//print_r($row);
             if (is_array($row)) {
                 $metadata = PerchUtil::json_safe_decode($row['metadata_json'] ?? '{}', true);
                 if (is_array($metadata)) {
@@ -1183,6 +1184,7 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
                 }
 
                 $logEntries = PerchUtil::json_safe_decode($row['raw_log_json'] ?? '[]', true);
+
                 if (!is_array($logEntries)) {
                     $logEntries = [];
                 }
@@ -1307,6 +1309,7 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
     });
 
     foreach ($logEntries as &$entry) {
+
         if (!is_array($entry)) {
             continue;
         }

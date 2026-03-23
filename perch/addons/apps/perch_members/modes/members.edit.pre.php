@@ -272,7 +272,7 @@ if (!function_exists('wl_backfill_sent_notes_to_member_comms')) {
         return $syncedAny;
     }
 }
-    
+
     $Members = new PerchMembers_Members($API);
     $message = false;
     

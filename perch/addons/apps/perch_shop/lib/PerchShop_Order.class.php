@@ -283,19 +283,18 @@ public function isReorder($Customer){
                $questionnaire_type="first-order";
                  $orders = $Orders->findAll_for_customer($Customer);
 
-                                             // if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
-                                             if($reorder){
+                                           if (PerchUtil::count($orders) && PerchUtil::count($orders)>=2) {
+                                          //   if($reorder){
                                   					      $questionnaire_type="re-order";
                                   					 }
 
-             // echo "reorder **";print_r($reorder);
 
         if (PerchUtil::count($items)) {
         	foreach($items as $Item) {
         	$sql = 'SELECT * FROM '.PERCH_DB_PREFIX.'products_match_pharmacy
                                         WHERE productID='.$this->db->pdb((int)$Item->productID());
                                          // echo "products_match_pharmacy";
-                                        	//print_r($sql);
+                                        	// print_r($sql);
         $Product = $Products->find((int)$Item->productID());
 
          	/*if ($Product) {
@@ -439,15 +438,16 @@ public function isReorder($Customer){
         }
 /*if(!PerchUtil::count($questions_items)){
      echo "reorder"; echo  $reorder ;
- echo $sql_questionnaire;
+echo $sql_questionnaire;
 echo "questions_items";
-	print_r($questions_items);
+	 print_r($questions_items);
 	die();exit();
 }*/
+   // echo "order_items";
+	// print_r($order_items);
 /*echo "questions_items";
 	print_r($questions_items);
-        echo "order_items";
-	print_r($order_items);
+
                       echo "ShippingAdr";
 	print_r($ShippingAddr);*/
          $shippingAddressLine1 = '';
@@ -480,7 +480,8 @@ echo "questions_items";
          ];
 
            $response = [];
-           $sendResult = comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
+           $sendResult= comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
+         if(!$sendResult) { echo "comms_service_request_json no"; print_r($orderData);die();exit();}
            $response = [
                'success' => $sendResult,
                'data' => [

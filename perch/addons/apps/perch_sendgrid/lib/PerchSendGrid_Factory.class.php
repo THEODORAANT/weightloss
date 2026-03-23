@@ -207,7 +207,6 @@ class PerchSendGrid_Factory
                 ],
             ],
         ];
- print_r( "update data"); print_r($data);
         $ch = curl_init($url);
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -218,11 +217,8 @@ class PerchSendGrid_Factory
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-   print_r( "update contact");
         $response = curl_exec($ch);
-        print_r( $response);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-     print_r( $status);
         curl_close($ch);
 
         return [
