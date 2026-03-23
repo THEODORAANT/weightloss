@@ -49,7 +49,8 @@
                                                   <li><a class="side_link active" href="/refer-a-friend">Refer A Friend</a></li>
                                                   <li><a class="side_link " href="/cookies-policy">Cookies Policy</a></li>
                                                   <li><a class="side_link" href="/make-a-complaint">Make a Complaint</a></li>
-                  </ul>
+                                <li><a class="side_link" href="/non-medical-returns-refunds">Non-Medical Returns &amp; Refunds</a></li>
+            </ul>
                 </div>
               </div>
               <div class="col-md-8">

@@ -52,6 +52,7 @@ perch_layout('terms/header', [
               <li><a class="side_link " href="/refer-a-friend">Refer A Friend</a></li>
               <li><a class="side_link " href="/cookies-policy">Cookies Policy</a></li>
               <li><a class="side_link active" href="/make-a-complaint">Make a Complaint</a></li>
+                          <li><a class="side_link" href="/non-medical-returns-refunds">Non-Medical Returns &amp; Refunds</a></li>
             </ul>
           </div>
         </div>

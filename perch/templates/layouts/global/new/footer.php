@@ -35,6 +35,7 @@
               <a href="/privacy-notice" class="hover:text-[#afd136] transition-colors">Privacy notice</a>
               <a href="/cookies-policy" class="hover:text-[#afd136] transition-colors">Cookies policy</a>
               <a href="/make-a-complaint" class="hover:text-[#afd136] transition-colors">Make a complaint</a>
+              <a href="/non-medical-returns-refunds" class="hover:text-[#afd136] transition-colors">Non-medical returns &amp; refunds</a>
             </div>
           </div>
         </div>
