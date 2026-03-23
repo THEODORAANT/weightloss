@@ -1002,6 +1002,7 @@ if (!function_exists('wl_backfill_sent_notes_to_member_comms')) {
         $tags = $Tags->get_for_member($Member->id());
           $notes = $Notes->get_for_member($Member->id());
         $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
+        $syncedSentNotes = false;
         //$syncedSentNotes = wl_backfill_sent_notes_to_member_comms($Member, $notes, $comms_member_notes, $NotePharmacyStatuses);
         if ($syncedSentNotes) {
             $comms_member_notes = comms_service_get_member_notes((int) $Member->id());
