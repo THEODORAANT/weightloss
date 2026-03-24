@@ -33,6 +33,45 @@
         echo '</div>';
     }
 
+    if (PerchUtil::count($stripe_prices_list) || $stripe_prices_error !== '') {
+        echo '<div class="field-wrap">';
+        echo '<label>' . $Lang->get('Stripe prices on account') . '</label>';
+
+        if ($stripe_prices_error !== '') {
+            echo '<p>' . PerchUtil::html($stripe_prices_error) . '</p>';
+        } else {
+            echo '<div style="overflow:auto;max-height:320px;">';
+            echo '<table class="d">';
+            echo '<thead><tr><th>ID</th><th>Product</th><th>Amount</th><th>Currency</th><th>Recurring</th><th>Active</th></tr></thead>';
+            echo '<tbody>';
+
+            foreach ($stripe_prices_list as $stripe_price) {
+                $price_id = (string) ($stripe_price['id'] ?? '');
+                $product_id = (string) ($stripe_price['product'] ?? '');
+                $currency = strtoupper((string) ($stripe_price['currency'] ?? ''));
+                $unit_amount = isset($stripe_price['unit_amount']) ? (string) $stripe_price['unit_amount'] : '';
+                $recurring_interval = '';
+                if (isset($stripe_price['recurring']) && is_array($stripe_price['recurring'])) {
+                    $recurring_interval = (string) ($stripe_price['recurring']['interval'] ?? '');
+                }
+                $is_active = !empty($stripe_price['active']) ? 'Yes' : 'No';
+
+                echo '<tr>';
+                echo '<td>' . PerchUtil::html($price_id) . '</td>';
+                echo '<td>' . PerchUtil::html($product_id) . '</td>';
+                echo '<td>' . PerchUtil::html($unit_amount) . '</td>';
+                echo '<td>' . PerchUtil::html($currency) . '</td>';
+                echo '<td>' . PerchUtil::html($recurring_interval) . '</td>';
+                echo '<td>' . PerchUtil::html($is_active) . '</td>';
+                echo '</tr>';
+            }
+
+            echo '</tbody></table></div>';
+        }
+
+        echo '</div>';
+    }
+
     echo $Form->submit_field('btnSubmit', $Lang->get('Save'), $API->app_path());
     echo '</div>';
 

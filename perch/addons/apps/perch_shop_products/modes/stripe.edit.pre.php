@@ -91,6 +91,8 @@
     $stripe_price_id = '';
     $stripe_remote_details = [];
     $stripe_remote_errors = [];
+    $stripe_prices_list = [];
+    $stripe_prices_error = '';
 
     if ($selected_product_id !== '') {
         $selected_product = $Products->find($selected_product_id);
@@ -167,5 +169,12 @@
             } else {
                 $stripe_remote_errors[$field_name] = $result['error'];
             }
+        }
+
+        $prices_result = perch_shop_products_fetch_stripe_resource('prices?limit=100', $stripe_secret_key);
+        if ($prices_result['ok'] && isset($prices_result['data']['data']) && is_array($prices_result['data']['data'])) {
+            $stripe_prices_list = $prices_result['data']['data'];
+        } elseif (!$prices_result['ok']) {
+            $stripe_prices_error = $prices_result['error'];
         }
     }
