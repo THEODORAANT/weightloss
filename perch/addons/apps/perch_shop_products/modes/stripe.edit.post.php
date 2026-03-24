@@ -16,6 +16,23 @@
     echo $Form->text_field('stripe_product_id', $Lang->get('Stripe product ID'), $stripe_product_id, 'l');
     echo $Form->text_field('stripe_price_id_test', $Lang->get('Stripe price ID (Test mode)'), $stripe_price_id_test, 'l');
     echo $Form->text_field('stripe_price_id', $Lang->get('Stripe price ID'), $stripe_price_id, 'l');
+
+    if (PerchUtil::count($stripe_remote_details) || PerchUtil::count($stripe_remote_errors)) {
+        echo '<div class="field-wrap">';
+        echo '<label>' . $Lang->get('Stripe API details') . '</label>';
+
+        foreach ($stripe_remote_details as $field_name => $stripe_data) {
+            echo '<p><strong>' . PerchUtil::html($field_name) . '</strong></p>';
+            echo '<pre style="max-height:240px;overflow:auto;">' . PerchUtil::html(json_encode($stripe_data, JSON_PRETTY_PRINT)) . '</pre>';
+        }
+
+        foreach ($stripe_remote_errors as $field_name => $error_message) {
+            echo '<p><strong>' . PerchUtil::html($field_name) . '</strong>: ' . PerchUtil::html($error_message) . '</p>';
+        }
+
+        echo '</div>';
+    }
+
     echo $Form->submit_field('btnSubmit', $Lang->get('Save'), $API->app_path());
     echo '</div>';
 
