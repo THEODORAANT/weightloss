@@ -129,11 +129,15 @@
     }
 
     if ($selected_product) {
-        $product_details = $selected_product->to_array();
-        $stripe_product_id_test = (string) ($product_details['stripe_product_id_test'] ?? '');
-        $stripe_product_id = (string) ($product_details['stripe_product_id'] ?? '');
-        $stripe_price_id_test = (string) ($product_details['stripe_price_id_test'] ?? '');
-        $stripe_price_id = (string) ($product_details['stripe_price_id'] ?? '');
+        $product_dynamic_fields = PerchUtil::json_safe_decode($selected_product->productDynamicFields(), true);
+        if (!is_array($product_dynamic_fields)) {
+            $product_dynamic_fields = [];
+        }
+
+        $stripe_product_id_test = (string) ($product_dynamic_fields['stripe_product_id_test'] ?? '');
+        $stripe_product_id = (string) ($product_dynamic_fields['stripe_product_id'] ?? '');
+        $stripe_price_id_test = (string) ($product_dynamic_fields['stripe_price_id_test'] ?? '');
+        $stripe_price_id = (string) ($product_dynamic_fields['stripe_price_id'] ?? '');
 
         $Gateway = PerchShop_Gateways::get('stripe');
         $config = PerchShop_Config::get('gateways', 'stripe');
