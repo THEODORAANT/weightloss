@@ -72,6 +72,10 @@
 
 
  $sort="^affid";
+$search = '';
+if (isset($_GET['q']) && trim($_GET['q']) !== '') {
+        $search = trim($_GET['q']);
+}
 if (isset($_GET['sort']) && $_GET['sort'] != '') {
         $sort = $_GET['sort'];
 
@@ -88,7 +92,7 @@ if (isset($_GET['sort']) && $_GET['sort'] != '') {
 
 
         default:
-            $members = $Affiliates->get_affiliates_listing($sort);
+            $members = $Affiliates->get_affiliates_listing($sort, $search);
 
 
             break;
