@@ -38,6 +38,15 @@
                     'arg'     => 'email'
             ]);*/
 
+
+        $Smartbar->add_item([
+                    'id'      => 'q',
+                    'title'   => 'Search by Name, Email, or Affiliate ID',
+                    'active'  => PerchRequest::get('q'),
+                    'type'    => 'search',
+                    'arg'     => 'q'
+            ]);
+
         echo $Smartbar->render();
 
 
@@ -71,6 +80,18 @@
                          'title'     => $Lang->get('Affiliate ID'),
                          'value'     => 'affid',
                          'sort'      => 'affid',
+
+                     ]);
+        $Listing->add_col([
+                         'title'     => $Lang->get('Affiliate Name'),
+                         'value'     => 'affiliate_name',
+                         'sort'      => 'affiliate_name',
+
+                     ]);
+        $Listing->add_col([
+                         'title'     => $Lang->get('Email'),
+                         'value'     => 'member_email',
+                         'sort'      => 'member_email',
 
                      ]);
 
