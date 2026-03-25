@@ -1139,7 +1139,7 @@ function displayUserAnswerHistoryUI(string $userId, string $logDir = 'logs'): ar
             .' WHERE user_id='.$this->db->pdb($sanitisedUserId)
             .' AND questionnaire_type='.$this->db->pdb($questionnaireType)
             .' ORDER BY created_at ASC, id ASC';
-echo $sql ;echo "1";
+//echo $sql ;echo "1";
         $rows = $this->db->get_rows($sql);
         if (is_array($rows) && PerchUtil::count($rows)) {
             foreach ($rows as $row) {
