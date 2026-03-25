@@ -15,6 +15,7 @@ public function get_affiliates_listing($sort, $search='', $Paging=false)
         try {
             $sort_val = 'id';
             $sort_dir = 'asc';
+            $search = trim((string)$search);
 
             if (isset($sort)) {
                 if (strpos($sort, '^') === 0) {
@@ -56,7 +57,8 @@ public function get_affiliates_listing($sort, $search='', $Paging=false)
             $results = $this->db->get_rows($sql);
             return $this->return_instances($results);
         } catch (Exception $e) {
-            echo 'Database error: '.$e->getMessage();
+            PerchUtil::debug('Affiliate listing query failed: '.$e->getMessage(), 'error');
+            return array();
         }
     }
 	public function get_by_affID($affID='nan', $Paging=false)

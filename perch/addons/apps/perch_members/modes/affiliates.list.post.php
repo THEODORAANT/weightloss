@@ -40,11 +40,24 @@
 
 
         $Smartbar->add_item([
+            'active' => (!PerchRequest::get('q')),
+            'title'  => $Lang->get('All'),
+            'link'   => $API->app_nav().'/',
+        ]);
+
+        $Smartbar->add_item([
                     'id'      => 'q',
                     'title'   => 'Search by Name, Email, or Affiliate ID',
                     'active'  => PerchRequest::get('q'),
                     'type'    => 'search',
-                    'arg'     => 'q'
+                    'arg'     => 'q',
+                    'actions' => [
+                        [
+                            'title'  => 'Reset to all',
+                            'remove' => ['q'],
+                            'icon'   => 'core/cancel',
+                        ],
+                    ],
             ]);
 
         echo $Smartbar->render();
