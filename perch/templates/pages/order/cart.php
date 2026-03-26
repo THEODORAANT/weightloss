@@ -45,7 +45,7 @@ wl_save_questionnaire_session($activeQuestionnaireMode);
         //echo "session";
       // print_r($_SESSION);
 
-$cart_popup_product_slug = perch_get('s');
+$cart_popup_product_slug ="weight-loss-blood-test-nadl026"; //perch_get('s');
 
 
 
@@ -84,7 +84,7 @@ $cart_popup_product_slug = perch_get('s');
         <div class="cart-product-popup-content">
             <?php
             perch_shop_product($cart_popup_product_slug, [
-                'template' => 'products/shop-product.html',
+                'template' => 'products/popup_product.html',
             ]);
             ?>
         </div>
