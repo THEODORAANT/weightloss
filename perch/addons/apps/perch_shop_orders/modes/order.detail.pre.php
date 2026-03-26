@@ -384,8 +384,10 @@
 
 	    		$current_status = strtolower(trim((string)$Order->orderStatus()));
 	    			$message = 'Product updated, but comms status update failed status'.$current_status;
-	    		if ($current_status === 'pending' || $current_status === 'payment_received') {
+	    		if ($current_status === 'paid' ) {
+
 	    			$pending_items = build_pending_order_status_items($DB, (int)$Order->id());
+	    			//print_r($pending_items);
 	    			if (PerchUtil::count($pending_items)) {
 	    				$orderStatusData = [
 	    					'status' => 'PENDING',

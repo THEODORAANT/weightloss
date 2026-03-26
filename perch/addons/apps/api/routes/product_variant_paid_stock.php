@@ -5,12 +5,12 @@ require_once __DIR__ . '/../auth.php';
 
 $token = get_bearer_token();
 $payload = verify_token($token);
-/*
+
 if (!$payload) {
     http_response_code(401);
     echo json_encode(['error' => 'Unauthorized']);
     exit;
-}*/
+}
 
 $data = json_decode(file_get_contents('php://input'), true);
 if (!is_array($data)) {
@@ -76,10 +76,10 @@ $variants = [];
 if (PerchUtil::count($rows)) {
     foreach ($rows as $row) {
         $variants[] = [
-            //'variant_id' => isset($row['variantID']) ? (int) $row['variantID'] : null,
-           // 'product_id' => isset($row['productID']) ? (int) $row['productID'] : null,
-           // 'sku' => $row['sku'] ?? '',
-          //  'title' => $row['title'] ?? '',
+            'variant_id' => isset($row['variantID']) ? (int) $row['variantID'] : null,
+            'product_id' => isset($row['productID']) ? (int) $row['productID'] : null,
+            'sku' => $row['sku'] ?? '',
+            'title' => $row['title'] ?? '',
             'variant' => $row['productVariantDesc'] ?? null,
             'total_paid' => isset($row['totalPaidQuantity']) ? (int) $row['totalPaidQuantity'] : 0,
         ];
