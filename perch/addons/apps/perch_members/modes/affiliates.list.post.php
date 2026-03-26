@@ -42,7 +42,7 @@
         $Smartbar->add_item([
             'active' => (!PerchRequest::get('q')),
             'title'  => $Lang->get('All'),
-            'link'   => $API->app_nav().'/',
+            'link'   => $API->app_nav().'/affiliates',
         ]);
 
         $Smartbar->add_item([
