@@ -45,6 +45,8 @@ wl_save_questionnaire_session($activeQuestionnaireMode);
         //echo "session";
       // print_r($_SESSION);
 
+$cart_popup_product_slug = perch_get('s');
+
 
 
 
@@ -74,6 +76,94 @@ wl_save_questionnaire_session($activeQuestionnaireMode);
   ]);
 }
     ?>
+
+<?php if ($cart_popup_product_slug) { ?>
+<div id="cart-product-popup" class="cart-product-popup-overlay" aria-hidden="true">
+    <div class="cart-product-popup-modal" role="dialog" aria-modal="true" aria-label="Product details">
+        <button type="button" id="close-cart-product-popup" class="cart-product-popup-close" aria-label="Close popup">&times;</button>
+        <div class="cart-product-popup-content">
+            <?php
+            perch_shop_product($cart_popup_product_slug, [
+                'template' => 'products/shop-product.html',
+            ]);
+            ?>
+        </div>
+    </div>
+</div>
+
+<style>
+  .cart-product-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.72);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .cart-product-popup-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cart-product-popup-modal {
+    width: min(1040px, 100%);
+    max-height: 92vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 14px;
+    position: relative;
+    padding: 22px;
+  }
+
+  .cart-product-popup-close {
+    position: sticky;
+    top: 0;
+    margin-left: auto;
+    border: 0;
+    background: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: #0f172a;
+    z-index: 2;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const popup = document.getElementById('cart-product-popup');
+    const closeBtn = document.getElementById('close-cart-product-popup');
+    if (!popup || !closeBtn) return;
+
+    popup.classList.add('is-open');
+    popup.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    const closePopup = function () {
+      popup.classList.remove('is-open');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    closeBtn.addEventListener('click', closePopup);
+    popup.addEventListener('click', function (event) {
+      if (event.target === popup) closePopup();
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closePopup();
+    });
+  });
+</script>
+<?php } ?>
 
     <section class="main_order_summary">
         <div class="container mt-5">
