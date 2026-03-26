@@ -46,9 +46,31 @@ wl_save_questionnaire_session($activeQuestionnaireMode);
       // print_r($_SESSION);
 
 $cart_popup_product_slug ="weight-loss-blood-test-nadl026"; //perch_get('s');
+$show_cart_popup_product = false;
 
+if ($cart_popup_product_slug) {
+    $ShopRuntime = PerchShop_Runtime::fetch();
+    $popup_product_id = (int) $ShopRuntime->get_product_id($cart_popup_product_slug);
+    $popup_is_in_cart = false;
 
+    if ($popup_product_id > 0) {
+        $cart_data = perch_shop_cart([
+            "skip-template" => true,
+            "cache" => false,
+        ], true);
 
+        if (isset($cart_data['items']) && is_array($cart_data['items'])) {
+            foreach ($cart_data['items'] as $cart_item) {
+                if ((int) ($cart_item['productID'] ?? 0) === $popup_product_id) {
+                    $popup_is_in_cart = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    $show_cart_popup_product = !$popup_is_in_cart;
+}
 
 
             //  echo "perch_member_logged_in".perch_member_logged_in() ;
@@ -77,7 +99,7 @@ $cart_popup_product_slug ="weight-loss-blood-test-nadl026"; //perch_get('s');
 }
     ?>
 
-<?php if ($cart_popup_product_slug) { ?>
+<?php if ($show_cart_popup_product) { ?>
 <div id="cart-product-popup" class="cart-product-popup-overlay" aria-hidden="true">
     <div class="cart-product-popup-modal" role="dialog" aria-modal="true" aria-label="Product details">
         <button type="button" id="close-cart-product-popup" class="cart-product-popup-close" aria-label="Close popup">&times;</button>
