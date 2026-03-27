@@ -117,15 +117,16 @@ if ($cart_popup_product_slug) {
   .cart-product-popup-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.72);
+    background: radial-gradient(circle at top, rgba(51, 40, 191, 0.24), rgba(15, 23, 42, 0.78));
+    backdrop-filter: blur(2px);
     z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px;
+    padding: 16px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.25s ease;
   }
 
   .cart-product-popup-overlay.is-open {
@@ -137,26 +138,39 @@ if ($cart_popup_product_slug) {
     width: min(1040px, 100%);
     max-height: 92vh;
     overflow: auto;
-    background: #fff;
-    border-radius: 14px;
+    background: transparent;
+    border-radius: 20px;
     position: relative;
-    padding: 22px;
+    padding: 8px;
+    transform: translateY(16px) scale(0.98);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .cart-product-popup-overlay.is-open .cart-product-popup-modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
   }
 
   .cart-product-popup-close {
     position: sticky;
-    top: 0;
+    top: 4px;
     margin-left: auto;
-    border: 0;
-    background: #fff;
-    width: 38px;
-    height: 38px;
+    border: 1px solid #dbe3f3;
+    background: rgba(255, 255, 255, 0.95);
+    width: 40px;
+    height: 40px;
     border-radius: 999px;
     font-size: 28px;
     line-height: 1;
     cursor: pointer;
-    color: #0f172a;
+    color: #1e2a47;
     z-index: 2;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  }
+
+  .cart-product-popup-content {
+    margin-top: -8px;
   }
 </style>
 
@@ -166,9 +180,11 @@ if ($cart_popup_product_slug) {
     const closeBtn = document.getElementById('close-cart-product-popup');
     if (!popup || !closeBtn) return;
 
-    popup.classList.add('is-open');
-    popup.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    const openPopup = function () {
+      popup.classList.add('is-open');
+      popup.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
 
     const closePopup = function () {
       popup.classList.remove('is-open');
@@ -176,10 +192,13 @@ if ($cart_popup_product_slug) {
       document.body.style.overflow = '';
     };
 
+    window.requestAnimationFrame(openPopup);
     closeBtn.addEventListener('click', closePopup);
+
     popup.addEventListener('click', function (event) {
       if (event.target === popup) closePopup();
     });
+
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') closePopup();
     });
