@@ -33,10 +33,24 @@
         <link rel="stylesheet" href="/css/custom-font.css" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link rel="stylesheet" href="/dist/style.css">
-        <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/style-2.css">
-        <link rel="stylesheet" href="/css/due.css">
+<?php
+        $optionalStylesheets = [
+            '/dist/style.css',
+            '/css/style.css',
+            '/css/style-2.css',
+            '/css/due.css',
+        ];
+
+        foreach ($optionalStylesheets as $stylesheetPath) {
+            $absolutePath = isset($_SERVER['DOCUMENT_ROOT'])
+                ? rtrim((string) $_SERVER['DOCUMENT_ROOT'], '/\\') . $stylesheetPath
+                : null;
+
+            if ($absolutePath && is_file($absolutePath)) {
+                echo '<link rel="stylesheet" href="' . htmlspecialchars($stylesheetPath, ENT_QUOTES, 'UTF-8') . '">' . PHP_EOL;
+            }
+        }
+?>
       </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
