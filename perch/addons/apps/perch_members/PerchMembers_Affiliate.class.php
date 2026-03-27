@@ -195,8 +195,11 @@ function convertCreditToCoupon($affID) {
  $now = date('Y-m-d H:i:s');
  $validTo = date('Y-m-d H:i:s', strtotime('+90 days'));
 
- $Promotions = new PerchShop_Promotions($shopAPI);
- $promotionData = [
+ $promoOrderSql = "SELECT MAX(promoOrder) FROM ".PERCH_DB_PREFIX."shop_promotions";
+ $promoOrder = (int)$this->db->get_value($promoOrderSql);
+ $promoOrder = $promoOrder > 0 ? ($promoOrder + 1) : 1;
+
+ $dynamicFields = [
      'title' => 'Affiliate Credit £'.number_format($amount, 2).' ('.$affID.')',
      'description' => 'Auto-generated from affiliate credit conversion.',
      'from' => $now,
@@ -216,9 +219,18 @@ function convertCreditToCoupon($affID) {
      'apply_to_shipping' => 0,
  ];
 
- $Promotion = $Promotions->create($promotionData);
+ $promoID = $this->db->insert(PERCH_DB_PREFIX.'shop_promotions', [
+     'promoTitle' => $dynamicFields['title'],
+     'promoDynamicFields' => PerchUtil::json_safe_encode($dynamicFields),
+     'promoFrom' => $now,
+     'promoTo' => $validTo,
+     'promoActive' => 1,
+     'promoOrder' => $promoOrder,
+     'promoCreated' => $now,
+     'promoUpdated' => $now,
+ ]);
 
- if (!is_object($Promotion)) {
+ if (!$promoID) {
      return [
          'ok' => false,
          'status' => 'Could not create the coupon. Please try again.'
