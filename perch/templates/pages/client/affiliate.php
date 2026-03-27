@@ -3,9 +3,11 @@ perch_layout('client/header', [
     'page_title' => perch_page_title(true),
 ]);
 
-if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_payout'])) {
-    perch_member_requestPayout();
+$couponResult = null;
+if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['convert_credit_to_coupon'])) {
+    $couponResult = perch_member_convert_credit_to_coupon();
 }
+
 ?>
 
 <section class="client-page">
@@ -36,7 +38,6 @@ if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($
             <?php
               $affiliateLink = 'https://' . $_SERVER['HTTP_HOST'] . '/?ref=' . perch_member_get('affID');
               $credit = perch_member_credit();
-              $payouts = perch_member_aff_payouts();
               $referrals = perch_member_aff_referrals();
             ?>
             <div class="client-card__section">
@@ -90,10 +91,19 @@ if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($
             </div>
 
             <div class="client-card__section">
-              <h2 class="client-card__title">Payout overview</h2>
-              <p class="client-card__intro">Your available balance and previous payout requests are summarised below.</p>
+              <h2 class="client-card__title">Credit to coupon</h2>
+              <p class="client-card__intro">Convert your available affiliate credit into a one-time discount coupon you can apply at checkout.</p>
               <div class="client-panel__body">
                 <div class="client-panel p-3">
+                  <?php if (is_array($couponResult) && !empty($couponResult['status'])) { ?>
+                    <div class="alert <?php echo !empty($couponResult['ok']) ? 'alert-success' : 'alert-warning'; ?> mb-3" role="alert">
+                      <?php echo htmlspecialchars($couponResult['status'], ENT_QUOTES, 'UTF-8'); ?>
+                      <?php if (!empty($couponResult['coupon_code'])) { ?>
+                        <div class="mt-2"><strong>Coupon code:</strong> <?php echo htmlspecialchars($couponResult['coupon_code'], ENT_QUOTES, 'UTF-8'); ?></div>
+                      <?php } ?>
+                    </div>
+                  <?php } ?>
+
                   <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                     <div>
                       <span class="text-uppercase text-muted small">Available credit</span>
@@ -101,39 +111,11 @@ if (perch_member_logged_in() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($
                     </div>
                     <?php if ($credit > 0) { ?>
                       <form method="post" class="client-actions">
-                        <button type="submit" class="btn btn-primary px-4" name="request_payout">Request payout</button>
+                        <button type="submit" class="btn btn-primary px-4" name="convert_credit_to_coupon">Convert to coupon</button>
                       </form>
+                    <?php } else { ?>
+                      <span class="text-muted small">No credit available to convert yet.</span>
                     <?php } ?>
-                  </div>
-                </div>
-
-                <div class="client-panel p-3">
-                  <h3 class="client-sidecard__title mb-3">Payout history</h3>
-                  <div class="table-responsive">
-                    <table class="client-table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Date</th>
-                          <th scope="col">Amount</th>
-                          <th scope="col">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php if ($payouts) { ?>
-                          <?php foreach ($payouts as $p) { ?>
-                            <tr>
-                              <td><?php echo date('Y-m-d', strtotime($p['requested_at'])); ?></td>
-                              <td>£<?php echo number_format($p['amount'], 2); ?></td>
-                              <td><?php echo ucfirst($p['status']); ?></td>
-                            </tr>
-                          <?php } ?>
-                        <?php } else { ?>
-                          <tr>
-                            <td colspan="3">No payouts yet. Your history will appear here once requests are processed.</td>
-                          </tr>
-                        <?php } ?>
-                      </tbody>
-                    </table>
                   </div>
                 </div>
               </div>

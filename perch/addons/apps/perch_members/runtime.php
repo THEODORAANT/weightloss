@@ -816,6 +816,22 @@ $memberid=0;
                          }
 
          }
+
+         function perch_member_convert_credit_to_coupon(){
+         $Session = PerchMembers_Session::fetch();
+                                      if ($Session->logged_in) {
+
+                                              $API  = new PerchAPI(1.0, 'perch_members');
+                                              $Affiliate = new PerchMembers_Affiliate($API);
+                                          return $Affiliate->convertCreditToCoupon($Session->get('affID'));
+                         }
+
+             return [
+                 'ok' => false,
+                 'status' => 'Please sign in to convert your credit.'
+             ];
+         }
+
        function perch_member_aff_referrals(){
         $Session = PerchMembers_Session::fetch();
         if ($Session->logged_in) {
