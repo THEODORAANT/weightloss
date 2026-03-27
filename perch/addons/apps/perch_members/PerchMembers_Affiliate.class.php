@@ -157,6 +157,97 @@ $payout_id = $pdo->lastInsertId();*/
          ];
 }
 
+function convertCreditToCoupon($affID) {
+ $sqlaff = "SELECT * FROM ".PERCH_DB_PREFIX."affiliates WHERE affID=".$this->db->pdb($affID);
+ $affrow = $this->db->get_row($sqlaff);
+
+ if (!PerchUtil::count($affrow)) {
+     return [
+         'ok' => false,
+         'status' => 'Affiliate account not found.'
+     ];
+ }
+
+ $affiliate_id = (int)$affrow['id'];
+ $credit = isset($affrow['credit']) ? (float)$affrow['credit'] : 0;
+
+ if ($credit <= 0) {
+     return [
+         'ok' => false,
+         'status' => 'No available credit to convert right now.'
+     ];
+ }
+
+ $shopAPI = new PerchAPI(1.0, 'perch_shop');
+ $Currencies = new PerchShop_Currencies($shopAPI);
+ $defaultCurrency = $Currencies->get_default();
+
+ if (!is_object($defaultCurrency)) {
+     return [
+         'ok' => false,
+         'status' => 'Unable to resolve the default shop currency.'
+     ];
+ }
+
+ $currencyID = (int)$defaultCurrency->id();
+ $amount = round($credit, 2);
+ $couponCode = strtoupper('AFF'.preg_replace('/[^A-Za-z0-9]/', '', (string)$affID).substr(md5(uniqid((string)$affiliate_id, true)), 0, 6));
+ $now = date('Y-m-d H:i:s');
+ $validTo = date('Y-m-d H:i:s', strtotime('+90 days'));
+
+ $promoOrderSql = "SELECT MAX(promoOrder) FROM ".PERCH_DB_PREFIX."shop_promotions";
+ $promoOrder = (int)$this->db->get_value($promoOrderSql);
+ $promoOrder = $promoOrder > 0 ? ($promoOrder + 1) : 1;
+
+ $dynamicFields = [
+     'title' => 'Affiliate Credit £'.number_format($amount, 2).' ('.$affID.')',
+     'description' => 'Auto-generated from affiliate credit conversion.',
+     'from' => $now,
+     'to' => $validTo,
+     'active' => '1',
+     'status' => '1',
+     'action' => 'discount_by_fixed',
+     'discount_code' => $couponCode,
+     'amount' => [
+         (string)$currencyID => $amount
+     ],
+     'max_uses' => 1,
+     'customer_uses' => 1,
+     'terminating' => 1,
+     'persistent' => 1,
+     'priority' => 999,
+     'apply_to_shipping' => 0,
+ ];
+
+ $promoID = $this->db->insert(PERCH_DB_PREFIX.'shop_promotions', [
+     'promoTitle' => $dynamicFields['title'],
+     'promoDynamicFields' => PerchUtil::json_safe_encode($dynamicFields),
+     'promoFrom' => $now,
+     'promoTo' => $validTo,
+     'promoActive' => 1,
+     'promoOrder' => $promoOrder,
+     'promoCreated' => $now,
+     'promoUpdated' => $now,
+ ]);
+
+ if (!$promoID) {
+     return [
+         'ok' => false,
+         'status' => 'Could not create the coupon. Please try again.'
+     ];
+ }
+
+ $sql = "UPDATE ".PERCH_DB_PREFIX."affiliates SET credit = 0 WHERE id=".$this->db->pdb($affiliate_id);
+ $this->db->execute($sql);
+
+ return [
+     'ok' => true,
+     'status' => 'Credit converted successfully. Use this coupon on checkout.',
+     'coupon_code' => $couponCode,
+     'amount' => $amount
+ ];
+}
+
 // Mark commissions as paid
 function markCommissionsPaid($memberId) {
 
