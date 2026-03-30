@@ -210,6 +210,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           box-shadow: 0 12px 20px rgba(67, 56, 202, 0.14);
         }
 
+        .client-nav-dropdown[open] > .client-dropdown-toggle {
+          border-color: rgba(79, 70, 229, 0.4);
+          background: #eef2ff;
+          color: #312e81;
+        }
+
         .client-dropdown-toggle::after {
           content: "";
           width: 8px;
@@ -571,7 +577,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ?>
      <ul class="client-tabs">
        <li>
-         <details class="client-nav-dropdown" <?php echo ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active') ? 'open' : ''; ?>>
+         <details class="client-nav-dropdown" data-default-open="<?php echo ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active') ? '1' : '0'; ?>" <?php echo ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active') ? 'open' : ''; ?>>
            <summary class="client-dropdown-toggle">Account</summary>
            <ul class="client-dropdown-menu">
              <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
@@ -581,7 +587,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          </details>
        </li>
        <li>
-         <details class="client-nav-dropdown" <?php echo ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active') ? 'open' : ''; ?>>
+         <details class="client-nav-dropdown" data-default-open="<?php echo ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active') ? '1' : '0'; ?>" <?php echo ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active') ? 'open' : ''; ?>>
            <summary class="client-dropdown-toggle">Orders &amp; Support</summary>
            <ul class="client-dropdown-menu">
              <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
@@ -591,7 +597,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          </details>
        </li>
        <li>
-         <details class="client-nav-dropdown" <?php echo ($vouchers_tab === 'active' || $affiliate_tab === 'active') ? 'open' : ''; ?>>
+         <details class="client-nav-dropdown" data-default-open="<?php echo ($vouchers_tab === 'active' || $affiliate_tab === 'active') ? '1' : '0'; ?>" <?php echo ($vouchers_tab === 'active' || $affiliate_tab === 'active') ? 'open' : ''; ?>>
            <summary class="client-dropdown-toggle">Benefits</summary>
            <ul class="client-dropdown-menu">
              <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Vouchers</a></li>
@@ -601,7 +607,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          </details>
        </li>
        <li>
-         <details class="client-nav-dropdown" <?php echo $notifications_tab === 'active' ? 'open' : ''; ?>>
+         <details class="client-nav-dropdown" data-default-open="<?php echo $notifications_tab === 'active' ? '1' : '0'; ?>" <?php echo $notifications_tab === 'active' ? 'open' : ''; ?>>
            <summary class="client-dropdown-toggle">Updates</summary>
            <ul class="client-dropdown-menu">
              <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
@@ -614,4 +620,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
    </div>
    </nav>
+<script>
+  (function () {
+    const mq = window.matchMedia('(min-width: 769px)');
+    const dropdowns = document.querySelectorAll('.client-nav-dropdown');
+
+    dropdowns.forEach((dropdown) => {
+      const defaultOpen = dropdown.getAttribute('data-default-open') === '1';
+
+      if (defaultOpen) {
+        dropdown.setAttribute('open', '');
+      }
+
+      dropdown.addEventListener('mouseenter', () => {
+        if (!mq.matches) return;
+        dropdown.setAttribute('open', '');
+      });
+
+      dropdown.addEventListener('mouseleave', () => {
+        if (!mq.matches) return;
+        if (defaultOpen) {
+          dropdown.setAttribute('open', '');
+          return;
+        }
+        dropdown.removeAttribute('open');
+      });
+    });
+  })();
+</script>
 <?php  } ?>
