@@ -451,6 +451,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         $affiliate_tab="";
         $notifications_tab="";
         $chat_tab="";
+        $vouchers_tab="";
         $chat_unread=false;
         $unread_count=0;
         $member_notifications = perch_member_notifications();
@@ -484,6 +485,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             $chat_tab="active";
            }else if($lastPart=="change-password" ){
             $change_password_tab="active";
+           }else if($lastPart=="vouchers" ){
+            $vouchers_tab="active";
            }
       ?>
      <ul class="client-tabs">
@@ -492,6 +495,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                      <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
 
        <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
+       <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Unused Vouchers</a></li>
        <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
        <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
        <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>

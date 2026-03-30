@@ -832,6 +832,19 @@ $memberid=0;
              ];
          }
 
+
+         function perch_member_unused_vouchers(){
+         $Session = PerchMembers_Session::fetch();
+                                      if ($Session->logged_in) {
+
+                                              $API  = new PerchAPI(1.0, 'perch_members');
+                                              $Affiliate = new PerchMembers_Affiliate($API);
+                                          return $Affiliate->getUnusedCoupons($Session->get('affID'));
+                         }
+
+             return [];
+         }
+
        function perch_member_aff_referrals(){
         $Session = PerchMembers_Session::fetch();
         if ($Session->logged_in) {

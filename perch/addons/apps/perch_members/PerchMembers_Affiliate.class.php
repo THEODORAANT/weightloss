@@ -267,6 +267,77 @@ function createStripeCouponAndPromotionCode($couponCode, $amount, $currencyCode,
     ];
 }
 
+
+function getUnusedCoupons($affID) {
+ $affID = trim((string)$affID);
+ if ($affID === '') {
+     return [];
+ }
+
+ $sql = "SELECT p.promoID, p.promoTitle, p.promoFrom, p.promoTo, p.promoActive, p.promoDynamicFields, p.promoCreated, COUNT(op.orderID) AS use_count
+"
+      . "FROM ".PERCH_DB_PREFIX."shop_promotions p
+"
+      . "LEFT JOIN ".PERCH_DB_PREFIX."shop_order_promotions op ON op.promoID = p.promoID
+"
+      . "WHERE p.promoTitle LIKE ".$this->db->pdb('Affiliate Credit %('.$affID.')')."
+"
+      . "GROUP BY p.promoID, p.promoTitle, p.promoFrom, p.promoTo, p.promoActive, p.promoDynamicFields, p.promoCreated
+"
+      . "HAVING use_count = 0
+"
+      . "ORDER BY p.promoCreated DESC";
+
+ $rows = $this->db->get_rows($sql);
+ if (!PerchUtil::count($rows)) {
+     return [];
+ }
+
+ $output = [];
+ foreach ($rows as $row) {
+     $dynamic = json_decode((string)($row['promoDynamicFields'] ?? ''), true);
+     if (!is_array($dynamic)) {
+         $dynamic = [];
+     }
+
+     $amount = null;
+     if (isset($dynamic['amount']) && is_array($dynamic['amount'])) {
+         $amountValues = array_values($dynamic['amount']);
+         if (isset($amountValues[0])) {
+             $amount = (float)$amountValues[0];
+         }
+     }
+
+     $discountCode = isset($dynamic['discount_code']) ? trim((string)$dynamic['discount_code']) : '';
+     $promoTo = isset($row['promoTo']) ? trim((string)$row['promoTo']) : '';
+     $isExpired = false;
+     if ($promoTo !== '' && strtotime($promoTo) !== false) {
+         $isExpired = strtotime($promoTo) < time();
+     }
+
+     $status = 'Active';
+     if (!(int)$row['promoActive']) {
+         $status = 'Inactive';
+     }
+     if ($isExpired) {
+         $status = 'Expired';
+     }
+
+     $output[] = [
+         'promo_id' => (int)($row['promoID'] ?? 0),
+         'title' => (string)($row['promoTitle'] ?? ''),
+         'code' => $discountCode,
+         'amount' => $amount,
+         'valid_from' => (string)($row['promoFrom'] ?? ''),
+         'valid_to' => $promoTo,
+         'status' => $status,
+         'uses' => 0,
+     ];
+ }
+
+ return $output;
+}
+
 function convertCreditToCoupon($affID) {
  $sqlaff = "SELECT * FROM ".PERCH_DB_PREFIX."affiliates WHERE affID=".$this->db->pdb($affID);
  $affrow = $this->db->get_row($sqlaff);
