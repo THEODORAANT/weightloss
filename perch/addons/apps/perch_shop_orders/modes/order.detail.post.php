@@ -62,7 +62,7 @@
 
     $output2.=  '<tr>';
         $output2.=  '<th class="text-left">'.$Lang->get('Received: ').'</th>';
-        $output2.=  '<td class="text-left">'.$HTML->encode(PerchShop_Date::format($Order->orderCreated(), PERCH_DATE_SHORT.' '.PERCH_TIME_SHORT)).'</td>';
+        $output2.=  '<td class="text-left">'.$HTML->encode(PerchShop_Date::format($Order->orderUpdated(), PERCH_DATE_SHORT.' '.PERCH_TIME_SHORT)).'</td>';
     $output2.=  '</tr>';
 
     $output2.=  '<tr>';
@@ -218,7 +218,7 @@ $output= $HTML->heading2('Order');
 
     $output.=  '<tr>';
         $output.=  '<th>'.$Lang->get('Received').'</th>';
-        $output.=  '<td>'.$HTML->encode(PerchShop_Date::format($Order->orderCreated(), PERCH_DATE_SHORT.' '.PERCH_TIME_SHORT)).'</td>';
+        $output.=  '<td>'.$HTML->encode(PerchShop_Date::format($Order->orderUpdated(), PERCH_DATE_SHORT.' '.PERCH_TIME_SHORT)).'</td>';
     $output.=  '</tr>';
 
     $output.=  '<tr>';

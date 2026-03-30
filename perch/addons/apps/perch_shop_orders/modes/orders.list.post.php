@@ -52,9 +52,9 @@ echo $HTML->title_panel([
 
             ]);
     $Listing->add_col([
-            'title'     => 'Date',
-            'value'     => 'orderCreated',
-            'sort'      => 'orderCreated',
+            'title'     => 'Payment Date',
+            'value'     => 'orderUpdated',
+            'sort'      => 'orderUpdated',
             'format'    => ['type'=>'date', 'format'=>PERCH_DATE_SHORT.' '.PERCH_TIME_SHORT],
         ]);
     $Listing->add_col([

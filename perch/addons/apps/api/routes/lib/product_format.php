@@ -179,7 +179,7 @@ function wl_format_variant($variant)
         'sku' => isset($variant['sku']) ? (string) $variant['sku'] : '',
         'dose' => $dose,
         'dose_label' => $doseLabel,
-        'price' => wl_extract_currency_amount($variant['price'] ?? null),
+        'price' => wl_extract_currency_amount($variant['price'] ?? ($variant['regular_price'] ?? null)),
         'sale_price' => wl_extract_currency_amount($variant['sale_price'] ?? null),
         'stock_level' => $stockLevel,
         'stock_status' => wl_format_stock_status($variant['stock_status'] ?? ($variant['stockStatus'] ?? null)),
@@ -213,6 +213,12 @@ function wl_format_product($product)
         $status = strtolower(trim($status));
     }
 
+    $basePrice = wl_extract_currency_amount($product['price'] ?? ($product['regular_price'] ?? null));
+    $salePrice = wl_extract_currency_amount($product['sale_price'] ?? null);
+    $isOnSale = wl_to_bool($product['on_sale'] ?? false)
+        || wl_to_bool($product['sale_pricing'] ?? false)
+        || ($salePrice !== null && $basePrice !== null && $salePrice < $basePrice);
+
     return [
         'id' => isset($product['productID']) ? (int) $product['productID'] : null,
         'sku' => isset($product['sku']) ? (string) $product['sku'] : '',
@@ -220,9 +226,9 @@ function wl_format_product($product)
         'slug' => isset($product['slug']) ? (string) $product['slug'] : (isset($product['productSlug']) ? (string) $product['productSlug'] : ''),
         'description' => isset($product['description']) ? (string) $product['description'] : '',
         'image' => wl_format_image($product['image'] ?? null),
-        'base_price' => wl_extract_currency_amount($product['price'] ?? null),
-        'sale_price' => wl_extract_currency_amount($product['sale_price'] ?? null),
-        'is_on_sale' => wl_to_bool($product['on_sale'] ?? false),
+        'base_price' => $basePrice,
+        'sale_price' => $salePrice,
+        'is_on_sale' => $isOnSale,
         'requires_shipping' => wl_to_bool($product['requires_shipping'] ?? false),
         'status' => $status,
         'variants' => $variantOutput,

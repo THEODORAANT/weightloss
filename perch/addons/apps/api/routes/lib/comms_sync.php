@@ -79,9 +79,9 @@ function comms_sync_member(int $memberID): bool
         'createdAt' => $createdAt,
         'updatedAt' => $updatedAt,
     ];
- //echo "sync_comms_member3";
+    // echo "sync_comms_member3";
     $response = comms_service_link_member_response($memberID, $payload);
-    //print_r($response );
+    // print_r($response );
     if ($response !== null) {
         $customerId = comms_service_extract_customer_id($response);
          //echo "customerId";  print_r($customerId );

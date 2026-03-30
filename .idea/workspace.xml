@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f950e4f-f8f7-47df-82e9-eaa722ca089f" name="Changes" comment="weightloss">
-      <change afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/templates/shop/products/popup_product.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/comms_service.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/comms_service.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/comms_sync.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/comms_sync.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/product_format.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/lib/product_format.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/product_variant_paid_stock.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/product_variant_paid_stock.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/register.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/register.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/api/routes/webhook_log.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/api/routes/webhook_log.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Order.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/PerchShop_Order.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/gateways/PerchShopGateway_stripe.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib/gateways/PerchShopGateway_stripe.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/order.detail.post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.list.post.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.list.post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.list.pre.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/addons/apps/perch_shop_orders/modes/orders.list.pre.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/order/cart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/perch/templates/pages/payment/stripe/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +26,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/codex/load-popup-window-on-cart-page" />
+    <option name="BRANCH" value="origin/codex/add-option-to-create-coupon-from-stripe" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -44,7 +55,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/templates/pages/order",
+    "last_opened_file_path": "/Applications/XAMPP/xamppfiles/htdocs/weightloss/perch/addons/apps",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -56,9 +67,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
       <recent name="$PROJECT_DIR$/perch/addons/apps" />
       <recent name="$PROJECT_DIR$/perch" />
+      <recent name="$PROJECT_DIR$/perch/templates/pages/order" />
       <recent name="$PROJECT_DIR$/perch/addons/apps/perch_shop/lib" />
       <recent name="$PROJECT_DIR$/scripts" />
     </key>
@@ -145,15 +156,7 @@
       <workItem from="1773515750703" duration="1235000" />
       <workItem from="1773758788687" duration="4012000" />
       <workItem from="1773831853171" duration="11974000" />
-      <workItem from="1774347369225" duration="7961000" />
-    </task>
-    <task id="LOCAL-00133" summary="weightloss">
-      <option name="closed" value="true" />
-      <created>1769076435320</created>
-      <option name="number" value="00133" />
-      <option name="presentableId" value="LOCAL-00133" />
-      <option name="project" value="LOCAL" />
-      <updated>1769076435320</updated>
+      <workItem from="1774347369225" duration="16855000" />
     </task>
     <task id="LOCAL-00134" summary="weightloss">
       <option name="closed" value="true" />
@@ -539,7 +542,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774537177628</updated>
     </task>
-    <option name="localTasksCounter" value="182" />
+    <task id="LOCAL-00182" summary="weightloss">
+      <option name="closed" value="true" />
+      <created>1774544162751</created>
+      <option name="number" value="00182" />
+      <option name="presentableId" value="LOCAL-00182" />
+      <option name="project" value="LOCAL" />
+      <updated>1774544162752</updated>
+    </task>
+    <option name="localTasksCounter" value="183" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

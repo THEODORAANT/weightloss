@@ -1,7 +1,7 @@
 <?php
 	$Paging = $API->get('Paging');
 	$Paging->set_per_page(24);
-$sort="^orderCreated";
+$sort="^orderUpdated";
         $Orders   = new PerchShop_Orders($API);
         $OrderItems = new PerchShop_OrderItems($API);
         $Customers = new PerchShop_Customers($API);

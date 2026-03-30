@@ -86,7 +86,7 @@ if ($cart_popup_product_slug) {
     'cancel_url' => $cancel_url,
     'token'      => perch_post('stripeToken')
   ]);
-}else if(isset($_GET["success"])){
+}/*else if(isset($_GET["success"])){
   // your 'success' and 'failure' URLs
   $return_url = '/payment/success/';
 //  $cancel_url = 'https://getweightloss-dev-d2c5gpf7asdvh3a2.uksouth-01.azurewebsites.net/payment/went/wrong';
@@ -96,7 +96,7 @@ if ($cart_popup_product_slug) {
     'cancel_url' => $cancel_url,
     'confirm_klarna'=>true
   ]);
-}
+}*/
     ?>
 
 <?php

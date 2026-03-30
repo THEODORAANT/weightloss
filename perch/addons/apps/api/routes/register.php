@@ -5,11 +5,14 @@
 //require_once '/perch/addons/apps/perch_members/PerchMembers_Member.class.php';
 //require_once __DIR__ . '/../../perch_members/PerchMembers_Member.class.php';
 include(__DIR__ .'/../../../../core/runtime/runtime.php');
-require_once __DIR__ . '/../lib/date_normalization.php';
 require_once __DIR__ . '/lib/comms_sync.php';
 require_once __DIR__ . '/../lib/date_normalization.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
+
+if (isset($data['dob'])) {
+    $data['dob'] = api_normalize_dob($data['dob']);
+}
 
 $required = ['email', 'password', 'first_name', 'last_name','gender'];
 //'dob','phone','shipping_address_1','postcode','country','shipping_country','city'];
