@@ -142,9 +142,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         .client-nav {
-          background-color: #ffffff;
-          border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-          box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+          background: linear-gradient(180deg, #f7f9ff 0%, #ffffff 100%);
+          border-bottom: 1px solid rgba(79, 70, 229, 0.12);
+          box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
           position: relative;
           z-index: 2000; /* keep tabs above sticky header on touch devices */
         }
@@ -152,11 +152,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         .client-nav__inner {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 18px 24px;
+          padding: 20px 24px 22px;
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
-          align-items: center;
+          align-items: flex-start;
           gap: 18px;
         }
 
@@ -174,11 +174,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         .client-tabs {
           list-style: none;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 14px;
+          margin: 0;
+          padding: 0;
+          width: min(860px, 100%);
+        }
+
+        .client-nav-section {
+          background: #ffffff;
+          border: 1px solid rgba(79, 70, 229, 0.12);
+          border-radius: 16px;
+          padding: 14px 14px 12px;
+          box-shadow: 0 10px 22px rgba(79, 70, 229, 0.07);
+        }
+
+        .client-nav-section__title {
+          display: block;
+          margin-bottom: 10px;
+          font-size: 0.75rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #6366f1;
+          font-weight: 700;
+        }
+
+        .client-nav-section__links {
+          list-style: none;
+          margin: 0;
+          padding: 0;
           display: flex;
           flex-wrap: wrap;
           gap: 10px;
-          margin: 0;
-          padding: 0;
         }
 
         .client-tab-link {
@@ -421,10 +449,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           .client-tabs {
             width: 100%;
+            grid-template-columns: 1fr;
+          }
+
+          .client-nav-section__links {
+            width: 100%;
           }
 
           .client-tab-link {
-            flex: 1 1 calc(50% - 10px);
+            width: 100%;
             justify-content: center;
           }
         }
@@ -490,19 +523,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
            }
       ?>
      <ul class="client-tabs">
-       <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
-       <li><a href="/client/change-password" class="client-tab-link <?php echo $change_password_tab === 'active' ? 'is-active' : ''; ?>">Change Password</a></li>
-                     <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
-
-       <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
-       <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Unused Vouchers</a></li>
-       <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
-       <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
-       <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
-       <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
-              <li><a href="/shop" class="client-tab-link">Shop</a></li>
-
-       <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
+       <li class="client-nav-section">
+         <span class="client-nav-section__title">Account</span>
+         <ul class="client-nav-section__links">
+           <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
+           <li><a href="/client/change-password" class="client-tab-link <?php echo $change_password_tab === 'active' ? 'is-active' : ''; ?>">Password</a></li>
+           <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
+         </ul>
+       </li>
+       <li class="client-nav-section">
+         <span class="client-nav-section__title">Orders & Support</span>
+         <ul class="client-nav-section__links">
+           <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
+           <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
+           <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
+         </ul>
+       </li>
+       <li class="client-nav-section">
+         <span class="client-nav-section__title">Benefits</span>
+         <ul class="client-nav-section__links">
+           <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Vouchers</a></li>
+           <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
+           <li><a href="/shop" class="client-tab-link">Shop</a></li>
+         </ul>
+       </li>
+       <li class="client-nav-section">
+         <span class="client-nav-section__title">Updates</span>
+         <ul class="client-nav-section__links">
+           <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
+           <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
+         </ul>
+       </li>
      </ul>
 
 
