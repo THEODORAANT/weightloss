@@ -157,6 +157,116 @@ $payout_id = $pdo->lastInsertId();*/
          ];
 }
 
+function createStripeCouponAndPromotionCode($couponCode, $amount, $currencyCode, $currencyDecimals)
+{
+    $Gateway = PerchShop_Gateways::get('stripe');
+    $config = PerchShop_Config::get('gateways', 'stripe');
+
+    if (!$Gateway || !is_array($config)) {
+        return [
+            'ok' => false,
+            'status' => 'Stripe gateway is not configured.'
+        ];
+    }
+
+    $stripeSecretKey = trim((string) $Gateway->get_api_key($config));
+    if ($stripeSecretKey === '') {
+        return [
+            'ok' => false,
+            'status' => 'Stripe secret key is missing.'
+        ];
+    }
+
+    $amountOff = (int) round(((float)$amount) * pow(10, (int)$currencyDecimals));
+    if ($amountOff <= 0) {
+        return [
+            'ok' => false,
+            'status' => 'Stripe amount_off must be greater than zero.'
+        ];
+    }
+
+    $couponFields = [
+        'amount_off' => $amountOff,
+        'currency' => strtolower((string) $currencyCode),
+        'duration' => 'once',
+    ];
+
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => 'https://api.stripe.com/v1/coupons',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_USERPWD => $stripeSecretKey . ':',
+        CURLOPT_POSTFIELDS => http_build_query($couponFields),
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/x-www-form-urlencoded',
+        ],
+    ]);
+
+    $couponResponse = curl_exec($ch);
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        return [
+            'ok' => false,
+            'status' => 'Stripe coupon cURL error: ' . $error
+        ];
+    }
+    curl_close($ch);
+
+    $couponData = json_decode($couponResponse, true);
+    if (!is_array($couponData) || !isset($couponData['id'])) {
+        return [
+            'ok' => false,
+            'status' => 'Stripe coupon creation failed: ' . $couponResponse
+        ];
+    }
+
+    $promoFields = [
+        'promotion[type]' => 'coupon',
+        'promotion[coupon]' => $couponData['id'],
+        'code' => $couponCode,
+    ];
+
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => 'https://api.stripe.com/v1/promotion_codes',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_USERPWD => $stripeSecretKey . ':',
+        CURLOPT_POSTFIELDS => http_build_query($promoFields),
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/x-www-form-urlencoded',
+        ],
+    ]);
+
+    $promoResponse = curl_exec($ch);
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        return [
+            'ok' => false,
+            'status' => 'Stripe promotion code cURL error: ' . $error
+        ];
+    }
+    curl_close($ch);
+
+    $promoData = json_decode($promoResponse, true);
+    if (!is_array($promoData) || !isset($promoData['id'])) {
+        return [
+            'ok' => false,
+            'status' => 'Stripe promotion code creation failed: ' . $promoResponse
+        ];
+    }
+
+    return [
+        'ok' => true,
+        'coupon_id' => $couponData['id'],
+        'promotion_code_id' => $promoData['id'],
+        'promotion_code' => (string)($promoData['code'] ?? $couponCode),
+    ];
+}
+
 function convertCreditToCoupon($affID) {
  $sqlaff = "SELECT * FROM ".PERCH_DB_PREFIX."affiliates WHERE affID=".$this->db->pdb($affID);
  $affrow = $this->db->get_row($sqlaff);
@@ -190,10 +300,20 @@ function convertCreditToCoupon($affID) {
  }
 
  $currencyID = (int)$defaultCurrency->id();
+ $currencyCode = (string)$defaultCurrency->currencyCode();
+ $currencyDecimals = (int)$defaultCurrency->currencyDecimals();
  $amount = round($credit, 2);
  $couponCode = strtoupper('AFF'.preg_replace('/[^A-Za-z0-9]/', '', (string)$affID).substr(md5(uniqid((string)$affiliate_id, true)), 0, 6));
  $now = date('Y-m-d H:i:s');
  $validTo = date('Y-m-d H:i:s', strtotime('+90 days'));
+
+ $stripeResult = $this->createStripeCouponAndPromotionCode($couponCode, $amount, $currencyCode, $currencyDecimals);
+ if (empty($stripeResult['ok'])) {
+     return [
+         'ok' => false,
+         'status' => (string)($stripeResult['status'] ?? 'Unable to create Stripe coupon.')
+     ];
+ }
 
  $promoOrderSql = "SELECT MAX(promoOrder) FROM ".PERCH_DB_PREFIX."shop_promotions";
  $promoOrder = (int)$this->db->get_value($promoOrderSql);
