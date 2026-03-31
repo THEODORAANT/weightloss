@@ -182,11 +182,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           width: min(860px, 100%);
         }
 
-        .client-nav-dropdown {
-          position: relative;
-        }
-
-        .client-dropdown-toggle {
+        .client-top-tab {
           appearance: none;
           border: 1px solid rgba(79, 70, 229, 0.18);
           border-radius: 999px;
@@ -204,55 +200,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           transition: all 0.2s ease;
         }
 
-        .client-dropdown-toggle:hover {
+        .client-top-tab:hover {
           transform: translateY(-1px);
           border-color: rgba(79, 70, 229, 0.35);
           box-shadow: 0 12px 20px rgba(67, 56, 202, 0.14);
         }
 
-        .client-nav-dropdown[open] > .client-dropdown-toggle {
+        .client-top-tab.is-active {
           border-color: rgba(79, 70, 229, 0.4);
           background: #eef2ff;
           color: #312e81;
         }
 
-        .client-dropdown-toggle::after {
-          content: "";
-          width: 8px;
-          height: 8px;
-          border-right: 2px solid currentColor;
-          border-bottom: 2px solid currentColor;
-          transform: rotate(45deg) translateY(-1px);
-          transition: transform 0.2s ease;
+        .client-subtabs {
+          width: 100%;
+          margin-top: 14px;
         }
 
-        .client-nav-dropdown[open] .client-dropdown-toggle::after {
-          transform: rotate(-135deg) translateY(-1px);
-        }
-
-        .client-dropdown-menu {
+        .client-subtab-panel {
           list-style: none;
           margin: 0;
           padding: 12px;
-          min-width: 220px;
-          position: absolute;
-          top: calc(100% + 10px);
-          left: 0;
-          z-index: 40;
           border-radius: 14px;
           border: 1px solid rgba(79, 70, 229, 0.16);
           background: #ffffff;
-          box-shadow: 0 18px 30px rgba(15, 23, 42, 0.14);
-          display: grid;
+          box-shadow: 0 12px 24px rgba(15, 23, 42, 0.09);
+          display: none;
+          flex-wrap: wrap;
           gap: 10px;
         }
 
-        .client-nav-dropdown > summary {
-          list-style: none;
-        }
-
-        .client-nav-dropdown > summary::-webkit-details-marker {
-          display: none;
+        .client-subtab-panel.is-active {
+          display: flex;
         }
 
         .client-tab-link {
@@ -497,17 +476,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             width: 100%;
           }
 
-          .client-nav-dropdown,
-          .client-dropdown-toggle {
+          .client-top-tab {
             width: 100%;
           }
 
-          .client-dropdown-menu {
+          .client-subtab-panel {
             width: 100%;
-            min-width: 0;
-            position: static;
-            margin-top: 10px;
-            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.09);
+            flex-direction: column;
           }
 
           .client-tab-link {
@@ -575,75 +550,74 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             $vouchers_tab="active";
            }
       ?>
+     <?php
+       $account_section_active = ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active');
+       $orders_section_active = ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active');
+       $benefits_section_active = ($vouchers_tab === 'active' || $affiliate_tab === 'active');
+       $updates_section_active = ($notifications_tab === 'active');
+     ?>
      <ul class="client-tabs">
        <li>
-         <details class="client-nav-dropdown" data-default-open="<?php echo ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active') ? '1' : '0'; ?>" <?php echo ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active') ? 'open' : ''; ?>>
-           <summary class="client-dropdown-toggle">Account</summary>
-           <ul class="client-dropdown-menu">
-             <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
-             <li><a href="/client/change-password" class="client-tab-link <?php echo $change_password_tab === 'active' ? 'is-active' : ''; ?>">Password</a></li>
-             <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
-           </ul>
-         </details>
+         <button type="button" class="client-top-tab <?php echo $account_section_active ? 'is-active' : ''; ?>" data-subtab-target="account">Account</button>
        </li>
        <li>
-         <details class="client-nav-dropdown" data-default-open="<?php echo ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active') ? '1' : '0'; ?>" <?php echo ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active') ? 'open' : ''; ?>>
-           <summary class="client-dropdown-toggle">Orders &amp; Support</summary>
-           <ul class="client-dropdown-menu">
-             <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
-             <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
-             <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
-           </ul>
-         </details>
+         <button type="button" class="client-top-tab <?php echo $orders_section_active ? 'is-active' : ''; ?>" data-subtab-target="orders">Orders &amp; Support</button>
        </li>
        <li>
-         <details class="client-nav-dropdown" data-default-open="<?php echo ($vouchers_tab === 'active' || $affiliate_tab === 'active') ? '1' : '0'; ?>" <?php echo ($vouchers_tab === 'active' || $affiliate_tab === 'active') ? 'open' : ''; ?>>
-           <summary class="client-dropdown-toggle">Benefits</summary>
-           <ul class="client-dropdown-menu">
-             <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Vouchers</a></li>
-             <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
-             <li><a href="/shop" class="client-tab-link">Shop</a></li>
-           </ul>
-         </details>
+         <button type="button" class="client-top-tab <?php echo $benefits_section_active ? 'is-active' : ''; ?>" data-subtab-target="benefits">Benefits</button>
        </li>
        <li>
-         <details class="client-nav-dropdown" data-default-open="<?php echo $notifications_tab === 'active' ? '1' : '0'; ?>" <?php echo $notifications_tab === 'active' ? 'open' : ''; ?>>
-           <summary class="client-dropdown-toggle">Updates</summary>
-           <ul class="client-dropdown-menu">
-             <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
-             <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
-           </ul>
-         </details>
+         <button type="button" class="client-top-tab <?php echo $updates_section_active ? 'is-active' : ''; ?>" data-subtab-target="updates">Updates</button>
        </li>
      </ul>
+     <div class="client-subtabs">
+       <ul class="client-subtab-panel <?php echo $account_section_active ? 'is-active' : ''; ?>" data-subtab-panel="account">
+         <li><a href="/client" class="client-tab-link <?php echo $profile_tab === 'active' ? 'is-active' : ''; ?>">Profile</a></li>
+         <li><a href="/client/change-password" class="client-tab-link <?php echo $change_password_tab === 'active' ? 'is-active' : ''; ?>">Password</a></li>
+         <li><a href="/payment/success" class="client-tab-link <?php echo $documents_tab === 'active' ? 'is-active' : ''; ?>">Documents</a></li>
+       </ul>
+       <ul class="client-subtab-panel <?php echo $orders_section_active ? 'is-active' : ''; ?>" data-subtab-panel="orders">
+         <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
+         <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
+         <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
+       </ul>
+       <ul class="client-subtab-panel <?php echo $benefits_section_active ? 'is-active' : ''; ?>" data-subtab-panel="benefits">
+         <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Vouchers</a></li>
+         <li><a href="/client/affiliate-dashboard" class="client-tab-link <?php echo $affiliate_tab === 'active' ? 'is-active' : ''; ?>">Affiliate</a></li>
+         <li><a href="/shop" class="client-tab-link">Shop</a></li>
+       </ul>
+       <ul class="client-subtab-panel <?php echo $updates_section_active ? 'is-active' : ''; ?>" data-subtab-panel="updates">
+         <li><a href="/client/notifications" class="client-tab-link <?php echo $notifications_tab === 'active' ? 'is-active' : ''; ?>">Notifications<?php if($unread_count){?><span class="unread-dot"></span><?php } ?></a></li>
+         <li><a href="/client/logout" class="client-tab-link">Logout</a></li>
+       </ul>
+     </div>
 
 
    </div>
    </nav>
 <script>
   (function () {
-    const mq = window.matchMedia('(min-width: 769px)');
-    const dropdowns = document.querySelectorAll('.client-nav-dropdown');
+    const topTabs = document.querySelectorAll('.client-top-tab');
+    const panels = document.querySelectorAll('.client-subtab-panel');
 
-    dropdowns.forEach((dropdown) => {
-      const defaultOpen = dropdown.getAttribute('data-default-open') === '1';
-
-      if (defaultOpen) {
-        dropdown.setAttribute('open', '');
-      }
-
-      dropdown.addEventListener('mouseenter', () => {
-        if (!mq.matches) return;
-        dropdown.setAttribute('open', '');
+    topTabs.forEach((tab) => {
+      tab.addEventListener('mouseenter', () => {
+        if (window.matchMedia('(max-width: 768px)').matches) return;
+        const target = tab.getAttribute('data-subtab-target');
+        topTabs.forEach((t) => t.classList.remove('is-active'));
+        panels.forEach((panel) => panel.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        const activePanel = document.querySelector('[data-subtab-panel="' + target + '"]');
+        if (activePanel) activePanel.classList.add('is-active');
       });
 
-      dropdown.addEventListener('mouseleave', () => {
-        if (!mq.matches) return;
-        if (defaultOpen) {
-          dropdown.setAttribute('open', '');
-          return;
-        }
-        dropdown.removeAttribute('open');
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-subtab-target');
+        topTabs.forEach((t) => t.classList.remove('is-active'));
+        panels.forEach((panel) => panel.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        const activePanel = document.querySelector('[data-subtab-panel="' + target + '"]');
+        if (activePanel) activePanel.classList.add('is-active');
       });
     });
   })();
