@@ -83,6 +83,14 @@ class PerchMembers_Members extends PerchAPI_Factory
 
                  }
 
+                    if($value["affiliate_id"]!=null && !$results) {
+                        $callstatus = $this->get_by_affiliate_id($value["affiliate_id"], $Paging);
+                        if($callstatus!=null){
+                            $results=true;
+                            return $callstatus;
+                        }
+                    }
+
                    if($value["fromdate"]!=null && $value["todate"]!=null) {
                       // echo "4";
                     $daterange = array(
@@ -100,6 +108,32 @@ class PerchMembers_Members extends PerchAPI_Factory
 
 		return $results;
 	}
+
+        public function get_by_affiliate_id($affiliate_id='nan', $Paging=false)
+        {
+                $affiliate_id = trim((string)$affiliate_id);
+                if ($affiliate_id === '') {
+                        return false;
+                }
+
+                $select = ($Paging && $Paging->enabled()) ? $Paging->select_sql() : 'SELECT';
+
+                $sql = $select.' *
+                                FROM '.$this->table.'
+                                WHERE memberProperties LIKE '.$this->db->pdb('%"affID":"'.$affiliate_id.'"%');
+
+                if ($Paging && $Paging->enabled()) {
+                        $sql .= ' '.$Paging->limit_sql();
+                }
+
+                $rows = $this->db->get_rows($sql);
+
+                if ($Paging && $Paging->enabled()) {
+                        $Paging->set_total($this->db->get_count($Paging->total_count_sql()));
+                }
+
+                return $this->return_instances($rows);
+        }
         public function get_by_status($status='nan',$sort=false, $Paging=false)
         {
                 return $this->get_by('memberStatus', $status, $sort,$Paging);
