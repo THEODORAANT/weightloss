@@ -603,7 +603,16 @@ class PerchAdminListing
                         return $this->HTML->encode($row->$prop());
                 }
 
+                $is_callback = false;
                 if (is_callable($def)) {
+                        if (!is_string($def)) {
+                                $is_callback = true;
+                        } elseif (strpos($def, '::') !== false || strpos($def, '->') !== false) {
+                                $is_callback = true;
+                        }
+                }
+
+                if ($is_callback) {
                         $func = $def;
                         return $func($row, $this->HTML, $this->Lang);
 
