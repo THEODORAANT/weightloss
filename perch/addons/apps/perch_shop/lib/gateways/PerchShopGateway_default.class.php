@@ -226,6 +226,22 @@ public function take_payment($Order, $opts)
         //'payment_method_options[klarna][preferred_locale]' => 'en-GB',
     ];
 
+    $promotion_code = '';
+    if (isset($opts['promotion_code'])) {
+        $promotion_code = trim((string)$opts['promotion_code']);
+    } elseif (isset($opts['discount_code'])) {
+        $promotion_code = trim((string)$opts['discount_code']);
+    }
+
+    if ($promotion_code !== '') {
+        $promotion_code_id = $this->resolve_stripe_promotion_code_id($stripe_secret_key, $promotion_code);
+        if ($promotion_code_id !== '') {
+            $checkout_fields['discounts[0][promotion_code]'] = $promotion_code_id;
+        } else {
+            PerchUtil::debug('Stripe promotion code not found for checkout: ' . $promotion_code, 'warning');
+        }
+    }
+
     $order_line_items = $this->get_order_checkout_line_items($Order, $currency, $stripe_price_id, $stripe_product_id, $is_test_mode);
 
     if (!PerchUtil::count($order_line_items)) {
@@ -306,6 +322,50 @@ public function take_payment($Order, $opts)
         PerchUtil::debug($data, 'error');
        // return $this->handle_failed_payment($Order, null, $opts);
     }
+}
+
+private function resolve_stripe_promotion_code_id($stripe_secret_key, $promotion_code)
+{
+    $promotion_code = trim((string)$promotion_code);
+    if ($promotion_code === '') {
+        return '';
+    }
+
+    if (strpos($promotion_code, 'promo_') === 0) {
+        return $promotion_code;
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.stripe.com/v1/promotion_codes?active=true&limit=10&code=' . rawurlencode($promotion_code));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPGET, true);
+    curl_setopt($ch, CURLOPT_USERPWD, $stripe_secret_key . ':');
+
+    $response = curl_exec($ch);
+    if ($response === false) {
+        curl_close($ch);
+        return '';
+    }
+
+    curl_close($ch);
+    $data = json_decode($response, true);
+    if (!is_array($data) || !isset($data['data']) || !is_array($data['data'])) {
+        return '';
+    }
+
+    $target_code = strtoupper($promotion_code);
+    foreach ($data['data'] as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $item_code = isset($item['code']) ? strtoupper((string)$item['code']) : '';
+        if ($item_code === $target_code && !empty($item['id'])) {
+            return (string)$item['id'];
+        }
+    }
+
+    return '';
 }
 
 	public function take_paymentold($Order, $opts)
