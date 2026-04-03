@@ -274,11 +274,13 @@ function getUnusedCoupons($affID) {
      return [];
  }
 
- $sql = "SELECT p.promoID, p.promoTitle, p.promoFrom, p.promoTo, p.promoActive, p.promoDynamicFields, p.promoCreated, COUNT(op.orderID) AS use_count
+ $sql = "SELECT p.promoID, p.promoTitle, p.promoFrom, p.promoTo, p.promoActive, p.promoDynamicFields, p.promoCreated, COUNT(o.orderID) AS use_count
 "
       . "FROM ".PERCH_DB_PREFIX."shop_promotions p
 "
       . "LEFT JOIN ".PERCH_DB_PREFIX."shop_order_promotions op ON op.promoID = p.promoID
+"
+      . "LEFT JOIN ".PERCH_DB_PREFIX."shop_orders o ON o.orderID = op.orderID AND o.orderStatus = ".$this->db->pdb('paid')."
 "
       . "WHERE p.promoTitle LIKE ".$this->db->pdb('Affiliate Credit %('.$affID.')')."
 "
