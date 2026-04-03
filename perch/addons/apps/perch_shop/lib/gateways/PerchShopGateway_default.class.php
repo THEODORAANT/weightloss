@@ -103,10 +103,22 @@ public function take_klarna_payment($Order, $opts)
 
 		foreach($items as $Item) {
 			$item_data = $Item->to_array();
-			$qty = isset($item_data['itemQty']) ? (int)$item_data['itemQty'] : 1;
+			$qty = 1;
+			if (isset($item_data['itemQty'])) {
+				$qty = (int)$item_data['itemQty'];
+			} elseif (isset($item_data['qty'])) {
+				$qty = (int)$item_data['qty'];
+			}
 			if ($qty < 1) $qty = 1;
 
-			$item_total = isset($item_data['itemTotal']) ? (float)$item_data['itemTotal'] : 0;
+			$item_total = 0;
+			if (isset($item_data['itemTotal'])) {
+				$item_total = (float)$item_data['itemTotal'];
+			} elseif (isset($item_data['total'])) {
+				$item_total = (float)$item_data['total'];
+			} elseif (isset($item_data['itemPrice'])) {
+				$item_total = ((float)$item_data['itemPrice']) * $qty;
+			}
 			if ($item_total <= 0) {
 				continue;
 			}
