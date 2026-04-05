@@ -32,8 +32,11 @@
 		<div class="d-flex justify-content-between">
 			<a href="#" style="color: #545454; padding: 10px 0;">Add promo code</a>
 
-			<span style="color: #288881; font-weight: bolder; padding: 10px 0;">	<perch:input type="text" class="discount-input" id="discount_code" /></span>
-
+			<perch:if id="total_discounts" match="gt" value="0.00">
+				<span style="color: #288881; font-weight: bolder; padding: 10px 0;">Applied: <perch:shop id="discount_code" /></span>
+			<perch:else />
+				<span style="color: #288881; font-weight: bolder; padding: 10px 0;">	<perch:input type="text" class="discount-input" id="discount_code" /></span>
+			</perch:if>
 
 		</div>
 
