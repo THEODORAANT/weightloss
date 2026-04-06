@@ -96,6 +96,11 @@
 
     if ($Form->submitted()) {
         $data = $Form->get_posted_content($Template, $Orders, $Order);
+        $dynamic_fields = PerchUtil::json_safe_decode($data['orderDynamicFields'] ?? '{}', true);
+        $shipping_status = '';
+        if (is_array($dynamic_fields) && isset($dynamic_fields['shipping_status'])) {
+            $shipping_status = trim((string)$dynamic_fields['shipping_status']);
+        }
 
         $postvars = ['customerID'];
         $more = $Form->receive($postvars);
@@ -309,6 +314,15 @@
             }
         }
 
+        if (is_object($Order) && $shipping_status !== '') {
+            $pharmacy_shipping_status = normalise_shipping_status_for_pharmacy_table($shipping_status);
+            $DB->execute(
+                'UPDATE '.PERCH_DB_PREFIX.'orders_match_pharmacy
+                 SET status='.$DB->pdb($pharmacy_shipping_status).'
+                 WHERE orderID='.$DB->pdb((int)$Order->id())
+            );
+        }
+
         if (is_object($Order)) {
             $message = $HTML->success_message('Your order has been successfully edited. Return to %slisting%s', '<a href="'.$API->app_path().'">', '</a>');
         } else {
@@ -341,6 +355,24 @@
             }
 
             return null;
+        }
+    }
+
+    if (!function_exists('normalise_shipping_status_for_pharmacy_table')) {
+        function normalise_shipping_status_for_pharmacy_table($value)
+        {
+            $normalised = strtolower(trim((string)$value));
+            switch ($normalised) {
+                case 'delayed dispatch':
+                    return 'DELAYED_DISPATCH';
+                case 'dispatched':
+                    return 'DISPATCHED';
+                case 'delivered':
+                    return 'DELIVERED';
+                case 'pending':
+                default:
+                    return 'PENDING';
+            }
         }
     }
 
