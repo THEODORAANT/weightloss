@@ -15,10 +15,47 @@
 
 	$message = false;
 	$status_reason = '';
+	$shipping_status_value = 'pending';
 	$product_options = [];
 
 	if (!function_exists('comms_service_request_json')) {
 		require_once PERCH_PATH . '/addons/apps/api/routes/lib/comms_service.php';
+	}
+
+	if (!function_exists('normalise_shipping_status_for_pharmacy_table')) {
+		function normalise_shipping_status_for_pharmacy_table($value)
+		{
+			$normalised = strtolower(trim((string)$value));
+			switch ($normalised) {
+				case 'delayed dispatch':
+					return 'DELAYED_DISPATCH';
+				case 'dispatched':
+					return 'DISPATCHED';
+				case 'delivered':
+					return 'DELIVERED';
+				case 'pending':
+				default:
+					return 'PENDING';
+			}
+		}
+	}
+
+	if (!function_exists('normalise_shipping_status_from_pharmacy_table')) {
+		function normalise_shipping_status_from_pharmacy_table($value)
+		{
+			$normalised = strtoupper(trim((string)$value));
+			switch ($normalised) {
+				case 'DELAYED_DISPATCH':
+					return 'Delayed dispatch';
+				case 'DISPATCHED':
+					return 'dispatched';
+				case 'DELIVERED':
+					return 'delivered';
+				case 'PENDING':
+				default:
+					return 'pending';
+			}
+		}
 	}
 
 	if (!function_exists('recalculate_order_totals')) {
@@ -212,10 +249,16 @@
 		$Customer    = $Customers->find($Order->customerID());
 		$BillingAdr  = $Addresses->find($Order->orderBillingAddress());
 		$ShippingAdr = $Addresses->find($Order->orderShippingAddress());
+		$current_shipping_status = $DB->get_value(
+			'SELECT status FROM '.PERCH_DB_PREFIX.'orders_match_pharmacy WHERE orderID='.$DB->pdb((int)$Order->id()).' LIMIT 1'
+		);
+		if ($current_shipping_status !== null && $current_shipping_status !== false && trim((string)$current_shipping_status) !== '') {
+			$shipping_status_value = normalise_shipping_status_from_pharmacy_table($current_shipping_status);
+		}
 
 		if ($Form->submitted()) {
 
-			$data = $Form->receive(['status']);
+			$data = $Form->receive(['status', 'shipping_status']);
 			$status_reason = trim((string)PerchUtil::post('status_reason'));
 
 			if ($Order && isset($data['status']) && $data['status'] !== '') {
@@ -241,6 +284,16 @@
 					}
 					}
 				}
+			}
+
+			if ($Order && isset($data['shipping_status']) && trim((string)$data['shipping_status']) !== '') {
+				$shipping_status_value = trim((string)$data['shipping_status']);
+				$pharmacy_shipping_status = normalise_shipping_status_for_pharmacy_table($shipping_status_value);
+				$DB->execute(
+					'UPDATE '.PERCH_DB_PREFIX.'orders_match_pharmacy
+					 SET status='.$DB->pdb($pharmacy_shipping_status).'
+					 WHERE orderID='.$DB->pdb((int)$Order->id())
+				);
 			}
 		}
 

@@ -13,12 +13,22 @@
 
     $status_reason_value = isset($status_reason) ? $status_reason : '';
     $status_reason_field = '<input type="hidden" name="status_reason" id="status_reason" value="'.$HTML->encode($status_reason_value).'">';
+    $shipping_status_opts = [
+        ['label' => 'pending', 'value' => 'pending'],
+        ['label' => 'Delayed dispatch', 'value' => 'Delayed dispatch'],
+        ['label' => 'dispatched', 'value' => 'dispatched'],
+        ['label' => 'delivered', 'value' => 'delivered'],
+    ];
+    $shipping_status_selected = isset($shipping_status_value) ? $shipping_status_value : 'pending';
 
     echo $HTML->title_panel([
         'heading' => $Lang->get('Viewing order'),
         'form' => [
             'action' => $Form->action(),
-            'button' => $Form->select_field('status', 'Change status to', $opts, $value).$status_reason_field.$Form->submit('btnSubmit', 'Update', 'button button-small')
+            'button' => $Form->select_field('status', 'Change status to', $opts, $value)
+                .$Form->select_field('shipping_status', 'Shipping status', $shipping_status_opts, $shipping_status_selected)
+                .$status_reason_field
+                .$Form->submit('btnSubmit', 'Update', 'button button-small')
         ]
     ], $CurrentUser);
 
