@@ -24,6 +24,35 @@
 
     echo $Smartbar->render();
 
+    $type_filter_options = [
+        ['value' => '', 'label' => $Lang->get('All types')],
+        ['value' => 'first-order', 'label' => $Lang->get('First-order questionnaire')],
+        ['value' => 'reorder', 'label' => $Lang->get('Re-order questionnaire')],
+    ];
+
+    $product_filter_options = [
+        ['value' => '', 'label' => $Lang->get('All products')],
+    ];
+    if (isset($product_options) && is_array($product_options)) {
+        foreach ($product_options as $value => $label) {
+            if ($value === 'all') {
+                continue;
+            }
+            $product_filter_options[] = [
+                'value' => $value,
+                'label' => $label,
+            ];
+        }
+    }
+
+    echo '<form method="get" class="form-simple">';
+    echo '<div class="form-inner">';
+    echo $Form->select_field('type', $Lang->get('Filter by type'), $type_filter_options, isset($selected_type) ? $selected_type : '');
+    echo $Form->select_field('product', $Lang->get('Filter by product'), $product_filter_options, isset($selected_product) ? $selected_product : '');
+    echo '<p class="submit"><button type="submit" class="button button-icon icon-left">'.PerchUtil::html($Lang->get('Apply filters')).'</button></p>';
+    echo '</div>';
+    echo '</form>';
+
     $Listing = new PerchAdminListing($CurrentUser, $HTML, $Lang, $Paging);
     $Listing->add_col([
             'title'     => 'Question',

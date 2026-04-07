@@ -34,7 +34,39 @@
         }
     }
 
+    $selected_type = isset($_GET['type']) ? trim((string)$_GET['type']) : '';
+    $selected_product = isset($_GET['product']) ? trim((string)$_GET['product']) : '';
+
     $questions = $Questions->all();
+
+    $product_options = ['all' => 'All products'];
+    if (PerchUtil::count($questions)) {
+        foreach ($questions as $Question) {
+            $product = $Question->productSlug();
+            if ($product === null || $product === '') {
+                continue;
+            }
+            $product_options[$product] = $product;
+        }
+    }
+
+    if ($selected_type !== '' || $selected_product !== '') {
+        $questions = array_values(array_filter($questions, function ($Question) use ($selected_type, $selected_product) {
+            if ($selected_type !== '' && $Question->questionnaireType() !== $selected_type) {
+                return false;
+            }
+
+            if ($selected_product !== '') {
+                $product = $Question->productSlug();
+                $normalized = ($product === null || $product === '') ? 'all' : $product;
+                if ($normalized !== $selected_product) {
+                    return false;
+                }
+            }
+
+            return true;
+        }));
+    }
 
     $question_groups = [];
     if (PerchUtil::count($questions)) {
@@ -46,7 +78,4 @@
             $question_groups[$type][] = $Question;
         }
     }
-
-
-    $questions = $Questions->all();
 ?>
