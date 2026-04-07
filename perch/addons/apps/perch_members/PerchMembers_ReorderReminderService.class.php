@@ -135,7 +135,7 @@ class PerchMembers_ReorderReminderService
             $notifiedCustomers[$customerID] = true;
             return;
         }
-echo "emailData"; print_r($emailData);
+//echo "emailData"; print_r($emailData);
        // try {
             $Email = $this->api->get('Email');
            // $Email->set_template('/perch/addons/apps/perch_members/templates/members/emails/reorder_reminder.html','members');
@@ -152,12 +152,12 @@ echo "emailData"; print_r($emailData);
                     $Email->recipientEmail($emailAddress);
                    // $Email->recipientEmail('perchrunway@gmail.com');
 
-  echo "Email";
-            print_r($Email);
+ // echo "Email";
+            //print_r($Email);
             $emailSent = $Email->send();
 
-            echo "email";
-            print_r($emailSent);
+           // echo "email";
+            //print_r($emailSent);
      /*   } catch (Exception $exception) {
             echo 'Failed to send email for order ' . $orderID . ': ' . $exception->getMessage() . PHP_EOL;
             $appendLog($orderID, $customerID, 'error-email');

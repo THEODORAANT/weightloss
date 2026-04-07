@@ -46,7 +46,7 @@
                 <perch:if not-exists="has_variants">
                     <perch:form id="add_to_cart" app="perch_shop" action="/order/cart">
                         <perch:input id="product" type="hidden" value="<perch:shop id="productID" env-autofill="false" />" />
-                        <perch:input type="submit" value="Add to cart" class="w-full rounded-full bg-[#3328bf] px-[18px] py-[12px] text-[14px] font-semibold text-white transition hover:bg-[#2a21a3]" />
+                        <perch:input type="submit" value="Add to cart" class="add-btn" />
                     </perch:form>
                     <perch:else />
                     <div class="flex flex-col gap-[16px] rounded-[16px] border border-slate-200 bg-slate-50 p-[16px]">
@@ -62,7 +62,8 @@
                                     options="<perch:shop id="_variant_opts" type="hidden" />"
                                 />
                                 <div class="pt-[10px]">
-                                    <perch:input type="submit" value="Add to cart" class="w-full rounded-full bg-[#3328bf] px-[18px] py-[12px] text-[14px] font-semibold text-white transition hover:bg-[#2a21a3]" />
+                                    <perch:input type="submit" value="Add to cart"
+                                                 class="add-btn" />
                                 </div>
                             </perch:form>
                         </div>
@@ -72,7 +73,7 @@
         </div>
     </div>
 
-    <div class="mt-[32px] border-t border-slate-200 pt-[24px] text-[15px] text-slate-600">
+  <!--  <div class="mt-[32px] border-t border-slate-200 pt-[24px] text-[15px] text-slate-600">
         <perch:shop id="description" type="textarea" />
-    </div>
+    </div>-->
 </div>

@@ -238,12 +238,13 @@ public function take_payment($Order, $opts)
         //'payment_method_options[klarna][preferred_locale]' => 'en-GB',
     ];
 
-    $promotion_code = '';
+  /*  $promotion_code = '';
     if (isset($opts['promotion_code'])) {
         $promotion_code = trim((string)$opts['promotion_code']);
     } elseif (isset($opts['discount_code'])) {
         $promotion_code = trim((string)$opts['discount_code']);
-    }
+    }*/
+ $promotion_code = $Order->get_discount_code();
 
     if ($promotion_code !== '') {
         $promotion_code_id = $this->resolve_stripe_promotion_code_id($stripe_secret_key, $promotion_code);
@@ -286,7 +287,7 @@ public function take_payment($Order, $opts)
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($checkout_fields));
 
-//print_r($checkout_fields);
+print_r($checkout_fields);
     $response = curl_exec($ch);
 //echo "take payment";print_r($response);
     curl_close($ch);

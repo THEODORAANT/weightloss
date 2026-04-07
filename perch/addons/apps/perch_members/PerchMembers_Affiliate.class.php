@@ -204,6 +204,7 @@ function createStripeCouponAndPromotionCode($couponCode, $amount, $currencyCode,
     ]);
 
     $couponResponse = curl_exec($ch);
+    print_r($couponResponse);
     if (curl_errno($ch)) {
         $error = curl_error($ch);
         curl_close($ch);
@@ -241,6 +242,7 @@ function createStripeCouponAndPromotionCode($couponCode, $amount, $currencyCode,
     ]);
 
     $promoResponse = curl_exec($ch);
+    print_r($promoResponse);
     if (curl_errno($ch)) {
         $error = curl_error($ch);
         curl_close($ch);
@@ -387,6 +389,18 @@ function convertCreditToCoupon($affID) {
          'status' => (string)($stripeResult['status'] ?? 'Unable to create Stripe coupon.')
      ];
  }
+ /*
+{ "id": "ksdxkleW", "object": "coupon", "amount_off": 9000, "created": 1774972210, "currency": "gbp",
+"duration": "once", "duration_in_months": null, "livemode": false, "max_redemptions": null, "metadata": {},
+"name": null, "percent_off": null, "redeem_by": null, "times_redeemed": 0, "valid": true }
+{ "id": "promo_1TH4YRCeux1vWiSRFCMU4bto", "object": "promotion_code", "active": true,
+ "code": "AFFAFF02VKF122131", "coupon": { "id": "ksdxkleW", "object": "coupon", "amount_off": 9000,
+ "created": 1774972210, "currency": "gbp", "duration": "once", "duration_in_months": null, "livemode": false,
+  "max_redemptions": null, "metadata": {}, "name": null, "percent_off": null, "redeem_by": null,
+  "times_redeemed": 0, "valid": true }, "created": 1774972211, "customer": null, "customer_account": null,
+   "expires_at": null, "livemode": false, "max_redemptions": null, "metadata": {},
+   "restrictions": { "first_time_transaction": false, "minimum_amount": null, "minimum_amount_currency": null },
+   "times_redeemed": 0 }*/
 
  $promoOrderSql = "SELECT MAX(promoOrder) FROM ".PERCH_DB_PREFIX."shop_promotions";
  $promoOrder = (int)$this->db->get_value($promoOrderSql);

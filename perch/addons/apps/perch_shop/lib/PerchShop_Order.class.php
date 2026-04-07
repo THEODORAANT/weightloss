@@ -436,14 +436,14 @@ public function isReorder($Customer){
                 "answer" => $questionnaire_notes,
             ];
         }
-if(!PerchUtil::count($questions_items)){
+/*if(!PerchUtil::count($questions_items)){
      echo "reorder"; echo  $reorder ;
  echo $sql_questionnaire;
 echo "questions_items";
 	print_r($questions_items);
 	//die();exit();
 }
-/*echo "questions_items";
+echo "questions_items";
 	print_r($questions_items);
 
                       echo "ShippingAdr";
@@ -479,7 +479,7 @@ echo "questions_items";
 
            $response = [];
            $sendResult = comms_service_request_json('POST', '/v1/perch/orders/'.$this->id().'/create', $orderData);
-                  if(!$sendResult) { echo "comms_service_request_json no"; print_r($orderData);die();exit();}
+               //   if(!$sendResult) { echo "comms_service_request_json no"; print_r($orderData);die();exit();}
 
            $response = [
                'success' => $sendResult,
