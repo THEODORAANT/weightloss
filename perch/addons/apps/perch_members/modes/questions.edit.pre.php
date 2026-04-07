@@ -30,10 +30,24 @@
     $Form = $API->get('Form');
     $Form->require_field('label', 'Required');
     $Form->require_field('questionKey', 'Required');
+    $Form->require_field('questionnaireSlug', 'Required');
 
     if ($Form->submitted()) {
-        $postvars = ['questionnaireType','questionKey','label','type','options','fieldName','stepSlug','dependencies','sort'];
+        $postvars = ['questionnaireType','questionnaireSlug','productSlug','questionKey','label','type','options','fieldName','stepSlug','dependencies','sort'];
         $data = $Form->receive($postvars);
+
+        if (!isset($data['questionnaireSlug']) || trim((string)$data['questionnaireSlug']) === '') {
+            $data['questionnaireSlug'] = 'default';
+        } else {
+            $data['questionnaireSlug'] = trim((string)$data['questionnaireSlug']);
+        }
+
+        if (isset($data['productSlug'])) {
+            $data['productSlug'] = trim((string)$data['productSlug']);
+            if ($data['productSlug'] === '' || $data['productSlug'] === 'all') {
+                $data['productSlug'] = null;
+            }
+        }
 
         $options_input = isset($data['options']) ? trim($data['options']) : '';
         if (isset($data['options'])) {

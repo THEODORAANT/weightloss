@@ -350,10 +350,10 @@ function perch_member_upload_document_api($memberID,$data){
 
         return false;
     }
-function perch_member_questionsForQuestionnaire($type) {
+function perch_member_questionsForQuestionnaire($type, $productSlug = null, $questionnaireSlug = 'default') {
      $API  = new PerchAPI(1.0, 'perch_members');
                        $Questionnaires = new PerchMembers_Questionnaires($API);
-                      return $Questionnaires->get_questions_answers($type);
+                      return $Questionnaires->get_questions_answers($type, $questionnaireSlug, $productSlug);
 
 
     }

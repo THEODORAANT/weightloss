@@ -46,6 +46,30 @@
         ]);
 
     $Listing->add_col([
+            'title' => $Lang->get('Questionnaire'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $slug = $Question->questionnaireSlug();
+                if ($slug === null || $slug === '') {
+                    $slug = 'default';
+                }
+                return $HTML->encode($slug);
+            },
+            'sort' => 'questionnaireSlug',
+        ]);
+
+    $Listing->add_col([
+            'title' => $Lang->get('Product'),
+            'value' => function ($Question, $HTML, $Lang) {
+                $product = $Question->productSlug();
+                if ($product === null || $product === '') {
+                    return $HTML->encode($Lang->get('All products'));
+                }
+                return $HTML->encode($product);
+            },
+            'sort' => 'productSlug',
+        ]);
+
+    $Listing->add_col([
             'title'     => $Lang->get('Answer type'),
             'value'     => 'type',
             'sort'      => 'type',

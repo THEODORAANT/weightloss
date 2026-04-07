@@ -92,6 +92,8 @@
         CREATE TABLE `__PREFIX__members_questionnaire_questions` (
           `questionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `questionnaireType` enum('first-order','reorder') NOT NULL DEFAULT 'first-order',
+          `questionnaireSlug` varchar(64) DEFAULT NULL,
+          `productSlug` varchar(64) DEFAULT NULL,
           `questionKey` varchar(64) NOT NULL DEFAULT '',
           `label` varchar(255) NOT NULL,
           `type` char(32) NOT NULL DEFAULT 'text',
@@ -133,6 +135,8 @@
                 $sort += 10;
                 $DB->insert(PERCH_DB_PREFIX.'members_questionnaire_questions', [
                     'questionnaireType' => 'reorder',
+                    'questionnaireSlug' => 'default',
+                    'productSlug'       => null,
                     'questionKey'       => $key,
                     'label'             => $q['label'],
                     'type'              => $q['type'],
@@ -149,6 +153,8 @@
                 $sort += 10;
                 $DB->insert(PERCH_DB_PREFIX.'members_questionnaire_questions', [
                     'questionnaireType' => 'first-order',
+                    'questionnaireSlug' => 'default',
+                    'productSlug'       => null,
                     'questionKey'       => $key,
                     'label'             => $q['label'],
                     'type'              => $q['type'],
@@ -166,4 +172,3 @@
     $result = $this->db->get_value($sql);
 
     return $result;
-

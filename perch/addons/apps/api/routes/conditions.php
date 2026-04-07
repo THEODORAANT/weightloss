@@ -7,7 +7,9 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 
 $type = $data['type'] ?? 'first-order';
-$questions=perch_member_questionsForQuestionnaire($type);
+$product = $data['product'] ?? null;
+$questionnaire = $data['questionnaire'] ?? 'default';
+$questions=perch_member_questionsForQuestionnaire($type, $product, $questionnaire);
 if($questions){
     echo json_encode(["questions" => $questions]);
 } else {

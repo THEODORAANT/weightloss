@@ -1,4 +1,6 @@
 <?php
+    require_once __DIR__.'/../questionnaire_medication_helpers.php';
+
     echo $HTML->title_panel([
         'heading' => $heading1,
     ], $CurrentUser);
@@ -7,10 +9,30 @@
 
     echo $Form->form_start();
 
+        $product_options = [
+            ['value' => 'all', 'label' => $Lang->get('All products')],
+        ];
+        if (function_exists('perch_questionnaire_medications')) {
+            foreach (perch_questionnaire_medications() as $slug => $label) {
+                if ($slug === 'none') {
+                    continue;
+                }
+
+                $product_options[] = [
+                    'value' => $slug,
+                    'label' => $label,
+                ];
+            }
+        }
+
         echo $Form->select_field('questionnaireType', 'Questionnaire type', [
             ['value'=>'first-order', 'label'=>$Lang->get('First order')],
             ['value'=>'reorder', 'label'=>$Lang->get('Re-order')]
         ], isset($details['questionnaireType'])?$details['questionnaireType']:'first-order');
+
+        echo $Form->text_field('questionnaireSlug', 'Questionnaire name', isset($details['questionnaireSlug']) && $details['questionnaireSlug'] !== '' ? $details['questionnaireSlug'] : 'default');
+
+        echo $Form->select_field('productSlug', 'Product', $product_options, isset($details['productSlug']) && $details['productSlug'] !== '' ? $details['productSlug'] : 'all');
 
         echo $Form->text_field('questionKey', 'Question key', isset($details['questionKey'])?$details['questionKey']:false);
 
@@ -22,13 +44,12 @@
         echo $Form->hint($Lang->get('Defines the questionnaire step slug. Leave blank to reuse the question key.'));
         echo $Form->text_field('stepSlug', 'Step slug', isset($details['stepSlug'])?$details['stepSlug']:false);
 
-        echo $Form->select_field('type', 'Field type', [
-            ['value'=>'text','label'=>'Text'],
-            ['value'=>'textarea','label'=>'Textarea'],
-            ['value'=>'radio','label'=>'Radio'],
-            ['value'=>'checkbox','label'=>'Checkbox'],
-            ['value'=>'button','label'=>'Button'],
-            ['value'=>'hidden','label'=>'Hidden']
+        echo $Form->select_field('type', 'Question input type', [
+            ['value'=>'text','label'=>'Text field'],
+            ['value'=>'textarea','label'=>'Long text field'],
+            ['value'=>'radio','label'=>'Multiple choice (single answer)'],
+            ['value'=>'checkbox','label'=>'Multiple choice (multiple answers)'],
+            ['value'=>'hidden','label'=>'Hidden value']
         ], isset($details['type'])?$details['type']:'text');
 
         echo $Form->textarea_field('options', 'Options (value:label per line)', isset($details['options'])?$details['options']:'');

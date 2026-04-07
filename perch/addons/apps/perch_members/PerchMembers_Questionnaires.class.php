@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/questionnaire_medication_helpers.php';
+require_once __DIR__ . '/PerchMembers_QuestionnaireQuestions.class.php';
 
 class PerchMembers_Questionnaires extends PerchAPI_Factory
 {
@@ -894,20 +895,111 @@ QUESTION;
 
         protected $default_sort_column = 'created_at';
         public $static_fields = array('version','question_text', 'question_slug', 'question_order', 'question_slug', 'answer', 'answer_text','member_id');
-	public function get_questions($type='first-order')
+    protected function normalizeQuestionnaireType($type='first-order')
     {
-    if($type=="re-order"){
-     return $this->reorder_questions;
+        return ($type === 're-order' || $type === 'reorder') ? 'reorder' : 'first-order';
     }
-    return $this->questions;
-    }
-        public function get_questions_answers($type='first-order')
-        {
-        if($type=="re-order"){
-         return $this->reorder_questions_answers;
+
+    protected function custom_questions_for_assignment($type='first-order', $questionnaireSlug='default', $productSlug=null)
+    {
+        $QuestionnaireQuestions = new PerchMembers_QuestionnaireQuestions($this->api);
+        $rows = $QuestionnaireQuestions->get_for_assignment(
+            $this->normalizeQuestionnaireType($type),
+            $questionnaireSlug,
+            $productSlug
+        );
+
+        if (!PerchUtil::count($rows)) {
+            return [null, null];
         }
+
+        $questions = [];
+        $questionsWithAnswers = [];
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $questionKey = isset($row['questionKey']) ? trim((string)$row['questionKey']) : '';
+            if ($questionKey === '') {
+                continue;
+            }
+
+            $label = isset($row['label']) ? (string)$row['label'] : $questionKey;
+            $fieldType = isset($row['type']) ? trim((string)$row['type']) : 'text';
+            $fieldName = isset($row['fieldName']) && $row['fieldName'] !== null && $row['fieldName'] !== ''
+                ? (string)$row['fieldName']
+                : $questionKey;
+
+            $options = [];
+            if (!empty($row['options'])) {
+                $decodedOptions = PerchUtil::json_safe_decode($row['options'], true);
+                if (is_array($decodedOptions)) {
+                    $options = $decodedOptions;
+                }
+            }
+
+            $questions[$questionKey] = $label;
+
+            $questionConfig = [
+                'label' => $label,
+                'type'  => $fieldType,
+                'name'  => $fieldName,
+            ];
+
+            if (PerchUtil::count($options)) {
+                $questionConfig['options'] = $options;
+            }
+
+            if (!empty($row['dependencies'])) {
+                $decodedDependencies = PerchUtil::json_safe_decode($row['dependencies'], true);
+                if (is_array($decodedDependencies)) {
+                    $questionConfig['dependencies'] = $decodedDependencies;
+                }
+            }
+
+            if (!empty($row['stepSlug'])) {
+                $questionConfig['step'] = (string)$row['stepSlug'];
+            }
+
+            $questionsWithAnswers[$questionKey] = $questionConfig;
+        }
+
+        if (!PerchUtil::count($questionsWithAnswers)) {
+            return [null, null];
+        }
+
+        return [$questions, $questionsWithAnswers];
+    }
+
+	public function get_questions($type='first-order', $questionnaireSlug='default', $productSlug=null)
+    {
+        [$customQuestions, $customQuestionConfigs] = $this->custom_questions_for_assignment($type, $questionnaireSlug, $productSlug);
+        if (is_array($customQuestions) && is_array($customQuestionConfigs)) {
+            return $customQuestions;
+        }
+
+        if($type=="re-order" || $type=="reorder"){
+            return $this->reorder_questions;
+        }
+
+        return $this->questions;
+    }
+
+    public function get_questions_answers($type='first-order', $questionnaireSlug='default', $productSlug=null)
+    {
+        [$customQuestions, $customQuestionConfigs] = $this->custom_questions_for_assignment($type, $questionnaireSlug, $productSlug);
+        if (is_array($customQuestions) && is_array($customQuestionConfigs)) {
+            return $customQuestionConfigs;
+        }
+
+        if($type=="re-order" || $type=="reorder"){
+            return $this->reorder_questions_answers;
+        }
+
         return $this->questions_and_answers;
-        }
+    }
 
     protected function resolveAnswerTextFromConfig($value, array $questionConfig)
     {

@@ -7,7 +7,9 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 
 $type = $data['type'] ?? 'first-order';
-$questions=perch_member_questionsForQuestionnaire($type);
+$product = $data['product'] ?? null;
+$questionnaire = $data['questionnaire'] ?? 'default';
+$questions=perch_member_questionsForQuestionnaire($type, $product, $questionnaire);
 if($questions){
 if($type=="first-order"){
 $questions["conditions"]["label"]="Do any of the following statements apply to you?";
