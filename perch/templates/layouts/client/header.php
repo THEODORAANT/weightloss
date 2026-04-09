@@ -513,6 +513,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         $notifications_tab="";
         $chat_tab="";
         $vouchers_tab="";
+        $appointments_tab="";
         $chat_unread=false;
         $unread_count=0;
         $member_notifications = perch_member_notifications();
@@ -548,11 +549,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             $change_password_tab="active";
            }else if($lastPart=="vouchers" ){
             $vouchers_tab="active";
+           }else if($lastPart=="my-appointments" ){
+            $appointments_tab="active";
            }
       ?>
      <?php
        $account_section_active = ($profile_tab === 'active' || $change_password_tab === 'active' || $documents_tab === 'active');
-       $orders_section_active = ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active');
+       $orders_section_active = ($orders_tab === 'active' || $reorder_tab === 'active' || $chat_tab === 'active' || $appointments_tab === 'active');
        $benefits_section_active = ($vouchers_tab === 'active' || $affiliate_tab === 'active');
        $updates_section_active = ($notifications_tab === 'active');
      ?>
@@ -580,6 +583,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          <li><a href="/client/orders" class="client-tab-link <?php echo $orders_tab === 'active' ? 'is-active' : ''; ?>">Orders</a></li>
          <li><a href="/order/re-order" class="client-tab-link <?php echo $reorder_tab === 'active' ? 'is-active' : ''; ?>">Re-Order</a></li>
          <li><a href="/client/chat" class="client-tab-link <?php echo $chat_tab === 'active' ? 'is-active' : ''; ?>">Chat<?php if($chat_unread){?><span class="unread-dot"></span><?php } ?></a></li>
+         <li><a href="/client/my-appointments" class="client-tab-link <?php echo $appointments_tab === 'active' ? 'is-active' : ''; ?>">My Appointments</a></li>
        </ul>
        <ul class="client-subtab-panel <?php echo $benefits_section_active ? 'is-active' : ''; ?>" data-subtab-panel="benefits">
          <li><a href="/client/vouchers" class="client-tab-link <?php echo $vouchers_tab === 'active' ? 'is-active' : ''; ?>">Vouchers</a></li>
