@@ -13,9 +13,11 @@
 		    PerchUtil::redirect($API->app_path());
 		}
 
-		$announcementID = PerchUtil::get('id');
+		$appointmentID = PerchUtil::get('id');
 		$Appointment   = $Appointments->find($appointmentID);
-		 $details  = $Appointment->to_array();
+		if (is_object($Appointment)) {
+			$details = $Appointment->to_array();
+		}
 		$edit_mode         = true;
 
 	}else{
@@ -94,4 +96,3 @@ $data['announcementTitle'] = $dynamic_fields['announcementTitle'];
 	if (is_object($Announcement)) {
 		$details = $Appointment->to_array();
 	}
-
