@@ -41,6 +41,7 @@ perch_layout('client/header', [
     <div class="client-hero">
       <h1>My appointments</h1>
       <p>View your booked nutrition and wellbeing appointments in one place.</p>
+      <a href="/client/appointments" class="btn btn-primary client-hero__cta">Add new appointment</a>
     </div>
 
     <?php if (!empty($appointments)): ?>
@@ -94,6 +95,7 @@ perch_layout('client/header', [
 
 <style>
   .appointments-list { display:grid; gap:16px; }
+  .client-hero__cta { margin-top:12px; }
   .appointment-item { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:16px; box-shadow:0 10px 22px rgba(15,23,42,.05); }
   .appointment-item__header { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:12px; }
   .appointment-item__header h2 { margin:0; font-size:1.15rem; }
