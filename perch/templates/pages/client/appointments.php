@@ -128,8 +128,9 @@ perch_layout('client/header', [
               </div>
             </div>
 
-            <div class="step-actions">
-              <button class="btn btn-primary" id="go-to-questions" disabled>Continue to questions</button>
+            <div class="step-actions step-actions--split">
+              <button class="btn btn-secondary" id="schedule-back" type="button">Back to appointment</button>
+              <button class="btn btn-primary" id="go-to-questions" type="button" disabled>Continue to questions</button>
             </div>
           </div>
         </div>
@@ -386,10 +387,11 @@ perch_layout('client/header', [
               </section>
             </form>
 
-            <div class="step-actions">
+            <div class="step-actions step-actions--split">
+              <button class="btn btn-secondary" id="questions-back" type="button">Back to scheduling</button>
               <div class="step-actions__group">
                 <div id="submission-error" class="form-error" role="alert" hidden></div>
-                <button class="btn btn-primary" id="go-to-cart" disabled>Submit and go to cart</button>
+                <button class="btn btn-primary" id="go-to-cart" type="button" disabled>Submit and go to cart</button>
               </div>
             </div>
           </div>
@@ -449,7 +451,9 @@ perch_layout('client/header', [
   .slot.is-selected { border-color:#4338ca; background:#eef2ff; box-shadow:0 12px 24px rgba(67,56,202,0.16); }
 
   .step-actions { margin-top:18px; display:flex; justify-content:flex-end; }
-  .step-actions__group { display:flex; flex-direction:column; align-items:flex-end; gap:10px; width:100%; }
+  .step-actions--split { justify-content:space-between; align-items:flex-start; gap:12px; }
+  .step-actions__group { display:flex; flex-direction:column; align-items:flex-end; gap:10px; width:100%; max-width:420px; }
+  .client-card.is-hidden { display:none; }
   .step-actions__group .form-error { width:100%; }
   .form-grid { display:grid; gap:16px; grid-template-columns:1fr; }
   @media (min-width: 720px) { .form-grid { grid-template-columns:1fr 1fr; } }
@@ -494,6 +498,8 @@ perch_layout('client/header', [
   const goToScheduleBtn = document.getElementById('go-to-schedule');
   const goToQuestionsBtn = document.getElementById('go-to-questions');
   const goToCartBtn = document.getElementById('go-to-cart');
+  const scheduleBackBtn = document.getElementById('schedule-back');
+  const questionsBackBtn = document.getElementById('questions-back');
   const dateInput = document.getElementById('appointment-date');
   const slotList = document.getElementById('slot-list');
   const slotMessage = document.getElementById('slot-message');
@@ -591,6 +597,16 @@ perch_layout('client/header', [
     if (statusEl) {
       statusEl.textContent = enabled ? '' : 'Complete the previous step';
     }
+  }
+
+
+  function showOnlyStep(stepName) {
+    const cards = document.querySelectorAll('.client-card[data-step]');
+    cards.forEach((card) => {
+      const isTarget = card.dataset.step === stepName;
+      card.classList.toggle('is-hidden', !isTarget);
+      card.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+    });
   }
 
   function formatTime(totalMinutes) {
@@ -739,7 +755,12 @@ perch_layout('client/header', [
     setStepEnabled('schedule', true);
     goToQuestionsBtn.disabled = true;
     dateInput.disabled = false;
+    showOnlyStep('schedule');
     dateInput.focus();
+  });
+
+  scheduleBackBtn.addEventListener('click', () => {
+    showOnlyStep('product');
   });
 
   dateInput.addEventListener('change', () => {
@@ -766,7 +787,12 @@ perch_layout('client/header', [
   goToQuestionsBtn.addEventListener('click', () => {
     setStepEnabled('questions', true);
     validateQuestions();
+    showOnlyStep('questions');
     document.getElementById('full_name').focus();
+  });
+
+  questionsBackBtn.addEventListener('click', () => {
+    showOnlyStep('schedule');
   });
 
   goToCartBtn.addEventListener('click', async () => {
@@ -810,6 +836,7 @@ perch_layout('client/header', [
   setStepEnabled('product', true);
   setStepEnabled('schedule', false);
   setStepEnabled('questions', false);
+  showOnlyStep('product');
 </script>
 
 <?php perch_layout('getStarted/footer'); ?>
