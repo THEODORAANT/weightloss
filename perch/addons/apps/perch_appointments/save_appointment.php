@@ -24,6 +24,8 @@ $DB->execute('CREATE TABLE IF NOT EXISTS `'.$table.'` (
   `goal` TEXT NOT NULL,
   `medical` TEXT NOT NULL,
   `notes` TEXT NULL,
+  `appointmentConfirmed` TINYINT(1) NOT NULL DEFAULT 0,
+  `confirmedAt` DATETIME NULL DEFAULT NULL,
   `createdAt` DATETIME NOT NULL,
   PRIMARY KEY (`appointmentID`),
   INDEX `member_lookup` (`memberID`),
@@ -73,6 +75,8 @@ $data = [
     'goal' => trim((string) $input['goal']),
     'medical' => trim((string) $input['medical']),
     'notes' => isset($input['notes']) ? trim((string) $input['notes']) : '',
+    'appointmentConfirmed' => 0,
+    'confirmedAt' => null,
     'createdAt' => date('Y-m-d H:i:s'),
 ];
 

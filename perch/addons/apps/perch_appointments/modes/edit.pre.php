@@ -1,98 +1,57 @@
 <?php
-    $Appointments = new PerchAppointments_Appointments($API);
-        $appointmentID = false;
 
-	$edit_mode  	= false;
-	$Appointment    	= false;
-	$message		= false;
-	$details 		= false;
+$Appointments = new PerchAppointments_Appointments($API);
+$Appointments->ensure_schema();
 
-	if (PerchUtil::get('id')) {
+$appointmentID = false;
+$Appointment = false;
+$message = false;
+$details = false;
 
-		if (!$CurrentUser->has_priv('perch_appointments.appointments.edit')) {
-		    PerchUtil::redirect($API->app_path());
-		}
+if (PerchUtil::get('id')) {
+    $appointmentID = (int) PerchUtil::get('id');
+    $Appointment = $Appointments->find($appointmentID);
 
-		$appointmentID = PerchUtil::get('id');
-		$Appointment   = $Appointments->find($appointmentID);
-		if (is_object($Appointment)) {
-			$details = $Appointment->to_array();
-		}
-		$edit_mode         = true;
+    if (!is_object($Appointment)) {
+        PerchUtil::redirect($API->app_path());
+    }
 
-	}else{
-		if (!$CurrentUser->has_priv('perch_appointments.appointments.create')) {
-		    PerchUtil::redirect($API->app_path());
-		}
-	}
+    $details = $Appointment->to_array();
+} else {
+    PerchUtil::redirect($API->app_path());
+}
 
-	// Template
-	$Template   = $API->get('Template');
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $newDate = trim((string) PerchUtil::post('appointmentDate'));
+    $newSlot = trim((string) PerchUtil::post('slotLabel'));
+    $confirmed = PerchUtil::post('appointmentConfirmed') ? 1 : 0;
 
+    $date = DateTime::createFromFormat('Y-m-d', $newDate);
 
-	$Template->set('appointments/appointments.html', 'appointments');
+    if (!$date || $newSlot === '') {
+        $message = $HTML->failure_message('Please provide a valid date and time.');
+    } else {
+        $update = [
+            'appointmentDate' => $date->format('Y-m-d'),
+            'appointmentDateLabel' => $date->format('D j M Y'),
+            'slotLabel' => $newSlot,
+            'appointmentConfirmed' => $confirmed,
+        ];
 
+        $wasConfirmed = isset($details['appointmentConfirmed']) && (int)$details['appointmentConfirmed'] === 1;
 
-	$tags = $Template->find_all_tags_and_repeaters();
-
-	$Form = $API->get('Form');
-	$Form->handle_empty_block_generation($Template);
-
-	$Form->set_required_fields_from_template($Template, $details);
-
-
-	if ($Form->submitted()) {
-
-       $prev = false;
-
-        if (isset($details['announcementDynamicFields'])) {
-            $prev = PerchUtil::json_safe_decode($details['announcementDynamicFields'], true);
+        if ($confirmed && !$wasConfirmed) {
+            $update['confirmedAt'] = date('Y-m-d H:i:s');
         }
 
-    	$dynamic_fields = $Form->receive_from_template_fields($Template, $prev, $Announcements, $Announcement, $clear_post=true, $strip_static_fields=false);
+        if (!$confirmed) {
+            $update['confirmedAt'] = null;
+        }
 
-        PerchUtil::debug('Dynamic fields:');
-        PerchUtil::debug($dynamic_fields);
+        $Appointment->update($update);
+        $Appointment = $Appointments->find($appointmentID);
+        $details = $Appointment->to_array();
 
-
-          // fetch out static fields
-                if (isset($dynamic_fields['announcementContent']) && is_array($dynamic_fields['announcementContent'])) {
-                    $data['announcementContentRaw']  = $dynamic_fields['announcementContent']['raw'];
-                    $data['announcementContent'] = $dynamic_fields['announcementContent']['processed'];
-                    unset($dynamic_fields['announcementContent']);
-                }
-
-    	$data['announcementCreatedDate'] =date("Y-m-d H:i:s") ;
-$data['announcementTitle'] = $dynamic_fields['announcementTitle'];
-		if (is_object($Announcement)) {
-			$Announcement->update($data);
-
-		}else{
-
-			$Appointment = $Appointments->create($data);
-
-			if ($Announcement) {
-				//$Listing->index($Template);
-				//$Listing->update_search_text($search_text);
-				PerchUtil::redirect($Perch->get_page().'?id='.$Appointment->id().'&created=1');
-			}
-
-		}
-
-		if (is_object($Appointment)) {
-		    $message = $HTML->success_message('Your Announcement has been successfully edited. Return to %sAnnouncement%s', '<a href="'.$API->app_path('perch_announcements') .'" class="notification-link">', '</a>');
-		}else{
-		    $message = $HTML->failure_message('Sorry, that update was not successful.');
-		}
-
-	}
-
-
-
-	if (PerchUtil::get('created') && !$message) {
-	    $message = $HTML->success_message('Your listing has been successfully created. Return to %slisting listing%s', '<a href="'. $API->app_path('perch_listings') .'" class="notification-link">', '</a>');
-	}
-
-	if (is_object($Announcement)) {
-		$details = $Appointment->to_array();
-	}
+        $message = $HTML->success_message('Appointment updated successfully.');
+    }
+}

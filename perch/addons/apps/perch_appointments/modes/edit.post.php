@@ -1,46 +1,47 @@
 <?php
-    if (is_object($Appointment)) {
 
-            $title = $Lang->get('Editing Appointment ‘%s’', $HTML->encode($Appointment->appointmentDateLabel()));
+if (!is_object($Appointment)) {
+    echo $HTML->failure_message('Appointment not found.');
+    return;
+}
 
+echo $HTML->title_panel([
+    'heading' => $Lang->get('Edit appointment #%s', $details['appointmentID']),
+], $CurrentUser);
 
-    }else{
-        $title = $Lang->get('Creating a new Appointment');
-    }
+if ($message) echo $message;
 
-    echo $HTML->title_panel([
-        'heading' => $title,
-    ], $CurrentUser);
+echo '<div class="inner">';
+echo '<form method="post">';
 
-    /* ----------------------------------------- SMART BAR ----------------------------------------- */
+echo '<div class="field-wrap">';
+echo '<label>Date</label>';
+echo '<input type="date" name="appointmentDate" value="'.PerchUtil::html($details['appointmentDate']).'" required>';
+echo '</div>';
 
+echo '<div class="field-wrap">';
+echo '<label>Time</label>';
+echo '<input type="text" name="slotLabel" value="'.PerchUtil::html($details['slotLabel']).'" required>';
+echo '</div>';
 
-    include('_subnav.php');
+echo '<div class="field-wrap">';
+echo '<label><input type="checkbox" name="appointmentConfirmed" value="1" '.(((int)$details['appointmentConfirmed'] === 1) ? 'checked' : '').'> Confirm appointment</label>';
+echo '</div>';
 
-    /* ---------------------------------------- /SMART BAR ----------------------------------------- */
+echo '<div class="submit-bar">';
+echo '<button type="submit" class="button button-icon icon-left">Save changes</button>';
+echo '</div>';
 
+echo '</form>';
 
-
-    $template_help_html = $Template->find_help();
-    if ($template_help_html) {
-        echo $HTML->heading2('Help');
-        echo '<div class="template-help">' . $template_help_html . '</div>';
-    }
-
-    echo $HTML->heading2('Appointment');
-
-    /* ---- FORM ---- */
-    echo $Form->form_start('announcement-edit');
-   $modified_details = $details;
-
-            if (isset($modified_details['announcementContentRaw'])) {
-                $modified_details['announcementContent'] = $modified_details['announcementContentRaw'];
-            }
-
-        echo $Form->fields_from_template($Template, $modified_details);
-
-
-        echo $Form->submit_field('btnSubmit', 'Save', $API->app_path());
-
-    echo $Form->form_end();
-    /* ---- /FORM ---- */
+echo '<hr>';
+echo '<h2>Saved appointment details</h2>';
+echo '<table class="d">';
+foreach ($details as $key => $value) {
+    echo '<tr>';
+    echo '<th>'.PerchUtil::html($key).'</th>';
+    echo '<td>'.PerchUtil::html((string)$value).'</td>';
+    echo '</tr>';
+}
+echo '</table>';
+echo '</div>';
