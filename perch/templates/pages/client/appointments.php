@@ -128,8 +128,9 @@ perch_layout('client/header', [
               </div>
             </div>
 
-            <div class="step-actions">
-              <button class="btn btn-primary" id="go-to-questions" disabled>Continue to questions</button>
+            <div class="step-actions step-actions--split">
+              <button class="btn btn-secondary" id="schedule-back" type="button">Back to appointment</button>
+              <button class="btn btn-primary" id="go-to-questions" type="button" disabled>Continue to questions</button>
             </div>
           </div>
         </div>
@@ -145,25 +146,252 @@ perch_layout('client/header', [
               <span class="step-status" aria-live="polite"></span>
             </div>
 
-            <form id="pre-questions" class="form-grid" novalidate>
-              <div>
-                <label class="form-label" for="goal">What would you like to focus on?</label>
-                <textarea id="goal" name="goal" class="form-control" rows="3" required placeholder="e.g. balancing meals, improving energy, staying consistent"></textarea>
+            <form id="pre-questions" class="form-grid intake-form" novalidate>
+              <div class="intake-intro">
+                <h3>Weight Loss with Injections: Client Intake Questionnaire</h3>
+                <p>Thank you for taking the time to complete this form. Your answers will help us tailor a nutrition and lifestyle plan that complements your weight loss injections safely and effectively.</p>
               </div>
-              <div>
-                <label class="form-label" for="medical">Anything medical we should know about?</label>
-                <textarea id="medical" name="medical" class="form-control" rows="3" required placeholder="Current medications, allergies or recent changes"></textarea>
-              </div>
-              <div>
-                <label class="form-label" for="notes">Additional notes (optional)</label>
-                <textarea id="notes" name="notes" class="form-control" rows="2" placeholder="Meal preferences, goals for this year, or questions"></textarea>
-              </div>
+
+              <section class="intake-section intake-full">
+                <h4>SECTION 1: Personal Information</h4>
+                <div>
+                  <label class="form-label" for="full_name">Full Name</label>
+                  <input class="form-control" type="text" id="full_name" name="full_name" required>
+                </div>
+                <div>
+                  <label class="form-label" for="date_of_birth">Date of Birth</label>
+                  <input class="form-control" type="date" id="date_of_birth" name="date_of_birth" required>
+                </div>
+                <div>
+                  <label class="form-label" for="email_address">Email Address</label>
+                  <input class="form-control" type="email" id="email_address" name="email_address" required>
+                </div>
+                <div>
+                  <label class="form-label" for="phone_number">Phone Number</label>
+                  <input class="form-control" type="tel" id="phone_number" name="phone_number" required>
+                </div>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Preferred method of contact</legend>
+                  <label><input type="radio" name="preferred_contact" value="Phone" required> Phone</label>
+                  <label><input type="radio" name="preferred_contact" value="Email"> Email</label>
+                </fieldset>
+              </section>
+
+              <section class="intake-section intake-full">
+                <h4>SECTION 2: Medical Background</h4>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Have you been prescribed a weight loss injection by a healthcare provider?</legend>
+                  <label><input type="radio" name="injection_status" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="injection_status" value="No"> No</label>
+                  <label><input type="radio" name="injection_status" value="I'm considering it"> I'm considering it</label>
+                </fieldset>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Which injection are you using or considering?</legend>
+                  <label><input type="radio" name="injection_type" value="Ozempic (Semaglutide)"> Ozempic (Semaglutide)</label>
+                  <label><input type="radio" name="injection_type" value="Wegovy"> Wegovy</label>
+                  <label><input type="radio" name="injection_type" value="Saxenda"> Saxenda</label>
+                  <label><input type="radio" name="injection_type" value="Mounjaro (Tirzepatide)"> Mounjaro (Tirzepatide)</label>
+                  <label><input type="radio" name="injection_type" value="Other"> Other</label>
+                  <label><input type="radio" name="injection_type" value="Not sure yet"> Not sure yet</label>
+                </fieldset>
+                <div class="intake-full">
+                  <label class="form-label" for="injection_type_other">Other injection (if selected)</label>
+                  <input class="form-control" type="text" id="injection_type_other" name="injection_type_other">
+                </div>
+                <div>
+                  <label class="form-label" for="start_date">Start date (if applicable)</label>
+                  <input class="form-control" type="date" id="start_date" name="start_date">
+                </div>
+                <div>
+                  <label class="form-label" for="current_dosage">Current dosage (if known)</label>
+                  <input class="form-control" type="text" id="current_dosage" name="current_dosage">
+                </div>
+                <div class="intake-full">
+                  <label class="form-label" for="side_effects">Have you experienced any side effects so far?</label>
+                  <textarea id="side_effects" name="side_effects" class="form-control" rows="2"></textarea>
+                </div>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Do you have any existing medical conditions?</legend>
+                  <label><input type="checkbox" name="medical_conditions[]" value="Type 2 Diabetes"> Type 2 Diabetes</label>
+                  <label><input type="checkbox" name="medical_conditions[]" value="PCOS"> PCOS</label>
+                  <label><input type="checkbox" name="medical_conditions[]" value="High blood pressure"> High blood pressure</label>
+                  <label><input type="checkbox" name="medical_conditions[]" value="High cholesterol"> High cholesterol</label>
+                  <label><input type="checkbox" name="medical_conditions[]" value="Hypothyroidism/Hyperthyroidism"> Hypothyroidism/Hyperthyroidism</label>
+                  <label><input type="checkbox" name="medical_conditions[]" value="Heart disease"> Heart disease</label>
+                  <label><input type="checkbox" name="medical_conditions[]" value="None"> None</label>
+                </fieldset>
+                <div class="intake-full">
+                  <label class="form-label" for="medical_conditions_other">Other medical conditions</label>
+                  <input class="form-control" type="text" id="medical_conditions_other" name="medical_conditions_other">
+                </div>
+                <div class="intake-full">
+                  <label class="form-label" for="medications_supplements">Are you taking any medications or supplements?</label>
+                  <textarea id="medications_supplements" name="medications_supplements" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="intake-full">
+                  <label class="form-label" for="allergies_intolerances">Any allergies or intolerances?</label>
+                  <textarea id="allergies_intolerances" name="allergies_intolerances" class="form-control" rows="2"></textarea>
+                </div>
+                <div>
+                  <label class="form-label" for="menopause">Are you going through the menopause?</label>
+                  <select class="form-control" id="menopause" name="menopause"><option value="">Select</option><option>Yes</option><option>No</option></select>
+                </div>
+                <div>
+                  <label class="form-label" for="post_menopause">Are you post menopause?</label>
+                  <select class="form-control" id="post_menopause" name="post_menopause"><option value="">Select</option><option>Yes</option><option>No</option></select>
+                </div>
+              </section>
+
+              <section class="intake-section intake-full">
+                <h4>SECTION 3: Weight History &amp; Goals</h4>
+                <div>
+                  <label class="form-label" for="current_weight">Current weight (kg/lbs)</label>
+                  <input class="form-control" type="text" id="current_weight" name="current_weight" required>
+                </div>
+                <div>
+                  <label class="form-label" for="goal_weight">Goal weight (kg/lbs)</label>
+                  <input class="form-control" type="text" id="goal_weight" name="goal_weight" required>
+                </div>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Have you tried to lose weight in the past?</legend>
+                  <label><input type="radio" name="tried_before" value="Yes"> Yes</label>
+                  <label><input type="radio" name="tried_before" value="No"> No</label>
+                </fieldset>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">What methods have you tried before?</legend>
+                  <label><input type="checkbox" name="methods_tried[]" value="Calorie counting"> Calorie counting</label>
+                  <label><input type="checkbox" name="methods_tried[]" value="Low-carb/Keto"> Low-carb/Keto</label>
+                  <label><input type="checkbox" name="methods_tried[]" value="Intermittent fasting"> Intermittent fasting</label>
+                  <label><input type="checkbox" name="methods_tried[]" value="Exercise programs"> Exercise programs</label>
+                  <label><input type="checkbox" name="methods_tried[]" value="Commercial plans (e.g. Slimming World, WW)"> Commercial plans (e.g. Slimming World, WW)</label>
+                </fieldset>
+                <div class="intake-full">
+                  <label class="form-label" for="methods_tried_other">Other method</label>
+                  <input class="form-control" type="text" id="methods_tried_other" name="methods_tried_other">
+                </div>
+                <div class="intake-full">
+                  <label class="form-label" for="worked_best">What has worked best for you in the past?</label>
+                  <textarea id="worked_best" name="worked_best" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="intake-full">
+                  <label class="form-label" for="reasons_now">What are your main reasons for wanting to lose weight now?</label>
+                  <textarea id="reasons_now" name="reasons_now" class="form-control" rows="2"></textarea>
+                </div>
+              </section>
+
+              <section class="intake-section intake-full">
+                <h4>SECTION 4: Nutrition &amp; Eating Habits</h4>
+                <div class="intake-full">
+                  <label class="form-label" for="typical_day_eating">What does a typical day of eating look like for you?</label>
+                  <textarea id="typical_day_eating" name="typical_day_eating" class="form-control" rows="2"></textarea>
+                </div>
+                <div>
+                  <label class="form-label" for="meals_per_day">How many meals do you eat per day (including snacks)?</label>
+                  <input class="form-control" type="text" id="meals_per_day" name="meals_per_day">
+                </div>
+                <fieldset class="option-group">
+                  <legend class="form-label">Do you eat out regularly?</legend>
+                  <label><input type="radio" name="eat_out" value="Yes"> Yes</label>
+                  <label><input type="radio" name="eat_out" value="No"> No</label>
+                  <label><input type="radio" name="eat_out" value="Occasionally"> Occasionally</label>
+                </fieldset>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Do you struggle with any of the following?</legend>
+                  <label><input type="checkbox" name="struggles[]" value="Emotional eating"> Emotional eating</label>
+                  <label><input type="checkbox" name="struggles[]" value="Late-night snacking"> Late-night snacking</label>
+                  <label><input type="checkbox" name="struggles[]" value="Cravings for sugar or carbs"> Cravings for sugar or carbs</label>
+                  <label><input type="checkbox" name="struggles[]" value="Portion control"> Portion control</label>
+                  <label><input type="checkbox" name="struggles[]" value="Skipping meals"> Skipping meals</label>
+                  <label><input type="checkbox" name="struggles[]" value="None of the above"> None of the above</label>
+                </fieldset>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Any dietary preferences or restrictions?</legend>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="Vegetarian"> Vegetarian</label>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="Vegan"> Vegan</label>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="Gluten-free"> Gluten-free</label>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="Dairy-free"> Dairy-free</label>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="Halal"> Halal</label>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="Kosher"> Kosher</label>
+                  <label><input type="checkbox" name="dietary_preferences[]" value="None"> None</label>
+                </fieldset>
+                <div class="intake-full">
+                  <label class="form-label" for="dietary_preferences_other">Other dietary preference</label>
+                  <input class="form-control" type="text" id="dietary_preferences_other" name="dietary_preferences_other">
+                </div>
+              </section>
+
+              <section class="intake-section intake-full">
+                <h4>SECTION 5: Lifestyle &amp; Wellness</h4>
+                <fieldset class="option-group">
+                  <legend class="form-label">How often do you exercise?</legend>
+                  <label><input type="radio" name="exercise_frequency" value="Daily"> Daily</label>
+                  <label><input type="radio" name="exercise_frequency" value="3–4 times/week"> 3–4 times/week</label>
+                  <label><input type="radio" name="exercise_frequency" value="Occasionally"> Occasionally</label>
+                  <label><input type="radio" name="exercise_frequency" value="Rarely"> Rarely</label>
+                  <label><input type="radio" name="exercise_frequency" value="Never"> Never</label>
+                </fieldset>
+                <div>
+                  <label class="form-label" for="activity_types">What types of activity do you enjoy?</label>
+                  <textarea id="activity_types" name="activity_types" class="form-control" rows="2"></textarea>
+                </div>
+                <fieldset class="option-group">
+                  <legend class="form-label">How would you describe your sleep pattern?</legend>
+                  <label><input type="radio" name="sleep_pattern" value="7–9 hours, good quality"> 7–9 hours, good quality</label>
+                  <label><input type="radio" name="sleep_pattern" value="5–7 hours, light or interrupted"> 5–7 hours, light or interrupted</label>
+                  <label><input type="radio" name="sleep_pattern" value="Less than 5 hours"> Less than 5 hours</label>
+                  <label><input type="radio" name="sleep_pattern" value="Struggle with insomnia"> Struggle with insomnia</label>
+                </fieldset>
+                <div>
+                  <label class="form-label" for="stress_level">How would you rate your daily stress levels (1 = low, 10 = very high)?</label>
+                  <input class="form-control" type="number" min="1" max="10" id="stress_level" name="stress_level">
+                </div>
+                <div>
+                  <label class="form-label" for="stress_coping">How do you usually cope with stress?</label>
+                  <textarea id="stress_coping" name="stress_coping" class="form-control" rows="2"></textarea>
+                </div>
+                <fieldset class="option-group intake-full">
+                  <legend class="form-label">Do you smoke or drink alcohol?</legend>
+                  <label><input type="radio" name="smoke_drink" value="Smoke"> Smoke</label>
+                  <label><input type="radio" name="smoke_drink" value="Drink alcohol"> Drink alcohol</label>
+                  <label><input type="radio" name="smoke_drink" value="Neither"> Neither</label>
+                  <label><input type="radio" name="smoke_drink" value="Both"> Both</label>
+                </fieldset>
+              </section>
+
+              <section class="intake-section intake-full">
+                <h4>SECTION 6: Goals &amp; Support</h4>
+                <div class="intake-full">
+                  <label class="form-label" for="successful_weight_loss">What would successful weight loss look like for you?</label>
+                  <textarea id="successful_weight_loss" name="successful_weight_loss" class="form-control" rows="2"></textarea>
+                </div>
+                <fieldset class="option-group">
+                  <legend class="form-label">Are you open to making long-term changes to your eating habits?</legend>
+                  <label><input type="radio" name="long_term_changes" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="long_term_changes" value="Somewhat"> Somewhat</label>
+                  <label><input type="radio" name="long_term_changes" value="Not sure"> Not sure</label>
+                </fieldset>
+                <fieldset class="option-group">
+                  <legend class="form-label">Do you currently have support from family or friends on this journey?</legend>
+                  <label><input type="radio" name="support_network" value="Yes"> Yes</label>
+                  <label><input type="radio" name="support_network" value="No"> No</label>
+                  <label><input type="radio" name="support_network" value="Somewhat"> Somewhat</label>
+                </fieldset>
+                <div class="intake-full">
+                  <label class="form-label" for="support_needed">What kind of support do you feel you need the most right now?</label>
+                  <textarea id="support_needed" name="support_needed" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="intake-full">
+                  <label class="form-label" for="anything_else">Anything else you’d like to share with me?</label>
+                  <textarea id="anything_else" name="anything_else" class="form-control" rows="3"></textarea>
+                </div>
+              </section>
             </form>
 
-            <div class="step-actions">
+            <div class="step-actions step-actions--split">
+              <button class="btn btn-secondary" id="questions-back" type="button">Back to scheduling</button>
               <div class="step-actions__group">
                 <div id="submission-error" class="form-error" role="alert" hidden></div>
-                <button class="btn btn-primary" id="go-to-cart" disabled>Go to cart</button>
+                <button class="btn btn-primary" id="go-to-cart" type="button" disabled>Submit and go to cart</button>
               </div>
             </div>
           </div>
@@ -223,11 +451,24 @@ perch_layout('client/header', [
   .slot.is-selected { border-color:#4338ca; background:#eef2ff; box-shadow:0 12px 24px rgba(67,56,202,0.16); }
 
   .step-actions { margin-top:18px; display:flex; justify-content:flex-end; }
-  .step-actions__group { display:flex; flex-direction:column; align-items:flex-end; gap:10px; width:100%; }
+  .step-actions--split { justify-content:space-between; align-items:flex-start; gap:12px; }
+  .step-actions__group { display:flex; flex-direction:column; align-items:flex-end; gap:10px; width:100%; max-width:420px; }
+  .client-card.is-hidden { display:none; }
   .step-actions__group .form-error { width:100%; }
   .form-grid { display:grid; gap:16px; grid-template-columns:1fr; }
   @media (min-width: 720px) { .form-grid { grid-template-columns:1fr 1fr; } }
   .form-grid textarea { min-height:88px; }
+  .form-grid input, .form-grid select { width:100%; }
+  .intake-form { gap:18px; }
+  .intake-intro { grid-column:1 / -1; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; }
+  .intake-intro h3 { margin:0 0 8px; }
+  .intake-intro p { margin:0; color:#475569; }
+  .intake-section { border:1px solid #e5e7eb; border-radius:12px; padding:14px; display:grid; gap:14px; grid-template-columns:1fr; }
+  .intake-section h4 { margin:0; color:#1f2937; }
+  .intake-full { grid-column:1 / -1; }
+  @media (min-width: 960px) { .intake-section { grid-template-columns:1fr 1fr; } }
+  .option-group { border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px; display:grid; gap:8px; }
+  .option-group legend { margin-bottom:4px; }
 
   .client-sidecard { position:sticky; top:110px; }
   .summary-list { display:grid; grid-template-columns:120px 1fr; gap:6px 12px; margin:0 0 14px; padding:0; }
@@ -248,7 +489,8 @@ perch_layout('client/header', [
     questions: {
       goal: '',
       medical: '',
-      notes: ''
+      notes: '',
+      raw: {}
     }
   };
 
@@ -256,6 +498,8 @@ perch_layout('client/header', [
   const goToScheduleBtn = document.getElementById('go-to-schedule');
   const goToQuestionsBtn = document.getElementById('go-to-questions');
   const goToCartBtn = document.getElementById('go-to-cart');
+  const scheduleBackBtn = document.getElementById('schedule-back');
+  const questionsBackBtn = document.getElementById('questions-back');
   const dateInput = document.getElementById('appointment-date');
   const slotList = document.getElementById('slot-list');
   const slotMessage = document.getElementById('slot-message');
@@ -355,6 +599,16 @@ perch_layout('client/header', [
     }
   }
 
+
+  function showOnlyStep(stepName) {
+    const cards = document.querySelectorAll('.client-card[data-step]');
+    cards.forEach((card) => {
+      const isTarget = card.dataset.step === stepName;
+      card.classList.toggle('is-hidden', !isTarget);
+      card.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+    });
+  }
+
   function formatTime(totalMinutes) {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
@@ -433,15 +687,48 @@ perch_layout('client/header', [
   }
 
   function validateQuestions() {
-    const goal = document.getElementById('goal');
-    const medical = document.getElementById('medical');
-    if (!goal.value.trim() || !medical.value.trim()) {
+    const requiredFields = ['full_name', 'date_of_birth', 'email_address', 'phone_number', 'current_weight', 'goal_weight'];
+    const hasMissingRequired = requiredFields.some((id) => {
+      const el = document.getElementById(id);
+      return !el || !String(el.value || '').trim();
+    });
+    const hasPreferredContact = !!preQuestionsForm.querySelector('input[name="preferred_contact"]:checked');
+    const hasInjectionStatus = !!preQuestionsForm.querySelector('input[name="injection_status"]:checked');
+    const hasLongTermChanges = !!preQuestionsForm.querySelector('input[name="long_term_changes"]:checked');
+
+    if (hasMissingRequired || !hasPreferredContact || !hasInjectionStatus || !hasLongTermChanges) {
       goToCartBtn.disabled = true;
       return false;
     }
-    state.questions.goal = goal.value.trim();
-    state.questions.medical = medical.value.trim();
-    state.questions.notes = document.getElementById('notes').value.trim();
+
+    const formData = new FormData(preQuestionsForm);
+    const answers = {};
+    formData.forEach((value, key) => {
+      if (key.endsWith('[]')) {
+        const normalizedKey = key.replace('[]', '');
+        if (!Array.isArray(answers[normalizedKey])) answers[normalizedKey] = [];
+        answers[normalizedKey].push(String(value));
+      } else if (Object.prototype.hasOwnProperty.call(answers, key)) {
+        if (!Array.isArray(answers[key])) answers[key] = [answers[key]];
+        answers[key].push(String(value));
+      } else {
+        answers[key] = String(value);
+      }
+    });
+
+    state.questions.goal = answers.successful_weight_loss || answers.reasons_now || 'Weight loss support';
+    state.questions.medical = [
+      `Injection status: ${answers.injection_status || 'Not provided'}`,
+      `Injection type: ${answers.injection_type || answers.injection_type_other || 'Not provided'}`,
+      `Current dosage: ${answers.current_dosage || 'Not provided'}`,
+      `Side effects: ${answers.side_effects || 'None provided'}`,
+      `Medical conditions: ${Array.isArray(answers.medical_conditions) ? answers.medical_conditions.join(', ') : (answers.medical_conditions || 'Not provided')}`,
+      `Medications/supplements: ${answers.medications_supplements || 'Not provided'}`,
+      `Allergies/intolerances: ${answers.allergies_intolerances || 'Not provided'}`,
+    ].join(' | ');
+    state.questions.notes = JSON.stringify(answers);
+    state.questions.raw = answers;
+
     goToCartBtn.disabled = false;
     setStepComplete('questions');
     return true;
@@ -468,7 +755,12 @@ perch_layout('client/header', [
     setStepEnabled('schedule', true);
     goToQuestionsBtn.disabled = true;
     dateInput.disabled = false;
+    showOnlyStep('schedule');
     dateInput.focus();
+  });
+
+  scheduleBackBtn.addEventListener('click', () => {
+    showOnlyStep('product');
   });
 
   dateInput.addEventListener('change', () => {
@@ -495,7 +787,12 @@ perch_layout('client/header', [
   goToQuestionsBtn.addEventListener('click', () => {
     setStepEnabled('questions', true);
     validateQuestions();
-    document.getElementById('goal').focus();
+    showOnlyStep('questions');
+    document.getElementById('full_name').focus();
+  });
+
+  questionsBackBtn.addEventListener('click', () => {
+    showOnlyStep('schedule');
   });
 
   goToCartBtn.addEventListener('click', async () => {
@@ -531,7 +828,7 @@ perch_layout('client/header', [
       setSubmissionError(error.message || 'Unable to continue to checkout. Please try again.');
     } finally {
       goToCartBtn.disabled = false;
-      goToCartBtn.textContent = 'Go to cart';
+      goToCartBtn.textContent = 'Submit and go to cart';
     }
   });
 
@@ -539,6 +836,7 @@ perch_layout('client/header', [
   setStepEnabled('product', true);
   setStepEnabled('schedule', false);
   setStepEnabled('questions', false);
+  showOnlyStep('product');
 </script>
 
 <?php perch_layout('getStarted/footer'); ?>
