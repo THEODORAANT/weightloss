@@ -150,21 +150,10 @@ perch_layout('client/header', [
               <div class="intake-intro">
                 <h3>Weight Loss with Injections: Client Intake Questionnaire</h3>
                 <p>Thank you for taking the time to complete this form. Your answers will help us tailor a nutrition and lifestyle plan that complements your weight loss injections safely and effectively.</p>
-                <div class="intake-progress" aria-hidden="true">
-                  <span class="intake-progress__pill">1. Personal</span>
-                  <span class="intake-progress__pill">2. Medical</span>
-                  <span class="intake-progress__pill">3. Weight Goals</span>
-                  <span class="intake-progress__pill">4. Nutrition</span>
-                  <span class="intake-progress__pill">5. Lifestyle</span>
-                  <span class="intake-progress__pill">6. Support</span>
-                </div>
               </div>
 
               <section class="intake-section intake-full">
-                <div class="intake-section__header">
-                  <h4>Section 1: Personal Information</h4>
-                  <p>Basic details and your preferred contact method for this appointment.</p>
-                </div>
+                <h4>SECTION 1: Personal Information</h4>
                 <div>
                   <label class="form-label" for="full_name">Full Name</label>
                   <input class="form-control" type="text" id="full_name" name="full_name" required>
@@ -189,10 +178,7 @@ perch_layout('client/header', [
               </section>
 
               <section class="intake-section intake-full">
-                <div class="intake-section__header">
-                  <h4>Section 2: Medical Background</h4>
-                  <p>Provide medical context so your clinician can prepare safely.</p>
-                </div>
+                <h4>SECTION 2: Medical Background</h4>
                 <fieldset class="option-group intake-full">
                   <legend class="form-label">Have you been prescribed a weight loss injection by a healthcare provider?</legend>
                   <label><input type="radio" name="injection_status" value="Yes" required> Yes</label>
@@ -257,10 +243,7 @@ perch_layout('client/header', [
               </section>
 
               <section class="intake-section intake-full">
-                <div class="intake-section__header">
-                  <h4>Section 3: Weight History &amp; Goals</h4>
-                  <p>Tell us where you are now and the outcomes you want to achieve.</p>
-                </div>
+                <h4>SECTION 3: Weight History &amp; Goals</h4>
                 <div>
                   <label class="form-label" for="current_weight">Current weight (kg/lbs)</label>
                   <input class="form-control" type="text" id="current_weight" name="current_weight" required>
@@ -297,10 +280,7 @@ perch_layout('client/header', [
               </section>
 
               <section class="intake-section intake-full">
-                <div class="intake-section__header">
-                  <h4>Section 4: Nutrition &amp; Eating Habits</h4>
-                  <p>Share your day-to-day food habits, preferences, and common challenges.</p>
-                </div>
+                <h4>SECTION 4: Nutrition &amp; Eating Habits</h4>
                 <div class="intake-full">
                   <label class="form-label" for="typical_day_eating">What does a typical day of eating look like for you?</label>
                   <textarea id="typical_day_eating" name="typical_day_eating" class="form-control" rows="2"></textarea>
@@ -341,10 +321,7 @@ perch_layout('client/header', [
               </section>
 
               <section class="intake-section intake-full">
-                <div class="intake-section__header">
-                  <h4>Section 5: Lifestyle &amp; Wellness</h4>
-                  <p>Help us understand your activity levels, stress, sleep, and routine.</p>
-                </div>
+                <h4>SECTION 5: Lifestyle &amp; Wellness</h4>
                 <fieldset class="option-group">
                   <legend class="form-label">How often do you exercise?</legend>
                   <label><input type="radio" name="exercise_frequency" value="Daily"> Daily</label>
@@ -382,10 +359,7 @@ perch_layout('client/header', [
               </section>
 
               <section class="intake-section intake-full">
-                <div class="intake-section__header">
-                  <h4>Section 6: Goals &amp; Support</h4>
-                  <p>Clarify what success looks like and where you want support.</p>
-                </div>
+                <h4>SECTION 6: Goals &amp; Support</h4>
                 <div class="intake-full">
                   <label class="form-label" for="successful_weight_loss">What would successful weight loss look like for you?</label>
                   <textarea id="successful_weight_loss" name="successful_weight_loss" class="form-control" rows="2"></textarea>
@@ -485,21 +459,15 @@ perch_layout('client/header', [
   @media (min-width: 720px) { .form-grid { grid-template-columns:1fr 1fr; } }
   .form-grid textarea { min-height:88px; }
   .form-grid input, .form-grid select { width:100%; }
-  .intake-form { gap:20px; }
-  .intake-intro { grid-column:1 / -1; background:linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%); border:1px solid #dbeafe; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(59,130,246,0.08); }
+  .intake-form { gap:18px; }
+  .intake-intro { grid-column:1 / -1; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; }
   .intake-intro h3 { margin:0 0 8px; }
   .intake-intro p { margin:0; color:#475569; }
-  .intake-progress { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-  .intake-progress__pill { background:#fff; border:1px solid #c7d2fe; color:#3730a3; border-radius:999px; padding:4px 10px; font-size:0.78rem; font-weight:600; }
-  .intake-section { border:1px solid #e2e8f0; border-radius:14px; padding:16px; display:grid; gap:14px; grid-template-columns:1fr; background:#fff; box-shadow:0 8px 24px rgba(15,23,42,0.04); }
-  .intake-section__header { grid-column:1 / -1; border-bottom:1px dashed #cbd5e1; padding-bottom:10px; margin-bottom:2px; }
-  .intake-section h4 { margin:0; color:#0f172a; }
-  .intake-section__header p { margin:6px 0 0; color:#64748b; font-size:0.92rem; }
+  .intake-section { border:1px solid #e5e7eb; border-radius:12px; padding:14px; display:grid; gap:14px; grid-template-columns:1fr; }
+  .intake-section h4 { margin:0; color:#1f2937; }
   .intake-full { grid-column:1 / -1; }
   @media (min-width: 960px) { .intake-section { grid-template-columns:1fr 1fr; } }
-  .option-group { border:1px solid #dbe1ea; border-radius:12px; padding:12px; display:grid; gap:8px; background:#f8fafc; }
-  .option-group label { display:flex; align-items:flex-start; gap:8px; color:#334155; }
-  .option-group input[type="radio"], .option-group input[type="checkbox"] { margin-top:3px; accent-color:#4f46e5; }
+  .option-group { border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px; display:grid; gap:8px; }
   .option-group legend { margin-bottom:4px; }
 
   .client-sidecard { position:sticky; top:110px; }
@@ -571,7 +539,7 @@ perch_layout('client/header', [
       throw new Error('Please select an appointment product before checking out.');
     }
 
-    const response = await fetch('/order/addtocart.php', {
+    const response = await fetch('/order/addtocart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
