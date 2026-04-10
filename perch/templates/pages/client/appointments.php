@@ -42,7 +42,7 @@ if (function_exists('perch_shop_products')) {
             $price = wl_appointment_extract_currency_amount($product['sale_price'] ?? $product['price'] ?? null);
 
             $appointmentProducts[] = [
-                'id' => $product['slug'] ?? ($product['productSlug'] ?? ($product['productID'] ?? uniqid('appointment_', true))),
+                'id' => $product['productID'],
                 'slug' => $product['slug'] ?? ($product['productSlug'] ?? ''),
                 'name' => $product['title'] ?? 'Appointment',
                 'price' => $price ?? 0,

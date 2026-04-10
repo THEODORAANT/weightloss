@@ -172,17 +172,18 @@ perch_layout('client/header', [
     if (!result?.result) throw new Error(result?.message || 'We could not save your appointment details.');
   }
 
-  async function addProductToCart(slug) {
-    const response = await fetch('/order/addtocart', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `m=${encodeURIComponent(slug)}`,
-    });
+  async function addProductToCart(id) {
 
-    if (!response.ok) throw new Error('Unable to reach checkout. Please try again.');
+    const response = await fetch('/order/add-to-cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify({ m: id }),
+    });
+console.log(response);
+    //if (!response.ok) throw new Error('Unable to reach checkout. Please try again.');
 
     const result = await response.json();
-    if (!result?.result) throw new Error('We could not add this appointment to your basket.');
+    //if (!result?.result) throw new Error('We could not add this appointment to your basket.');
   }
 
   preQuestionsForm.addEventListener('input', validateQuestions);
@@ -227,8 +228,8 @@ perch_layout('client/header', [
         medical,
         notes: JSON.stringify(answers),
       });
-
-      await addProductToCart(state.product.slug);
+console.log(state.product);
+      await addProductToCart(state.product.id);
       sessionStorage.removeItem('appointmentBooking');
       window.location.href = '/order/cart';
     } catch (error) {
