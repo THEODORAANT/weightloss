@@ -78,8 +78,15 @@ if (PerchUtil::count($appointments)) {
     ]);
 
     $Listing->add_col([
-        'title'     => 'Confirmed',
-        'value'     => 'appointmentConfirmed',
+        'title'     => 'Status',
+        'value'     => 'appointmentStatus',
+        'sort'      => 'appointmentStatus',
+    ]);
+
+    $Listing->add_col([
+        'title'     => 'Order ID',
+        'value'     => 'orderID',
+        'sort'      => 'orderID',
     ]);
 
     $Listing->add_col([

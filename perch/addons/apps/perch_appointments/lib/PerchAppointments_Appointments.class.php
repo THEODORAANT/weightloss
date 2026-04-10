@@ -18,6 +18,8 @@ class PerchAppointments_Appointments  extends PerchAppointments_Factory
     public function ensure_schema()
     {
         $schema_updates = [
+            'orderID' => "ALTER TABLE {$this->table} ADD COLUMN orderID INT UNSIGNED NULL DEFAULT NULL",
+            'appointmentStatus' => "ALTER TABLE {$this->table} ADD COLUMN appointmentStatus ENUM('pending','confirmed','completed') NOT NULL DEFAULT 'pending'",
             'appointmentConfirmed' => "ALTER TABLE {$this->table} ADD COLUMN appointmentConfirmed TINYINT(1) NOT NULL DEFAULT 0",
             'confirmedAt' => "ALTER TABLE {$this->table} ADD COLUMN confirmedAt DATETIME NULL DEFAULT NULL",
         ];

@@ -25,7 +25,23 @@ echo '<input type="text" name="slotLabel" value="'.PerchUtil::html($details['slo
 echo '</div>';
 
 echo '<div class="field-wrap">';
-echo '<label><input type="checkbox" name="appointmentConfirmed" value="1" '.(((int)$details['appointmentConfirmed'] === 1) ? 'checked' : '').'> Confirm appointment</label>';
+echo '<label>Status</label>';
+echo '<select name="appointmentStatus" required>';
+$selectedStatus = isset($details['appointmentStatus']) ? (string)$details['appointmentStatus'] : (((int)$details['appointmentConfirmed'] === 1) ? 'confirmed' : 'pending');
+$statusOptions = [
+    'pending' => 'Pending',
+    'confirmed' => 'Confirmed',
+    'completed' => 'Completed',
+];
+foreach ($statusOptions as $value => $label) {
+    echo '<option value="'.PerchUtil::html($value).'" '.($selectedStatus === $value ? 'selected' : '').'>'.PerchUtil::html($label).'</option>';
+}
+echo '</select>';
+echo '</div>';
+
+echo '<div class="field-wrap">';
+echo '<label>Associated Order ID</label>';
+echo '<input type="number" min="1" step="1" name="orderID" value="'.PerchUtil::html((string)($details['orderID'] ?? '')).'">';
 echo '</div>';
 
 echo '<div class="submit-bar">';

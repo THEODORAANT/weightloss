@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS `__PREFIX__appointments` (
   `goal` TEXT NOT NULL,
   `medical` TEXT NOT NULL,
   `notes` TEXT NULL,
+  `orderID` INT UNSIGNED NULL DEFAULT NULL,
+  `appointmentStatus` ENUM('pending','confirmed','completed') NOT NULL DEFAULT 'pending',
   `appointmentConfirmed` TINYINT(1) NOT NULL DEFAULT 0,
   `confirmedAt` DATETIME NULL DEFAULT NULL,
   `createdAt` DATETIME NOT NULL,
