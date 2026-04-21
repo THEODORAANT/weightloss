@@ -89,7 +89,7 @@ public function take_klarna_payment($Order, $opts)
     }
 }
 
-	private function get_order_checkout_line_items($Order, $currency, $default_price_id='', $default_product_id='', $test_mode=false)
+	private function get_order_checkout_line_items($Order, $currency, $default_price_id='', $default_product_id='', $test_mode=false, $allow_price_ids=true)
 	{
 		$OrderItems = new PerchShop_OrderItems($this->api);
 		$items = $OrderItems->get_by('orderID', $Order->id());
@@ -161,7 +161,7 @@ public function take_klarna_payment($Order, $opts)
 				'quantity' => $qty,
 			];
 
-			if ($stripe_price_id !== '') {
+			if ($allow_price_ids && $stripe_price_id !== '') {
 				$line_item['price'] = $stripe_price_id;
 			} else {
 				$line_item['currency'] = $currency;
@@ -255,7 +255,17 @@ public function take_payment($Order, $opts)
         }
     }
 
-    $order_line_items = $this->get_order_checkout_line_items($Order, $currency, $stripe_price_id, $stripe_product_id, $is_test_mode);
+    $has_discount_code = ($promotion_code !== '');
+    $allow_price_ids = !$has_discount_code;
+
+    $order_line_items = $this->get_order_checkout_line_items(
+        $Order,
+        $currency,
+        $stripe_price_id,
+        $stripe_product_id,
+        $is_test_mode,
+        $allow_price_ids
+    );
 
     if (!PerchUtil::count($order_line_items)) {
         $amount = (int) round($orderTotal * 100);
@@ -286,8 +296,6 @@ public function take_payment($Order, $opts)
     }
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($checkout_fields));
-
-print_r($checkout_fields);
     $response = curl_exec($ch);
 //echo "take payment";print_r($response);
     curl_close($ch);
