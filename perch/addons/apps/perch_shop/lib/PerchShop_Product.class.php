@@ -402,10 +402,12 @@ class PerchShop_Product extends PerchShop_Base
 
         $prices = $this->get($price_field);
 
-        // Variant with no different price? Return the parent.
+        // Variant with no different price? Use parent pricing data but keep variant tax rules.
         if (!$prices && $this->is_variant()) {
             $Parent = $this->get_parent();
-            return $Parent->get_prices($qty, $pricing, $price_tax_mode, $CustomerTaxLocation, $HomeTaxLocation, $Currency, $Totaliser);
+            if ($Parent) {
+                $prices = $Parent->get($price_field);
+            }
         }
 
         if ($prices) {
