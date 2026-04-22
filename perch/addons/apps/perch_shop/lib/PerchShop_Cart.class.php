@@ -771,10 +771,13 @@ public function calculate_cart_for_api($cart_id){
 		// Get the cart data
 		$cart = $this->db->get_row('SELECT * FROM '.$this->table.' WHERE cartID='.(int)$cart_id);
 
-if (PerchUtil::count($cart) && isset($cart['locationID'])) {
+if (PerchUtil::count($cart)) {
 
 		// Get the tax location we're working with
-		$CustomerTaxLocation = $TaxLocations->find((int)$cart['locationID']);
+		$CustomerTaxLocation = null;
+		if (isset($cart['locationID']) && (int)$cart['locationID'] > 0) {
+			$CustomerTaxLocation = $TaxLocations->find((int)$cart['locationID']);
+		}
 		$HomeTaxLocation 	 = $TaxLocations->find((int)$this->get_home_tax_location_id());
 
 		if (!$CustomerTaxLocation && $HomeTaxLocation) {
@@ -947,9 +950,12 @@ if (PerchUtil::count($cart) && isset($cart['locationID'])) {
 		// Get the cart data
 		$cart = $this->db->get_row('SELECT * FROM '.$this->table.' WHERE cartID='.(int)$this->cart_id);
 
-if (PerchUtil::count($cart) && isset($cart['locationID'])) {
+if (PerchUtil::count($cart)) {
 		// Get the tax location we're working with
-		$CustomerTaxLocation = $TaxLocations->find((int)$cart['locationID']);
+		$CustomerTaxLocation = null;
+		if (isset($cart['locationID']) && (int)$cart['locationID'] > 0) {
+			$CustomerTaxLocation = $TaxLocations->find((int)$cart['locationID']);
+		}
 		$HomeTaxLocation 	 = $TaxLocations->find((int)$this->get_home_tax_location_id());
 
 		if (!$CustomerTaxLocation && $HomeTaxLocation) {
