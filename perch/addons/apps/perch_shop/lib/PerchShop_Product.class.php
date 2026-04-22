@@ -419,17 +419,29 @@ class PerchShop_Product extends PerchShop_Base
             if (isset($prices[$Currency->id()])) {
                 $base_price = floatval($prices[$Currency->id()]);
 
-                // Whos tax rate do we use?
-                $TaxGroup = $this->get_tax_group();
+                // Whose tax rate do we use?
+                $TaxGroup    = $this->get_tax_group();
+                $TaxLocation = null;
+                $tax_rate    = 0;
 
-                if ($TaxGroup->groupTaxRate()=='buyer') {
-                    $TaxLocation = $CustomerTaxLocation;
+                if ($TaxGroup) {
+                    if ($TaxGroup->groupTaxRate()=='buyer') {
+                        $TaxLocation = $CustomerTaxLocation;
+                    }else{
+                        $TaxLocation = $HomeTaxLocation;
+                    }
+
+                    if ($TaxLocation) {
+                        // Which rate to charge? Standard, reduced etc
+                        $tax_rate = $TaxRates->get_rate_for_location((int)$TaxGroup->id(), (int)$TaxLocation->id());
+                    }else{
+                        PerchUtil::debug('Tax location missing for product #'.$this->id().' (tax group #'.$TaxGroup->id().')');
+                    }
                 }else{
-                    $TaxLocation = $HomeTaxLocation;
+                    PerchUtil::debug('Tax group missing for product #'.$this->id());
                 }
 
-                // Which rate to charge? Standard, reduced etc
-                $tax_rate = $TaxRates->get_rate_for_location((int)$TaxGroup->id(), (int)$TaxLocation->id());
+                PerchUtil::debug('Tax calculation for product #'.$this->id().': group='.(($TaxGroup)?$TaxGroup->id():'none').', location='.(($TaxLocation)?$TaxLocation->id():'none').', rate='.$tax_rate.', customer_pays_tax='.(($customer_pays_tax)?'1':'0'));
 
                 // Add or remove tax?
                 $multiplier = 1 + ($tax_rate/100);
