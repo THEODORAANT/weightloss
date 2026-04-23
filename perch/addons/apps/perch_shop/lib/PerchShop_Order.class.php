@@ -462,9 +462,34 @@ echo "questions_items";
              $shippingCountry = $ShippingAddr->get_country_name() ?? '';
          }
 
+         $originOrderId = (string)$this->id();
+         $stripePaymentId = '';
+         $gatewayReference = trim((string)$this->orderGatewayRef());
+         if ($gatewayReference !== '' && strtolower((string)$this->orderGateway()) === 'stripe') {
+             $stripePaymentId = $gatewayReference;
+         }
+
+         $subtotal = (float)$this->orderSubtotal();
+         $deliveryCost = (float)$this->orderShippingTotal();
+         $total = (float)$this->orderTotal();
+
+         $courierService = '';
+         if (is_array($dynamicFields)) {
+             $candidateCourierService = strtoupper(trim((string)($dynamicFields['courierService'] ?? $dynamicFields['courier_service'] ?? '')));
+             if (in_array($candidateCourierService, ['SEB', 'TPN24'], true)) {
+                 $courierService = $candidateCourierService;
+             }
+         }
+
          $orderData = [
              "status" => "PAYMENT_RECEIVED",
              "customerId" => $Customer->pharmacy_refid(),
+             "originOrderId" => $originOrderId,
+             "stripePaymentId" => $stripePaymentId,
+             "subtotal" => $subtotal,
+             "deliveryCost" => $deliveryCost,
+             "total" => $total,
+             "courierService" => $courierService,
              "items" => $order_items,
              "shipping" => [
                  "addressLine1" => $shippingAddressLine1,
